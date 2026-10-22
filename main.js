@@ -61,8 +61,8 @@ const SCENES = {
     locationAr: 'شارع سلطانة / الدائري الثاني، المدينة المنورة',
     locationEn: 'Airport Road / King Abdullah Ring Road, Madinah',
     icon: '🚗',
-    baseImg: '/images/sim-driving-cataract.jpg',
-    simImg: '/images/sim-driving-clear.jpg',
+    baseImg: './images/sim-driving-cataract.jpg',
+    simImg: './images/sim-driving-clear.jpg',
     baseTagAr: 'الأساس: ماء أبيض غير معالج (ضبابية وتشتت ضوئي)',
     baseTagEn: 'Baseline: Untreated Cataract (Blur & Halos)',
   },
@@ -378,7 +378,7 @@ function renderHero() {
         </div>
 
         <div class="hero-image fade-in">
-          <img src="/images/dr-maan-portrait.png" alt="${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='/images/doctor-portrait.jpg'">
+          <img src="./images/dr-maan-portrait.png" alt="${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='./images/doctor-portrait.jpg'">
           <div class="image-accent">
             <div class="accent-title">${currentLang === 'ar' ? 'العيادة التخصصية' : 'Clinical Practice'}</div>
             <div class="accent-value">${currentLang === 'ar' ? 'مغربي — طريق المطار' : 'Magrabi — Airport Road'}</div>
@@ -404,7 +404,7 @@ function renderProfile() {
 
       <div class="profile-grid fade-in">
         <div class="profile-media">
-          <img src="/images/doctor-portrait.jpg" alt="${DOCTOR.nameAr}" class="profile-media-img" loading="lazy">
+          <img src="./images/doctor-portrait.jpg" alt="${DOCTOR.nameAr}" class="profile-media-img" loading="lazy">
           <div class="credentials-chips">
             <span class="chip chip-gold">🎖️ ${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)' : 'Fellow of Royal College of Surgeons (FRCS UK)'}</span>
             <span class="chip">🏛️ ${currentLang === 'ar' ? 'رئيس قسم طب وجراحة العيون – جامعة طيبة' : 'Chair of Ophthalmology – Taibah University'}</span>
@@ -448,14 +448,14 @@ function renderProfile() {
         </div>
         <div class="gallery-grid">
           <div class="gallery-card">
-            <img src="/images/dr-maan-redsea.jpg" alt="Saudi Ophthalmology Society Red Sea" loading="lazy">
+            <img src="./images/dr-maan-redsea.jpg" alt="Saudi Ophthalmology Society Red Sea" loading="lazy">
             <div class="gallery-caption">
               <strong>${currentLang === 'ar' ? 'مؤتمر البحر الأحمر لطب وجراحة العيون 2024' : 'Red Sea Ophthalmology Conference 2024'}</strong>
               <p>${currentLang === 'ar' ? 'عضو المجلس العلمي وممثل الجمعية السعودية لطب العيون' : 'Scientific Council Member & SOS Representative'}</p>
             </div>
           </div>
           <div class="gallery-card">
-            <img src="/images/dr-maan-faculty.jpg" alt="Faculty Saudi Ophthalmology" loading="lazy">
+            <img src="./images/dr-maan-faculty.jpg" alt="Faculty Saudi Ophthalmology" loading="lazy">
             <div class="gallery-caption">
               <strong>${currentLang === 'ar' ? 'المجلس العلمي والجلسات الأكاديمية الدولية' : 'International Scientific Faculty & Clinical Sessions'}</strong>
               <p>${currentLang === 'ar' ? 'مع نخبة من قيادات وجراحي العيون الدوليين' : 'With international ophthalmic leaders and surgical faculty'}</p>
@@ -527,7 +527,7 @@ function renderSpecialties() {
       titleEn: 'Cataract Surgery & Premium IOL Implantation',
       descAr: 'استبدال العدسة المعتمة بالموجات فوق الصوتية (الفاكو) وزراعة أحدث العدسات الذكية: أحادية البؤرة، ممتدة المدى البصري (EDOF)، والعدسات ثلاثية البؤرة لاستعادة صفاء الرؤية.',
       descEn: 'Micro-incision phacoemulsification for lens replacement with advanced monofocal, EDOF, and trifocal intraocular lenses.',
-      img: '/images/surgery-phaco.jpg',
+      img: './images/surgery-phaco.jpg',
       tagsAr: ['إزالة الساد بالفاكو', 'تصحيح الاستجماتيزم', 'العدسات التوريكية', 'عدسات ثلاثية EDOF'],
       tagsEn: ['Phacoemulsification', 'Astigmatism Correction', 'Toric IOLs', 'Trifocal / EDOF Optics']
     },
@@ -537,7 +537,7 @@ function renderSpecialties() {
       titleEn: 'Cornea Care & Advanced Keratoconus Treatment',
       descAr: 'التشخيص المبكر والدقيق للقرنية المخروطية وتثبيت القرنية بالأشعة فوق البنفسجية والريبوفلافين (Corneal Cross-Linking - CXL)، مع خطط متابعة مستمرة لحفظ النظر.',
       descEn: 'Early keratoconus detection, corneal collagen cross-linking (CXL) to arrest progression, and specialized anterior segment management.',
-      img: '/images/cornea-cxl.jpg',
+      img: './images/cornea-cxl.jpg',
       tagsAr: ['تثبيت القرنية CXL', 'سماكة القرنية الطبقية', 'علاج سحابات القرنية', 'جفاف العين المزمن'],
       tagsEn: ['Corneal Cross-Linking (CXL)', 'Pachymetry Tomography', 'Corneal Opacities', 'Ocular Surface Disease']
     },
@@ -547,7 +547,7 @@ function renderSpecialties() {
       titleEn: 'Laser Refractive Surgery (Femto-LASIK & PRK)',
       descAr: 'معاينة وفحص دقيق لقصر وطول النظر والاستجماتيزم باستخدام تقنيات الفيمتوليزك، والليزر السطحي (PRK)، وبصمة العين المخصصة (Custom Wavefront) لتحقيق أقصى حدة بصرية.',
       descEn: 'Comprehensive suitability evaluation for Femto-LASIK and surface ablation (PRK) driven by customized wavefront topography.',
-      img: '/images/clinic-exam-room.jpg',
+      img: './images/clinic-exam-room.jpg',
       tagsAr: ['فحص سماكة القرنية', 'الليزر السطحي PRK', 'الفيمتو ليزك', 'بصمة العين Wavefront'],
       tagsEn: ['Pachymetry Check', 'Surface PRK', 'Femto-LASIK', 'Wavefront Custom']
     },
@@ -557,7 +557,7 @@ function renderSpecialties() {
       titleEn: 'Advanced Diagnostics & Optical Biometry',
       descAr: 'التصوير المقطعي للقرنية (Pentacam)، فحص خلايا البطانة القرنية (Specular Microscopy)، وقياس قوة العدسة الدقيق ضوئياً (Optical Biometry) بأحدث أجهزة التصوير ثلاثية الأبعاد.',
       descEn: 'High-precision Scheimpflug corneal tomography (Pentacam), specular endothelial microscopy, and optical biometry for exact surgical planning.',
-      img: '/images/diagnostics-pentacam.jpg',
+      img: './images/diagnostics-pentacam.jpg',
       tagsAr: ['طبوغرافيا البنتاكام', 'قياس ضغط العين', 'مسح العصب البصري', 'حساب العدسات بالبيومتري'],
       tagsEn: ['Pentacam Tomography', 'Intraocular Pressure', 'OCT Macula & Nerve', 'Optical Biometry IOL Master']
     }
@@ -1330,7 +1330,7 @@ function renderSimSceneContent(sceneId, lensId) {
     const isCataract = lensId === 'cataract';
     const isTrifocal = lensId === 'trifocal';
     const isEdof = lensId === 'edof';
-    const imgUrl = isCataract ? '/images/sim-driving-cataract.jpg' : '/images/sim-driving-clear.jpg';
+    const imgUrl = isCataract ? './images/sim-driving-cataract.jpg' : './images/sim-driving-clear.jpg';
 
     return `
       <div style="position:relative;width:100%;height:100%;background-image:url('${imgUrl}');background-size:cover;background-position:center;">
@@ -1369,7 +1369,7 @@ function renderSimSceneContent(sceneId, lensId) {
     return `
     <div style="width:100%;height:100%;background:#0A0F1A;display:flex;flex-direction:column;position:relative;overflow:hidden;">
       <!-- Top Windshield View: Highway to Airport Road Madinah -->
-      <div style="height:50%;background-image:url('/images/sim-driving-clear.jpg');background-size:cover;background-position:center 40%;position:relative;border-bottom:3px solid #1E293B;filter:${isCataract ? 'blur(3px) contrast(0.6)' : 'none'};">
+      <div style="height:50%;background-image:url('./images/sim-driving-clear.jpg');background-size:cover;background-position:center 40%;position:relative;border-bottom:3px solid #1E293B;filter:${isCataract ? 'blur(3px) contrast(0.6)' : 'none'};">
         <div style="position:absolute;bottom:8px;right:16px;background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;font-size:10px;color:#F1F5F9;">
           ${currentLang === 'ar' ? 'الرؤية البعيدة عبر الزجاج الأمامي' : 'Windshield Distance View'}
         </div>
