@@ -178,9 +178,12 @@ const LENSES = {
 // --- APP STATE ---
 let currentLang = 'ar';
 let themeMode = localStorage.getItem('theme') || 'system'; // 'system' | 'light' | 'dark'
-let simScene = 'night';
-let simLens = 'trifocal';
+let simMode = 'scenes'; // 'scenes' | 'anatomy' | 'defocus' | 'chart'
+let simScene = 'night'; // 'night' | 'intermediate' | 'near'
+let simLens = 'trifocal'; // 'trifocal' | 'edof' | 'monofocal' | 'cataract'
 let simSliderPos = 50; // percentage
+let simGlassesOn = false; // reading glasses toggle in chart mode
+let defocusDiopter = -2.5; // diopters for defocus curve scrubber
 let qStep = 0;
 let qAnswers = [];
 let qDone = false;
@@ -595,23 +598,53 @@ function renderSpecialties() {
   </section>`;
 }
 
-// --- VISION SIMULATOR (OVERHAULED CONSOLE) ---
+// --- VISION SIMULATOR (CLINICAL OPHTHALMOLOGY CONSOLE) ---
 function renderSimulator() {
-  const currentScene = SCENES[simScene];
-  const currentLens = LENSES[simLens];
+  const currentScene = SCENES[simScene] || SCENES.night;
+  const currentLens = LENSES[simLens] || LENSES.trifocal;
 
   return `
   <section class="simulator-section" id="simulator">
     <div class="container">
       <div class="section-header fade-in">
-        <div class="section-label">${currentLang === 'ar' ? 'أداة بصرية استرشادية تعليمية معتمدة' : 'Accredited Educational Tool'}</div>
-        <h2>${currentLang === 'ar' ? 'محاكي الرؤية التفاعلي: عِش التجربة البصرية وقارن بين خيارات العدسات' : 'Interactive Vision Simulator & Comparative Lens Optics'}</h2>
-        <p>${currentLang === 'ar' ? 'أداة رقمية توضيحية لتوضيح الفارق المتوقع في جودة الرؤية، وتشتت الأضواء الليلية، ومدى الاستقلالية عن النظارات الطبية بعد زراعة العدسات الذكية الحديثة (IOL).' : 'Explore how vision behaves across real daily tasks and inspect the optical characteristics of modern intraocular lenses.'}</p>
+        <div class="section-label">${currentLang === 'ar' ? 'أداة بصرية استرشادية سريرية معتمدة' : 'Accredited Clinical Ophthalmology Tool'}</div>
+        <h2>${currentLang === 'ar' ? 'محاكي البصريات السريري: عِش التجربة وقارن بين مسارات الضوء والعدسات' : 'Clinical Ophthalmology Simulator & Ray-Tracing Console'}</h2>
+        <p>${currentLang === 'ar' ? 'منصة تثقيفية متقدمة مطورة بإشراف د. معن البري لتوضيح مسار الأشعة داخل العين، ومقارنة منحنيات اللابؤرية السريرية (Defocus Curves)، وفحص حدة النظر واختبارات القراءة، والنتائج الواقعية للعدسات الذكية.' : 'Advanced clinical platform illustrating intraocular ray tracing, international defocus curves, Snellen visual acuity, and real-world optical dysphotopsia.'}</p>
       </div>
 
       <div class="sim-chassis fade-in">
-        <!-- Top Toolbar: Scene Selector -->
-        <div class="sim-top-bar">
+        <!-- Master Mode Switcher Bar -->
+        <div class="sim-mode-bar">
+          <div class="sim-mode-tabs">
+            <button class="sim-mode-tab ${simMode === 'scenes' ? 'active' : ''}" onclick="setSimMode('scenes')">
+              <span>🚗</span>
+              <span>${currentLang === 'ar' ? 'الأنشطة الحياتية الواقعية' : 'Real-World Tasks'}</span>
+            </button>
+            <button class="sim-mode-tab ${simMode === 'anatomy' ? 'active' : ''}" onclick="setSimMode('anatomy')">
+              <span>🔬</span>
+              <span>${currentLang === 'ar' ? 'المسار التشريحي للأشعة (Ray Tracing)' : 'Anatomical Ray Tracing'}</span>
+            </button>
+            <button class="sim-mode-tab ${simMode === 'defocus' ? 'active' : ''}" onclick="setSimMode('defocus')">
+              <span>📈</span>
+              <span>${currentLang === 'ar' ? 'منحنى اللابؤرية السريري (Defocus Curve)' : 'Clinical Defocus Curve'}</span>
+            </button>
+            <button class="sim-mode-tab ${simMode === 'chart' ? 'active' : ''}" onclick="setSimMode('chart')">
+              <span>👁️</span>
+              <span>${currentLang === 'ar' ? 'لوحة فحص النظر (Snellen & Jaeger)' : 'Snellen & Jaeger Acuity Card'}</span>
+            </button>
+          </div>
+
+          <div style="font-size:0.75rem;color:var(--gold-light);font-weight:600;">
+            ${simMode === 'scenes' ? (currentLang === 'ar' ? 'محاكاة الأنشطة اليومية' : 'Daily Life Simulation') : ''}
+            ${simMode === 'anatomy' ? (currentLang === 'ar' ? 'فيزياء انكسار الضوء في العين' : 'Ocular Refractive Physics') : ''}
+            ${simMode === 'defocus' ? (currentLang === 'ar' ? 'معايير الجمعية الأوروبية ESCRS' : 'ESCRS Clinical Benchmark') : ''}
+            ${simMode === 'chart' ? (currentLang === 'ar' ? 'اختبار قياس النظر السريري' : 'Standard Clinical Acuity') : ''}
+          </div>
+        </div>
+
+        <!-- Sub-toolbar if in Scenes mode -->
+        ${simMode === 'scenes' ? `
+        <div class="sim-sub-bar">
           <div class="sim-scene-tabs">
             <button class="sim-scene-tab ${simScene === 'night' ? 'active' : ''}" onclick="setSimScene('night')">
               <span>🚗</span>
@@ -619,58 +652,27 @@ function renderSimulator() {
             </button>
             <button class="sim-scene-tab ${simScene === 'phone' ? 'active' : ''}" onclick="setSimScene('phone')">
               <span>📱</span>
-              <span>${currentLang === 'ar' ? 'الهاتف والمسافات القريبة (40 سم)' : 'Smartphone (40 cm)'}</span>
+              <span>${currentLang === 'ar' ? 'لوحة السيارة والشاشات (60 سم)' : 'Dashboard & Screens (60 cm)'}</span>
             </button>
             <button class="sim-scene-tab ${simScene === 'quran' ? 'active' : ''}" onclick="setSimScene('quran')">
               <span>📖</span>
-              <span>${currentLang === 'ar' ? 'المصحف الشريف والقراءة المكتبية' : 'Quran & Book Reading'}</span>
+              <span>${currentLang === 'ar' ? 'روشتة الدواء والمصحف (40 سم)' : 'Prescription & Reading (40 cm)'}</span>
             </button>
           </div>
 
           <div style="display:flex;align-items:center;gap:var(--space-2);">
-            <button onclick="resetSimSlider()" class="btn btn-sm" style="background:#162236;color:#E2E8F0;border:1px solid #243550;">
+            <button onclick="resetSimSlider()" class="btn btn-sm" style="background:#162236;color:#E2E8F0;border:1px solid #243550;font-size:0.75rem;">
               ${currentLang === 'ar' ? 'إعادة ضبط المنصف' : 'Center Slider'}
             </button>
           </div>
-        </div>
+        </div>` : ''}
 
-        <!-- Interactive Split-View Viewport Canvas -->
+        <!-- Interactive Viewport Canvas Area -->
         <div class="sim-viewport-frame" id="sim-viewport">
-          <!-- Layer 1: Baseline View (Underneath / Cataract condition) -->
-          <div class="sim-layer-base">
-            ${renderSimSceneContent(simScene, 'cataract')}
-          </div>
-
-          <!-- Layer 2: Simulated Lens View (Clipped by slider handle) -->
-          <div class="sim-layer-active-wrap" id="sim-active-wrap" style="width: ${simSliderPos}%;">
-            <div style="position:absolute;inset:0;width:100%;height:100%;">
-              ${renderSimSceneContent(simScene, simLens)}
-            </div>
-          </div>
-
-          <!-- Slider Range Input for smooth mouse / touch interaction -->
-          <input type="range" min="0" max="100" value="${simSliderPos}" class="sim-slider-input" oninput="updateSimSlider(this.value)" aria-label="Compare baseline vs simulated lens">
-
-          <!-- Draggable Divider Line & Badge -->
-          <div class="sim-slider-line" id="sim-divider-line" style="left: ${simSliderPos}%;">
-            <div class="sim-slider-handle">⟺</div>
-          </div>
-
-          <!-- Status Tags inside Viewport -->
-          <div class="sim-tag-pill sim-tag-base">
-            ${currentLang === 'ar' ? currentScene.baseTagAr : currentScene.baseTagEn}
-          </div>
-          <div class="sim-tag-pill sim-tag-simulated">
-            ${currentLang === 'ar' ? currentLens.tagAr : currentLens.tagEn}
-          </div>
-
-          <!-- Location Indicator -->
-          <div class="sim-location-pill">
-            📍 ${currentLang === 'ar' ? currentScene.locationAr : currentScene.locationEn}
-          </div>
+          ${renderActiveSimViewport(simMode, simScene, simLens, simSliderPos, simGlassesOn, defocusDiopter)}
         </div>
 
-        <!-- Lens Selection Pills Bar -->
+        <!-- Lens Selection Pills Bar (Active in ALL modes) -->
         <div class="sim-lens-bar">
           <span class="sim-lens-label">${currentLang === 'ar' ? 'العدسة المقارنة:' : 'Selected Lens Optic:'}</span>
           ${Object.values(LENSES).map(l => `
@@ -749,92 +751,712 @@ function renderSimulator() {
         <div class="sim-disclaimer-box">
           <strong>⚠️ ${currentLang === 'ar' ? 'تنويه طبي وإخلاء مسؤولية سريرية:' : 'Clinical Disclaimer:'}</strong>
           ${currentLang === 'ar'
-            ? 'هذا المحاكي مخصص للأغراض التثقيفية والاسترشادية العامة فقط، ولا يُعد بأي حال من الأحوال وسيلة تشخيصية أو تنبؤاً قطعياً بالنتيجة الجراحية الفردية. تعتمد النتيجة الفعلية لكل مريض على عوامل بيولوجية وفسيولوجية متعددة تشمل الفحص الطبوغرافي الشامل للقرنية (Pentacam)، وقياسات طول العين بالموجات الضوئية (Optical Biometry - IOL Master)، وسلامة الشبكية والعصب البصري.'
-            : 'This simulator is strictly an educational tool illustrating optical principles. It does not replace a clinical consultation or predict exact postoperative visual acuity, which is determined by individual optical biometry, corneal tomography, macular health, and neuroadaptation.'}
+            ? 'هذا المحاكي مخصص للأغراض التثقيفية والاسترشادية السريرية فقط، ولا يُعد بأي حال من الأحوال وسيلة تشخيصية أو تنبؤاً قطعياً بالنتيجة الجراحية الفردية. تعتمد النتيجة الفعلية لكل مريض على قياسات دقيقة تشمل فحص تضاريس القرنية بالبنتاكام (Pentacam)، وحساب مقاسات العدسة بأجهزة البيومتري الضوئي (IOL Master)، وسلامة اللطخة الصفراء والشبكية (OCT Macula).'
+            : 'This simulator illustrates established optical principles and clinical consensus. Actual surgical outcomes depend on individual corneal tomography, optical biometry, macular integrity, and patient neuroadaptation.'}
         </div>
       </div>
     </div>
   </section>`;
 }
 
+// Router for Viewport Content based on selected Mode
+function renderActiveSimViewport(mode, sceneId, lensId, sliderPos, glassesOn, diopter) {
+  if (mode === 'anatomy') {
+    return renderAnatomyRayTracing(lensId);
+  }
+  if (mode === 'defocus') {
+    return renderDefocusCurve(lensId, diopter);
+  }
+  if (mode === 'chart') {
+    return renderClinicalChart(lensId, glassesOn);
+  }
+
+  // Default: Real-World Scenes with Interactive Split Slider
+  const currentScene = SCENES[sceneId] || SCENES.night;
+  const currentLens = LENSES[lensId] || LENSES.trifocal;
+
+  return `
+    <!-- Layer 1: Baseline View (Underneath / Cataract condition) -->
+    <div class="sim-layer-base">
+      ${renderSimSceneContent(sceneId, 'cataract')}
+    </div>
+
+    <!-- Layer 2: Simulated Lens View (Clipped by slider handle) -->
+    <div class="sim-layer-active-wrap" id="sim-active-wrap" style="width: ${sliderPos}%;">
+      <div style="position:absolute;inset:0;width:100%;height:100%;">
+        ${renderSimSceneContent(sceneId, lensId)}
+      </div>
+    </div>
+
+    <!-- Slider Range Input for smooth mouse / touch interaction -->
+    <input type="range" min="0" max="100" value="${sliderPos}" class="sim-slider-input" oninput="updateSimSlider(this.value)" aria-label="Compare baseline vs simulated lens">
+
+    <!-- Draggable Divider Line & Badge -->
+    <div class="sim-slider-line" id="sim-divider-line" style="left: ${sliderPos}%;">
+      <div class="sim-slider-handle">⟺</div>
+    </div>
+
+    <!-- Status Tags inside Viewport -->
+    <div class="sim-tag-pill sim-tag-base">
+      ${currentLang === 'ar' ? currentScene.baseTagAr : currentScene.baseTagEn}
+    </div>
+    <div class="sim-tag-pill sim-tag-simulated">
+      ${currentLang === 'ar' ? currentLens.tagAr : currentLens.tagEn}
+    </div>
+
+    <!-- Location Indicator -->
+    <div class="sim-location-pill">
+      📍 ${currentLang === 'ar' ? currentScene.locationAr : currentScene.locationEn}
+    </div>
+  `;
+}
+
+// --- MODE 2: ANATOMICAL OPTICAL RAY TRACING (SVG) ---
+function renderAnatomyRayTracing(lensId) {
+  const isCataract = lensId === 'cataract';
+  const isMonofocal = lensId === 'monofocal';
+  const isEdof = lensId === 'edof';
+  const isTrifocal = lensId === 'trifocal';
+
+  return `
+  <div class="anatomy-viewport">
+    <div style="text-align:center;margin-bottom:var(--space-2);z-index:2;">
+      <h4 style="font-size:0.95rem;color:var(--gold-light);font-weight:700;">
+        ${currentLang === 'ar' ? 'المسار البصري للأشعة الضوئية داخل مقطع العين الأفقي' : 'Horizontal Eye Cross-Section & Intraocular Optical Ray Tracing'}
+      </h4>
+      <p style="font-size:0.75rem;color:#94A3B8;">
+        ${isCataract ? (currentLang === 'ar' ? 'تشتت الضوء (Light Scattering) داخل العدسة المعتمة وفقدان تركيز الصورة على اللطخة الصفراء' : 'Severe light scattering inside opaque cataract lens with loss of macular focal point') : ''}
+        ${isMonofocal ? (currentLang === 'ar' ? 'تركيز فائق الحدة في نقطة بؤرية واحدة على اللطخة الصفراء (أشعة القراءة القريبة تسقط خلف الشبكية)' : 'Pristine single focal convergence on the fovea; near rays focus behind the retina (Presbyopia)') : ''}
+        ${isEdof ? (currentLang === 'ar' ? 'تمديد المدى البؤري في قناة ضوئية متصلة توفر رؤية سلسة من البعيد إلى المتوسط' : 'Elongated optical focal cylinder providing continuous depth of focus from distance to intermediate') : ''}
+        ${isTrifocal ? (currentLang === 'ar' ? 'تقسيم الضوء عبر درجات حيود دقيقة لتكوين 3 بؤر مركزة على الشبكية (بعيد 6م، متوسط 66سم، قريب 35سم)' : 'Diffractive micro-step light division forming 3 sharp focal peaks: Distance, Intermediate & Near') : ''}
+      </p>
+    </div>
+
+    <svg class="anatomy-svg" viewBox="0 0 740 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Gradients -->
+        <radialGradient id="cataractHaze" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.95"/>
+          <stop offset="70%" stop-color="#D97706" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#78350F" stop-opacity="0.6"/>
+        </radialGradient>
+        <radialGradient id="iolClear" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#0284C7" stop-opacity="0.2"/>
+        </radialGradient>
+        <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Eye Anatomy Outer Wall: Sclera & Cornea -->
+      <!-- Sclera (White/Cream Outer Envelope) -->
+      <path d="M 230 70 C 440 70, 580 120, 580 190 C 580 260, 440 310, 230 310" stroke="#334155" stroke-width="8" fill="#0C1424" stroke-linecap="round"/>
+      <!-- Choroid / Pigment Layer -->
+      <path d="M 240 78 C 430 78, 570 125, 570 190 C 570 255, 430 302, 240 302" stroke="#641B2D" stroke-width="3" fill="none"/>
+      <!-- Retina Layer (Gold/Amber) -->
+      <path d="M 250 86 C 420 86, 560 130, 560 190 C 560 250, 420 294, 250 294" stroke="#C5A46D" stroke-width="3" fill="none"/>
+
+      <!-- Macula Fovea Centralis (Golden Target on posterior pole) -->
+      <circle cx="560" cy="190" r="7" fill="#F59E0B" stroke="#C5A46D" stroke-width="2"/>
+      <text x="580" y="194" fill="#F59E0B" font-size="11" font-weight="700">${currentLang === 'ar' ? 'اللطخة الصفراء (Fovea)' : 'Fovea Centralis'}</text>
+
+      <!-- Optic Nerve Exit -->
+      <path d="M 545 235 L 610 250 L 610 270 L 535 250 Z" fill="#1E293B" stroke="#475569" stroke-width="1.5"/>
+      <text x="618" y="265" fill="#94A3B8" font-size="10">${currentLang === 'ar' ? 'العصب البصري' : 'Optic Nerve'}</text>
+
+      <!-- Cornea (Clear anterior curved dome) -->
+      <path d="M 230 70 C 140 100, 140 280, 230 310" stroke="#38BDF8" stroke-width="5" fill="rgba(56, 189, 248, 0.08)"/>
+      <text x="135" y="80" fill="#38BDF8" font-size="11" font-weight="700">${currentLang === 'ar' ? 'القرنية (Cornea)' : 'Cornea'}</text>
+
+      <!-- Iris & Pupil (Aperture) -->
+      <path d="M 230 70 L 255 145" stroke="#64748B" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 230 310 L 255 235" stroke="#64748B" stroke-width="6" stroke-linecap="round"/>
+      <text x="260" y="130" fill="#94A3B8" font-size="10">${currentLang === 'ar' ? 'القزحية والحدقة' : 'Iris & Pupil'}</text>
+
+      <!-- Crystalline Lens Capsule / Implant Location -->
+      <g transform="translate(265, 140)">
+        ${isCataract ? `
+          <!-- Cataract Opaque Cloudy Lens -->
+          <ellipse cx="20" cy="50" rx="20" ry="46" fill="url(#cataractHaze)" stroke="#D97706" stroke-width="2"/>
+          <!-- Inner protein opacities -->
+          <circle cx="16" cy="45" r="9" fill="#B45309" opacity="0.7"/>
+          <circle cx="24" cy="58" r="7" fill="#78350F" opacity="0.6"/>
+          <circle cx="12" cy="62" r="5" fill="#92400E" opacity="0.8"/>
+          <text x="50" y="55" fill="#F59E0B" font-size="11" font-weight="700">${currentLang === 'ar' ? 'الساد (عدسة معتمة)' : 'Cataract Lens'}</text>
+        ` : `
+          <!-- Clear IOL with Flexible Haptics in Capsular Bag -->
+          <!-- Haptics -->
+          <path d="M 20 4 C 35 -15, 60 -10, 65 0" stroke="#38BDF8" stroke-width="2" fill="none"/>
+          <path d="M 20 96 C 35 115, 60 110, 65 100" stroke="#38BDF8" stroke-width="2" fill="none"/>
+          <!-- Optic Body -->
+          <ellipse cx="20" cy="50" rx="14" ry="44" fill="url(#iolClear)" stroke="#38BDF8" stroke-width="2.5"/>
+          ${isTrifocal ? `
+            <!-- Concentric Diffractive Steps for Trifocal -->
+            <ellipse cx="20" cy="50" rx="9" ry="30" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="3,2" fill="none"/>
+            <ellipse cx="20" cy="50" rx="5" ry="16" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="2,2" fill="none"/>
+            <text x="45" y="55" fill="#C5A46D" font-size="11" font-weight="700">${currentLang === 'ar' ? 'عدسة ثلاثية البؤرة (حلقات حيود)' : 'Trifocal Diffractive IOL'}</text>
+          ` : (isEdof ? `
+            <ellipse cx="20" cy="50" rx="7" ry="24" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
+            <text x="45" y="55" fill="#38BDF8" font-size="11" font-weight="700">${currentLang === 'ar' ? 'عدسة ممتدة المدى (EDOF)' : 'EDOF Optical Zone'}</text>
+          ` : `
+            <text x="45" y="55" fill="#10B981" font-size="11" font-weight="700">${currentLang === 'ar' ? 'عدسة أحادية البؤرة (Monofocal)' : 'Monofocal IOL'}</text>
+          `)}
+        `}
+      </g>
+
+      <!-- Light Rays Ray-Tracing Paths -->
+      ${isCataract ? `
+        <!-- Cataract: Incoming parallel rays hit cloudy lens and scatter wildly -->
+        <g stroke="#38BDF8" stroke-width="2.5" opacity="0.9" filter="url(#laserGlow)">
+          <line x1="50" y1="160" x2="165" y2="160"/>
+          <line x1="50" y1="175" x2="155" y2="175"/>
+          <line x1="50" y1="190" x2="150" y2="190"/>
+          <line x1="50" y1="205" x2="155" y2="205"/>
+          <line x1="50" y1="220" x2="165" y2="220"/>
+
+          <!-- Through Cornea to Lens -->
+          <line x1="165" y1="160" x2="275" y2="170"/>
+          <line x1="155" y1="175" x2="275" y2="180"/>
+          <line x1="150" y1="190" x2="275" y2="190"/>
+          <line x1="155" y1="205" x2="275" y2="200"/>
+          <line x1="165" y1="220" x2="275" y2="210"/>
+        </g>
+        <!-- Scattered Dispersed Rays inside Vitreous -->
+        <g stroke="#F59E0B" stroke-width="1.8" stroke-dasharray="4,3" opacity="0.6">
+          <line x1="285" y1="170" x2="480" y2="110"/>
+          <line x1="285" y1="175" x2="520" y2="140"/>
+          <line x1="285" y1="180" x2="550" y2="170"/>
+          <line x1="285" y1="190" x2="560" y2="190"/>
+          <line x1="285" y1="195" x2="555" y2="215"/>
+          <line x1="285" y1="200" x2="510" y2="245"/>
+          <line x1="285" y1="210" x2="460" y2="280"/>
+          <line x1="285" y1="190" x2="390" y2="260"/>
+          <line x1="285" y1="190" x2="380" y2="120"/>
+        </g>
+        <circle cx="560" cy="190" r="30" fill="rgba(245, 158, 11, 0.25)" filter="url(#laserGlow)"/>
+        <text x="420" y="325" fill="#EF4444" font-size="11" font-weight="700">❌ ${currentLang === 'ar' ? 'تشتت وانكسار غير منتظم (توهج وضبابية)' : 'Unfocused Scatter & Contrast Loss'}</text>
+      ` : (isMonofocal ? `
+        <!-- Monofocal: Distant rays converge into a razor-sharp focal dot on the fovea -->
+        <g stroke="#38BDF8" stroke-width="2.5" opacity="0.95" filter="url(#laserGlow)">
+          <!-- Entrance -->
+          <line x1="50" y1="160" x2="165" y2="160"/>
+          <line x1="50" y1="175" x2="155" y2="175"/>
+          <line x1="50" y1="190" x2="150" y2="190"/>
+          <line x1="50" y1="205" x2="155" y2="205"/>
+          <line x1="50" y1="220" x2="165" y2="220"/>
+          <!-- Cornea to Lens -->
+          <line x1="165" y1="160" x2="275" y2="170"/>
+          <line x1="155" y1="175" x2="275" y2="180"/>
+          <line x1="150" y1="190" x2="275" y2="190"/>
+          <line x1="155" y1="205" x2="275" y2="200"/>
+          <line x1="165" y1="220" x2="275" y2="210"/>
+          <!-- Lens to Fovea Focal Point -->
+          <line x1="290" y1="170" x2="560" y2="190" stroke="#10B981" stroke-width="2.5"/>
+          <line x1="290" y1="180" x2="560" y2="190" stroke="#10B981" stroke-width="2.5"/>
+          <line x1="290" y1="190" x2="560" y2="190" stroke="#10B981" stroke-width="3"/>
+          <line x1="290" y1="200" x2="560" y2="190" stroke="#10B981" stroke-width="2.5"/>
+          <line x1="290" y1="210" x2="560" y2="190" stroke="#10B981" stroke-width="2.5"/>
+        </g>
+        <circle cx="560" cy="190" r="5" fill="#10B981" filter="url(#laserGlow)"/>
+        <!-- Dotted Near Ray showing presbyopia focus behind retina -->
+        <g stroke="#F43F5E" stroke-width="1.8" stroke-dasharray="3,3" opacity="0.8">
+          <line x1="290" y1="165" x2="620" y2="190"/>
+          <line x1="290" y1="215" x2="620" y2="190"/>
+          <circle cx="620" cy="190" r="4" fill="#F43F5E"/>
+        </g>
+        <text x="360" y="325" fill="#10B981" font-size="11" font-weight="700">✓ ${currentLang === 'ar' ? 'بؤرة بعيدة فائقة النقاء على اللطخة الصفراء (نظارة للقريب)' : 'Pristine Distance Foveal Focus (Near requires glasses)'}</text>
+      ` : (isEdof ? `
+        <!-- EDOF: Continuous focal cylinder along visual axis -->
+        <g stroke="#38BDF8" stroke-width="2.5" opacity="0.95" filter="url(#laserGlow)">
+          <!-- Entrance -->
+          <line x1="50" y1="160" x2="165" y2="160"/>
+          <line x1="50" y1="175" x2="155" y2="175"/>
+          <line x1="50" y1="190" x2="150" y2="190"/>
+          <line x1="50" y1="205" x2="155" y2="205"/>
+          <line x1="50" y1="220" x2="165" y2="220"/>
+          <!-- To Lens -->
+          <line x1="165" y1="160" x2="275" y2="170"/>
+          <line x1="155" y1="175" x2="275" y2="180"/>
+          <line x1="150" y1="190" x2="275" y2="190"/>
+          <line x1="155" y1="205" x2="275" y2="200"/>
+          <line x1="165" y1="220" x2="275" y2="210"/>
+          <!-- Extended Depth Focus Zone -->
+          <line x1="290" y1="170" x2="520" y2="186" stroke="#38BDF8" stroke-width="2.5"/>
+          <line x1="290" y1="210" x2="520" y2="194" stroke="#38BDF8" stroke-width="2.5"/>
+          <line x1="290" y1="190" x2="560" y2="190" stroke="#0284C7" stroke-width="3"/>
+          <rect x="520" y="184" width="45" height="12" rx="4" fill="rgba(56, 189, 248, 0.4)" stroke="#38BDF8" stroke-width="1.5" filter="url(#laserGlow)"/>
+        </g>
+        <text x="360" y="325" fill="#38BDF8" font-size="11" font-weight="700">✓ ${currentLang === 'ar' ? 'قناة بؤرية ممتدة (Extended Focus Channel) بعيد + متوسط' : 'Extended Continuous Depth of Focus Channel'}</text>
+      ` : `
+        <!-- Trifocal: Three distinct diffractive focal bundles -->
+        <g stroke="#38BDF8" stroke-width="2.5" opacity="0.95" filter="url(#laserGlow)">
+          <!-- Entrance -->
+          <line x1="50" y1="160" x2="165" y2="160"/>
+          <line x1="50" y1="175" x2="155" y2="175"/>
+          <line x1="50" y1="190" x2="150" y2="190"/>
+          <line x1="50" y1="205" x2="155" y2="205"/>
+          <line x1="50" y1="220" x2="165" y2="220"/>
+          <!-- To Lens -->
+          <line x1="165" y1="160" x2="275" y2="170"/>
+          <line x1="155" y1="175" x2="275" y2="180"/>
+          <line x1="150" y1="190" x2="275" y2="190"/>
+          <line x1="155" y1="205" x2="275" y2="200"/>
+          <line x1="165" y1="220" x2="275" y2="210"/>
+          <!-- Bundle 1: Distance Focus (Gold) -->
+          <line x1="290" y1="170" x2="560" y2="190" stroke="#C5A46D" stroke-width="2.5"/>
+          <line x1="290" y1="210" x2="560" y2="190" stroke="#C5A46D" stroke-width="2.5"/>
+          <!-- Bundle 2: Intermediate Focus (Cyan) -->
+          <line x1="290" y1="175" x2="560" y2="190" stroke="#38BDF8" stroke-width="2" stroke-dasharray="6,2"/>
+          <line x1="290" y1="205" x2="560" y2="190" stroke="#38BDF8" stroke-width="2" stroke-dasharray="6,2"/>
+          <!-- Bundle 3: Near Focus (Burgundy) -->
+          <line x1="290" y1="180" x2="560" y2="190" stroke="#F43F5E" stroke-width="2" stroke-dasharray="3,2"/>
+          <line x1="290" y1="200" x2="560" y2="190" stroke="#F43F5E" stroke-width="2" stroke-dasharray="3,2"/>
+        </g>
+        <!-- Triple Focal Ring at Fovea -->
+        <circle cx="560" cy="190" r="7" fill="#C5A46D" filter="url(#laserGlow)"/>
+        <circle cx="560" cy="190" r="14" stroke="#38BDF8" stroke-width="1.5" fill="none"/>
+        <circle cx="560" cy="190" r="21" stroke="#F43F5E" stroke-width="1.5" fill="none"/>
+        <text x="320" y="325" fill="#C5A46D" font-size="11" font-weight="700">✓ ${currentLang === 'ar' ? 'تطابق بؤري ثلاثي متكامل على الشبكية (استقلالية كاملة عن النظارة)' : 'Triple Optical Convergence on Retina (Full Independence)'}</text>
+      `))}
+    </svg>
+
+    <div class="anatomy-legend">
+      <div class="anatomy-legend-item">
+        <span class="legend-dot" style="background:#38BDF8;"></span>
+        <span>${currentLang === 'ar' ? 'حزم الضوء الواردة' : 'Incoming Light'}</span>
+      </div>
+      <div class="anatomy-legend-item">
+        <span class="legend-dot" style="background:#C5A46D;"></span>
+        <span>${currentLang === 'ar' ? 'اللطخة الصفراء Fovea' : 'Macula Fovea'}</span>
+      </div>
+      <div class="anatomy-legend-item">
+        <span class="legend-dot" style="background:#10B981;"></span>
+        <span>${currentLang === 'ar' ? 'البؤرة الصافية المستقرة' : 'Sharp Focal Plane'}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// --- MODE 3: CLINICAL DEFOCUS CURVE (SVG GRAPH) ---
+function renderDefocusCurve(lensId, diopter) {
+  // Vergence map: diopter from 0.0 to -3.0
+  // Acuity calculator
+  let visualAcuityText = '20/20 (1.0)';
+  let acuityPercent = 100;
+
+  if (lensId === 'trifocal') {
+    if (diopter >= -0.5) { visualAcuityText = '20/20 (1.0)'; acuityPercent = 98; }
+    else if (diopter >= -1.75) { visualAcuityText = '20/25 (0.85)'; acuityPercent = 92; }
+    else if (diopter >= -2.75) { visualAcuityText = '20/25 (0.88)'; acuityPercent = 90; }
+    else { visualAcuityText = '20/30 (0.75)'; acuityPercent = 82; }
+  } else if (lensId === 'edof') {
+    if (diopter >= -0.75) { visualAcuityText = '20/20 (1.0)'; acuityPercent = 100; }
+    else if (diopter >= -1.75) { visualAcuityText = '20/25 (0.90)'; acuityPercent = 94; }
+    else if (diopter >= -2.5) { visualAcuityText = '20/32 (0.65)'; acuityPercent = 68; }
+    else { visualAcuityText = '20/50 (0.40)'; acuityPercent = 45; }
+  } else if (lensId === 'monofocal') {
+    if (diopter >= -0.5) { visualAcuityText = '20/20 (1.0)'; acuityPercent = 100; }
+    else if (diopter >= -1.25) { visualAcuityText = '20/32 (0.60)'; acuityPercent = 60; }
+    else if (diopter >= -2.0) { visualAcuityText = '20/50 (0.35)'; acuityPercent = 35; }
+    else { visualAcuityText = '20/80 (0.25) [يلزم نظارة]'; acuityPercent = 25; }
+  } else {
+    visualAcuityText = '20/70 (0.30) [ضبابية ساد]';
+    acuityPercent = 30;
+  }
+
+  // Calculate position on curve X: 0.0D at X=120, -3.5D at X=680
+  // diopter ranges from +0.5 to -3.5 (span = 4.0D)
+  const currentD = parseFloat(diopter);
+  const clampedD = Math.max(-3.5, Math.min(0.5, currentD));
+  const markerX = 120 + ((0.5 - clampedD) / 4.0) * 560;
+  
+  // Marker Y based on acuityPercent (100% at Y=60, 0% at Y=230)
+  const markerY = 230 - (acuityPercent / 100) * 170;
+
+  return `
+  <div class="defocus-viewport">
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1E2D44;padding-bottom:var(--space-2);margin-bottom:var(--space-2);">
+      <div>
+        <h4 style="font-size:0.95rem;color:var(--gold-light);font-weight:700;">
+          ${currentLang === 'ar' ? 'منحنى اللابؤرية السريري المعتمد دولياً (Defocus Curve - ESCRS)' : 'Clinical Defocus Curve Benchmark (ESCRS Standard)'}
+        </h4>
+        <p style="font-size:0.75rem;color:#94A3B8;">
+          ${currentLang === 'ar' ? 'المقياس العلمي المعتمد في أبحاث جراحة العيون لمقارنة حدة الإبصار (Snellen / LogMAR) عبر جميع مسافات الرؤية اليومية.' : 'International gold standard plotting visual acuity (Snellen/LogMAR) across full diopter vergences.'}
+        </p>
+      </div>
+      <div style="background:#141F33;padding:4px 12px;border-radius:var(--radius-md);border:1px solid #1E2D44;font-size:0.75rem;color:#E2E8F0;">
+        ${currentLang === 'ar' ? 'المسافة المختارة:' : 'Target Distance:'} <strong style="color:var(--gold);">${Math.abs(clampedD).toFixed(1)} D (${getDistanceLabel(clampedD)})</strong>
+      </div>
+    </div>
+
+    <!-- Defocus SVG Chart -->
+    <div class="defocus-chart-wrap">
+      <svg class="defocus-svg" viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background functional threshold band (>= 20/25 functional vision) -->
+        <rect x="100" y="55" width="580" height="60" fill="rgba(16, 185, 129, 0.08)" rx="4"/>
+        <text x="690" y="85" fill="#10B981" font-size="9.5" font-weight="600">${currentLang === 'ar' ? 'نطاق الرؤية الممتازة دون نظارة' : 'Spectacle Independence Zone (≥20/25)'}</text>
+
+        <!-- Grid Lines & Y Axis -->
+        <line x1="100" y1="55" x2="680" y2="55" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="85" y="60" fill="#94A3B8" font-size="9" text-anchor="end">20/20 (0.0)</text>
+
+        <line x1="100" y1="85" x2="680" y2="85" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="85" y="90" fill="#94A3B8" font-size="9" text-anchor="end">20/25 (0.1)</text>
+
+        <line x1="100" y1="125" x2="680" y2="125" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="85" y="130" fill="#94A3B8" font-size="9" text-anchor="end">20/40 (0.3)</text>
+
+        <line x1="100" y1="175" x2="680" y2="175" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="85" y="180" fill="#94A3B8" font-size="9" text-anchor="end">20/70 (0.5)</text>
+
+        <line x1="100" y1="225" x2="680" y2="225" stroke="#334155" stroke-width="1.5"/>
+        <text x="85" y="228" fill="#64748B" font-size="9" text-anchor="end">20/125</text>
+
+        <!-- Vertical X-Axis Markers for Distances -->
+        <!-- 0.0D (Infinity / Distance) -->
+        <line x1="190" y1="50" x2="190" y2="225" stroke="#334155" stroke-width="1"/>
+        <text x="190" y="240" fill="#E2E8F0" font-size="10" font-weight="700" text-anchor="middle">0.0 D</text>
+        <text x="190" y="252" fill="#94A3B8" font-size="8.5" text-anchor="middle">${currentLang === 'ar' ? 'البعيد (القيادة)' : 'Distance (>6m)'}</text>
+
+        <!-- -1.0D (1m) -->
+        <line x1="330" y1="50" x2="330" y2="225" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="330" y="240" fill="#94A3B8" font-size="10" text-anchor="middle">-1.0 D</text>
+        <text x="330" y="252" fill="#64748B" font-size="8.5" text-anchor="middle">${currentLang === 'ar' ? '1 متر' : '1 Meter'}</text>
+
+        <!-- -1.5D (66cm / Intermediate) -->
+        <line x1="400" y1="50" x2="400" y2="225" stroke="#334155" stroke-width="1"/>
+        <text x="400" y="240" fill="#E2E8F0" font-size="10" font-weight="700" text-anchor="middle">-1.5 D</text>
+        <text x="400" y="252" fill="#94A3B8" font-size="8.5" text-anchor="middle">${currentLang === 'ar' ? 'كمبيوتر (66 سم)' : 'PC (66cm)'}</text>
+
+        <!-- -2.5D (40cm / Near) -->
+        <line x1="540" y1="50" x2="540" y2="225" stroke="#334155" stroke-width="1"/>
+        <text x="540" y="240" fill="#E2E8F0" font-size="10" font-weight="700" text-anchor="middle">-2.5 D</text>
+        <text x="540" y="252" fill="#94A3B8" font-size="8.5" text-anchor="middle">${currentLang === 'ar' ? 'جوال (40 سم)' : 'Phone (40cm)'}</text>
+
+        <!-- -3.0D (33cm / Fine Reading) -->
+        <line x1="610" y1="50" x2="610" y2="225" stroke="#1E2D44" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="610" y="240" fill="#94A3B8" font-size="10" text-anchor="middle">-3.0 D</text>
+        <text x="610" y="252" fill="#64748B" font-size="8.5" text-anchor="middle">${currentLang === 'ar' ? 'مصحف (33 سم)' : 'Book (33cm)'}</text>
+
+        <!-- CURVE 1: Monofocal (Emerald line) -->
+        <path d="M 120 180 Q 155 120, 190 58 Q 230 65, 270 95 Q 330 145, 400 180 Q 480 210, 680 220" 
+              fill="none" 
+              stroke="${lensId === 'monofocal' ? '#10B981' : '#334155'}" 
+              stroke-width="${lensId === 'monofocal' ? '4' : '1.8'}" 
+              opacity="${lensId === 'monofocal' ? '1' : '0.4'}"/>
+
+        <!-- CURVE 2: EDOF (Cyan line) -->
+        <path d="M 120 160 Q 155 100, 190 58 Q 250 62, 330 75 Q 400 88, 470 120 Q 540 170, 680 210" 
+              fill="none" 
+              stroke="${lensId === 'edof' ? '#38BDF8' : '#334155'}" 
+              stroke-width="${lensId === 'edof' ? '4' : '1.8'}" 
+              opacity="${lensId === 'edof' ? '1' : '0.4'}"/>
+
+        <!-- CURVE 3: Trifocal (Gold line) -->
+        <path d="M 120 160 Q 155 95, 190 60 Q 250 68, 330 85 Q 400 90, 470 82 Q 540 76, 610 105 Q 650 145, 680 185" 
+              fill="none" 
+              stroke="${lensId === 'trifocal' ? '#C5A46D' : '#334155'}" 
+              stroke-width="${lensId === 'trifocal' ? '4.5' : '1.8'}" 
+              opacity="${lensId === 'trifocal' ? '1' : '0.4'}"/>
+
+        <!-- CURVE 4: Cataract (Dashed Red line) -->
+        <path d="M 120 195 Q 250 185, 400 188 Q 550 192, 680 198" 
+              fill="none" 
+              stroke="${lensId === 'cataract' ? '#EF4444' : '#334155'}" 
+              stroke-width="${lensId === 'cataract' ? '3.5' : '1.5'}" 
+              stroke-dasharray="${lensId === 'cataract' ? 'none' : '4,3'}"
+              opacity="${lensId === 'cataract' ? '1' : '0.35'}"/>
+
+        <!-- Interactive Marker Dot on active curve -->
+        <circle cx="${markerX}" cy="${markerY}" r="7" fill="#FFFFFF" stroke="var(--gold)" stroke-width="3" filter="url(#laserGlow)"/>
+        <line x1="${markerX}" y1="50" x2="${markerX}" y2="225" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
+      </svg>
+    </div>
+
+    <!-- Defocus Diopter Scrubber Card -->
+    <div class="defocus-controls-card">
+      <div style="display:flex;align-items:center;gap:var(--space-2);font-size:0.8rem;color:#E2E8F0;">
+        <span>🔍 ${currentLang === 'ar' ? 'فحص مسافة محددة:' : 'Inspect Distance:'}</span>
+        <strong style="color:var(--gold);">${clampedD.toFixed(1)} D</strong>
+      </div>
+
+      <input type="range" min="-3.5" max="0.5" step="0.25" value="${clampedD}" class="defocus-slider" oninput="setDefocusDiopter(this.value)">
+
+      <div style="background:#0A1220;border:1px solid #1E2D44;border-radius:var(--radius-md);padding:4px 14px;font-size:0.82rem;">
+        <span style="color:#94A3B8;">${currentLang === 'ar' ? 'حدة الإبصار المقدرة:' : 'Predicted Visual Acuity:'}</span>
+        <strong style="color:#10B981;margin-inline-start:6px;">${visualAcuityText}</strong>
+      </div>
+    </div>
+  </div>`;
+}
+
+function getDistanceLabel(diopter) {
+  const d = Math.abs(diopter);
+  if (d <= 0.25) return currentLang === 'ar' ? 'اللانهاية / القيادة' : 'Infinity / Driving';
+  if (d <= 1.0) return currentLang === 'ar' ? '1 متر' : '1 Meter';
+  if (d <= 1.75) return currentLang === 'ar' ? '66 سم (الكمبيوتر)' : '66 cm (PC)';
+  if (d <= 2.5) return currentLang === 'ar' ? '40 سم (الجوال)' : '40 cm (Phone)';
+  return currentLang === 'ar' ? '33 سم (القراءة الدقيقة)' : '33 cm (Fine Print)';
+}
+
+// --- MODE 4: SNELLEN & JAEGER CLINICAL ACUITY CARDS ---
+function renderClinicalChart(lensId, glassesOn) {
+  const isCataract = lensId === 'cataract';
+  const isMonofocal = lensId === 'monofocal';
+  const isEdof = lensId === 'edof';
+  const isTrifocal = lensId === 'trifocal';
+
+  // Distance filter
+  let snellenFilter = 'none';
+  if (isCataract) snellenFilter = 'blur(2.8px) contrast(0.65) sepia(0.3)';
+
+  // Near Jaeger filter
+  let jaegerFilter = 'none';
+  if (isCataract) {
+    jaegerFilter = 'blur(3.5px) contrast(0.6) sepia(0.3)';
+  } else if (isMonofocal) {
+    jaegerFilter = glassesOn ? 'none' : 'blur(2.6px) contrast(0.85)';
+  } else if (isEdof) {
+    jaegerFilter = 'blur(0.8px)';
+  } else if (isTrifocal) {
+    jaegerFilter = 'none';
+  }
+
+  return `
+  <div class="chart-viewport">
+    <div class="clinical-chart-board">
+      <!-- Left Column: Snellen Distance Eye Chart (6m / 20ft) -->
+      <div class="snellen-col" style="filter: ${snellenFilter};">
+        <div class="snellen-title">
+          🏥 ${currentLang === 'ar' ? 'لوحة سنيلين لفحص الرؤية البعيدة (6 أمتار)' : 'Snellen Distance Chart (6 Meters / 20 ft)'}
+        </div>
+
+        <div class="snellen-row" style="padding:10px 0;">
+          <span class="snellen-letters" style="font-size:42px;">E</span>
+          <span class="snellen-grade">20/200</span>
+        </div>
+        <div class="snellen-row" style="padding:8px 0;">
+          <span class="snellen-letters" style="font-size:28px;">F P</span>
+          <span class="snellen-grade">20/100</span>
+        </div>
+        <div class="snellen-row" style="padding:6px 0;">
+          <span class="snellen-letters" style="font-size:22px;">T O Z</span>
+          <span class="snellen-grade">20/70</span>
+        </div>
+        <div class="snellen-row" style="padding:5px 0;">
+          <span class="snellen-letters" style="font-size:17px;">L P E D</span>
+          <span class="snellen-grade">20/50</span>
+        </div>
+        <div class="snellen-row" style="padding:4px 0;">
+          <span class="snellen-letters" style="font-size:14px;">P E C F D</span>
+          <span class="snellen-grade">20/40</span>
+        </div>
+        <div class="snellen-row" style="padding:3px 0;background:rgba(197, 164, 109, 0.1);">
+          <span class="snellen-letters" style="font-size:11.5px;color:#641B2D;">E D F C Z P</span>
+          <span class="snellen-grade" style="color:#641B2D;font-weight:bold;">20/25</span>
+        </div>
+        <div class="snellen-row" style="padding:3px 0;border-bottom:none;">
+          <span class="snellen-letters" style="font-size:9.5px;letter-spacing:6px;">F E L O P Z D</span>
+          <span class="snellen-grade">20/20 (6/6)</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Jaeger Near Reading Card (35-40 cm) -->
+      <div class="jaeger-col">
+        <div>
+          <div class="jaeger-title">
+            <span>📖 ${currentLang === 'ar' ? 'بطاقة جيجر لفحص القراءة القريبة (40 سم)' : 'Jaeger Near Reading Card (40 cm)'}</span>
+            ${isMonofocal ? `
+              <button class="glasses-toggle-btn ${glassesOn ? 'active' : ''}" onclick="toggleSimGlasses()">
+                <span>👓</span>
+                <span>${glassesOn ? (currentLang === 'ar' ? 'خلع نظارة القراءة' : 'Remove Glasses') : (currentLang === 'ar' ? 'ارتداء نظارة قراءة +2.50D' : 'Wear +2.50D Glasses')}</span>
+              </button>
+            ` : ''}
+          </div>
+
+          <div style="filter: ${jaegerFilter}; transition: filter 0.3s ease;">
+            <!-- J7 / J5 (Headline & Clinic Details) -->
+            <div class="jaeger-block">
+              <div class="jaeger-grade-tag">J7 (14 pt) — ${currentLang === 'ar' ? 'الخط الكبير' : 'Large Print'}</div>
+              <p style="font-size:15px;line-height:1.6;font-weight:700;color:#0F172A;">
+                ${currentLang === 'ar' ? 'مستشفيات ومراكز مغربي للعيون — المدينة المنورة' : 'Magrabi Health Eye & ENT Hospital — Madinah'}
+              </p>
+            </div>
+
+            <!-- J5 / J3 (Prescription dosage) -->
+            <div class="jaeger-block">
+              <div class="jaeger-grade-tag">J3 (9 pt) — ${currentLang === 'ar' ? 'روشتة الدواء وتعليمات القطرات' : 'Medication & Eye Drops Instructions'}</div>
+              <p style="font-size:11px;line-height:1.8;color:#334155;">
+                ${currentLang === 'ar'
+                  ? 'قطرة مرطبة خالية من المواد الحافظة: قطرة واحدة في كل عين 4 مرات يومياً، مع الالتزام التام بفترات الراحة البصرية.'
+                  : 'Preservative-free artificial tears: 1 drop in each eye 4 times daily as prescribed by Dr. Maan Al Barry.'}
+              </p>
+            </div>
+
+            <!-- J1 (Fine Print / 20/25 Near Equivalence) -->
+            <div class="jaeger-block" style="border-inline-start:3px solid var(--secondary-burgundy);">
+              <div class="jaeger-grade-tag">J1 (7 pt / 20/25) — ${currentLang === 'ar' ? 'الخط الدقيق جداً للهاتف والكتب' : 'Fine Print & Mobile Text'}</div>
+              <p style="font-size:8.5px;line-height:1.9;color:#1E293B;">
+                ${currentLang === 'ar'
+                  ? 'تمكن العدسات ثلاثية البؤرة المريض من قراءة هذا السطر الدقيق بصفاء تام دون الحاجة لنظارة قراءة مساعدة. بينما تتطلب العدسة أحادية البؤرة ارتداء نظارة قراءة مخصصة للمسافات القريبة (+2.50 ديوبتر) لفك تشويش هذا السطر.'
+                  : 'Trifocal IOLs allow comfortable reading of this fine text without reading glasses. Standard Monofocal IOLs require +2.50D reading glasses to resolve this line.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.75rem;padding:6px 10px;background:#F1F5F9;border-radius:6px;color:#475569;margin-top:var(--space-2);">
+          ${isMonofocal
+            ? (glassesOn ? (currentLang === 'ar' ? '✅ تم تصحيح القريبة بنظارة قراءة (+2.50 ديوبتر)' : '✅ Corrected with +2.50D Reading Glasses') : (currentLang === 'ar' ? '⚠️ أحادية البؤرة: سطر J1 مشوش ويحتاج نظارة قراءة' : '⚠️ Monofocal: J1 is blurred without reading glasses'))
+            : (isTrifocal
+                ? (currentLang === 'ar' ? '✨ ثلاثية البؤرة: وضوح تام لجميع السطور J1 إلى J7 بدون نظارة' : '✨ Trifocal: J1 to J7 perfectly readable without glasses')
+                : (isEdof
+                    ? (currentLang === 'ar' ? '🔹 ممتدة المدى: J3 ممتاز، قد يلزم تكبير خفيف لـ J1' : '🔹 EDOF: J3 is clear; fine J1 print is slightly soft')
+                    : (currentLang === 'ar' ? '❌ عتامة الماء الأبيض: انخفاض تباين لجميع السطور والنظارة لا تعالج الساد' : '❌ Cataract: Contrast loss across all lines; glasses cannot cure lens opacity')))}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Scene content renderer for Mode 1
 function renderSimSceneContent(sceneId, lensId) {
   if (sceneId === 'night') {
-    // Uses real photographic references downloaded locally
-    const imgUrl = (lensId === 'cataract') ? '/images/sim-driving-cataract.jpg' : '/images/sim-driving-clear.jpg';
-    let filterStyle = 'none';
-    if (lensId === 'monofocal') filterStyle = 'contrast(1.05)';
-    else if (lensId === 'edof') filterStyle = 'contrast(1.0)';
-    else if (lensId === 'trifocal') filterStyle = 'none';
+    const isCataract = lensId === 'cataract';
+    const isTrifocal = lensId === 'trifocal';
+    const isEdof = lensId === 'edof';
+    const imgUrl = isCataract ? '/images/sim-driving-cataract.jpg' : '/images/sim-driving-clear.jpg';
 
     return `
-      <div style="width:100%;height:100%;background-image:url('${imgUrl}');background-size:cover;background-position:center;filter:${filterStyle};"></div>
+      <div style="position:relative;width:100%;height:100%;background-image:url('${imgUrl}');background-size:cover;background-position:center;">
+        <!-- Diffractive Halo Rings for Trifocal Night Driving -->
+        ${isTrifocal ? `
+          <div class="halo-overlay">
+            <!-- Center oncoming car headlight halos -->
+            <div style="position:absolute;top:54%;left:54%;">
+              <div class="halo-ring inner"></div>
+              <div class="halo-ring middle"></div>
+              <div class="halo-ring outer"></div>
+            </div>
+            <!-- Streetlight Halos -->
+            <div style="position:absolute;top:38%;left:53%;">
+              <div class="halo-ring inner"></div>
+              <div class="halo-ring middle"></div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Glare Starburst for Cataract -->
+        ${isCataract ? `<div class="cataract-glare-overlay"></div>` : ''}
+      </div>
     `;
   }
 
-  // Realistic Smartphone Reading Scene with Near Blur Simulation
+  // Intermediate Scene: Car Cockpit & Highway View (60-80 cm)
   if (sceneId === 'phone') {
     const isCataract = lensId === 'cataract';
     const isMonofocal = lensId === 'monofocal';
     const isEdof = lensId === 'edof';
-    const blurAmount = isCataract ? 'blur(4px) contrast(0.6)' : (isMonofocal ? 'blur(2.8px) contrast(0.85)' : (isEdof ? 'blur(0.8px)' : 'none'));
+
+    // In Monofocal, the dashboard gauges and navigation screen are blurred (+1.50D deficit), while the windshield view of the road is clear!
+    const dashBlur = isCataract ? 'blur(4px) contrast(0.6)' : (isMonofocal ? 'blur(3px) contrast(0.85)' : (isEdof ? 'none' : 'none'));
 
     return `
-    <div style="width:100%;height:100%;background:#1E2430;display:flex;align-items:center;justify-content:center;filter:${blurAmount};">
-      <div style="width:310px;height:420px;background:#0F172A;border-radius:32px;border:3px solid #334155;padding:12px;box-shadow:0 16px 32px rgba(0,0,0,0.5);display:flex;flex-direction:column;">
-        <div style="height:32px;background:#641B2D;border-radius:18px 18px 4px 4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">
-          ${currentLang === 'ar' ? 'عيادة د. معن البري — مغربي' : 'Dr. Maan Al Barry Clinic — Magrabi'}
+    <div style="width:100%;height:100%;background:#0A0F1A;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+      <!-- Top Windshield View: Highway to Airport Road Madinah -->
+      <div style="height:50%;background-image:url('/images/sim-driving-clear.jpg');background-size:cover;background-position:center 40%;position:relative;border-bottom:3px solid #1E293B;filter:${isCataract ? 'blur(3px) contrast(0.6)' : 'none'};">
+        <div style="position:absolute;bottom:8px;right:16px;background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;font-size:10px;color:#F1F5F9;">
+          ${currentLang === 'ar' ? 'الرؤية البعيدة عبر الزجاج الأمامي' : 'Windshield Distance View'}
         </div>
-        <div style="flex:1;background:#F8FAFC;border-radius:6px;padding:14px;color:#1E293B;font-family:sans-serif;margin-top:8px;display:flex;flex-direction:column;gap:10px;">
-          <div style="background:#E2E8F0;padding:10px;border-radius:10px;font-size:12px;line-height:1.6;">
-            <strong>${currentLang === 'ar' ? 'موعد فحص العيون والقرنية:' : 'Eye & Cornea Evaluation:'}</strong><br>
-            ${currentLang === 'ar' ? 'طريق المطار، المدينة المنورة' : 'Airport Road, Madinah'}
+      </div>
+
+      <!-- Bottom Car Dashboard Cockpit (Intermediate Focus 66-80 cm) -->
+      <div style="height:50%;background:#0F172A;padding:12px 24px;display:flex;align-items:center;justify-content:space-around;gap:16px;filter:${dashBlur};transition:filter 0.3s ease;">
+        <!-- Digital Speedometer -->
+        <div style="width:140px;height:120px;background:#1E293B;border-radius:12px;border:2px solid #334155;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);">
+          <span style="font-size:10px;color:#94A3B8;text-transform:uppercase;">SPEED</span>
+          <span style="font-size:36px;font-weight:900;color:#38BDF8;font-family:monospace;line-height:1;">80</span>
+          <span style="font-size:9px;color:#64748B;">KM / H</span>
+        </div>
+
+        <!-- Center GPS Navigation Screen (Madinah Airport Road) -->
+        <div style="flex:1;max-width:320px;height:120px;background:#131D31;border-radius:12px;border:2px solid #2563EB;padding:10px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1E293B;padding-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#FFFFFF;">📍 ${currentLang === 'ar' ? 'مستشفيات مغربي — طريق المطار' : 'Magrabi Hospital — Airport Rd'}</span>
+            <span style="font-size:9.5px;color:#38BDF8;">600 m</span>
           </div>
-          <div style="background:#FFFFFF;border:1px solid #CBD5E1;padding:12px;border-radius:10px;font-size:13px;line-height:1.7;">
-            <p style="font-weight:700;color:#641B2D;margin-bottom:4px;">${currentLang === 'ar' ? 'اختبار قراءة الخطوط الدقيقة' : 'Fine Print Acuity Test'}</p>
-            <p style="font-size:11.5px;color:#334155;">
-              ${currentLang === 'ar' ? 'القدرة على تصفح الرسائل وقراءة الخط الصغير براحة تامة دون إجهاد العين.' : 'Testing clear reading of smartphone text and messaging comfortably without eye strain.'}
-            </p>
-            <p style="font-size:9.5px;color:#94A3B8;margin-top:6px;">Line N6 / 20/30 Near Acuity Target</p>
+          <div style="font-size:10px;color:#CBD5E1;line-height:1.5;">
+            ${currentLang === 'ar' ? 'انعطف يميناً بعد 600 متر باتجاه العيادات الاستشارية.' : 'Turn right in 600m towards Specialty Clinics.'}
           </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;">
+            <span>ETA: 4 min</span>
+            <span style="color:#10B981;">Intermediate Acuity Target</span>
+          </div>
+        </div>
+
+        <!-- Fuel & RPM Gauges -->
+        <div style="width:140px;height:120px;background:#1E293B;border-radius:12px;border:2px solid #334155;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span style="font-size:10px;color:#94A3B8;">ENGINE</span>
+          <span style="font-size:24px;font-weight:700;color:#F59E0B;font-family:monospace;">2,200</span>
+          <span style="font-size:9px;color:#64748B;">RPM</span>
         </div>
       </div>
     </div>`;
   }
 
-  // Realistic Quran & Printed Book Scene with Near Acuity Simulation
+  // Near Scene: Prescription Pad & Arabic Reading (35-40 cm)
   const isCataract = lensId === 'cataract';
   const isMonofocal = lensId === 'monofocal';
   const isEdof = lensId === 'edof';
-  const blurAmount = isCataract ? 'blur(4.5px) contrast(0.55) sepia(0.3)' : (isMonofocal ? 'blur(2.6px)' : (isEdof ? 'blur(1.2px)' : 'none'));
+  const nearBlur = isCataract ? 'blur(4.5px) contrast(0.55) sepia(0.3)' : (isMonofocal ? 'blur(2.8px)' : (isEdof ? 'blur(1.1px)' : 'none'));
 
   return `
-  <div style="width:100%;height:100%;background:#DCD3BE;display:flex;align-items:center;justify-content:center;filter:${blurAmount};">
-    <div style="width:640px;height:380px;background:#FCF9F0;border:2px solid #B8A88E;border-radius:8px;padding:24px;display:flex;gap:24px;box-shadow:0 12px 28px rgba(0,0,0,0.25);">
-      <!-- Right Page -->
-      <div style="flex:1;border-inline-end:1px solid #D5C7B0;padding-inline-end:16px;text-align:center;">
-        <h4 style="font-size:16px;color:#641B2D;margin-bottom:8px;font-family:serif;">
-          ${currentLang === 'ar' ? 'المصحف الشريف والقراءة اليومية' : 'Reading & Classical Typography'}
-        </h4>
-        <p style="font-size:13px;color:#1E293B;line-height:2.1;font-family:serif;">
-          ${currentLang === 'ar'
-            ? 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ'
-            : 'In the name of God, the Most Gracious, the Most Merciful. Praise be to God, Lord of the worlds.'}
-        </p>
-        <p style="font-size:11px;color:#64748B;margin-top:12px;line-height:1.7;">
-          ${currentLang === 'ar' ? 'وضوح علامات التشكيل وحركات الإعراب بدقة دون إجهاد أو ضبابية.' : 'High contrast resolution for Arabic calligraphy, fine diacritics, and printed script.'}
-        </p>
-      </div>
-      <!-- Left Page -->
-      <div style="flex:1;padding-inline-start:16px;text-align:center;">
-        <h4 style="font-size:15px;color:#C5A46D;margin-bottom:8px;font-family:serif;">
-          ${currentLang === 'ar' ? 'د. معن بن عبدالله البري' : 'Dr. Maan Al Barry'}
-        </h4>
-        <p style="font-size:12px;color:#334155;line-height:1.9;">
-          ${currentLang === 'ar' ? 'استشاري جراحة الماء الأبيض وتصحيح الإبصار والقرنية — مستشفيات ومراكز مغربي للعيون بالمدينة المنورة.' : 'Consultant Ophthalmologist — Cataract & Refractive Surgery, Magrabi Health Madinah.'}
-        </p>
-        <div style="margin-top:24px;display:flex;flex-direction:column;gap:8px;">
-          ${[1, 2, 3, 4].map(() => `<div style="height:8px;background:#E2D7C3;border-radius:2px;width:100%;"></div>`).join('')}
+  <div style="width:100%;height:100%;background:#111A29;display:flex;align-items:center;justify-content:center;padding:16px;">
+    <div style="width:620px;height:380px;background:#FCFBF7;border:2px solid #CBD5E1;border-radius:12px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,0.4);display:flex;flex-direction:column;justify-content:space-between;filter:${nearBlur};transition:filter 0.3s ease;color:#0F172A;">
+      <!-- Header of Medical Prescription Pad -->
+      <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #641B2D;padding-bottom:12px;">
+        <div>
+          <h3 style="font-size:17px;font-weight:800;color:#641B2D;margin-bottom:2px;">
+            ${currentLang === 'ar' ? 'د. معن بن عبدالله بن عمر البري' : 'Dr. Maan Abdullah Al Barry'}
+          </h3>
+          <p style="font-size:10.5px;color:#475569;">
+            ${currentLang === 'ar' ? 'استشاري طب وجراحة العيون والقرنية والماء الأبيض — زميل كلية الجراحين الملكية (بريطانيا)' : 'Consultant Ophthalmologist — Cataract & Refractive Surgery (FRCS UK)'}
+          </p>
         </div>
+        <div style="text-align:end;font-size:10px;color:#64748B;">
+          <span>${currentLang === 'ar' ? 'مستشفيات مغربي — المدينة المنورة' : 'Magrabi Hospital — Madinah'}</span><br>
+          <span style="color:#C5A46D;font-weight:700;">Rx Medical Clinic</span>
+        </div>
+      </div>
+
+      <!-- Body: Authentic Medical Instructions & Reading Lines -->
+      <div style="padding:12px 0;display:flex;flex-direction:column;gap:10px;font-family:serif;">
+        <p style="font-size:15px;line-height:1.8;color:#1E293B;font-weight:600;">
+          ${currentLang === 'ar'
+            ? 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — خطة العلاج والتأهيل البصري بعد جراحة الساد وزراعة العدسات'
+            : 'Post-Operative Visual Rehabilitation & Intraocular Lens Protocol'}
+        </p>
+
+        <p style="font-size:12px;line-height:2.0;color:#334155;">
+          ${currentLang === 'ar'
+            ? 'السطر الدقيق (N5): استخدام القطرات بانتظام، مع مراعاة راحة العين أثناء القراءة اليومية للمصحف وتصفح شاشات الهواتف الذكية. تتيح العدسات ثلاثية البؤرة قراءة هذا النص الصغير بنقاء تام دون الحاجة لنظارة.'
+            : 'Fine print verification (N5): Regular instillation of post-operative drops. Trifocal IOLs permit pristine resolution of this fine text without reading glasses.'}
+        </p>
+
+        <div style="background:#F1F5F9;border:1px dashed #CBD5E1;padding:8px 12px;border-radius:6px;font-size:10.5px;color:#475569;">
+          <strong>${currentLang === 'ar' ? 'معيار الفحص السريري:' : 'Clinical Target:'}</strong> ${currentLang === 'ar' ? 'اختبار المسافة القريبة عند 40 سم بدقة 20/25 (Jaeger J1)' : '40 cm Near Reading Target at 20/25 (Jaeger J1)'}
+        </div>
+      </div>
+
+      <!-- Footer Signature -->
+      <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #E2E8F0;padding-top:8px;font-size:10px;color:#64748B;">
+        <span>${currentLang === 'ar' ? 'طريق المطار، المدينة المنورة' : 'Airport Road, Madinah'}</span>
+        <span style="font-family:cursive;font-size:14px;color:#641B2D;font-weight:bold;">Dr. Maan Al Barry</span>
       </div>
     </div>
   </div>`;
@@ -1564,6 +2186,28 @@ window.toggleMobileMenu = function() {
 
 window.closeMobileMenu = function() {
   document.getElementById('mobile-nav')?.classList.remove('open');
+};
+
+window.setSimMode = function(mode) {
+  simMode = mode;
+  render();
+  scrollToSection('simulator');
+};
+
+window.setDefocusDiopter = function(val) {
+  defocusDiopter = parseFloat(val);
+  const container = document.getElementById('sim-viewport');
+  if (container && simMode === 'defocus') {
+    container.innerHTML = renderDefocusCurve(simLens, defocusDiopter);
+  } else {
+    render();
+  }
+};
+
+window.toggleSimGlasses = function() {
+  simGlassesOn = !simGlassesOn;
+  render();
+  scrollToSection('simulator');
 };
 
 window.setSimScene = function(scene) {
