@@ -1,22 +1,22 @@
 import './style.css';
 
 // ============================================================
-// DR. MAAN AL BARRY — OFFICIAL MEDICAL WEBSITE
-// Bilingual Ophthalmology Website with Vision Simulator & IOL Guide
+// DR. MAAN AL BARRY — OFFICIAL MEDICAL PORTAL
+// Clinical Prestige & Academic Ophthalmology
 // ============================================================
 
 // --- DATA LAYER (Verified Primary Source Facts) ---
 const DOCTOR = {
-  nameAr: 'د. معن عبدالله عمر البري',
+  nameAr: 'د. معن بن عبدالله بن عمر البري',
   nameEn: 'Dr. Maan Abdullah Omar Al Barry',
   shortNameAr: 'د. معن البري',
   shortNameEn: 'Dr. Maan Al Barry',
-  titleAr: 'استشاري المياه البيضاء وعمليات تصحيح الإبصار والقرنية',
+  titleAr: 'استشاري طب وجراحة العيون والقرنية والماء الأبيض وتصحيح الإبصار',
   titleEn: 'Consultant Ophthalmologist — Cataract, Cornea & Refractive Surgery',
   degreesAr: 'زميل كلية الجراحين الملكية (بريطانيا) FRCS',
   degreesEn: 'Fellow of the Royal College of Surgeons (UK) FRCS',
-  clinicAr: 'مغربي الصحية للعيون والأذن – المدينة المنورة',
-  clinicEn: 'Magrabi Health Eye & ENT – Madinah',
+  clinicAr: 'مستشفيات ومراكز مغربي للعيون والأذن – المدينة المنورة',
+  clinicEn: 'Magrabi Health Eye & ENT Hospital – Madinah',
   addressAr: 'طريق المطار، المدينة المنورة، المملكة العربية السعودية',
   addressEn: 'Airport Road, Madinah, Saudi Arabia',
   whatsapp: '966508533309',
@@ -26,10 +26,11 @@ const DOCTOR = {
   magrabiProfile: 'https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry',
   taibahProfile: 'https://www.taibahu.edu.sa/the-university/about-taibah-university/faculty-members/1431',
   email: 'mbarry@taibahu.edu.sa',
-  mapsUrl: 'https://maps.google.com/?q=Magrabi+Hospital+Madinah+Airport+Road',
+  // Official supplied Google Maps Destination Link
+  mapsUrl: 'https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA',
   roles: {
     ar: [
-      'المدير الطبي التنفيذي – مغربي المدينة المنورة',
+      'المدير الطبي التنفيذي – مستشفيات ومراكز مغربي بالمدينة المنورة',
       'رئيس قسم طب وجراحة العيون – جامعة طيبة',
       'ممثل الجمعية السعودية لطب وجراحة العيون – المدينة المنورة',
       'عضو المجلس العلمي لمؤتمر البحر الأحمر لطب وجراحة العيون',
@@ -39,7 +40,7 @@ const DOCTOR = {
       'عضو الجمعية السعودية لطب وجراحة العيون (SOS)',
     ],
     en: [
-      'Chief Medical Officer – Magrabi Madinah',
+      'Chief Medical Officer – Magrabi Health Eye & ENT, Madinah',
       'Chairman, Department of Ophthalmology – Taibah University',
       'Saudi Ophthalmological Society Representative – Madinah',
       'Scientific Council Member – Red Sea Ophthalmology Conference',
@@ -51,393 +52,1118 @@ const DOCTOR = {
   }
 };
 
-// --- BILINGUAL CONTENT (ARABIC & ENGLISH) ---
-const i18n = {
-  ar: {
-    lang: 'ar',
-    dir: 'rtl',
-    nav: {
-      home: 'الرئيسية',
-      profile: 'السيرة المهنية',
-      specialties: 'التخصصات',
-      cataracts: 'المياه البيضاء والعدسات',
-      simulator: 'محاكي الرؤية',
-      questionnaire: 'استبيان العدسات',
-      education: 'التثقيف الصحي',
-      clinic: 'العيادة والحجز',
-      faq: 'أسئلة شائعة'
-    },
-    hero: {
-      badge: 'استشاري طب وجراحة العيون — المدينة المنورة',
-      h1: `رعاية متخصصة لصحة العين<br><span class="gold-text">وجراحة المياه البيضاء وتصحيح الإبصار</span>`,
-      subtitle: 'تقييم شامل لحالات المياه البيضاء، القرنية المخروطية، وتصحيح النظر بالليزر، مع شرح علمي وافٍ للخيارات الطبية المناسبة لكل مريض بناءً على الفحص الدقيق والقياسات السريرية.',
-      cta1: 'احجز موعدك في مغربي',
-      cta2: 'استفسر عبر واتساب',
-      cred1: 'المدير الطبي لمغربي المدينة',
-      cred2: 'رئيس قسم العيون بجامعة طيبة',
-      cred3: 'زميل كلية الجراحين الملكية (FRCS)',
-      stat1: '+200 تقييم موثق',
-      stat2: 'مستشفى معتمد JCI وCBAHI',
-      stat3: '+70 عاماً خبرة مغربي',
-    },
-    profile: {
-      label: 'السيرة المهنية والخبرات',
-      title: 'د. معن عبدالله عمر البري',
-      subtitle: 'استشاري المياه البيضاء وعمليات تصحيح الإبصار والقرنية',
-      bio1: 'د. معن عبدالله البري استشاري طب وجراحة العيون في مغربي الصحية للعيون والأذن بالمدينة المنورة. يعمل ضمن وحدة المياه البيضاء ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص العدسة، فحص تضاريس القرنية، وملاءمة الإجراءات العلاجية والجراحية.',
-      bio2: 'تتكامل خبرته السريرية مع أدوار قيادية وأكاديمية بارزة؛ حيث يشغل منصب المدير الطبي التنفيذي لمغربي المدينة المنورة، ورئيس قسم طب وجراحة العيون في جامعة طيبة، وممثل الجمعية السعودية لطب وجراحة العيون في منطقة المدينة المنورة، إلى جانب عضويته في المجلس العلمي لمؤتمر البحر الأحمر لطب وجراحة العيون.',
-      qualificationsTitle: 'المؤهلات والعضويات الرسمية',
-      timelineTitle: 'المسيرة القيادية والأكاديمية',
-      galleryTitle: 'المشاركات العلمية والمؤتمرات',
-      reviewsTitle: 'تجارب المرضى في مغربي المدينة المنورة',
-      reviewsSubtitle: 'آراء وتقييمات من مرضى زاروا عيادة د. معن البري'
-    },
-    specialties: {
-      label: 'التخصصات السريرية',
-      title: 'مجالات الرعاية الطبية والجراحية',
-      desc: 'خدمات تشخيصية وعلاجية مبنية على أحدث البروتوكولات والقياسات الطبية الدقيقة.',
-      items: [
-        {
-          icon: '👁',
-          title: 'جراحة المياه البيضاء وزراعة العدسات',
-          desc: 'إزالة إعتام عدسة العين بالموجات فوق الصوتية (الفاكو) عبر فتحة ميكروسكوبية، وزراعة أحدث العدسات داخل العين (أحادية البؤرة، ممتدة العمق EDOF، أو متعددة/ثلاثية البؤرة).'
-        },
-        {
-          icon: '🔬',
-          title: 'تصحيح الإبصار بالليزر والليزك',
-          desc: 'تقييم شامل لملائمة تصحيح النظر بالليزك والفيمتو ليزك والسطحي (PRK)، بناءً على فحص تضاريس القرنية وسماكتها واستقرار قياسات النظر.'
-        },
-        {
-          icon: '🫧',
-          title: 'أمراض القرنية والقرنية المخروطية',
-          desc: 'تشخيص مبكر للقرنية المخروطية وإجراء تثبيت القرنية الضوئي (CXL) لمنع تطور الحالة، وتقديم خطط علاجية ومتابعة دورية لحفظ النظر.'
-        },
-        {
-          icon: '📐',
-          title: 'الفحوصات الشاملة وقياسات ما قبل الجراحة',
-          desc: 'قياس أبعاد العين بدقة ضوئية متطورة (Biometry)، وفحص قاع العين وسطح القرنية لضمان أفضل اختيار وتخطيط علاجي آمن.'
-        }
-      ]
-    },
-    iolSection: {
-      label: 'دليل المرضى للعدسات',
-      title: 'خيارات العدسات داخل العين (IOL)',
-      desc: 'عند إجراء عملية المياه البيضاء، يتم استبدال عدسة العين المعتمة بعدسة صناعية دائمة. لا توجد عدسة واحدة مثالية للجميع، بل يحدد الطبيب الخيار الأنسب لحالتك وأسلوب حياتك بعد فحص شامل.',
-    },
-    simulator: {
-      label: 'أداة تعليمية تفاعلية',
-      title: 'محاكي الرؤية التوضيحي',
-      desc: 'استكشف كيف قد تبدو الرؤية في ظروف مختلفة وقارن بين الحالات عبر شريط المقارنة التفاعلي. هذه محاكاة تعليمية توضيحية وليست تنبؤًا بنتيجة جراحية.',
-      compareLabel: 'حرّك الشريط للمقارنة بين الرؤية الطبيعية وتأثير العدسة المختارة:',
-      normalView: 'رؤية سليمة',
-      simulatedView: 'المحاكاة التعليمية',
-    },
-    questionnaire: {
-      label: 'استبيان تثقيفي',
-      title: 'نقاط النقاش حول خيارات العدسات',
-      desc: 'أجب عن 4 أسئلة موجزة لمساعدتك في فهم المحاور الهامة التي يجدر بك مناقشتها مع طبيب العيون في عيادتك القادمة.',
-    },
-    education: {
-      label: 'المكتبة الطبية الموثوقة',
-      title: 'التثقيف الطبي لصحة عينيك',
-      desc: 'مقالات وإرشادات طبية مبسطة ومبنية على الدليل العلمي أعدت لمساعدتك وعائلتك على فهم الحالات والخيارات العلاجية.',
-    },
-    clinic: {
-      label: 'العيادة والموقع',
-      title: 'موقع العيادة وحجز المواعيد',
-      name: DOCTOR.clinicAr,
-      address: DOCTOR.addressAr,
-      directions: 'الاتجاهات عبر خرائط جوجل',
-      hours: 'أوقات العمل',
-      hoursValue: 'السبت إلى الخميس: 9:00 صباحاً – 9:00 مساءً (يرجى التأكد من مواعيد العيادة قبل الحضور)',
-      phone: 'مركز الاتصال الموحد',
-      landline: 'الهاتف المباشر',
-      book: 'احجز عبر البوابة الرسمية لمغربي',
-      whatsapp: 'استفسر عن المواعيد عبر واتساب',
-    },
-    faq: {
-      label: 'الأسئلة الشائعة',
-      title: 'إجابات على أكثر الأسئلة تكراراً',
-    },
-    footer: {
-      disclaimer: 'إخلاء مسؤولية طبية',
-      disclaimerText: 'المحتوى المنشور في هذا الموقع ذو طبيعة تثقيفية وتوعوية عامة، ولا يُغني بأي حال عن الاستشارة الطبية والفحص السريري من قبل طبيب العيون المختص. لا يجوز استخدام هذه المعلومات لتشخيص أو علاج أي مرض. في حالات الطوارئ العينية، يرجى مراجعة أقرب مركز طوارئ فوراً.',
-      rights: 'جميع الحقوق محفوظة ©',
-      madeWith: 'الموقع التعريفي الشخصي للدكتور معن عبدالله البري',
-    },
-    cta: {
-      title: 'هل تحتاج إلى استشارة متخصصة لصحة عينيك؟',
-      desc: 'احجز موعدك الآن مع د. معن البري في مغربي المدينة المنورة لإجراء فحص شامل ومناقشة الخطة الأنسب لحالتك.',
-    },
-    langSwitch: 'English',
-    bookNow: 'احجز موعدك',
-    learnMore: 'اقرأ المزيد',
-    whatsappMsg: 'مرحباً، أرغب بالاستفسار عن حجز موعد استشارة مع د. معن عبدالله البري في مغربي المدينة المنورة.',
-    simDisclaimer: 'تنبيه: هذه محاكاة تعليمية توضيحية وليست محاكاة سريرية معتمدة أو تنبؤًا بنتيجة العملية. تختلف النتائج الفعلية حسب حالة العين، القياسات الطبية، ونوع العدسة المزروعة. لا تغني هذه الأداة عن الفحص السريري المتخصص.',
-    qDisclaimer: 'تنبيه سريري: هذا الاستبيان أداة تعليمية وتثقيفية فقط، ولا يقدم تشخيصاً طبياً أو توصية ملزمة بعدسة معينة. يعتمد اختيار العدسة وإجراءات تصحيح النظر كلياً على الفحص الشامل والقياسات الطبية في العيادة.',
+// --- SIMULATOR CONFIGURATIONS ---
+const SCENES = {
+  night: {
+    id: 'night',
+    titleAr: 'القيادة الليلية (المدينة المنورة)',
+    titleEn: 'Night Driving (Madinah)',
+    locationAr: 'شارع سلطانة / الدائري الثاني، المدينة المنورة',
+    locationEn: 'Airport Road / King Abdullah Ring Road, Madinah',
+    icon: '🚗',
+    baseImg: '/images/sim-driving-cataract.jpg',
+    simImg: '/images/sim-driving-clear.jpg',
+    baseTagAr: 'الأساس: ماء أبيض غير معالج (ضبابية وتشتت ضوئي)',
+    baseTagEn: 'Baseline: Untreated Cataract (Blur & Halos)',
   },
-  en: {
-    lang: 'en',
-    dir: 'ltr',
-    nav: {
-      home: 'Home',
-      profile: 'Biography',
-      specialties: 'Specialties',
-      cataracts: 'Cataracts & IOLs',
-      simulator: 'Vision Simulator',
-      questionnaire: 'Lens Guide',
-      education: 'Patient Education',
-      clinic: 'Clinic & Booking',
-      faq: 'FAQ'
-    },
-    hero: {
-      badge: 'Consultant Ophthalmologist — Madinah, Saudi Arabia',
-      h1: `Specialized Eye Care,<br><span class="gold-text">Cataract Surgery & Vision Correction</span>`,
-      subtitle: 'Comprehensive evaluation for cataracts, keratoconus, and laser vision correction — with evidence-based guidance on the most suitable clinical options after precise ophthalmic examination.',
-      cta1: 'Book at Magrabi',
-      cta2: 'Inquire via WhatsApp',
-      cred1: 'Chief Medical Officer – Magrabi Madinah',
-      cred2: 'Chair of Ophthalmology – Taibah University',
-      cred3: 'Fellow of Royal College of Surgeons (FRCS)',
-      stat1: '200+ Verified Reviews',
-      stat2: 'JCI & CBAHI Accredited',
-      stat3: '70+ Years of Magrabi Care',
-    },
-    profile: {
-      label: 'Professional Profile',
-      title: 'Dr. Maan Abdullah Omar Al Barry',
-      subtitle: 'Consultant Ophthalmologist — Cataract, Cornea & Refractive Surgery',
-      bio1: 'Dr. Maan Abdullah Al Barry is a consultant ophthalmic surgeon practicing at Magrabi Health Eye & ENT in Madinah, Saudi Arabia. He serves within the Cataract Unit and Cornea & Refractive Surgery Unit, providing meticulous evaluation for patients requiring cataract removal, intraocular lens selection, corneal pathology care, and refractive surgery.',
-      bio2: 'His clinical practice is reinforced by significant leadership and academic appointments: he is Executive Medical Director / Chief Medical Officer of Magrabi Madinah, Chairman of the Department of Ophthalmology at Taibah University, Madinah Representative of the Saudi Ophthalmological Society, and Scientific Council Member of the Red Sea Ophthalmology Conference.',
-      qualificationsTitle: 'Verified Qualifications & Credentials',
-      timelineTitle: 'Academic & Executive Appointments',
-      galleryTitle: 'Scientific Leadership & Conferences',
-      reviewsTitle: 'Verified Patient Experiences',
-      reviewsSubtitle: 'Reviews from patients treated at Magrabi Health Madinah'
-    },
-    specialties: {
-      label: 'Clinical Specialties',
-      title: 'Areas of Medical & Surgical Care',
-      desc: 'Evidence-based diagnostic and surgical services tailored to each patient after detailed measurements.',
-      items: [
-        {
-          icon: '👁',
-          title: 'Cataract Surgery & IOL Implantation',
-          desc: 'Micro-incision phacoemulsification for cataract removal with implantation of premium intraocular lenses (Monofocal, EDOF, or Trifocal/Multifocal).'
-        },
-        {
-          icon: '🔬',
-          title: 'Laser Vision Correction (LASIK / PRK)',
-          desc: 'Comprehensive suitability assessment for LASIK, Femto-LASIK, and surface ablation (PRK) based on corneal topography, pachymetry, and refractive stability.'
-        },
-        {
-          icon: '🫧',
-          title: 'Cornea Care & Keratoconus (CXL)',
-          desc: 'Early diagnosis of keratoconus, corneal collagen cross-linking (CXL) to arrest disease progression, and personalized long-term management.'
-        },
-        {
-          icon: '📐',
-          title: 'Pre-operative Biometry & Diagnostics',
-          desc: 'High-precision optical biometry and anterior segment imaging ensuring optimal calculation and personalized surgical planning.'
-        }
-      ]
-    },
-    iolSection: {
-      label: 'Patient Education',
-      title: 'Understanding Intraocular Lens (IOL) Options',
-      desc: 'During cataract surgery, the clouded natural lens is replaced with a permanent artificial intraocular lens. No single lens is universally ideal; your surgeon determines the optimal choice based on your eye measurements, visual priorities, and lifestyle.',
-    },
-    simulator: {
-      label: 'Interactive Educational Tool',
-      title: 'Vision Simulator & Interactive Comparison',
-      desc: 'Explore how vision may appear across different everyday scenarios and compare views using the interactive split slider. This is an illustrative simulation, not a clinical prediction.',
-      compareLabel: 'Drag slider to compare normal vision with simulated lens state:',
-      normalView: 'Normal Vision',
-      simulatedView: 'Simulated State',
-    },
-    questionnaire: {
-      label: 'Educational Questionnaire',
-      title: 'Discussion Points for Your Consultation',
-      desc: 'Answer 4 brief questions to identify key topics and expectations to discuss with your ophthalmologist during your clinical evaluation.',
-    },
-    education: {
-      label: 'Evidence-Based Library',
-      title: 'Patient Medical Education',
-      desc: 'Clear, doctor-reviewed educational guides to help you understand your eye health, surgical options, and recovery journey.',
-    },
-    clinic: {
-      label: 'Clinic & Location',
-      title: 'Location & Appointment Booking',
-      name: DOCTOR.clinicEn,
-      address: DOCTOR.addressEn,
-      directions: 'Get Directions on Google Maps',
-      hours: 'Clinic Hours',
-      hoursValue: 'Saturday to Thursday: 9:00 AM – 9:00 PM (Please confirm specific clinic schedule before visit)',
-      phone: 'Call Center',
-      landline: 'Direct Line',
-      book: 'Book via Magrabi Official Portal',
-      whatsapp: 'Inquire via WhatsApp',
-    },
-    faq: {
-      label: 'FAQ',
-      title: 'Frequently Asked Questions',
-    },
-    footer: {
-      disclaimer: 'Medical Disclaimer',
-      disclaimerText: 'The content provided on this website is for informational and educational purposes only. It is not intended as a substitute for professional ophthalmic examination, diagnosis, or treatment. Never disregard professional medical advice or delay seeking care because of something you have read here. For eye emergencies, contact an emergency room immediately.',
-      rights: 'All Rights Reserved ©',
-      madeWith: 'Official Physician Website of Dr. Maan Al Barry',
-    },
-    cta: {
-      title: 'Ready for a Specialized Eye Evaluation?',
-      desc: 'Book your appointment with Dr. Maan Al Barry at Magrabi Madinah for a comprehensive eye exam and personalized discussion of your treatment options.',
-    },
-    langSwitch: 'عربي',
-    bookNow: 'Book Appointment',
-    learnMore: 'Learn More',
-    whatsappMsg: 'Hello, I would like to inquire about booking a consultation with Dr. Maan Al Barry at Magrabi Madinah.',
-    simDisclaimer: 'Clinical Note: This is an illustrative educational simulation, not a clinically validated prediction of surgical outcomes. Actual results vary based on corneal anatomy, eye health, lens calculations, and individual healing. It does not replace an in-person eye exam.',
-    qDisclaimer: 'Clinical Safety: This questionnaire is strictly educational and non-diagnostic. Lens selection and refractive surgery candidacy require comprehensive clinical examination and optical biometry performed by an ophthalmologist.',
+  phone: {
+    id: 'phone',
+    titleAr: 'الهاتف والمسافات القريبة (40 سم)',
+    titleEn: 'Smartphone Reading (40 cm)',
+    locationAr: 'تصفح الرسائل وتطبيقات الجوال ومحادثات العيادة',
+    locationEn: 'Reading Clinic Messages & Smartphone Text',
+    icon: '📱',
+    baseImg: '', // rendered via high precision SVG
+    simImg: '',
+    baseTagAr: 'الأساس: صعوبة قراءة الرسائل وإجهاد العين',
+    baseTagEn: 'Baseline: Blurry Screen Text & Strain',
+  },
+  quran: {
+    id: 'quran',
+    titleAr: 'المصحف الشريف والقراءة المكتبية',
+    titleEn: 'Quran & Book Reading',
+    locationAr: 'قراءة المصحف والكتب الورقية في إضاءة معتدلة',
+    locationEn: 'Reading Quran & Printed Books in Ambient Light',
+    icon: '📖',
+    baseImg: '', // rendered via high precision SVG
+    simImg: '',
+    baseTagAr: 'الأساس: بهتان الحروف وضبابية التشكيل',
+    baseTagEn: 'Baseline: Faded Ink & Hazy Diacritics',
   }
 };
 
-// --- IOL COMPARISON DATA ---
-const IOL_DATA = {
-  ar: [
-    {
-      type: 'أحادية البؤرة (Monofocal)',
-      distance: 'ممتازة وحادة للرؤية البعيدة',
-      intermediate: 'قد تحتاج نظارة خفيفة لشاشات الكمبيوتر',
-      near: 'تتطلب استخدام نظارة للقراءة القريبة',
-      glare: 'أقل احتمالية للهالات والوهج ليلاً',
-      bestFor: 'المرضى الذين يفضلون أعلى جودة تباين للقيادة ليلاً ولا يمانعون ارتداء نظارة قراءة.'
-    },
-    {
-      type: 'ممتدة العمق (EDOF)',
-      distance: 'ممتازة للرؤية البعيدة',
-      intermediate: 'واضحة جداً للمسافات المتوسطة (لوحة القيادة والكمبيوتر)',
-      near: 'جيدة للقراءة المتوسطة، قد تلزم نظارة للنصوص الدقيقة',
-      glare: 'احتمالية منخفضة إلى معتدلة للهالات',
-      bestFor: 'المرضى الراغبين في نطاق رؤية مستمر من البعيد إلى شاشات الكمبيوتر مع تقليل الاعتماد على النظارة.'
-    },
-    {
-      type: 'متعددة/ثلاثية البؤرة (Trifocal)',
-      distance: 'جيدة جداً للمسافات البعيدة',
-      intermediate: 'جيدة للمسافة المتوسطة (أجهزة التابلت والكمبيوتر)',
-      near: 'جيدة للقراءة القريبة والهاتف دون نظارة في معظم الأوقات',
-      glare: 'احتمالية أعلى للهالات حول الأضواء ليلاً (تتكيف معها العين عادةً)',
-      bestFor: 'المرضى الباحثين عن أقصى درجات الاستغناء عن النظارة في معظم المهام اليومية، مع سلامة القرنية والشبكية.'
-    },
-    {
-      type: 'عدسات توريك (Toric) لتصحيح الاستجماتيزم',
-      distance: 'تصحح اللابؤرية الناتجة عن شكل القرنية البيضاوي',
-      intermediate: 'تتوفر بتصاميم أحادية أو ممتدة أو ثلاثية',
-      near: 'حسب التصميم البؤري المختار',
-      glare: 'يعتمد على التصميم البؤري المصاحب',
-      bestFor: 'المرضى الذين يعانون من درجات ملحوظة من الاستجماتيزم (اللابؤرية) قبل العملية.'
-    }
-  ],
-  en: [
-    {
-      type: 'Monofocal IOL',
-      distance: 'Sharp, high-contrast distance vision',
-      intermediate: 'May need light glasses for computer screens',
-      near: 'Requires reading glasses for close tasks',
-      glare: 'Lowest incidence of halos and glare at night',
-      bestFor: 'Patients prioritizing maximum contrast for night driving who are comfortable using reading glasses.'
-    },
-    {
-      type: 'Extended Depth of Focus (EDOF)',
-      distance: 'Excellent distance vision',
-      intermediate: 'Very clear intermediate vision (dashboard & screens)',
-      near: 'Functional for casual reading; small print may need glasses',
-      glare: 'Low to moderate halo profile',
-      bestFor: 'Patients seeking continuous vision across distance and intermediate with reduced reliance on glasses.'
-    },
-    {
-      type: 'Trifocal / Multifocal IOL',
-      distance: 'Good distance vision',
-      intermediate: 'Clear intermediate vision for tablets & laptops',
-      near: 'Good near vision for books & smartphones without glasses',
-      glare: 'Higher chance of starbursts/halos at night (typically diminishes with neuroadaptation)',
-      bestFor: 'Patients desiring maximum spectacle independence for daily tasks, provided ocular surface and retina are healthy.'
-    },
-    {
-      type: 'Toric IOL (Astigmatism Correction)',
-      distance: 'Neutralizes pre-existing corneal astigmatism',
-      intermediate: 'Available in monofocal, EDOF, or trifocal optics',
-      near: 'Depends on optical platform selected',
-      glare: 'Depends on accompanying optic design',
-      bestFor: 'Patients with significant pre-existing corneal astigmatism seeking sharper uncorrected vision.'
-    }
-  ]
+const LENSES = {
+  trifocal: {
+    id: 'trifocal',
+    nameAr: 'ثلاثية البؤرة الذكية (Trifocal)',
+    nameEn: 'Smart Trifocal IOL',
+    tagAr: 'المحاكاة: عدسة ثلاثية البؤرة الذكية',
+    tagEn: 'Simulated: Smart Trifocal IOL',
+    focusAr: 'تغطية ممتازة للمسافة البعيدة (القيادة)، المتوسطة (الشاشات)، والقريبة (قراءة الهاتف).',
+    focusEn: 'Continuous coverage for distance (driving), intermediate (screens), and near (phone).',
+    distance: 98,
+    intermediate: 92,
+    near: 88,
+    spectaclesAr: 'استقلالية عالية جداً لمعظم المهام اليومية (90-95%) دون نظارة',
+    spectaclesEn: 'High spectacle independence (90–95%) for daily tasks',
+    halosAr: 'طفيف إلى معتدل حول المصابيح القوية أثناء القيادة ليلاً ويتلاشى تدريجياً بالتكيف العصبي',
+    halosEn: 'Mild-to-moderate halos around bright headlights, diminishing with neuroadaptation',
+    insightTitleAr: 'رأي الاستشاري: كيف يرى الدماغ الصور عبر العدسة ثلاثية البؤرة؟',
+    insightTitleEn: 'Clinical Insight: How Neuroadaptation Works with Trifocal IOLs',
+    insightTextAr: 'تقوم العدسات ثلاثية البؤرة (Trifocal) بتوزيع الضوء على ثلاث نقاط تركيز رئيسية. يستغرق الدماغ البشري فترة وجيزة تتراوح بين عدة أسابيع إلى بضعة أشهر لتعلم اختيار الصورة الأصفى تلقائياً دون أي مجهود إرادي، وهي العملية المعروفة طبياً بـ (Neuroadaptation).',
+    insightTextEn: 'Trifocal lenses split incoming light into distinct focal points. The visual cortex adapts over several weeks to automatically prioritize the in-focus image, a physiological process known as neuroadaptation.'
+  },
+  edof: {
+    id: 'edof',
+    nameAr: 'ممتدة المدى البصري (EDOF)',
+    nameEn: 'Extended Depth of Focus (EDOF)',
+    tagAr: 'المحاكاة: عدسة ممتدة المدى البصري (EDOF)',
+    tagEn: 'Simulated: EDOF Intraocular Lens',
+    focusAr: 'تواصل بصري انسيابي ممتاز للمسافات البعيدة والمتوسطة مع حد أدنى شبه معدوم من الهالات الليلية.',
+    focusEn: 'Seamless visual continuum across distance and intermediate with minimal night halos.',
+    distance: 99,
+    intermediate: 94,
+    near: 65,
+    spectaclesAr: 'استقلالية ممتازة نهاراً، قد تلزم نظارة خفيفة لقراءة الخطوط الدقيقة جداً بالهاتف',
+    spectaclesEn: 'Great daytime independence; light reading glasses for very small print',
+    halosAr: 'أدنى درجات التوهج الليلي، خيار مثالي لمن يقودون سياراتهم كثيراً ليلاً',
+    halosEn: 'Negligible halo profile, optimal for frequent nighttime drivers',
+    insightTitleAr: 'رأي الاستشاري: مفهوم المدى الممتد (EDOF)',
+    insightTitleEn: 'Clinical Insight: Continuous Depth of Focus Mechanism',
+    insightTextAr: 'تعتمد عدسات EDOF على تمديد البؤرة الضوئية بدلاً من تجزئتها لنقاط منفصلة، مما يمنح المريض تبايناً بصرياً سلساً وثابتاً من الأفق البعيد وحتى شاشة الحاسوب ولوحة القيادة، مع الحفاظ على نقاء الرؤية الليلية وخلوها من الهالات.',
+    insightTextEn: 'EDOF optics elongate the focal zone rather than creating isolated focal points, preserving pristine night driving contrast and continuous intermediate clarity.'
+  },
+  monofocal: {
+    id: 'monofocal',
+    nameAr: 'أحادية البؤرة القياسية (Monofocal)',
+    nameEn: 'Standard Monofocal IOL',
+    tagAr: 'المحاكاة: عدسة أحادية البؤرة (مضبوطة للمسافة البعيدة)',
+    tagEn: 'Simulated: Monofocal (Set for Distance)',
+    focusAr: 'صفاء نقي وتباين فائق للمسافة البعيدة فقط، مع ضرورة استخدام نظارة طبية للقراءة والكمبيوتر.',
+    focusEn: 'Pristine distance contrast; dedicated glasses required for screens and reading.',
+    distance: 100,
+    intermediate: 50,
+    near: 25,
+    spectaclesAr: 'الحاجة لنظارة قراءة قريبة ونظارة كمبيوتر هي حاجة يومية دائمة',
+    spectaclesEn: 'Reading and computer glasses are required on a daily basis',
+    halosAr: 'منعدم تماماً، تباين عالي الجودة مطابق للعين الطبيعية الشابة',
+    halosEn: 'Zero optical dysphotopsia; pristine optical purity',
+    insightTitleAr: 'رأي الاستشاري: نقاء النقطة الواحدة',
+    insightTitleEn: 'Clinical Insight: High-Contrast Monofocal Clarity',
+    insightTextAr: 'تعد العدسة أحادية البؤرة الخيار الكلاسيكي المعتمد. يتم ضبط قوة العدسة لتمنح المريض رؤية بعيدة صافية تماماً (مثل القيادة)، بينما يعتمد المريض على نظارات القراءة للمسافات القريبة والمتوسطة.',
+    insightTextEn: 'Monofocal IOLs remain the gold standard for pure optical contrast. They optimize distance vision while leaving intermediate and near tasks to reading glasses.'
+  },
+  cataract: {
+    id: 'cataract',
+    nameAr: 'الماء الأبيض غير المعالج (Cataract)',
+    nameEn: 'Untreated Cataract Baseline',
+    tagAr: 'المحاكاة: عتامة العدسة المتقدمة',
+    tagEn: 'Simulated: Advanced Cataract Clouding',
+    focusAr: 'تشوش متقدم، اصفرار الألوان، فقدان حدة التباين، وهالات ضوئية مزعجة تعيق القيادة والقراءة.',
+    focusEn: 'Severe optical blur, contrast loss, faded color perception, and disabling glare.',
+    distance: 35,
+    intermediate: 30,
+    near: 20,
+    spectaclesAr: 'النظارات الطبية لا تستطيع تصحيح العتامة الداخلية لعدسة العين',
+    spectaclesEn: 'Eyeglasses cannot correct internal crystalline lens opacification',
+    halosAr: 'توهج وتشتت ضوئي حاد (Glare) وانبهار شديد بمصابيح السيارات المعاكسة',
+    halosEn: 'Severe light scattering and disabling glare from oncoming headlights',
+    insightTitleAr: 'رأي الاستشاري: أثر الساد على نوعية الحياة',
+    insightTitleEn: 'Clinical Insight: Progressive Quality of Life Impact',
+    insightTextAr: 'الماء الأبيض ليس غشاءً خارجياً على العين، بل هو تصلب وتعتّم تدريجي في البروتينات المكونة لعدسة العين الطبيعية داخل الحدقة، ويعد التدخل الجراحي بالفاكو وزراعة العدسة هو الحل الحاسم والنهائي.',
+    insightTextEn: 'Cataract is the progressive clouding of the natural crystalline lens inside the pupil. Micro-incision phacoemulsification and IOL implantation is the definitive curative treatment.'
+  }
 };
 
-// --- MEDICAL EDUCATION LIBRARY ARTICLES ---
-const ARTICLES = {
-  ar: [
+// --- APP STATE ---
+let currentLang = 'ar';
+let themeMode = localStorage.getItem('theme') || 'system'; // 'system' | 'light' | 'dark'
+let simScene = 'night';
+let simLens = 'trifocal';
+let simSliderPos = 50; // percentage
+let qStep = 0;
+let qAnswers = [];
+let qDone = false;
+let activeArticle = null;
+
+// Apply initial theme
+function applyTheme(mode) {
+  themeMode = mode;
+  localStorage.setItem('theme', mode);
+
+  if (mode === 'system') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', mode);
+  }
+
+  // Update button icon if present
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) {
+    const isDark = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    btn.innerHTML = mode === 'system' ? '💻' : (isDark ? '🌙' : '☀️');
+    btn.setAttribute('title', mode === 'system' ? 'الوضع التلقائي (حسب النظام)' : (mode === 'dark' ? 'الوضع الليلي' : 'الوضع النهاري'));
+  }
+}
+
+// Watch system theme change
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (themeMode === 'system') {
+    applyTheme('system');
+  }
+});
+
+// Cycle theme button handler
+window.cycleTheme = function() {
+  if (themeMode === 'system') applyTheme('light');
+  else if (themeMode === 'light') applyTheme('dark');
+  else applyTheme('system');
+};
+
+function whatsappUrl(prefill) {
+  const msg = encodeURIComponent(prefill || (currentLang === 'ar'
+    ? 'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن عبدالله البري في مستشفى مغربي المدينة المنورة.'
+    : 'Hello, I would like to inquire about booking a consultation with Dr. Maan Al Barry at Magrabi Madinah.'));
+  return `https://wa.me/${DOCTOR.whatsapp}?text=${msg}`;
+}
+
+// --- RENDER APPLICATION ---
+function render() {
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.body.className = currentLang === 'en' ? 'lang-en' : '';
+
+  const app = document.getElementById('app');
+  if (!app) return;
+
+  app.innerHTML = `
+    ${renderHeader()}
+    <main>
+      ${renderHero()}
+      ${renderProfile()}
+      ${renderSpecialties()}
+      ${renderSimulator()}
+      ${renderIOLGuide()}
+      ${renderQuestionnaire()}
+      ${renderEducation()}
+      ${renderClinic()}
+      ${renderFAQ()}
+      ${renderCTA()}
+    </main>
+    ${renderFooter()}
+    ${renderBookingBar()}
+  `;
+
+  applyTheme(themeMode);
+  initScrollAnimations();
+  initHeaderScroll();
+}
+
+// --- HEADER COMPONENT ---
+function renderHeader() {
+  const isDark = themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const themeIcon = themeMode === 'system' ? '💻' : (isDark ? '🌙' : '☀️');
+
+  return `
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="header-logo" onclick="scrollToSection('home');return false;">
+        <div class="logo-icon">م</div>
+        <div class="logo-text">
+          <strong>${currentLang === 'ar' ? DOCTOR.shortNameAr : DOCTOR.shortNameEn}</strong>
+          <small>${currentLang === 'ar' ? 'استشاري طب وجراحة العيون' : 'Consultant Ophthalmologist'}</small>
+        </div>
+      </a>
+
+      <nav class="header-nav">
+        <div class="nav-links">
+          <a href="#home" onclick="scrollToSection('home');return false;">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
+          <a href="#profile" onclick="scrollToSection('profile');return false;">${currentLang === 'ar' ? 'عن الدكتور' : 'Biography'}</a>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'التخصصات' : 'Specialties'}</a>
+          <a href="#simulator" onclick="scrollToSection('simulator');return false;">${currentLang === 'ar' ? 'محاكي الرؤية' : 'Simulator'}</a>
+          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'دليل العدسات' : 'IOL Guide'}</a>
+          <a href="#education" onclick="scrollToSection('education');return false;">${currentLang === 'ar' ? 'المكتبة الطبية' : 'Education'}</a>
+          <a href="#clinic" onclick="scrollToSection('clinic');return false;">${currentLang === 'ar' ? 'العيادة والحجز' : 'Clinic'}</a>
+        </div>
+
+        <div class="header-actions">
+          <!-- Adaptive Theme Switcher -->
+          <button id="theme-toggle-btn" class="theme-switch-btn" onclick="cycleTheme()" aria-label="Toggle Theme">${themeIcon}</button>
+          
+          <!-- Bilingual Switcher -->
+          <button class="lang-switch" onclick="toggleLang()" aria-label="Switch Language">${currentLang === 'ar' ? 'English' : 'عربي'}</button>
+          
+          <!-- Primary Booking CTA -->
+          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Appointment'}
+          </a>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open Navigation">☰</button>
+      </nav>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <nav class="mobile-nav" id="mobile-nav">
+      <a href="#home" onclick="scrollToSection('home');closeMobileMenu();return false;">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
+      <a href="#profile" onclick="scrollToSection('profile');closeMobileMenu();return false;">${currentLang === 'ar' ? 'عن الدكتور والمسيرة' : 'Biography'}</a>
+      <a href="#specialties" onclick="scrollToSection('specialties');closeMobileMenu();return false;">${currentLang === 'ar' ? 'التخصصات والخدمات' : 'Specialties'}</a>
+      <a href="#simulator" onclick="scrollToSection('simulator');closeMobileMenu();return false;">${currentLang === 'ar' ? 'محاكي الرؤية التفاعلي' : 'Vision Simulator'}</a>
+      <a href="#cataracts" onclick="scrollToSection('cataracts');closeMobileMenu();return false;">${currentLang === 'ar' ? 'دليل العدسات (IOLs)' : 'IOL Guide'}</a>
+      <a href="#questionnaire" onclick="scrollToSection('questionnaire');closeMobileMenu();return false;">${currentLang === 'ar' ? 'استبيان نمط الحياة البصري' : 'Questionnaire'}</a>
+      <a href="#education" onclick="scrollToSection('education');closeMobileMenu();return false;">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف' : 'Medical Library'}</a>
+      <a href="#clinic" onclick="scrollToSection('clinic');closeMobileMenu();return false;">${currentLang === 'ar' ? 'العيادة والحجز والموقع' : 'Clinic & Booking'}</a>
+      <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">📍 ${currentLang === 'ar' ? 'موقع المستشفى (خرائط جوجل)' : 'Hospital Google Maps'}</a>
+    </nav>
+  </header>`;
+}
+
+// --- HERO SECTION ---
+function renderHero() {
+  return `
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content fade-in">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            ${currentLang === 'ar' ? 'استشاري معتمد | خبرة سريرية وأكاديمية متقدمة | المدينة المنورة' : 'Consultant Ophthalmologist | Madinah, Saudi Arabia'}
+          </div>
+
+          <h1>
+            ${currentLang === 'ar'
+              ? 'رعاية متخصصة لصحة العين<br><span class="gold-text">ورؤية أوضح وأكثر دقة</span>'
+              : 'Specialized Eye Care &amp;<br><span class="gold-text">Precision Cataract Surgery</span>'}
+          </h1>
+
+          <p class="hero-subtitle">
+            ${currentLang === 'ar'
+              ? 'استشاري طب وجراحة العيون، جراحة الساد (الماء الأبيض)، وزراعة العدسات الذكية، وتصحيح العيوب الانكسارية بالمدينة المنورة. خبرة أكاديمية وسريرية موثقة ترتكز على أحدث التقنيات وأعلى معايير الأمان الجراحي.'
+              : 'Senior consultant specializing in micro-incision cataract surgery, premium IOL implantation, laser refractive correction, and corneal preservation at Magrabi Health Madinah.'}
+          </p>
+
+          <div class="hero-cta">
+            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+              ${currentLang === 'ar' ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}
+            </a>
+            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg">
+              ${currentLang === 'ar' ? 'جرب محاكي الرؤية التفاعلي' : 'Try Vision Simulator'}
+            </a>
+            <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;">
+              📍 <span>${currentLang === 'ar' ? 'مستشفيات مغربي – المدينة المنورة' : 'Magrabi Hospital – Madinah'}</span>
+            </a>
+          </div>
+
+          <div class="hero-credentials">
+            <div class="credential-item">
+              <span class="icon">🏥</span>
+              <span>${currentLang === 'ar' ? 'المدير الطبي لمغربي المدينة' : 'CMO Magrabi Madinah'}</span>
+            </div>
+            <div class="credential-item">
+              <span class="icon">🎓</span>
+              <span>${currentLang === 'ar' ? 'رئيس قسم العيون بجامعة طيبة' : 'Chair of Ophthalmology, Taibah Univ.'}</span>
+            </div>
+            <div class="credential-item">
+              <span class="icon">🇬🇧</span>
+              <span>${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية (FRCS)' : 'Fellow of Royal College of Surgeons (FRCS)'}</span>
+            </div>
+            <div class="credential-item">
+              <span class="icon">🇸🇦</span>
+              <span>${currentLang === 'ar' ? 'ممثل الجمعية السعودية لطب العيون' : 'SOS Madinah Representative'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-image fade-in">
+          <img src="/images/dr-maan-portrait.png" alt="${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='/images/doctor-portrait.jpg'">
+          <div class="image-accent">
+            <div class="accent-title">${currentLang === 'ar' ? 'العيادة التخصصية' : 'Clinical Practice'}</div>
+            <div class="accent-value">${currentLang === 'ar' ? 'مغربي — طريق المطار' : 'Magrabi — Airport Road'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+// --- PHYSICIAN PROFILE SECTION ---
+function renderProfile() {
+  const roles = DOCTOR.roles[currentLang];
+
+  return `
+  <section class="section section-alt" id="profile">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">${currentLang === 'ar' ? 'السيرة المهنية والأكاديمية' : 'Professional Profile'}</div>
+        <h2>${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}</h2>
+        <p style="font-weight:600;color:var(--secondary-burgundy);">${currentLang === 'ar' ? DOCTOR.titleAr : DOCTOR.titleEn}</p>
+      </div>
+
+      <div class="profile-grid fade-in">
+        <div class="profile-media">
+          <img src="/images/doctor-portrait.jpg" alt="${DOCTOR.nameAr}" class="profile-media-img" loading="lazy">
+          <div class="credentials-chips">
+            <span class="chip chip-gold">🎖️ ${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)' : 'Fellow of Royal College of Surgeons (FRCS UK)'}</span>
+            <span class="chip">🏛️ ${currentLang === 'ar' ? 'رئيس قسم طب وجراحة العيون – جامعة طيبة' : 'Chair of Ophthalmology – Taibah University'}</span>
+            <span class="chip">🏥 ${currentLang === 'ar' ? 'المدير الطبي التنفيذي – مغربي المدينة' : 'Executive Medical Director – Magrabi Madinah'}</span>
+            <span class="chip">🇸🇦 ${currentLang === 'ar' ? 'ممثل الجمعية السعودية لطب وجراحة العيون' : 'Saudi Ophthalmology Society Rep.'}</span>
+          </div>
+        </div>
+
+        <div class="profile-text">
+          <p style="font-size:1.05rem;line-height:1.9;color:var(--text-primary);margin-bottom:var(--space-4);">
+            ${currentLang === 'ar'
+              ? 'د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة. يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص عدسة العين، تشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
+              : 'Dr. Maan Al Barry is a Consultant Ophthalmologist and Anterior Segment Surgeon practicing at Magrabi Health Eye & ENT Hospital in Madinah. He provides specialized clinical care in cataract micro-surgery, corneal disease management, and customized laser refractive procedures.'}
+          </p>
+
+          <p style="font-size:1.05rem;line-height:1.9;color:var(--text-secondary);margin-bottom:var(--space-6);">
+            ${currentLang === 'ar'
+              ? 'تتكامل ممارسته السريرية مع أدوار قيادية وأكاديمية بارزة؛ حيث يشغل منصب المدير الطبي التنفيذي لمغربي المدينة المنورة، ورئيس قسم طب وجراحة العيون في جامعة طيبة، وممثل الجمعية السعودية لطب وجراحة العيون في منطقة المدينة المنورة، وعضو المجلس العلمي لمؤتمر البحر الأحمر لطب العيون.'
+              : 'His clinical mastery is backed by distinguished academic appointments as Chairman of the Ophthalmology Department at Taibah University, Chief Medical Officer at Magrabi Madinah, and active member of the American Academy of Ophthalmology.'}
+          </p>
+
+          <h3 style="margin-bottom:var(--space-4);font-size:1.15rem;color:var(--secondary-burgundy);">
+            ${currentLang === 'ar' ? 'المسيرة القيادية والمهنية' : 'Leadership & Scientific Appointments'}
+          </h3>
+          <div class="timeline">
+            ${roles.map(r => `
+              <div class="timeline-item">
+                <h4>${r}</h4>
+                <p>${currentLang === 'ar' ? 'عضوية قيادية وأكاديمية رسمية مثبتة في السجلات الطبية' : 'Official medical appointment and peer-recognized leadership'}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Conference & Scientific Leadership Gallery -->
+      <div style="margin-top:var(--space-16);" class="fade-in">
+        <div class="section-header" style="margin-bottom:var(--space-6);">
+          <div class="section-label">${currentLang === 'ar' ? 'المشاركات العلمية والمؤتمرات الدولية' : 'Scientific Conferences & Leadership'}</div>
+          <h3 style="font-size:1.35rem;">${currentLang === 'ar' ? 'التمثيل العلمي لطب العيون' : 'Ophthalmic Academic Representation'}</h3>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <img src="/images/dr-maan-redsea.jpg" alt="Saudi Ophthalmology Society Red Sea" loading="lazy">
+            <div class="gallery-caption">
+              <strong>${currentLang === 'ar' ? 'مؤتمر البحر الأحمر لطب وجراحة العيون 2024' : 'Red Sea Ophthalmology Conference 2024'}</strong>
+              <p>${currentLang === 'ar' ? 'عضو المجلس العلمي وممثل الجمعية السعودية لطب العيون' : 'Scientific Council Member & SOS Representative'}</p>
+            </div>
+          </div>
+          <div class="gallery-card">
+            <img src="/images/dr-maan-faculty.jpg" alt="Faculty Saudi Ophthalmology" loading="lazy">
+            <div class="gallery-caption">
+              <strong>${currentLang === 'ar' ? 'المجلس العلمي والجلسات الأكاديمية الدولية' : 'International Scientific Faculty & Clinical Sessions'}</strong>
+              <p>${currentLang === 'ar' ? 'مع نخبة من قيادات وجراحي العيون الدوليين' : 'With international ophthalmic leaders and surgical faculty'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verified Patient Reviews -->
+      <div style="margin-top:var(--space-16);" class="fade-in">
+        <div class="section-header" style="margin-bottom:var(--space-6);">
+          <div class="section-label">${currentLang === 'ar' ? 'آراء وتجارب المرضى' : 'Patient Testimonials'}</div>
+          <h3 style="font-size:1.35rem;">${currentLang === 'ar' ? 'تجارب المراجعين في مغربي المدينة المنورة' : 'Reviews from Magrabi Health Madinah'}</h3>
+        </div>
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"${currentLang === 'ar' ? 'كانت تجربة ممتازة بكل المقاييس. استغرق موعدي قرابة ساعة، أجريت خلالها الفحوصات الدقيقة ثم قابلت الدكتور معن البري، الذي شرح لي تفاصيل الإجراء وأي مضاعفات محتملة بكل أمانة ووضوح ومهنية عالية.' : 'An outstanding experience by all measures. I completed thorough diagnostics before meeting Dr. Maan Al Barry, who explained the procedure and potential nuances with utmost clarity and professional integrity.'}"</p>
+            </div>
+            <div class="review-author">
+              <div class="review-avatar">ر</div>
+              <div class="review-meta">
+                <strong>${currentLang === 'ar' ? 'راكان العبري' : 'Rakan Al-Abri'}</strong>
+                <span>${currentLang === 'ar' ? 'مريض تم علاجه بمغربي المدينة المنورة' : 'Patient at Magrabi Madinah'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"${currentLang === 'ar' ? 'أود أن أشكر فريق د. معن البري على حسن الاستقبال والتعامل الراقي والمعاملة المريحة، والاهتمام الفائق بتنظيم المواعيد والإجابة عن كافة التساؤلات بابتسامة وترحاب.' : 'I would like to extend heartfelt thanks to Dr. Maan Al Barry and his clinical team for their wonderful hospitality, comfortable care, and seamless appointment coordination.'}"</p>
+            </div>
+            <div class="review-author">
+              <div class="review-avatar">م</div>
+              <div class="review-meta">
+                <strong>${currentLang === 'ar' ? 'مايا أحمد' : 'Maya Ahmed'}</strong>
+                <span>${currentLang === 'ar' ? 'مراجعة عيادة العيون والقرنية' : 'Cornea & Vision Correction Patient'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"${currentLang === 'ar' ? 'أعرب عن خالص امتناني للدكتور معن البري على مهنيته الاستثنائية، وخبرته الواسعة، وتوجيهه اللطيف والمهدئ طوال مراحل العملية، والاهتمام الدقيق بالمتابعة بعد الإجراء.' : 'My deepest gratitude to Dr. Maan for his exceptional surgical precision, vast expertise, and gentle guidance throughout the entire procedure and post-op follow-up.'}"</p>
+            </div>
+            <div class="review-author">
+              <div class="review-avatar">ب</div>
+              <div class="review-meta">
+                <strong>${currentLang === 'ar' ? 'بشرى الشراحيلي' : 'Bushra Al-Sharahili'}</strong>
+                <span>${currentLang === 'ar' ? 'مريضة جراحة عيون' : 'Ophthalmic Surgery Patient'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+// --- SPECIALTIES & PRECISION UNITS ---
+function renderSpecialties() {
+  const units = [
+    {
+      code: 'SURG-01',
+      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات الذكية',
+      titleEn: 'Cataract Surgery & Premium IOL Implantation',
+      descAr: 'استبدال العدسة المعتمة بالموجات فوق الصوتية (الفاكو) وزراعة أحدث العدسات الذكية: أحادية البؤرة، ممتدة المدى البصري (EDOF)، والعدسات ثلاثية البؤرة لاستعادة صفاء الرؤية.',
+      descEn: 'Micro-incision phacoemulsification for lens replacement with advanced monofocal, EDOF, and trifocal intraocular lenses.',
+      img: '/images/surgery-phaco.jpg',
+      tagsAr: ['إزالة الساد بالفاكو', 'تصحيح الاستجماتيزم', 'العدسات التوريكية', 'عدسات ثلاثية EDOF'],
+      tagsEn: ['Phacoemulsification', 'Astigmatism Correction', 'Toric IOLs', 'Trifocal / EDOF Optics']
+    },
+    {
+      code: 'SURG-02',
+      titleAr: 'جراحة وأمراض القرنية والقرنية المخروطية المتقدمة',
+      titleEn: 'Cornea Care & Advanced Keratoconus Treatment',
+      descAr: 'التشخيص المبكر والدقيق للقرنية المخروطية وتثبيت القرنية بالأشعة فوق البنفسجية والريبوفلافين (Corneal Cross-Linking - CXL)، مع خطط متابعة مستمرة لحفظ النظر.',
+      descEn: 'Early keratoconus detection, corneal collagen cross-linking (CXL) to arrest progression, and specialized anterior segment management.',
+      img: '/images/cornea-cxl.jpg',
+      tagsAr: ['تثبيت القرنية CXL', 'سماكة القرنية الطبقية', 'علاج سحابات القرنية', 'جفاف العين المزمن'],
+      tagsEn: ['Corneal Cross-Linking (CXL)', 'Pachymetry Tomography', 'Corneal Opacities', 'Ocular Surface Disease']
+    },
+    {
+      code: 'SURG-03',
+      titleAr: 'عمليات تصحيح النظر بالليزر والفيمتو ليزك',
+      titleEn: 'Laser Refractive Surgery (Femto-LASIK & PRK)',
+      descAr: 'معاينة وفحص دقيق لقصر وطول النظر والاستجماتيزم باستخدام تقنيات الفيمتوليزك، والليزر السطحي (PRK)، وبصمة العين المخصصة (Custom Wavefront) لتحقيق أقصى حدة بصرية.',
+      descEn: 'Comprehensive suitability evaluation for Femto-LASIK and surface ablation (PRK) driven by customized wavefront topography.',
+      img: '/images/clinic-exam-room.jpg',
+      tagsAr: ['فحص سماكة القرنية', 'الليزر السطحي PRK', 'الفيمتو ليزك', 'بصمة العين Wavefront'],
+      tagsEn: ['Pachymetry Check', 'Surface PRK', 'Femto-LASIK', 'Wavefront Custom']
+    },
+    {
+      code: 'DIAG-04',
+      titleAr: 'الفحوصات التشخيصية المتقدمة وقياسات ما قبل الجراحة',
+      titleEn: 'Advanced Diagnostics & Optical Biometry',
+      descAr: 'التصوير المقطعي للقرنية (Pentacam)، فحص خلايا البطانة القرنية (Specular Microscopy)، وقياس قوة العدسة الدقيق ضوئياً (Optical Biometry) بأحدث أجهزة التصوير ثلاثية الأبعاد.',
+      descEn: 'High-precision Scheimpflug corneal tomography (Pentacam), specular endothelial microscopy, and optical biometry for exact surgical planning.',
+      img: '/images/diagnostics-pentacam.jpg',
+      tagsAr: ['طبوغرافيا البنتاكام', 'قياس ضغط العين', 'مسح العصب البصري', 'حساب العدسات بالبيومتري'],
+      tagsEn: ['Pentacam Tomography', 'Intraocular Pressure', 'OCT Macula & Nerve', 'Optical Biometry IOL Master']
+    }
+  ];
+
+  return `
+  <section class="section" id="specialties">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">${currentLang === 'ar' ? 'التخصصات الطبية والخدمات الجراحية الدقيقة' : 'Precision Clinical Specialties'}</div>
+        <h2>${currentLang === 'ar' ? 'حلول جراحية وعلاجية بأحدث ما توصل إليه علم العيون' : 'Advanced Ophthalmic Medical & Surgical Solutions'}</h2>
+        <p>${currentLang === 'ar' ? 'إجراءات جراحية وتشخيصية متقدمة تُجرى وفق بروتوكولات عالمية معتمدة لضمان أمان ودقة النتائج.' : 'State-of-the-art diagnostics and surgeries performed according to international clinical quality benchmarks.'}</p>
+      </div>
+
+      <div class="specialties-grid fade-in">
+        ${units.map(u => `
+          <div class="specialty-unit-card">
+            <div class="specialty-img-wrap">
+              <img src="${u.img}" alt="${currentLang === 'ar' ? u.titleAr : u.titleEn}" loading="lazy">
+            </div>
+            <div class="specialty-body">
+              <div class="specialty-tag">${u.code}</div>
+              <h3>${currentLang === 'ar' ? u.titleAr : u.titleEn}</h3>
+              <p>${currentLang === 'ar' ? u.descAr : u.descEn}</p>
+              <div class="specialty-features">
+                ${(currentLang === 'ar' ? u.tagsAr : u.tagsEn).map(t => `<span class="specialty-pill">${t}</span>`).join('')}
+              </div>
+              <div style="margin-top:auto;padding-top:var(--space-3);">
+                <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                  ${currentLang === 'ar' ? 'طلب تقرير تشخيصي أو حجز موعد ←' : 'Book Specialty Evaluation →'}
+                </a>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+// --- VISION SIMULATOR (OVERHAULED CONSOLE) ---
+function renderSimulator() {
+  const currentScene = SCENES[simScene];
+  const currentLens = LENSES[simLens];
+
+  return `
+  <section class="simulator-section" id="simulator">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">${currentLang === 'ar' ? 'أداة بصرية استرشادية تعليمية معتمدة' : 'Accredited Educational Tool'}</div>
+        <h2>${currentLang === 'ar' ? 'محاكي الرؤية التفاعلي: عِش التجربة البصرية وقارن بين خيارات العدسات' : 'Interactive Vision Simulator & Comparative Lens Optics'}</h2>
+        <p>${currentLang === 'ar' ? 'أداة رقمية توضيحية لتوضيح الفارق المتوقع في جودة الرؤية، وتشتت الأضواء الليلية، ومدى الاستقلالية عن النظارات الطبية بعد زراعة العدسات الذكية الحديثة (IOL).' : 'Explore how vision behaves across real daily tasks and inspect the optical characteristics of modern intraocular lenses.'}</p>
+      </div>
+
+      <div class="sim-chassis fade-in">
+        <!-- Top Toolbar: Scene Selector -->
+        <div class="sim-top-bar">
+          <div class="sim-scene-tabs">
+            <button class="sim-scene-tab ${simScene === 'night' ? 'active' : ''}" onclick="setSimScene('night')">
+              <span>🚗</span>
+              <span>${currentLang === 'ar' ? 'القيادة الليلية (المدينة المنورة)' : 'Night Driving (Madinah)'}</span>
+            </button>
+            <button class="sim-scene-tab ${simScene === 'phone' ? 'active' : ''}" onclick="setSimScene('phone')">
+              <span>📱</span>
+              <span>${currentLang === 'ar' ? 'الهاتف والمسافات القريبة (40 سم)' : 'Smartphone (40 cm)'}</span>
+            </button>
+            <button class="sim-scene-tab ${simScene === 'quran' ? 'active' : ''}" onclick="setSimScene('quran')">
+              <span>📖</span>
+              <span>${currentLang === 'ar' ? 'المصحف الشريف والقراءة المكتبية' : 'Quran & Book Reading'}</span>
+            </button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:var(--space-2);">
+            <button onclick="resetSimSlider()" class="btn btn-sm" style="background:#162236;color:#E2E8F0;border:1px solid #243550;">
+              ${currentLang === 'ar' ? 'إعادة ضبط المنصف' : 'Center Slider'}
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Split-View Viewport Canvas -->
+        <div class="sim-viewport-frame" id="sim-viewport">
+          <!-- Layer 1: Baseline View (Underneath / Cataract condition) -->
+          <div class="sim-layer-base">
+            ${renderSimSceneContent(simScene, 'cataract')}
+          </div>
+
+          <!-- Layer 2: Simulated Lens View (Clipped by slider handle) -->
+          <div class="sim-layer-active-wrap" id="sim-active-wrap" style="width: ${simSliderPos}%;">
+            <div style="position:absolute;inset:0;width:100%;height:100%;">
+              ${renderSimSceneContent(simScene, simLens)}
+            </div>
+          </div>
+
+          <!-- Slider Range Input for smooth mouse / touch interaction -->
+          <input type="range" min="0" max="100" value="${simSliderPos}" class="sim-slider-input" oninput="updateSimSlider(this.value)" aria-label="Compare baseline vs simulated lens">
+
+          <!-- Draggable Divider Line & Badge -->
+          <div class="sim-slider-line" id="sim-divider-line" style="left: ${simSliderPos}%;">
+            <div class="sim-slider-handle">⟺</div>
+          </div>
+
+          <!-- Status Tags inside Viewport -->
+          <div class="sim-tag-pill sim-tag-base">
+            ${currentLang === 'ar' ? currentScene.baseTagAr : currentScene.baseTagEn}
+          </div>
+          <div class="sim-tag-pill sim-tag-simulated">
+            ${currentLang === 'ar' ? currentLens.tagAr : currentLens.tagEn}
+          </div>
+
+          <!-- Location Indicator -->
+          <div class="sim-location-pill">
+            📍 ${currentLang === 'ar' ? currentScene.locationAr : currentScene.locationEn}
+          </div>
+        </div>
+
+        <!-- Lens Selection Pills Bar -->
+        <div class="sim-lens-bar">
+          <span class="sim-lens-label">${currentLang === 'ar' ? 'العدسة المقارنة:' : 'Selected Lens Optic:'}</span>
+          ${Object.values(LENSES).map(l => `
+            <button class="sim-lens-pill ${simLens === l.id ? 'active' : ''}" onclick="setSimLens('${l.id}')">
+              ${currentLang === 'ar' ? l.nameAr : l.nameEn}
+            </button>
+          `).join('')}
+        </div>
+
+        <!-- Clinical Insights & Quantitative Metrics Grid -->
+        <div class="sim-insights-grid">
+          <!-- Column 1: Doctor's Clinical Neuroadaptation Explanation -->
+          <div class="sim-insight-card">
+            <div class="sim-insight-header">
+              <span>👨‍⚕️</span>
+              <span>${currentLang === 'ar' ? currentLens.insightTitleAr : currentLens.insightTitleEn}</span>
+            </div>
+            <p class="sim-clinical-text">
+              ${currentLang === 'ar' ? currentLens.insightTextAr : currentLens.insightTextEn}
+            </p>
+            <div style="margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid #1E2D44;display:flex;align-items:center;justify-content:space-between;font-size:0.75rem;color:#94A3B8;">
+              <span>د. معن عبدالله البري — استشاري طب وجراحة العيون</span>
+              <span style="color:var(--gold);">المدينة المنورة</span>
+            </div>
+          </div>
+
+          <!-- Column 2: Objective Visual Indicators and Acuity Meters -->
+          <div class="sim-insight-card">
+            <div class="sim-insight-header">
+              <span>📊</span>
+              <span>${currentLang === 'ar' ? 'مؤشرات الأداء البصري للعدسة المختارة' : 'Optical Acuity & Independence Benchmark'}</span>
+            </div>
+
+            <!-- Distance Acuity -->
+            <div class="sim-metric-row">
+              <div class="sim-metric-label">
+                <span>${currentLang === 'ar' ? 'الرؤية البعيدة (القيادة ولوحات الطرق)' : 'Distance Vision (Driving & Roads)'}</span>
+                <strong style="color:var(--gold-light);">${currentLens.distance}%</strong>
+              </div>
+              <div class="sim-meter-track">
+                <div class="sim-meter-fill" style="width: ${currentLens.distance}%;"></div>
+              </div>
+            </div>
+
+            <!-- Intermediate Acuity -->
+            <div class="sim-metric-row">
+              <div class="sim-metric-label">
+                <span>${currentLang === 'ar' ? 'الرؤية المتوسطة (شاشات الكمبيوتر ولوحة السيارة)' : 'Intermediate Vision (Laptops & Dashboards)'}</span>
+                <strong style="color:var(--gold-light);">${currentLens.intermediate}%</strong>
+              </div>
+              <div class="sim-meter-track">
+                <div class="sim-meter-fill" style="width: ${currentLens.intermediate}%;"></div>
+              </div>
+            </div>
+
+            <!-- Near Acuity -->
+            <div class="sim-metric-row">
+              <div class="sim-metric-label">
+                <span>${currentLang === 'ar' ? 'الرؤية القريبة (قراءة الهاتف والمصحف)' : 'Near Vision (Smartphone & Books)'}</span>
+                <strong style="color:var(--gold-light);">${currentLens.near}%</strong>
+              </div>
+              <div class="sim-meter-track">
+                <div class="sim-meter-fill" style="width: ${currentLens.near}%;"></div>
+              </div>
+            </div>
+
+            <!-- Dysphotopsia & Spectacles Notes -->
+            <div style="margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid #1E2D44;font-size:0.78rem;color:#CBD5E1;line-height:1.7;">
+              <div><strong>🕶️ ${currentLang === 'ar' ? 'الاستقلالية عن النظارة:' : 'Spectacle Independence:'}</strong> ${currentLang === 'ar' ? currentLens.spectaclesAr : currentLens.spectaclesEn}</div>
+              <div style="margin-top:4px;"><strong>✨ ${currentLang === 'ar' ? 'الهالات والوهج الليلي:' : 'Night Halos / Glare:'}</strong> ${currentLang === 'ar' ? currentLens.halosAr : currentLens.halosEn}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statutory Medical Disclaimer -->
+        <div class="sim-disclaimer-box">
+          <strong>⚠️ ${currentLang === 'ar' ? 'تنويه طبي وإخلاء مسؤولية سريرية:' : 'Clinical Disclaimer:'}</strong>
+          ${currentLang === 'ar'
+            ? 'هذا المحاكي مخصص للأغراض التثقيفية والاسترشادية العامة فقط، ولا يُعد بأي حال من الأحوال وسيلة تشخيصية أو تنبؤاً قطعياً بالنتيجة الجراحية الفردية. تعتمد النتيجة الفعلية لكل مريض على عوامل بيولوجية وفسيولوجية متعددة تشمل الفحص الطبوغرافي الشامل للقرنية (Pentacam)، وقياسات طول العين بالموجات الضوئية (Optical Biometry - IOL Master)، وسلامة الشبكية والعصب البصري.'
+            : 'This simulator is strictly an educational tool illustrating optical principles. It does not replace a clinical consultation or predict exact postoperative visual acuity, which is determined by individual optical biometry, corneal tomography, macular health, and neuroadaptation.'}
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderSimSceneContent(sceneId, lensId) {
+  if (sceneId === 'night') {
+    // Uses real photographic references downloaded locally
+    const imgUrl = (lensId === 'cataract') ? '/images/sim-driving-cataract.jpg' : '/images/sim-driving-clear.jpg';
+    let filterStyle = 'none';
+    if (lensId === 'monofocal') filterStyle = 'contrast(1.05)';
+    else if (lensId === 'edof') filterStyle = 'contrast(1.0)';
+    else if (lensId === 'trifocal') filterStyle = 'none';
+
+    return `
+      <div style="width:100%;height:100%;background-image:url('${imgUrl}');background-size:cover;background-position:center;filter:${filterStyle};"></div>
+    `;
+  }
+
+  // Realistic Smartphone Reading Scene with Near Blur Simulation
+  if (sceneId === 'phone') {
+    const isCataract = lensId === 'cataract';
+    const isMonofocal = lensId === 'monofocal';
+    const isEdof = lensId === 'edof';
+    const blurAmount = isCataract ? 'blur(4px) contrast(0.6)' : (isMonofocal ? 'blur(2.8px) contrast(0.85)' : (isEdof ? 'blur(0.8px)' : 'none'));
+
+    return `
+    <div style="width:100%;height:100%;background:#1E2430;display:flex;align-items:center;justify-content:center;filter:${blurAmount};">
+      <div style="width:310px;height:420px;background:#0F172A;border-radius:32px;border:3px solid #334155;padding:12px;box-shadow:0 16px 32px rgba(0,0,0,0.5);display:flex;flex-direction:column;">
+        <div style="height:32px;background:#641B2D;border-radius:18px 18px 4px 4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">
+          ${currentLang === 'ar' ? 'عيادة د. معن البري — مغربي' : 'Dr. Maan Al Barry Clinic — Magrabi'}
+        </div>
+        <div style="flex:1;background:#F8FAFC;border-radius:6px;padding:14px;color:#1E293B;font-family:sans-serif;margin-top:8px;display:flex;flex-direction:column;gap:10px;">
+          <div style="background:#E2E8F0;padding:10px;border-radius:10px;font-size:12px;line-height:1.6;">
+            <strong>${currentLang === 'ar' ? 'موعد فحص العيون والقرنية:' : 'Eye & Cornea Evaluation:'}</strong><br>
+            ${currentLang === 'ar' ? 'طريق المطار، المدينة المنورة' : 'Airport Road, Madinah'}
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #CBD5E1;padding:12px;border-radius:10px;font-size:13px;line-height:1.7;">
+            <p style="font-weight:700;color:#641B2D;margin-bottom:4px;">${currentLang === 'ar' ? 'اختبار قراءة الخطوط الدقيقة' : 'Fine Print Acuity Test'}</p>
+            <p style="font-size:11.5px;color:#334155;">
+              ${currentLang === 'ar' ? 'القدرة على تصفح الرسائل وقراءة الخط الصغير براحة تامة دون إجهاد العين.' : 'Testing clear reading of smartphone text and messaging comfortably without eye strain.'}
+            </p>
+            <p style="font-size:9.5px;color:#94A3B8;margin-top:6px;">Line N6 / 20/30 Near Acuity Target</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Realistic Quran & Printed Book Scene with Near Acuity Simulation
+  const isCataract = lensId === 'cataract';
+  const isMonofocal = lensId === 'monofocal';
+  const isEdof = lensId === 'edof';
+  const blurAmount = isCataract ? 'blur(4.5px) contrast(0.55) sepia(0.3)' : (isMonofocal ? 'blur(2.6px)' : (isEdof ? 'blur(1.2px)' : 'none'));
+
+  return `
+  <div style="width:100%;height:100%;background:#DCD3BE;display:flex;align-items:center;justify-content:center;filter:${blurAmount};">
+    <div style="width:640px;height:380px;background:#FCF9F0;border:2px solid #B8A88E;border-radius:8px;padding:24px;display:flex;gap:24px;box-shadow:0 12px 28px rgba(0,0,0,0.25);">
+      <!-- Right Page -->
+      <div style="flex:1;border-inline-end:1px solid #D5C7B0;padding-inline-end:16px;text-align:center;">
+        <h4 style="font-size:16px;color:#641B2D;margin-bottom:8px;font-family:serif;">
+          ${currentLang === 'ar' ? 'المصحف الشريف والقراءة اليومية' : 'Reading & Classical Typography'}
+        </h4>
+        <p style="font-size:13px;color:#1E293B;line-height:2.1;font-family:serif;">
+          ${currentLang === 'ar'
+            ? 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ'
+            : 'In the name of God, the Most Gracious, the Most Merciful. Praise be to God, Lord of the worlds.'}
+        </p>
+        <p style="font-size:11px;color:#64748B;margin-top:12px;line-height:1.7;">
+          ${currentLang === 'ar' ? 'وضوح علامات التشكيل وحركات الإعراب بدقة دون إجهاد أو ضبابية.' : 'High contrast resolution for Arabic calligraphy, fine diacritics, and printed script.'}
+        </p>
+      </div>
+      <!-- Left Page -->
+      <div style="flex:1;padding-inline-start:16px;text-align:center;">
+        <h4 style="font-size:15px;color:#C5A46D;margin-bottom:8px;font-family:serif;">
+          ${currentLang === 'ar' ? 'د. معن بن عبدالله البري' : 'Dr. Maan Al Barry'}
+        </h4>
+        <p style="font-size:12px;color:#334155;line-height:1.9;">
+          ${currentLang === 'ar' ? 'استشاري جراحة الماء الأبيض وتصحيح الإبصار والقرنية — مستشفيات ومراكز مغربي للعيون بالمدينة المنورة.' : 'Consultant Ophthalmologist — Cataract & Refractive Surgery, Magrabi Health Madinah.'}
+        </p>
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:8px;">
+          ${[1, 2, 3, 4].map(() => `<div style="height:8px;background:#E2D7C3;border-radius:2px;width:100%;"></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// --- IOL COMPARISON MATRIX SECTION ---
+function renderIOLGuide() {
+  const iolMatrix = [
+    {
+      typeAr: 'ثلاثية البؤرة الذكية (Trifocal)',
+      typeEn: 'Smart Trifocal IOL',
+      distAr: 'ممتازة (1.0)',
+      distEn: 'Excellent (1.0)',
+      interAr: 'ممتازة جداً (كمبيوتر)',
+      interEn: 'Very Good (Screens)',
+      nearAr: 'ممتازة دون نظارة',
+      nearEn: 'Excellent (No glasses)',
+      halosAr: 'هالات طفيفة معتادة تخف تدريجياً',
+      halosEn: 'Mild halos fading with adaptation',
+      spectaclesAr: 'نادرة جداً (1-5% فقط)',
+      spectaclesEn: 'Extremely rare (1–5%)',
+      bestAr: 'للمرضى الراغبين في أقصى استقلالية عن النظارة في جميع المسافات.',
+      bestEn: 'For patients prioritizing complete spectacle independence across all distances.'
+    },
+    {
+      typeAr: 'ممتدة المدى البصري (EDOF)',
+      typeEn: 'Extended Depth of Focus (EDOF)',
+      distAr: 'ممتازة وواضحة جداً',
+      distEn: 'Excellent & Clear',
+      interAr: 'ممتازة وطبيعية',
+      interEn: 'Excellent & Natural',
+      nearAr: 'جيدة (قد تلزم نظارة للنصوص الدقيقة)',
+      nearEn: 'Good (light glasses for fine print)',
+      halosAr: 'أدنى درجات الهالات الليلية',
+      halosEn: 'Minimal night glare profile',
+      spectaclesAr: 'للقراءة الدقيقة جداً فقط',
+      spectaclesEn: 'Fine small print only',
+      bestAr: 'لمحبي القيادة الليلية واستخدام الحاسوب المستمر دون هالات مزعجة.',
+      bestEn: 'Ideal for continuous night drivers and computer professionals.'
+    },
+    {
+      typeAr: 'أحادية البؤرة القياسية (Monofocal)',
+      typeEn: 'Standard Monofocal IOL',
+      distAr: 'ممتازة وأعلى تباين',
+      distEn: 'Sharp, Maximum Contrast',
+      interAr: 'متوسطة',
+      interEn: 'Moderate',
+      nearAr: 'غير واضحة بدون نظارة',
+      nearEn: 'Requires Reading Glasses',
+      halosAr: 'طبيعية تماماً وخالية من الهالات',
+      halosEn: 'Zero halos, pure contrast',
+      spectaclesAr: 'دائمة للقراءة والكمبيوتر',
+      spectaclesEn: 'Permanent for reading & laptop',
+      bestAr: 'لمن يفضلون أعلى جودة تباين نقي للمسافة البعيدة ولا يمانعون ارتداء نظارة قراءة.',
+      bestEn: 'For patients desiring pure distance acuity who are comfortable wearing reading glasses.'
+    },
+    {
+      typeAr: 'عتامة الماء الأبيض (Cataract)',
+      typeEn: 'Cataract Opacity (Pre-op)',
+      distAr: 'ضبابية ومشوشة',
+      distEn: 'Hazy & Blurred',
+      interAr: 'فقدان للتباين اللوني',
+      interEn: 'Reduced Color Contrast',
+      nearAr: 'إجهاد وصعوبة بالغة',
+      nearEn: 'Eye Strain & Difficulty',
+      halosAr: 'تشتت ضوئي وهالات تعيق القيادة',
+      halosEn: 'Severe glare & headlight flares',
+      spectaclesAr: 'لا تفيد النظارة في حل المشكلة',
+      spectaclesEn: 'Glasses cannot correct opacity',
+      bestAr: 'حالة عتامة تستوجب فحص استشاري العيون لتحديد خطة الجراحة.',
+      bestEn: 'Clinical pathology requiring consultation and phacoemulsification planning.'
+    }
+  ];
+
+  return `
+  <section class="section section-alt" id="cataracts">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">${currentLang === 'ar' ? 'الدليل الإكلينيكي الشامل لاختيار العدسات' : 'Clinical Lens Selection Guide'}</div>
+        <h2>${currentLang === 'ar' ? 'مقارنة فئات العدسات داخل العين (IOL Spectrum)' : 'Comprehensive Intraocular Lens (IOL) Comparison Matrix'}</h2>
+        <p>${currentLang === 'ar' ? 'ملخص الفروقات الهندسية والوظيفية لمساعدتك في اتخاذ قرار طبي مستنير بالتشاور مع د. معن البري.' : 'Compare focal ranges, night driving characteristics, and spectacle independence expectations based on ESCRS guidelines.'}</p>
+      </div>
+
+      <div class="iol-table-wrap fade-in">
+        <table class="iol-table">
+          <thead>
+            <tr>
+              <th>${currentLang === 'ar' ? 'فئة العدسة' : 'Lens Category'}</th>
+              <th>${currentLang === 'ar' ? 'الرؤية البعيدة (القيادة)' : 'Distance Acuity'}</th>
+              <th>${currentLang === 'ar' ? 'الرؤية المتوسطة (الحاسوب)' : 'Intermediate (Screens)'}</th>
+              <th>${currentLang === 'ar' ? 'الرؤية القريبة (القراءة)' : 'Near Vision (Reading)'}</th>
+              <th>${currentLang === 'ar' ? 'التأقلم مع أضواء الليل' : 'Night Glare / Halos'}</th>
+              <th>${currentLang === 'ar' ? 'الحاجة لنظارة مساعدة' : 'Spectacle Need'}</th>
+              <th>${currentLang === 'ar' ? 'الفئة الأنسب للمناقشة' : 'Clinical Recommendation'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${iolMatrix.map(m => `
+              <tr>
+                <td><strong style="color:var(--secondary-burgundy);">${currentLang === 'ar' ? m.typeAr : m.typeEn}</strong></td>
+                <td>${currentLang === 'ar' ? m.distAr : m.distEn}</td>
+                <td>${currentLang === 'ar' ? m.interAr : m.interEn}</td>
+                <td>${currentLang === 'ar' ? m.nearAr : m.nearEn}</td>
+                <td>${currentLang === 'ar' ? m.halosAr : m.halosEn}</td>
+                <td><span style="font-weight:600;color:var(--text-primary);">${currentLang === 'ar' ? m.spectaclesAr : m.spectaclesEn}</span></td>
+                <td style="font-size:0.8rem;">${currentLang === 'ar' ? m.bestAr : m.bestEn}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="medical-disclaimer fade-in">
+        <strong>⚠️ ${currentLang === 'ar' ? 'تنبيه إكلينيكي هام:' : 'Clinical Notice:'}</strong>
+        ${currentLang === 'ar'
+          ? 'لا توجد عدسة واحدة تعتبر الأفضل مطلقاً لكل إنسان. يعتمد اختيار العدسة داخل العيادة على تصوير تضاريس القرنية (Pentacam)، سلامة المقولة وشبكية العين، وحساب قوة العدسة الضوئي، مع مراعاة متطلبات مهنتك ونمط حياتك.'
+          : 'No single lens type is universally ideal. Your surgeon tailors the lens choice to your corneal topography, macular integrity, and optical biometry measurements.'}
+      </div>
+    </div>
+  </section>`;
+}
+
+// --- LIFESTYLE QUESTIONNAIRE SECTION ---
+function renderQuestionnaire() {
+  const Q = {
+    ar: {
+      steps: [
+        {
+          question: 'ما هي فئتك العمرية التقريبية؟',
+          desc: 'تساعد لمعرفة درجة التكيف العصبي الطبيعي وجفاف العين الفسيولوجي.',
+          options: ['أقل من 45 سنة', '45 إلى 58 سنة', '59 إلى 70 سنة', 'أكثر من 70 سنة', 'لست متأكداً']
+        },
+        {
+          question: 'هل تم تشخيصك سابقاً بأي من حالات العين التالية؟',
+          desc: 'بعض حالات الشبكية وارتفاع ضغط العين تتطلب اختيار عدسات تحافظ على أعلى حساسية للتباين.',
+          options: [
+            'لا توجد حالات سابقة معتمدة (سليمة)',
+            'ارتفاع ضغط العين أو ماء أزرق (Glaucoma)',
+            'اعتلال بمركز الإبصار أو السكري بالشبكية',
+            'قرنية مخروطية أو جفاف عين مزمن',
+            'لست متأكداً تماماً (أرغب بفحص شامل)'
+          ]
+        },
+        {
+          question: 'ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟',
+          desc: 'تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.',
+          options: [
+            'القيادة الليلية ورؤية المسافات البعيدة بوضوح ودون هالات',
+            'العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)',
+            'قراءة المصحف الشريف والهاتف الذكي دون نظارة',
+            'الاستقلالية التامة بنسبة 95%+ عن النظارات في كافة الظروف'
+          ]
+        },
+        {
+          question: 'هل سبق لك إجراء عملية ليزك أو تصحيح نظر سابق؟',
+          desc: 'العيون التي خضعت لعمليات سابقة تحتاج معادلات حسابية خاصة (Barrett True-K).',
+          options: [
+            'لم أجرِ أي عملية سابقة (قرنية طبيعية)',
+            'نعم، أجريت فيمتو ليزك أو ليزر سطحي PRK',
+            'نعم، خضعت لتثبيت قرنية مخروطية CXL',
+            'لست متأكداً من التاريخ الجراحي الدقيق'
+          ]
+        }
+      ]
+    },
+    en: {
+      steps: [
+        {
+          question: 'What is your approximate age group?',
+          desc: 'Guides expectations regarding neuroadaptation and ocular surface status.',
+          options: ['Under 45 years', '45 to 58 years', '59 to 70 years', 'Over 70 years', 'Not certain']
+        },
+        {
+          question: 'Do you have any previously diagnosed ocular conditions?',
+          desc: 'Conditions such as glaucoma or maculopathy influence lens optical platform selection.',
+          options: [
+            'No diagnosed conditions (Healthy Eyes)',
+            'Glaucoma or elevated eye pressure',
+            'Diabetic retinopathy or macular condition',
+            'Keratoconus or severe chronic dry eye',
+            'Not certain (Require complete exam)'
+          ]
+        },
+        {
+          question: 'What is your primary visual priority in daily routine?',
+          desc: 'Defines your most critical working visual focal distance.',
+          options: [
+            'Night driving and high contrast distance clarity with zero halos',
+            'Computer work, laptops, and dashboard view (Intermediate continuous)',
+            'Smartphone use and book reading without reading glasses',
+            'Maximum spectacle independence (95%+) in all everyday scenarios'
+          ]
+        },
+        {
+          question: 'Have you undergone previous laser refractive surgery (LASIK / PRK)?',
+          desc: 'Post-refractive eyes require specialized biometric calculations (e.g., Barrett True-K).',
+          options: [
+            'No previous surgery (Virgin Cornea)',
+            'Yes, prior Femto-LASIK or PRK',
+            'Yes, prior corneal cross-linking (CXL)',
+            'Not certain of surgical history'
+          ]
+        }
+      ]
+    }
+  };
+
+  const currentQ = Q[currentLang];
+
+  if (qDone) {
+    return `
+    <section class="section" id="questionnaire">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-label">${currentLang === 'ar' ? 'تقرير نمط الحياة البصري الاسترشادي' : 'Visual Lifestyle Report'}</div>
+          <h2>${currentLang === 'ar' ? 'النقاط المقترحة لمناقشتها مع الدكتور معن البري' : 'Discussion Points for Your Ophthalmic Consultation'}</h2>
+        </div>
+        <div class="questionnaire fade-in">
+          <div class="q-result">
+            <div style="font-size:2.5rem;margin-bottom:var(--space-2);">📋</div>
+            <h3 style="color:var(--secondary-burgundy);margin-bottom:var(--space-3);">
+              ${currentLang === 'ar' ? 'تم تجهيز ملخص أولوياتك البصرية' : 'Your Discussion Summary is Ready'}
+            </h3>
+            <p style="color:var(--text-secondary);font-size:0.95rem;margin-bottom:var(--space-6);">
+              ${currentLang === 'ar'
+                ? 'بناءً على إجاباتك الأربع، هذه المحاور العلمية التي يوصى بطرحها ومناقشتها خلال جلستك في عيادة مغربي بالمدينة المنورة:'
+                : 'Based on your selected priorities, here are key clinical topics to explore during your consultation at Magrabi:'}
+            </p>
+
+            <div class="q-result-item">
+              <h4>🎯 ${currentLang === 'ar' ? 'الأولوية الوظيفية المستهدفة' : 'Target Visual Focus'}</h4>
+              <p>${currentLang === 'ar' ? 'مناقشة موازنة الرؤية بين عدسات EDOF (للقيادة والشاشات مع انعدام الهالات) أو عدسات Trifocal (للقراءة بدون نظارات مع فترة تكيف عصبي).' : 'Evaluate EDOF for pure night contrast vs Trifocals for complete spectacle independence with neuroadaptation.'}</p>
+            </div>
+
+            <div class="q-result-item">
+              <h4>🔬 ${currentLang === 'ar' ? 'الفحوصات الطبوغرافية الموصى بها' : 'Required Diagnostic Profiling'}</h4>
+              <p>${currentLang === 'ar' ? 'إجراء فحص البنتاكام (Pentacam) لاستبعاد الاستجماتيزم غير المنتظم والتأكد من ملاءمة العدسات متعددة البؤرة لسطح قرنيتك.' : 'Perform Pentacam Scheimpflug tomography to evaluate regular vs irregular astigmatism before premium IOL selection.'}</p>
+            </div>
+
+            <div class="q-result-item">
+              <h4>⚖️ ${currentLang === 'ar' ? 'تحديد الخيار الجراحي النهائي' : 'Final Surgical Confirmation'}</h4>
+              <p>${currentLang === 'ar' ? 'يتم اتخاذ القرار النهائي بناءً على قياسات طول العين بالموجات الضوئية (IOL Master) وفحص قاع العين المباشر مع الدكتور.' : 'Target lens power is calculated using optical biometry paired with thorough clinical examination by Dr. Maan.'}</p>
+            </div>
+
+            <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;margin-top:var(--space-8);">
+              <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                ${currentLang === 'ar' ? 'حجز موعد فحص القرنية والعدسات' : 'Book Exam Appointment'}
+              </a>
+              <a href="${whatsappUrl('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                ${currentLang === 'ar' ? 'تنسيق الموعد عبر واتساب' : 'Inquire via WhatsApp'}
+              </a>
+              <button class="btn btn-outline" onclick="restartQ()">
+                ${currentLang === 'ar' ? 'إعادة الاستبيان' : 'Restart'}
+              </button>
+            </div>
+
+            <div class="medical-disclaimer" style="margin-top:var(--space-6);text-align:start;">
+              <strong>${currentLang === 'ar' ? 'تنبيه سريري:' : 'Clinical Safety Notice:'}</strong>
+              ${currentLang === 'ar'
+                ? 'هذا التقرير استرشادي وتثقيفي فقط ولا يمثل تشخيصاً طبياً أو وصفة ملزمة لنوع عدسة. القرار الطبي يتخذه الاستشاري حصراً بعد الفحص المجهري المباشر.'
+                : 'This summary is for educational discussion only and does not constitute a prescription. Clinical diagnosis and treatment decisions are made exclusively following in-person examination.'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>`;
+  }
+
+  const step = currentQ.steps[qStep];
+
+  return `
+  <section class="section" id="questionnaire">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">${currentLang === 'ar' ? 'استبيان نمط الحياة البصري' : 'Visual Lifestyle Questionnaire'}</div>
+        <h2>${currentLang === 'ar' ? '4 خطوات لاكتشاف خيارات العدسة الأنسب لك' : '4 Guided Steps to Identify Your Visual Needs'}</h2>
+        <p>${currentLang === 'ar' ? 'أداة تثقيفية لمساعدتك في تحديد أولوياتك اليومية قبل جلسة الفحص والاستشارة في العيادة.' : 'A guided tool to map your daily priorities before your comprehensive clinical consultation.'}</p>
+      </div>
+
+      <div class="questionnaire fade-in">
+        <div class="q-progress">
+          ${currentQ.steps.map((_, i) => `
+            <div class="step ${i < qStep ? 'done' : ''} ${i === qStep ? 'current' : ''}"></div>
+          `).join('')}
+        </div>
+
+        <div style="margin-bottom:var(--space-4);">
+          <span style="font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;">
+            ${currentLang === 'ar' ? `الخطوة ${qStep + 1} من 4` : `Step ${qStep + 1} of 4`}
+          </span>
+          <h3 style="font-size:1.25rem;color:var(--text-primary);margin-top:4px;">${step.question}</h3>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:2px;">${step.desc}</p>
+        </div>
+
+        <div class="q-options">
+          ${step.options.map((opt, i) => `
+            <button class="q-option ${qAnswers[qStep] === i ? 'selected' : ''}" onclick="selectQOption(${i})">
+              <span>${opt}</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="q-nav">
+          ${qStep > 0 ? `<button class="btn btn-outline btn-sm" onclick="prevQStep()">${currentLang === 'ar' ? 'السابق' : 'Previous'}</button>` : '<div></div>'}
+          <button class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[qStep] === undefined ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
+            ${qStep < currentQ.steps.length - 1 ? (currentLang === 'ar' ? 'التالي ←' : 'Next →') : (currentLang === 'ar' ? 'عرض التقرير الاسترشادي' : 'View Lifestyle Summary')}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+// --- MEDICAL EDUCATION LIBRARY SECTION ---
+function renderEducation() {
+  const articles = [
     {
       id: 'cataract-guide',
-      title: 'ما هي المياه البيضاء (الساد) ومتى تصبح الجراحة ضرورية؟',
-      summary: 'إعتام طبيعي يصيب عدسة العين مع التقدم في العمر، ولا تعالج بالأدوية بل بالجراحة الدقيقة عند تأثيرها على الحياة اليومية.',
-      content: `
+      titleAr: 'ما هي المياه البيضاء (الساد) ومتى تصبح الجراحة ضرورية؟',
+      titleEn: 'What is a Cataract and When is Surgery Indicated?',
+      contentAr: `
         <h4>ما هو إعتام عدسة العين؟</h4>
         <p>المياه البيضاء ليست غشاءً ينمو فوق سطح العين، بل هي عتامة تدريجية في العدسة الطبيعية الشفافة الموجودة داخل العين خلف بؤبؤ العين. تؤدي هذه العتامة إلى تشتت الضوء الداخل إلى الشبكية، مما يسبب ضبابية الرؤية، بهتان الألوان، وصعوبة القيادة ليلاً بسبب الوهج.</p>
         <h4>متى ينبغي إجراء العملية؟</h4>
         <p>لا تتطلب المياه البيضاء الجراحة فور اكتشافها إلا إذا كانت تسبب مضاعفات نادرة كارتفاع ضغط العين. المعيار الأساسي هو مدى تأثير ضعف النظر على أنشطتك اليومية مثل القراءة، قيادة السيارة، أو التعرف على وجوه الأشخاص.</p>
         <h4>كيف تُجرى الجراحة الحديثة؟</h4>
         <p>تُجرى عملية الفاكو (Phacoemulsification) عبر فتحة ميكروسكوبية لا تتجاوز 2.2 ملم، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>
-      `
-    },
-    {
-      id: 'keratoconus-guide',
-      title: 'القرنية المخروطية: الأعراض، التشخيص، وخيارات التثبيت (CXL)',
-      summary: 'حالة يرق فيها نسيج القرنية وتتحول إلى شكل مخروطي، ويعد التثبيت الضوئي للقرنية حجر الأساس لوقف تدهورها.',
-      content: `
-        <h4>ما هي القرنية المخروطية؟</h4>
-        <p>القرنية هي النافذة الشفافة الأمامية للعين. في القرنية المخروطية، يضعف النسيج الضام وتبرز القرنية تدريجياً لتأخذ شكلاً مخروطياً، مما يؤدي إلى استجماتيزم غير منتظم وتدهور سريع في قياسات النظارة خاصة لدى فئة الشباب والمراهقين.</p>
-        <h4>أهمية التشخيص المبكر وتصوير تضاريس القرنية (Pentacam)</h4>
-        <p>يساعد التصوير الطبقي للقرنية في اكتشاف المرض قبل ظهور أي علامات واضحة بالفحص العادي. يُنصح كل من يلاحظ تغيراً متكرراً في مقاس النظارة أو فركاً مزمناً في العين بإجراء هذا الفحص.</p>
-        <h4>عملية تثبيت القرنية بالكولاجين (CXL)</h4>
-        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. الهدف الأساسي هو إيقاف تقدم المرض وحماية النظر من التدهور المستقبلي.</p>
-      `
-    },
-    {
-      id: 'lasik-candidacy',
-      title: 'من هو المرشح المناسب لعمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك)؟',
-      summary: 'شروط الأمان والمعايير الطبية الدقيقة التي تحدد الإجراء الأمثل لتصحيح قصر أو طول النظر والاستجماتيزم.',
-      content: `
-        <h4>المعايير الأساسية للأمان:</h4>
-        <ul>
-          <li><strong>العمر:</strong> ألا يقل عن 18 عاماً لضمان استقرار نمو العين.</li>
-          <li><strong>استقرار النظر:</strong> ثبات قياسات النظارة لمدة عام على الأقل.</li>
-          <li><strong>سماكة القرنية وشكلها:</strong> خلو القرنية تماماً من أي علامات للقرنية المخروطية أو الترقق غير الطبيعي.</li>
-          <li><strong>صحة سطح العين:</strong> علاج أي جفاف حاد قبل اتخاذ قرار الليزك.</li>
-        </ul>
-        <h4>ما الفرق بين الفيمتو ليزك والليزر السطحي (PRK)؟</h4>
-        <p>في الفيمتو ليزك يتم رفع قشرة رقيقة من القرنية بواسطة ليزر الفيمتوثانية ثم تصحيح النظر، مما يوفر تعافياً سريعاً جداً. أما الليزر السطحي فيتم دون رفع أي قشرة، ويعد الخيار الأنسب لأصحاب القرنيات الرقيقة أو من يمارسون رياضات عنيفة.</p>
-      `
-    },
-    {
-      id: 'surgery-journey',
-      title: 'رحلة المريض: ماذا تتوقع قبل وأثناء وبعد جراحة المياه البيضاء؟',
-      summary: 'دليل تفصيلي لمراحل التحضير، تجربة يوم العملية، وإرشادات التعافي القطرات بعد الجراحة.',
-      content: `
-        <h4>قبل العملية (التحضير والقياسات):</h4>
-        <p>يخضع المريض لقياسات بصرية فائقة الدقة (Optical Biometry) لحساب قوة العدسة المناسبة، مع مناقشة نوع العدسة الأنسب لاحتياجاته.</p>
-        <h4>يوم العملية:</h4>
-        <p>إجراء يومي لا يستدعي المبيت. تستغرق الجراحة نحو 15 إلى 20 دقيقة تحت تخدير موضعي بالقطرات، مع شعور المريض بضغط خفيف أو أضواء دون ألم حقيقي.</p>
-        <h4>بعد العملية:</h4>
-        <p>يغادر المريض بعد وقت وجيز مرتدياً غطاءً واقياً. من الضروري الالتزام بجدول القطرات المضادة للالتهاب والمضادات الحيوية، وتجنب فرك العين أو وصول الماء المباشر إليها خلال الأيام الأولى.</p>
-      `
-    }
-  ],
-  en: [
-    {
-      id: 'cataract-guide',
-      title: 'What is a Cataract and When is Surgery Indicated?',
-      summary: 'A natural age-related clouding of the ocular lens, treatable safely and effectively via modern micro-incision surgery.',
-      content: `
+      `,
+      contentEn: `
         <h4>Understanding Cataracts</h4>
         <p>A cataract is not a film over the eye, but rather a gradual clouding of the natural crystalline lens inside the eye. This clouding scatters light entering the retina, producing blurred vision, washed-out colors, and glare around light sources at night.</p>
         <h4>When Should Surgery Be Performed?</h4>
@@ -448,9 +1174,17 @@ const ARTICLES = {
     },
     {
       id: 'keratoconus-guide',
-      title: 'Keratoconus: Diagnosis, Progression, and Corneal Cross-Linking (CXL)',
-      summary: 'A condition causing corneal thinning and steepening, managed effectively with collagen cross-linking.',
-      content: `
+      titleAr: 'القرنية المخروطية: الأعراض، التشخيص، وخيارات التثبيت (CXL)',
+      titleEn: 'Keratoconus: Diagnosis, Progression, and Corneal Cross-Linking (CXL)',
+      contentAr: `
+        <h4>ما هي القرنية المخروطية؟</h4>
+        <p>القرنية هي النافذة الشفافة الأمامية للعين. في القرنية المخروطية، يضعف النسيج الضام وتبرز القرنية تدريجياً لتأخذ شكلاً مخروطياً، مما يؤدي إلى استجماتيزم غير منتظم وتدهور سريع في قياسات النظارة خاصة لدى فئة الشباب والمراهقين.</p>
+        <h4>أهمية التشخيص المبكر وتصوير تضاريس القرنية (Pentacam)</h4>
+        <p>يساعد التصوير الطبقي للقرنية في اكتشاف المرض قبل ظهور أي علامات واضحة بالفحص العادي. يُنصح كل من يلاحظ تغيراً متكرراً في مقاس النظارة أو فركاً مزمناً في العين بإجراء هذا الفحص.</p>
+        <h4>عملية تثبيت القرنية بالكولاجين (CXL)</h4>
+        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. الهدف الأساسي هو إيقاف تقدم المرض وحماية النظر من التدهور المستقبلي.</p>
+      `,
+      contentEn: `
         <h4>What is Keratoconus?</h4>
         <p>Keratoconus is a progressive condition where the cornea thins and bulges into an irregular conical shape. This produces progressive irregular astigmatism, frequently requiring frequent eyeglass prescription changes in adolescents and young adults.</p>
         <h4>Early Diagnosis with Corneal Tomography</h4>
@@ -461,9 +1195,20 @@ const ARTICLES = {
     },
     {
       id: 'lasik-candidacy',
-      title: 'Who is an Ideal Candidate for Laser Vision Correction (LASIK / PRK)?',
-      summary: 'Safety criteria, stability requirements, and anatomical guidelines governing refractive procedures.',
-      content: `
+      titleAr: 'من هو المرشح المناسب لعمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك)؟',
+      titleEn: 'Who is an Ideal Candidate for Laser Vision Correction (LASIK / PRK)?',
+      contentAr: `
+        <h4>المعايير الأساسية للأمان:</h4>
+        <ul>
+          <li><strong>العمر:</strong> ألا يقل عن 18 عاماً لضمان استقرار نمو العين.</li>
+          <li><strong>استقرار النظر:</strong> ثبات قياسات النظارة لمدة عام على الأقل.</li>
+          <li><strong>سماكة القرنية وشكلها:</strong> خلو القرنية تماماً من أي علامات للقرنية المخروطية أو الترقق غير الطبيعي.</li>
+          <li><strong>صحة سطح العين:</strong> علاج أي جفاف حاد قبل اتخاذ قرار الليزك.</li>
+        </ul>
+        <h4>ما الفرق بين الفيمتو ليزك والليزر السطحي (PRK)؟</h4>
+        <p>في الفيمتو ليزك يتم رفع قشرة رقيقة من القرنية بواسطة ليزر الفيمتوثانية ثم تصحيح النظر، مما يوفر تعافياً سريعاً جداً. أما الليزر السطحي فيتم دون رفع أي قشرة، ويعد الخيار الأنسب لأصحاب القرنيات الرقيقة أو من يمارسون رياضات عنيفة.</p>
+      `,
+      contentEn: `
         <h4>Essential Safety Criteria:</h4>
         <ul>
           <li><strong>Age:</strong> At least 18 years to ensure ocular maturity.</li>
@@ -477,9 +1222,17 @@ const ARTICLES = {
     },
     {
       id: 'surgery-journey',
-      title: 'The Patient Journey: What to Expect Before, During, and After Cataract Surgery',
-      summary: 'A step-by-step roadmap from pre-op optical biometry to post-op drops and visual recovery.',
-      content: `
+      titleAr: 'رحلة المريض: ماذا تتوقع قبل وأثناء وبعد جراحة المياه البيضاء؟',
+      titleEn: 'The Patient Journey: What to Expect Before, During, and After Cataract Surgery',
+      contentAr: `
+        <h4>قبل العملية (التحضير والقياسات):</h4>
+        <p>يخضع المريض لقياسات بصرية فائقة الدقة (Optical Biometry) لحساب قوة العدسة المناسبة، مع مناقشة نوع العدسة الأنسب لاحتياجاته.</p>
+        <h4>يوم العملية:</h4>
+        <p>إجراء يومي لا يستدعي المبيت. تستغرق الجراحة نحو 15 إلى 20 دقيقة تحت تخدير موضعي بالقطرات، مع شعور المريض بضغط خفيف أو أضواء دون ألم حقيقي.</p>
+        <h4>بعد العملية:</h4>
+        <p>يغادر المريض بعد وقت وجيز مرتدياً غطاءً واقياً. من الضروري الالتزام بجدول القطرات المضادة للالتهاب والمضادات الحيوية، وتجنب فرك العين أو وصول الماء المباشر إليها خلال الأيام الأولى.</p>
+      `,
+      contentEn: `
         <h4>Pre-Operative Preparation:</h4>
         <p>Precise optical biometry is performed to calculate target IOL power, paired with a detailed lifestyle discussion regarding distance, intermediate, and near visual needs.</p>
         <h4>Day of Surgery:</h4>
@@ -488,874 +1241,39 @@ const ARTICLES = {
         <p>Patients follow a structured regimen of anti-inflammatory and antibiotic eye drops, avoiding eye rubbing or direct tap water exposure during the initial healing window.</p>
       `
     }
-  ]
-};
-
-// --- VERIFIED PATIENT REVIEWS ---
-const REVIEWS = {
-  ar: [
-    {
-      author: 'راكان العبري',
-      date: 'مريض تم علاجه بمغربي المدينة المنورة',
-      text: 'كانت تجربة ممتازة بكل المقاييس. استغرق موعدي قرابة ساعة، أجريت خلالها الفحوصات الدقيقة ثم قابلت الدكتور معن البري، الذي شرح لي تفاصيل الإجراء وأي مضاعفات محتملة بكل أمانة ووضوح ومهنية عالية.',
-      stars: 5,
-    },
-    {
-      author: 'مايا أحمد',
-      date: 'مراجعة عيادة العيون والقرنية',
-      text: 'أود أن أشكر فريق د. معن البري على حسن الاستقبال والتعامل الراقي والمعاملة المريحة، والاهتمام الفائق بتنظيم المواعيد والإجابة عن كافة التساؤلات بابتسامة وترحاب.',
-      stars: 5,
-    },
-    {
-      author: 'بشرى الشراحيلي',
-      date: 'مريضة جراحة عيون',
-      text: 'أعرب عن خالص امتناني للدكتور معن البري على مهنيته الاستثنائية، وخبرته الواسعة، وتوجيهه اللطيف والمهدئ طوال مراحل العملية، والاهتمام الدقيق بالمتابعة بعد الإجراء.',
-      stars: 5,
-    }
-  ],
-  en: [
-    {
-      author: 'Rakan Al-Abri',
-      date: 'Patient at Magrabi Madinah',
-      text: 'An outstanding experience by all measures. I completed thorough diagnostics before meeting Dr. Maan Al Barry, who explained the procedure and potential nuances with utmost clarity, honesty, and professional integrity.',
-      stars: 5,
-    },
-    {
-      author: 'Maya Ahmed',
-      date: 'Cornea & Vision Correction Patient',
-      text: 'I would like to extend heartfelt thanks to Dr. Maan Al Barry and his dedicated clinical team for their wonderful hospitality, comfortable care, and seamless appointment coordination.',
-      stars: 5,
-    },
-    {
-      author: 'Bushra Al-Sharahili',
-      date: 'Ophthalmic Surgery Patient',
-      text: 'My deepest gratitude to Dr. Maan for his exceptional surgical precision, vast expertise, and gentle guidance throughout the entire procedure and post-op follow-up.',
-      stars: 5,
-    }
-  ]
-};
-
-// --- FAQ DATA ---
-const FAQ_DATA = {
-  ar: [
-    {
-      q: 'ما هو التخصص الدقيق للدكتور معن عبدالله البري؟',
-      a: 'استشاري طب وجراحة العيون، متخصص في جراحة المياه البيضاء (الساد) وزراعة العدسات بمختلف أنواعها، عمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك والسطحي)، وأمراض القرنية والقرنية المخروطية وتثبيت القرنية.'
-    },
-    {
-      q: 'أين تقع عيادة الدكتور معن البري وكيف يمكن الوصول إليها؟',
-      a: 'يستقبل د. معن البري مراجعيه في مستشفى مغربي الصحية للعيون والأذن بالمدينة المنورة، الواقع على طريق المطار. الفرع معتمد من اللجنة الدولية المشتركة JCI والمؤسسة الأمريكية SRC كمركز تميز لطب العيون.'
-    },
-    {
-      q: 'كيف يمكنني حجز موعد مؤكد مع الطبيب؟',
-      a: 'يمكنك الحجز مباشرة عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو عبر الاتصال بالرقم الموحد 19505، أو الاستفسار السريع وتنسيق الموعد عبر رابط واتساب المتوفر في الموقع.'
-    },
-    {
-      q: 'هل يضمن محاكي الرؤية النتيجة الفعلية للعملية الجراحية؟',
-      a: 'كلا، محاكي الرؤية هو أداة تعليمية وتوضيحية عامة لشرح الفروقات المفاهيمية بين العدسات. النتيجة الفعلية تعتمد على فحص تضاريس القرنية، صحة الشبكية، وقياسات العين الدقيقة التي يجريها الاستشاري.'
-    },
-    {
-      q: 'هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟',
-      a: 'توفر العدسات الحديثة مثل العدسات ثلاثية البؤرة (Trifocal) والعدسات ممتدة العمق (EDOF) استقلالية عالية عن النظارات لمعظم الأنشطة كالقراءة وقيادة السيارة، ولكن لا يمكن تقديم ضمان طبي بنسبة 100% لعدم الحاجة لنظارة في بعض الظروف الخاصة.'
-    },
-    {
-      q: 'ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟',
-      a: 'يشترط ألا يقل العمر عن 18 عاماً، وثبات النظر لمدة عام، وسماكة قرنية كافية، وخلو العين التام من القرنية المخروطية أو الجفاف الشديد غير المعالج، ويتم حسم القرار بعد تصوير القرنية الطبقي.'
-    }
-  ],
-  en: [
-    {
-      q: 'What are Dr. Maan Al Barry\'s medical subspecialties?',
-      a: 'He is a Consultant Ophthalmologist specializing in cataract surgery and advanced IOL implantation, laser refractive surgery (LASIK, Femto-LASIK, PRK), and corneal diseases including keratoconus and corneal cross-linking (CXL).'
-    },
-    {
-      q: 'Where does Dr. Maan see patients in Madinah?',
-      a: 'At Magrabi Health Eye & ENT – Madinah, located on Airport Road. The hospital holds JCI accreditation and SRC Center of Excellence designation in Ophthalmology.'
-    },
-    {
-      q: 'How can I book an appointment?',
-      a: 'You can book through the official Magrabi Online Booking portal (ob.magrabi.com.sa), via call center at 19505, or through the direct WhatsApp consultation inquiry button on this website.'
-    },
-    {
-      q: 'Does the Vision Simulator predict actual surgical vision?',
-      a: 'No. The simulator is strictly an educational tool demonstrating optic principles. Real-world postoperative visual acuity is determined by clinical biometry, corneal morphology, and individualized healing.'
-    },
-    {
-      q: 'Can cataract surgery guarantee complete spectacle independence?',
-      a: 'While modern premium IOLs (Trifocals & EDOFs) significantly decrease dependence on glasses for distance, intermediate, and near tasks, complete 100% independence cannot be guaranteed for every clinical case.'
-    },
-    {
-      q: 'What are the main criteria for laser vision correction (LASIK)?',
-      a: 'Candidates must be at least 18 years old, possess stable refraction for 12 months, have adequate corneal thickness, and demonstrate normal corneal topography with no evidence of keratoconus.'
-    }
-  ]
-};
-
-// --- QUESTIONNAIRE DATA ---
-const QUESTIONNAIRE = {
-  ar: {
-    steps: [
-      {
-        question: 'ما هي الفئة العمرية التقريبية للمريض؟',
-        options: ['أقل من 45 سنة', '45 إلى 55 سنة', '56 إلى 68 سنة', 'أكثر من 68 سنة', 'لست متأكداً']
-      },
-      {
-        question: 'هل تم تشخيصك سابقاً بأي من الحالات العينية التالية؟',
-        options: [
-          'لا توجد حالات مشخصة معروفة',
-          'جلوكوما (ارتفاع ضغط العين)',
-          'اعتلال الشبكية السكري أو أمراض قاع العين',
-          'قرنية مخروطية أو جفاف شديد مزمن',
-          'لست متأكداً تماماً'
-        ]
-      },
-      {
-        question: 'ما هي أولويتك البصرية الأساسية التي ترغب بمناقشتها مع الطبيب؟',
-        options: [
-          'القيادة الليلية وأعلى جودة تباين للمسافات البعيدة',
-          'القراءة المريحة واستخدام الهاتف الذكي دون نظارة',
-          'رؤية متوازنة عبر مختلف المسافات (الكمبيوتر والأنشطة اليومية)',
-          'لست متأكداً بعد'
-        ]
-      },
-      {
-        question: 'هل خضعت في السابق لأي جراحة تصحيح نظر بالليزر (ليزك، ليزر سطحي)؟',
-        options: ['نعم، أجريت عملية تصحيح نظر سابقة', 'لا، لم أجرِ أي عملية سابقة', 'لست متأكداً']
-      }
-    ],
-    results: {
-      nightDriving: {
-        title: 'أولوية القيادة الليلية وجودة التباين',
-        text: 'تعد جودة الرؤية الليلية وانخفاض احتمالية الهالات حول مصابيح السيارات من أهم النقاط التي تناقشها مع الطبيب. العدسات أحادية البؤرة أو بعض عدسات EDOF توفر نقاءً عالياً للتباين ليلاً، مع الحاجة لنظارة للقراءة القريبة.'
-      },
-      nearVision: {
-        title: 'أولوية القراءة واستخدام الهاتف الذكي',
-        text: 'إذا كان تقليل الاعتماد على نظارة القراءة في مقدمة أهدافك، فناقش مع الطبيب ملاءمة عينك لعدسات الترايفوكل (Trifocal) التي تتيح تركيزاً قريباً، مع التأكد من سلامة سطح القرنية والشبكية.'
-      },
-      balanced: {
-        title: 'رؤية ممتدة ومتوازنة لنمط الحياة العصري',
-        text: 'قد تكون العدسات ممتدة عمق التركيز (EDOF) خياراً متوازناً لتغطية المسافة البعيدة والمتوسطة (شاشات الكمبيوتر ولوحة السيارة) مع احتمالية أقل لظواهر الوهج الليلي مقارنة بالعدسات المتعددة التقليدية.'
-      },
-      previousLasik: {
-        title: 'أهمية الإفصاح عن جراحات الليزك السابقة',
-        text: 'تؤثر عمليات الليزك السابقة على انحناء القرنية السطحي، وتتطلب معادلات حسابية خاصة (Post-refractive IOL formulas) لحساب قوة العدسة بدقة لتفادي أي انحراف بعد العملية.'
-      },
-      eyeCondition: {
-        title: 'التأثير المتبادل للحالات العينية المصاحبة',
-        text: 'في حال وجود جلوكوما أو اعتلال بالشبكية، يُفضل استشاري العيون عادةً العدسات أحادية البؤرة فائقة التباين لحماية حساسية الضوء وعدم إجهاد العصب البصري.'
-      },
-      generalAdvice: {
-        title: 'الخطوة التالية الموصى بها',
-        text: 'هذه الإرشادات تثقيفية تهدف لترتيب أولوياتك. القرار العلاجي الحاسم يُتخذ داخل العيادة بعد الفحص المجهري وتصوير تضاريس القرنية وقياسات بيومترية متطورة مع د. معن البري.'
-      }
-    }
-  },
-  en: {
-    steps: [
-      {
-        question: 'What is your approximate age group?',
-        options: ['Under 45 years', '45 to 55 years', '56 to 68 years', 'Over 68 years', 'Not certain']
-      },
-      {
-        question: 'Do you have any previously diagnosed eye conditions?',
-        options: [
-          'No known diagnosed eye conditions',
-          'Glaucoma (elevated eye pressure)',
-          'Diabetic retinopathy or macular condition',
-          'Keratoconus or severe chronic dry eye',
-          'Not completely certain'
-        ]
-      },
-      {
-        question: 'What is your primary visual priority to discuss with the surgeon?',
-        options: [
-          'Night driving clarity & high contrast for distance',
-          'Smartphone use & reading without reading glasses',
-          'Balanced continuous vision (computer screens & daily tasks)',
-          'Not certain yet'
-        ]
-      },
-      {
-        question: 'Have you had prior laser vision correction (LASIK, PRK)?',
-        options: ['Yes, prior refractive surgery', 'No prior eye surgery', 'Not certain']
-      }
-    ],
-    results: {
-      nightDriving: {
-        title: 'Priority: Night Driving & Contrast Sensitivity',
-        text: 'Preserving high contrast sensitivity and minimizing dysphotopsias (halos/starbursts) is paramount. Monofocal or specific EDOF optics generally offer superior nighttime optical purity with reading glasses retained for fine print.'
-      },
-      nearVision: {
-        title: 'Priority: Near Vision & Spectacle Independence',
-        text: 'If near tasks without glasses are your goal, discuss trifocal IOL designs with your surgeon, provided your macula and corneal optical surface demonstrate excellent baseline health.'
-      },
-      balanced: {
-        title: 'Priority: Extended Intermediate & Modern Lifestyle',
-        text: 'Extended Depth of Focus (EDOF) lenses provide a balanced optical continuum across distance and intermediate (dashboard, laptops) with an easier neuroadaptation profile than classic multifocals.'
-      },
-      previousLasik: {
-        title: 'Clinical Value of Prior LASIK Disclosure',
-        text: 'Previous corneal refractive surgery alters standard keratometry. Specialized post-refractive biometric formulas must be utilized to calculate target intraocular lens power accurately.'
-      },
-      eyeCondition: {
-        title: 'Ocular Co-morbidities & Lens Selection',
-        text: 'In the presence of optic nerve compromise (glaucoma) or macular pathology, monofocal platforms are often clinically preferred to safeguard contrast sensitivity.'
-      },
-      generalAdvice: {
-        title: 'Next Clinical Step',
-        text: 'These guidelines serve as educational discussion points. Final surgical candidacy and lens selection are determined during comprehensive clinical evaluation and advanced biometry with Dr. Maan Al Barry.'
-      }
-    }
-  }
-};
-
-// --- APP STATE ---
-let currentLang = 'ar';
-let simScene = 'driving';
-let simLens = 'cataract';
-let simSliderPos = 50; // percentage
-let qStep = 0;
-let qAnswers = [];
-let qDone = false;
-let activeArticle = null;
-
-function t() { return i18n[currentLang]; }
-
-function whatsappUrl(prefill) {
-  const msg = encodeURIComponent(prefill || t().whatsappMsg);
-  return `https://wa.me/${DOCTOR.whatsapp}?text=${msg}`;
-}
-
-// --- RENDER APPLICATION ---
-function render() {
-  const T = t();
-  document.documentElement.lang = T.lang;
-  document.documentElement.dir = T.dir;
-  document.body.className = currentLang === 'en' ? 'lang-en' : '';
-
-  const app = document.getElementById('app');
-  if (!app) return;
-
-  app.innerHTML = `
-    ${renderHeader(T)}
-    <main>
-      ${renderHero(T)}
-      ${renderProfile(T)}
-      ${renderSpecialties(T)}
-      ${renderIOLSection(T)}
-      ${renderSimulator(T)}
-      ${renderQuestionnaire(T)}
-      ${renderEducation(T)}
-      ${renderClinic(T)}
-      ${renderFAQ(T)}
-      ${renderCTA(T)}
-    </main>
-    ${renderFooter(T)}
-    ${renderBookingBar(T)}
-  `;
-
-  initScrollAnimations();
-  initHeaderScroll();
-}
-
-// --- COMPONENTS ---
-
-function renderHeader(T) {
-  return `
-  <header class="site-header" id="site-header">
-    <div class="container header-inner">
-      <a href="#" class="header-logo" onclick="scrollToSection('home');return false;">
-        <div class="logo-icon">م</div>
-        <div class="logo-text">
-          ${currentLang === 'ar' ? DOCTOR.shortNameAr : DOCTOR.shortNameEn}
-          <small>${currentLang === 'ar' ? 'استشاري طب وجراحة العيون' : 'Consultant Ophthalmologist'}</small>
-        </div>
-      </a>
-      <nav class="header-nav">
-        <div class="nav-links" id="nav-links">
-          <a href="#home" onclick="scrollToSection('home');return false;">${T.nav.home}</a>
-          <a href="#profile" onclick="scrollToSection('profile');return false;">${T.nav.profile}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${T.nav.specialties}</a>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${T.nav.cataracts}</a>
-          <a href="#simulator" onclick="scrollToSection('simulator');return false;">${T.nav.simulator}</a>
-          <a href="#education" onclick="scrollToSection('education');return false;">${T.nav.education}</a>
-          <a href="#clinic" onclick="scrollToSection('clinic');return false;">${T.nav.clinic}</a>
-          <a href="#faq" onclick="scrollToSection('faq');return false;">${T.nav.faq}</a>
-        </div>
-        <div class="header-actions">
-          <button class="lang-switch" onclick="toggleLang()" aria-label="Toggle Language">${T.langSwitch}</button>
-          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${T.bookNow}</a>
-        </div>
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open Navigation Menu">
-          <span></span>
-        </button>
-      </nav>
-    </div>
-    <nav class="mobile-nav" id="mobile-nav">
-      <a href="#home" onclick="scrollToSection('home');closeMobileMenu();return false;">${T.nav.home}</a>
-      <a href="#profile" onclick="scrollToSection('profile');closeMobileMenu();return false;">${T.nav.profile}</a>
-      <a href="#specialties" onclick="scrollToSection('specialties');closeMobileMenu();return false;">${T.nav.specialties}</a>
-      <a href="#cataracts" onclick="scrollToSection('cataracts');closeMobileMenu();return false;">${T.nav.cataracts}</a>
-      <a href="#simulator" onclick="scrollToSection('simulator');closeMobileMenu();return false;">${T.nav.simulator}</a>
-      <a href="#questionnaire" onclick="scrollToSection('questionnaire');closeMobileMenu();return false;">${T.nav.questionnaire}</a>
-      <a href="#education" onclick="scrollToSection('education');closeMobileMenu();return false;">${T.nav.education}</a>
-      <a href="#clinic" onclick="scrollToSection('clinic');closeMobileMenu();return false;">${T.nav.clinic}</a>
-      <a href="#faq" onclick="scrollToSection('faq');closeMobileMenu();return false;">${T.nav.faq}</a>
-    </nav>
-  </header>`;
-}
-
-function renderHero(T) {
-  return `
-  <section class="hero" id="home">
-    <div class="container">
-      <div class="hero-grid">
-        <div class="hero-content fade-in">
-          <div class="hero-badge">
-            <span class="badge-dot"></span>
-            ${T.hero.badge}
-          </div>
-          <h1>${T.hero.h1}</h1>
-          <p class="hero-subtitle">${T.hero.subtitle}</p>
-          <div class="hero-cta">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-lg">${T.hero.cta1}</a>
-            <a href="${whatsappUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp">${T.hero.cta2}</a>
-          </div>
-          <div class="hero-credentials">
-            <div class="credential-item">
-              <div class="icon">🏥</div>
-              <span>${T.hero.cred1}</span>
-            </div>
-            <div class="credential-item">
-              <div class="icon">🎓</div>
-              <span>${T.hero.cred2}</span>
-            </div>
-            <div class="credential-item">
-              <div class="icon">🇬🇧</div>
-              <span>${T.hero.cred3}</span>
-            </div>
-          </div>
-        </div>
-        <div class="hero-image fade-in">
-          <img src="/images/dr-maan-portrait.png" alt="${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='/images/doctor-portrait.jpg'">
-          <div class="image-accent">
-            <div class="accent-title">${currentLang === 'ar' ? 'الموقع السريري' : 'Practice'}</div>
-            <div class="accent-value">${currentLang === 'ar' ? 'مغربي — المدينة المنورة' : 'Magrabi — Madinah'}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>`;
-}
-
-function renderProfile(T) {
-  const p = T.profile;
-  const roles = DOCTOR.roles[currentLang];
-  const reviews = REVIEWS[currentLang];
-
-  return `
-  <section class="section section-alt" id="profile">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${p.label}</div>
-        <h2>${p.title}</h2>
-        <p style="font-weight:600;color:var(--burgundy);">${p.subtitle}</p>
-      </div>
-
-      <div class="profile-grid fade-in">
-        <div class="profile-media">
-          <img src="/images/doctor-portrait.jpg" alt="${DOCTOR.nameAr}" class="profile-media-img" loading="lazy">
-          <div class="credentials-chips">
-            <span class="chip chip-gold">🎖️ ${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية (FRCS بريطانيا)' : 'Fellow of Royal College of Surgeons (FRCS UK)'}</span>
-            <span class="chip">🏛️ ${currentLang === 'ar' ? 'رئيس قسم العيون بجامعة طيبة' : 'Chair of Ophthalmology, Taibah Univ.'}</span>
-            <span class="chip">🏥 ${currentLang === 'ar' ? 'المدير الطبي التنفيذي لمغربي المدينة' : 'CMO Magrabi Madinah'}</span>
-            <span class="chip">🇸🇦 ${currentLang === 'ar' ? 'ممثل الجمعية السعودية لطب العيون' : 'Saudi Ophthalmology Society Rep.'}</span>
-          </div>
-        </div>
-        <div class="profile-text">
-          <p style="font-size:1.05rem;line-height:1.9;color:var(--charcoal);margin-bottom:var(--space-4);">${p.bio1}</p>
-          <p style="font-size:1.05rem;line-height:1.9;color:var(--charcoal);margin-bottom:var(--space-6);">${p.bio2}</p>
-
-          <h3 style="margin-bottom:var(--space-4);font-size:1.15rem;color:var(--burgundy);">${p.timelineTitle}</h3>
-          <div class="timeline">
-            ${roles.map(r => `
-              <div class="timeline-item">
-                <h4>${r}</h4>
-                <p>${currentLang === 'ar' ? 'عضوية قيادية وأكاديمية رسمية مثبتة في السجلات الطبية' : 'Officially verified leadership and academic appointment'}</p>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- Scientific Leadership Gallery -->
-      <div style="margin-top:var(--space-16);" class="fade-in">
-        <div class="section-header" style="margin-bottom:var(--space-6);">
-          <div class="section-label">${p.galleryTitle}</div>
-          <h3 style="font-size:1.35rem;">${currentLang === 'ar' ? 'المشاركات العلمية ومؤتمرات طب العيون' : 'Academic Conferences & Leadership'}</h3>
-        </div>
-        <div class="gallery-grid">
-          <div class="gallery-card">
-            <img src="/images/dr-maan-redsea.jpg" alt="Saudi Ophthalmology Society Red Sea" loading="lazy">
-            <div class="gallery-caption">
-              <strong>${currentLang === 'ar' ? 'مؤتمر البحر الأحمر لطب وجراحة العيون 2024' : 'Red Sea Ophthalmology Conference 2024'}</strong>
-              <p>${currentLang === 'ar' ? 'عضو المجلس العلمي وممثل الجمعية السعودية لطب العيون' : 'Scientific Council Member & SOS Representative'}</p>
-            </div>
-          </div>
-          <div class="gallery-card">
-            <img src="/images/dr-maan-faculty.jpg" alt="Faculty Saudi Ophthalmology" loading="lazy">
-            <div class="gallery-caption">
-              <strong>${currentLang === 'ar' ? 'المجلس العلمي والجلسات الأكاديمية الدولية' : 'International Scientific Faculty & Sessions'}</strong>
-              <p>${currentLang === 'ar' ? 'مع نخبة من قيادات وجراحي العيون الدوليين' : 'With international ophthalmic leaders and surgical faculty'}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Verified Patient Reviews -->
-      <div style="margin-top:var(--space-16);" class="fade-in">
-        <div class="section-header" style="margin-bottom:var(--space-6);">
-          <div class="section-label">${p.reviewsTitle}</div>
-          <h3 style="font-size:1.35rem;">${p.reviewsSubtitle}</h3>
-        </div>
-        <div class="reviews-grid">
-          ${reviews.map(r => `
-            <div class="review-card">
-              <div>
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"${r.text}"</p>
-              </div>
-              <div class="review-author">
-                <div class="review-avatar">${r.author.charAt(0)}</div>
-                <div class="review-meta">
-                  <strong>${r.author}</strong>
-                  <span>${r.date}</span>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-  </section>`;
-}
-
-function renderSpecialties(T) {
-  const cards = T.specialties.items.map(item => `
-    <div class="card fade-in">
-      <div class="card-icon">${item.icon}</div>
-      <h3>${item.title}</h3>
-      <p style="line-height:1.7;">${item.desc}</p>
-    </div>
-  `).join('');
-
-  return `
-  <section class="section" id="specialties">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${T.specialties.label}</div>
-        <h2>${T.specialties.title}</h2>
-        <p>${T.specialties.desc}</p>
-      </div>
-      <div class="cards-grid">${cards}</div>
-    </div>
-  </section>`;
-}
-
-function renderIOLSection(T) {
-  const iolData = IOL_DATA[currentLang];
-  const rows = iolData.map(l => `
-    <tr>
-      <td><strong style="color:var(--burgundy);">${l.type}</strong></td>
-      <td>${l.distance}</td>
-      <td>${l.intermediate}</td>
-      <td>${l.near}</td>
-      <td>${l.glare}</td>
-      <td style="font-size:0.8rem;color:var(--charcoal);">${l.bestFor}</td>
-    </tr>
-  `).join('');
-
-  const thLabels = currentLang === 'ar'
-    ? ['نوع العدسة', 'الرؤية البعيدة', 'الرؤية المتوسطة (كمبيوتر)', 'الرؤية القريبة (قراءة)', 'الهالات والوهج الليلي', 'الفئة الأنسب للمناقشة']
-    : ['Lens Type', 'Distance Vision', 'Intermediate (Screens)', 'Near Vision (Reading)', 'Night Halos / Glare', 'Clinical Profile'];
-
-  return `
-  <section class="section section-alt" id="cataracts">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${T.iolSection.label}</div>
-        <h2>${T.iolSection.title}</h2>
-        <p>${T.iolSection.desc}</p>
-      </div>
-      <div class="fade-in" style="overflow-x:auto;">
-        <table class="iol-table">
-          <thead>
-            <tr>${thLabels.map(l => `<th>${l}</th>`).join('')}</tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-      <div class="medical-disclaimer">
-        <strong>${currentLang === 'ar' ? 'تنبيه سريري هام:' : 'Important Clinical Notice:'}</strong>
-        ${currentLang === 'ar'
-          ? 'هذا الجدول تعليمي وتثقيفي ولا يُغني عن استشارة طبيب العيون. لا توجد عدسة واحدة مثالية لكل مريض؛ فاختيار العدسة يعتمد على تضاريس القرنية، صحة الشبكية والعصب البصري، ونتائج القياسات الضوئية الدقيقة (Biometry).'
-          : 'This table is educational and does not replace in-person ophthalmic consultation. No lens is universally superior; lens suitability depends on optical biometry, corneal astigmatism, retinal integrity, and lifestyle.'}
-      </div>
-    </div>
-  </section>`;
-}
-
-function renderSimulator(T) {
-  const scenes = [
-    { id: 'driving', label: currentLang === 'ar' ? 'القيادة الليلية' : 'Night Driving' },
-    { id: 'phone', label: currentLang === 'ar' ? 'شاشة الهاتف' : 'Smartphone Reading' },
-    { id: 'reading', label: currentLang === 'ar' ? 'قراءة كتاب' : 'Book Reading' },
-  ];
-  const lenses = [
-    { id: 'cataract', label: currentLang === 'ar' ? 'إعتام المياه البيضاء' : 'Cataract Opacity' },
-    { id: 'monofocal', label: currentLang === 'ar' ? 'أحادية البؤرة (Monofocal)' : 'Monofocal IOL' },
-    { id: 'edof', label: currentLang === 'ar' ? 'ممتدة العمق (EDOF)' : 'EDOF IOL' },
-    { id: 'trifocal', label: currentLang === 'ar' ? 'ثلاثية البؤرة (Trifocal)' : 'Trifocal IOL' },
   ];
 
-  const lensInfo = {
-    cataract: {
-      ar: 'محاكاة تأثير المياه البيضاء: ضبابية في الرؤية، انخفاض شديد في التباين، وتشتت الضوء حول المصابيح ليلاً.',
-      en: 'Cataract Simulation: progressive blurriness, reduced contrast sensitivity, and scattering of light around headlights.'
-    },
-    monofocal: {
-      ar: 'عدسة أحادية البؤرة: رؤية بعيدة نقية وحادة جداً مع تباين ممتاز، بينما قد تبدو شاشات الهاتف والكتب غير واضحة بدون نظارة قراءة.',
-      en: 'Monofocal IOL: crisp high-contrast distance clarity, with near and smartphone tasks requiring reading glasses.'
-    },
-    edof: {
-      ar: 'عدسة ممتدة العمق: امتداد في وضوح الرؤية من المسافة البعيدة وحتى المسافات المتوسطة (لوحة القيادة والشاشات) مع احتمالية منخفضة للهالات.',
-      en: 'EDOF IOL: extended range from distance to intermediate tasks (screens, dashboard) with minimal dysphotopsia.'
-    },
-    trifocal: {
-      ar: 'عدسة ثلاثية البؤرة: توفير رؤية وظيفية متزامنة للبعيد والمتوسط والقريب مع تقليل الحاجة للنظارة، مصحوبة بهالات دائرية خفيفة حول الأضواء تتكيف معها العين عادة.',
-      en: 'Trifocal IOL: simultaneous functional vision across near, intermediate, and far tasks, accompanied by subtle night halos that adapt over time.'
-    },
-  };
-
   return `
-  <section class="simulator-section" id="simulator">
+  <section class="section section-alt" id="education">
     <div class="container">
       <div class="section-header fade-in">
-        <div class="section-label" style="color:var(--gold);">${T.simulator.label}</div>
-        <h2 style="color:var(--white);">${T.simulator.title}</h2>
-        <p style="color:var(--gray-400);">${T.simulator.desc}</p>
-      </div>
-
-      <div class="simulator-wrapper fade-in">
-        <!-- Scene Selection Tabs -->
-        <div class="simulator-controls">
-          <div class="simulator-tabs">
-            ${scenes.map(s => `<button class="sim-tab ${simScene === s.id ? 'active' : ''}" onclick="setSimScene('${s.id}')">${s.label}</button>`).join('')}
-          </div>
-        </div>
-
-        <!-- Interactive Split View Comparison Viewport -->
-        <div class="slider-interactive-wrap" id="sim-slider-container">
-          <!-- Layer 1: Normal Reference Vision -->
-          <div class="slider-layer-before">
-            <div class="slider-layer-content">
-              ${renderSceneSVG(simScene, 'normal')}
-            </div>
-          </div>
-
-          <!-- Layer 2: Simulated Lens Effect (clipped by slider) -->
-          <div class="slider-layer-after" id="sim-after-layer" style="width: ${simSliderPos}%;">
-            <div class="slider-layer-content">
-              ${renderSceneSVG(simScene, simLens)}
-            </div>
-          </div>
-
-          <!-- Slider Range Control -->
-          <input type="range" min="0" max="100" value="${simSliderPos}" class="slider-range-input" id="sim-range-input" oninput="updateSimSlider(this.value)" aria-label="Compare vision slider">
-
-          <!-- Visual Divider Line and Handle -->
-          <div class="slider-divider-line" id="sim-divider-line" style="left: ${simSliderPos}%;">
-            <div class="slider-divider-badge">⟺</div>
-          </div>
-
-          <!-- Tags -->
-          <div class="slider-labels-tag tag-before">${T.simulator.normalView}</div>
-          <div class="slider-labels-tag tag-after">${T.simulator.simulatedView} (${lenses.find(l=>l.id===simLens).label})</div>
-        </div>
-
-        <!-- Lens Selection Buttons -->
-        <div class="simulator-lens-buttons">
-          ${lenses.map(l => `<button class="lens-btn ${simLens === l.id ? 'active' : ''}" onclick="setSimLens('${l.id}')">${l.label}</button>`).join('')}
-        </div>
-
-        <!-- Overlay Text Description -->
-        <div class="sim-overlay-text" style="position:relative;background:var(--gray-900);">
-          <h4>${lensInfo[simLens][currentLang]}</h4>
-          <p style="font-size:0.8rem;color:var(--gold);margin-top:4px;">${T.simulator.compareLabel}</p>
-        </div>
-
-        <!-- Prominent Disclaimer -->
-        <div class="sim-disclaimer">
-          <strong>${currentLang === 'ar' ? 'إخلاء مسؤولية محاكي الرؤية:' : 'Simulator Disclaimer:'}</strong> ${T.simDisclaimer}
-        </div>
-      </div>
-    </div>
-  </section>`;
-}
-
-function renderSceneSVG(scene, lensMode) {
-  // Filters matching visual symptoms
-  let filterCss = 'none';
-  if (lensMode === 'cataract') {
-    filterCss = scene === 'driving'
-      ? 'blur(3.5px) contrast(0.65) brightness(0.85) saturate(0.6)'
-      : 'blur(4px) contrast(0.6) saturate(0.5)';
-  } else if (lensMode === 'monofocal') {
-    filterCss = scene === 'driving'
-      ? 'contrast(1.05) brightness(1.0)' // sharp distance
-      : 'blur(3px) contrast(0.85)'; // blur near
-  } else if (lensMode === 'edof') {
-    filterCss = scene === 'driving'
-      ? 'contrast(1.0) brightness(1.0)'
-      : (scene === 'phone' ? 'blur(0.8px) contrast(0.95)' : 'blur(1.6px) contrast(0.9)');
-  } else if (lensMode === 'trifocal') {
-    filterCss = scene === 'driving'
-      ? 'contrast(0.92) brightness(1.02)'
-      : 'blur(0px) contrast(0.98)';
-  }
-
-  const haloEffect = (lensMode === 'trifocal' && scene === 'driving')
-    ? `<circle cx="300" cy="350" r="45" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.6"/>
-       <circle cx="500" cy="350" r="45" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.6"/>
-       <circle cx="300" cy="350" r="70" fill="none" stroke="#FFA500" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4"/>
-       <circle cx="500" cy="350" r="70" fill="none" stroke="#FFA500" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4"/>`
-    : '';
-
-  if (scene === 'driving') {
-    return `
-    <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;filter:${filterCss};">
-      <rect width="800" height="450" fill="#070c14"/>
-      <!-- Road and Horizon -->
-      <polygon points="360,220 440,220 800,450 0,450" fill="#15181e"/>
-      <line x1="400" y1="220" x2="400" y2="450" stroke="#f1c40f" stroke-width="3" stroke-dasharray="35,25"/>
-      <line x1="360" y1="220" x2="0" y2="450" stroke="#555" stroke-width="2"/>
-      <line x1="440" y1="220" x2="800" y2="450" stroke="#555" stroke-width="2"/>
-
-      <!-- Madinah Highway Signs -->
-      <rect x="520" y="90" width="180" height="75" rx="6" fill="#0d47a1" stroke="#fff" stroke-width="2"/>
-      <text x="610" y="125" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="'Alexandria', sans-serif">طريق المطار ✈</text>
-      <text x="610" y="148" text-anchor="middle" fill="#90caf9" font-size="12" font-family="'Inter', sans-serif">Airport Road — Madinah</text>
-
-      <!-- Street Light Poles -->
-      ${[120, 240, 680].map(x => `
-        <line x1="${x}" y1="140" x2="${x}" y2="300" stroke="#444" stroke-width="2.5"/>
-        <circle cx="${x}" cy="140" r="10" fill="#ffecb3" opacity="0.8"/>
-        <circle cx="${x}" cy="140" r="28" fill="#ffd54f" opacity="0.2"/>
-      `).join('')}
-
-      <!-- Oncoming Car Headlights -->
-      <ellipse cx="300" cy="350" rx="30" ry="14" fill="#ffffff" opacity="0.95"/>
-      <ellipse cx="500" cy="350" rx="30" ry="14" fill="#ffffff" opacity="0.95"/>
-      <ellipse cx="300" cy="350" rx="55" ry="24" fill="#fff59d" opacity="0.3"/>
-      <ellipse cx="500" cy="350" rx="55" ry="24" fill="#fff59d" opacity="0.3"/>
-      ${haloEffect}
-    </svg>`;
-  }
-
-  if (scene === 'phone') {
-    return `
-    <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;filter:${filterCss};">
-      <rect width="800" height="450" fill="#1e2430"/>
-      <!-- Smartphone Mockup -->
-      <rect x="250" y="20" width="300" height="410" rx="28" fill="#0b0f17" stroke="#333f52" stroke-width="3"/>
-      <rect x="265" y="45" width="270" height="360" rx="14" fill="#f8fafc"/>
-
-      <!-- Phone App Header -->
-      <rect x="265" y="45" width="270" height="50" fill="#641B2D"/>
-      <text x="400" y="75" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="'Alexandria', sans-serif">
-        ${currentLang === 'ar' ? 'رسالة العيادة — مغربي' : 'Clinic Message — Magrabi'}
-      </text>
-
-      <!-- Messages Content -->
-      <rect x="280" y="115" width="240" height="65" rx="8" fill="#e2e8f0"/>
-      <text x="300" y="140" fill="#1e293b" font-size="12" font-weight="600" font-family="'Alexandria', sans-serif">
-        ${currentLang === 'ar' ? 'موعد فحص العيون والقرنية:' : 'Eye & Cornea Exam Appointment:'}
-      </text>
-      <text x="300" y="162" fill="#475569" font-size="11" font-family="'Inter', sans-serif">
-        ${currentLang === 'ar' ? 'د. معن البري — طريق المطار' : 'Dr. Maan Al Barry — Airport Rd'}
-      </text>
-
-      <!-- Arabic & English Text Samples for Near Acuity Testing -->
-      <rect x="280" y="195" width="240" height="180" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-      <text x="400" y="225" text-anchor="middle" fill="#641B2D" font-size="14" font-weight="bold" font-family="'Alexandria', sans-serif">
-        ${currentLang === 'ar' ? 'فحص حدة الإبصار القريبة' : 'Near Visual Acuity Sample'}
-      </text>
-      <text x="400" y="255" text-anchor="middle" fill="#1e293b" font-size="12" font-family="'Alexandria', sans-serif">
-        ${currentLang === 'ar' ? 'قراءة الرسائل بوضوح وراحة' : 'Clear and comfortable text reading'}
-      </text>
-      <text x="400" y="280" text-anchor="middle" fill="#475569" font-size="10.5" font-family="'Inter', sans-serif">
-        ${currentLang === 'ar' ? 'اختبار القدرة على قراءة الخط الصغير دون إجهاد' : 'Testing fine print legibility without eye strain'}
-      </text>
-      <text x="400" y="305" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="'Inter', sans-serif">
-        N6 / 20/30 Near Vision Acuity Benchmark Line
-      </text>
-    </svg>`;
-  }
-
-  // Book Reading Scene
-  return `
-  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;filter:${filterCss};">
-    <rect width="800" height="450" fill="#e8dec8"/>
-    <!-- Open Book Mockup -->
-    <rect x="100" y="30" width="600" height="390" rx="8" fill="#fcf9f2" stroke="#c4b59d" stroke-width="2"/>
-    <line x1="400" y1="30" x2="400" y2="420" stroke="#d5c8b0" stroke-width="3"/>
-
-    <!-- Left Page -->
-    <text x="250" y="80" text-anchor="middle" fill="#641B2D" font-size="16" font-weight="bold" font-family="'Alexandria', serif">
-      ${currentLang === 'ar' ? 'طب وجراحة العيون' : 'Ophthalmology Practice'}
-    </text>
-    <text x="250" y="120" text-anchor="middle" fill="#242B30" font-size="12" font-family="'Alexandria', serif">
-      ${currentLang === 'ar' ? 'علاج المياه البيضاء والقرنية المخروطية' : 'Cataract & Keratoconus Care'}
-    </text>
-    ${[160, 190, 220, 250, 280, 310, 340].map(y => `
-      <rect x="140" y="${y}" width="220" height="8" rx="2" fill="#64748b" opacity="0.65"/>
-    `).join('')}
-
-    <!-- Right Page -->
-    <text x="550" y="80" text-anchor="middle" fill="#C5A46D" font-size="16" font-weight="bold" font-family="'Alexandria', serif">
-      ${currentLang === 'ar' ? 'د. معن عبدالله البري' : 'Dr. Maan Al Barry'}
-    </text>
-    <text x="550" y="120" text-anchor="middle" fill="#242B30" font-size="12" font-family="'Alexandria', serif">
-      ${currentLang === 'ar' ? 'المدينة المنورة — مستشفى مغربي' : 'Madinah — Magrabi Hospital'}
-    </text>
-    ${[160, 190, 220, 250, 280, 310, 340].map(y => `
-      <rect x="440" y="${y}" width="220" height="8" rx="2" fill="#64748b" opacity="0.65"/>
-    `).join('')}
-  </svg>`;
-}
-
-function renderQuestionnaire(T) {
-  const Q = QUESTIONNAIRE[currentLang];
-
-  if (qDone) {
-    return `
-    <section class="section section-alt" id="questionnaire">
-      <div class="container">
-        <div class="section-header fade-in">
-          <div class="section-label">${T.questionnaire.label}</div>
-          <h2>${T.questionnaire.title}</h2>
-        </div>
-        <div class="questionnaire fade-in">
-          ${renderQuestionnaireResult(T)}
-        </div>
-      </div>
-    </section>`;
-  }
-
-  const step = Q.steps[qStep];
-  return `
-  <section class="section section-alt" id="questionnaire">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${T.questionnaire.label}</div>
-        <h2>${T.questionnaire.title}</h2>
-        <p>${T.questionnaire.desc}</p>
-      </div>
-      <div class="questionnaire fade-in">
-        <div class="q-progress">
-          ${Q.steps.map((_, i) => `<div class="step ${i < qStep ? 'done' : ''} ${i === qStep ? 'current' : ''}"></div>`).join('')}
-        </div>
-        <div class="q-question">
-          <h3>${currentLang === 'ar' ? `السؤال ${qStep + 1} من ${Q.steps.length}` : `Question ${qStep + 1} of ${Q.steps.length}`}</h3>
-          <p style="font-size:1.1rem;color:var(--charcoal);margin-top:var(--space-2);font-weight:600;">${step.question}</p>
-        </div>
-        <div class="q-options">
-          ${step.options.map((opt, i) => `
-            <button class="q-option ${qAnswers[qStep] === i ? 'selected' : ''}" onclick="selectQOption(${i})">${opt}</button>
-          `).join('')}
-        </div>
-        <div class="q-nav">
-          ${qStep > 0 ? `<button class="btn btn-outline btn-sm" onclick="prevQStep()">${currentLang === 'ar' ? 'السابق' : 'Previous'}</button>` : '<div></div>'}
-          <button class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[qStep] === undefined ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
-            ${qStep < Q.steps.length - 1 ? (currentLang === 'ar' ? 'التالي' : 'Next') : (currentLang === 'ar' ? 'عرض ملخص النقاش' : 'View Discussion Points')}
-          </button>
-        </div>
-        <div class="medical-disclaimer" style="margin-top:var(--space-6);">
-          ${T.qDisclaimer}
-        </div>
-      </div>
-    </div>
-  </section>`;
-}
-
-function renderQuestionnaireResult(T) {
-  const R = QUESTIONNAIRE[currentLang].results;
-  const items = [];
-
-  const priorityAnswer = qAnswers[2];
-  if (priorityAnswer === 0) items.push(R.nightDriving);
-  else if (priorityAnswer === 1) items.push(R.nearVision);
-  else items.push(R.balanced);
-
-  if (qAnswers[3] === 0) items.push(R.previousLasik);
-  if (qAnswers[1] !== 0 && qAnswers[1] !== 4 && qAnswers[1] !== undefined) items.push(R.eyeCondition);
-  items.push(R.generalAdvice);
-
-  return `
-  <div class="q-result">
-    <h3>${currentLang === 'ar' ? 'ملخص النقاط التثقيفية المقترحة لمناقشتها مع الطبيب' : 'Suggested Discussion Points for Your Doctor Visit'}</h3>
-    <p style="color:var(--gray-600);font-size:0.95rem;margin-bottom:var(--space-6);">${currentLang === 'ar' ? 'بناءً على أولوياتك، هذه بعض النقاط العلمية التي يُنصح بطرحها أثناء الفحص الإكلينيكي في مغربي:' : 'Based on your selected priorities, here are key clinical topics to explore during your consultation at Magrabi:'}</p>
-    <div class="q-result-items">
-      ${items.map(item => `
-        <div class="q-result-item">
-          <h4>${item.title}</h4>
-          <p>${item.text}</p>
-        </div>
-      `).join('')}
-    </div>
-    <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;margin-top:var(--space-8);">
-      <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-primary">${T.bookNow}</a>
-      <a href="${whatsappUrl('مرحباً، أود الاستفسار عن استشارة حول عمليات المياه البيضاء وخيارات العدسات مع د. معن البري.')}" target="_blank" rel="noopener" class="btn btn-whatsapp">${currentLang === 'ar' ? 'استفسر عبر واتساب' : 'Inquire via WhatsApp'}</a>
-      <button class="btn btn-outline" onclick="restartQ()">${currentLang === 'ar' ? 'إعادة الإجابة' : 'Restart Questionnaire'}</button>
-    </div>
-    <div class="medical-disclaimer" style="margin-top:var(--space-6);text-align:start;">${T.qDisclaimer}</div>
-  </div>`;
-}
-
-function renderEducation(T) {
-  const articles = ARTICLES[currentLang];
-
-  return `
-  <section class="section" id="education">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${T.education.label}</div>
-        <h2>${T.education.title}</h2>
-        <p>${T.education.desc}</p>
+        <div class="section-label">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف السريري' : 'Medical Library & Patient Education'}</div>
+        <h2>${currentLang === 'ar' ? 'إرشادات طبية موثقة لصحة عينيك' : 'Evidence-Based Eye Health Guidance'}</h2>
+        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية محكمة أعدت بإشراف الدكتور معن البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Peer-reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
       </div>
 
       <div class="article-accordion fade-in">
-        ${articles.map((art, idx) => `
+        ${articles.map(art => `
           <div class="article-item ${activeArticle === art.id ? 'open' : ''}" id="art-item-${art.id}">
             <button class="article-trigger" onclick="toggleArticle('${art.id}')">
-              <span>${art.title}</span>
+              <span>${currentLang === 'ar' ? art.titleAr : art.titleEn}</span>
               <span class="trigger-icon">▼</span>
             </button>
             <div class="article-content">
-              ${art.content}
-              <div style="margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid var(--gray-200);font-size:0.8rem;color:var(--gray-500);">
-                👨‍⚕️ ${currentLang === 'ar' ? 'إشراف ومراجعة طبية: د. معن عبدالله البري — استشاري طب وجراحة العيون' : 'Medically reviewed by Dr. Maan Al Barry — Consultant Ophthalmologist'}
+              ${currentLang === 'ar' ? art.contentAr : art.contentEn}
+              <div style="margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid var(--border-subtle);font-size:0.8rem;color:var(--text-muted);">
+                👨‍⚕️ ${currentLang === 'ar' ? 'إشراف ومراجعة سريرية: د. معن بن عبدالله البري — استشاري طب وجراحة العيون' : 'Medically supervised by Dr. Maan Al Barry — Consultant Ophthalmologist'}
               </div>
             </div>
           </div>
         `).join('')}
       </div>
 
-      <!-- Emergency Red Flags Box -->
+      <!-- Emergency Red Flags Card -->
       <div class="emergency-card fade-in">
         <div class="emergency-header">
           <span>⚠️</span>
-          <span>${currentLang === 'ar' ? 'علامات التحذير الطارئة (تستوجب الرعاية العاجلة فوراً)' : 'Emergency Red Flags (Require Immediate Ophthalmic Attention)'}</span>
+          <span>${currentLang === 'ar' ? 'علامات التحذير الطارئة (تستوجب الرعاية العاجلة فوراً)' : 'Emergency Red Flags (Require Immediate Ophthalmic Care)'}</span>
         </div>
         <p style="font-size:0.9rem;">
           ${currentLang === 'ar'
@@ -1373,50 +1291,74 @@ function renderEducation(T) {
   </section>`;
 }
 
-function renderClinic(T) {
+// --- CLINIC, BOOKING & EXACT GOOGLE MAPS SECTION ---
+function renderClinic() {
   return `
-  <section class="section section-alt" id="clinic">
+  <section class="section" id="clinic">
     <div class="container">
       <div class="section-header fade-in">
-        <div class="section-label">${T.clinic.label}</div>
-        <h2>${T.clinic.title}</h2>
+        <div class="section-label">${currentLang === 'ar' ? 'العيادة والموقع الجغرافي' : 'Hospital Practice & Location'}</div>
+        <h2>${currentLang === 'ar' ? 'العيادة والاستشارات وحجز المواعيد' : 'Clinic Location & Direct Appointment Booking'}</h2>
+        <p>${currentLang === 'ar' ? 'نرحب بكم في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، المزودة بأحدث التجهيزات الجراحية والتشخيصية.' : 'We welcome you at Magrabi Health Eye & ENT Hospital in Madinah, fully equipped with state-of-the-art diagnostic and surgical technology.'}</p>
       </div>
+
       <div class="clinic-card fade-in">
-        <div class="clinic-map">
-          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-3);color:var(--burgundy);text-decoration:none;padding:var(--space-8);text-align:center;">
-            <span style="font-size:3rem;">📍</span>
-            <strong style="font-size:1.1rem;">${T.clinic.name}</strong>
-            <span style="font-size:0.85rem;color:var(--gray-500);">${T.clinic.address}</span>
-            <span class="btn btn-outline btn-sm" style="margin-top:var(--space-3);">${T.clinic.directions}</span>
+        <!-- Exact Google Maps Direction Integration -->
+        <div class="clinic-map-pane">
+          <div style="font-size:3rem;margin-bottom:var(--space-2);">📍</div>
+          <h4 style="font-size:1.15rem;color:var(--text-primary);margin-bottom:var(--space-1);">
+            ${currentLang === 'ar' ? DOCTOR.clinicAr : DOCTOR.clinicEn}
+          </h4>
+          <p style="font-size:0.88rem;color:var(--text-secondary);max-width:320px;margin-bottom:var(--space-4);">
+            ${currentLang === 'ar' ? DOCTOR.addressAr : DOCTOR.addressEn}
+          </p>
+          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            🗺️ ${currentLang === 'ar' ? 'فتح الاتجاهات عبر خرائط جوجل (Google Maps)' : 'Open in Google Maps'}
           </a>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">
+            ${currentLang === 'ar' ? 'رابط الوصول المباشر المعتمد للمستشفى' : 'Official Verified Hospital Destination Link'}
+          </span>
         </div>
+
         <div class="clinic-info">
-          <h3>${T.clinic.name}</h3>
-          <div class="clinic-detail">
-            <div class="detail-icon">📍</div>
+          <h3>${currentLang === 'ar' ? 'بيانات التواصل وأوقات الزيارة' : 'Clinic Contact & Practice Schedule'}</h3>
+
+          <div class="clinic-detail-item">
+            <div class="detail-icon">🏢</div>
             <div class="detail-text">
-              <strong>${currentLang === 'ar' ? 'العنوان' : 'Address'}</strong>
-              ${T.clinic.address}
+              <strong>${currentLang === 'ar' ? 'الموقع والصرح الطبي' : 'Medical Hospital'}</strong>
+              <span>${currentLang === 'ar' ? DOCTOR.clinicAr : DOCTOR.clinicEn}</span>
             </div>
           </div>
-          <div class="clinic-detail">
+
+          <div class="clinic-detail-item">
             <div class="detail-icon">📞</div>
             <div class="detail-text">
-              <strong>${T.clinic.phone}</strong>
-              <a href="tel:${DOCTOR.callCenter}" style="direction:ltr;display:inline-block;color:var(--burgundy);font-weight:600;">${DOCTOR.callCenter} / ${DOCTOR.landline}</a>
+              <strong>${currentLang === 'ar' ? 'مركز الاتصال والحجز الموحد' : 'Central Call Center'}</strong>
+              <a href="tel:${DOCTOR.callCenter}" style="direction:ltr;display:inline-block;font-weight:700;color:var(--secondary-burgundy);">
+                ${DOCTOR.callCenter} / ${DOCTOR.landline}
+              </a>
             </div>
           </div>
-          <div class="clinic-detail">
+
+          <div class="clinic-detail-item">
             <div class="detail-icon">🕐</div>
             <div class="detail-text">
-              <strong>${T.clinic.hours}</strong>
-              ${T.clinic.hoursValue}
+              <strong>${currentLang === 'ar' ? 'مواعيد عمل العيادات' : 'Clinic Hours'}</strong>
+              <span>${currentLang === 'ar' ? 'السبت إلى الخميس: 9:00 ص – 1:00 م | 5:00 م – 9:30 م' : 'Saturday to Thursday: 9:00 AM – 1:00 PM | 5:00 PM – 9:30 PM'}</span>
             </div>
           </div>
+
           <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-6);">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-primary">${T.clinic.book}</a>
-            <a href="${whatsappUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp">${T.clinic.whatsapp}</a>
-            <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener" class="btn btn-outline">${T.clinic.directions}</a>
+            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              ${currentLang === 'ar' ? 'حجز موعد عبر البوابة الرسمية لمغربي' : 'Book via Magrabi Official Portal'}
+            </a>
+            <a href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+              💬 ${currentLang === 'ar' ? 'تنسيق واستفسار عبر واتساب' : 'Inquire via WhatsApp'}
+            </a>
+            <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+              🚗 ${currentLang === 'ar' ? 'الاتجاهات الجغرافية (Google Maps)' : 'Hospital Directions (Google Maps)'}
+            </a>
           </div>
         </div>
       </div>
@@ -1424,24 +1366,64 @@ function renderClinic(T) {
   </section>`;
 }
 
-function renderFAQ(T) {
-  const faqs = FAQ_DATA[currentLang];
+// --- FAQ SECTION ---
+function renderFAQ() {
+  const faqs = [
+    {
+      qAr: 'ما هو التخصص الدقيق للدكتور معن بن عبدالله البري؟',
+      qEn: 'What are Dr. Maan Al Barry\'s medical subspecialties?',
+      aAr: 'استشاري طب وجراحة العيون، متخصص في جراحة المياه البيضاء (الساد) وزراعة العدسات الذكية، عمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك والسطحي)، وأمراض القرنية والقرنية المخروطية وتثبيت القرنية CXL.',
+      aEn: 'He is a Consultant Ophthalmologist specializing in cataract surgery, advanced IOL implantation, laser refractive surgery (LASIK, Femto-LASIK, PRK), and corneal diseases including keratoconus and corneal cross-linking (CXL).'
+    },
+    {
+      qAr: 'أين تقع عيادة الدكتور معن البري وكيف يمكن الوصول إليها؟',
+      qEn: 'Where is Dr. Maan Al Barry\'s clinic located?',
+      aAr: 'يستقبل د. معن البري مراجعيه في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، الواقع على طريق المطار. يمكنك فتح رابط خرائط جوجل المعتمد مباشرة عبر الموقع.',
+      aEn: 'At Magrabi Health Eye & ENT Hospital in Madinah, located on Airport Road. You can access the verified Google Maps destination link directly from this website.'
+    },
+    {
+      qAr: 'كيف يمكنني حجز موعد مؤكد مع الطبيب؟',
+      qEn: 'How can I book a confirmed appointment?',
+      aAr: 'يمكنك الحجز مباشرة عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو عبر الاتصال بالرقم الموحد 19505، أو الاستفسار السريع وتنسيق الموعد عبر رابط واتساب المتوفر في الموقع.',
+      aEn: 'You can book through the official Magrabi Online Booking portal (ob.magrabi.com.sa), via the contact center at 19505, or via direct WhatsApp coordination.'
+    },
+    {
+      qAr: 'هل يضمن محاكي الرؤية النتيجة الفعلية للعملية الجراحية؟',
+      qEn: 'Does the Vision Simulator predict actual surgical vision?',
+      aAr: 'كلا، محاكي الرؤية هو أداة تعليمية وتوضيحية عامة لشرح الفروقات المفاهيمية بين العدسات. النتيجة الفعلية تعتمد على فحص تضاريس القرنية، صحة الشبكية، وقياسات العين الدقيقة التي يجريها الاستشاري.',
+      aEn: 'No. The simulator is strictly an educational tool illustrating optical principles. Real-world postoperative visual acuity is determined by clinical biometry, corneal morphology, and individualized healing.'
+    },
+    {
+      qAr: 'هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟',
+      qEn: 'Can cataract surgery guarantee complete spectacle independence?',
+      aAr: 'توفر العدسات الحديثة مثل العدسات ثلاثية البؤرة (Trifocal) والعدسات ممتدة العمق (EDOF) استقلالية عالية عن النظارات لمعظم الأنشطة كالقراءة وقيادة السيارة، ولكن لا يمكن تقديم ضمان طبي بنسبة 100% لعدم الحاجة لنظارة في بعض الظروف الخاصة.',
+      aEn: 'While modern premium IOLs (Trifocals & EDOFs) significantly decrease dependence on glasses for distance, intermediate, and near tasks, complete 100% independence cannot be guaranteed for every clinical case.'
+    },
+    {
+      qAr: 'ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟',
+      qEn: 'What are the main criteria for laser vision correction (LASIK)?',
+      aAr: 'يشترط ألا يقل العمر عن 18 عاماً، وثبات النظر لمدة عام، وسماكة قرنية كافية، وخلو العين التام من القرنية المخروطية أو الجفاف الشديد غير المعالج، ويتم حسم القرار بعد تصوير القرنية الطبقي (Pentacam).',
+      aEn: 'Candidates must be at least 18 years old, possess stable refraction for 12 months, have adequate corneal thickness, and demonstrate normal corneal topography with no evidence of keratoconus.'
+    }
+  ];
+
   return `
-  <section class="section" id="faq">
+  <section class="section section-alt" id="faq">
     <div class="container">
       <div class="section-header fade-in">
-        <div class="section-label">${T.faq.label}</div>
-        <h2>${T.faq.title}</h2>
+        <div class="section-label">${currentLang === 'ar' ? 'الأسئلة الشائعة والاستفسارات' : 'Frequently Asked Questions'}</div>
+        <h2>${currentLang === 'ar' ? 'دليل إجابات صحة العين وجراحة الساد والقرنية' : 'Ophthalmic Health & Surgical Answers'}</h2>
       </div>
+
       <div class="faq-list fade-in">
         ${faqs.map((f, i) => `
           <div class="faq-item" id="faq-${i}">
             <button class="faq-question" onclick="toggleFaq(${i})" aria-expanded="false" aria-controls="faq-answer-${i}">
-              <span>${f.q}</span>
+              <span>${currentLang === 'ar' ? f.qAr : f.qEn}</span>
               <span class="faq-icon">+</span>
             </button>
             <div class="faq-answer" id="faq-answer-${i}" role="region">
-              <p>${f.a}</p>
+              <p>${currentLang === 'ar' ? f.aAr : f.aEn}</p>
             </div>
           </div>
         `).join('')}
@@ -1450,86 +1432,115 @@ function renderFAQ(T) {
   </section>`;
 }
 
-function renderCTA(T) {
+// --- CALL TO ACTION BANNER ---
+function renderCTA() {
   return `
   <section class="section">
     <div class="container">
       <div class="cta-banner fade-in">
-        <h2>${T.cta.title}</h2>
-        <p>${T.cta.desc}</p>
+        <h2>${currentLang === 'ar' ? 'هل ترغب في معرفة أي عدسة تناسب نمط حياتك؟' : 'Ready for a Specialized Eye Evaluation?'}</h2>
+        <p>${currentLang === 'ar' ? 'احجز موعدك الآن مع د. معن بن عبدالله البري في مغربي المدينة المنورة لإجراء تقييم شامل ومناقشة الخيارات الأنسب لحالتك.' : 'Schedule your comprehensive examination with Dr. Maan Al Barry at Magrabi Health Madinah today.'}</p>
         <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;">
-          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-gold btn-lg">${T.bookNow}</a>
-          <a href="${whatsappUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp">${currentLang === 'ar' ? 'تنسيق الموعد عبر واتساب' : 'Inquire via WhatsApp'}</a>
+          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-lg">
+            ${currentLang === 'ar' ? 'تأكيد حجز موعد كشف واستشارة' : 'Book Clinic Appointment'}
+          </a>
+          <a href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
+            💬 ${currentLang === 'ar' ? 'تنسيق عبر واتساب' : 'Inquire via WhatsApp'}
+          </a>
+          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg" style="color:#FFFFFF;border-color:rgba(255,255,255,0.4);">
+            📍 ${currentLang === 'ar' ? 'موقع المستشفى بالمدينة' : 'Hospital Location'}
+          </a>
         </div>
       </div>
     </div>
   </section>`;
 }
 
-function renderFooter(T) {
+// --- FOOTER COMPONENT ---
+function renderFooter() {
   return `
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);">
-            <div class="logo-icon" style="width:40px;height:40px;font-size:1.1rem;">م</div>
+            <div class="logo-icon" style="width:38px;height:38px;font-size:1.1rem;">م</div>
             <div>
-              <strong style="color:var(--white);font-size:1rem;display:block;">${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}</strong>
+              <strong style="color:var(--footer-title);font-size:1.05rem;display:block;">${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}</strong>
               <small style="color:var(--gold);font-size:0.75rem;">${currentLang === 'ar' ? DOCTOR.titleAr : DOCTOR.titleEn}</small>
             </div>
           </div>
-          <p>${T.footer.madeWith}</p>
+          <p style="font-size:0.85rem;line-height:1.7;">
+            ${currentLang === 'ar'
+              ? 'الموقع الرسمي للتعريف بالخبرات الأكاديمية والسريرية للدكتور معن البري، ونشر التثقيف الطبي الموثوق حول جراحات المياه البيضاء، القرنية، وتصحيح النظر.'
+              : 'Official medical portal presenting Dr. Maan Al Barry\'s academic appointments and evidence-based patient education.'}
+          </p>
         </div>
+
         <div class="footer-col">
-          <h4>${currentLang === 'ar' ? 'روابط سريعة' : 'Quick Navigation'}</h4>
-          <a href="#home" onclick="scrollToSection('home');return false;">${T.nav.home}</a>
-          <a href="#profile" onclick="scrollToSection('profile');return false;">${T.nav.profile}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${T.nav.specialties}</a>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${T.nav.cataracts}</a>
-          <a href="#simulator" onclick="scrollToSection('simulator');return false;">${T.nav.simulator}</a>
-          <a href="#education" onclick="scrollToSection('education');return false;">${T.nav.education}</a>
+          <h4>${currentLang === 'ar' ? 'روابط الوصول السريع' : 'Quick Navigation'}</h4>
+          <a href="#home" onclick="scrollToSection('home');return false;">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
+          <a href="#profile" onclick="scrollToSection('profile');return false;">${currentLang === 'ar' ? 'السيرة المهنية' : 'Biography'}</a>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'التخصصات الجراحية' : 'Specialties'}</a>
+          <a href="#simulator" onclick="scrollToSection('simulator');return false;">${currentLang === 'ar' ? 'محاكي الرؤية' : 'Simulator'}</a>
+          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'دليل العدسات IOL' : 'IOL Guide'}</a>
         </div>
+
         <div class="footer-col">
-          <h4>${currentLang === 'ar' ? 'التخصصات الطبية' : 'Specialties'}</h4>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'جراحة المياه البيضاء' : 'Cataract Surgery'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'تصحيح الإبصار (الليزك)' : 'Refractive Surgery'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'القرنية المخروطية (CXL)' : 'Keratoconus (CXL)'}</a>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'زراعة العدسات التوريك والمتقدمة' : 'Premium & Toric IOLs'}</a>
+          <h4>${currentLang === 'ar' ? 'التخصصات الدقيقة' : 'Clinical Focus'}</h4>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'جراحة الساد والماء الأبيض' : 'Cataract Surgery'}</a>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'زراعة العدسات ثلاثية البؤرة' : 'Trifocal / EDOF IOLs'}</a>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'القرنية المخروطية وتثبيت CXL' : 'Keratoconus (CXL)'}</a>
+          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'الفيمتو ليزك وتصحيح النظر' : 'Femto-LASIK & PRK'}</a>
         </div>
+
         <div class="footer-col">
-          <h4>${currentLang === 'ar' ? 'العيادة والتواصل' : 'Practice & Contact'}</h4>
-          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener">${T.bookNow}</a>
-          <a href="${whatsappUrl()}" target="_blank" rel="noopener">WhatsApp (${DOCTOR.whatsapp})</a>
-          <a href="tel:${DOCTOR.callCenter}">${T.clinic.phone}: ${DOCTOR.callCenter}</a>
-          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener">${T.clinic.directions}</a>
+          <h4>${currentLang === 'ar' ? 'العيادة والتواصل' : 'Hospital & Contact'}</h4>
+          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">📍 ${currentLang === 'ar' ? 'مغربي طريق المطار (Google Maps)' : 'Airport Road, Madinah (Maps)'}</a>
+          <a href="tel:${DOCTOR.callCenter}">📞 ${currentLang === 'ar' ? 'الرقم الموحد: ' : 'Call Center: '}${DOCTOR.callCenter}</a>
+          <a href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer">💬 WhatsApp (${DOCTOR.whatsapp})</a>
+          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer">🌐 ${currentLang === 'ar' ? 'بوابة الحجز الإلكتروني' : 'Online Booking'}</a>
         </div>
       </div>
-      <div class="medical-disclaimer" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--gray-300);margin-bottom:var(--space-6);">
-        <strong style="color:var(--gold);">${T.footer.disclaimer}:</strong> ${T.footer.disclaimerText}
+
+      <div class="medical-disclaimer" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#94A3B8;margin-bottom:var(--space-6);">
+        <strong style="color:var(--gold);">⚖️ ${currentLang === 'ar' ? 'إخلاء مسؤولية طبي معتمد:' : 'Medical Disclaimer:'}</strong>
+        ${currentLang === 'ar'
+          ? 'المحتوى العلمي والمواد التثقيفية المنشورة على هذا الموقع مخصصة حصرياً للتوعية الطبية العامة، ولا تُعد بأي حال من الأحوال بديلاً عن الكشف الإكلينيكي المباشر والتشخيص العيني الدقيق لدى الطبيب الاستشاري.'
+          : 'Content published on this website is for educational and awareness purposes only and does not substitute for personalized clinical examination and medical diagnosis by an ophthalmologist.'}
       </div>
+
       <div class="footer-bottom">
-        <p>${T.footer.rights} ${new Date().getFullYear()} — ${DOCTOR.nameAr}</p>
+        <p>© ${new Date().getFullYear()} ${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn} — ${currentLang === 'ar' ? 'جميع الحقوق محفوظة' : 'All Rights Reserved'}</p>
         <div>
-          <a href="${DOCTOR.magrabiProfile}" target="_blank" rel="noopener">${currentLang === 'ar' ? 'الملف الطبي في مغربي' : 'Magrabi Profile'}</a> ·
-          <a href="${DOCTOR.taibahProfile}" target="_blank" rel="noopener">${currentLang === 'ar' ? 'ملف أعضاء هيئة التدريس بجامعة طيبة' : 'Taibah University Profile'}</a>
+          <a href="${DOCTOR.magrabiProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'الملف الطبي في مغربي' : 'Magrabi Profile'}</a> ·
+          <a href="${DOCTOR.taibahProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'ملف جامعة طيبة' : 'Taibah University Profile'}</a> ·
+          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
         </div>
       </div>
     </div>
   </footer>`;
 }
 
-function renderBookingBar(T) {
+// --- FIXED MOBILE BOOKING BAR ---
+function renderBookingBar() {
   return `
   <div class="booking-bar" id="booking-bar">
     <div class="booking-bar-inner">
-      <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${T.bookNow}</a>
-      <a href="${whatsappUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-sm">WhatsApp</a>
+      <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+        ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Exam'}
+      </a>
+      <a href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+        💬 WhatsApp
+      </a>
+      <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+        📍 Maps
+      </a>
     </div>
   </div>`;
 }
 
-// --- INTERACTIVE ACTIONS ---
+// --- INTERACTIVE ACTIONS & HANDLERS ---
 
 window.toggleLang = function() {
   currentLang = currentLang === 'ar' ? 'en' : 'ar';
@@ -1541,8 +1552,8 @@ window.toggleLang = function() {
 window.scrollToSection = function(id) {
   const el = document.getElementById(id);
   if (el) {
-    const headerH = document.getElementById('site-header')?.offsetHeight || 72;
-    const y = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
+    const headerH = document.getElementById('site-header')?.offsetHeight || 74;
+    const y = el.getBoundingClientRect().top + window.scrollY - headerH - 12;
     window.scrollTo({ top: y, behavior: 'smooth' });
   }
 };
@@ -1569,10 +1580,16 @@ window.setSimLens = function(lens) {
 
 window.updateSimSlider = function(val) {
   simSliderPos = val;
-  const afterLayer = document.getElementById('sim-after-layer');
-  const dividerLine = document.getElementById('sim-divider-line');
-  if (afterLayer) afterLayer.style.width = val + '%';
-  if (dividerLine) dividerLine.style.left = val + '%';
+  const wrap = document.getElementById('sim-active-wrap');
+  const line = document.getElementById('sim-divider-line');
+  if (wrap) wrap.style.width = val + '%';
+  if (line) line.style.left = val + '%';
+};
+
+window.resetSimSlider = function() {
+  window.updateSimSlider(50);
+  const input = document.querySelector('.sim-slider-input');
+  if (input) input.value = 50;
 };
 
 window.selectQOption = function(idx) {
@@ -1583,8 +1600,7 @@ window.selectQOption = function(idx) {
 
 window.nextQStep = function() {
   if (qAnswers[qStep] === undefined) return;
-  const Q = QUESTIONNAIRE[currentLang];
-  if (qStep < Q.steps.length - 1) {
+  if (qStep < 3) {
     qStep++;
   } else {
     qDone = true;
@@ -1620,7 +1636,6 @@ window.toggleFaq = function(idx) {
   if (item) item.classList.toggle('open');
 };
 
-// --- SCROLL ANIMATIONS ---
 function initScrollAnimations() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -1638,13 +1653,13 @@ function initHeaderScroll() {
     const header = document.getElementById('site-header');
     if (header) {
       if (window.scrollY > 40) {
-        header.classList.add('scrolled');
+        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
       } else {
-        header.classList.remove('scrolled');
+        header.style.boxShadow = 'none';
       }
     }
   }, { passive: true });
 }
 
-// Initial Render
+// Initial Mount
 render();
