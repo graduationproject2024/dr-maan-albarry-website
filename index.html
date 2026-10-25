@@ -14,8 +14,8 @@
   <link rel="alternate" hreflang="en" href="https://drmaanalbarry.com/en/">
   <link rel="alternate" hreflang="x-default" href="https://drmaanalbarry.com/ar/">
 
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon-HV1kWBx1.svg">
+  <link rel="manifest" href="./assets/manifest-aCiE-U49.webmanifest">
 
   <!-- Open Graph / Facebook / LinkedIn -->
   <meta property="og:type" content="profile">
@@ -35,7 +35,20 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (t === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch(e) {}
+    })();
+  </script>
 
   <!-- Comprehensive Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -238,7 +251,7 @@
   }
   </script>
 
-  <script type="module" crossorigin src="./assets/index-DJXy5S1L.js"></script>
+  <script type="module" crossorigin src="./assets/index-pdzhnXba.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-BgibJTr9.css">
 </head>
 <body>
