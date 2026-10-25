@@ -1,5 +1,3 @@
-import './style.css';
-
 // ============================================================
 // DR. MAAN AL BARRY — OFFICIAL MEDICAL PORTAL
 // Clinical Prestige & Academic Ophthalmology
@@ -311,31 +309,47 @@ function drawPrescription(ctx, w, h, diopter) {
   ctx.fillStyle = '#fbfaf6';
   ctx.fillRect(w * 0.12, h * 0.08, w * 0.76, h * 0.84);
   ctx.fillStyle = '#1d2630';
-  ctx.textAlign = 'center';
-  ctx.direction = 'rtl';
 
-  const lines = [
-    [0.5, 'قطرة مرطبة بدون مواد حافظة'],
-    [0.4, 'قطرة واحدة في كل عين'],
-    [0.4, 'أربع مرات يومياً بعد الأكل'],
-    [0.3, 'تجنب فرك العين أو إدخال الماء'],
-    [0.2, 'المراجعة بعد أسبوع من تاريخ العملية'],
-    [0.1, 'يرجى إحضار هذه الورقة وقطرات العين معك'],
-    [0, 'مستشفى مغربي للعيون · المدينة المنورة']
+  const isAr = (simState.lang === 'ar');
+  ctx.textAlign = 'center';
+  ctx.direction = isAr ? 'rtl' : 'ltr';
+
+  const linesAr = [
+    [0.5, 'فحص قياس حدة الإبصار للمسافات القريبة'],
+    [0.4, 'تثقيف صحة العين ورعاية الإبصار المستمرة'],
+    [0.4, 'تختلف قوة التكبير المناسبة بحسب طبيعة كل عين'],
+    [0.3, 'القراءة المريحة تتطلب مسافة وإضاءة معتدلة دائماً'],
+    [0.2, 'الفحوصات الدورية تحفظ كفاءة التباين وصفاء الرؤية'],
+    [0.1, 'رعاية متخصصة لصحة القرنية والعدسات داخل العين'],
+    [0, 'مستشفيات ومراكز مغربي للعيون والأذن · المدينة المنورة']
   ];
 
+  const linesEn = [
+    [0.5, 'Standard Near Visual Acuity Reading Chart'],
+    [0.4, 'Continuous Eye Health & Vision Care Guidance'],
+    [0.4, 'Magnification Needs Vary by Individual Patient'],
+    [0.3, 'Comfortable Reading Demands Proper Lighting'],
+    [0.2, 'Periodic Comprehensive Exams Protect Clarity'],
+    [0.1, 'Specialized Anterior Segment & Cataract Surgery'],
+    [0, 'Magrabi Health Eye & Ear Hospital · Madinah']
+  ];
+
+  const lines = isAr ? linesAr : linesEn;
   let curY = h * 0.13;
   lines.forEach(([logmarVal, text]) => {
     const fontSize = 5 * (10 ** logmarVal) * BLUR_SCALE;
-    ctx.font = `500 ${fontSize / 0.68}px "IBM Plex Sans Arabic", Alexandria, sans-serif`;
+    const fontName = isAr ? '"IBM Plex Sans Arabic", Alexandria, sans-serif' : 'Inter, sans-serif';
+    ctx.font = `500 ${fontSize / 0.68}px ${fontName}`;
+    ctx.direction = isAr ? 'rtl' : 'ltr';
     ctx.fillText(text, w * 0.5, curY + fontSize);
+
     ctx.direction = 'ltr';
     ctx.font = '500 11px Inter, sans-serif';
     ctx.fillStyle = '#7a838c';
     ctx.textAlign = 'start';
     ctx.fillText('20/' + Math.round(20 * (10 ** logmarVal)), w * 0.14, curY + fontSize);
     ctx.textAlign = 'center';
-    ctx.direction = 'rtl';
+    ctx.direction = isAr ? 'rtl' : 'ltr';
     ctx.fillStyle = '#1d2630';
     curY += fontSize * 1.45 + 6;
   });
@@ -423,6 +437,9 @@ function renderSimulator(lang) {
             <button data-scene="night">${tText('قيادة ليلاً', 'Night driving')}</button>
             <button data-scene="read">${tText('القراءة', 'Reading')}</button>
           </div>
+          <button data-action="reset" class="btn btn-sm" style="margin-inline-start: auto; height: 34px; padding: 0 14px; font-size: 0.8rem; border-color: var(--border-subtle); color: var(--text-muted);" title="${tText('إعادة ضبط المحاكي للحالة الافتراضية', 'Reset simulator to defaults')}">
+            ${tText('إعادة ضبط ↺', 'Reset ↺')}
+          </button>
         </div>
 
         <div class="vs-bar vs-lens" id="vs-lens">
@@ -535,6 +552,16 @@ function initSimulatorEvents(lang) {
     const btn = e.target.closest('button');
     if (!btn || btn.disabled) return;
 
+    if (btn.dataset.action === 'reset') {
+      simState.lens = 'trifocal';
+      simState.scene = 'night';
+      simState.D = 0;
+      simState.pos = 50;
+      simState.tab = 'sim';
+      const slider = root.querySelector('#vs-slider');
+      if (slider) slider.value = 50;
+    }
+
     if (btn.dataset.tab) simState.tab = btn.dataset.tab;
     if (btn.dataset.scene) simState.scene = btn.dataset.scene;
     if (btn.dataset.lens) simState.lens = btn.dataset.lens;
@@ -549,10 +576,12 @@ function initSimulatorEvents(lang) {
 
   const slider = root.querySelector('#vs-slider');
   if (slider) {
-    slider.addEventListener('input', (e) => {
+    const onSlide = (e) => {
       simState.pos = +e.target.value;
       updateSimulatorDom();
-    });
+    };
+    slider.addEventListener('input', onSlide);
+    slider.addEventListener('change', onSlide);
   }
 
   updateSimulatorDom();
@@ -593,6 +622,10 @@ function applyTheme(theme) {
     const isDark = (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
     btn.innerHTML = (theme === 'system' ? '◐' : isDark ? 'ليلي' : 'نهاري');
     btn.setAttribute('title', theme === 'system' ? 'الوضع التلقائي (حسب النظام)' : isDark ? 'الوضع الليلي' : 'الوضع النهاري');
+  }
+
+  if (document.getElementById('vs-root')) {
+    updateSimulatorDom();
   }
 }
 
@@ -805,6 +838,11 @@ function renderProfile() {
         <div class="section-header" style="margin-bottom:var(--space-6);">
           <div class="section-label">${currentLang === 'ar' ? 'آراء وتجارب المرضى' : 'Patient Testimonials'}</div>
           <h3 style="font-size:1.35rem;">${currentLang === 'ar' ? 'تجارب المراجعين في مغربي المدينة المنورة' : 'Reviews from Magrabi Health Madinah'}</h3>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;max-width:620px;margin-inline:auto;">
+            ${currentLang === 'ar'
+              ? 'ملاحظة سريرية: تجارب وشهادات استرشادية منقولة من مراجعي منصات التقييم العامة لمستشفيات مغربي، وتخضع للمراجعة والتأكيد النهائي من الطبيب.'
+              : 'Clinical note: Illustrative feedback compiled from public review platforms for Magrabi Health, pending final administrative confirmation by the clinic owner.'}
+          </p>
         </div>
         <div class="reviews-grid">
           <div class="review-card">
