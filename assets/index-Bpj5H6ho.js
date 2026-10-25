@@ -68,7 +68,29 @@
         </strong>
       </div>
       <p>${a(n[i.lens].noteAr,n[i.lens].noteEn)}</p>
-    `)}function x(e){i.lang=e;let t=document.getElementById(`vs-root`);if(!t)return;t.addEventListener(`click`,e=>{let n=e.target.closest(`button`);if(n&&!n.disabled){if(n.dataset.action===`reset`){i.lens=`trifocal`,i.scene=`night`,i.D=0,i.pos=50,i.tab=`sim`;let e=t.querySelector(`#vs-slider`);e&&(e.value=50)}n.dataset.tab&&(i.tab=n.dataset.tab),n.dataset.scene&&(i.scene=n.dataset.scene),n.dataset.lens&&(i.lens=n.dataset.lens),n.dataset.d!==void 0&&(i.D=+n.dataset.d),n.dataset.scene&&i.scene===`read`&&i.D===0&&(i.D=-2.5),b()}});let n=t.querySelector(`#vs-slider`);if(n){let e=e=>{i.pos=+e.target.value,b()};n.addEventListener(`input`,e),n.addEventListener(`change`,e)}b(),document.fonts&&document.fonts.ready&&document.fonts.ready.then(b)}var S=`ar`,C=(()=>{try{return localStorage.getItem(`theme`)}catch{return null}})()||`system`,w=0,T=[],E=!1,D=null;function O(e){C=e;try{localStorage.setItem(`theme`,e)}catch{}e===`system`?document.documentElement.removeAttribute(`data-theme`):document.documentElement.setAttribute(`data-theme`,e);let t=document.getElementById(`theme-toggle-btn`);if(t){let n=e===`dark`||e===`system`&&window.matchMedia(`(prefers-color-scheme: dark)`).matches;t.innerHTML=e===`system`?`◐`:n?`ليلي`:`نهاري`,t.setAttribute(`title`,e===`system`?`الوضع التلقائي (حسب النظام)`:n?`الوضع الليلي`:`الوضع النهاري`)}document.getElementById(`vs-root`)&&b()}window.matchMedia(`(prefers-color-scheme: dark)`).addEventListener(`change`,()=>{C===`system`&&O(`system`)}),window.cycleTheme=function(){O(C===`system`?`light`:C===`light`?`dark`:`system`)};function k(t){let n=encodeURIComponent(t||(S===`ar`?`مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن عبدالله البري في مستشفى مغربي المدينة المنورة.`:`Hello, I would like to inquire about booking a consultation with Dr. Maan Al Barry at Magrabi Madinah.`));return`https://wa.me/${e.whatsapp}?text=${n}`}function A(){let t=C===`dark`||C===`system`&&window.matchMedia(`(prefers-color-scheme: dark)`).matches,n=C===`system`?`◐`:t?`ليلي`:`نهاري`;return`
+    `)}function x(e){i.lang=e;let t=document.getElementById(`vs-root`);if(!t)return;t.addEventListener(`click`,e=>{let n=e.target.closest(`button`);if(n&&!n.disabled){if(n.dataset.action===`reset`){i.lens=`trifocal`,i.scene=`night`,i.D=0,i.pos=50,i.tab=`sim`;let e=t.querySelector(`#vs-slider`);e&&(e.value=50)}n.dataset.tab&&(i.tab=n.dataset.tab),n.dataset.scene&&(i.scene=n.dataset.scene),n.dataset.lens&&(i.lens=n.dataset.lens),n.dataset.d!==void 0&&(i.D=+n.dataset.d),n.dataset.scene&&i.scene===`read`&&i.D===0&&(i.D=-2.5),b()}});let n=t.querySelector(`#vs-slider`);if(n){let e=e=>{i.pos=+e.target.value,b()};n.addEventListener(`input`,e),n.addEventListener(`change`,e)}b(),document.fonts&&document.fonts.ready&&document.fonts.ready.then(b)}var S=`ar`,C=(()=>{try{return localStorage.getItem(`theme`)}catch{return null}})()||`system`,w=0,T=[],E=!1,D=null;function O(e=`theme-toggle-btn`){let t=C===`dark`||C===`system`&&window.matchMedia(`(prefers-color-scheme: dark)`).matches;return`
+  <button id="${e}" class="theme-sun-moon-toggle ${t?`is-dark`:``}" onclick="toggleTheme()" role="switch" aria-checked="${t?`true`:`false`}" aria-label="${S===`ar`?t?`الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري`:`الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي`:t?`Dark mode enabled. Click to switch to light mode`:`Light mode enabled. Click to switch to dark mode`}" title="${S===`ar`?`تبديل المظهر (ليلي / نهاري)`:`Toggle Theme (Dark / Light)`}">
+    <span class="tsm-sky">
+      <span class="tsm-clouds" aria-hidden="true">
+        <svg viewBox="0 0 24 14" class="tsm-cloud tsm-cloud-1"><path d="M19 14H5a4 4 0 01-.8-7.9A5.5 5.5 0 0115 4a4.5 4.5 0 014 6.8 4 4 0 010 3.2z"/></svg>
+        <svg viewBox="0 0 20 12" class="tsm-cloud tsm-cloud-2"><path d="M16 12H4a3.5 3.5 0 01-.7-6.9A4.5 4.5 0 0112 3a3.5 3.5 0 014 6 3.5 3.5 0 010 3z"/></svg>
+      </span>
+      <span class="tsm-stars" aria-hidden="true">
+        <span class="tsm-star tsm-star-1">★</span>
+        <span class="tsm-star tsm-star-2">✦</span>
+        <span class="tsm-star tsm-star-3">★</span>
+      </span>
+      <span class="tsm-thumb">
+        <svg class="tsm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.5" fill="#f59e0b" stroke="#d97706"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="#f59e0b"></path>
+        </svg>
+        <svg class="tsm-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </span>
+    </span>
+  </button>`}function k(e){C=e;try{localStorage.setItem(`theme`,e)}catch{}e===`system`?document.documentElement.removeAttribute(`data-theme`):document.documentElement.setAttribute(`data-theme`,e);let t=e===`dark`||e===`system`&&window.matchMedia(`(prefers-color-scheme: dark)`).matches;document.querySelectorAll(`.theme-sun-moon-toggle`).forEach(e=>{e.classList.toggle(`is-dark`,t),e.setAttribute(`aria-checked`,t?`true`:`false`);let n=S===`ar`?t?`الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري`:`الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي`:t?`Dark mode enabled. Click to switch to light mode`:`Light mode enabled. Click to switch to dark mode`;e.setAttribute(`aria-label`,n),e.setAttribute(`title`,n)}),document.getElementById(`vs-root`)&&b()}window.matchMedia(`(prefers-color-scheme: dark)`).addEventListener(`change`,()=>{C===`system`&&k(`system`)}),window.toggleTheme=function(){k(C===`dark`||C===`system`&&window.matchMedia(`(prefers-color-scheme: dark)`).matches?`light`:`dark`)},window.cycleTheme=window.toggleTheme;function A(t){let n=encodeURIComponent(t||(S===`ar`?`مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن عبدالله البري في مستشفى مغربي المدينة المنورة.`:`Hello, I would like to inquire about booking a consultation with Dr. Maan Al Barry at Magrabi Madinah.`));return`https://wa.me/${e.whatsapp}?text=${n}`}function j(){return`
   <header class="site-header" id="site-header">
     <div class="container header-inner">
       <a href="#home" class="header-logo" onclick="scrollToSection('home');return false;">
@@ -91,7 +113,7 @@
         </div>
 
         <div class="header-actions">
-          <button id="theme-toggle-btn" class="theme-switch-btn" onclick="cycleTheme()" aria-label="Toggle Theme">${n}</button>
+          ${O(`theme-toggle-btn`)}
           <button class="lang-switch" onclick="toggleLang()" aria-label="Switch Language">${S===`ar`?`English`:`عربي`}</button>
           <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
             ${S===`ar`?`احجز موعداً`:`Book Appointment`}
@@ -104,6 +126,10 @@
 
     <!-- Mobile Drawer -->
     <nav class="mobile-nav" id="mobile-nav">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px 14px;border-bottom:1px solid var(--border-subtle);margin-bottom:6px;">
+        <span style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">${S===`ar`?`مظهر الموقع`:`Appearance`}</span>
+        ${O(`theme-toggle-btn-mobile`)}
+      </div>
       <a href="#home" onclick="scrollToSection('home');closeMobileMenu();return false;">${S===`ar`?`الرئيسية`:`Home`}</a>
       <a href="#profile" onclick="scrollToSection('profile');closeMobileMenu();return false;">${S===`ar`?`عن الدكتور والمسيرة`:`Biography`}</a>
       <a href="#specialties" onclick="scrollToSection('specialties');closeMobileMenu();return false;">${S===`ar`?`التخصصات والخدمات`:`Specialties`}</a>
@@ -114,7 +140,7 @@
       <a href="#clinic" onclick="scrollToSection('clinic');closeMobileMenu();return false;">${S===`ar`?`العيادة والحجز والموقع`:`Clinic & Booking`}</a>
       <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer">${S===`ar`?`موقع المستشفى (خرائط جوجل)`:`Hospital Google Maps`}</a>
     </nav>
-  </header>`}function j(){return`
+  </header>`}function M(){return`
   <section class="hero" id="home">
     <div class="container">
       <div class="hero-grid">
@@ -133,11 +159,21 @@
           </p>
 
           <div class="hero-cta">
-            <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-              ${S===`ar`?`احجز موعد كشف أو استشارة`:`Book Clinic Appointment`}
+            <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="hero-primary-cta">
+              <span class="btn-fill-effect" aria-hidden="true"></span>
+              <span class="btn-label">${S===`ar`?`احجز موعد كشف أو استشارة`:`Book Clinic Appointment`}</span>
+              <span class="btn-arrow-wrap" aria-hidden="true">
+                <svg class="btn-arrow-svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </span>
             </a>
-            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg">
-              ${S===`ar`?`جرب محاكي الرؤية التفاعلي`:`Try Vision Simulator`}
+            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg btn-gradient-shimmer" id="hero-secondary-cta">
+              <span class="btn-shimmer-border" aria-hidden="true"></span>
+              <span class="btn-shimmer-body">
+                <span class="btn-label">${S===`ar`?`جرب محاكي الرؤية التفاعلي`:`Try Vision Simulator`}</span>
+                <span class="btn-sparkle" aria-hidden="true">✦</span>
+              </span>
             </a>
             <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;">
               <span>${S===`ar`?`مستشفيات مغربي – المدينة المنورة`:`Magrabi Hospital – Madinah`}</span>
@@ -173,7 +209,7 @@
         </div>
       </div>
     </div>
-  </section>`}function M(){let t=e.roles[S];return`
+  </section>`}function N(){let t=e.roles[S];return`
   <section class="section section-alt" id="profile">
     <div class="container">
       <div class="section-header fade-in">
@@ -285,7 +321,7 @@
         </div>
       </div>
     </div>
-  </section>`}function N(){return`
+  </section>`}function P(){return`
   <section class="section" id="specialties">
     <div class="container">
       <div class="section-header fade-in">
@@ -317,7 +353,7 @@
         `).join(``)}
       </div>
     </div>
-  </section>`}function P(){let e=S===`ar`,t=[{n:e?`ثلاثية البؤرة`:`Trifocal`,sub:e?`للاستغناء عن النظارة قدر الإمكان`:`For maximum spectacle independence`,d:[4,e?`ممتازة`:`Excellent`],m:[4,e?`جيدة جداً`:`Very good`],nr:[4,e?`جيدة غالباً بدون نظارة`:`Good, often without glasses`],h:[3,e?`أكثر شيوعاً، وتخف غالباً مع التكيف العصبي`:`More common; often fade with neuroadaptation`],g:e?`قليلة لدى أغلب المرضى، وتختلف من حالة لأخرى`:`Uncommon for most patients; varies`},{n:e?`ممتدة المدى (EDOF)`:`Extended depth of focus (EDOF)`,sub:e?`للقيادة الليلية والعمل على الشاشات`:`For night driving and screen work`,d:[4,e?`ممتازة`:`Excellent`],m:[4,e?`جيدة جداً`:`Very good`],nr:[2,e?`محدودة للخط الدقيق`:`Limited for fine print`],h:[2,e?`أقل من الثلاثية، وأكثر من الأحادية`:`Fewer than trifocal, more than monofocal`],g:e?`غالباً للقراءة الدقيقة فقط`:`Mostly for fine reading only`},{n:e?`أحادية البؤرة`:`Monofocal`,sub:e?`لأعلى نقاء للبعيد مع نظارة للقريب`:`Sharpest distance, glasses for near`,d:[4,e?`ممتازة`:`Excellent`],m:[2,e?`تحتاج نظارة غالباً`:`Glasses usually needed`],nr:[1,e?`تحتاج نظارة قراءة`:`Reading glasses needed`],h:[1,e?`الأقل بين الأنواع`:`Lowest of the three`],g:e?`دائمة للقراءة والكمبيوتر`:`Permanent for reading and computer`}],n=(e,t)=>`
+  </section>`}function F(){let e=S===`ar`,t=[{n:e?`ثلاثية البؤرة`:`Trifocal`,sub:e?`للاستغناء عن النظارة قدر الإمكان`:`For maximum spectacle independence`,d:[4,e?`ممتازة`:`Excellent`],m:[4,e?`جيدة جداً`:`Very good`],nr:[4,e?`جيدة غالباً بدون نظارة`:`Good, often without glasses`],h:[3,e?`أكثر شيوعاً، وتخف غالباً مع التكيف العصبي`:`More common; often fade with neuroadaptation`],g:e?`قليلة لدى أغلب المرضى، وتختلف من حالة لأخرى`:`Uncommon for most patients; varies`},{n:e?`ممتدة المدى (EDOF)`:`Extended depth of focus (EDOF)`,sub:e?`للقيادة الليلية والعمل على الشاشات`:`For night driving and screen work`,d:[4,e?`ممتازة`:`Excellent`],m:[4,e?`جيدة جداً`:`Very good`],nr:[2,e?`محدودة للخط الدقيق`:`Limited for fine print`],h:[2,e?`أقل من الثلاثية، وأكثر من الأحادية`:`Fewer than trifocal, more than monofocal`],g:e?`غالباً للقراءة الدقيقة فقط`:`Mostly for fine reading only`},{n:e?`أحادية البؤرة`:`Monofocal`,sub:e?`لأعلى نقاء للبعيد مع نظارة للقريب`:`Sharpest distance, glasses for near`,d:[4,e?`ممتازة`:`Excellent`],m:[2,e?`تحتاج نظارة غالباً`:`Glasses usually needed`],nr:[1,e?`تحتاج نظارة قراءة`:`Reading glasses needed`],h:[1,e?`الأقل بين الأنواع`:`Lowest of the three`],g:e?`دائمة للقراءة والكمبيوتر`:`Permanent for reading and computer`}],n=(e,t)=>`
     <span class="pips ${t}" role="img" aria-label="${e}/4">
       ${[1,2,3,4].map(t=>`<i class="${t<=e?`on`:``}"></i>`).join(``)}
     </span>
@@ -364,7 +400,7 @@
         ${e?`لا توجد عدسة هي الأفضل للجميع. يعتمد الاختيار على فحص القرنية والشبكية وقياسات العين ونمط حياتك، ويحدده الطبيب بعد الفحص.`:`No single lens is best for everyone. The choice depends on your corneal and retinal exam, eye measurements and lifestyle, and is made with your surgeon after examination.`}
       </div>
     </div>
-  </section>`}function F(){let t={ar:{steps:[{question:`ما هي فئتك العمرية التقريبية؟`,desc:`تساعد لمعرفة درجة التكيف العصبي الطبيعي وجفاف العين الفسيولوجي.`,options:[`أقل من 45 سنة`,`45 إلى 58 سنة`,`59 إلى 70 سنة`,`أكثر من 70 سنة`,`لست متأكداً`]},{question:`هل تم تشخيصك سابقاً بأي من حالات العين التالية؟`,desc:`بعض حالات الشبكية وارتفاع ضغط العين تتطلب اختيار عدسات تحافظ على أعلى حساسية للتباين.`,options:[`لا توجد حالات سابقة معتمدة (سليمة)`,`ارتفاع ضغط العين أو ماء أزرق (Glaucoma)`,`اعتلال بمركز الإبصار أو السكري بالشبكية`,`قرنية مخروطية أو جفاف عين مزمن`,`لست متأكداً تماماً (أرغب بفحص شامل)`]},{question:`ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟`,desc:`تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.`,options:[`القيادة الليلية ورؤية المسافات البعيدة بوضوح ودون هالات`,`العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)`,`قراءة المصحف الشريف والهاتف الذكي دون نظارة`,`الاستقلالية التامة بنسبة 95%+ عن النظارات في كافة الظروف`]},{question:`هل سبق لك إجراء عملية ليزك أو تصحيح نظر سابق؟`,desc:`العيون التي خضعت لعمليات سابقة تحتاج معادلات حسابية خاصة (Barrett True-K).`,options:[`لم أجرِ أي عملية سابقة (قرنية طبيعية)`,`نعم، أجريت فيمتو ليزك أو ليزر سطحي PRK`,`نعم، خضعت لتثبيت قرنية مخروطية CXL`,`لست متأكداً من التاريخ الجراحي الدقيق`]}]},en:{steps:[{question:`What is your approximate age group?`,desc:`Guides expectations regarding neuroadaptation and ocular surface status.`,options:[`Under 45 years`,`45 to 58 years`,`59 to 70 years`,`Over 70 years`,`Not certain`]},{question:`Do you have any previously diagnosed ocular conditions?`,desc:`Conditions such as glaucoma or maculopathy influence lens optical platform selection.`,options:[`No diagnosed conditions (Healthy Eyes)`,`Glaucoma or elevated eye pressure`,`Diabetic retinopathy or macular condition`,`Keratoconus or severe chronic dry eye`,`Not certain (Require complete exam)`]},{question:`What is your primary visual priority in daily routine?`,desc:`Defines your most critical working visual focal distance.`,options:[`Night driving and high contrast distance clarity with zero halos`,`Computer work, laptops, and dashboard view (Intermediate continuous)`,`Smartphone use and book reading without reading glasses`,`Maximum spectacle independence (95%+) in all everyday scenarios`]},{question:`Have you undergone previous laser refractive surgery (LASIK / PRK)?`,desc:`Post-refractive eyes require specialized biometric calculations (e.g., Barrett True-K).`,options:[`No previous surgery (Virgin Cornea)`,`Yes, prior Femto-LASIK or PRK`,`Yes, prior corneal cross-linking (CXL)`,`Not certain of surgical history`]}]}}[S];if(E)return`
+  </section>`}function I(){let t={ar:{steps:[{question:`ما هي فئتك العمرية التقريبية؟`,desc:`تساعد لمعرفة درجة التكيف العصبي الطبيعي وجفاف العين الفسيولوجي.`,options:[`أقل من 45 سنة`,`45 إلى 58 سنة`,`59 إلى 70 سنة`,`أكثر من 70 سنة`,`لست متأكداً`]},{question:`هل تم تشخيصك سابقاً بأي من حالات العين التالية؟`,desc:`بعض حالات الشبكية وارتفاع ضغط العين تتطلب اختيار عدسات تحافظ على أعلى حساسية للتباين.`,options:[`لا توجد حالات سابقة معتمدة (سليمة)`,`ارتفاع ضغط العين أو ماء أزرق (Glaucoma)`,`اعتلال بمركز الإبصار أو السكري بالشبكية`,`قرنية مخروطية أو جفاف عين مزمن`,`لست متأكداً تماماً (أرغب بفحص شامل)`]},{question:`ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟`,desc:`تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.`,options:[`القيادة الليلية ورؤية المسافات البعيدة بوضوح ودون هالات`,`العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)`,`قراءة المصحف الشريف والهاتف الذكي دون نظارة`,`الاستقلالية التامة بنسبة 95%+ عن النظارات في كافة الظروف`]},{question:`هل سبق لك إجراء عملية ليزك أو تصحيح نظر سابق؟`,desc:`العيون التي خضعت لعمليات سابقة تحتاج معادلات حسابية خاصة (Barrett True-K).`,options:[`لم أجرِ أي عملية سابقة (قرنية طبيعية)`,`نعم، أجريت فيمتو ليزك أو ليزر سطحي PRK`,`نعم، خضعت لتثبيت قرنية مخروطية CXL`,`لست متأكداً من التاريخ الجراحي الدقيق`]}]},en:{steps:[{question:`What is your approximate age group?`,desc:`Guides expectations regarding neuroadaptation and ocular surface status.`,options:[`Under 45 years`,`45 to 58 years`,`59 to 70 years`,`Over 70 years`,`Not certain`]},{question:`Do you have any previously diagnosed ocular conditions?`,desc:`Conditions such as glaucoma or maculopathy influence lens optical platform selection.`,options:[`No diagnosed conditions (Healthy Eyes)`,`Glaucoma or elevated eye pressure`,`Diabetic retinopathy or macular condition`,`Keratoconus or severe chronic dry eye`,`Not certain (Require complete exam)`]},{question:`What is your primary visual priority in daily routine?`,desc:`Defines your most critical working visual focal distance.`,options:[`Night driving and high contrast distance clarity with zero halos`,`Computer work, laptops, and dashboard view (Intermediate continuous)`,`Smartphone use and book reading without reading glasses`,`Maximum spectacle independence (95%+) in all everyday scenarios`]},{question:`Have you undergone previous laser refractive surgery (LASIK / PRK)?`,desc:`Post-refractive eyes require specialized biometric calculations (e.g., Barrett True-K).`,options:[`No previous surgery (Virgin Cornea)`,`Yes, prior Femto-LASIK or PRK`,`Yes, prior corneal cross-linking (CXL)`,`Not certain of surgical history`]}]}}[S];if(E)return`
     <section class="section" id="questionnaire">
       <div class="container">
         <div class="section-header fade-in">
@@ -399,7 +435,7 @@
               <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                 ${S===`ar`?`حجز موعد فحص القرنية والعدسات`:`Book Exam Appointment`}
               </a>
-              <a href="${k(`مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.`)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+              <a href="${A(`مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.`)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
                 ${S===`ar`?`تنسيق الموعد عبر واتساب`:`Inquire via WhatsApp`}
               </a>
               <button class="btn btn-outline" onclick="restartQ()">
@@ -454,7 +490,7 @@
         </div>
       </div>
     </div>
-  </section>`}function I(){return`
+  </section>`}function L(){return`
   <section class="section section-alt" id="education">
     <div class="container">
       <div class="section-header fade-in">
@@ -558,7 +594,7 @@
         </ul>
       </div>
     </div>
-  </section>`}function L(){return`
+  </section>`}function R(){return`
   <section class="section" id="clinic">
     <div class="container">
       <div class="section-header fade-in">
@@ -614,7 +650,7 @@
             <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
               ${S===`ar`?`حجز موعد عبر البوابة الرسمية لمغربي`:`Book via Magrabi Official Portal`}
             </a>
-            <a href="${k()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+            <a href="${A()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
               ${S===`ar`?`تنسيق واستفسار عبر واتساب`:`Inquire via WhatsApp`}
             </a>
             <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
@@ -624,7 +660,7 @@
         </div>
       </div>
     </div>
-  </section>`}function R(){return`
+  </section>`}function z(){return`
   <section class="section section-alt" id="faq">
     <div class="container">
       <div class="section-header fade-in">
@@ -646,7 +682,7 @@
         `).join(``)}
       </div>
     </div>
-  </section>`}function z(){return`
+  </section>`}function B(){return`
   <section class="section">
     <div class="container">
       <div class="cta-banner fade-in">
@@ -656,7 +692,7 @@
           <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-lg">
             ${S===`ar`?`تأكيد حجز موعد كشف واستشارة`:`Book Clinic Appointment`}
           </a>
-          <a href="${k()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
+          <a href="${A()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
             ${S===`ar`?`تنسيق عبر واتساب`:`Inquire via WhatsApp`}
           </a>
           <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg" style="color:#FFFFFF;border-color:rgba(255,255,255,0.4);">
@@ -665,7 +701,7 @@
         </div>
       </div>
     </div>
-  </section>`}function B(){return`
+  </section>`}function V(){return`
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
@@ -703,7 +739,7 @@
           <h4>${S===`ar`?`العيادة والتواصل`:`Hospital & Contact`}</h4>
           <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer">${S===`ar`?`مغربي طريق المطار (Google Maps)`:`Airport Road, Madinah (Maps)`}</a>
           <a href="tel:${e.callCenter}">${S===`ar`?`الرقم الموحد: `:`Call Center: `}${e.callCenter}</a>
-          <a href="${k()}" target="_blank" rel="noopener noreferrer">WhatsApp (${e.whatsapp})</a>
+          <a href="${A()}" target="_blank" rel="noopener noreferrer">WhatsApp (${e.whatsapp})</a>
           <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer">${S===`ar`?`بوابة الحجز الإلكتروني`:`Online Booking`}</a>
         </div>
       </div>
@@ -722,33 +758,33 @@
         </div>
       </div>
     </div>
-  </footer>`}function V(){return`
+  </footer>`}function H(){return`
   <div class="booking-bar" id="booking-bar">
     <div class="booking-bar-inner">
       <a href="${e.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
         ${S===`ar`?`احجز موعداً`:`Book Exam`}
       </a>
-      <a href="${k()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+      <a href="${A()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
         WhatsApp
       </a>
       <a href="${e.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
         Maps
       </a>
     </div>
-  </div>`}window.toggleLang=function(){S=S===`ar`?`en`:`ar`,w=0,T=[],E=!1,D=null,W(),window.scrollTo(0,0)},window.scrollToSection=function(e){let t=document.getElementById(e);if(t){let e=document.getElementById(`site-header`)?.offsetHeight||74,n=t.getBoundingClientRect().top+window.scrollY-e-12;window.scrollTo({top:n,behavior:`smooth`})}},window.toggleMobileMenu=function(){let e=document.getElementById(`mobile-nav`);e&&e.classList.toggle(`open`)},window.closeMobileMenu=function(){let e=document.getElementById(`mobile-nav`);e&&e.classList.remove(`open`)},window.selectQOption=function(e){T[w]=e,W(),scrollToSection(`questionnaire`)},window.nextQStep=function(){T[w]!==void 0&&(w<3?w++:E=!0,W(),scrollToSection(`questionnaire`))},window.prevQStep=function(){w>0&&(w--,W(),scrollToSection(`questionnaire`))},window.restartQ=function(){w=0,T=[],E=!1,W(),scrollToSection(`questionnaire`)},window.toggleArticle=function(e){D=D===e?null:e;let t=document.getElementById(`art-item-${e}`);t&&t.classList.toggle(`open`)},window.toggleFaq=function(e){let t=document.getElementById(`faq-${e}`);t&&t.classList.toggle(`open`)};function H(){let e=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add(`visible`)})},{threshold:.08,rootMargin:`0px 0px -40px 0px`});document.querySelectorAll(`.fade-in`).forEach(t=>e.observe(t))}function U(){window.addEventListener(`scroll`,()=>{let e=document.getElementById(`site-header`);e&&(window.scrollY>40?e.style.boxShadow=`0 4px 20px rgba(0, 0, 0, 0.08)`:e.style.boxShadow=`none`)},{passive:!0})}function W(){document.documentElement.lang=S,document.documentElement.dir=S===`ar`?`rtl`:`ltr`,document.body.className=S===`en`?`lang-en`:``;let e=document.getElementById(`app`);e&&(e.innerHTML=`
-    ${A()}
+  </div>`}window.toggleLang=function(){S=S===`ar`?`en`:`ar`,w=0,T=[],E=!1,D=null,G(),window.scrollTo(0,0)},window.scrollToSection=function(e){let t=document.getElementById(e);if(t){let e=document.getElementById(`site-header`)?.offsetHeight||74,n=t.getBoundingClientRect().top+window.scrollY-e-12;window.scrollTo({top:n,behavior:`smooth`})}},window.toggleMobileMenu=function(){let e=document.getElementById(`mobile-nav`);e&&e.classList.toggle(`open`)},window.closeMobileMenu=function(){let e=document.getElementById(`mobile-nav`);e&&e.classList.remove(`open`)},window.selectQOption=function(e){T[w]=e,G(),scrollToSection(`questionnaire`)},window.nextQStep=function(){T[w]!==void 0&&(w<3?w++:E=!0,G(),scrollToSection(`questionnaire`))},window.prevQStep=function(){w>0&&(w--,G(),scrollToSection(`questionnaire`))},window.restartQ=function(){w=0,T=[],E=!1,G(),scrollToSection(`questionnaire`)},window.toggleArticle=function(e){D=D===e?null:e;let t=document.getElementById(`art-item-${e}`);t&&t.classList.toggle(`open`)},window.toggleFaq=function(e){let t=document.getElementById(`faq-${e}`);t&&t.classList.toggle(`open`)};function U(){let e=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add(`visible`)})},{threshold:.08,rootMargin:`0px 0px -40px 0px`});document.querySelectorAll(`.fade-in`).forEach(t=>e.observe(t))}function W(){window.addEventListener(`scroll`,()=>{let e=document.getElementById(`site-header`);e&&(window.scrollY>40?e.style.boxShadow=`0 4px 20px rgba(0, 0, 0, 0.08)`:e.style.boxShadow=`none`)},{passive:!0})}function G(){document.documentElement.lang=S,document.documentElement.dir=S===`ar`?`rtl`:`ltr`,document.body.className=S===`en`?`lang-en`:``;let e=document.getElementById(`app`);e&&(e.innerHTML=`
+    ${j()}
     <main>
-      ${j()}
       ${M()}
       ${N()}
-      ${y(S)}
       ${P()}
+      ${y(S)}
       ${F()}
       ${I()}
       ${L()}
       ${R()}
       ${z()}
+      ${B()}
     </main>
-    ${B()}
     ${V()}
-  `,O(C),H(),U(),x(S))}W();
+    ${H()}
+  `,k(C),U(),W(),x(S))}G();
