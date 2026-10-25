@@ -1,0 +1,16 @@
+{
+  "name": "د. معن بن عبدالله البري | استشاري طب وجراحة العيون",
+  "short_name": "د. معن بن عبدالله البري",
+  "description": "استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار) — المدينة المنورة | خبرة منذ 1998",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a192f",
+  "theme_color": "#1f5f6b",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
