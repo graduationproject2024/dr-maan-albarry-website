@@ -605,6 +605,38 @@ let qAnswers = [];
 let qCompleted = false;
 let openArticleId = null;
 
+function renderThemeToggle(id = 'theme-toggle-btn') {
+  const isDark = (currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
+  const label = currentLang === 'ar'
+    ? (isDark ? 'الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري' : 'الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي')
+    : (isDark ? 'Dark mode enabled. Click to switch to light mode' : 'Light mode enabled. Click to switch to dark mode');
+  const title = currentLang === 'ar' ? 'تبديل المظهر (ليلي / نهاري)' : 'Toggle Theme (Dark / Light)';
+
+  return `
+  <button id="${id}" class="theme-sun-moon-toggle ${isDark ? 'is-dark' : ''}" onclick="toggleTheme()" role="switch" aria-checked="${isDark ? 'true' : 'false'}" aria-label="${label}" title="${title}">
+    <span class="tsm-sky">
+      <span class="tsm-clouds" aria-hidden="true">
+        <svg viewBox="0 0 24 14" class="tsm-cloud tsm-cloud-1"><path d="M19 14H5a4 4 0 01-.8-7.9A5.5 5.5 0 0115 4a4.5 4.5 0 014 6.8 4 4 0 010 3.2z"/></svg>
+        <svg viewBox="0 0 20 12" class="tsm-cloud tsm-cloud-2"><path d="M16 12H4a3.5 3.5 0 01-.7-6.9A4.5 4.5 0 0112 3a3.5 3.5 0 014 6 3.5 3.5 0 010 3z"/></svg>
+      </span>
+      <span class="tsm-stars" aria-hidden="true">
+        <span class="tsm-star tsm-star-1">★</span>
+        <span class="tsm-star tsm-star-2">✦</span>
+        <span class="tsm-star tsm-star-3">★</span>
+      </span>
+      <span class="tsm-thumb">
+        <svg class="tsm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.5" fill="#f59e0b" stroke="#d97706"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="#f59e0b"></path>
+        </svg>
+        <svg class="tsm-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </span>
+    </span>
+  </button>`;
+}
+
 function applyTheme(theme) {
   currentTheme = theme;
   try {
@@ -617,12 +649,17 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
   }
 
-  const btn = document.getElementById('theme-toggle-btn');
-  if (btn) {
-    const isDark = (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-    btn.innerHTML = (theme === 'system' ? '◐' : isDark ? 'ليلي' : 'نهاري');
-    btn.setAttribute('title', theme === 'system' ? 'الوضع التلقائي (حسب النظام)' : isDark ? 'الوضع الليلي' : 'الوضع النهاري');
-  }
+  const isDark = (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
+  document.querySelectorAll('.theme-sun-moon-toggle').forEach(btn => {
+    btn.classList.toggle('is-dark', isDark);
+    btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+    const label = currentLang === 'ar'
+      ? (isDark ? 'الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري' : 'الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي')
+      : (isDark ? 'Dark mode enabled. Click to switch to light mode' : 'Light mode enabled. Click to switch to dark mode');
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  });
 
   if (document.getElementById('vs-root')) {
     updateSimulatorDom();
@@ -633,10 +670,12 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   if (currentTheme === 'system') applyTheme('system');
 });
 
-window.cycleTheme = function () {
-  const next = (currentTheme === 'system' ? 'light' : currentTheme === 'light' ? 'dark' : 'system');
-  applyTheme(next);
+window.toggleTheme = function () {
+  const isDark = (currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
+  applyTheme(isDark ? 'light' : 'dark');
 };
+
+window.cycleTheme = window.toggleTheme;
 
 function getWhatsAppUrl(msg) {
   const text = encodeURIComponent(msg || (currentLang === 'ar'
@@ -647,9 +686,6 @@ function getWhatsAppUrl(msg) {
 
 // --- HEADER ---
 function renderHeader() {
-  const isDark = (currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-  const themeLabel = (currentTheme === 'system' ? '◐' : isDark ? 'ليلي' : 'نهاري');
-
   return `
   <header class="site-header" id="site-header">
     <div class="container header-inner">
@@ -673,7 +709,7 @@ function renderHeader() {
         </div>
 
         <div class="header-actions">
-          <button id="theme-toggle-btn" class="theme-switch-btn" onclick="cycleTheme()" aria-label="Toggle Theme">${themeLabel}</button>
+          ${renderThemeToggle('theme-toggle-btn')}
           <button class="lang-switch" onclick="toggleLang()" aria-label="Switch Language">${currentLang === 'ar' ? 'English' : 'عربي'}</button>
           <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
             ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Appointment'}
@@ -686,6 +722,10 @@ function renderHeader() {
 
     <!-- Mobile Drawer -->
     <nav class="mobile-nav" id="mobile-nav">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px 14px;border-bottom:1px solid var(--border-subtle);margin-bottom:6px;">
+        <span style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">${currentLang === 'ar' ? 'مظهر الموقع' : 'Appearance'}</span>
+        ${renderThemeToggle('theme-toggle-btn-mobile')}
+      </div>
       <a href="#home" onclick="scrollToSection('home');closeMobileMenu();return false;">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
       <a href="#profile" onclick="scrollToSection('profile');closeMobileMenu();return false;">${currentLang === 'ar' ? 'عن الدكتور والمسيرة' : 'Biography'}</a>
       <a href="#specialties" onclick="scrollToSection('specialties');closeMobileMenu();return false;">${currentLang === 'ar' ? 'التخصصات والخدمات' : 'Specialties'}</a>
@@ -724,11 +764,21 @@ function renderHero() {
           </p>
 
           <div class="hero-cta">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-              ${currentLang === 'ar' ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}
+            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="hero-primary-cta">
+              <span class="btn-fill-effect" aria-hidden="true"></span>
+              <span class="btn-label">${currentLang === 'ar' ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}</span>
+              <span class="btn-arrow-wrap" aria-hidden="true">
+                <svg class="btn-arrow-svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </span>
             </a>
-            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg">
-              ${currentLang === 'ar' ? 'جرب محاكي الرؤية التفاعلي' : 'Try Vision Simulator'}
+            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg btn-gradient-shimmer" id="hero-secondary-cta">
+              <span class="btn-shimmer-border" aria-hidden="true"></span>
+              <span class="btn-shimmer-body">
+                <span class="btn-label">${currentLang === 'ar' ? 'جرب محاكي الرؤية التفاعلي' : 'Try Vision Simulator'}</span>
+                <span class="btn-sparkle" aria-hidden="true">✦</span>
+              </span>
             </a>
             <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;">
               <span>${currentLang === 'ar' ? 'مستشفيات مغربي – المدينة المنورة' : 'Magrabi Hospital – Madinah'}</span>
