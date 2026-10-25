@@ -7,152 +7,102 @@
    C: Sun / Moon Sky Theme Toggle (Header & Mobile)
    ============================================================ */
 
-/* --- COMPONENT C: SUN / MOON SKY THEME TOGGLE --- */
-.theme-sun-moon-toggle {
+/* --- COMPONENT C: CLEAN MEDICAL THEME TOGGLE --- */
+.theme-clean-toggle {
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  padding: 0;
   width: 58px;
   height: 32px;
-  padding: 3px;
-  border-radius: 999px;
-  border: 1.5px solid var(--border-strong);
   background: transparent;
+  border: none;
   cursor: pointer;
+  border-radius: 999px;
   outline: none;
-  overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: border-color var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
   flex-shrink: 0;
+  transition: transform var(--transition-fast);
 }
-.theme-sun-moon-toggle:hover {
-  border-color: var(--secondary-burgundy);
+.theme-clean-toggle:hover {
   transform: translateY(-1px);
 }
-.theme-sun-moon-toggle:focus-visible {
+.theme-clean-toggle:focus-visible {
   outline: 2px solid var(--secondary-burgundy);
   outline-offset: 2px;
-}
-.tsm-sky {
-  position: absolute;
-  inset: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 60%, #bae6fd 100%);
-  transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
 }
-.theme-sun-moon-toggle.is-dark .tsm-sky {
-  background: linear-gradient(135deg, #091326 0%, #111d38 55%, #1e293b 100%);
+.tct-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
-.tsm-clouds {
+.theme-clean-toggle:hover .tct-track {
+  border-color: var(--secondary-burgundy);
+}
+.tct-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0.65;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+  z-index: 1;
+}
+.tct-icon-sun {
+  color: #d97706;
+}
+.tct-icon-moon {
+  color: var(--gold-light);
+}
+.tct-thumb {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.4s ease, transform 0.5s ease;
-}
-.theme-sun-moon-toggle.is-dark .tsm-clouds {
-  opacity: 0;
-  transform: translateY(12px) scale(0.8);
-}
-.tsm-cloud {
-  position: absolute;
-  fill: rgba(255, 255, 255, 0.85);
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
-}
-.tsm-cloud-1 {
-  width: 18px;
-  height: 10px;
-  bottom: 3px;
-  left: 6px;
-}
-.tsm-cloud-2 {
-  width: 14px;
-  height: 8px;
-  top: 4px;
-  left: 18px;
-  opacity: 0.7;
-}
-.tsm-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.5s ease;
-  transform: translateY(-8px) scale(0.85);
-}
-.theme-sun-moon-toggle.is-dark .tsm-stars {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-.tsm-star {
-  position: absolute;
-  color: #fef08a;
-  line-height: 1;
-  text-shadow: 0 0 4px rgba(254, 240, 138, 0.8);
-  animation: tsmTwinkle 2.4s ease-in-out infinite alternate;
-}
-.tsm-star-1 {
-  font-size: 8px;
-  top: 5px;
-  right: 12px;
-  animation-delay: 0.2s;
-}
-.tsm-star-2 {
-  font-size: 7px;
-  bottom: 6px;
-  right: 22px;
-  animation-delay: 0.9s;
-}
-.tsm-star-3 {
-  font-size: 6px;
-  top: 9px;
-  right: 32px;
-  animation-delay: 1.5s;
-}
-@keyframes tsmTwinkle {
-  0% { opacity: 0.45; transform: scale(0.85); }
-  100% { opacity: 1; transform: scale(1.15); }
-}
-.tsm-thumb {
-  position: absolute;
-  top: 3px;
+  top: 2.5px;
   left: 3px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: transparent;
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color var(--transition-base), border-color var(--transition-base);
   z-index: 2;
 }
-.theme-sun-moon-toggle.is-dark .tsm-thumb {
-  transform: translateX(26px);
+.theme-clean-toggle.is-dark .tct-thumb {
+  transform: translateX(25px);
+  background: var(--bg-surface-elevated);
+  border-color: var(--border-strong);
 }
-.tsm-sun, .tsm-moon {
+.tct-thumb-sun, .tct-thumb-moon {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.tsm-sun {
+.tct-thumb-sun {
   opacity: 1;
   transform: scale(1) rotate(0deg);
-  filter: drop-shadow(0 1px 3px rgba(245, 158, 11, 0.5));
 }
-.theme-sun-moon-toggle.is-dark .tsm-sun {
+.theme-clean-toggle.is-dark .tct-thumb-sun {
   opacity: 0;
   transform: scale(0.3) rotate(90deg);
 }
-.tsm-moon {
+.tct-thumb-moon {
   opacity: 0;
   transform: scale(0.3) rotate(-90deg);
   color: #fef08a;
-  filter: drop-shadow(0 0 4px rgba(254, 240, 138, 0.7));
 }
-.theme-sun-moon-toggle.is-dark .tsm-moon {
+.theme-clean-toggle.is-dark .tct-thumb-moon {
   opacity: 1;
   transform: scale(1) rotate(0deg);
 }
@@ -323,8 +273,8 @@
 
 /* Reduced Motion Override for Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .theme-sun-moon-toggle,
-  .theme-sun-moon-toggle *,
+  .theme-clean-toggle,
+  .theme-clean-toggle *,
   .btn-arrow-fill,
   .btn-arrow-fill *,
   .btn-gradient-shimmer,
@@ -357,5 +307,266 @@
     max-width: 100%;
   }
 }
+
+/* ============================================================
+   EYE ICON PIPS & IOL COMPARISON STYLES
+   Replaces colored bars with open/closed clinical eye icons
+   ============================================================ */
+.eye-pips {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.eye-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--border-strong);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.eye-icon svg {
+  width: 17px;
+  height: 13px;
+  display: block;
+}
+.eye-open.good {
+  color: var(--ok);
+}
+.eye-open.more {
+  color: var(--warn);
+}
+.eye-closed {
+  color: var(--border-strong);
+  opacity: 0.45;
+}
+[data-theme="dark"] .eye-closed {
+  color: var(--border-strong);
+  opacity: 0.35;
+}
+
+/* Favored Lens Highlight (EDOF) */
+.iol-card-favored {
+  border: 2px solid var(--secondary-burgundy) !important;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(31, 95, 107, 0.14) !important;
+  background: linear-gradient(180deg, var(--card-bg) 0%, var(--bg-surface-alt) 100%) !important;
+}
+.iol-favored-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold);
+  color: var(--secondary-burgundy);
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+[data-theme="dark"] .iol-favored-badge {
+  color: var(--gold-light);
+  border-color: var(--gold);
+}
+
+/* ============================================================
+   VISION SIMULATOR DISCLAIMER NOTE
+   Subtle clinical note under the simulator canvas
+   ============================================================ */
+.vs-disclaimer-note {
+  margin-top: var(--space-4);
+  padding: 12px 16px;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.vs-note-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--secondary-burgundy);
+  opacity: 0.85;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS & ZERO-DISTORTION OPTIMIZATIONS
+   Ensures 100% responsive, distortion-free display on all phones
+   ============================================================ */
+/* Enforce 16:9 natural aspect-ratio for simulator on ALL screen sizes */
+.vs-view {
+  aspect-ratio: 16 / 9 !important;
+  min-height: 190px;
+}
+
+@media (max-width: 600px) {
+  /* Simulator Mobile Refinements */
+  .vs-card {
+    padding: var(--space-4) var(--space-3);
+    border-radius: 14px;
+  }
+  .vs-bar {
+    gap: 8px;
+  }
+  .vs-seg {
+    width: 100%;
+    display: flex;
+  }
+  .vs-seg button {
+    flex: 1;
+    padding: 0 8px;
+    font-size: 0.82rem;
+    min-height: 38px;
+    text-align: center;
+  }
+  .vs-lens,
+  .vs-dist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .vs-lens button {
+    flex: 1 1 calc(50% - 6px);
+    padding: 0 10px;
+    font-size: 0.82rem;
+    min-height: 40px;
+    text-align: center;
+  }
+  .vs-dist button {
+    flex: 1 1 calc(33.333% - 6px);
+    padding: 0 8px;
+    font-size: 0.78rem;
+    min-height: 38px;
+    text-align: center;
+  }
+  .vs-view {
+    aspect-ratio: 16 / 9 !important;
+    border-radius: 10px;
+  }
+  .vs-tag {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    top: 8px;
+  }
+  .vs-tag.l { left: 8px; }
+  .vs-tag.r { right: 8px; }
+  .vs-line span {
+    width: 26px;
+    height: 26px;
+    margin: -13px;
+  }
+  .vs-line span:before {
+    font-size: 11px;
+  }
+  .vs-metrics {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .vs-disclaimer-note {
+    font-size: 0.75rem;
+    padding: 10px 12px;
+  }
+
+  /* Hero Section Mobile Polish */
+  .hero {
+    padding: var(--space-8) 0 var(--space-12);
+  }
+  .hero-content h1 {
+    font-size: 1.85rem;
+    line-height: 1.35;
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+  .hero-badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    line-height: 1.4;
+  }
+  .hero-credentials {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .credential-item {
+    font-size: 0.82rem;
+  }
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Profile & Bio Mobile Fixes */
+  .timeline {
+    padding-inline-start: var(--space-6);
+  }
+  .timeline:before {
+    inset-inline-start: 6px;
+  }
+  .timeline-item:before {
+    inset-inline-start: calc(-1 * var(--space-6) + 2px);
+  }
+  /* Header Mobile Logo Refinements */
+  .header-logo {
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.15rem;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    min-width: 0;
+  }
+  .logo-text strong {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .logo-text small {
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 175px;
+    display: block;
+    margin-top: 1px;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Ultra-compact screens (e.g. 360px) */
+  .logo-text small {
+    max-width: 130px;
+    font-size: 0.64rem;
+  }
+  .logo-text strong {
+    font-size: 0.88rem;
+  }
+  .iol-card {
+    padding: var(--space-4);
+  }
+  .eye-icon svg {
+    width: 15px;
+    height: 11px;
+  }
+}
+
 
 

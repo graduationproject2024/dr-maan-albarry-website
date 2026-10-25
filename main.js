@@ -5,14 +5,15 @@
 
 // --- DATA LAYER (Verified Primary Source Facts) ---
 export const DOCTOR = {
-  nameAr: 'د. معن بن عبدالله بن عمر البري',
-  nameEn: 'Dr. Maan Abdullah Omar Al Barry',
-  shortNameAr: 'د. معن البري',
+  nameAr: 'د. معن بن عبدالله البري',
+  nameEn: 'Dr. Maan bin Abdullah Al Barry',
+  shortNameAr: 'د. معن بن عبدالله البري',
   shortNameEn: 'Dr. Maan Al Barry',
-  titleAr: 'استشاري طب وجراحة العيون والقرنية والماء الأبيض وتصحيح الإبصار',
-  titleEn: 'Consultant Ophthalmologist — Cataract, Cornea & Refractive Surgery',
-  degreesAr: 'زميل كلية الجراحين الملكية (بريطانيا) FRCS',
+  titleAr: 'استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار)',
+  titleEn: 'Consultant Ophthalmologist (Specializing in Cornea, Cataract & Refractive Surgery)',
+  degreesAr: 'زميل الكلية البريطانية الملكية FRCS',
   degreesEn: 'Fellow of the Royal College of Surgeons (UK) FRCS',
+  experienceSince: 1998,
   clinicAr: 'مستشفيات ومراكز مغربي للعيون والأذن – المدينة المنورة',
   clinicEn: 'Magrabi Health Eye & ENT Hospital – Madinah',
   addressAr: 'طريق المطار، المدينة المنورة، المملكة العربية السعودية',
@@ -27,24 +28,22 @@ export const DOCTOR = {
   mapsUrl: 'https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA',
   roles: {
     ar: [
-      'المدير الطبي التنفيذي – مستشفيات ومراكز مغربي بالمدينة المنورة',
-      'رئيس قسم طب وجراحة العيون – جامعة طيبة',
-      'ممثل الجمعية السعودية لطب وجراحة العيون – المدينة المنورة',
-      'عضو المجلس العلمي لمؤتمر البحر الأحمر لطب وجراحة العيون',
-      'أمين سر الجمعية السعودية لطب العيون سابقاً',
-      'زميل كلية الجراحين الملكية – بريطانيا (FRCS)',
-      'عضو الجمعية الأمريكية لطب وجراحة العيون (AAO)',
-      'عضو الجمعية السعودية لطب وجراحة العيون (SOS)'
+      'كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)',
+      'أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار',
+      'زميل الكلية البريطانية الملكية FRCS',
+      'رئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً لمدة 10 سنوات',
+      'ممثل الجمعية السعودية لطب العيون بالمدينة المنورة سابقاً',
+      'أحد مؤسسي مؤتمر البحر الأحمر الدولي للطب وجراحة العيون',
+      'خبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998'
     ],
     en: [
-      'Chief Medical Officer – Magrabi Health Eye & ENT, Madinah',
-      'Chairman, Department of Ophthalmology – Taibah University',
-      'Saudi Ophthalmological Society Representative – Madinah',
-      'Scientific Council Member – Red Sea Ophthalmology Conference',
-      'Former Secretary General – Saudi Ophthalmological Society',
-      'Fellow of the Royal College of Surgeons – UK (FRCS)',
-      'Member – American Academy of Ophthalmology (AAO)',
-      'Member – Saudi Ophthalmological Society (SOS)'
+      'Chief Medical Officer – Magrabi Health Madinah (General Supervisor of Medical, Administrative & Operational Affairs)',
+      'First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons',
+      'Fellow of the Royal College of Surgeons (UK) FRCS',
+      'Former Chairman, Department of Ophthalmology – Taibah University (10 Years)',
+      'Former Representative of the Saudi Ophthalmological Society in Madinah',
+      'Co-Founder of the Red Sea International Ophthalmology Conference',
+      'Extensive Clinical, Surgical & Academic Experience Since 1998'
     ]
   }
 };
@@ -54,41 +53,41 @@ export const DOCTOR = {
 const DEFOCUS_STEPS = [0, -0.5, -1, -1.5, -2, -2.5, -3, -3.5];
 
 const LENSES = {
-  monofocal: {
-    id: 'monofocal',
-    ar: 'أحادية البؤرة',
-    en: 'Monofocal',
-    va: [0, 0.1, 0.18, 0.32, 0.42, 0.5, 0.58, 0.66],
-    halo: 0.1,
-    noteAr: 'أوضح رؤية للبعيد؛ القريب والمتوسط يحتاجان نظارة غالباً. أقل معدل للهالات بين الأنواع.',
-    noteEn: 'Sharpest at distance; intermediate/near usually need glasses. Lowest halo rate of the three.'
-  },
   edof: {
     id: 'edof',
-    ar: 'ممتدة المدى (EDOF)',
-    en: 'Extended depth of focus',
-    va: [0, 0.03, 0.08, 0.13, 0.19, 0.24, 0.38, 0.52],
-    halo: 0.35,
-    noteAr: 'انتقال سلس من البعيد إلى المتوسط، والقريب أقل من الثلاثية. الهالات أكثر من الأحادية.',
-    noteEn: 'Smooth distance-to-intermediate range; near is weaker than trifocal. More halos than monofocal.'
+    ar: 'ممتدة المدى (EDOF) — الخيار المفضل حالياً سريرياً',
+    en: 'Extended Depth of Focus (EDOF) — Clinically Favored',
+    va: [0, 0.03, 0.08, 0.13, 0.18, 0.23, 0.36, 0.50],
+    halo: 0.16,
+    noteAr: 'الخيار المفضل حالياً لدى الدكتور معن لأغلب الحالات: جودة رؤية عالية وحساسية تباين ممتازة مع هالات ليلية منخفضة جداً وراحة فائقة أثناء القيادة والعمل على الشاشات. قد تلزم نظارة خفيفة للقراءة الدقيقة جداً.',
+    noteEn: 'Currently favored by Dr. Maan for most cases: optimal visual contrast, high clarity, and minimal night halos for driving and screens. Light reading glasses may only be needed for fine print.'
   },
   trifocal: {
     id: 'trifocal',
-    ar: 'ثلاثية البؤرة',
+    ar: 'ثلاثية البؤرة (Trifocal)',
     en: 'Trifocal',
     va: [0, 0.08, 0.12, 0.1, 0.08, 0.1, 0.17, 0.32],
-    halo: 0.8,
-    noteAr: 'رؤية جيدة للبعيد والمتوسط والقريب؛ الهالات الليلية أكثر شيوعاً وتخف غالباً مع التكيف العصبي.',
-    noteEn: 'Good distance, intermediate and near; night halos are more common and often fade with neuroadaptation.'
+    halo: 0.78,
+    noteAr: 'استقلالية أكبر عن نظارة القراءة للمسافات القريبة، ولكن نظراً لانقسام الضوء بين 3 بؤر فقد تنخفض حساسية التباين وتزداد الهالات الحلقية والوهج ليلاً مقارنة بعدسات EDOF، وتتطلب وقتاً للتكيف العصبي.',
+    noteEn: 'Provides high near spectacle independence; however, light division can reduce contrast and generate concentric night halos/glare compared to EDOF, requiring neuroadaptation.'
+  },
+  monofocal: {
+    id: 'monofocal',
+    ar: 'أحادية البؤرة (Monofocal)',
+    en: 'Monofocal',
+    va: [0, 0.1, 0.18, 0.32, 0.42, 0.5, 0.58, 0.66],
+    halo: 0.08,
+    noteAr: 'أعلى نقاء وتباين للمسافات البعيدة وأقل هالات ليلية؛ تتطلب دائماً نظارة للمسافات المتوسطة (الكمبيوتر) والقريبة (القراءة).',
+    noteEn: 'Purest distance acuity and lowest halos; definitely requires glasses for intermediate (computer) and near (reading).'
   },
   cataract: {
     id: 'cataract',
-    ar: 'ساد (مثال متوسط)',
-    en: 'Cataract (moderate example)',
+    ar: 'ساد غير معالج (عتامة العدسة)',
+    en: 'Untreated Cataract',
     va: [0.5, 0.5, 0.52, 0.52, 0.55, 0.55, 0.58, 0.6],
     halo: 0,
-    noteAr: 'مثال لساد متوسط (≈20/60). تختلف الشدة من مريض لآخر، والنظارة لا تعالج العتامة.',
-    noteEn: 'A moderate example (~20/60). Severity varies, and glasses cannot fix lens opacity.'
+    noteAr: 'عتامة متوسطة تشوش الرؤية وتسبب تشتت الضوء والوهج وانخفاض التباين، ولا يمكن تصحيحها بالنظارات.',
+    noteEn: 'Moderate lens opacity causing blur, severe glare scatter, and loss of contrast, not correctable by glasses.'
   }
 };
 
@@ -102,7 +101,7 @@ const DISTANCE_STEPS = [
 
 // Simulator State
 let simState = {
-  lens: 'trifocal',
+  lens: 'edof',
   scene: 'night',
   D: 0,
   pos: 50,
@@ -448,8 +447,8 @@ function renderSimulator(lang) {
 
         <div id="vs-sim">
           <div class="vs-view" dir="ltr">
-            <canvas id="vs-b" width="960" height="480"></canvas>
-            <canvas id="vs-a" width="960" height="480"></canvas>
+            <canvas id="vs-b" width="960" height="540"></canvas>
+            <canvas id="vs-a" width="960" height="540"></canvas>
             <input type="range" id="vs-slider" min="0" max="100" value="50" aria-label="${tText('مقارنة قبل وبعد', 'Before / after')}">
             <div class="vs-line" id="vs-line"><span></span></div>
             <em class="vs-tag l" id="vs-tl"></em>
@@ -467,6 +466,20 @@ function renderSimulator(lang) {
         <div class="vs-metrics" id="vs-metrics"></div>
 
         <p class="vs-note">${tText('تفترض المحاكاة عينين بقوة بصرية مستهدفة قريبة من الصفر، وإضاءة جيدة للقراءة. حدة الإبصار بالمتوسط ≤ 0.2 logMAR تُعد رؤية وظيفية. النتيجة الفعلية تعتمد على قياسات عينك وفحص الطبيب. المصادر: مراجعة منهجية BMC Ophthalmology 2019، وملخصات مؤتمر ESCRS 2024.', 'Assumes near-plano targets and good reading light. Mean acuity ≤ 0.2 logMAR is treated as functional. Your actual result depends on your own eye measurements and your surgeon’s exam. Sources: BMC Ophthalmology 2019 meta-analysis; ESCRS 2024 abstracts.')}</p>
+
+        <div class="vs-disclaimer-note">
+          <svg class="vs-note-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>
+            ${tText(
+              'تنويه طبي: هذه المحاكاة قد لا تنطبق 100% على الواقع، لكنها أقرب صورة توضيحية لتوصيل الفكرة والمعلومة. يفضل الدكتور معن بن عبدالله البري حالياً العدسات ممتدة المدى (EDOF) لجودة النظر العالية وانخفاض الهالات مقارنة بالثلاثية، لكن يبقى لكل مريض حالته الخاصة وقياساته الفريدة التي يُبنى عليها الاختيار الطبي النهائي بعد الفحص السريري الدقيق.',
+              'Clinical Note: This simulation may not apply 100% to individual reality, but serves as the closest illustrative representation to convey the concept. Dr. Maan bin Abdullah Al Barry currently favors Extended Depth of Focus (EDOF) lenses for superior optical quality and reduced halos, but every patient has unique ocular parameters; the final choice is tailored during your clinical examination.'
+            )}
+          </span>
+        </div>
       </div>
     </div>
   </section>`;
@@ -553,7 +566,7 @@ function initSimulatorEvents(lang) {
     if (!btn || btn.disabled) return;
 
     if (btn.dataset.action === 'reset') {
-      simState.lens = 'trifocal';
+      simState.lens = 'edof';
       simState.scene = 'night';
       simState.D = 0;
       simState.pos = 50;
@@ -613,24 +626,26 @@ function renderThemeToggle(id = 'theme-toggle-btn') {
   const title = currentLang === 'ar' ? 'تبديل المظهر (ليلي / نهاري)' : 'Toggle Theme (Dark / Light)';
 
   return `
-  <button id="${id}" class="theme-sun-moon-toggle ${isDark ? 'is-dark' : ''}" onclick="toggleTheme()" role="switch" aria-checked="${isDark ? 'true' : 'false'}" aria-label="${label}" title="${title}">
-    <span class="tsm-sky">
-      <span class="tsm-clouds" aria-hidden="true">
-        <svg viewBox="0 0 24 14" class="tsm-cloud tsm-cloud-1"><path d="M19 14H5a4 4 0 01-.8-7.9A5.5 5.5 0 0115 4a4.5 4.5 0 014 6.8 4 4 0 010 3.2z"/></svg>
-        <svg viewBox="0 0 20 12" class="tsm-cloud tsm-cloud-2"><path d="M16 12H4a3.5 3.5 0 01-.7-6.9A4.5 4.5 0 0112 3a3.5 3.5 0 014 6 3.5 3.5 0 010 3z"/></svg>
+  <button id="${id}" class="theme-clean-toggle ${isDark ? 'is-dark' : ''}" onclick="toggleTheme()" role="switch" aria-checked="${isDark ? 'true' : 'false'}" aria-label="${label}" title="${title}">
+    <span class="tct-track" aria-hidden="true">
+      <span class="tct-icon tct-icon-sun">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
       </span>
-      <span class="tsm-stars" aria-hidden="true">
-        <span class="tsm-star tsm-star-1">★</span>
-        <span class="tsm-star tsm-star-2">✦</span>
-        <span class="tsm-star tsm-star-3">★</span>
+      <span class="tct-icon tct-icon-moon">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
       </span>
-      <span class="tsm-thumb">
-        <svg class="tsm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <span class="tct-thumb">
+        <svg class="tct-thumb-sun" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4.5" fill="#f59e0b" stroke="#d97706"></circle>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="#f59e0b"></path>
         </svg>
-        <svg class="tsm-moon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        <svg class="tct-thumb-moon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </span>
     </span>
@@ -651,7 +666,7 @@ function applyTheme(theme) {
 
   const isDark = (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
 
-  document.querySelectorAll('.theme-sun-moon-toggle').forEach(btn => {
+  document.querySelectorAll('.theme-clean-toggle').forEach(btn => {
     btn.classList.toggle('is-dark', isDark);
     btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
     const label = currentLang === 'ar'
@@ -679,8 +694,8 @@ window.cycleTheme = window.toggleTheme;
 
 function getWhatsAppUrl(msg) {
   const text = encodeURIComponent(msg || (currentLang === 'ar'
-    ? 'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن عبدالله البري في مستشفى مغربي المدينة المنورة.'
-    : 'Hello, I would like to inquire about booking a consultation with Dr. Maan Al Barry at Magrabi Madinah.'));
+    ? 'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن بن عبدالله البري في مستشفى مغربي المدينة المنورة.'
+    : 'Hello, I would like to inquire about booking a consultation with Dr. Maan bin Abdullah Al Barry at Magrabi Madinah.'));
   return `https://wa.me/${DOCTOR.whatsapp}?text=${text}`;
 }
 
@@ -693,7 +708,7 @@ function renderHeader() {
         <div class="logo-icon">م</div>
         <div class="logo-text">
           <strong>${currentLang === 'ar' ? DOCTOR.shortNameAr : DOCTOR.shortNameEn}</strong>
-          <small>${currentLang === 'ar' ? 'استشاري طب وجراحة العيون' : 'Consultant Ophthalmologist'}</small>
+          <small>${currentLang === 'ar' ? 'استشاري طب وجراحة العيون (القرنية والماء الأبيض)' : 'Consultant Ophthalmologist (Cornea & Cataract)'}</small>
         </div>
       </a>
 
@@ -748,7 +763,7 @@ function renderHero() {
         <div class="hero-content fade-in">
           <div class="hero-badge">
             <span class="badge-dot"></span>
-            ${currentLang === 'ar' ? 'استشاري معتمد | خبرة سريرية وأكاديمية متقدمة | المدينة المنورة' : 'Consultant Ophthalmologist | Madinah, Saudi Arabia'}
+            ${currentLang === 'ar' ? 'خبرة سريرية وأكاديمية وجراحية ممتدة منذ 1998 | المدينة المنورة' : 'Clinical & Surgical Excellence Since 1998 | Madinah, Saudi Arabia'}
           </div>
 
           <h1>
@@ -759,8 +774,8 @@ function renderHero() {
 
           <p class="hero-subtitle">
             ${currentLang === 'ar'
-              ? 'استشاري طب وجراحة العيون، جراحة الساد (الماء الأبيض)، وزراعة العدسات الذكية، وتصحيح العيوب الانكسارية بالمدينة المنورة. خبرة أكاديمية وسريرية موثقة ترتكز على أحدث التقنيات وأعلى معايير الأمان الجراحي.'
-              : 'Senior consultant specializing in micro-incision cataract surgery, premium IOL implantation, laser refractive correction, and corneal preservation at Magrabi Health Madinah.'}
+              ? 'د. معن بن عبدالله البري — استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار) بالمدينة المنورة. خبرة أكاديمية وسريرية موثقة ترتكز على أحدث التقنيات وأعلى معايير الأمان الجراحي.'
+              : 'Dr. Maan bin Abdullah Al Barry — Consultant Ophthalmologist (Specializing in Cornea, Cataract & Refractive Surgery) at Magrabi Health Madinah.'}
           </p>
 
           <div class="hero-cta">
@@ -788,19 +803,19 @@ function renderHero() {
           <div class="hero-credentials">
             <div class="credential-item">
               <span class="icon">🏥</span>
-              <span>${currentLang === 'ar' ? 'المدير الطبي لمغربي المدينة' : 'CMO Magrabi Madinah'}</span>
-            </div>
-            <div class="credential-item">
-              <span class="icon">🎓</span>
-              <span>${currentLang === 'ar' ? 'رئيس قسم العيون بجامعة طيبة' : 'Chair of Ophthalmology, Taibah Univ.'}</span>
-            </div>
-            <div class="credential-item">
-              <span class="icon">🇬🇧</span>
-              <span>${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية (FRCS)' : 'Fellow of Royal College of Surgeons (FRCS)'}</span>
+              <span>${currentLang === 'ar' ? 'كبير موظفي مركز مغربي المدينة' : 'Chief Medical Officer – Magrabi'}</span>
             </div>
             <div class="credential-item">
               <span class="icon">🇸🇦</span>
-              <span>${currentLang === 'ar' ? 'ممثل الجمعية السعودية لطب العيون' : 'SOS Madinah Representative'}</span>
+              <span>${currentLang === 'ar' ? 'أول رئيس لرابطة جراحي القرنية والماء الأبيض' : '1st President – Saudi Cataract & Cornea'}</span>
+            </div>
+            <div class="credential-item">
+              <span class="icon">🇬🇧</span>
+              <span>${currentLang === 'ar' ? 'زميل الكلية البريطانية الملكية FRCS' : 'Fellow Royal College of Surgeons FRCS'}</span>
+            </div>
+            <div class="credential-item">
+              <span class="icon">⭐</span>
+              <span>${currentLang === 'ar' ? 'خبرة ممتدة منذ 1998' : 'Practicing Since 1998'}</span>
             </div>
           </div>
         </div>
@@ -834,24 +849,25 @@ function renderProfile() {
         <div class="profile-media">
           <img src="./images/doctor-portrait.jpg" alt="${DOCTOR.nameAr}" class="profile-media-img" loading="lazy">
           <div class="credentials-chips">
-            <span class="chip chip-gold">${currentLang === 'ar' ? 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)' : 'Fellow of Royal College of Surgeons (FRCS UK)'}</span>
-            <span class="chip">${currentLang === 'ar' ? 'رئيس قسم طب وجراحة العيون – جامعة طيبة' : 'Chair of Ophthalmology – Taibah University'}</span>
-            <span class="chip">${currentLang === 'ar' ? 'المدير الطبي التنفيذي – مغربي المدينة' : 'Executive Medical Director – Magrabi Madinah'}</span>
-            <span class="chip">🇸🇦 ${currentLang === 'ar' ? 'ممثل الجمعية السعودية لطب وجراحة العيون' : 'Saudi Ophthalmology Society Rep.'}</span>
+            <span class="chip chip-gold">${currentLang === 'ar' ? 'زميل الكلية البريطانية الملكية FRCS' : 'Fellow Royal College of Surgeons (FRCS)'}</span>
+            <span class="chip">${currentLang === 'ar' ? 'كبير موظفي مركز مغربي المدينة المنورة' : 'Chief Medical Officer – Magrabi Madinah'}</span>
+            <span class="chip">${currentLang === 'ar' ? 'أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار' : '1st President – Saudi Cornea, Cataract & Refractive'}</span>
+            <span class="chip">${currentLang === 'ar' ? 'رئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً (10 سنوات)' : 'Former Chair of Ophthalmology – Taibah Univ. (10 Yrs)'}</span>
+            <span class="chip">⭐ ${currentLang === 'ar' ? 'خبرة ممتدة منذ 1998' : 'Experience Since 1998'}</span>
           </div>
         </div>
 
         <div class="profile-text">
           <p style="font-size:1.05rem;line-height:1.9;color:var(--text-primary);margin-bottom:var(--space-4);">
             ${currentLang === 'ar'
-              ? 'د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة. يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص عدسة العين، تشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
-              : 'Dr. Maan Al Barry is a Consultant Ophthalmologist and Anterior Segment Surgeon practicing at Magrabi Health Eye & ENT Hospital in Madinah. He provides specialized clinical care in cataract micro-surgery, corneal disease management, and customized laser refractive procedures.'}
+              ? 'د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، بخبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998. يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص عدسة العين، تشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
+              : 'Dr. Maan bin Abdullah Al Barry is a Senior Consultant Ophthalmologist practicing at Magrabi Health Eye & ENT Hospital in Madinah, with extensive clinical and surgical experience since 1998. He specializes in micro-incision cataract surgery, anterior segment corneal disease, and precision refractive surgery.'}
           </p>
 
           <p style="font-size:1.05rem;line-height:1.9;color:var(--text-secondary);margin-bottom:var(--space-6);">
             ${currentLang === 'ar'
-              ? 'تتكامل ممارسته السريرية مع أدوار قيادية وأكاديمية بارزة؛ حيث يشغل منصب المدير الطبي التنفيذي لمغربي المدينة المنورة، ورئيس قسم طب وجراحة العيون في جامعة طيبة، وممثل الجمعية السعودية لطب وجراحة العيون في منطقة المدينة المنورة، وعضو المجلس العلمي لمؤتمر البحر الأحمر لطب العيون.'
-              : 'His clinical mastery is backed by distinguished academic appointments as Chairman of the Ophthalmology Department at Taibah University, Chief Medical Officer at Magrabi Madinah, and active member of the American Academy of Ophthalmology.'}
+              ? 'تتكامل ممارسته السريرية مع أدوار قيادية وأكاديمية بارزة؛ حيث يشغل منصب كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)، وهو أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار، ورئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً لمدة 10 سنوات، وممثل الجمعية السعودية لطب العيون بالمدينة المنورة سابقاً، وأحد مؤسسي مؤتمر البحر الأحمر الدولي للطب وجراحة العيون.'
+              : 'His clinical practice is anchored by distinguished leadership appointments: Chief Medical Officer at Magrabi Health Madinah, First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons, former Chairman of Ophthalmology at Taibah University for 10 years, and Co-Founder of the Red Sea International Ophthalmology Conference.'}
           </p>
 
           <h3 style="margin-bottom:var(--space-4);font-size:1.15rem;color:var(--secondary-burgundy);">
@@ -1027,44 +1043,57 @@ function renderIolGuide() {
   const isAr = (currentLang === 'ar');
   const iolCards = [
     {
-      n: isAr ? 'ثلاثية البؤرة' : 'Trifocal',
-      sub: isAr ? 'للاستغناء عن النظارة قدر الإمكان' : 'For maximum spectacle independence',
-      d: [4, isAr ? 'ممتازة' : 'Excellent'],
-      m: [4, isAr ? 'جيدة جداً' : 'Very good'],
-      nr: [4, isAr ? 'جيدة غالباً بدون نظارة' : 'Good, often without glasses'],
-      h: [3, isAr ? 'أكثر شيوعاً، وتخف غالباً مع التكيف العصبي' : 'More common; often fade with neuroadaptation'],
-      g: isAr ? 'قليلة لدى أغلب المرضى، وتختلف من حالة لأخرى' : 'Uncommon for most patients; varies'
+      n: isAr ? 'ممتدة المدى (EDOF)' : 'Extended Depth of Focus (EDOF)',
+      favored: true,
+      badge: isAr ? 'الخيار المفضل حالياً لدى د. معن' : 'Favored by Dr. Maan',
+      sub: isAr ? 'أعلى جودة بصرية وأقل هالات ليلية للقيادة والشاشات' : 'Optimal optical quality & minimal halos for driving and screens',
+      d: [4, isAr ? 'ممتازة وواضحة جداً' : 'Excellent & crisp'],
+      m: [4, isAr ? 'ممتازة (شاشات ولوحة القيادة)' : 'Excellent (screens & dashboard)'],
+      nr: [2, isAr ? 'جيدة للأنشطة اليومية، ونظارة خفيفة للخط الدقيق' : 'Functional for daily tasks, light glasses for fine print'],
+      h: [1, isAr ? 'منخفضة جداً (راحة فائقة بالقيادة ليلاً)' : 'Very low (great night driving comfort)'],
+      g: isAr ? 'نظارة خفيفة للقراءة الدقيقة جداً فقط' : 'Light glasses for very fine print only'
     },
     {
-      n: isAr ? 'ممتدة المدى (EDOF)' : 'Extended depth of focus (EDOF)',
-      sub: isAr ? 'للقيادة الليلية والعمل على الشاشات' : 'For night driving and screen work',
+      n: isAr ? 'ثلاثية البؤرة (Trifocal)' : 'Trifocal',
+      favored: false,
+      badge: null,
+      sub: isAr ? 'للاستغناء عن النظارة مع احتمالية هالات ليلية' : 'Maximum spectacle independence with potential night halos',
       d: [4, isAr ? 'ممتازة' : 'Excellent'],
       m: [4, isAr ? 'جيدة جداً' : 'Very good'],
-      nr: [2, isAr ? 'محدودة للخط الدقيق' : 'Limited for fine print'],
-      h: [2, isAr ? 'أقل من الثلاثية، وأكثر من الأحادية' : 'Fewer than trifocal, more than monofocal'],
-      g: isAr ? 'غالباً للقراءة الدقيقة فقط' : 'Mostly for fine reading only'
+      nr: [4, isAr ? 'ممتازة للقراءة بدون نظارة غالباً' : 'Great, rarely need glasses'],
+      h: [4, isAr ? 'أكثر شيوعاً (هالات حلقية ووهج حول الأضواء)' : 'More frequent (concentric halos around lights)'],
+      g: isAr ? 'استغناء شبه كامل، وتختلف بحسب الإضاءة والتكيف' : 'High independence, depends on lighting & neuroadaptation'
     },
     {
-      n: isAr ? 'أحادية البؤرة' : 'Monofocal',
-      sub: isAr ? 'لأعلى نقاء للبعيد مع نظارة للقريب' : 'Sharpest distance, glasses for near',
-      d: [4, isAr ? 'ممتازة' : 'Excellent'],
+      n: isAr ? 'أحادية البؤرة (Monofocal)' : 'Monofocal',
+      favored: false,
+      badge: null,
+      sub: isAr ? 'لأعلى نقاء للبعيد مع نظارة للقريب والمتوسط' : 'Sharpest distance, permanent glasses for near & intermediate',
+      d: [4, isAr ? 'ممتازة ونقية' : 'Excellent & pure'],
       m: [2, isAr ? 'تحتاج نظارة غالباً' : 'Glasses usually needed'],
-      nr: [1, isAr ? 'تحتاج نظارة قراءة' : 'Reading glasses needed'],
-      h: [1, isAr ? 'الأقل بين الأنواع' : 'Lowest of the three'],
+      nr: [1, isAr ? 'تحتاج نظارة قراءة دائماً' : 'Reading glasses needed'],
+      h: [1, isAr ? 'الأقل إطلاقاً بين العدسات' : 'Lowest of all lenses'],
       g: isAr ? 'دائمة للقراءة والكمبيوتر' : 'Permanent for reading and computer'
     }
   ];
 
-  const renderPips = (score, cls) => `
-    <span class="pips ${cls}" role="img" aria-label="${score}/4">
-      ${[1, 2, 3, 4].map(k => `<i class="${k <= score ? 'on' : ''}"></i>`).join('')}
+  const renderEyePips = (score, cls) => `
+    <span class="eye-pips ${cls}" role="img" aria-label="${score}/4">
+      ${[1, 2, 3, 4].map(k => `
+        <span class="eye-icon ${k <= score ? 'eye-open' : 'eye-closed'} ${k <= score ? cls : ''}">
+          ${k <= score 
+            ? `<svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></svg>`
+            : `<svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10c3.5 5 8 7 10 7s6.5-2 10-7"/><path d="M6 13.5l-2 3M10 16.5l-1 3M14 16.5l1 3M18 13.5l2 3"/></svg>`
+          }
+        </span>
+      `).join('')}
     </span>
   `;
 
   const renderRow = (label, tuple, cls) => `
     <div class="iol-row">
       <b>${label}</b>
-      ${renderPips(tuple[0], cls)}
+      ${renderEyePips(tuple[0], cls)}
       <small>${tuple[1]}</small>
     </div>
   `;
@@ -1075,14 +1104,17 @@ function renderIolGuide() {
       <div class="section-header fade-in">
         <div class="section-label">${isAr ? 'دليل اختيار العدسة' : 'Lens selection guide'}</div>
         <h2>${isAr ? 'مقارنة العدسات الشائعة داخل العين' : 'Comparing common intraocular lenses'}</h2>
-        <p>${isAr ? 'ملخص مبسّط للفروق بين الأنواع الثلاثة لمساعدتك على الحوار مع طبيبك.' : 'A simple summary of the three main types, to support your conversation with your surgeon.'}</p>
+        <p>${isAr ? 'ملخص سريري مبسط للفروق بين الأنواع الثلاثة لمساعدتك على الحوار مع الدكتور معن.' : 'A simplified clinical summary of the three main types, to support your conversation with Dr. Maan.'}</p>
       </div>
 
       <div class="iol-grid fade-in">
         ${iolCards.map(c => `
-          <article class="iol-card">
+          <article class="iol-card ${c.favored ? 'iol-card-favored' : ''}">
             <header>
-              <h3>${c.n}</h3>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                <h3 style="margin:0;">${c.n}</h3>
+                ${c.badge ? `<span class="iol-favored-badge">${c.badge}</span>` : ''}
+              </div>
               <p>${c.sub}</p>
             </header>
             ${renderRow(isAr ? 'الرؤية البعيدة' : 'Distance', c.d, 'good')}
@@ -1097,15 +1129,21 @@ function renderIolGuide() {
       </div>
 
       <p class="iol-legend fade-in">
-        <span>${isAr ? 'الأخضر: كلما زادت الدرجات كان الأداء أفضل' : 'Green: more bars means better performance'}</span>
-        <span>${isAr ? 'البرتقالي: كلما زادت الدرجات زاد تكرار الهالات' : 'Amber: more bars means more frequent halos'}</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="var(--secondary-burgundy)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3.2" fill="var(--secondary-burgundy)"/></svg>
+          ${isAr ? 'عيون مفتوحة: تشير إلى درجة الوضوح والأداء المرتفع (أو تكرار الهالات في معيار الهالات)' : 'Open eyes: Indicate high clarity and performance (or frequency in halos metric)'}
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="var(--border-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10c3.5 5 8 7 10 7s6.5-2 10-7"/><path d="M6 13.5l-2 3M10 16.5l-1 3M14 16.5l1 3M18 13.5l2 3"/></svg>
+          ${isAr ? 'عيون مغمضة: تشير إلى نطاق محدود أو الحاجة لنظارة مساعدة' : 'Closed eyes: Indicate limited visual range or glasses needed'}
+        </span>
       </p>
 
       <div class="medical-disclaimer fade-in">
-        <strong>${isAr ? 'تنبيه سريري:' : 'Clinical Note:'}</strong>
+        <strong>${isAr ? 'توجيه سريري من د. معن بن عبدالله البري:' : 'Clinical Guidance by Dr. Maan:'}</strong>
         ${isAr
-          ? 'لا توجد عدسة هي الأفضل للجميع. يعتمد الاختيار على فحص القرنية والشبكية وقياسات العين ونمط حياتك، ويحدده الطبيب بعد الفحص.'
-          : 'No single lens is best for everyone. The choice depends on your corneal and retinal exam, eye measurements and lifestyle, and is made with your surgeon after examination.'}
+          ? 'يفضل الدكتور معن في الفترة الحالية العدسات ممتدة المدى (EDOF) لمعظم المرضى نظراً لتفوق جودة التباين والنقاء وانخفاض الهالات الليلية بشكل ملحوظ مقارنة بالثلاثية. ومع ذلك، لا توجد عدسة واحدة تناسب الجميع بشكل مطلق؛ بل يبقى لكل مريض وضعه الخاص (فحص تضاريس القرنية، فحص الشبكية والماكولا، ونمط الأنشطة اليومية) ليساعدك الدكتور معن في اختيار العدسة المثالية لحالتك.'
+          : 'Dr. Maan currently favors Extended Depth of Focus (EDOF) lenses for many patients due to their superior contrast quality and significantly lower night halos compared to trifocals. Nevertheless, no single lens suits everyone; each eye is unique (corneal topography, macular health, and visual habits), and Dr. Maan customizes the optimal selection during your clinical consultation.'}
       </div>
     </div>
   </section>`;
@@ -1202,7 +1240,7 @@ function renderQuestionnaire() {
       <div class="container">
         <div class="section-header fade-in">
           <div class="section-label">${currentLang === 'ar' ? 'تقرير نمط الحياة البصري الاسترشادي' : 'Visual Lifestyle Report'}</div>
-          <h2>${currentLang === 'ar' ? 'النقاط المقترحة لمناقشتها مع الدكتور معن البري' : 'Discussion Points for Your Ophthalmic Consultation'}</h2>
+          <h2>${currentLang === 'ar' ? 'النقاط المقترحة لمناقشتها مع الدكتور معن بن عبدالله البري' : 'Discussion Points for Your Ophthalmic Consultation'}</h2>
         </div>
         <div class="questionnaire fade-in">
           <div class="q-result">
@@ -1395,7 +1433,7 @@ function renderEducation() {
       <div class="section-header fade-in">
         <div class="section-label">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف السريري' : 'Medical Library & Patient Education'}</div>
         <h2>${currentLang === 'ar' ? 'إرشادات طبية موثقة لصحة عينيك' : 'Evidence-Based Eye Health Guidance'}</h2>
-        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية محكمة أعدت بإشراف الدكتور معن البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Peer-reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
+        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية محكمة أعدت بإشراف الدكتور معن بن عبدالله البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Peer-reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
       </div>
 
       <div class="article-accordion fade-in">
@@ -1515,9 +1553,9 @@ function renderFaq() {
       aEn: 'He is a Consultant Ophthalmologist specializing in cataract surgery, advanced IOL implantation, laser refractive surgery (LASIK, Femto-LASIK, PRK), and corneal diseases including keratoconus and corneal cross-linking (CXL).'
     },
     {
-      qAr: 'أين تقع عيادة الدكتور معن البري وكيف يمكن الوصول إليها؟',
+      qAr: 'أين تقع عيادة الدكتور معن بن عبدالله البري وكيف يمكن الوصول إليها؟',
       qEn: 'Where is Dr. Maan Al Barry clinic located?',
-      aAr: 'يستقبل د. معن البري مراجعيه في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، الواقع على طريق المطار. يمكنك فتح رابط خرائط جوجل المعتمد مباشرة عبر الموقع.',
+      aAr: 'يستقبل د. معن بن عبدالله البري مراجعيه في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، الواقع على طريق المطار. يمكنك فتح رابط خرائط جوجل المعتمد مباشرة عبر الموقع.',
       aEn: 'At Magrabi Health Eye & ENT Hospital in Madinah, located on Airport Road. You can access the verified Google Maps destination link directly from this website.'
     },
     {
@@ -1611,7 +1649,7 @@ function renderFooter() {
           </div>
           <p style="font-size:0.85rem;line-height:1.7;">
             ${currentLang === 'ar'
-              ? 'الموقع الرسمي للتعريف بالخبرات الأكاديمية والسريرية للدكتور معن البري، ونشر التثقيف الطبي الموثوق حول جراحات المياه البيضاء، القرنية، وتصحيح النظر.'
+              ? 'الموقع الرسمي للتعريف بالخبرات الأكاديمية والسريرية للدكتور معن بن عبدالله البري، ونشر التثقيف الطبي الموثوق حول جراحات القرنية والماء الأبيض وتصحيح النظر.'
               : 'Official medical portal presenting Dr. Maan Al Barry academic appointments and evidence-based patient education.'}
           </p>
         </div>
