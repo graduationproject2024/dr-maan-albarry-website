@@ -1,0 +1,126 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Physician",
+      "@id": "https://drmaanalbarry.com/#physician",
+      "name": "د. معن بن عبدالله البري",
+      "alternateName": [
+        "Dr. Maan bin Abdullah Al Barry",
+        "Dr. Maan Al Barry",
+        "د. معن البري",
+        "د. معن عبدالله البري"
+      ],
+      "jobTitle": "استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار)",
+      "description": "استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار). كبير موظفي مركز مغربي المدينة المنورة. مغربي الصحية للعيون والأذن – المدينة المنورة.",
+      "image": "https://drmaanalbarry.com/images/doctor-portrait.jpg",
+      "url": "https://drmaanalbarry.com",
+      "telephone": "920018000",
+      "medicalSpecialty": [
+        "Ophthalmologic"
+      ],
+      "knowsAbout": [
+        "Cataract Surgery",
+        "Intraocular Lens Implantation",
+        "Refractive Surgery",
+        "Corneal Cross-Linking (CXL)",
+        "Keratoconus"
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Fellowship",
+          "name": "Fellow of the Royal College of Surgeons, UK (FRCS)",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Royal College of Surgeons, United Kingdom"
+          }
+        }
+      ],
+      "memberOf": [
+        {
+          "@type": "Organization",
+          "name": "Saudi Ophthalmological Society"
+        },
+        {
+          "@type": "Organization",
+          "name": "American Academy of Ophthalmology"
+        }
+      ],
+      "worksFor": [
+        {
+          "@type": "Hospital",
+          "name": "مغربي الصحية للعيون والأذن – المدينة المنورة",
+          "alternateName": "Magrabi Health Eye & ENT Hospital – Madinah",
+          "url": "https://www.magrabihealth.com/ar/sa/eye/branches/magrabi-health-eye--ear--al-madina-al-monawara",
+          "telephone": "920018000",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "طريق المطار",
+            "addressLocality": "المدينة المنورة",
+            "addressRegion": "منطقة المدينة المنورة",
+            "addressCountry": "SA"
+          }
+        }
+      ],
+      "sameAs": [
+        "https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry",
+        "https://www.taibahu.edu.sa/the-university/about-taibah-university/faculty-members/1431"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://drmaanalbarry.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "ما هو التخصص الدقيق للدكتور معن بن عبدالله البري؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "استشاري طب وجراحة العيون، يعمل ضمن وحدة المياه البيضاء ووحدة جراحة القرنية وتصحيح النظر، ويقيّم حالات المياه البيضاء (الساد) وزراعة العدسات، وتصحيح الإبصار بالليزر، وأمراض القرنية والقرنية المخروطية وتثبيت القرنية (CXL)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "أين تقع عيادة الدكتور معن بن عبدالله البري وكيف يمكن الوصول إليها؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "يستقبل د. معن البري مراجعيه في مغربي الصحية للعيون والأذن – المدينة المنورة، الواقع على طريق المطار. يمكنك فتح موقع المستشفى على خرائط جوجل من قسم العيادة في هذا الموقع."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "كيف يمكنني حجز موعد مع الطبيب؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو الاتصال بمركز اتصال مغربي على 920018000 أو 19505، أو الاستفسار عن أقرب موعد عبر واتساب مغربي المخصص لمواعيد د. معن."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يضمن محاكي الرؤية النتيجة الفعلية للعملية الجراحية؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "كلا، محاكي الرؤية أداة تعليمية وتوضيحية عامة لشرح الفروقات المفاهيمية بين العدسات. النتيجة الفعلية تعتمد على فحص تضاريس القرنية، صحة الشبكية، وقياسات العين الدقيقة التي يجريها الاستشاري."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "قد تقلل بعض العدسات الحديثة مثل ثلاثية البؤرة (Trifocal) وممتدة المدى (EDOF) الاعتماد على النظارات في كثير من الأنشطة، لكن لا يمكن ضمان الاستغناء التام عن النظارة لكل مريض، ويختلف ذلك بحسب حالة العين ونوع العدسة والإضاءة."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "من المعايير الشائعة: ألا يقل العمر عن 18 عاماً، وثبات درجة النظر لمدة عام تقريباً، وسماكة قرنية كافية، وخلو القرنية من علامات القرنية المخروطية أو الجفاف الشديد غير المعالج. ويُحسم القرار بعد تصوير القرنية الطبقي والفحص الشامل."
+          }
+        }
+      ]
+    }
+  ]
+}

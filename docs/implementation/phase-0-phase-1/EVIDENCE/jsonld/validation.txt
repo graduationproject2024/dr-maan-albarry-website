@@ -1,0 +1,10 @@
+ld+json blocks: 1
+JSON.parse: OK
+@types: Physician, EducationalOccupationalCredential, Organization, Hospital, PostalAddress, FAQPage, Question, Answer
+Review present: false
+AggregateRating present: false
+BreadcrumbList present: false
+OpeningHoursSpecification present: false
+Physician.telephone: 920018000
+Physician.jobTitle: استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار)
+FAQPage questions: 6

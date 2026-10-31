@@ -8,9 +8,12 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "test": "playwright test",
+    "test:evidence": "node tests/measure.mjs docs/implementation/phase-0-phase-1/EVIDENCE/after"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "gh-pages": "^6.3.0",
     "puppeteer-core": "^25.16.0",
     "typescript": "~6.0.3",

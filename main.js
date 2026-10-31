@@ -3,139 +3,11 @@
 // Clinical Prestige & Academic Ophthalmology
 // ============================================================
 
-// --- DATA LAYER (Verified Primary Source Facts) ---
-export const DOCTOR = {
-  nameAr: 'د. معن بن عبدالله البري',
-  nameEn: 'Dr. Maan bin Abdullah Al Barry',
-  shortNameAr: 'د. معن بن عبدالله البري',
-  shortNameEn: 'Dr. Maan Al Barry',
-  titleAr: 'استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار)',
-  titleEn: 'Consultant Ophthalmologist (Specializing in Cornea, Cataract & Refractive Surgery)',
-  degreesAr: 'زميل الكلية البريطانية الملكية FRCS',
-  degreesEn: 'Fellow of the Royal College of Surgeons (UK) FRCS',
-  experienceSince: 1998,
-  clinicAr: 'مستشفيات ومراكز مغربي للعيون والأذن – المدينة المنورة',
-  clinicEn: 'Magrabi Health Eye & ENT Hospital – Madinah',
-  addressAr: 'طريق المطار، المدينة المنورة، المملكة العربية السعودية',
-  addressEn: 'Airport Road, Madinah, Saudi Arabia',
-  whatsapp: '966554946433',
-  bookingUrl: 'https://ob.magrabi.com.sa/OnlineBooking/',
-  callCenter: '19505',
-  landline: '920018000',
-  clinicDirectPhone: '0554946433',
-  clinicDirectPhoneTel: '+966554946433',
-  instagram: 'https://www.instagram.com/dr_maan_albarry?xtok=MTZqcGVsZG4wNGhheg==',
-  twitter: 'https://x.com/maanalbarry?s=11&t=gevckOqd4vSgDb_51Inwbg',
-  youtube: 'https://m.youtube.com/@drmaanalbarry3195/featured?ra=m',
-  magrabiProfile: 'https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry',
-  taibahProfile: 'https://www.taibahu.edu.sa/the-university/about-taibah-university/faculty-members/1431',
-  email: 'mbarry@taibahu.edu.sa',
-  mapsUrl: 'https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA',
-  roles: {
-    ar: [
-      'كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)',
-      'أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار',
-      'زميل الكلية البريطانية الملكية FRCS',
-      'رئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً لمدة 10 سنوات',
-      'ممثل الجمعية السعودية لطب العيون بالمدينة المنورة سابقاً',
-      'أحد مؤسسي مؤتمر البحر الأحمر الدولي للطب وجراحة العيون',
-      'خبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998'
-    ],
-    en: [
-      'Chief Medical Officer – Magrabi Health Madinah (General Supervisor of Medical, Administrative & Operational Affairs)',
-      'First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons',
-      'Fellow of the Royal College of Surgeons (UK) FRCS',
-      'Former Chairman, Department of Ophthalmology – Taibah University (10 Years)',
-      'Former Representative of the Saudi Ophthalmological Society in Madinah',
-      'Co-Founder of the Red Sea International Ophthalmology Conference',
-      'Extensive Clinical, Surgical & Academic Experience Since 1998'
-    ]
-  }
-};
+// --- DATA LAYER: single source of truth (see doctor-data.js) ---
+import { DOCTOR, FAQ, whatsappUrl, publishableTestimonials } from './doctor-data.js';
 
-// --- CLINICALLY VERIFIED VISION SIMULATOR CONFIGURATION ---
-// Based on BMC Ophthalmology 2019 Meta-Analysis & ESCRS 2024 Clinical Proceedings
-const DEFOCUS_STEPS = [0, -0.5, -1, -1.5, -2, -2.5, -3, -3.5];
-
-const LENSES = {
-  edof: {
-    id: 'edof',
-    ar: 'ممتدة المدى (EDOF) — الخيار المفضل حالياً سريرياً',
-    en: 'Extended Depth of Focus (EDOF) — Clinically Favored',
-    va: [0, 0.03, 0.08, 0.13, 0.18, 0.23, 0.36, 0.50],
-    halo: 0.16,
-    noteAr: 'الخيار المفضل حالياً لدى الدكتور معن لأغلب الحالات: جودة رؤية عالية وحساسية تباين ممتازة مع هالات ليلية منخفضة جداً وراحة فائقة أثناء القيادة والعمل على الشاشات. قد تلزم نظارة خفيفة للقراءة الدقيقة جداً.',
-    noteEn: 'Currently favored by Dr. Maan for most cases: optimal visual contrast, high clarity, and minimal night halos for driving and screens. Light reading glasses may only be needed for fine print.'
-  },
-  trifocal: {
-    id: 'trifocal',
-    ar: 'ثلاثية البؤرة (Trifocal)',
-    en: 'Trifocal',
-    va: [0, 0.08, 0.12, 0.1, 0.08, 0.1, 0.17, 0.32],
-    halo: 0.78,
-    noteAr: 'استقلالية أكبر عن نظارة القراءة للمسافات القريبة، ولكن نظراً لانقسام الضوء بين 3 بؤر فقد تنخفض حساسية التباين وتزداد الهالات الحلقية والوهج ليلاً مقارنة بعدسات EDOF، وتتطلب وقتاً للتكيف العصبي.',
-    noteEn: 'Provides high near spectacle independence; however, light division can reduce contrast and generate concentric night halos/glare compared to EDOF, requiring neuroadaptation.'
-  },
-  monofocal: {
-    id: 'monofocal',
-    ar: 'أحادية البؤرة (Monofocal)',
-    en: 'Monofocal',
-    va: [0, 0.1, 0.18, 0.32, 0.42, 0.5, 0.58, 0.66],
-    halo: 0.08,
-    noteAr: 'أعلى نقاء وتباين للمسافات البعيدة وأقل هالات ليلية؛ تتطلب دائماً نظارة للمسافات المتوسطة (الكمبيوتر) والقريبة (القراءة).',
-    noteEn: 'Purest distance acuity and lowest halos; definitely requires glasses for intermediate (computer) and near (reading).'
-  },
-  cataract: {
-    id: 'cataract',
-    ar: 'ساد غير معالج (عتامة العدسة)',
-    en: 'Untreated Cataract',
-    va: [0.5, 0.5, 0.52, 0.52, 0.55, 0.55, 0.58, 0.6],
-    halo: 0,
-    noteAr: 'عتامة متوسطة تشوش الرؤية وتسبب تشتت الضوء والوهج وانخفاض التباين، ولا يمكن تصحيحها بالنظارات.',
-    noteEn: 'Moderate lens opacity causing blur, severe glare scatter, and loss of contrast, not correctable by glasses.'
-  }
-};
-
-const DISTANCE_STEPS = [
-  [0, 'بعيد (٦م+)', 'Distance (6m+)'],
-  [-1, '١ متر', '1 m'],
-  [-1.5, 'كمبيوتر ٦٦سم', 'Computer 66cm'],
-  [-2.5, 'جوال ٤٠سم', 'Phone 40cm'],
-  [-3, 'كتاب ٣٣سم', 'Book 33cm']
-];
-
-// Simulator State
-let simState = {
-  lens: 'edof',
-  scene: 'night',
-  D: 0,
-  pos: 50,
-  tab: 'sim',
-  lang: 'ar'
-};
-
-const tText = (ar, en) => (currentLang === 'ar' ? ar : en);
-
-const SNELLEN_DENOMS = [20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200];
-const toSnellen = (logmar) => {
-  const target = 20 * (10 ** logmar);
-  return '20/' + SNELLEN_DENOMS.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
-};
-
-function getAcuity(lensKey, diopter) {
-  const va = LENSES[lensKey].va;
-  const idx = Math.min(3.5, Math.max(0, -diopter)) / 0.5;
-  const base = Math.min(6, Math.floor(idx));
-  return va[base] + (va[base + 1] - va[base]) * (idx - base);
-}
-
-function getNearestFunctional(lensKey) {
-  let nearest = 0;
-  for (let n = 0; n <= 3.5; n += 0.05) {
-    if (getAcuity(lensKey, -n) <= 0.2) nearest = n;
-  }
-  return nearest;
-}
+// Pick the current-language value from an { ar, en } pair.
+const L = (pair) => pair[currentLang];
 
 export const VisionSim = (() => {
   'use strict';
@@ -143,12 +15,12 @@ export const VisionSim = (() => {
   const DEFOCUS_STEPS = [0, -.5, -1, -1.5, -2, -2.5, -3, -3.5];
   const LENSES = {
     edof: {
-      ar: 'ممتدة المدى (EDOF) — الخيار المفضل حالياً سريرياً',
-      en: 'Extended Depth of Focus (EDOF) — Clinically Favored',
+      ar: 'ممتدة المدى (EDOF)',
+      en: 'Extended Depth of Focus (EDOF)',
       va: [0, .03, .08, .13, .18, .23, .36, .5],
       halo: .16,
-      noteAr: 'الخيار المفضل حالياً لدى الدكتور معن لأغلب الحالات: جودة رؤية عالية وحساسية تباين ممتازة مع هالات ليلية منخفضة جداً وراحة فائقة أثناء القيادة والعمل على الشاشات. قد تلزم نظارة خفيفة للقراءة الدقيقة جداً.',
-      noteEn: 'Currently favored by Dr. Maan for most cases: optimal visual contrast, high clarity, and minimal night halos for driving and screens. Light reading glasses may only be needed for fine print.'
+      noteAr: 'مصممة لتمديد نطاق الرؤية من البعيد إلى المسافات المتوسطة (الشاشات ولوحة القيادة)، وتكون الهالات الليلية فيها عادةً أقل من العدسات متعددة البؤر. غالباً ما تلزم نظارة للقراءة الدقيقة. يحدد الطبيب مدى ملاءمتها بعد الفحص.',
+      noteEn: 'Designed to extend the range of vision from distance to intermediate (screens, dashboard), usually with fewer night halos than multifocal designs. Reading glasses are often needed for fine print. Suitability is decided after examination.'
     },
     trifocal: {
       ar: 'ثلاثية البؤرة (Trifocal)',
@@ -163,8 +35,8 @@ export const VisionSim = (() => {
       en: 'Monofocal',
       va: [0, .1, .18, .32, .42, .5, .58, .66],
       halo: .08,
-      noteAr: 'أعلى نقاء وتباين للمسافات البعيدة وأقل هالات ليلية؛ تتطلب دائماً نظارة للمسافات المتوسطة (الكمبيوتر) والقريبة (القراءة).',
-      noteEn: 'Purest distance acuity and lowest halos; definitely requires glasses for intermediate (computer) and near (reading).'
+      noteAr: 'أعلى نقاء وتباين للمسافات البعيدة وأقل هالات ليلية؛ تتطلب غالباً نظارة للمسافات المتوسطة (الكمبيوتر) والقريبة (القراءة).',
+      noteEn: 'Purest distance acuity and lowest halos; usually requires glasses for intermediate (computer) and near (reading).'
     },
     cataract: {
       ar: 'ساد غير معالج (عتامة العدسة)',
@@ -803,8 +675,8 @@ void main(){
 <li>${T('الهالات في العدسات متعددة البؤر: قطر دائرة التشويش للبؤرة الثانوية = قطر البؤبؤ × قوة الإضافة (β = P × ΔD). البؤبؤ ليلاً أوسع، فالهالات أكبر.', 'Multifocal halos: secondary-focus blur circle = pupil × add power (β = P × ΔD). Night pupils are wider, so halos are larger.')}</li>
 <li>${T('الوهج: التشتت الأمامي للضوء يتناقص تقريباً مع 1/θ² (معادلة Stiles–Holladay)، ويكون أعلى في الساد.', 'Glare: forward light scatter falls roughly as 1/θ² (Stiles–Holladay), and is higher in cataract.')}</li>
 <li>${T('الساد: اصفرار العدسة، ضباب يقلل التباين، وأشعة نجمية. الأضواء بإضاءة HDR فتبقى أقوى من الأسطح كما في الواقع.', 'Cataract: lens yellowing, contrast-lowering haze, starbursts. Lights are rendered in HDR, far brighter than surfaces, as in reality.')}</li>
-<li>${T('قوة الإضافة وقطر البؤبؤ ومعامل التشتت أرقام تقريبية قابلة للتعديل وتحتاج مراجعة الدكتور قبل النشر.', 'Add powers, pupil sizes and scatter factors are editable approximations and need the surgeon’s review before publishing.')}</li></ul></details>
- <div class="vs-disclaimer-note"><svg class="vs-note-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>${T('تنويه طبي: هذه المحاكاة قد لا تنطبق 100% على الواقع، لكنها أقرب صورة توضيحية لتوصيل الفكرة والمعلومة. يفضل الدكتور معن بن عبدالله البري حالياً العدسات ممتدة المدى (EDOF) لجودة النظر العالية وانخفاض الهالات مقارنة بالثلاثية، لكن يبقى لكل مريض حالته الخاصة وقياساته الفريدة التي يُبنى عليها الاختيار الطبي النهائي بعد الفحص السريري الدقيق.', 'Clinical Note: This simulation may not apply 100% to individual reality, but serves as the closest illustrative representation to convey the concept. Dr. Maan bin Abdullah Al Barry currently favors Extended Depth of Focus (EDOF) lenses for superior optical quality and reduced halos, but every patient has unique ocular parameters; the final choice is tailored during your clinical examination.')}</span></div>
+<li>${T('قوة الإضافة وقطر البؤبؤ ومعامل التشتت قيم تقريبية لأغراض التوضيح.', 'Add powers, pupil sizes and scatter factors are approximate values for illustration.')}</li></ul></details>
+ <div class="vs-disclaimer-note"><svg class="vs-note-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>${T('تنويه طبي: هذه المحاكاة قد لا تنطبق 100% على الواقع، لكنها أقرب صورة توضيحية لتوصيل الفكرة والمعلومة. لا توجد عدسة واحدة تناسب الجميع؛ لكل مريض حالته وقياساته الخاصة التي يُبنى عليها الاختيار الطبي النهائي بعد الفحص السريري.', 'Clinical Note: This simulation may not apply 100% to individual reality, but serves as the closest illustrative representation to convey the concept. No single lens suits everyone; every patient has unique eye measurements, and the final choice is made after a clinical examination.')}</span></div>
 </div>`;
   }
 
@@ -1047,10 +919,9 @@ window.toggleTheme = function () {
 window.cycleTheme = window.toggleTheme;
 
 function getWhatsAppUrl(msg) {
-  const text = encodeURIComponent(msg || (currentLang === 'ar'
+  return whatsappUrl(msg || (currentLang === 'ar'
     ? 'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن بن عبدالله البري في مستشفى مغربي المدينة المنورة.'
     : 'Hello, I would like to inquire about booking a consultation with Dr. Maan bin Abdullah Al Barry at Magrabi Madinah.'));
-  return `https://wa.me/${DOCTOR.whatsapp}?text=${text}`;
 }
 
 // --- HEADER ---
@@ -1101,7 +972,7 @@ function renderHeader() {
         <button class="lang-switch" onclick="toggleLang()" aria-label="Switch Language" title="${currentLang === 'ar' ? 'Switch to English' : 'التحويل إلى العربية'}">
           ${currentLang === 'ar' ? 'English' : 'عربي'}
         </button>
-        <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-header-book">
+        <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-header-book">
           ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Appointment'}
         </a>
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open Navigation">☰</button>
@@ -1117,13 +988,13 @@ function renderHeader() {
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-subtle);margin-bottom:10px;">
         <span style="font-size:0.95rem;font-weight:700;color:var(--text-primary);">${currentLang === 'ar' ? 'منصات الدكتور:' : 'Channels:'}</span>
         <div style="display:flex;align-items:center;gap:10px;">
-          <a href="${DOCTOR.instagram}" target="_blank" rel="noopener noreferrer" class="header-social-link instagram" aria-label="Instagram" title="Instagram">
+          <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="header-social-link instagram" aria-label="Instagram" title="Instagram">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
-          <a href="${DOCTOR.twitter}" target="_blank" rel="noopener noreferrer" class="header-social-link twitter" aria-label="X (Twitter)" title="X (Twitter)">
+          <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="header-social-link twitter" aria-label="X (Twitter)" title="X (Twitter)">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <a href="${DOCTOR.youtube}" target="_blank" rel="noopener noreferrer" class="header-social-link youtube" aria-label="YouTube" title="YouTube">
+          <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="header-social-link youtube" aria-label="YouTube" title="YouTube">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           </a>
         </div>
@@ -1137,7 +1008,7 @@ function renderHeader() {
       <a href="#questionnaire" onclick="scrollToSection('questionnaire');closeMobileMenu();return false;" class="${currentActiveNavId === 'questionnaire' ? 'active' : ''}">${currentLang === 'ar' ? 'استبيان نمط الحياة البصري' : 'Questionnaire'}</a>
       <a href="#education" onclick="scrollToSection('education');closeMobileMenu();return false;" class="${currentActiveNavId === 'education' ? 'active' : ''}">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف' : 'Medical Library'}</a>
       <a href="#clinic" onclick="scrollToSection('clinic');closeMobileMenu();return false;" class="${currentActiveNavId === 'clinic' ? 'active' : ''}">${currentLang === 'ar' ? 'العيادة والحجز والموقع' : 'Clinic & Booking'}</a>
-      <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'موقع المستشفى (خرائط جوجل)' : 'Hospital Google Maps'}</a>
+      <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'موقع المستشفى (خرائط جوجل)' : 'Hospital Google Maps'}</a>
     </nav>
   </header>`;
 }
@@ -1165,30 +1036,30 @@ function renderHero() {
         <div class="hero-content fade-in">
           <div class="hero-badge">
             <span class="badge-seal" aria-hidden="true">★</span>
-            <span>${isAr ? 'خبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998 · المدينة المنورة' : 'Clinical & Surgical Excellence Since 1998 · Madinah, Saudi Arabia'}</span>
+            <span>${isAr ? `خبرة سريرية وأكاديمية وجراحية ممتدة منذ عام <bdi>${DOCTOR.professional.experienceSince}</bdi> · المدينة المنورة` : `Clinical, academic & surgical experience since <bdi>${DOCTOR.professional.experienceSince}</bdi> · Madinah, Saudi Arabia`}</span>
           </div>
 
           <h1 class="hero-title ${isAr ? 'font-doctor-highlight' : ''}">
-            ${isAr ? DOCTOR.nameAr : DOCTOR.nameEn}
+            ${L(DOCTOR.identity.name)}
           </h1>
 
           <div class="hero-specialty-subtitle">
-            ${isAr ? DOCTOR.titleAr : DOCTOR.titleEn}
+            ${L(DOCTOR.identity.title)}
           </div>
 
           <div class="hero-latin-subtitle">
-            ${isAr ? 'Consultant Cornea, Cataract & Refractive Surgery — FRCS (UK)' : 'Senior Consultant at Magrabi Health Eye Hospital — Madinah'}
+            ${isAr ? `${DOCTOR.identity.title.en} · ${DOCTOR.professional.qualifications[0].short}` : `Consultant at ${DOCTOR.clinic.name.en}`}
           </div>
 
           <!-- Prominent Doctor Showcase for Mobile & Tablet (immediately visible at the beginning!) -->
           <div class="hero-image-mobile">
             <div class="hero-image-wrap">
-              <img src="./images/uploaded_1.png" alt="${isAr ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
+              <img src="./images/uploaded_1.png" alt="${L(DOCTOR.identity.name)}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
               <div class="image-floating-badge">
-                <div class="badge-icon-box">✓</div>
+                <div class="badge-icon-box" aria-hidden="true">✓</div>
                 <div class="badge-text-box">
-                  <small>${isAr ? 'الترخيص الاستشاري المعتمد' : 'Board-Certified Consultant'}</small>
-                  <strong>${isAr ? 'الهيئة السعودية للتخصصات الصحية' : 'Saudi Commission for Health Specialties'}</strong>
+                  <small>${isAr ? 'زميل كلية الجراحين الملكية' : 'Fellow of the Royal College of Surgeons'}</small>
+                  <strong>${DOCTOR.professional.qualifications[0].short}</strong>
                 </div>
               </div>
             </div>
@@ -1203,25 +1074,23 @@ function renderHero() {
             </p>
           </div>
 
-          <div class="hero-stats-strip">
-            <div class="stat-box">
-              <strong class="stat-number">+26</strong>
-              <span class="stat-label">${isAr ? 'عاماً خبرة سريرية وأكاديمية (منذ 1998)' : 'Years of Clinical Excellence (Since 1998)'}</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-box">
-              <strong class="stat-number">100%</strong>
-              <span class="stat-label">${isAr ? 'التزام طبي وفق بروتوكولات الفحص الدقيق' : 'Adherence to Diagnostic Protocols'}</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-box">
-              <strong class="stat-number">+15,000</strong>
-              <span class="stat-label">${isAr ? 'فحص وإجراء جراحي دقيق في طب العيون' : 'Specialized Ophthalmic Procedures'}</span>
-            </div>
-          </div>
+          <ul class="hero-facts" aria-label="${isAr ? 'حقائق مهنية' : 'Professional facts'}">
+            <li class="hero-fact">
+              <strong class="hero-fact-value"><bdi>${DOCTOR.professional.experienceSince}</bdi></strong>
+              <span class="hero-fact-label">${isAr ? 'بداية الممارسة السريرية والجراحية' : 'In clinical & surgical practice since'}</span>
+            </li>
+            <li class="hero-fact">
+              <strong class="hero-fact-value"><bdi>FRCS</bdi></strong>
+              <span class="hero-fact-label">${isAr ? 'زميل كلية الجراحين الملكية&nbsp;– بريطانيا' : 'Royal College of Surgeons, UK'}</span>
+            </li>
+            <li class="hero-fact">
+              <strong class="hero-fact-value">${isAr ? 'مغربي' : 'Magrabi'}</strong>
+              <span class="hero-fact-label">${isAr ? 'للعيون والأذن&nbsp;– المدينة المنورة' : 'Eye & ENT Hospital&nbsp;– Madinah'}</span>
+            </li>
+          </ul>
 
           <div class="hero-cta">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="hero-primary-cta">
+            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="hero-primary-cta" data-cta="book">
               <span class="btn-fill-effect" aria-hidden="true"></span>
               <span class="btn-label">${isAr ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}</span>
               <span class="btn-arrow-wrap" aria-hidden="true">
@@ -1237,7 +1106,7 @@ function renderHero() {
                 <span class="btn-sparkle" aria-hidden="true">✦</span>
               </span>
             </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm hero-cta-whatsapp" data-cta="whatsapp">
               <span>${isAr ? 'تنسيق عبر واتساب' : 'WhatsApp'}</span>
             </a>
           </div>
@@ -1245,15 +1114,15 @@ function renderHero() {
           <div class="hero-social-row">
             <span class="hero-social-title">${isAr ? 'قنوات التواصل والتثقيف الطبي للدكتور معن:' : 'Official Medical & Social Channels:'}</span>
             <div class="hero-social-list">
-              <a href="${DOCTOR.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 <span>Instagram</span>
               </a>
-              <a href="${DOCTOR.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 <span>X (Twitter)</span>
               </a>
-              <a href="${DOCTOR.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                 <span>YouTube</span>
               </a>
@@ -1267,12 +1136,12 @@ function renderHero() {
 
         <div class="hero-image hero-desktop-doctor-showcase fade-in">
           <div class="hero-image-wrap">
-            <img src="./images/uploaded_1.png" alt="${isAr ? DOCTOR.nameAr : DOCTOR.nameEn}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
+            <img src="./images/uploaded_1.png" alt="${L(DOCTOR.identity.name)}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
             <div class="image-floating-badge">
-              <div class="badge-icon-box">✓</div>
+              <div class="badge-icon-box" aria-hidden="true">✓</div>
               <div class="badge-text-box">
-                <small>${isAr ? 'الترخيص الاستشاري المعتمد' : 'Board-Certified Consultant'}</small>
-                <strong>${isAr ? 'الهيئة السعودية للتخصصات الصحية' : 'Saudi Commission for Health Specialties'}</strong>
+                <small>${isAr ? 'زميل كلية الجراحين الملكية' : 'Fellow of the Royal College of Surgeons'}</small>
+                <strong>${DOCTOR.professional.qualifications[0].short}</strong>
               </div>
             </div>
           </div>
@@ -1288,19 +1157,19 @@ function renderQualifications() {
   const cards = [
     {
       icon: '🏛️',
-      titleAr: 'الزمالة والبورد الملكي البريطاني',
-      titleEn: 'Royal College Fellowship & Saudi Board',
-      descAr: 'زميل الكلية البريطانية الملكية للجراحين (FRCS) وبورد طب وجراحة العيون، مع الالتزام الصارم بأعلى المعايير السريرية العالمية.',
-      descEn: 'Fellow of the Royal College of Surgeons (FRCS) & Board Certified in Ophthalmology adhering to rigorous surgical benchmarks.',
-      tag: 'FRCS (UK) & Saudi Board'
+      titleAr: 'زمالة كلية الجراحين الملكية',
+      titleEn: 'Royal College of Surgeons Fellowship',
+      descAr: 'زميل كلية الجراحين الملكية في بريطانيا (FRCS)، وعضو الجمعية السعودية لطب وجراحة العيون والجمعية الأمريكية لطب وجراحة العيون.',
+      descEn: 'Fellow of the Royal College of Surgeons, UK (FRCS); member of the Saudi Ophthalmological Society and the American Academy of Ophthalmology.',
+      tag: 'FRCS (UK)'
     },
     {
       icon: '🔬',
-      titleAr: 'تخصص دقيق في جراحة وأمراض القرنية',
-      titleEn: 'Cornea & Anterior Segment Subspecialty',
-      descAr: 'برنامج الزمالة التخصصية في أمراض وزراعة وتثبيت القرنية وعلاج القرنية المخروطية بتقنية CXL وحالات العين الأمامية المعقدة.',
-      descEn: 'Subspecialty fellowship in corneal disease, keratoconus cross-linking (CXL), and anterior segment reconstruction.',
-      tag: 'Cornea Fellowship'
+      titleAr: 'جراحة وأمراض القرنية',
+      titleEn: 'Cornea & Refractive Surgery',
+      descAr: 'يعمل ضمن وحدة جراحة القرنية وتصحيح النظر: تقييم أمراض القرنية والقرنية المخروطية وتثبيت القرنية (CXL) وملاءمة عمليات تصحيح الإبصار.',
+      descEn: 'Works within the cornea & refractive surgery unit: corneal disease, keratoconus and cross-linking (CXL), and refractive surgery candidacy.',
+      tag: 'Cornea & Refractive'
     },
     {
       icon: '👁️',
@@ -1314,8 +1183,8 @@ function renderQualifications() {
       icon: '⚕️',
       titleAr: 'المناصب القيادية والأكاديمية',
       titleEn: 'Leadership & Academic Appointments',
-      descAr: 'كبير موظفي مركز مغربي المدينة، وأول رئيس للرابطة السعودية للقرنية والماء الأبيض وتصحيح الإبصار، ورئيس قسم العيون بجامعة طيبة سابقاً (10 سنوات).',
-      descEn: 'Chief Medical Officer at Magrabi Madinah, 1st President of Saudi Cornea & Cataract Association, Taibah Univ Chair (10 yrs).',
+      descAr: DOCTOR.professional.roles.slice(0, 3).map(r => r.shortAr || r.ar).join('، ') + '.',
+      descEn: DOCTOR.professional.roles.slice(0, 3).map(r => r.shortEn || r.en).join('; ') + '.',
       tag: 'Clinical Leadership'
     }
   ];
@@ -1326,7 +1195,7 @@ function renderQualifications() {
       <div class="section-header fade-in">
         <div class="section-label">${isAr ? 'الاعتمادات والتأهيل الأكاديمي' : 'Credentials & Academic Accreditation'}</div>
         <h2>${isAr ? 'ركائز الكفاءة الجراحية والاعتماد العلمي الدولي' : 'Pillars of Clinical Excellence & Surgical Mastery'}</h2>
-        <p>${isAr ? 'مؤهلات عليا وزمالات دولية تضمن للمريض أعلى مستويات الأمان والدقة والشفافية الطبية.' : 'Distinguished international fellowships ensuring patients receive the highest standards of safety and precision.'}</p>
+        <p>${isAr ? 'المؤهلات كما وردت في ملف مغربي الصحية، والمناصب كما زوّدنا بها مكتب الطبيب.' : 'Qualifications as listed by Magrabi Health; roles as provided by the doctor’s office.'}</p>
       </div>
 
       <div class="qualifications-grid fade-in">
@@ -1347,7 +1216,7 @@ function renderQualifications() {
 
 // --- PROFILE & SCIENTIFIC PARTICIPATION ---
 function renderProfile() {
-  const roles = DOCTOR.roles[currentLang];
+  const roles = DOCTOR.professional.roles.map(r => r[currentLang]);
   const isAr = (currentLang === 'ar');
 
   return `
@@ -1367,24 +1236,22 @@ function renderProfile() {
         <div class="section-label-wrap">
           <span class="section-label">${isAr ? 'السيرة المهنية والأكاديمية' : 'Professional Profile'}</span>
         </div>
-        <h2 class="${isAr ? 'font-doctor-highlight' : ''}">${isAr ? DOCTOR.nameAr : DOCTOR.nameEn}</h2>
-        <p style="font-weight:600;color:var(--secondary-burgundy);">${isAr ? DOCTOR.titleAr : DOCTOR.titleEn}</p>
+        <h2 class="${isAr ? 'font-doctor-highlight' : ''}">${L(DOCTOR.identity.name)}</h2>
+        <p style="font-weight:600;color:var(--secondary-burgundy);">${L(DOCTOR.identity.title)}</p>
       </div>
 
       <div class="profile-grid fade-in">
         <div class="profile-media">
           <div class="profile-media-wrap">
-            <img src="./images/uploaded_2.jpg" alt="${isAr ? DOCTOR.nameAr : DOCTOR.nameEn}" class="profile-media-img" loading="lazy" onerror="this.src='./images/dr-maan-redsea.jpg'">
+            <img src="./images/uploaded_2.jpg" alt="${L(DOCTOR.identity.name)}" class="profile-media-img" loading="lazy" onerror="this.src='./images/dr-maan-redsea.jpg'">
             <div class="profile-media-caption">
               <span>${isAr ? 'مؤتمر البحر الأحمر الدولي لطب وجراحة العيون — الجمعية السعودية لطب العيون' : 'Red Sea International Ophthalmology Conference — SOS'}</span>
             </div>
           </div>
           <div class="credentials-chips">
-            <span class="chip chip-gold">${isAr ? 'زميل الكلية البريطانية الملكية FRCS' : 'Fellow Royal College of Surgeons (FRCS)'}</span>
-            <span class="chip">${isAr ? 'كبير موظفي مركز مغربي المدينة المنورة' : 'Chief Medical Officer – Magrabi Madinah'}</span>
-            <span class="chip">${isAr ? 'أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار' : '1st President – Saudi Cornea, Cataract & Refractive'}</span>
-            <span class="chip">${isAr ? 'رئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً (10 سنوات)' : 'Former Chair of Ophthalmology – Taibah Univ. (10 Yrs)'}</span>
-            <span class="chip">⭐ ${isAr ? 'خبرة ممتدة منذ 1998' : 'Experience Since 1998'}</span>
+            <span class="chip chip-gold">${L(DOCTOR.professional.qualifications[0])}</span>
+            ${DOCTOR.professional.roles.filter(r => r.current).map(r => `<span class="chip">${isAr ? (r.shortAr || r.ar) : (r.shortEn || r.en)}</span>`).join('')}
+            <span class="chip">${isAr ? `خبرة ممتدة منذ <bdi>${DOCTOR.professional.experienceSince}</bdi>` : `Experience since <bdi>${DOCTOR.professional.experienceSince}</bdi>`}</span>
           </div>
         </div>
 
@@ -1392,14 +1259,9 @@ function renderProfile() {
           <p style="font-size:1.05rem;line-height:1.9;color:var(--text-primary);margin-bottom:var(--space-4);">
             ${isAr
               ? 'د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، بخبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998. يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص عدسة العين، تشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
-              : 'Dr. Maan bin Abdullah Al Barry is a Senior Consultant Ophthalmologist practicing at Magrabi Health Eye & ENT Hospital in Madinah, with extensive clinical and surgical experience since 1998. He specializes in micro-incision cataract surgery, anterior segment corneal disease, and precision refractive surgery.'}
+              : 'Dr. Maan bin Abdullah Al Barry is a Consultant Ophthalmologist practicing at Magrabi Health Eye & ENT Hospital in Madinah, with clinical and surgical experience since 1998. He works within the cataract unit and the cornea & refractive surgery unit, helping patients whose care depends on careful lens and corneal assessment.'}
           </p>
 
-          <p style="font-size:1.05rem;line-height:1.9;color:var(--text-secondary);margin-bottom:var(--space-6);">
-            ${isAr
-              ? 'تتكامل ممارسته السريرية مع أدوار قيادية وأكاديمية بارزة؛ حيث يشغل منصب كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)، وهو أول رئيس للرابطة السعودية لجراحي القرنية والماء الأبيض وتصحيح الإبصار، ورئيس قسم طب وجراحة العيون بجامعة طيبة سابقاً لمدة 10 سنوات، وممثل الجمعية السعودية لطب العيون بالمدينة المنورة سابقاً، وأحد مؤسسي مؤتمر البحر الأحمر الدولي للطب وجراحة العيون.'
-              : 'His clinical practice is anchored by distinguished leadership appointments: Chief Medical Officer at Magrabi Health Madinah, First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons, former Chairman of Ophthalmology at Taibah University for 10 years, and Co-Founder of the Red Sea International Ophthalmology Conference.'}
-          </p>
 
           <h3 style="margin-bottom:var(--space-4);font-size:1.15rem;color:var(--secondary-burgundy);">
             ${isAr ? 'المسيرة القيادية والمهنية' : 'Leadership & Scientific Appointments'}
@@ -1415,15 +1277,15 @@ function renderProfile() {
           <div class="profile-social-card">
             <span class="profile-social-title">${isAr ? 'قنوات التواصل والمحتوى العلمي الموثوق للدكتور معن:' : 'Official Scientific & Media Channels:'}</span>
             <div class="profile-social-list">
-              <a href="${DOCTOR.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 <span>Instagram</span>
               </a>
-              <a href="${DOCTOR.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 <span>X (Twitter)</span>
               </a>
-              <a href="${DOCTOR.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
+              <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                 <span>YouTube</span>
               </a>
@@ -1456,14 +1318,14 @@ function renderProfile() {
             <div class="tech-icon-box">👁️</div>
             <div>
               <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'جراحة الفاكو الدقيقة (Phacoemulsification)' : 'Micro-Incision Phacoemulsification'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تفتيت الساد بالموجات فوق الصوتية وزراعة العدسات المطوية عبر شق مجهري لا يتجاوز 2.2 ملم تحت تخدير موضعي بالقطرات.' : 'Micro-incision cataract removal and foldable intraocular lens implantation through a 2.2mm incision with no stitches.'}</p>
+              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تفتيت الساد بالموجات فوق الصوتية وزراعة العدسات المطوية عبر شق جراحي صغير، وغالباً تحت تخدير موضعي بالقطرات.' : 'Small-incision cataract removal and foldable intraocular lens implantation, usually under topical anaesthesia and without stitches.'}</p>
             </div>
           </div>
           <div class="tech-card">
             <div class="tech-icon-box">📐</div>
             <div>
-              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'القياسات البصرية الحيوية (Optical Biometry)' : 'Swept-Source Optical Biometry'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'حساب قوة العدسة المزروعة بدقة متناهية بالليزر وفق أحدث معادلات الذكاء الاصطناعي لضمان أفضل دقة انكسارية.' : 'Laser-based optical biometry utilizing state-of-the-art AI formulas for supreme refractive accuracy.'}</p>
+              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'القياسات البصرية الحيوية (Optical Biometry)' : 'Optical Biometry'}</h4>
+              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'حساب قوة العدسة المزروعة بالقياس البصري ومعادلات حسابية حديثة.' : 'Optical biometry with modern lens-power formulas.'}</p>
             </div>
           </div>
           <div class="tech-card">
@@ -1496,63 +1358,36 @@ function renderProfile() {
         </div>
       </div>
 
-      <!-- Verified Patient Reviews -->
-      <div style="margin-top:var(--space-16);" class="fade-in">
-        <div class="section-header" style="margin-bottom:var(--space-6);">
-          <div class="section-label">${currentLang === 'ar' ? 'آراء وتجارب المرضى' : 'Patient Testimonials'}</div>
-          <h3 style="font-size:1.35rem;">${currentLang === 'ar' ? 'تجارب المراجعين في مغربي المدينة المنورة' : 'Reviews from Magrabi Health Madinah'}</h3>
-          <p style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;max-width:620px;margin-inline:auto;">
-            ${currentLang === 'ar'
-              ? 'ملاحظة سريرية: تجارب وشهادات استرشادية منقولة من مراجعي منصات التقييم العامة لمستشفيات مغربي، وتخضع للمراجعة والتأكيد النهائي من الطبيب.'
-              : 'Clinical note: Illustrative feedback compiled from public review platforms for Magrabi Health, pending final administrative confirmation by the clinic owner.'}
-          </p>
-        </div>
-        <div class="reviews-grid">
-          <div class="review-card">
-            <div>
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"${currentLang === 'ar' ? 'كانت تجربة ممتازة بكل المقاييس. استغرق موعدي قرابة ساعة، أجريت خلالها الفحوصات الدقيقة ثم قابلت الدكتور معن البري، الذي شرح لي تفاصيل الإجراء وأي مضاعفات محتملة بكل أمانة ووضوح ومهنية عالية.' : 'An outstanding experience by all measures. I completed thorough diagnostics before meeting Dr. Maan Al Barry, who explained the procedure and potential nuances with utmost clarity and professional integrity.'}"</p>
-            </div>
-            <div class="review-author">
-              <div class="review-avatar">ر</div>
-              <div class="review-meta">
-                <strong>${currentLang === 'ar' ? 'راكان العبري' : 'Rakan Al-Abri'}</strong>
-                <span>${currentLang === 'ar' ? 'مريض تم علاجه بمغربي المدينة المنورة' : 'Patient at Magrabi Madinah'}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="review-card">
-            <div>
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"${currentLang === 'ar' ? 'أود أن أشكر فريق د. معن البري على حسن الاستقبال والتعامل الراقي والمعاملة المريحة، والاهتمام الفائق بتنظيم المواعيد والإجابة عن كافة التساؤلات بابتسامة وترحاب.' : 'I would like to extend heartfelt thanks to Dr. Maan Al Barry and his clinical team for their wonderful hospitality, comfortable care, and seamless appointment coordination.'}"</p>
-            </div>
-            <div class="review-author">
-              <div class="review-avatar">م</div>
-              <div class="review-meta">
-                <strong>${currentLang === 'ar' ? 'مايا أحمد' : 'Maya Ahmed'}</strong>
-                <span>${currentLang === 'ar' ? 'مراجعة عيادة العيون والقرنية' : 'Cornea & Vision Correction Patient'}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="review-card">
-            <div>
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"${currentLang === 'ar' ? 'أعرب عن خالص امتناني للدكتور معن البري على مهنيته الاستثنائية، وخبرته الواسعة، وتوجيهه اللطيف والمهدئ طوال مراحل العملية، والاهتمام الدقيق بالمتابعة بعد الإجراء.' : 'My deepest gratitude to Dr. Maan for his exceptional surgical precision, vast expertise, and gentle guidance throughout the entire procedure and post-op follow-up.'}"</p>
-            </div>
-            <div class="review-author">
-              <div class="review-avatar">ب</div>
-              <div class="review-meta">
-                <strong>${currentLang === 'ar' ? 'بشرى الشراحيلي' : 'Bushra Al-Sharahili'}</strong>
-                <span>${currentLang === 'ar' ? 'مريضة جراحة عيون' : 'Ophthalmic Surgery Patient'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      ${renderTestimonials()}
     </div>
   </section>`;
+}
+
+// --- PATIENT TESTIMONIALS (publication-gated) ---
+// Renders nothing unless at least one testimonial has a source URL, documented reuse
+// permission, attribution and approved text (see isPublishableTestimonial in doctor-data.js).
+function renderTestimonials() {
+  const items = publishableTestimonials();
+  if (!items.length) return '';
+  const isAr = (currentLang === 'ar');
+  return `
+      <div style="margin-top:var(--space-16);" class="fade-in" id="testimonials">
+        <div class="section-header" style="margin-bottom:var(--space-6);">
+          <div class="section-label">${isAr ? 'آراء المرضى' : 'Patient Testimonials'}</div>
+        </div>
+        <div class="reviews-grid">
+          ${items.map(t => `
+          <figure class="review-card">
+            <blockquote class="review-text">${t.approvedText[currentLang] || t.approvedText.ar || t.approvedText.en}</blockquote>
+            <figcaption class="review-author">
+              <div class="review-meta">
+                <strong>${t.attribution}</strong>
+                <a href="${t.source.url}" target="_blank" rel="noopener noreferrer">${isAr ? 'المصدر' : 'Source'}</a>
+              </div>
+            </figcaption>
+          </figure>`).join('')}
+        </div>
+      </div>`;
 }
 
 // --- SPECIALTIES & PRECISION UNITS ---
@@ -1656,7 +1491,7 @@ function renderSpecialties() {
                 ${(isAr ? u.tagsAr : u.tagsEn).map(t => `<span class="specialty-pill">${t}</span>`).join('')}
               </div>
               <div style="margin-top:auto;padding-top:var(--space-3);">
-                <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
                   ${isAr ? 'طلب تقرير تشخيصي أو حجز موعد ←' : 'Book Specialty Evaluation →'}
                 </a>
               </div>
@@ -1701,20 +1536,16 @@ function renderIolGuide() {
   const iolCards = [
     {
       n: isAr ? 'ممتدة المدى (EDOF)' : 'Extended Depth of Focus (EDOF)',
-      favored: true,
-      badge: isAr ? 'الخيار المفضل حالياً لدى د. معن' : 'Favored by Dr. Maan',
-      sub: isAr ? 'أعلى جودة بصرية وأقل هالات ليلية للقيادة والشاشات' : 'Optimal optical quality & minimal halos for driving and screens',
-      d: [4, isAr ? 'ممتازة وواضحة جداً' : 'Excellent & crisp'],
-      m: [4, isAr ? 'ممتازة (شاشات ولوحة القيادة)' : 'Excellent (screens & dashboard)'],
+      sub: isAr ? 'نطاق رؤية ممتد من البعيد إلى المتوسط، وهالات ليلية أقل عادةً من العدسات متعددة البؤر' : 'Extended range from distance to intermediate, usually with fewer night halos than multifocal designs',
+      d: [4, isAr ? 'ممتازة' : 'Excellent'],
+      m: [4, isAr ? 'جيدة جداً (الشاشات ولوحة القيادة)' : 'Very good (screens & dashboard)'],
       nr: [2, isAr ? 'جيدة للأنشطة اليومية، ونظارة خفيفة للخط الدقيق' : 'Functional for daily tasks, light glasses for fine print'],
-      h: [1, isAr ? 'منخفضة جداً (راحة فائقة بالقيادة ليلاً)' : 'Very low (great night driving comfort)'],
-      g: isAr ? 'نظارة خفيفة للقراءة الدقيقة جداً فقط' : 'Light glasses for very fine print only'
+      h: [2, isAr ? 'منخفضة عادةً' : 'Usually low'],
+      g: isAr ? 'غالباً نظارة للقراءة الدقيقة' : 'Often needed for fine print'
     },
     {
       n: isAr ? 'ثلاثية البؤرة (Trifocal)' : 'Trifocal',
-      favored: false,
-      badge: null,
-      sub: isAr ? 'للاستغناء عن النظارة مع احتمالية هالات ليلية' : 'Maximum spectacle independence with potential night halos',
+      sub: isAr ? 'لتقليل الحاجة للنظارة مع احتمال هالات ليلية' : 'Less need for glasses, with a chance of night halos',
       d: [4, isAr ? 'ممتازة' : 'Excellent'],
       m: [4, isAr ? 'جيدة جداً' : 'Very good'],
       nr: [4, isAr ? 'ممتازة للقراءة بدون نظارة غالباً' : 'Great, rarely need glasses'],
@@ -1723,8 +1554,6 @@ function renderIolGuide() {
     },
     {
       n: isAr ? 'أحادية البؤرة (Monofocal)' : 'Monofocal',
-      favored: false,
-      badge: null,
       sub: isAr ? 'لأعلى نقاء للبعيد مع نظارة للقريب والمتوسط' : 'Sharpest distance, permanent glasses for near & intermediate',
       d: [4, isAr ? 'ممتازة ونقية' : 'Excellent & pure'],
       m: [2, isAr ? 'تحتاج نظارة غالباً' : 'Glasses usually needed'],
@@ -1761,16 +1590,15 @@ function renderIolGuide() {
       <div class="section-header fade-in">
         <div class="section-label">${isAr ? 'دليل اختيار العدسة' : 'Lens selection guide'}</div>
         <h2>${isAr ? 'مقارنة العدسات الشائعة داخل العين' : 'Comparing common intraocular lenses'}</h2>
-        <p>${isAr ? 'ملخص سريري مبسط للفروق بين الأنواع الثلاثة لمساعدتك على الحوار مع الدكتور معن.' : 'A simplified clinical summary of the three main types, to support your conversation with Dr. Maan.'}</p>
+        <p>${isAr ? 'ملخص تثقيفي مبسط للفروق بين الأنواع الثلاثة لمساعدتك على الحوار مع طبيبك.' : 'A simplified educational summary of the three main types, to support the conversation with your ophthalmologist.'}</p>
       </div>
 
       <div class="iol-grid fade-in">
         ${iolCards.map(c => `
-          <article class="iol-card ${c.favored ? 'iol-card-favored' : ''}">
+          <article class="iol-card">
             <header>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
                 <h3 style="margin:0;">${c.n}</h3>
-                ${c.badge ? `<span class="iol-favored-badge">${c.badge}</span>` : ''}
               </div>
               <p>${c.sub}</p>
             </header>
@@ -1797,10 +1625,10 @@ function renderIolGuide() {
       </p>
 
       <div class="medical-disclaimer fade-in">
-        <strong>${isAr ? 'توجيه سريري من <span class="font-doctor-highlight">د. معن بن عبدالله البري</span>:' : 'Clinical Guidance by Dr. Maan:'}</strong>
+        <strong>${isAr ? 'كيف يُحدَّد نوع العدسة؟' : 'How is the lens chosen?'}</strong>
         ${isAr
-          ? 'يفضل الدكتور معن في الفترة الحالية العدسات ممتدة المدى (EDOF) لمعظم المرضى نظراً لتفوق جودة التباين والنقاء وانخفاض الهالات الليلية بشكل ملحوظ مقارنة بالثلاثية. ومع ذلك، لا توجد عدسة واحدة تناسب الجميع بشكل مطلق؛ بل يبقى لكل مريض وضعه الخاص (فحص تضاريس القرنية، فحص الشبكية والماكولا، ونمط الأنشطة اليومية) ليساعدك الدكتور معن في اختيار العدسة المثالية لحالتك.'
-          : 'Dr. Maan currently favors Extended Depth of Focus (EDOF) lenses for many patients due to their superior contrast quality and significantly lower night halos compared to trifocals. Nevertheless, no single lens suits everyone; each eye is unique (corneal topography, macular health, and visual habits), and Dr. Maan customizes the optimal selection during your clinical consultation.'}
+          ? 'لا توجد عدسة واحدة تناسب جميع المرضى. لكل نوع مزايا وحدود: أحادية البؤرة تعطي رؤية بعيدة نقية مع الحاجة لنظارة للقريب، وممتدة المدى توسّع نطاق الرؤية للمسافات المتوسطة، وثلاثية البؤرة تقلل الحاجة لنظارة القراءة مع احتمال أكبر للهالات. يُبنى الاختيار على الفحص السريري وقياسات العين (تضاريس القرنية، صحة الشبكية والماكولا، سطح العين) وعلى أولوياتك اليومية وتوقعاتك، بالتشاور مع طبيب العيون المعالج.'
+          : 'No single lens suits every patient. Each type has trade-offs: monofocal lenses give clear distance vision but need glasses for near; EDOF lenses extend the range into intermediate distances; trifocal lenses reduce the need for reading glasses with a higher chance of halos. The choice depends on your examination and eye measurements (corneal topography, retinal and macular health, ocular surface) and on your daily priorities and expectations, decided with your treating ophthalmologist.'}
       </div>
     </div>
   </section>`;
@@ -1831,10 +1659,10 @@ function renderQuestionnaireCard() {
           question: 'ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟',
           desc: 'تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.',
           options: [
-            'القيادة الليلية ورؤية المسافات البعيدة بوضوح ودون هالات',
+            'القيادة الليلية ووضوح الرؤية البعيدة مع أقل قدر من الهالات',
             'العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)',
             'قراءة المصحف الشريف والهاتف الذكي دون نظارة',
-            'الاستقلالية التامة بنسبة 95%+ عن النظارات في كافة الظروف'
+            'أقل اعتماد ممكن على النظارات'
           ]
         },
         {
@@ -1871,10 +1699,10 @@ function renderQuestionnaireCard() {
           question: 'What is your primary visual priority in daily routine?',
           desc: 'Defines your most critical working visual focal distance.',
           options: [
-            'Night driving and high contrast distance clarity with zero halos',
+            'Night driving and sharp distance vision with as few halos as possible',
             'Computer work, laptops, and dashboard view (Intermediate continuous)',
             'Smartphone use and book reading without reading glasses',
-            'Maximum spectacle independence (95%+) in all everyday scenarios'
+            'As little dependence on glasses as possible'
           ]
         },
         {
@@ -1904,7 +1732,7 @@ function renderQuestionnaireCard() {
 
           <div class="q-result-item">
             <h4>${currentLang === 'ar' ? 'الأولوية الوظيفية المستهدفة' : 'Target Visual Focus'}</h4>
-            <p>${currentLang === 'ar' ? 'مناقشة موازنة الرؤية بين عدسات EDOF (للقيادة والشاشات مع انعدام الهالات) أو عدسات Trifocal (للقراءة بدون نظارات مع فترة تكيف عصبي).' : 'Evaluate EDOF for pure night contrast vs Trifocals for complete spectacle independence with neuroadaptation.'}</p>
+            <p>${currentLang === 'ar' ? 'مناقشة الموازنة بين أنواع العدسات بحسب أولوياتك: نطاق الرؤية المطلوب (بعيد، متوسط، قريب)، واحتمال الهالات الليلية، والحاجة المتوقعة للنظارة.' : 'Discuss the trade-offs between lens types for your priorities: the range you need (distance, intermediate, near), the chance of night halos, and expected need for glasses.'}</p>
           </div>
 
           <div class="q-result-item">
@@ -1914,11 +1742,11 @@ function renderQuestionnaireCard() {
 
           <div class="q-result-item">
             <h4>${currentLang === 'ar' ? 'تحديد الخيار الجراحي النهائي' : 'Final Surgical Confirmation'}</h4>
-            <p>${currentLang === 'ar' ? 'يتم اتخاذ القرار النهائي بناءً على قياسات طول العين بالموجات الضوئية (IOL Master) وفحص قاع العين المباشر مع الدكتور.' : 'Target lens power is calculated using optical biometry paired with thorough clinical examination by Dr. Maan.'}</p>
+            <p>${currentLang === 'ar' ? 'يتم اتخاذ القرار النهائي بناءً على قياسات طول العين بالموجات الضوئية (IOL Master) وفحص قاع العين المباشر مع الدكتور.' : 'Lens power is calculated from optical biometry together with a full clinical examination by your ophthalmologist.'}</p>
           </div>
 
           <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;margin-top:var(--space-8);">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
               ${currentLang === 'ar' ? 'حجز موعد فحص القرنية والعدسات' : 'Book Exam Appointment'}
             </a>
             <a href="${getWhatsAppUrl('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
@@ -2003,7 +1831,7 @@ function renderEducation() {
         <h4>متى ينبغي إجراء العملية؟</h4>
         <p>لا تتطلب المياه البيضاء الجراحة فور اكتشافها إلا إذا كانت تسبب مضاعفات نادرة كارتفاع ضغط العين. المعيار الأساسي هو مدى تأثير ضعف النظر على أنشطتك اليومية مثل القراءة، قيادة السيارة، أو التعرف على وجوه الأشخاص.</p>
         <h4>كيف تُجرى الجراحة الحديثة؟</h4>
-        <p>تُجرى عملية الفاكو (Phacoemulsification) عبر فتحة ميكروسكوبية لا تتجاوز 2.2 ملم، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>
+        <p>تُجرى عملية الفاكو (Phacoemulsification) عبر شق جراحي صغير، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>
       `,
       contentEn: `
         <h4>Understanding Cataracts</h4>
@@ -2011,7 +1839,7 @@ function renderEducation() {
         <h4>When Should Surgery Be Performed?</h4>
         <p>Cataract surgery is rarely urgent. The guiding criterion is whether reduced visual acuity interferes with your regular daily activities, such as driving, reading, working on screens, or personal safety.</p>
         <h4>Modern Phacoemulsification</h4>
-        <p>Surgery is performed through a micro-incision (~2.2 mm). Ultrasound gently breaks up the clouded lens, which is aspirated, and an artificial intraocular lens (IOL) is implanted under topical drop anesthesia with no stitches required in most cases.</p>
+        <p>Surgery is performed through a small incision. Ultrasound gently breaks up the clouded lens, which is aspirated, and an artificial intraocular lens (IOL) is implanted under topical drop anesthesia with no stitches required in most cases.</p>
       `
     },
     {
@@ -2078,7 +1906,7 @@ function renderEducation() {
         <h4>Pre-Operative Preparation:</h4>
         <p>Precise optical biometry is performed to calculate target IOL power, paired with a detailed lifestyle discussion regarding distance, intermediate, and near visual needs.</p>
         <h4>Day of Surgery:</h4>
-        <p>Performed as an outpatient day procedure under topical anesthetic eye drops. The surgical procedure typically lasts 15–20 minutes with zero pain and immediate discharge.</p>
+        <p>Performed as an outpatient day procedure under topical anesthetic eye drops. The surgical procedure typically lasts 15–20 minutes usually with little discomfort; most patients go home the same day.</p>
         <h4>Post-Operative Care:</h4>
         <p>Patients follow a structured regimen of anti-inflammatory and antibiotic eye drops, avoiding eye rubbing or direct tap water exposure during the initial healing window.</p>
       `
@@ -2091,7 +1919,7 @@ function renderEducation() {
       <div class="section-header fade-in">
         <div class="section-label">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف السريري' : 'Medical Library & Patient Education'}</div>
         <h2>${currentLang === 'ar' ? 'إرشادات طبية موثقة لصحة عينيك' : 'Evidence-Based Eye Health Guidance'}</h2>
-        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية محكمة أعدت بإشراف الدكتور معن بن عبدالله البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Peer-reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
+        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية أعدت بإشراف الدكتور معن بن عبدالله البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
       </div>
 
       <div class="article-accordion fade-in">
@@ -2155,11 +1983,11 @@ function renderClinic() {
             <div class="map-meta-info">
               <span class="map-marker-icon" aria-hidden="true">📍</span>
               <div>
-                <strong>${isAr ? DOCTOR.clinicAr : DOCTOR.clinicEn}</strong>
-                <small>${isAr ? DOCTOR.addressAr : DOCTOR.addressEn}</small>
+                <strong>${L(DOCTOR.clinic.name)}</strong>
+                <small>${L(DOCTOR.clinic.address)}</small>
               </div>
             </div>
-            <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-map-action">
+            <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-map-action">
               <span>${isAr ? 'الاتجاهات عبر Google Maps' : 'Open in Google Maps'}</span>
               <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -2171,7 +1999,7 @@ function renderClinic() {
         <div class="clinic-info">
           <div class="clinic-header-badge">
             <span class="badge-dot-pulse"></span>
-            <span>${isAr ? 'الفرع المعتمد | إشراف د. معن البري' : 'Official Hospital Practice | Madinah'}</span>
+            <span>${isAr ? 'مكان الممارسة | مغربي المدينة المنورة' : 'Hospital practice | Magrabi Madinah'}</span>
           </div>
 
           <h3>${isAr ? 'بيانات التواصل وأوقات الزيارة' : 'Clinic Contact & Practice Schedule'}</h3>
@@ -2181,42 +2009,36 @@ function renderClinic() {
               <div class="detail-icon-box" aria-hidden="true">🏥</div>
               <div class="detail-text">
                 <strong>${isAr ? 'الموقع والصرح الطبي' : 'Medical Hospital'}</strong>
-                <span>${isAr ? DOCTOR.clinicAr : DOCTOR.clinicEn}</span>
-                <small style="color:var(--text-muted);display:block;margin-top:2px;">${isAr ? DOCTOR.addressAr : DOCTOR.addressEn}</small>
-              </div>
-            </div>
-
-            <div class="clinic-detail-item">
-              <div class="detail-icon-box" aria-hidden="true">📱</div>
-              <div class="detail-text">
-                <strong>${isAr ? 'الرقم المباشر لعيادة <span class="font-doctor-highlight">د. معن</span> بمغربي' : 'Direct Clinic Phone – Dr. Maan (Magrabi)'}</strong>
-                <a href="tel:${DOCTOR.clinicDirectPhone}" style="direction:ltr;display:inline-block;font-weight:700;color:var(--secondary-burgundy);font-size:1.05rem;margin-top:2px;">
-                  ${DOCTOR.clinicDirectPhone}
-                </a>
+                <span>${L(DOCTOR.clinic.name)}</span>
+                <small style="color:var(--text-muted);display:block;margin-top:2px;">${L(DOCTOR.clinic.address)}</small>
               </div>
             </div>
 
             <div class="clinic-detail-item">
               <div class="detail-icon-box" aria-hidden="true">📞</div>
               <div class="detail-text">
-                <strong>${isAr ? 'مركز الاتصال والحجز الموحد لمغربي' : 'Magrabi Central Call Center'}</strong>
-                <a href="tel:${DOCTOR.callCenter}" style="direction:ltr;display:inline-block;font-weight:700;color:var(--secondary-burgundy);font-size:1.05rem;margin-top:2px;">
-                  ${DOCTOR.callCenter} / ${DOCTOR.landline}
-                </a>
+                <strong>${isAr ? 'مركز اتصال مغربي الصحية' : 'Magrabi Health contact center'}</strong>
+                <span class="contact-numbers">
+                  <a href="tel:${DOCTOR.contact.callCenter.tel}" class="contact-number" data-cta="call"><bdi dir="ltr">${DOCTOR.contact.callCenter.display}</bdi></a>
+                  <span aria-hidden="true">·</span>
+                  <a href="tel:${DOCTOR.contact.callCenterShort.tel}" class="contact-number" data-cta="call"><bdi dir="ltr">${DOCTOR.contact.callCenterShort.display}</bdi></a>
+                </span>
               </div>
             </div>
 
             <div class="clinic-detail-item">
               <div class="detail-icon-box" aria-hidden="true">🕒</div>
               <div class="detail-text">
-                <strong>${isAr ? 'مواعيد عمل العيادات' : 'Clinic Hours'}</strong>
-                <span>${isAr ? 'السبت إلى الخميس: 9:00 ص – 1:00 م | 5:00 م – 9:30 م' : 'Saturday to Thursday: 9:00 AM – 1:00 PM | 5:00 PM – 9:30 PM'}</span>
+                <strong>${isAr ? 'مواعيد العيادة' : 'Clinic hours'}</strong>
+                <span>${DOCTOR.clinic.workingHours
+                  ? L(DOCTOR.clinic.workingHours)
+                  : (isAr ? 'تختلف مواعيد عيادة الطبيب؛ يرجى تأكيد الموعد عبر مركز الاتصال أو بوابة الحجز.' : 'The doctor’s clinic schedule varies; please confirm through the contact center or the booking portal.')}</span>
               </div>
             </div>
           </div>
 
           <div class="clinic-cta-actions">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-arrow-fill">
+            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-arrow-fill" id="clinic-booking-cta" data-cta="book">
               <span class="btn-fill-effect" aria-hidden="true"></span>
               <span class="btn-label">${isAr ? 'حجز موعد عبر البوابة الرسمية لمغربي' : 'Book via Magrabi Official Portal'}</span>
               <span class="btn-arrow-wrap" aria-hidden="true">
@@ -2225,7 +2047,7 @@ function renderClinic() {
                 </svg>
               </span>
             </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" data-cta="whatsapp">
               <span>${isAr ? 'تنسيق واستفسار عبر واتساب' : 'Inquire via WhatsApp'}</span>
             </a>
           </div>
@@ -2237,44 +2059,6 @@ function renderClinic() {
 
 // --- FAQ SECTION ---
 function renderFaq() {
-  const faqs = [
-    {
-      qAr: 'ما هو التخصص الدقيق للدكتور معن بن عبدالله البري؟',
-      qEn: "What are Dr. Maan Al Barry's medical subspecialties?",
-      aAr: 'استشاري طب وجراحة العيون، متخصص في جراحة المياه البيضاء (الساد) وزراعة العدسات الذكية، عمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك والسطحي)، وأمراض القرنية والقرنية المخروطية وتثبيت القرنية CXL.',
-      aEn: 'He is a Consultant Ophthalmologist specializing in cataract surgery, advanced IOL implantation, laser refractive surgery (LASIK, Femto-LASIK, PRK), and corneal diseases including keratoconus and corneal cross-linking (CXL).'
-    },
-    {
-      qAr: 'أين تقع عيادة الدكتور معن بن عبدالله البري وكيف يمكن الوصول إليها؟',
-      qEn: 'Where is Dr. Maan Al Barry clinic located?',
-      aAr: 'يستقبل د. معن بن عبدالله البري مراجعيه في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، الواقع على طريق المطار. يمكنك فتح رابط خرائط جوجل المعتمد مباشرة عبر الموقع.',
-      aEn: 'At Magrabi Health Eye & ENT Hospital in Madinah, located on Airport Road. You can access the verified Google Maps destination link directly from this website.'
-    },
-    {
-      qAr: 'كيف يمكنني حجز موعد مؤكد مع الطبيب؟',
-      qEn: 'How can I book a confirmed appointment?',
-      aAr: 'يمكنك الحجز مباشرة عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو عبر الاتصال بالرقم الموحد 19505، أو الاستفسار السريع وتنسيق الموعد عبر رابط واتساب المتوفر في الموقع.',
-      aEn: 'You can book through the official Magrabi Online Booking portal (ob.magrabi.com.sa), via the contact center at 19505, or via direct WhatsApp coordination.'
-    },
-    {
-      qAr: 'هل يضمن محاكي الرؤية النتيجة الفعلية للعملية الجراحية؟',
-      qEn: 'Does the Vision Simulator predict actual surgical vision?',
-      aAr: 'كلا، محاكي الرؤية هو أداة تعليمية وتوضيحية عامة لشرح الفروقات المفاهيمية بين العدسات. النتيجة الفعلية تعتمد على فحص تضاريس القرنية، صحة الشبكية، وقياسات العين الدقيقة التي يجريها الاستشاري.',
-      aEn: 'No. The simulator is strictly an educational tool illustrating optical principles. Real-world postoperative visual acuity is determined by clinical biometry, corneal morphology, and individualized healing.'
-    },
-    {
-      qAr: 'هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟',
-      qEn: 'Can cataract surgery guarantee complete spectacle independence?',
-      aAr: 'توفر العدسات الحديثة مثل العدسات ثلاثية البؤرة (Trifocal) والعدسات ممتدة العمق (EDOF) استقلالية عالية عن النظارات لمعظم الأنشطة كالقراءة وقيادة السيارة، ولكن لا يمكن تقديم ضمان طبي بنسبة 100% لعدم الحاجة لنظارة في بعض الظروف الخاصة.',
-      aEn: 'While modern premium IOLs (Trifocals & EDOFs) significantly decrease dependence on glasses for distance, intermediate, and near tasks, complete 100% independence cannot be guaranteed for every clinical case.'
-    },
-    {
-      qAr: 'ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟',
-      qEn: 'What are the main criteria for laser vision correction (LASIK)?',
-      aAr: 'يشترط ألا يقل العمر عن 18 عاماً، وثبات النظر لمدة عام، وسماكة قرنية كافية، وخلو العين التام من القرنية المخروطية أو الجفاف الشديد غير المعالج، ويتم حسم القرار بعد تصوير القرنية الطبقي (Pentacam).',
-      aEn: 'Candidates must be at least 18 years old, possess stable refraction for 12 months, have adequate corneal thickness, and demonstrate normal corneal topography with no evidence of keratoconus.'
-    }
-  ];
 
   return `
   <section class="section section-alt" id="faq">
@@ -2285,14 +2069,14 @@ function renderFaq() {
       </div>
 
       <div class="faq-list fade-in">
-        ${faqs.map((f, idx) => `
+        ${FAQ.map((f, idx) => `
           <div class="faq-item" id="faq-${idx}">
             <button class="faq-question" onclick="toggleFaq(${idx})" aria-expanded="false" aria-controls="faq-answer-${idx}">
-              <span>${currentLang === 'ar' ? f.qAr : f.qEn}</span>
+              <span>${L(f.q)}</span>
               <span class="faq-icon">+</span>
             </button>
             <div class="faq-answer" id="faq-answer-${idx}" role="region">
-              <p>${currentLang === 'ar' ? f.aAr : f.aEn}</p>
+              <p>${L(f.a)}</p>
             </div>
           </div>
         `).join('')}
@@ -2312,13 +2096,13 @@ function renderCtaBanner() {
         <div class="cta-banner-content">
           <div class="cta-badge">
             <span class="badge-seal" aria-hidden="true">★</span>
-            <span>${isAr ? 'حجز مباشر | رعاية استشارية متخصصة منذ 1998' : 'Direct Booking | Board-Certified Care Since 1998'}</span>
+            <span>${isAr ? 'حجز مباشر | رعاية استشارية متخصصة منذ 1998' : 'Direct Booking | Specialist Care Since 1998'}</span>
           </div>
           <h2>${isAr ? 'جاهز لحجز موعد كشف أو استشارة مع <span class="font-doctor-highlight">د. معن البري</span>؟' : 'Ready to Book an Examination or Consultation with Dr. Maan?'}</h2>
           <p>${isAr ? 'نرحب بك في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة لإجراء تقييم شامل لقرنية وعينك واختيار الحل الجراحي أو نوع العدسة الأنسب لنمط حياتك بكل دقة وشفافية.' : 'We welcome you at Magrabi Health Eye & ENT Hospital in Madinah for a comprehensive anterior segment exam and individualized surgical guidance.'}</p>
           
           <div class="cta-buttons-group">
-            <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="cta-primary-btn">
+            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="cta-primary-btn" data-cta="book">
               <span class="btn-fill-effect" aria-hidden="true"></span>
               <span class="btn-label">${isAr ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}</span>
               <span class="btn-arrow-wrap" aria-hidden="true">
@@ -2330,7 +2114,7 @@ function renderCtaBanner() {
             <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
               <span>${isAr ? 'تنسيق واستفسار عبر واتساب' : 'Inquire via WhatsApp'}</span>
             </a>
-            <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg">
+            <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg">
               <span>${isAr ? 'الاتجاهات وموقع المستشفى' : 'Hospital Location'}</span>
             </a>
           </div>
@@ -2365,8 +2149,8 @@ function renderFooter() {
           <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);">
             <div class="logo-icon" style="width:38px;height:38px;font-size:1.1rem;">م</div>
             <div>
-              <strong class="${currentLang === 'ar' ? 'font-doctor-highlight' : ''}" style="color:var(--footer-title);font-size:1.15rem;display:block;">${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn}</strong>
-              <small style="color:var(--gold);font-size:0.75rem;">${currentLang === 'ar' ? DOCTOR.titleAr : DOCTOR.titleEn}</small>
+              <strong class="${currentLang === 'ar' ? 'font-doctor-highlight' : ''}" style="color:var(--footer-title);font-size:1.15rem;display:block;">${L(DOCTOR.identity.name)}</strong>
+              <small style="color:var(--gold);font-size:0.75rem;">${L(DOCTOR.identity.title)}</small>
             </div>
           </div>
           <p style="font-size:0.85rem;line-height:1.7;">
@@ -2375,17 +2159,17 @@ function renderFooter() {
               : 'Official medical portal presenting Dr. Maan Al Barry academic appointments and evidence-based patient education.'}
           </p>
           <div class="footer-social-links">
-            <a href="${DOCTOR.instagram}" target="_blank" rel="noopener noreferrer" class="social-link-btn instagram" aria-label="Instagram" title="Instagram - Dr. Maan Albarry">
+            <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-link-btn instagram" aria-label="Instagram" title="Instagram - Dr. Maan Albarry">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
             </a>
-            <a href="${DOCTOR.twitter}" target="_blank" rel="noopener noreferrer" class="social-link-btn twitter" aria-label="X (Twitter)" title="X (Twitter) - Dr. Maan Albarry">
+            <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-link-btn twitter" aria-label="X (Twitter)" title="X (Twitter) - Dr. Maan Albarry">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
             </a>
-            <a href="${DOCTOR.youtube}" target="_blank" rel="noopener noreferrer" class="social-link-btn youtube" aria-label="YouTube" title="YouTube - Dr. Maan Albarry">
+            <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-link-btn youtube" aria-label="YouTube" title="YouTube - Dr. Maan Albarry">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
@@ -2418,14 +2202,10 @@ function renderFooter() {
 
         <div class="footer-col">
           <h4>${currentLang === 'ar' ? 'العيادة والتواصل' : 'Hospital & Contact'}</h4>
-          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'مغربي طريق المطار (Google Maps)' : 'Airport Road, Madinah (Maps)'}</a>
-          <a href="tel:${DOCTOR.clinicDirectPhone}" style="color:var(--gold-light);font-weight:700;">
-            ${currentLang === 'ar' ? 'الرقم المباشر لعيادة د. معن: ' : 'Direct Clinic Phone: '}
-            <span style="direction:ltr;display:inline-block;color:#fff;">${DOCTOR.clinicDirectPhone}</span>
-          </a>
-          <a href="tel:${DOCTOR.callCenter}">${currentLang === 'ar' ? 'الرقم الموحد: ' : 'Call Center: '}${DOCTOR.callCenter}</a>
-          <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer">WhatsApp (${DOCTOR.clinicDirectPhone})</a>
-          <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'بوابة الحجز الإلكتروني' : 'Online Booking'}</a>
+          <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'مغربي طريق المطار (Google Maps)' : 'Airport Road, Madinah (Maps)'}</a>
+          <a href="tel:${DOCTOR.contact.callCenter.tel}" data-cta="call">${currentLang === 'ar' ? 'مركز اتصال مغربي: ' : 'Magrabi contact center: '}<bdi dir="ltr">${DOCTOR.contact.callCenter.display}</bdi></a>
+          <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" data-cta="whatsapp">${currentLang === 'ar' ? 'واتساب مواعيد مغربي' : 'Magrabi appointments WhatsApp'}</a>
+          <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'بوابة الحجز الإلكتروني' : 'Online Booking'}</a>
         </div>
       </div>
 
@@ -2437,11 +2217,11 @@ function renderFooter() {
       </div>
 
       <div class="footer-bottom">
-        <p>© ${new Date().getFullYear()} ${currentLang === 'ar' ? DOCTOR.nameAr : DOCTOR.nameEn} — ${currentLang === 'ar' ? 'جميع الحقوق محفوظة' : 'All Rights Reserved'}</p>
+        <p>© ${new Date().getFullYear()} ${L(DOCTOR.identity.name)} — ${currentLang === 'ar' ? 'جميع الحقوق محفوظة' : 'All Rights Reserved'}</p>
         <div>
-          <a href="${DOCTOR.magrabiProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'الملف الطبي في مغربي' : 'Magrabi Profile'}</a> ·
-          <a href="${DOCTOR.taibahProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'ملف جامعة طيبة' : 'Taibah University Profile'}</a> ·
-          <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
+          <a href="${DOCTOR.social.magrabiProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'الملف الطبي في مغربي' : 'Magrabi Profile'}</a> ·
+          <a href="${DOCTOR.social.taibahProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'ملف جامعة طيبة' : 'Taibah University Profile'}</a> ·
+          <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
         </div>
       </div>
     </div>
@@ -2449,24 +2229,28 @@ function renderFooter() {
 }
 
 // --- FIXED MOBILE BOOKING BAR ---
+// Three primary actions only (book, call, WhatsApp). Maps stays reachable from the clinic section,
+// the CTA banner and the footer.
 function renderBookingBar() {
+  const isAr = (currentLang === 'ar');
+  const call = DOCTOR.contact.callCenter;
   return `
-  <div class="booking-bar" id="booking-bar">
+  <nav class="booking-bar" id="booking-bar" aria-label="${isAr ? 'إجراءات الحجز السريعة' : 'Quick booking actions'}">
     <div class="booking-bar-inner">
-      <a href="${DOCTOR.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
-        ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Exam'}
+      <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="booking-action booking-action-book" data-cta="book">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+        <span>${isAr ? 'احجز موعداً' : 'Book'}</span>
       </a>
-      <a href="tel:${DOCTOR.clinicDirectPhone}" class="btn btn-outline btn-sm" style="font-weight:600;">
-        📞 ${DOCTOR.clinicDirectPhone}
+      <a href="tel:${call.tel}" class="booking-action booking-action-call" data-cta="call" aria-label="${isAr ? `اتصال بمركز اتصال مغربي ${call.display}` : `Call Magrabi contact center ${call.display}`}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg>
+        <span>${isAr ? 'اتصال' : 'Call'}</span>
       </a>
-      <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
-        WhatsApp
-      </a>
-      <a href="${DOCTOR.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
-        Maps
+      <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="booking-action booking-action-whatsapp" data-cta="whatsapp" aria-label="${isAr ? 'واتساب مواعيد مغربي' : 'Magrabi appointments on WhatsApp'}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
+        <span>${isAr ? 'واتساب' : 'WhatsApp'}</span>
       </a>
     </div>
-  </div>`;
+  </nav>`;
 }
 
 // --- GLOBAL ATTACHMENTS & INTERACTION DISPATCHERS ---
@@ -2657,6 +2441,9 @@ function observeIntersection() {
 }
 
 function headerScrollShadow() {
+  // renderApp() runs again on every language switch; register the listener only once.
+  if (window.__headerShadowBound) return;
+  window.__headerShadowBound = true;
   window.addEventListener('scroll', () => {
     const header = document.getElementById('site-header');
     if (header) {

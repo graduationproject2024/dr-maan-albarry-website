@@ -378,7 +378,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-whatsapp {
-  background: #25d366;
+  background: #15803d; /* white text 5.0:1 (WCAG AA); brand #25d366 fails with white */
   color: #ffffff !important;
   font-weight: 700;
   border-radius: var(--radius-full);
@@ -386,7 +386,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-whatsapp:hover {
-  background: #1fb956;
+  background: #166534;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
 }
@@ -432,10 +432,18 @@ h1, h2, h3, h4 {
   opacity: 1;
 }
 
+.btn-arrow-fill {
+  white-space: normal;
+  max-width: 100%;
+}
+
 .btn-arrow-fill .btn-label {
   position: relative;
   z-index: 2;
   font-size: 0.98rem;
+  min-width: 0;
+  line-height: 1.4;
+  text-wrap: balance;
 }
 
 .btn-arrow-fill .btn-arrow-wrap {
@@ -1418,48 +1426,47 @@ body.lang-en .font-doctor-highlight {
   font-style: normal;
 }
 
-/* 3-Tile Clinical Metrics Strip */
-.hero-stats-strip {
-  display: flex;
-  align-items: center;
+/* Verified professional facts (replaces the unsourced statistics strip) */
+.hero-facts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: var(--space-4) var(--space-6);
-  margin-bottom: var(--space-8);
+  padding: var(--space-4) var(--space-2);
+  margin: 0 0 var(--space-8);
   box-shadow: var(--card-shadow);
-  gap: var(--space-6);
 }
 
-.stat-box {
-  flex: 1;
+.hero-fact {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-inline: var(--space-4);
 }
 
-.stat-number {
-  font-size: 1.55rem;
+.hero-fact + .hero-fact {
+  border-inline-start: 1px solid var(--border-subtle);
+}
+
+.hero-fact-value {
+  font-size: 1.4rem;
   font-weight: 800;
   color: var(--secondary-burgundy);
-  line-height: 1.1;
+  line-height: 1.15;
   font-family: var(--font-en), var(--font-ar);
 }
 
-[data-theme="dark"] .stat-number {
+[data-theme="dark"] .hero-fact-value {
   color: var(--gold);
 }
 
-.stat-label {
+.hero-fact-label {
   font-size: 0.78rem;
   color: var(--text-muted);
   line-height: 1.45;
-  margin-top: 4px;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 42px;
-  background: var(--border-subtle);
 }
 
 .hero-cta {
@@ -2538,30 +2545,6 @@ details.vs-sci ul {
   box-shadow: var(--card-shadow-hover);
 }
 
-.iol-card-favored {
-  border: 2px solid var(--secondary-burgundy) !important;
-  box-shadow: 0 8px 24px rgba(31, 95, 107, 0.15) !important;
-  background: linear-gradient(180deg, var(--card-bg) 0%, var(--bg-surface-alt) 100%) !important;
-}
-
-.iol-favored-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  background: var(--gold-bg);
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  font-size: 0.72rem;
-  font-weight: 700;
-  border-radius: var(--radius-full);
-  white-space: nowrap;
-}
-
-[data-theme="dark"] .iol-favored-badge {
-  color: var(--gold-light);
-  border-color: var(--gold);
-}
-
 .iol-card h3 {
   font-size: 1.15rem;
   margin: 0;
@@ -3284,7 +3267,7 @@ details.vs-sci ul {
   font-size: 0.8rem;
 }
 
-/* Sticky Mobile Booking Bar */
+/* Sticky Mobile Booking Bar — three equal, always-visible actions */
 .booking-bar {
   display: none;
   position: fixed;
@@ -3296,24 +3279,86 @@ details.vs-sci ul {
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border-top: 1px solid var(--border-subtle);
-  padding: var(--space-3) var(--space-4);
+  padding: 10px max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .booking-bar-inner {
-  display: flex;
-  gap: var(--space-3);
-  max-width: var(--container-max);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  max-width: 560px;
   margin-inline: auto;
 }
 
-.booking-bar .btn {
-  flex: 1;
+.booking-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--secondary-burgundy);
+  color: var(--secondary-burgundy);
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.booking-action span {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.booking-action svg {
+  flex-shrink: 0;
+}
+
+.booking-action-book {
+  background: var(--btn-bg);
+  border-color: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.booking-action-whatsapp {
+  background: #15803d; /* white text 5.0:1 (WCAG AA) */
+  border-color: #15803d;
+  color: #ffffff;
+}
+
+.booking-action:active {
+  transform: translateY(1px);
+}
+
+[data-theme="dark"] .booking-action-book {
+  border-color: var(--gold);
+}
+
+[data-theme="dark"] .booking-action-call {
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+/* Narrow phones: icon above label, like a tab bar, so labels never break mid-word */
+@media (max-width: 440px) {
+  .booking-action {
+    flex-direction: column;
+    gap: 3px;
+    min-height: 52px;
+    padding: 4px 6px;
+    font-size: 0.82rem;
+  }
 }
 
 @media (max-width: 768px) {
   .booking-bar { display: block; }
-  body { padding-bottom: 74px; }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 }
 
 /* ------------------------------------------------------------
@@ -3389,10 +3434,6 @@ details.vs-sci ul {
   .hero-quote-card {
     text-align: start;
   }
-  .hero-stats-strip {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
   .hero-cta {
     justify-content: center;
   }
@@ -3437,14 +3478,6 @@ details.vs-sci ul {
     border-top: 1px solid var(--border-subtle);
     border-bottom: none;
     min-height: 380px;
-  }
-  .hero-stats-strip {
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-  .stat-divider {
-    width: 100%;
-    height: 1px;
   }
 }
 
@@ -3640,5 +3673,122 @@ details.vs-sci ul {
   .eye-icon svg {
     width: 15px;
     height: 11px;
+  }
+}
+
+/* ------------------------------------------------------------
+   18. MOBILE BOOKING JOURNEY (Phase 1)
+   ------------------------------------------------------------ */
+.contact-numbers {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.detail-text a.contact-number {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--secondary-burgundy);
+}
+
+[data-theme="dark"] .detail-text a.contact-number {
+  color: var(--gold-light);
+}
+
+/* Patient sees who, what and how to book before supporting detail (portrait first on phones) */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hero-content > * {
+  max-width: 100%;
+}
+.hero-quote-card,
+.hero-facts { width: 100%; }
+
+@media (max-width: 1024px) {
+  .hero-content {
+    align-items: center;
+  }
+  .hero-badge { order: 1; }
+  .hero-title { order: 2; }
+  .hero-specialty-subtitle { order: 3; }
+  .hero-latin-subtitle { order: 4; }
+  .hero-cta { order: 5; width: 100%; }
+  .hero-image-mobile { order: 6; }
+  .hero-facts { order: 7; }
+  .hero-quote-card { order: 8; }
+  .hero-social-row { order: 9; }
+}
+
+@media (min-width: 1025px) {
+  .hero-cta { order: 5; }
+  .hero-facts { order: 6; }
+  .hero-quote-card { order: 7; }
+  .hero-social-row { order: 8; }
+}
+
+@media (max-width: 768px) {
+  /* Call and WhatsApp live in the sticky bar on phones */
+  .hero-cta .hero-cta-whatsapp {
+    display: none;
+  }
+  .clinic-cta-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-cta {
+    margin-bottom: var(--space-4);
+  }
+  .hero-image-mobile {
+    margin: var(--space-2) auto var(--space-5);
+  }
+  .hero-image-mobile .hero-image-wrap {
+    max-width: 260px;
+  }
+  .hero-image-mobile .doctor-photo {
+    height: 300px;
+  }
+  .hero-facts {
+    padding: var(--space-3) 0;
+    margin-bottom: var(--space-5);
+  }
+  .hero-fact {
+    padding-inline: 8px;
+    text-align: center;
+  }
+  .hero-fact-value {
+    font-size: 1.1rem;
+  }
+  .hero-fact-label {
+    font-size: 0.7rem;
+  }
+  .btn-arrow-fill.btn-lg,
+  .clinic-cta-actions .btn-arrow-fill {
+    padding-inline: 1.1rem;
+  }
+
+  .vs-card button {
+    min-height: 44px;
+  }
+
+  /* Simulator: the two comparison tags stack in the top corners instead of colliding */
+  .vs-tag {
+    max-width: calc(50% - 22px);
+    white-space: normal;
+    line-height: 1.3;
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+  /* Keep the renderer's 16:9 frame (the slider maps to it) but use the card's full width */
+  .vs-view {
+    margin-inline: calc(-1 * var(--space-3));
+    border-radius: 0;
   }
 }
