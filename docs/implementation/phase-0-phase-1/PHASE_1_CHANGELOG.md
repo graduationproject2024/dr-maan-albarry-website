@@ -26,5 +26,8 @@
 ## Content density
 - Page height at 390 AR: 24,998 → 22,648px (−9.4%). Removed the duplicated bio paragraph and hidden testimonials; smaller mobile portrait. Medically relevant content was not cut. Further progressive disclosure (career timeline, technology grid) is noted for a later pass.
 
+## Simulator tag (follow-up)
+- ≤440px: the left tag shows a short lens name ("EDOF", "Trifocal", "ثلاثية البؤرة" …). The full and short names are both rendered and toggled by CSS, so orientation changes stay correct.
+
 ## Robustness
 - `headerScrollShadow()` registered a new window scroll listener on every language switch. It is now guarded (regression test asserts active listeners don't grow).

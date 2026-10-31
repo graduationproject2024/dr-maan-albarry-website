@@ -714,7 +714,9 @@ void main(){
     $('#vs-dist').hidden = S.tab !== 'curve' && S.scene !== 'read';
     $('#vs-curve').hidden = S.tab !== 'curve';
     if (S.tab === 'curve') $('#vs-curve').innerHTML = curveSVG();
-    $('#vs-tl').textContent = T(LENSES[S.lens].ar, LENSES[S.lens].en);
+    // Full lens name, plus a short form shown on narrow phones so the two comparison tags stay compact
+    const SHORT = { edof: ['EDOF', 'EDOF'], trifocal: ['ثلاثية البؤرة', 'Trifocal'], monofocal: ['أحادية البؤرة', 'Monofocal'], cataract: ['ساد غير معالج', 'Cataract'] }[S.lens];
+    $('#vs-tl').innerHTML = `<span class="vs-tag-full">${T(LENSES[S.lens].ar, LENSES[S.lens].en)}</span><span class="vs-tag-short">${T(SHORT[0], SHORT[1])}</span>`;
     const d = S.scene === 'night' && S.tab === 'sim' ? 0 : S.D, a = acuity(S.lens, d), nf = nearest(S.lens), fn = a <= .2;
     $('#vs-metrics').innerHTML = `<div><small>${T('حدة الإبصار المتوقعة', 'Expected acuity')}</small><strong>${toSnellen(a)}</strong><span>${a.toFixed(2)} logMAR</span></div>
  <div><small>${T('عند هذه المسافة', 'At this distance')}</small><strong class="${fn ? 'ok' : 'warn'}">${fn ? T('رؤية وظيفية غالباً بدون نظارة', 'Usually functional without glasses') : T('غالباً تلزم نظارة', 'Glasses usually needed')}</strong></div>
@@ -1174,10 +1176,10 @@ function renderQualifications() {
     {
       icon: '👁️',
       titleAr: 'جراحة الماء الأبيض والعدسات المتقدمة',
-      titleEn: 'Micro-Incision Cataract & Premium IOLs',
-      descAr: 'إجراء عمليات إزالة الساد عبر تقنية الفاكو الميكروسكوبية، وزراعة أحدث العدسات الذكية: أحادية البؤرة، EDOF، وثلاثية البؤرة.',
+      titleEn: 'Cataract Surgery & Lens Implantation',
+      descAr: 'إجراء عمليات إزالة الساد عبر تقنية الفاكو الميكروسكوبية، وزراعة العدسات داخل العين: أحادية البؤرة، ممتدة المدى (EDOF)، وثلاثية البؤرة.',
       descEn: 'Phacoemulsification micro-incision cataract surgery and customized implantation of monofocal, EDOF, and trifocal IOLs.',
-      tag: 'Cataract & Premium IOLs'
+      tag: 'Cataract & IOLs'
     },
     {
       icon: '⚕️',
@@ -1194,7 +1196,7 @@ function renderQualifications() {
     <div class="container">
       <div class="section-header fade-in">
         <div class="section-label">${isAr ? 'الاعتمادات والتأهيل الأكاديمي' : 'Credentials & Academic Accreditation'}</div>
-        <h2>${isAr ? 'ركائز الكفاءة الجراحية والاعتماد العلمي الدولي' : 'Pillars of Clinical Excellence & Surgical Mastery'}</h2>
+        <h2>${isAr ? 'المؤهلات ومجالات التركيز السريري' : 'Qualifications & Clinical Focus'}</h2>
         <p>${isAr ? 'المؤهلات كما وردت في ملف مغربي الصحية، والمناصب كما زوّدنا بها مكتب الطبيب.' : 'Qualifications as listed by Magrabi Health; roles as provided by the doctor’s office.'}</p>
       </div>
 
@@ -1302,8 +1304,8 @@ function renderProfile() {
       <div class="activity-strip-card fade-in">
         <div class="activity-strip-header">
           <div>
-            <strong style="font-size:1.12rem;display:block;color:var(--text-primary);">${isAr ? 'التقنيات والتجهيزات الجراحية والتشخيصية المعتمدة' : 'Clinical & Surgical Diagnostic Technologies'}</strong>
-            <small style="color:var(--text-muted);">${isAr ? 'تجهيزات عالمية متقدمة في مستشفى مغربي المدينة المنورة تحت إشراف د. معن البري' : 'Advanced platforms at Magrabi Health Madinah under Dr. Maan Al Barry’s clinical oversight'}</small>
+            <strong style="font-size:1.12rem;display:block;color:var(--text-primary);">${isAr ? 'التقنيات والتجهيزات الجراحية والتشخيصية' : 'Clinical & Surgical Diagnostic Technologies'}</strong>
+            <small style="color:var(--text-muted);">${isAr ? 'تجهيزات تشخيصية وجراحية متوفرة في مستشفى مغربي المدينة المنورة' : 'Diagnostic and surgical platforms available at Magrabi Health Madinah'}</small>
           </div>
         </div>
         <div class="tech-grid">
@@ -1318,7 +1320,7 @@ function renderProfile() {
             <div class="tech-icon-box">👁️</div>
             <div>
               <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'جراحة الفاكو الدقيقة (Phacoemulsification)' : 'Micro-Incision Phacoemulsification'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تفتيت الساد بالموجات فوق الصوتية وزراعة العدسات المطوية عبر شق جراحي صغير، وغالباً تحت تخدير موضعي بالقطرات.' : 'Small-incision cataract removal and foldable intraocular lens implantation, usually under topical anaesthesia and without stitches.'}</p>
+              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تفتيت الساد بالموجات فوق الصوتية وزراعة العدسات المطوية عبر شق جراحي صغير، وغالباً تحت تخدير موضعي بالقطرات ودون غرز جراحية.' : 'Small-incision cataract removal and foldable intraocular lens implantation, usually under topical anaesthesia and without stitches.'}</p>
             </div>
           </div>
           <div class="tech-card">
@@ -1332,7 +1334,7 @@ function renderProfile() {
             <div class="tech-icon-box">🛡️</div>
             <div>
               <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'تثبيت القرنية الضوئي (Corneal Cross-Linking)' : 'Corneal Cross-Linking (CXL)'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تقنية كيميائية ضوئية بالريبوفلافين والأشعة فوق البنفسجية لوقف تطور القرنية المخروطية وحماية النظر.' : 'Photochemical stabilization utilizing riboflavin and UVA to halt keratoconus progression and preserve vision.'}</p>
+              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تقنية كيميائية ضوئية بالريبوفلافين والأشعة فوق البنفسجية تهدف إلى إبطاء أو إيقاف تطور القرنية المخروطية.' : 'Riboflavin and UVA photochemical treatment that aims to slow or stop keratoconus progression.'}</p>
             </div>
           </div>
         </div>
@@ -1395,12 +1397,12 @@ function renderSpecialties() {
   const units = [
     {
       code: 'SURG-01',
-      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات الذكية',
-      titleEn: 'Cataract Surgery & Premium IOL Implantation',
-      descAr: 'استبدال العدسة المعتمة بالموجات فوق الصوتية (الفاكو) وزراعة أحدث العدسات الذكية: أحادية البؤرة، ممتدة المدى البصري (EDOF)، والعدسات ثلاثية البؤرة لاستعادة صفاء الرؤية.',
+      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات داخل العين',
+      titleEn: 'Cataract Surgery & Intraocular Lens Implantation',
+      descAr: 'استبدال العدسة المعتمة بالموجات فوق الصوتية (الفاكو) وزراعة العدسات داخل العين: أحادية البؤرة، ممتدة المدى البصري (EDOF)، والعدسات ثلاثية البؤرة لاستعادة صفاء الرؤية.',
       descEn: 'Micro-incision phacoemulsification for lens replacement with advanced monofocal, EDOF, and trifocal intraocular lenses.',
       img: './images/surgery-phaco.jpg',
-      tagsAr: ['إزالة الساد بالفاكو', 'تصحيح الاستجماتيزم', 'العدسات التوريكية', 'عدسات ثلاثية EDOF'],
+      tagsAr: ['إزالة الساد بالفاكو', 'تصحيح الاستجماتيزم', 'العدسات التوريكية', 'عدسات EDOF وثلاثية البؤرة'],
       tagsEn: ['Phacoemulsification', 'Astigmatism Correction', 'Toric IOLs', 'Trifocal / EDOF Optics']
     },
     {
@@ -1408,7 +1410,7 @@ function renderSpecialties() {
       titleAr: 'جراحة وأمراض القرنية والقرنية المخروطية المتقدمة',
       titleEn: 'Cornea Care & Advanced Keratoconus Treatment',
       descAr: 'التشخيص المبكر والدقيق للقرنية المخروطية وتثبيت القرنية بالأشعة فوق البنفسجية والريبوفلافين (Corneal Cross-Linking - CXL)، مع خطط متابعة مستمرة لحفظ النظر.',
-      descEn: 'Early keratoconus detection, corneal collagen cross-linking (CXL) to arrest progression, and specialized anterior segment management.',
+      descEn: 'Early keratoconus detection, corneal collagen cross-linking (CXL) aimed at slowing or stopping progression, and specialized anterior segment management.',
       img: './images/cornea-cxl.jpg',
       tagsAr: ['تثبيت القرنية CXL', 'سماكة القرنية الطبقية', 'علاج سحابات القرنية', 'جفاف العين المزمن'],
       tagsEn: ['Corneal Cross-Linking (CXL)', 'Pachymetry Tomography', 'Corneal Opacities', 'Ocular Surface Disease']
@@ -1474,7 +1476,7 @@ function renderSpecialties() {
       <div class="section-header fade-in">
         <div class="section-label">${isAr ? 'التخصصات الطبية والخدمات الجراحية الدقيقة' : 'Precision Clinical Specialties'}</div>
         <h2>${isAr ? 'حلول جراحية وعلاجية بأحدث ما توصل إليه علم العيون' : 'Advanced Ophthalmic Medical & Surgical Solutions'}</h2>
-        <p>${isAr ? 'إجراءات جراحية وتشخيصية متقدمة تُجرى وفق بروتوكولات عالمية معتمدة لضمان أمان ودقة النتائج.' : 'State-of-the-art diagnostics and surgeries performed according to international clinical quality benchmarks.'}</p>
+        <p>${isAr ? 'إجراءات جراحية وتشخيصية تُجرى وفق بروتوكولات سريرية معتمدة دولياً.' : 'Diagnostics and surgery performed according to internationally recognised clinical protocols.'}</p>
       </div>
 
       <div class="specialties-grid fade-in">
@@ -1504,7 +1506,7 @@ function renderSpecialties() {
       <div class="journey-head fade-in">
         <div class="section-label">${isAr ? 'منهجية الرعاية السريرية' : 'Clinical Care Pathway'}</div>
         <h3>${isAr ? 'رحلة المريض السريرية: من التشخيص الدقيق إلى وضوح الرؤية' : 'The Systematic Patient Journey: From Diagnosis to Visual Clarity'}</h3>
-        <p>${isAr ? 'مسار رعاية منظم يضمن للمريض الفهم الكامل والراحة التامة في كل خطوة.' : 'A structured pathway ensuring thorough understanding, safety, and personalized outcomes.'}</p>
+        <p>${isAr ? 'مسار رعاية منظم يساعد المريض على فهم كل خطوة من الفحص حتى المتابعة.' : 'A structured pathway that helps you understand each step, from examination to follow-up.'}</p>
       </div>
 
       <div class="journey-grid fade-in">
@@ -1852,7 +1854,7 @@ function renderEducation() {
         <h4>أهمية التشخيص المبكر وتصوير تضاريس القرنية (Pentacam)</h4>
         <p>يساعد التصوير الطبقي للقرنية في اكتشاف المرض قبل ظهور أي علامات واضحة بالفحص العادي. يُنصح كل من يلاحظ تغيراً متكرراً في مقاس النظارة أو فركاً مزمناً في العين بإجراء هذا الفحص.</p>
         <h4>عملية تثبيت القرنية بالكولاجين (CXL)</h4>
-        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. الهدف الأساسي هو إيقاف تقدم المرض وحماية النظر من التدهور المستقبلي.</p>
+        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. ويهدف إلى إبطاء تقدم المرض أو إيقافه للحفاظ على النظر، وتختلف الاستجابة من مريض لآخر.</p>
       `,
       contentEn: `
         <h4>What is Keratoconus?</h4>
@@ -1860,7 +1862,7 @@ function renderEducation() {
         <h4>Early Diagnosis with Corneal Tomography</h4>
         <p>High-resolution Scheimpflug tomography (Pentacam) detects subclinical keratoconus before overt signs appear on basic slit-lamp examination. Anyone with rapidly changing astigmatism or habitual eye rubbing should be screened.</p>
         <h4>Corneal Collagen Cross-Linking (CXL)</h4>
-        <p>CXL strengthens corneal stromal collagen bonds using riboflavin (vitamin B2) drops activated by precise UVA light, arresting disease progression and preserving visual acuity.</p>
+        <p>CXL strengthens corneal stromal collagen bonds using riboflavin (vitamin B2) drops activated by UVA light. It aims to slow or stop disease progression to help preserve vision; response varies between patients.</p>
       `
     },
     {

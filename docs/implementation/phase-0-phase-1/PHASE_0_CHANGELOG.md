@@ -19,6 +19,7 @@
 - **FAQ:** rendered from the shared `FAQ` array, the same one that feeds FAQPage JSON-LD. The booking answer now lists the verified contact roles.
 - **CTA banner:** "Board-Certified Care" → "Specialist Care".
 - **Related overstatements fixed:** "zero pain and immediate discharge" → "usually little discomfort; most patients go home the same day". "AI formulas for supreme refractive accuracy" / "Swept-Source" → "optical biometry with modern lens-power formulas". "Peer-reviewed / محكمة" → "reviewed". Simulator note "need the surgeon's review before publishing" → "approximate values for illustration".
+- **Follow-up:** remaining reviewer copy fixed. Equipment "oversight" claim removed; guarantee phrasing ("لضمان أمان ودقة النتائج", "يضمن … الراحة التامة", "ensuring … outcomes") neutralised; CXL now "aims to slow or stop progression; response varies" (4 places); "Premium/smart IOLs", "Surgical Mastery" and the tag typo fixed; FAQ #4/#5 questions aligned between AR and EN.
 - Inert `data-cta="book|call|whatsapp"` attributes added for future consented measurement (no tracking).
 
 ## Changed — other files

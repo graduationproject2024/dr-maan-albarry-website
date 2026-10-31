@@ -18,8 +18,8 @@ Outcomes 1–8 (lens preference, stats, licence, testimonials, contacts, hours, 
 | "AI formulas … supreme accuracy" / "Swept-Source" | out-of-scope | **Fixed** |
 | "Peer-reviewed / محكمة" guides | out-of-scope | **Fixed** → "reviewed" |
 | Red Sea "co-founder" vs caption "scientific council member" | nit | Logged as D-5 |
-| Minor AR/EN nuance mismatches (FAQ #4/#5 wording, "without stitches") | nit | Open, for a later copy pass |
-| "under Dr. Maan's clinical oversight" (equipment), "لضمان أمان ودقة النتائج", CXL "arrest progression", "Premium IOLs" marketing tone, tag typo "عدسات ثلاثية EDOF" | out-of-scope | Open, recorded for a later content pass |
+| Minor AR/EN nuance mismatches (FAQ #4/#5 wording, "without stitches") | nit | **Fixed** (follow-up commit): FAQ questions aligned; AR incision text mentions no stitches |
+| "under Dr. Maan's clinical oversight" (equipment), "لضمان أمان ودقة النتائج" / "يضمن … الراحة التامة", CXL "arrest progression" (4 places), "Premium IOLs" / "أحدث العدسات الذكية" / "Surgical Mastery", tag typo "عدسات ثلاثية EDOF" | out-of-scope | **Fixed** (follow-up commit): neutral wording; CXL "aims to slow or stop progression; response varies" |
 
 ## 2. Code review — no blocking defects
 | Finding | Severity | Disposition |
@@ -30,7 +30,7 @@ Outcomes 1–8 (lens preference, stats, licence, testimonials, contacts, hours, 
 | WhatsApp bar action 4.1:1 contrast | medium | **Fixed** (`#15803d`, 5.0:1) |
 | `String.replace` with a string can interpret `$` patterns in JSON-LD | low | **Fixed** (function replacer) |
 | Hero badge year and AR Latin subtitle hard-coded | low | **Fixed** (from data) |
-| Positive testimonial render path untested | low | Gate function unit-tested. A rendered-card test needs a test hook in production code, so it was not added. Recorded as a known gap. |
+| Positive testimonial render path untested | low | **Fixed** (follow-up): tests inject records into the built bundle via request interception, with no production hook. A valid record renders with its source link; records missing permission or source render nothing. |
 | Quote card may shrink in the flex column | cosmetic | **Fixed** (`width: 100%`) |
 | Verified: no TDZ issue with `L()`, all `DOCTOR.*` refs resolve, no XSS vector, llms.txt not duplicated | — | — |
 
@@ -48,6 +48,6 @@ Clean in all 16 combinations (360/390/768/1366 × AR/EN × light/dark): no overf
 | Dark Book action low non-text contrast | nit | **Fixed** (gold border) |
 | `env(safe-area-inset-*)` needs `viewport-fit=cover` | nit | **Fixed** |
 | Bar is weighted 1.35/1/1, not "equal" | nit | Intentional; documented |
-| EN EDOF tag wraps to 2 lines at 360 | nit | Open (no overlap; tests pass) |
+| EN EDOF tag wraps to 2 lines at 360 | nit | **Fixed** (follow-up): short lens names ("EDOF", "Trifocal" …) at ≤440px, via CSS toggle |
 | AR header brand truncated at 360 (pre-existing) | nit | Open, outside Phase 1 scope |
 | AR subtitle breaks after "(تخصص" | nit | Open (natural wrapping of the official title) |

@@ -3792,3 +3792,9 @@ details.vs-sci ul {
     border-radius: 0;
   }
 }
+
+.vs-tag-short { display: none; }
+@media (max-width: 440px) {
+  .vs-tag-full { display: none; }
+  .vs-tag-short { display: inline; }
+}

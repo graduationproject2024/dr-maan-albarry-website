@@ -143,6 +143,38 @@ test.describe('Phase 0 structured data & llms.txt', () => {
   });
 });
 
+test.describe('Phase 0 testimonial rendering (records injected into the built bundle)', () => {
+  const inject = async (page, records) => {
+    await page.route(/\/assets\/index-[^/]+\.js$/, async route => {
+      const res = await route.fetch();
+      const body = await res.text();
+      const marker = 'testimonials:[]';
+      expect(body).toContain(marker);
+      await route.fulfill({ response: res, body: body.replace(marker, `testimonials:${JSON.stringify(records)}`) });
+    });
+  };
+  const valid = { source: { url: 'https://example.org/review/1' }, permission: { documented: true, reference: 'consent-test' }, attribution: 'Test Patient', approvedText: { ar: 'نص معتمد للاختبار', en: 'Approved test text' } };
+
+  test('a fully documented testimonial renders with its source link', async ({ page }) => {
+    await inject(page, [valid]);
+    await open(page, 'en');
+    const card = page.locator('#testimonials .review-card');
+    await expect(card).toHaveCount(1);
+    await expect(card).toContainText('Approved test text');
+    await expect(card.locator('a')).toHaveAttribute('href', valid.source.url);
+    await expect(page.locator('.review-stars')).toHaveCount(0);
+  });
+
+  test('records missing permission or source never render', async ({ page }) => {
+    await inject(page, [
+      { ...valid, permission: { documented: false, reference: 'x' } },
+      { ...valid, source: { url: '' } }
+    ]);
+    await open(page, 'ar');
+    await expect(page.locator('#testimonials, .review-card')).toHaveCount(0);
+  });
+});
+
 test.describe('Phase 0 testimonial publication gate', () => {
   test('rejects records without source, permission, attribution or approved text', () => {
     const ok = { source: { url: 'https://example.org/r/1' }, permission: { documented: true, reference: 'consent-2026-001' }, attribution: 'Patient', approvedText: { ar: 'نص' } };

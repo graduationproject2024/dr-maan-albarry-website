@@ -26,7 +26,7 @@
 ## C. Doctor data decisions
 See [DOCTOR_DATA_DECISIONS.md](DOCTOR_DATA_DECISIONS.md). In short:
 - **Confirmed (official sources):** title/specialty, units, FRCS (UK), SOS and AAO memberships, Magrabi Madinah on Airport Road, JCI/CBAHI, call center 920018000 / 19505, Magrabi WhatsApp 966508533309, booking portal, Taibah Associate Professor.
-- **Removed:** 15,000+ and 100% stats; SCFHS licence badge; Saudi Board / Board-Certified; cornea fellowship; "Senior"; every EDOF preference claim; "zero halos"; "95%+"; 2.2 mm; 3 reworded testimonials and stars; contradictory hours; fake breadcrumbs, geo, priceRange; unverified mobile 0554946433 (now absent from the bundle too); several overstatements ("zero pain", "supreme accuracy", "peer-reviewed").
+- **Removed:** 15,000+ and 100% stats; SCFHS licence badge; Saudi Board / Board-Certified; cornea fellowship; "Senior"; every EDOF preference claim; "zero halos"; "95%+"; 2.2 mm; 3 reworded testimonials and stars; contradictory hours; fake breadcrumbs, geo, priceRange; unverified mobile 0554946433 (now absent from the bundle too); several overstatements ("zero pain", "supreme accuracy", "peer-reviewed", equipment "oversight", guaranteed-outcome phrasing, CXL "arrests progression", "Premium/smart IOLs").
 - **Unverified but kept (owner-supplied):** Chief of Staff wording, former Taibah chair (10 yrs), first SSCCRS president, Red Sea co-founder, former SOS rep, since 1998.
 - **Decisions needed:** D-1 … D-14.
 
@@ -40,7 +40,7 @@ See [DOCTOR_DATA_DECISIONS.md](DOCTOR_DATA_DECISIONS.md). In short:
 | Desktop 1366 | Stats tiles; CTA off the first screen | Verified facts; CTA on the first screen (`after/1366/*-top.png`) |
 
 ## E. Test results
-`npm test`: **64 passed, 0 failed, 0 skipped, 0 blocked**; `--repeat-each=2`: 128/128, 0 flaky; `npm run build` ✔; `npm audit`: 0 vulnerabilities. Mutation checks confirm the tests detect the original defects. Details: [TEST_RESULTS.md](TEST_RESULTS.md).
+`npm test`: **66 passed, 0 failed, 0 skipped, 0 blocked**; `--repeat-each=2` (64-test suite): 128/128, 0 flaky; `npm run build` ✔; `npm audit`: 0 vulnerabilities. Mutation checks confirm the tests detect the original defects. Details: [TEST_RESULTS.md](TEST_RESULTS.md).
 
 ## F. Responsive verification
 360×800, 390×844 (AR/EN × light/dark, bar, CTAs, simulator, overflow); 768×1024 (bar fits); 1366×768 and 1440×900 (AR/EN: bar hidden, CTA on first screen, no overflow). All pass.

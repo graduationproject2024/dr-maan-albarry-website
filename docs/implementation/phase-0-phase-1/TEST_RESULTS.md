@@ -15,14 +15,14 @@ Environment: Windows 11, Node 24.18.1, `@playwright/test` 1.64.1 (Chromium). On 
 
 | Run | Passed | Failed | Skipped | Flaky | Blocked |
 |---|---|---|---|---|---|
-| `npm test` — final run ([log](EVIDENCE/playwright/final-run.txt)) | **64** | 0 | 0 | 0 | 0 |
-| `--repeat-each=2` stability | **128** | 0 | 0 | 0 | 0 |
+| `npm test` — final run ([log](EVIDENCE/playwright/final-run.txt)) | **66** | 0 | 0 | 0 | 0 |
+| `--repeat-each=2` stability (64-test suite, before the follow-up commit) | **128** | 0 | 0 | 0 | 0 |
 | `npm run build` | ✔ | | | | |
 | `npm audit` | 0 vulnerabilities | | | | |
 
-Breakdown: `tests/phase0-content.spec.js` 12 tests · `tests/phase1-mobile.spec.js` 52 tests.
+Breakdown: `tests/phase0-content.spec.js` 14 tests · `tests/phase1-mobile.spec.js` 52 tests.
 
-### Phase 0 tests (12)
+### Phase 0 tests (14)
 - Contact links (tel / WhatsApp / booking) only from approved central data — AR, EN
 - No unsupported stats, licence, testimonial placeholder, lens preference or 2.2 mm in the full text, including every simulator lens note and the questionnaire result — AR, EN
 - Professional roles render exactly as the data states; no "Chief Medical Officer / Senior / المدير الطبي التنفيذي" — AR, EN
@@ -31,6 +31,7 @@ Breakdown: `tests/phase0-content.spec.js` 12 tests · `tests/phase1-mobile.spec.
 - llms.txt generated, contains roles and verified contacts, no removed claims
 - Every generated file in `dist/` is free of preference wording, licence claims, the unverified number, 2.2 mm, and patient names
 - Testimonial publication gate (unit)
+- Testimonial rendering: records injected into the built bundle via request interception. A valid record renders with its source link and no stars; records missing permission or source render nothing.
 
 ### Phase 1 tests (52)
 - 8 combinations (360/390 × AR/EN × light/dark) × 5 tests:
@@ -66,6 +67,5 @@ Note: the hero CTA label measured 206/312px at 360 on this baseline, so it was n
 - The capture script once logged an aborted cross-origin `google.com/maps/embed` iframe request. The lazy map iframe was cancelled when the capture context closed; it is not a site error.
 
 ## Known testing gaps
-- Positive render of a publishable testimonial is covered only at the gate-function level.
 - Real-device checks (iOS Safari safe-area, Android Chrome) were not run; only Chromium emulation.
 - Not run on Linux/macOS. There, WebGL would fall back to SwiftShader and the simulator tests would likely time out unless a GPU is configured. Not verified.

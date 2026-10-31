@@ -20,7 +20,7 @@ Legend: ✅ passed with evidence · ⛔ blocked on an external decision (see BLO
 | Professional role consistent | ⚠️ | Identical across AR/EN/JSON-LD/llms (tested). The wording itself is owner-supplied and differs from Magrabi's profile, so it awaits confirmation (B-7). |
 | `llms.txt` synchronised | ✅ | Generated; test |
 | No invented medical facts | ✅ | Medical reviewer confirmed; nothing replaced removed claims |
-| Automated Phase 0 tests pass | ✅ | 12/12 |
+| Automated Phase 0 tests pass | ✅ | 14/14 |
 | Independent content & technical review passes | ✅ | Medical review: conditional pass; all in-scope items fixed. Code review: no blockers left. |
 | P0-7 booking interaction measurement | ⛔ | B-5: no approved analytics or consent decision. Inert `data-cta` hooks only. |
 | Clinic confirmation of the mobile number | ⛔ | B-1 (safe interim behaviour live) |
