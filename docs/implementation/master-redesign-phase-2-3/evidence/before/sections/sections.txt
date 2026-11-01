@@ -1,0 +1,16 @@
+FAIL 390-ar-light site-header: locator.screenshot: Timeout 30000ms exceeded.
+390-ar-light: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=20335
+FAIL 390-en-dark site-header: locator.screenshot: Timeout 30000ms exceeded.
+390-en-dark: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=20484
+FAIL 390-ar-dark site-header: locator.screenshot: Timeout 30000ms exceeded.
+390-ar-dark: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=20335
+FAIL 390-en-light site-header: locator.screenshot: Timeout 30000ms exceeded.
+390-en-light: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=20484
+FAIL 1440-ar-light site-header: locator.screenshot: Timeout 30000ms exceeded.
+1440-ar-light: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=13214
+FAIL 1440-en-dark site-header: locator.screenshot: Timeout 30000ms exceeded.
+1440-en-dark: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=13196
+FAIL 1440-ar-dark site-header: locator.screenshot: Timeout 30000ms exceeded.
+1440-ar-dark: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=13214
+FAIL 1440-en-light site-header: locator.screenshot: Timeout 30000ms exceeded.
+1440-en-light: site-header, home, qualifications, profile, specialties, simulator, cataracts, questionnaire, education, clinic, faq, footer | pageH=13196

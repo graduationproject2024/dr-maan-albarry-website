@@ -16,6 +16,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
     url: 'http://localhost:4173/',
+    env: { CSIM_HARNESS: '1' }, // also build the 3D simulator test harness page
     reuseExistingServer: false, // always rebuild: tests also scan dist/ directly
     timeout: 120_000
   }

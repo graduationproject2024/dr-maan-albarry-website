@@ -4,7 +4,7 @@
 // ============================================================
 
 // --- DATA LAYER: single source of truth (see doctor-data.js) ---
-import { DOCTOR, FAQ, whatsappUrl, publishableTestimonials } from './doctor-data.js';
+import { DOCTOR, FAQ, whatsappUrl, publishableTestimonials, yearsOfExperience } from './doctor-data.js';
 
 // Pick the current-language value from an { ar, en } pair.
 const L = (pair) => pair[currentLang];
@@ -848,547 +848,326 @@ void main(){
 // Attach to window for global access
 window.VisionSim = VisionSim;
 
-function renderSimulator(lang) {
-  const isAr = (lang === 'ar');
-  return `
-  <section class="section vs-section" id="simulator">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${isAr ? 'أداة تثقيفية تفاعلية ثلاثية الأبعاد' : 'Interactive 3D Educational Tool'}</div>
-        <h2>${isAr ? 'كيف قد تبدو رؤيتك بعد زراعة العدسة؟' : 'How Might Your Vision Look After Lens Implantation?'}</h2>
-        <p>${isAr ? 'اسحب الخط للمقارنة المباشرة بين العدسة المختارة والساد غير المعالج عبر محاكاة بصرية ثلاثية الأبعاد مبنية على متوسطات الدراسات المنشورة.' : 'Drag the line to compare your chosen lens against an untreated cataract using a real-time 3D optical simulation.'}</p>
-      </div>
-      <div id="simulator-host"></div>
-    </div>
-  </section>`;
-}
+// ============================================================
+// APP SHELL — Phase 2/3 master redesign ("the consultant's folio")
+// Design system: docs/implementation/master-redesign-phase-2-3/CLAUDE_DESIGN_SYSTEM.md
+// Every doctor fact below is read from doctor-data.js; nothing factual is hard-coded here.
+// ============================================================
 
 // --- APP STATE & LOCAL STORAGE ---
+// Initial language: the prerendered /en/ route ships <html lang="en">; otherwise the saved choice; otherwise Arabic.
 let currentLang = (() => {
+  if (document.documentElement.lang === 'en') return 'en';
   try { return localStorage.getItem('lang') === 'en' ? 'en' : 'ar'; } catch (e) { return 'ar'; }
 })();
-let currentTheme = (() => {
-  try {
-    return localStorage.getItem('theme');
-  } catch (e) {
-    return null;
-  }
-})() || 'system';
+
+// Theme: an explicit visitor choice ('light' | 'dark') is stored under localStorage 'theme'.
+// With no saved choice the site follows the device (prefers-color-scheme), live.
+const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+let savedTheme = (() => {
+  try { const t = localStorage.getItem('theme'); return t === 'dark' || t === 'light' ? t : null; } catch (e) { return null; }
+})();
+const resolvedTheme = () => savedTheme || (darkQuery.matches ? 'dark' : 'light');
 
 let currentQStep = 0;
 let qAnswers = [];
 let qCompleted = false;
 let openArticleId = null;
 
-function renderThemeToggle(id = 'theme-toggle-btn') {
-  const isDark = (currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-  const label = currentLang === 'ar'
-    ? (isDark ? 'الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري' : 'الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي')
-    : (isDark ? 'Dark mode enabled. Click to switch to light mode' : 'Light mode enabled. Click to switch to dark mode');
-  const title = currentLang === 'ar' ? 'تبديل المظهر (ليلي / نهاري)' : 'Toggle Theme (Dark / Light)';
+const tr = (ar, en) => (currentLang === 'ar' ? ar : en);
 
-  return `
-  <button id="${id}" class="theme-clean-toggle ${isDark ? 'is-dark' : ''}" onclick="toggleTheme()" role="switch" aria-checked="${isDark ? 'true' : 'false'}" aria-label="${label}" title="${title}">
-    <span class="tct-track" aria-hidden="true">
-      <span class="tct-slot tct-slot-sun ${isDark ? 'is-dimmed' : 'is-active'}">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-        </svg>
-      </span>
-      <span class="tct-slot tct-slot-moon ${isDark ? 'is-active' : 'is-dimmed'}">
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </span>
-      <span class="tct-thumb"></span>
-    </span>
-  </button>`;
-}
-
-function applyTheme(theme) {
-  currentTheme = theme;
-  try {
-    localStorage.setItem('theme', theme);
-  } catch (e) {}
-
-  if (theme === 'system') {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-
-  const isDark = (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-
-  document.querySelectorAll('.theme-clean-toggle').forEach(btn => {
-    btn.classList.toggle('is-dark', isDark);
-    btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
-    const sunSlot = btn.querySelector('.tct-slot-sun');
-    const moonSlot = btn.querySelector('.tct-slot-moon');
-    if (sunSlot) {
-      sunSlot.classList.toggle('is-active', !isDark);
-      sunSlot.classList.toggle('is-dimmed', isDark);
-    }
-    if (moonSlot) {
-      moonSlot.classList.toggle('is-active', isDark);
-      moonSlot.classList.toggle('is-dimmed', !isDark);
-    }
-    const label = currentLang === 'ar'
-      ? (isDark ? 'الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري' : 'الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي')
-      : (isDark ? 'Dark mode enabled. Click to switch to light mode' : 'Light mode enabled. Click to switch to dark mode');
-    btn.setAttribute('aria-label', label);
-    btn.setAttribute('title', label);
-  });
-}
-
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-  if (currentTheme === 'system') applyTheme('system');
-});
-
-window.toggleTheme = function () {
-  const isDark = (currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-  applyTheme(isDark ? 'light' : 'dark');
+// --- ICONS: one inline SVG set (24px grid, 1.75 stroke). No emoji anywhere. ---
+const IC = {
+  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
+  phone: '<path d="M20.5 16.3v2.8a1.9 1.9 0 0 1-2.1 1.9A18.6 18.6 0 0 1 3 5.6 1.9 1.9 0 0 1 4.9 3.5h2.8a1.9 1.9 0 0 1 1.9 1.6c.1.9.4 1.8.7 2.6a1.9 1.9 0 0 1-.4 2l-1.2 1.2a15 15 0 0 0 5.4 5.4l1.2-1.2a1.9 1.9 0 0 1 2-.4c.8.3 1.7.6 2.6.7a1.9 1.9 0 0 1 1.6 1.9z"/>',
+  pin: '<path d="M12 21s-7-6.1-7-11.4a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.6" r="2.4"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  arrow: '<path d="M4.5 12h15M13.5 6l6 6-6 6"/>',
+  external: '<path d="M14 4.5h5.5V10M19.5 4.5 11 13M17.5 14v5.5h-13v-13H10"/>',
+  menu: '<path d="M4 7.5h16M4 12h16M4 16.5h10"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  play: '<circle cx="12" cy="12" r="9"/><path d="M10 8.6v6.8l5.6-3.4z" fill="currentColor" stroke="none"/>',
+  shield: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8 7.5 9.5 4.4-1.5 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>',
+  alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.1"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.3 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.3-3.5-8.5s1.1-6.1 3.5-8.5z"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 7.8v.1"/>'
 };
+const icon = (name, size = 20) =>
+  `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${IC[name]}</svg>`;
 
-window.cycleTheme = window.toggleTheme;
+// Brand glyphs (filled) — Instagram, X, YouTube, WhatsApp.
+const GLYPH = {
+  instagram: '<path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/>',
+  x: '<path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24H16.17l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25H8.08l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>',
+  youtube: '<path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.87.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/>',
+  whatsapp: '<path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/>'
+};
+const glyph = (name, size = 18) =>
+  `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="currentColor" aria-hidden="true" focusable="false">${GLYPH[name]}</svg>`;
+
+const EXT = 'target="_blank" rel="noopener noreferrer"';
+const D = DOCTOR;
+const C = DOCTOR.contact;
+const role = id => D.professional.roles.find(r => r.id === id);
+const qual = id => D.professional.qualifications.find(q => q.id === id);
+const short = r => (currentLang === 'ar' ? (r.shortAr || r.ar) : (r.shortEn || r.en));
+const STAT = D.credibility.statistics.find(s => s.id === 'cases-15000');
 
 function getWhatsAppUrl(msg) {
-  return whatsappUrl(msg || (currentLang === 'ar'
-    ? 'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن بن عبدالله البري في مستشفى مغربي المدينة المنورة.'
-    : 'Hello, I would like to inquire about booking a consultation with Dr. Maan bin Abdullah Al Barry at Magrabi Madinah.'));
+  return whatsappUrl(msg || tr(
+    'مرحباً، أود الاستفسار عن حجز موعد استشارة مع د. معن بن عبدالله البري في مستشفى مغربي المدينة المنورة.',
+    'Hello, I would like to inquire about booking a consultation with Dr. Maan bin Abdullah Al Barry at Magrabi Madinah.'));
+}
+
+// Shared section head: index numeral + eyebrow + title + optional lede.
+const sectionHead = (idx, eyebrow, title, lede = '', cls = '') => `
+      <header class="section-head ${cls} fade-in">
+        <p class="eyebrow"><span class="eyebrow-num" aria-hidden="true">${idx}</span><span>${eyebrow}</span></p>
+        <h2>${title}</h2>
+        ${lede ? `<p class="lede">${lede}</p>` : ''}
+      </header>`;
+
+// --- NAVIGATION MODEL ---
+const NAV = [
+  ['profile', 'عن الدكتور', 'About'],
+  ['specialties', 'التخصصات', 'Expertise'],
+  ['cataracts', 'الماء الأبيض والعدسات', 'Cataract & lenses'],
+  ['simulator', 'محاكي الرؤية', 'Vision simulator'],
+  ['cataract-3d', 'الجراحة ثلاثية الأبعاد', '3D surgery'],
+  ['education', 'المكتبة الطبية', 'Library'],
+  ['clinic', 'العيادة والحجز', 'Clinic & booking']
+];
+const DRAWER_NAV = [
+  ['home', 'الرئيسية', 'Home'],
+  ...NAV.slice(0, 3),
+  ['questionnaire', 'استبيان نمط الحياة البصري', 'Lifestyle questionnaire'],
+  ...NAV.slice(3),
+  ['faq', 'الأسئلة الشائعة', 'Questions']
+];
+const NAV_SECTION_IDS = ['home', ...NAV.map(n => n[0])];
+
+let currentActiveNavId = 'home';
+let isClickScrolling = false;
+let clickScrollTimer = null;
+
+function renderThemeToggle(id) {
+  const isDark = resolvedTheme() === 'dark';
+  const label = isDark ? tr('الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري', 'Dark mode on. Switch to light mode')
+    : tr('الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي', 'Light mode on. Switch to dark mode');
+  return `<button id="${id}" type="button" class="icon-btn theme-toggle" onclick="toggleTheme()" role="switch" aria-checked="${isDark}" aria-label="${label}" title="${label}">${icon('sun', 20)}${icon('moon', 20)}</button>`;
+}
+
+function renderLangToggle(extra = '') {
+  return `<button type="button" class="icon-btn lang-switch ${extra}" onclick="toggleLang()" aria-label="${tr('Switch to English', 'التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
+          <span lang="${tr('en', 'ar')}">${tr('EN', 'ع')}</span>
+        </button>`;
 }
 
 // --- HEADER ---
 function renderHeader() {
+  const link = ([id, ar, en], i, drawer) => `<a href="#${id}" onclick="scrollToSection('${id}');${drawer ? 'closeMobileMenu();' : ''}return false;" class="${currentActiveNavId === id ? 'active' : ''}">${drawer ? `<span class="drawer-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>` : ''}<span>${tr(ar, en)}</span></a>`;
   return `
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      <a href="#home" class="header-logo" onclick="scrollToSection('home');return false;">
-        <div class="logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"></path>
-            <circle cx="12" cy="12" r="3.2" fill="currentColor" fill-opacity="0.25"></circle>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <strong class="${currentLang === 'ar' ? 'font-doctor-highlight' : ''}">${currentLang === 'ar' ? 'د. معن البري' : 'Dr. Maan Albarry'}</strong>
-          <small>${currentLang === 'ar' ? 'استشاري جراحة القرنية والماء الأبيض' : 'Consultant Cornea & Cataract Surgeon'}</small>
-        </div>
+      <a href="#home" class="wordmark" onclick="scrollToSection('home');return false;" aria-label="${L(D.identity.shortName)}">
+        <span class="wordmark-name">${L(D.identity.shortName)}</span>
+        <span class="wordmark-sub">${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span>
       </a>
 
-      <nav class="header-nav">
-        <div class="nav-links">
-          <a href="#home" onclick="scrollToSection('home');return false;" class="${currentActiveNavId === 'home' ? 'active' : ''}">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
-          <a href="#profile" onclick="scrollToSection('profile');return false;" class="${currentActiveNavId === 'profile' ? 'active' : ''}">${currentLang === 'ar' ? 'عن الدكتور' : 'Biography'}</a>
-          <a href="#conferences" onclick="scrollToSection('conferences');return false;" class="${currentActiveNavId === 'conferences' ? 'active' : ''}">
-            <span class="nav-text-full">${currentLang === 'ar' ? 'المشاركات العلمية والمؤتمرات الدولية' : 'Scientific Conferences'}</span>
-            <span class="nav-text-short">${currentLang === 'ar' ? 'المشاركات العلمية' : 'Conferences'}</span>
-          </a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;" class="${currentActiveNavId === 'specialties' ? 'active' : ''}">${currentLang === 'ar' ? 'التخصصات' : 'Specialties'}</a>
-          <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="${currentActiveNavId === 'simulator' ? 'active' : ''}">
-            <span class="nav-text-full">${currentLang === 'ar' ? 'محاكي الرؤية' : 'Simulator'}</span>
-            <span class="nav-text-short">${currentLang === 'ar' ? 'المحاكي' : 'Sim'}</span>
-          </a>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;" class="${currentActiveNavId === 'cataracts' ? 'active' : ''}">${currentLang === 'ar' ? 'دليل العدسات' : 'IOL Guide'}</a>
-          <a href="#education" onclick="scrollToSection('education');return false;" class="${currentActiveNavId === 'education' ? 'active' : ''}">
-            <span class="nav-text-full">${currentLang === 'ar' ? 'المكتبة الطبية' : 'Education'}</span>
-            <span class="nav-text-short">${currentLang === 'ar' ? 'المكتبة' : 'Library'}</span>
-          </a>
-          <a href="#clinic" onclick="scrollToSection('clinic');return false;" class="${currentActiveNavId === 'clinic' ? 'active' : ''}">
-            <span class="nav-text-full">${currentLang === 'ar' ? 'العيادة والحجز' : 'Clinic'}</span>
-            <span class="nav-text-short">${currentLang === 'ar' ? 'العيادة' : 'Clinic'}</span>
-          </a>
-        </div>
+      <nav class="header-nav" aria-label="${tr('التنقل الرئيسي', 'Main navigation')}">
+        <div class="nav-links">${NAV.map((n, i) => link(n, i, false)).join('')}</div>
       </nav>
 
       <div class="header-actions">
+        ${renderLangToggle()}
         ${renderThemeToggle('theme-toggle-btn')}
-        <button class="lang-switch" onclick="toggleLang()" aria-label="Switch Language" title="${currentLang === 'ar' ? 'Switch to English' : 'التحويل إلى العربية'}">
-          ${currentLang === 'ar' ? 'English' : 'عربي'}
-        </button>
-        <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-header-book">
-          ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Appointment'}
+        <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-sm btn-header-book" data-cta="book">
+          <span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>
         </a>
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="${currentLang === 'ar' ? 'القائمة' : 'Menu'}" aria-expanded="false" aria-controls="mobile-nav">☰</button>
+        <button type="button" class="icon-btn mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="${tr('القائمة', 'Menu')}" aria-expanded="false" aria-controls="mobile-nav">${icon('menu', 22)}</button>
       </div>
     </div>
 
-    <!-- Mobile Drawer -->
-    <nav class="mobile-nav" id="mobile-nav">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 14px;border-bottom:1px solid var(--border-subtle);margin-bottom:6px;">
-        <span style="font-size:0.95rem;font-weight:700;color:var(--text-primary);">${currentLang === 'ar' ? 'مظهر الموقع' : 'Appearance'}</span>
-        ${renderThemeToggle('theme-toggle-btn-mobile')}
+    <nav class="mobile-nav" id="mobile-nav" aria-label="${tr('قائمة الموقع', 'Site menu')}">
+      <div class="drawer-head">
+        <span class="drawer-title">${tr('المحتويات', 'Contents')}</span>
+        <button type="button" class="icon-btn" onclick="closeMobileMenu();document.querySelector('.mobile-menu-btn').focus();" aria-label="${tr('إغلاق القائمة', 'Close menu')}">${icon('close', 22)}</button>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-subtle);margin-bottom:10px;">
-        <span style="font-size:0.95rem;font-weight:700;color:var(--text-primary);">${currentLang === 'ar' ? 'منصات الدكتور:' : 'Channels:'}</span>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="header-social-link instagram" aria-label="Instagram" title="Instagram">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="header-social-link twitter" aria-label="X (Twitter)" title="X (Twitter)">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="header-social-link youtube" aria-label="YouTube" title="YouTube">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </a>
+      <div class="drawer-links">${DRAWER_NAV.map((n, i) => link(n, i, true)).join('')}</div>
+      <div class="drawer-foot">
+        <a href="${D.clinic.mapUrl}" ${EXT} class="drawer-map">${icon('pin', 18)}<span>${tr('موقع المستشفى على خرائط جوجل', 'Hospital on Google Maps')}</span></a>
+        <div class="drawer-row">
+          <span>${tr('المظهر', 'Appearance')}</span>
+          ${renderThemeToggle('theme-toggle-btn-mobile')}
+        </div>
+        <div class="drawer-row">
+          <span>${tr('قنوات الدكتور', 'Channels')}</span>
+          <span class="social-row">
+            <a href="${D.social.instagram}" ${EXT} class="icon-btn" aria-label="Instagram">${glyph('instagram')}</a>
+            <a href="${D.social.twitter}" ${EXT} class="icon-btn" aria-label="X (Twitter)">${glyph('x', 16)}</a>
+            <a href="${D.social.youtube}" ${EXT} class="icon-btn" aria-label="YouTube">${glyph('youtube')}</a>
+          </span>
         </div>
       </div>
-      <a href="#home" onclick="scrollToSection('home');closeMobileMenu();return false;" class="${currentActiveNavId === 'home' ? 'active' : ''}">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
-      <a href="#profile" onclick="scrollToSection('profile');closeMobileMenu();return false;" class="${currentActiveNavId === 'profile' ? 'active' : ''}">${currentLang === 'ar' ? 'عن الدكتور والمسيرة' : 'Biography'}</a>
-      <a href="#conferences" onclick="scrollToSection('conferences');closeMobileMenu();return false;" class="${currentActiveNavId === 'conferences' ? 'active' : ''}">${currentLang === 'ar' ? 'المشاركات العلمية والمؤتمرات الدولية' : 'Scientific Conferences'}</a>
-      <a href="#specialties" onclick="scrollToSection('specialties');closeMobileMenu();return false;" class="${currentActiveNavId === 'specialties' ? 'active' : ''}">${currentLang === 'ar' ? 'التخصصات والخدمات' : 'Specialties'}</a>
-      <a href="#simulator" onclick="scrollToSection('simulator');closeMobileMenu();return false;" class="${currentActiveNavId === 'simulator' ? 'active' : ''}">${currentLang === 'ar' ? 'محاكي الرؤية التفاعلي' : 'Vision Simulator'}</a>
-      <a href="#cataracts" onclick="scrollToSection('cataracts');closeMobileMenu();return false;" class="${currentActiveNavId === 'cataracts' ? 'active' : ''}">${currentLang === 'ar' ? 'دليل العدسات (IOLs)' : 'IOL Guide'}</a>
-      <a href="#questionnaire" onclick="scrollToSection('questionnaire');closeMobileMenu();return false;" class="${currentActiveNavId === 'questionnaire' ? 'active' : ''}">${currentLang === 'ar' ? 'استبيان نمط الحياة البصري' : 'Questionnaire'}</a>
-      <a href="#education" onclick="scrollToSection('education');closeMobileMenu();return false;" class="${currentActiveNavId === 'education' ? 'active' : ''}">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف' : 'Medical Library'}</a>
-      <a href="#clinic" onclick="scrollToSection('clinic');closeMobileMenu();return false;" class="${currentActiveNavId === 'clinic' ? 'active' : ''}">${currentLang === 'ar' ? 'العيادة والحجز والموقع' : 'Clinic & Booking'}</a>
-      <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'موقع المستشفى (خرائط جوجل)' : 'Hospital Google Maps'}</a>
     </nav>
   </header>`;
 }
 
-// --- HERO SECTION ---
+// --- HERO ---
 function renderHero() {
-  const isAr = (currentLang === 'ar');
+  const chief = role('magrabi-chief');
+  const years = yearsOfExperience();
+  const portrait = (cls, eager) => `<img src="./images/dr-maan-redsea.jpg" width="682" height="1024" alt="${cls === 'hero-cameo-img' ? '' : L(D.identity.name)}" class="${cls}" ${eager ? 'loading="eager" fetchpriority="high"' : 'loading="eager"'} decoding="async">`;
   return `
   <section class="hero" id="home">
-    <!-- Subtle Background Shapes & Optical Accents -->
-    <div class="bg-shape-decor hero-bg-decor" aria-hidden="true">
-      <div class="glow-orb glow-orb-gold" style="width:520px;height:520px;top:-120px;right:-100px;"></div>
-      <div class="glow-orb glow-orb-burgundy" style="width:440px;height:440px;bottom:-60px;left:-80px;"></div>
-      <div class="optical-ring" style="width:680px;height:680px;top:-200px;right:-140px;"></div>
-      <div class="optical-ring optical-ring-dashed" style="width:500px;height:500px;top:-110px;right:-50px;"></div>
-      <div class="optical-ring" style="width:340px;height:340px;top:-30px;right:30px;border-color:rgba(197,164,109,0.12);"></div>
-      <span class="optical-plus" style="top:18%;right:14%;">+</span>
-      <span class="optical-plus" style="top:62%;right:8%;">+</span>
-      <span class="optical-plus" style="top:28%;left:12%;">+</span>
-      <span class="optical-plus" style="bottom:16%;left:20%;">+</span>
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow hero-eyebrow"><span>${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span><span class="dot" aria-hidden="true"></span><span>${tr('المدينة المنورة', 'Madinah')}</span></p>
+        <div class="hero-id">
+          <h1 class="hero-title">${L(D.identity.name)}</h1>
+          <div class="hero-cameo" aria-hidden="true">${portrait('hero-cameo-img', false)}</div>
+        </div>
+        <p class="hero-specialty-subtitle">${L(D.identity.title)}</p>
+        <p class="hero-role"><span class="hero-role-label">${tr('المنصب الحالي', 'Current role')}</span><span class="hero-role-text">${short(chief)}</span></p>
+
+        <div class="hero-cta">
+          <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" id="hero-primary-cta" data-cta="book">
+            <span class="btn-label">${tr('احجز موعد كشف أو استشارة', 'Book a consultation')}</span>${icon('arrow', 18)}
+          </a>
+          <a href="tel:${C.clinicDirect.tel}" class="btn btn-quiet btn-lg" id="hero-call-cta" data-cta="call">
+            ${icon('phone', 18)}<span class="btn-label">${tr('عيادة الدكتور', 'Clinic line')} <bdi dir="ltr">${C.clinicDirect.display}</bdi></span>
+          </a>
+        </div>
+        <p class="hero-aside">${tr('الرقم نفسه متاح على', 'The same number is on')} <a href="${getWhatsAppUrl()}" ${EXT} class="text-link" data-cta="whatsapp">${tr('واتساب', 'WhatsApp')}</a></p>
+      </div>
+
+      <figure class="hero-portrait">
+        <div class="hero-portrait-frame"><div class="hero-portrait-clip">${portrait('hero-portrait-img', true)}</div></div>
+        <figcaption>${tr('في مؤتمر البحر الأحمر الدولي لطب العيون', 'At the Red Sea International Ophthalmology Conference')}</figcaption>
+      </figure>
     </div>
 
     <div class="container">
-      <div class="hero-grid">
-        <div class="hero-content fade-in">
-          <div class="hero-badge">
-            <span class="badge-seal" aria-hidden="true">★</span>
-            <span>${isAr ? `خبرة سريرية وأكاديمية وجراحية ممتدة منذ عام <bdi>${DOCTOR.professional.experienceSince}</bdi> · المدينة المنورة` : `Clinical, academic & surgical experience since <bdi>${DOCTOR.professional.experienceSince}</bdi> · Madinah, Saudi Arabia`}</span>
-          </div>
-
-          <h1 class="hero-title ${isAr ? 'font-doctor-highlight' : ''}">
-            ${L(DOCTOR.identity.name)}
-          </h1>
-
-          <div class="hero-specialty-subtitle">
-            ${L(DOCTOR.identity.title)}
-          </div>
-
-          <div class="hero-latin-subtitle">
-            ${isAr ? `${DOCTOR.identity.title.en} · ${DOCTOR.professional.qualifications[0].short}` : `Consultant at ${DOCTOR.clinic.name.en}`}
-          </div>
-
-          <!-- Prominent Doctor Showcase for Mobile & Tablet (immediately visible at the beginning!) -->
-          <div class="hero-image-mobile">
-            <div class="hero-image-wrap">
-              <img src="./images/uploaded_1.png" alt="${L(DOCTOR.identity.name)}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
-              <div class="image-floating-badge">
-                <div class="badge-icon-box" aria-hidden="true">✓</div>
-                <div class="badge-text-box">
-                  <small>${isAr ? 'زميل كلية الجراحين الملكية' : 'Fellow of the Royal College of Surgeons'}</small>
-                  <strong>${DOCTOR.professional.qualifications[0].short}</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="hero-quote-card">
-            <div class="quote-mark">“</div>
-            <p class="quote-text">
-              ${isAr
-                ? 'طب العيون أمانة علمية وإنسانية دقيقة؛ هدفنا الأول هو الحفاظ على نعمة الإبصار وتقديم العلاج الأنسب لكل عين وفق أعلى المعايير الطبية العالمية دون إفراط أو تسويق غير مبرر.'
-                : 'Ophthalmology is a sacred clinical trust. Our core objective is preserving sight and delivering personalized, evidence-based care adhering to the highest international medical standards.'}
-            </p>
-          </div>
-
-          <ul class="hero-facts" aria-label="${isAr ? 'حقائق مهنية' : 'Professional facts'}">
-            <li class="hero-fact">
-              <strong class="hero-fact-value"><bdi>${DOCTOR.professional.experienceSince}</bdi></strong>
-              <span class="hero-fact-label">${isAr ? 'بداية الممارسة السريرية والجراحية' : 'In clinical & surgical practice since'}</span>
-            </li>
-            <li class="hero-fact">
-              <strong class="hero-fact-value"><bdi>FRCS</bdi></strong>
-              <span class="hero-fact-label">${isAr ? 'زميل كلية الجراحين الملكية&nbsp;– بريطانيا' : 'Royal College of Surgeons, UK'}</span>
-            </li>
-            <li class="hero-fact">
-              <strong class="hero-fact-value">${isAr ? 'مغربي' : 'Magrabi'}</strong>
-              <span class="hero-fact-label">${isAr ? 'للعيون والأذن&nbsp;– المدينة المنورة' : 'Eye & ENT Hospital&nbsp;– Madinah'}</span>
-            </li>
-          </ul>
-
-          <div class="hero-cta">
-            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="hero-primary-cta" data-cta="book">
-              <span class="btn-fill-effect" aria-hidden="true"></span>
-              <span class="btn-label">${isAr ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <svg class="btn-arrow-svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </span>
-            </a>
-            <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="btn btn-outline btn-lg btn-gradient-shimmer" id="hero-secondary-cta">
-              <span class="btn-shimmer-border" aria-hidden="true"></span>
-              <span class="btn-shimmer-body">
-                <span class="btn-label">${isAr ? 'جرب محاكي الرؤية التفاعلي' : 'Try Vision Simulator'}</span>
-                <span class="btn-sparkle" aria-hidden="true">✦</span>
-              </span>
-            </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm hero-cta-whatsapp" data-cta="whatsapp">
-              <span>${isAr ? 'تنسيق عبر واتساب' : 'WhatsApp'}</span>
-            </a>
-          </div>
-
-          <div class="hero-social-row">
-            <span class="hero-social-title">${isAr ? 'قنوات التواصل والتثقيف الطبي للدكتور معن:' : 'Official Medical & Social Channels:'}</span>
-            <div class="hero-social-list">
-              <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                <span>Instagram</span>
-              </a>
-              <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                <span>X (Twitter)</span>
-              </a>
-              <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                <span>YouTube</span>
-              </a>
-              <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="social-chip whatsapp" title="WhatsApp - Dr. Maan">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                <span>WhatsApp</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-image hero-desktop-doctor-showcase fade-in">
-          <div class="hero-image-wrap">
-            <img src="./images/uploaded_1.png" alt="${L(DOCTOR.identity.name)}" class="doctor-photo" loading="eager" onerror="this.src='./images/dr-maan-portrait.png'">
-            <div class="image-floating-badge">
-              <div class="badge-icon-box" aria-hidden="true">✓</div>
-              <div class="badge-text-box">
-                <small>${isAr ? 'زميل كلية الجراحين الملكية' : 'Fellow of the Royal College of Surgeons'}</small>
-                <strong>${DOCTOR.professional.qualifications[0].short}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ul class="hero-facts" aria-label="${tr('حقائق مهنية', 'Professional facts')}">
+        <li class="hero-fact">
+          <strong class="hero-fact-value"><bdi>${D.professional.experienceSince}</bdi></strong>
+          <span class="hero-fact-label">${tr('بداية الممارسة السريرية والجراحية', 'In clinical & surgical practice since')}<span class="hero-fact-sub">${tr(`<bdi>${years}</bdi> عاماً من الخبرة`, `<bdi>${years}</bdi> years of experience`)}</span></span>
+        </li>
+        ${STAT ? `<li class="hero-fact">
+          <strong class="hero-fact-value"><bdi dir="ltr">${STAT.value}</bdi></strong>
+          <span class="hero-fact-label">${L(STAT.label)}</span>
+        </li>` : ''}
+        <li class="hero-fact">
+          <strong class="hero-fact-value"><bdi dir="ltr">FRCS</bdi></strong>
+          <span class="hero-fact-label">${tr('زميل كلية الجراحين الملكية – بريطانيا', 'Royal College of Surgeons, UK')}</span>
+        </li>
+      </ul>
     </div>
   </section>`;
 }
 
-// --- ACADEMIC QUALIFICATIONS & FELLOWSHIPS ---
+// --- CREDENTIALS LEDGER (replaces the card-per-credential grid) ---
 function renderQualifications() {
-  const isAr = (currentLang === 'ar');
-  const cards = [
+  const groups = [
     {
-      icon: '🏛️',
-      titleAr: 'زمالة كلية الجراحين الملكية',
-      titleEn: 'Royal College of Surgeons Fellowship',
-      descAr: 'زميل كلية الجراحين الملكية في بريطانيا (FRCS)، وعضو الجمعية السعودية لطب وجراحة العيون والجمعية الأمريكية لطب وجراحة العيون.',
-      descEn: 'Fellow of the Royal College of Surgeons, UK (FRCS); member of the Saudi Ophthalmological Society and the American Academy of Ophthalmology.',
-      tag: 'FRCS (UK)'
+      title: tr('المؤهلات', 'Qualifications'),
+      rows: D.professional.qualifications.map(q => [q.short, L(q)])
     },
     {
-      icon: '🔬',
-      titleAr: 'جراحة وأمراض القرنية',
-      titleEn: 'Cornea & Refractive Surgery',
-      descAr: 'يعمل ضمن وحدة جراحة القرنية وتصحيح النظر: تقييم أمراض القرنية والقرنية المخروطية وتثبيت القرنية (CXL) وملاءمة عمليات تصحيح الإبصار.',
-      descEn: 'Works within the cornea & refractive surgery unit: corneal disease, keratoconus and cross-linking (CXL), and refractive surgery candidacy.',
-      tag: 'Cornea & Refractive'
+      title: tr('الصفة الأكاديمية', 'Academic'),
+      rows: [
+        [tr('حالياً', 'Rank'), L(D.professional.academicRank)],
+        [tr('سابقاً', 'Former'), short(role('taibah-chair'))]
+      ]
     },
     {
-      icon: '👁️',
-      titleAr: 'جراحة الماء الأبيض والعدسات المتقدمة',
-      titleEn: 'Cataract Surgery & Lens Implantation',
-      descAr: 'إجراء عمليات إزالة الساد عبر تقنية الفاكو الميكروسكوبية، وزراعة العدسات داخل العين: أحادية البؤرة، ممتدة المدى (EDOF)، وثلاثية البؤرة.',
-      descEn: 'Phacoemulsification micro-incision cataract surgery and customized implantation of monofocal, EDOF, and trifocal IOLs.',
-      tag: 'Cataract & IOLs'
+      title: tr('القيادة', 'Leadership'),
+      rows: [
+        [tr('حالياً', 'Current'), short(role('magrabi-chief')), true],
+        [tr('سابقاً', 'Former'), short(role('sscc-president'))]
+      ]
     },
     {
-      icon: '⚕️',
-      titleAr: 'المناصب القيادية والأكاديمية',
-      titleEn: 'Leadership & Academic Appointments',
-      descAr: DOCTOR.professional.roles.slice(0, 3).map(r => r.shortAr || r.ar).join('، ') + '.',
-      descEn: DOCTOR.professional.roles.slice(0, 3).map(r => r.shortEn || r.en).join('; ') + '.',
-      tag: 'Clinical Leadership'
+      title: tr('العضويات', 'Memberships'),
+      rows: D.professional.memberships.map(m => [tr('عضو', 'Member'), L(m)])
     }
   ];
-
   return `
-  <section class="section" id="qualifications" style="padding-top:var(--space-12);padding-bottom:var(--space-12);">
+  <section class="section section-ledger" id="qualifications">
     <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${isAr ? 'الاعتمادات والتأهيل الأكاديمي' : 'Credentials & Academic Accreditation'}</div>
-        <h2>${isAr ? 'المؤهلات ومجالات التركيز السريري' : 'Qualifications & Clinical Focus'}</h2>
-        <p>${isAr ? 'المؤهلات كما وردت في ملف مغربي الصحية، والمناصب كما زوّدنا بها مكتب الطبيب.' : 'Qualifications as listed by Magrabi Health; roles as provided by the doctor’s office.'}</p>
-      </div>
-
-      <div class="qualifications-grid swipe-row fade-in" role="region" tabindex="0" aria-label="${isAr ? 'المؤهلات (اسحب لرؤية المزيد)' : 'Qualifications (swipe for more)'}">
-        ${cards.map(c => `
-          <div class="qual-card">
-            <div class="qual-icon-box" aria-hidden="true">${c.icon}</div>
-            <h3>${isAr ? c.titleAr : c.titleEn}</h3>
-            <p>${isAr ? c.descAr : c.descEn}</p>
-            <div>
-              <span class="qual-tag">${c.tag}</span>
-            </div>
-          </div>
-        `).join('')}
+      ${sectionHead('01', tr('المؤهلات والمناصب', 'Credentials'), tr('سيرة مهنية تُقرأ في سطور', 'Credentials at a glance'),
+        tr('مؤهلات ومناصب منشورة لدى مغربي الصحية وجامعة طيبة، أو أكدها د. معن البري شخصياً.', 'Qualifications and roles published by Magrabi Health and Taibah University, or confirmed by Dr. Maan Al Barry himself.'), 'section-head-split')}
+      <div class="ledger qualifications-grid fade-in">
+        ${groups.map(g => `
+        <div class="ledger-group">
+          <h3 class="ledger-title">${g.title}</h3>
+          <ul class="ledger-list">
+            ${g.rows.map(([k, v, em]) => `<li class="ledger-row${em ? ' is-emphasis' : ''}"><span class="ledger-key">${k}</span><span class="ledger-val">${v}</span></li>`).join('')}
+          </ul>
+        </div>`).join('')}
       </div>
     </div>
   </section>`;
 }
 
-// --- PROFILE & SCIENTIFIC PARTICIPATION ---
+// --- BIOGRAPHY, APPOINTMENTS & CONFERENCES ---
 function renderProfile() {
-  const roles = DOCTOR.professional.roles.map(r => r[currentLang]);
-  const isAr = (currentLang === 'ar');
-
+  const isAr = currentLang === 'ar';
   return `
-  <section class="section section-alt" id="profile">
-    <!-- Subtle Background Shapes & Optical Accents -->
-    <div class="bg-shape-decor profile-bg-decor" aria-hidden="true">
-      <div class="glow-orb glow-orb-gold" style="width:480px;height:480px;top:15%;left:-120px;"></div>
-      <div class="glow-orb glow-orb-burgundy" style="width:400px;height:400px;bottom:10%;right:-90px;"></div>
-      <div class="optical-curve-arc" style="width:560px;height:560px;bottom:-140px;right:-120px;"></div>
-      <div class="optical-ring optical-ring-dashed" style="width:380px;height:380px;top:8%;left:4%;"></div>
-      <span class="optical-plus" style="top:22%;left:16%;">+</span>
-      <span class="optical-plus" style="bottom:22%;right:14%;">+</span>
-    </div>
-
+  <section class="section section-sand" id="profile">
     <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label-wrap">
-          <span class="section-label">${isAr ? 'السيرة المهنية والأكاديمية' : 'Professional Profile'}</span>
-        </div>
-        <h2 class="${isAr ? 'font-doctor-highlight' : ''}">${L(DOCTOR.identity.name)}</h2>
-        <p style="font-weight:600;color:var(--secondary-burgundy);">${L(DOCTOR.identity.title)}</p>
-      </div>
-
-      <div class="profile-grid fade-in">
-        <div class="profile-media">
-          <div class="profile-media-wrap">
-            <img src="./images/uploaded_2.jpg" alt="${L(DOCTOR.identity.name)}" class="profile-media-img" loading="lazy" onerror="this.src='./images/dr-maan-redsea.jpg'">
-            <div class="profile-media-caption">
-              <span>${isAr ? 'مؤتمر البحر الأحمر الدولي لطب وجراحة العيون — الجمعية السعودية لطب العيون' : 'Red Sea International Ophthalmology Conference — SOS'}</span>
-            </div>
-          </div>
-          <div class="credentials-chips">
-            <span class="chip chip-gold">${L(DOCTOR.professional.qualifications[0])}</span>
-            ${DOCTOR.professional.roles.filter(r => r.current).map(r => `<span class="chip">${isAr ? (r.shortAr || r.ar) : (r.shortEn || r.en)}</span>`).join('')}
-            <span class="chip">${isAr ? `خبرة ممتدة منذ <bdi>${DOCTOR.professional.experienceSince}</bdi>` : `Experience since <bdi>${DOCTOR.professional.experienceSince}</bdi>`}</span>
-          </div>
-        </div>
-
-        <div class="profile-text">
-          <p style="font-size:1.05rem;line-height:1.9;color:var(--text-primary);margin-bottom:var(--space-4);">
-            ${isAr
-              ? 'د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، بخبرة سريرية وأكاديمية وجراحية ممتدة منذ عام 1998. يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة متناهية في فحص عدسة العين، تشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
-              : 'Dr. Maan bin Abdullah Al Barry is a Consultant Ophthalmologist practicing at Magrabi Health Eye & ENT Hospital in Madinah, with clinical and surgical experience since 1998. He works within the cataract unit and the cornea & refractive surgery unit, helping patients whose care depends on careful lens and corneal assessment.'}
-          </p>
-
-
-          <h3 style="margin-bottom:var(--space-4);font-size:1.15rem;color:var(--secondary-burgundy);">
-            ${isAr ? 'المسيرة القيادية والمهنية' : 'Leadership & Scientific Appointments'}
-          </h3>
-          <div class="timeline">
-            ${roles.map(r => `
-              <div class="timeline-item">
-                <h4>${r}</h4>
-              </div>
-            `).join('')}
-          </div>
-
-          <div class="profile-social-card">
-            <span class="profile-social-title">${isAr ? 'قنوات التواصل والمحتوى العلمي الموثوق للدكتور معن:' : 'Official Scientific & Media Channels:'}</span>
-            <div class="profile-social-list">
-              <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-chip instagram" title="Instagram - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                <span>Instagram</span>
-              </a>
-              <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-chip twitter" title="X (Twitter) - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                <span>X (Twitter)</span>
-              </a>
-              <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip youtube" title="YouTube - Dr. Maan Albarry">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                <span>YouTube</span>
-              </a>
-              <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="social-chip whatsapp" title="WhatsApp - Dr. Maan">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                <span>WhatsApp</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Authentic Approved Clinical Technologies & Platforms -->
-      <div class="activity-strip-card fade-in">
-        <div class="activity-strip-header">
-          <div>
-            <strong style="font-size:1.12rem;display:block;color:var(--text-primary);">${isAr ? 'التقنيات والتجهيزات الجراحية والتشخيصية' : 'Clinical & Surgical Diagnostic Technologies'}</strong>
-            <small style="color:var(--text-muted);">${isAr ? 'تجهيزات تشخيصية وجراحية متوفرة في مستشفى مغربي المدينة المنورة' : 'Diagnostic and surgical platforms available at Magrabi Health Madinah'}</small>
-          </div>
-        </div>
-        <div class="tech-grid swipe-row" role="region" tabindex="0" aria-label="${isAr ? 'التقنيات (اسحب لرؤية المزيد)' : 'Technologies (swipe for more)'}">
-          <div class="tech-card">
-            <div class="tech-icon-box">🔬</div>
-            <div>
-              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'تصوير القرنية الطبقي (Pentacam HR)' : 'Pentacam HR Corneal Tomography'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'قياس تضاريس وسماكة القرنية بدقة ميكرونية لتشخيص القرنية المخروطية المبكرة وتحديد ملاءمة عمليات تصحيح النظر.' : 'High-resolution Scheimpflug tomography for early keratoconus detection and customized refractive surgery candidacy.'}</p>
-            </div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-icon-box">👁️</div>
-            <div>
-              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'جراحة الفاكو الدقيقة (Phacoemulsification)' : 'Micro-Incision Phacoemulsification'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تفتيت الساد بالموجات فوق الصوتية وزراعة العدسات المطوية عبر شق جراحي صغير، وغالباً تحت تخدير موضعي بالقطرات ودون غرز جراحية.' : 'Small-incision cataract removal and foldable intraocular lens implantation, usually under topical anaesthesia and without stitches.'}</p>
-            </div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-icon-box">📐</div>
-            <div>
-              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'القياسات البصرية الحيوية (Optical Biometry)' : 'Optical Biometry'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'حساب قوة العدسة المزروعة بالقياس البصري ومعادلات حسابية حديثة.' : 'Optical biometry with modern lens-power formulas.'}</p>
-            </div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-icon-box">🛡️</div>
-            <div>
-              <h4 style="font-size:0.98rem;margin-bottom:4px;color:var(--text-primary);">${isAr ? 'تثبيت القرنية الضوئي (Corneal Cross-Linking)' : 'Corneal Cross-Linking (CXL)'}</h4>
-              <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.6;margin:0;">${isAr ? 'تقنية كيميائية ضوئية بالريبوفلافين والأشعة فوق البنفسجية تهدف إلى إبطاء أو إيقاف تطور القرنية المخروطية.' : 'Riboflavin and UVA photochemical treatment that aims to slow or stop keratoconus progression.'}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Scientific participation & Conferences -->
-      <div class="conferences-section" id="conferences" style="scroll-margin-top: 88px; margin-top: var(--space-16);">
-        <div class="sci-head fade-in">
-          <div class="section-label" style="display:inline-block;margin-bottom:8px;">${currentLang === 'ar' ? 'المؤتمرات والأكاديميا' : 'Academic & Scientific Conferences'}</div>
-          <h3 style="font-size:1.65rem;color:var(--text-primary);margin-bottom:6px;">${currentLang === 'ar' ? 'المشاركات العلمية والمؤتمرات الدولية' : 'Scientific Participation & Conferences'}</h3>
-          <p style="color:var(--text-secondary);font-size:0.95rem;">${currentLang === 'ar' ? 'حضور وتمثيل علمي مستمر في مؤتمرات طب وجراحة العيون الإقليمية والدولية' : 'Representing ophthalmology at national and international meetings'}</p>
-        </div>
-        <div class="sci-grid fade-in">
-          <figure class="sci-fig">
-            <img src="./images/dr-maan-redsea.jpg" alt="${currentLang === 'ar' ? 'د. معن البري في مؤتمر البحر الأحمر لطب العيون 2024' : 'Dr. Maan Al Barry at Saudi Ophthalmology 2024, The Red Sea'}" style="object-position:50% 22%" loading="lazy">
-            <figcaption><strong>${currentLang === 'ar' ? 'مؤتمر البحر الأحمر لطب وجراحة العيون 2024' : 'Saudi Ophthalmology 2024 — The Red Sea'}</strong><span>${currentLang === 'ar' ? 'عضو المجلس العلمي للمؤتمر' : 'Scientific Council Member'}</span></figcaption>
+      ${sectionHead('02', tr('السيرة المهنية', 'Biography'), tr('بين العيادة وغرفة العمليات وقاعة المحاضرات', 'Between the clinic, the operating theatre and the lecture hall'))}
+      <div class="bio-grid">
+        <aside class="bio-aside fade-in">
+          <figure class="bio-portrait">
+            <img src="./images/dr-maan-portrait.png" width="295" height="225" alt="${L(D.identity.name)}" loading="lazy" decoding="async">
           </figure>
-          <figure class="sci-fig">
-            <img src="./images/dr-maan-faculty.jpg" alt="${currentLang === 'ar' ? 'مع نخبة من أطباء العيون في الجلسات العلمية' : 'With fellow faculty at the scientific sessions'}" style="object-position:50% 100%" loading="lazy">
-            <figcaption><strong>${currentLang === 'ar' ? 'الجلسات العلمية الدولية' : 'International scientific sessions'}</strong><span>${currentLang === 'ar' ? 'مع نخبة من أطباء وجراحي العيون' : 'With ophthalmic surgeons and faculty'}</span></figcaption>
-          </figure>
+          <p class="bio-aside-name">${L(D.identity.name)}</p>
+          <p class="bio-aside-title">${L(D.identity.specialty)}</p>
+          <div class="social-row">
+            <a href="${D.social.instagram}" ${EXT} class="icon-btn" aria-label="Instagram">${glyph('instagram')}</a>
+            <a href="${D.social.twitter}" ${EXT} class="icon-btn" aria-label="X (Twitter)">${glyph('x', 16)}</a>
+            <a href="${D.social.youtube}" ${EXT} class="icon-btn" aria-label="YouTube">${glyph('youtube')}</a>
+          </div>
+        </aside>
+
+        <div class="bio-main fade-in">
+          <p class="bio-lede">${isAr
+            ? `د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، بخبرة سريرية وأكاديمية وجراحية ممتدة منذ عام <bdi>${D.professional.experienceSince}</bdi>.`
+            : `Dr. Maan bin Abdullah Al Barry is a Consultant Ophthalmologist at Magrabi Health Eye & ENT Hospital in Madinah, with clinical, academic and surgical experience since <bdi>${D.professional.experienceSince}</bdi>.`}</p>
+          <p class="bio-body">${isAr
+            ? 'يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة في فحص عدسة العين، وتشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
+            : 'He works within the cataract unit and the cornea & refractive surgery unit, helping patients whose care depends on careful assessment of the lens and cornea — from keratoconus diagnosis to laser vision correction and lens implantation.'}</p>
+
+          <h3 class="sub-title">${tr('المناصب والمسيرة', 'Appointments')}</h3>
+          <ol class="timeline">
+            ${D.professional.roles.map(r => `
+            <li class="timeline-item${r.current ? ' is-current' : ''}">
+              <span class="timeline-when">${r.current ? tr('حالياً', 'Current') : tr('سابقاً', 'Previously')}</span>
+              <h4>${r[currentLang]}</h4>
+            </li>`).join('')}
+          </ol>
+          <p class="signature" aria-hidden="true">${L(D.identity.shortName)}</p>
+        </div>
+      </div>
+
+      <div class="conferences" id="conferences">
+        <figure class="conf-figure fade-in">
+          <img src="./images/dr-maan-faculty.jpg" width="1024" height="768" alt="${tr('د. معن البري مع نخبة من أطباء العيون في الجلسات العلمية لمؤتمر البحر الأحمر 2024', 'Dr. Maan Al Barry with fellow faculty at the scientific sessions, Saudi Ophthalmology 2024')}" loading="lazy" decoding="async">
+        </figure>
+        <div class="conf-text fade-in">
+          <p class="eyebrow"><span>${tr('المشاركات العلمية', 'Scientific participation')}</span></p>
+          <h3>${tr('المشاركات العلمية والمؤتمرات الدولية', 'Scientific meetings & conferences')}</h3>
+          <p>${tr('حضور وتمثيل علمي في مؤتمرات طب وجراحة العيون الإقليمية والدولية.', 'Representing ophthalmology at national and international meetings.')}</p>
+          <dl class="conf-list">
+            <div><dt>${tr('مؤتمر البحر الأحمر لطب وجراحة العيون 2024', 'Saudi Ophthalmology 2024 — The Red Sea')}</dt><dd>${tr('عضو المجلس العلمي للمؤتمر', 'Scientific Council Member')}</dd></div>
+            <div><dt>${tr('الجلسات العلمية الدولية', 'International scientific sessions')}</dt><dd>${tr('مع نخبة من أطباء وجراحي العيون', 'With ophthalmic surgeons and faculty')}</dd></div>
+          </dl>
         </div>
       </div>
 
@@ -1403,352 +1182,203 @@ function renderProfile() {
 function renderTestimonials() {
   const items = publishableTestimonials();
   if (!items.length) return '';
-  const isAr = (currentLang === 'ar');
   return `
-      <div style="margin-top:var(--space-16);" class="fade-in" id="testimonials">
-        <div class="section-header" style="margin-bottom:var(--space-6);">
-          <div class="section-label">${isAr ? 'آراء المرضى' : 'Patient Testimonials'}</div>
-        </div>
+      <div class="testimonials fade-in" id="testimonials">
+        <p class="eyebrow"><span>${tr('آراء المرضى', 'Patient testimonials')}</span></p>
         <div class="reviews-grid">
           ${items.map(t => `
           <figure class="review-card">
             <blockquote class="review-text">${t.approvedText[currentLang] || t.approvedText.ar || t.approvedText.en}</blockquote>
             <figcaption class="review-author">
-              <div class="review-meta">
-                <strong>${t.attribution}</strong>
-                <a href="${t.source.url}" target="_blank" rel="noopener noreferrer">${isAr ? 'المصدر' : 'Source'}</a>
-              </div>
+              <strong>${t.attribution}</strong>
+              <a href="${t.source.url}" ${EXT}>${tr('المصدر', 'Source')}</a>
             </figcaption>
           </figure>`).join('')}
         </div>
       </div>`;
 }
 
-// --- SPECIALTIES & PRECISION UNITS ---
+// --- EXPERTISE, PROCEDURES, TECHNOLOGY & CARE PATHWAY ---
 function renderSpecialties() {
-  const units = [
+  const areas = [
     {
-      code: 'SURG-01',
-      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات داخل العين',
-      titleEn: 'Cataract Surgery & Intraocular Lens Implantation',
-      descAr: 'استبدال العدسة المعتمة بالموجات فوق الصوتية (الفاكو) وزراعة العدسات داخل العين: أحادية البؤرة، ممتدة المدى البصري (EDOF)، والعدسات ثلاثية البؤرة لاستعادة صفاء الرؤية.',
-      descEn: 'Micro-incision phacoemulsification for lens replacement with advanced monofocal, EDOF, and trifocal intraocular lenses.',
-      img: './images/surgery-phaco.jpg',
-      tagsAr: ['إزالة الساد بالفاكو', 'تصحيح الاستجماتيزم', 'العدسات التوريكية', 'عدسات EDOF وثلاثية البؤرة'],
-      tagsEn: ['Phacoemulsification', 'Astigmatism Correction', 'Toric IOLs', 'Trifocal / EDOF Optics']
+      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات', titleEn: 'Cataract surgery & lens implantation',
+      descAr: 'استبدال العدسة المعتمة بتقنية الفاكو وزراعة عدسة داخل العين — أحادية البؤرة أو ممتدة المدى (EDOF) أو ثلاثية البؤرة — بحسب الفحص والقياسات واحتياجات المريض.',
+      descEn: 'Phacoemulsification to replace the clouded lens with an intraocular lens — monofocal, extended depth of focus (EDOF) or trifocal — chosen from the examination, measurements and the patient’s needs.',
+      tagsAr: ['إزالة الساد بالفاكو', 'العدسات التوريكية للاستجماتيزم', 'عدسات EDOF وثلاثية البؤرة'],
+      tagsEn: ['Phacoemulsification', 'Toric lenses for astigmatism', 'EDOF & trifocal lenses'],
+      more: 'cataracts', moreAr: 'دليل العدسات', moreEn: 'Lens guide'
     },
     {
-      code: 'SURG-02',
-      titleAr: 'جراحة وأمراض القرنية والقرنية المخروطية المتقدمة',
-      titleEn: 'Cornea Care & Advanced Keratoconus Treatment',
-      descAr: 'التشخيص المبكر والدقيق للقرنية المخروطية وتثبيت القرنية بالأشعة فوق البنفسجية والريبوفلافين (Corneal Cross-Linking - CXL)، مع خطط متابعة مستمرة لحفظ النظر.',
-      descEn: 'Early keratoconus detection, corneal collagen cross-linking (CXL) aimed at slowing or stopping progression, and specialized anterior segment management.',
-      img: './images/cornea-cxl.jpg',
-      tagsAr: ['تثبيت القرنية CXL', 'سماكة القرنية الطبقية', 'علاج سحابات القرنية', 'جفاف العين المزمن'],
-      tagsEn: ['Corneal Cross-Linking (CXL)', 'Pachymetry Tomography', 'Corneal Opacities', 'Ocular Surface Disease']
+      titleAr: 'أمراض القرنية والقرنية المخروطية', titleEn: 'Cornea & keratoconus',
+      descAr: 'التشخيص المبكر للقرنية المخروطية بالتصوير الطبقي، وتثبيت القرنية بالريبوفلافين والأشعة فوق البنفسجية (CXL) بهدف إبطاء تطور المرض، مع خطط متابعة.',
+      descEn: 'Early keratoconus detection with corneal tomography, and corneal cross-linking (CXL) with riboflavin and UVA aimed at slowing progression, with structured follow-up.',
+      tagsAr: ['تثبيت القرنية CXL', 'التصوير الطبقي للقرنية', 'أمراض سطح العين'],
+      tagsEn: ['Corneal cross-linking (CXL)', 'Corneal tomography', 'Ocular surface disease'],
+      more: 'education', moreAr: 'اقرأ عن القرنية المخروطية', moreEn: 'Read about keratoconus'
     },
     {
-      code: 'SURG-03',
-      titleAr: 'عمليات تصحيح النظر بالليزر والفيمتو ليزك',
-      titleEn: 'Laser Refractive Surgery (Femto-LASIK & PRK)',
-      descAr: 'معاينة وفحص دقيق لقصر وطول النظر والاستجماتيزم باستخدام تقنيات الفيمتوليزك، والليزر السطحي (PRK)، وبصمة العين المخصصة (Custom Wavefront) لتحقيق أقصى حدة بصرية.',
-      descEn: 'Comprehensive suitability evaluation for Femto-LASIK and surface ablation (PRK) driven by customized wavefront topography.',
-      img: './images/clinic-exam-room.jpg',
-      tagsAr: ['فحص سماكة القرنية', 'الليزر السطحي PRK', 'الفيمتو ليزك', 'بصمة العين Wavefront'],
-      tagsEn: ['Pachymetry Check', 'Surface PRK', 'Femto-LASIK', 'Wavefront Custom']
-    },
-    {
-      code: 'DIAG-04',
-      titleAr: 'الفحوصات التشخيصية المتقدمة وقياسات ما قبل الجراحة',
-      titleEn: 'Advanced Diagnostics & Optical Biometry',
-      descAr: 'التصوير المقطعي للقرنية (Pentacam)، فحص خلايا البطانة القرنية (Specular Microscopy)، وقياس قوة العدسة الدقيق ضوئياً (Optical Biometry) بأحدث أجهزة التصوير ثلاثية الأبعاد.',
-      descEn: 'High-precision Scheimpflug corneal tomography (Pentacam), specular endothelial microscopy, and optical biometry for exact surgical planning.',
-      img: './images/diagnostics-pentacam.jpg',
-      tagsAr: ['طبوغرافيا البنتاكام', 'قياس ضغط العين', 'مسح العصب البصري', 'حساب العدسات بالبيومتري'],
-      tagsEn: ['Pentacam Tomography', 'Intraocular Pressure', 'OCT Macula & Nerve', 'Optical Biometry IOL Master']
+      titleAr: 'تصحيح الإبصار بالليزر', titleEn: 'Laser vision correction',
+      descAr: 'تقييم شامل لملاءمة الفيمتو ليزك والليزر السطحي (PRK): سماكة القرنية وشكلها وثبات النظر وصحة سطح العين، قبل اتخاذ أي قرار.',
+      descEn: 'A full suitability assessment for Femto-LASIK and surface laser (PRK): corneal thickness and shape, prescription stability and ocular-surface health, before any decision.',
+      tagsAr: ['الفيمتو ليزك', 'الليزر السطحي PRK', 'فحص سماكة القرنية'],
+      tagsEn: ['Femto-LASIK', 'Surface laser (PRK)', 'Corneal thickness check'],
+      more: 'faq', moreAr: 'معايير الترشيح', moreEn: 'Candidacy criteria'
     }
   ];
-
-  const isAr = (currentLang === 'ar');
-
-  const journeySteps = [
-    {
-      num: '01',
-      titleAr: 'الفحص التشخيصي المقطعي المتقدم',
-      titleEn: 'Comprehensive Diagnostic Profiling',
-      descAr: 'تصوير تضاريس القرنية (Pentacam) وقياس القوة الانكسارية بدقة ضوئية لتحديد الخطة الجراحية بدقة متناهية.',
-      descEn: 'High-resolution Scheimpflug tomography and optical biometry to establish an objective surgical roadmap.'
-    },
-    {
-      num: '02',
-      titleAr: 'الاستشارة ومناقشة الخيارات بأمانة',
-      titleEn: 'Personalized Clinical Consultation',
-      descAr: 'جلسة حوارية مفصلة مع د. معن لشرح النتائج واختيار نوع العدسة أو تقنية الليزك الأنسب لنمط حياتك وعملك.',
-      descEn: 'Transparent discussion regarding realistic outcomes, custom lens options, and lifestyle visual goals.'
-    },
-    {
-      num: '03',
-      titleAr: 'الإجراء الجراحي الميكروسكوبي الدقيق',
-      titleEn: 'Precision Micro-Incision Surgery',
-      descAr: 'إجراء العملية داخل غرف عمليات مجهزة بأحدث أجهزة الفاكو والليزر تحت تخدير موضعي مريح دون ألم يذكر.',
-      descEn: 'Procedure executed in state-of-the-art operating theaters under comfortable topical drop anesthesia.'
-    },
-    {
-      num: '04',
-      titleAr: 'بروتوكول المتابعة والاطمئنان بعد العملية',
-      titleEn: 'Structured Postoperative Care Protocol',
-      descAr: 'جدول زيارات فحص مجدولة لمراقبة تعافي القرنية والتأكد من استقرار حدة الإبصار وسلامة العين على المدى البعيد.',
-      descEn: 'Rigorous schedule of follow-up reviews to monitor corneal healing and confirm long-term visual stability.'
-    }
+  const tech = [
+    [tr('تصوير القرنية الطبقي (Pentacam)', 'Corneal tomography (Pentacam)'), tr('قياس تضاريس وسماكة القرنية لتشخيص القرنية المخروطية المبكرة وتحديد ملاءمة تصحيح النظر.', 'Maps corneal shape and thickness to detect early keratoconus and assess refractive-surgery suitability.')],
+    [tr('جراحة الفاكو (Phacoemulsification)', 'Phacoemulsification'), tr('إزالة الساد عبر شق صغير وزراعة عدسة قابلة للطي، غالباً تحت تخدير موضعي بالقطرات.', 'Small-incision cataract removal with a foldable lens, usually under anaesthetic eye drops.')],
+    [tr('القياسات البصرية الحيوية (Optical Biometry)', 'Optical biometry'), tr('حساب قوة العدسة المزروعة بالقياس البصري ومعادلات حسابية حديثة.', 'Calculates the implant power with optical measurement and modern formulas.')],
+    [tr('تثبيت القرنية (Cross-Linking)', 'Corneal cross-linking (CXL)'), tr('الريبوفلافين والأشعة فوق البنفسجية بهدف إبطاء تطور القرنية المخروطية أو إيقافه.', 'Riboflavin and UVA light that aim to slow or stop keratoconus progression.')]
   ];
-
+  const steps = [
+    [tr('الفحص والتصوير', 'Examination & imaging'), tr('تصوير القرنية وقياس العين لبناء خطة موضوعية.', 'Corneal imaging and eye measurements build an objective plan.')],
+    [tr('الاستشارة', 'Consultation'), tr('شرح النتائج ومناقشة الخيارات والتوقعات الواقعية مع د. معن.', 'Results, options and realistic expectations, discussed with Dr. Maan.')],
+    [tr('الإجراء', 'Procedure'), tr('في غرف عمليات مستشفى مغربي، غالباً تحت تخدير موضعي.', 'In Magrabi’s operating theatres, usually under local anaesthetic.')],
+    [tr('المتابعة', 'Follow-up'), tr('زيارات مجدولة لمتابعة التعافي واستقرار الرؤية.', 'Scheduled visits to follow healing and visual stability.')]
+  ];
   return `
   <section class="section" id="specialties">
     <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${isAr ? 'التخصصات الطبية والخدمات الجراحية الدقيقة' : 'Precision Clinical Specialties'}</div>
-        <h2>${isAr ? 'حلول جراحية وعلاجية بأحدث ما توصل إليه علم العيون' : 'Advanced Ophthalmic Medical & Surgical Solutions'}</h2>
-        <p>${isAr ? 'إجراءات جراحية وتشخيصية تُجرى وفق بروتوكولات سريرية معتمدة دولياً.' : 'Diagnostics and surgery performed according to internationally recognised clinical protocols.'}</p>
-      </div>
+      ${sectionHead('03', tr('التخصصات والخدمات', 'Expertise'), tr('ثلاثة مجالات، وعناية واحدة بالتفاصيل', 'Three areas of focus, one standard of care'),
+        tr('يعمل د. معن ضمن وحدتي الماء الأبيض والقرنية وتصحيح النظر في مغربي المدينة المنورة.', 'Dr. Maan works within the cataract unit and the cornea & refractive unit at Magrabi Madinah.'))}
 
-      <div class="specialties-grid fade-in">
-        ${units.map(u => `
-          <div class="specialty-unit-card">
-            <div class="specialty-img-wrap">
-              <img src="${u.img}" alt="${isAr ? u.titleAr : u.titleEn}" loading="lazy">
-            </div>
-            <div class="specialty-body">
-              <div class="specialty-tag">${u.code}</div>
-              <h3>${isAr ? u.titleAr : u.titleEn}</h3>
-              <p>${isAr ? u.descAr : u.descEn}</p>
-              <div class="specialty-features">
-                ${(isAr ? u.tagsAr : u.tagsEn).map(t => `<span class="specialty-pill">${t}</span>`).join('')}
-              </div>
-              <div style="margin-top:auto;padding-top:var(--space-3);">
-                <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
-                  ${isAr ? 'طلب تقرير تشخيصي أو حجز موعد ←' : 'Book Specialty Evaluation →'}
-                </a>
+      <div class="expertise-grid">
+        <figure class="expertise-figure fade-in">
+          <img src="./images/clinic-exam-room.jpg" width="512" height="279" alt="${tr('غرفة الفحص والإجراءات في مستشفى مغربي مع شاشة تصوير القرنية', 'Examination and procedure room at Magrabi with corneal imaging on screen')}" loading="lazy" decoding="async">
+          <figcaption>${tr('تصوير القرنية جزء من كل تقييم قبل الجراحة.', 'Corneal imaging is part of every pre-surgical assessment.')}</figcaption>
+        </figure>
+        <ol class="index-list fade-in">
+          ${areas.map((a, i) => `
+          <li class="index-item">
+            <span class="index-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+            <div class="index-body">
+              <h3>${tr(a.titleAr, a.titleEn)}</h3>
+              <p>${tr(a.descAr, a.descEn)}</p>
+              <p class="index-tags">${(currentLang === 'ar' ? a.tagsAr : a.tagsEn).map(t => `<span>${t}</span>`).join('')}</p>
+              <div class="index-links">
+                <a href="#${a.more}" onclick="scrollToSection('${a.more}');return false;" class="text-link">${tr(a.moreAr, a.moreEn)}${icon('arrow', 16)}</a>
+                <a href="${C.bookingUrl}" ${EXT} class="text-link text-link-quiet" data-cta="book">${tr('احجز تقييماً', 'Book an assessment')}</a>
               </div>
             </div>
-          </div>
-        `).join('')}
+          </li>`).join('')}
+        </ol>
       </div>
 
-      <!-- 4-Step Systematic Clinical Journey -->
-      <div class="journey-head fade-in">
-        <div class="section-label">${isAr ? 'منهجية الرعاية السريرية' : 'Clinical Care Pathway'}</div>
-        <h3>${isAr ? 'رحلة المريض السريرية: من التشخيص الدقيق إلى وضوح الرؤية' : 'The Systematic Patient Journey: From Diagnosis to Visual Clarity'}</h3>
-        <p>${isAr ? 'مسار رعاية منظم يساعد المريض على فهم كل خطوة من الفحص حتى المتابعة.' : 'A structured pathway that helps you understand each step, from examination to follow-up.'}</p>
+      <div class="tech-block">
+        <h3 class="sub-title fade-in">${tr('التشخيص والتقنيات في مغربي المدينة المنورة', 'Diagnostics & technology at Magrabi Madinah')}</h3>
+        <ul class="tech-grid fade-in" aria-label="${tr('التقنيات', 'Technologies')}">
+          ${tech.map(([t, d]) => `<li class="tech-item"><h4>${t}</h4><p>${d}</p></li>`).join('')}
+        </ul>
       </div>
 
-      <div class="journey-grid fade-in">
-        ${journeySteps.map(step => `
-          <div class="journey-step-card">
-            <span class="journey-step-number">${step.num}</span>
-            <h4>${isAr ? step.titleAr : step.titleEn}</h4>
-            <p>${isAr ? step.descAr : step.descEn}</p>
-          </div>
-        `).join('')}
+      <div class="pathway-block">
+        <h3 class="sub-title fade-in">${tr('رحلة المريض: من الفحص إلى المتابعة', 'Your path: from examination to follow-up')}</h3>
+        <ol class="pathway fade-in">
+          ${steps.map(([t, d], i) => `<li class="pathway-step"><span class="pathway-num" aria-hidden="true">${i + 1}</span><h4>${t}</h4><p>${d}</p></li>`).join('')}
+        </ol>
       </div>
 
-      <!-- Hospital Accreditation Strip -->
-      <div class="jci-strip fade-in">
-        <span class="jci-icon">🛡️</span>
-        <span>
-          ${isAr
-            ? 'تُجرى كافة الفحوصات والعمليات الجراحية في مستشفى ومراكز مغربي للعيون بالمدينة المنورة — معتمد من الهيئة المشتركة الدولية (JCI) والمركز السعودي لاعتماد المنشآت الصحية (CBAHI).'
-            : 'All surgical procedures performed at Magrabi Health Eye & ENT Hospital in Madinah — accredited by the Joint Commission International (JCI) and CBAHI.'}
-        </span>
-      </div>
+      <p class="accreditation fade-in">${icon('shield', 22)}<span>${tr(
+        `تُجرى الفحوصات والعمليات في ${D.clinic.name.ar}، المعتمد من الهيئة المشتركة الدولية (JCI) والمركز السعودي لاعتماد المنشآت الصحية (CBAHI).`,
+        `Examinations and surgery take place at ${D.clinic.name.en}, accredited by Joint Commission International (JCI) and CBAHI.`)}</span></p>
     </div>
   </section>`;
 }
 
-// --- IOL COMPARISON GUIDE ---
+// --- CATARACT & IOL EDUCATION ---
 function renderIolGuide() {
-  const isAr = (currentLang === 'ar');
-  const iolCards = [
+  const lenses = [
     {
-      n: isAr ? 'ممتدة المدى (EDOF)' : 'Extended Depth of Focus (EDOF)',
-      sub: isAr ? 'نطاق رؤية ممتد من البعيد إلى المتوسط، وهالات ليلية أقل عادةً من العدسات متعددة البؤر' : 'Extended range from distance to intermediate, usually with fewer night halos than multifocal designs',
-      d: [4, isAr ? 'ممتازة' : 'Excellent'],
-      m: [4, isAr ? 'جيدة جداً (الشاشات ولوحة القيادة)' : 'Very good (screens & dashboard)'],
-      nr: [2, isAr ? 'جيدة للأنشطة اليومية، ونظارة خفيفة للخط الدقيق' : 'Functional for daily tasks, light glasses for fine print'],
-      h: [2, isAr ? 'منخفضة عادةً' : 'Usually low'],
-      g: isAr ? 'غالباً نظارة للقراءة الدقيقة' : 'Often needed for fine print'
+      n: tr('ممتدة المدى', 'Extended depth of focus'), code: 'EDOF',
+      sub: tr('نطاق رؤية ممتد من البعيد إلى المتوسط، وهالات ليلية أقل عادةً من العدسات متعددة البؤر.', 'An extended range from distance to intermediate, usually with fewer night halos than multifocal designs.'),
+      d: [4, tr('ممتازة', 'Excellent')], m: [4, tr('جيدة جداً (الشاشات ولوحة القيادة)', 'Very good (screens & dashboard)')],
+      nr: [2, tr('جيدة للأنشطة اليومية، ونظارة خفيفة للخط الدقيق', 'Functional for daily tasks; light glasses for fine print')],
+      h: [2, tr('منخفضة عادةً', 'Usually low')], g: tr('غالباً نظارة للقراءة الدقيقة', 'Often needed for fine print')
     },
     {
-      n: isAr ? 'ثلاثية البؤرة (Trifocal)' : 'Trifocal',
-      sub: isAr ? 'لتقليل الحاجة للنظارة مع احتمال هالات ليلية' : 'Less need for glasses, with a chance of night halos',
-      d: [4, isAr ? 'ممتازة' : 'Excellent'],
-      m: [4, isAr ? 'جيدة جداً' : 'Very good'],
-      nr: [4, isAr ? 'ممتازة للقراءة بدون نظارة غالباً' : 'Great, rarely need glasses'],
-      h: [4, isAr ? 'أكثر شيوعاً (هالات حلقية ووهج حول الأضواء)' : 'More frequent (concentric halos around lights)'],
-      g: isAr ? 'استغناء شبه كامل، وتختلف بحسب الإضاءة والتكيف' : 'High independence, depends on lighting & neuroadaptation'
+      n: tr('ثلاثية البؤرة', 'Trifocal'), code: 'Trifocal',
+      sub: tr('لتقليل الحاجة للنظارة مع احتمال هالات ليلية.', 'Less need for glasses, with a chance of night halos.'),
+      d: [4, tr('ممتازة', 'Excellent')], m: [4, tr('جيدة جداً', 'Very good')],
+      nr: [4, tr('جيدة للقراءة دون نظارة غالباً', 'Good; glasses rarely needed')],
+      h: [4, tr('أكثر شيوعاً (هالات حلقية ووهج حول الأضواء)', 'More frequent (rings and glare around lights)')], g: tr('استغناء كبير، ويختلف بحسب الإضاءة والتكيف', 'High independence; depends on lighting & adaptation')
     },
     {
-      n: isAr ? 'أحادية البؤرة (Monofocal)' : 'Monofocal',
-      sub: isAr ? 'لأعلى نقاء للبعيد مع نظارة للقريب والمتوسط' : 'Sharpest distance, permanent glasses for near & intermediate',
-      d: [4, isAr ? 'ممتازة ونقية' : 'Excellent & pure'],
-      m: [2, isAr ? 'تحتاج نظارة غالباً' : 'Glasses usually needed'],
-      nr: [1, isAr ? 'تحتاج نظارة قراءة دائماً' : 'Reading glasses needed'],
-      h: [1, isAr ? 'الأقل إطلاقاً بين العدسات' : 'Lowest of all lenses'],
-      g: isAr ? 'دائمة للقراءة والكمبيوتر' : 'Permanent for reading and computer'
+      n: tr('أحادية البؤرة', 'Monofocal'), code: 'Monofocal',
+      sub: tr('لأعلى نقاء للبعيد مع نظارة للقريب والمتوسط.', 'The sharpest distance vision, with glasses for near and intermediate.'),
+      d: [4, tr('ممتازة ونقية', 'Excellent & crisp')], m: [2, tr('تحتاج نظارة غالباً', 'Glasses usually needed')],
+      nr: [1, tr('تحتاج نظارة قراءة', 'Reading glasses needed')],
+      h: [1, tr('الأقل بين العدسات', 'Lowest of the three')], g: tr('للقراءة والكمبيوتر', 'For reading and computer')
     }
   ];
-
-  const renderEyePips = (score, cls) => `
-    <span class="eye-pips ${cls}" role="img" aria-label="${score}/4">
-      ${[1, 2, 3, 4].map(k => `
-        <span class="eye-icon ${k <= score ? 'eye-open' : 'eye-closed'} ${k <= score ? cls : ''}">
-          ${k <= score 
-            ? `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></svg>`
-            : `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10c3.5 4.5 6.5 6 9 6s5.5-1.5 9-6"/><path d="M6 13l-1.8 2.5M10 15.5l-0.8 3M14 15.5l0.8 3M18 13l1.8 2.5"/></svg>`
-          }
-        </span>
-      `).join('')}
-    </span>
-  `;
-
-  const renderRow = (label, tuple, cls) => `
-    <div class="iol-row">
-      <b>${label}</b>
-      ${renderEyePips(tuple[0], cls)}
-      <small>${tuple[1]}</small>
-    </div>
-  `;
-
+  const scale = ([score, note], kind) => `<span class="scale scale-${kind}" role="img" aria-label="${score} / 4">${[1, 2, 3, 4].map(k => `<i class="${k <= score ? 'on' : ''}"></i>`).join('')}</span><span class="scale-note">${note}</span>`;
+  const rows = [
+    ['d', tr('الرؤية البعيدة', 'Distance'), 'good'],
+    ['m', tr('المتوسطة (الكمبيوتر)', 'Intermediate (computer)'), 'good'],
+    ['nr', tr('القريبة (القراءة)', 'Near (reading)'), 'good'],
+    ['h', tr('الهالات الليلية', 'Night halos'), 'halo']
+  ];
   return `
-  <section class="section section-alt" id="cataracts">
+  <section class="section section-sand" id="cataracts">
     <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${isAr ? 'دليل اختيار العدسة' : 'Lens selection guide'}</div>
-        <h2>${isAr ? 'مقارنة العدسات الشائعة داخل العين' : 'Comparing common intraocular lenses'}</h2>
-        <p>${isAr ? 'ملخص تثقيفي مبسط للفروق بين الأنواع الثلاثة لمساعدتك على الحوار مع طبيبك.' : 'A simplified educational summary of the three main types, to support the conversation with your ophthalmologist.'}</p>
+      ${sectionHead('04', tr('الماء الأبيض والعدسات', 'Cataract & lens guide'), tr('ماذا يعني الماء الأبيض، وكيف تُختار العدسة؟', 'What a cataract is, and how a lens is chosen'))}
+
+      <div class="cataract-intro">
+        <div class="cataract-text fade-in">
+          <p class="lede-serif">${tr('الماء الأبيض ليس غشاءً فوق العين، بل عتامة تدريجية في العدسة الطبيعية خلف البؤبؤ، تسبب ضبابية الرؤية وبهتان الألوان والوهج ليلاً.', 'A cataract is not a film over the eye but a gradual clouding of the natural lens behind the pupil — blurring vision, dulling colours and adding glare at night.')}</p>
+          <p>${tr('المعيار الأساسي لتوقيت الجراحة هو تأثير ضعف النظر على أنشطتك اليومية. تُستبدل العدسة المعتمة بعدسة صناعية، ويُختار نوعها بعد الفحص والقياسات ومناقشة أولوياتك.', 'The main criterion for timing surgery is how reduced vision affects your daily life. The clouded lens is replaced by an artificial one, whose type is chosen after examination, measurements and a conversation about your priorities.')}</p>
+          <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="text-link">${tr('شاهد الفرق في محاكي الرؤية', 'See the difference in the vision simulator')}${icon('arrow', 16)}</a>
+        </div>
+        <figure class="cataract-figure fade-in">
+          <img src="./images/surgery-phaco.jpg" width="512" height="279" alt="${tr('قطرات ونظارة واقية تُستخدم بعد عملية الماء الأبيض', 'Eye drops and protective glasses used after cataract surgery')}" loading="lazy" decoding="async">
+          <figcaption>${tr('بعد العملية: قطرات ونظارة واقية وتعليمات متابعة.', 'After surgery: drops, protective glasses and follow-up instructions.')}</figcaption>
+        </figure>
       </div>
 
-      <div class="iol-grid fade-in">
-        ${iolCards.map(c => `
-          <article class="iol-card">
-            <header>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-                <h3 style="margin:0;">${c.n}</h3>
-              </div>
-              <p>${c.sub}</p>
-            </header>
-            ${renderRow(isAr ? 'الرؤية البعيدة' : 'Distance', c.d, 'good')}
-            ${renderRow(isAr ? 'المتوسطة (الكمبيوتر)' : 'Intermediate (computer)', c.m, 'good')}
-            ${renderRow(isAr ? 'القريبة (القراءة)' : 'Near (reading)', c.nr, 'good')}
-            ${renderRow(isAr ? 'الهالات الليلية' : 'Night halos', c.h, 'more')}
-            <div class="iol-foot">
-              <b>${isAr ? 'الحاجة للنظارة:' : 'Glasses:'}</b> ${c.g}
-            </div>
-          </article>
-        `).join('')}
+      <div class="iol-sheet fade-in" role="group" aria-label="${tr('مقارنة العدسات داخل العين', 'Intraocular lens comparison')}">
+        ${lenses.map(l => `
+        <article class="iol-col">
+          <header class="iol-head">
+            <p class="iol-code"><bdi dir="ltr">${l.code}</bdi></p>
+            <h3>${l.n}</h3>
+            <p>${l.sub}</p>
+          </header>
+          <dl class="iol-rows">
+            ${rows.map(([k, label, kind]) => `<div class="iol-row"><dt>${label}</dt><dd>${scale(l[k], kind)}</dd></div>`).join('')}
+            <div class="iol-row iol-row-glasses"><dt>${tr('الحاجة للنظارة', 'Glasses')}</dt><dd>${l.g}</dd></div>
+          </dl>
+        </article>`).join('')}
       </div>
+      <p class="iol-legend fade-in"><span class="scale scale-good" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>${tr('عدد الخانات الممتلئة يعبّر عن مستوى الأداء، أو عن تكرار الهالات في صف الهالات.', 'Filled marks show the level of performance — or, for halos, how often they occur.')}</p>
 
-      <p class="iol-legend fade-in">
-        <span style="display:inline-flex;align-items:center;gap:6px;">
-          <svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="var(--secondary-burgundy)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3.2" fill="var(--secondary-burgundy)"/></svg>
-          ${isAr ? 'عيون مفتوحة: تشير إلى درجة الوضوح والأداء المرتفع (أو تكرار الهالات في معيار الهالات)' : 'Open eyes: Indicate high clarity and performance (or frequency in halos metric)'}
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:6px;">
-          <svg viewBox="0 0 24 24" width="18" height="13" fill="none" stroke="var(--border-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10c3.5 5 8 7 10 7s6.5-2 10-7"/><path d="M6 13.5l-2 3M10 16.5l-1 3M14 16.5l1 3M18 13.5l2 3"/></svg>
-          ${isAr ? 'عيون مغمضة: تشير إلى نطاق محدود أو الحاجة لنظارة مساعدة' : 'Closed eyes: Indicate limited visual range or glasses needed'}
-        </span>
-      </p>
-
-      <div class="medical-disclaimer fade-in">
-        <strong>${isAr ? 'كيف يُحدَّد نوع العدسة؟' : 'How is the lens chosen?'}</strong>
-        ${isAr
-          ? 'لا توجد عدسة واحدة تناسب جميع المرضى. لكل نوع مزايا وحدود: أحادية البؤرة تعطي رؤية بعيدة نقية مع الحاجة لنظارة للقريب، وممتدة المدى توسّع نطاق الرؤية للمسافات المتوسطة، وثلاثية البؤرة تقلل الحاجة لنظارة القراءة مع احتمال أكبر للهالات. يُبنى الاختيار على الفحص السريري وقياسات العين (تضاريس القرنية، صحة الشبكية والماكولا، سطح العين) وعلى أولوياتك اليومية وتوقعاتك، بالتشاور مع طبيب العيون المعالج.'
-          : 'No single lens suits every patient. Each type has trade-offs: monofocal lenses give clear distance vision but need glasses for near; EDOF lenses extend the range into intermediate distances; trifocal lenses reduce the need for reading glasses with a higher chance of halos. The choice depends on your examination and eye measurements (corneal topography, retinal and macular health, ocular surface) and on your daily priorities and expectations, decided with your treating ophthalmologist.'}
-      </div>
+      <aside class="note fade-in">
+        <h3>${tr('كيف يُحدَّد نوع العدسة؟', 'How is the lens chosen?')}</h3>
+        <p>${tr(
+          'لا توجد عدسة واحدة تناسب جميع المرضى. لكل نوع مزايا وحدود: أحادية البؤرة تعطي رؤية بعيدة نقية مع الحاجة لنظارة للقريب، وممتدة المدى توسّع نطاق الرؤية للمسافات المتوسطة، وثلاثية البؤرة تقلل الحاجة لنظارة القراءة مع احتمال أكبر للهالات. يُبنى الاختيار على الفحص السريري وقياسات العين وعلى أولوياتك اليومية، بالتشاور مع طبيب العيون المعالج.',
+          'No single lens suits every patient. Each type has trade-offs: monofocal lenses give clear distance vision but need glasses for near; EDOF lenses extend the range into intermediate distances; trifocal lenses reduce the need for reading glasses with a higher chance of halos. The choice depends on your examination, eye measurements and daily priorities, decided with your treating ophthalmologist.')}</p>
+      </aside>
     </div>
   </section>`;
 }
 
-// --- QUESTIONNAIRE SECTION ---
+// --- QUESTIONNAIRE ---
 function renderQuestionnaireCard() {
   const content = {
     ar: {
       steps: [
-        {
-          question: 'ما هي فئتك العمرية التقريبية؟',
-          desc: 'تساعد لمعرفة درجة التكيف العصبي الطبيعي وجفاف العين الفسيولوجي.',
-          options: ['أقل من 45 سنة', '45 إلى 58 سنة', '59 إلى 70 سنة', 'أكثر من 70 سنة', 'لست متأكداً']
-        },
-        {
-          question: 'هل تم تشخيصك سابقاً بأي من حالات العين التالية؟',
-          desc: 'بعض حالات الشبكية وارتفاع ضغط العين تتطلب اختيار عدسات تحافظ على أعلى حساسية للتباين.',
-          options: [
-            'لا توجد حالات سابقة معتمدة (سليمة)',
-            'ارتفاع ضغط العين أو ماء أزرق (Glaucoma)',
-            'اعتلال بمركز الإبصار أو السكري بالشبكية',
-            'قرنية مخروطية أو جفاف عين مزمن',
-            'لست متأكداً تماماً (أرغب بفحص شامل)'
-          ]
-        },
-        {
-          question: 'ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟',
-          desc: 'تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.',
-          options: [
-            'القيادة الليلية ووضوح الرؤية البعيدة مع أقل قدر من الهالات',
-            'العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)',
-            'قراءة المصحف الشريف والهاتف الذكي دون نظارة',
-            'أقل اعتماد ممكن على النظارات'
-          ]
-        },
-        {
-          question: 'هل سبق لك إجراء عملية ليزك أو تصحيح نظر سابق؟',
-          desc: 'العيون التي خضعت لعمليات سابقة تحتاج معادلات حسابية خاصة (Barrett True-K).',
-          options: [
-            'لم أجرِ أي عملية سابقة (قرنية طبيعية)',
-            'نعم، أجريت فيمتو ليزك أو ليزر سطحي PRK',
-            'نعم، خضعت لتثبيت قرنية مخروطية CXL',
-            'لست متأكداً من التاريخ الجراحي الدقيق'
-          ]
-        }
+        { question: 'ما هي فئتك العمرية التقريبية؟', desc: 'تساعد لمعرفة درجة التكيف العصبي الطبيعي وجفاف العين الفسيولوجي.', options: ['أقل من 45 سنة', '45 إلى 58 سنة', '59 إلى 70 سنة', 'أكثر من 70 سنة', 'لست متأكداً'] },
+        { question: 'هل تم تشخيصك سابقاً بأي من حالات العين التالية؟', desc: 'بعض حالات الشبكية وارتفاع ضغط العين تتطلب اختيار عدسات تحافظ على أعلى حساسية للتباين.', options: ['لا توجد حالات سابقة معتمدة (سليمة)', 'ارتفاع ضغط العين أو ماء أزرق (Glaucoma)', 'اعتلال بمركز الإبصار أو السكري بالشبكية', 'قرنية مخروطية أو جفاف عين مزمن', 'لست متأكداً تماماً (أرغب بفحص شامل)'] },
+        { question: 'ما هي الأولوية البصرية الأهم في نمط حياتك اليومي؟', desc: 'تساعد على تحديد النطاق البصري الأكثر استخداماً خلال يومك.', options: ['القيادة الليلية ووضوح الرؤية البعيدة مع أقل قدر من الهالات', 'العمل المكتبي، شاشات الحاسوب، ولوحة قيادة السيارة (مسافة ممتدة)', 'قراءة المصحف الشريف والهاتف الذكي دون نظارة', 'أقل اعتماد ممكن على النظارات'] },
+        { question: 'هل سبق لك إجراء عملية ليزك أو تصحيح نظر سابق؟', desc: 'العيون التي خضعت لعمليات سابقة تحتاج معادلات حسابية خاصة (Barrett True-K).', options: ['لم أجرِ أي عملية سابقة (قرنية طبيعية)', 'نعم، أجريت فيمتو ليزك أو ليزر سطحي PRK', 'نعم، خضعت لتثبيت قرنية مخروطية CXL', 'لست متأكداً من التاريخ الجراحي الدقيق'] }
       ]
     },
     en: {
       steps: [
-        {
-          question: 'What is your approximate age group?',
-          desc: 'Guides expectations regarding neuroadaptation and ocular surface status.',
-          options: ['Under 45 years', '45 to 58 years', '59 to 70 years', 'Over 70 years', 'Not certain']
-        },
-        {
-          question: 'Do you have any previously diagnosed ocular conditions?',
-          desc: 'Conditions such as glaucoma or maculopathy influence lens optical platform selection.',
-          options: [
-            'No diagnosed conditions (Healthy Eyes)',
-            'Glaucoma or elevated eye pressure',
-            'Diabetic retinopathy or macular condition',
-            'Keratoconus or severe chronic dry eye',
-            'Not certain (Require complete exam)'
-          ]
-        },
-        {
-          question: 'What is your primary visual priority in daily routine?',
-          desc: 'Defines your most critical working visual focal distance.',
-          options: [
-            'Night driving and sharp distance vision with as few halos as possible',
-            'Computer work, laptops, and dashboard view (Intermediate continuous)',
-            'Smartphone use and book reading without reading glasses',
-            'As little dependence on glasses as possible'
-          ]
-        },
-        {
-          question: 'Have you undergone previous laser refractive surgery (LASIK / PRK)?',
-          desc: 'Post-refractive eyes require specialized biometric calculations (e.g., Barrett True-K).',
-          options: [
-            'No previous surgery (Virgin Cornea)',
-            'Yes, prior Femto-LASIK or PRK',
-            'Yes, prior corneal cross-linking (CXL)',
-            'Not certain of surgical history'
-          ]
-        }
+        { question: 'What is your approximate age group?', desc: 'Guides expectations regarding neuroadaptation and ocular surface status.', options: ['Under 45 years', '45 to 58 years', '59 to 70 years', 'Over 70 years', 'Not certain'] },
+        { question: 'Do you have any previously diagnosed eye conditions?', desc: 'Conditions such as glaucoma or maculopathy influence which lens designs are suitable.', options: ['No diagnosed conditions (healthy eyes)', 'Glaucoma or elevated eye pressure', 'Diabetic retinopathy or macular condition', 'Keratoconus or severe chronic dry eye', 'Not certain (I would like a complete exam)'] },
+        { question: 'What is your main visual priority day to day?', desc: 'Defines the viewing distance you rely on most.', options: ['Night driving and sharp distance vision with as few halos as possible', 'Computer work, laptops and the dashboard (intermediate range)', 'Smartphone use and book reading without reading glasses', 'As little dependence on glasses as possible'] },
+        { question: 'Have you had previous laser vision correction (LASIK / PRK)?', desc: 'Eyes with previous refractive surgery need specialised lens calculations (e.g., Barrett True-K).', options: ['No previous surgery', 'Yes, prior Femto-LASIK or PRK', 'Yes, prior corneal cross-linking (CXL)', 'Not certain of my surgical history'] }
       ]
     }
   }[currentLang];
@@ -1756,151 +1386,233 @@ function renderQuestionnaireCard() {
   if (qCompleted) {
     return `
       <div class="questionnaire">
-        <div class="q-result">
-          <h3 style="color:var(--secondary-burgundy);margin-bottom:var(--space-3);">
-            ${currentLang === 'ar' ? 'تم تجهيز ملخص أولوياتك البصرية' : 'Your Discussion Summary is Ready'}
-          </h3>
-          <p style="color:var(--text-secondary);font-size:0.95rem;margin-bottom:var(--space-6);">
-            ${currentLang === 'ar' ? 'بناءً على إجاباتك الأربع، هذه المحاور العلمية التي يوصى بطرحها ومناقشتها خلال جلستك في عيادة مغربي بالمدينة المنورة:' : 'Based on your selected priorities, here are key clinical topics to explore during your consultation at Magrabi:'}
-          </p>
-
-          <div class="q-result-item">
-            <h4>${currentLang === 'ar' ? 'الأولوية الوظيفية المستهدفة' : 'Target Visual Focus'}</h4>
-            <p>${currentLang === 'ar' ? 'مناقشة الموازنة بين أنواع العدسات بحسب أولوياتك: نطاق الرؤية المطلوب (بعيد، متوسط، قريب)، واحتمال الهالات الليلية، والحاجة المتوقعة للنظارة.' : 'Discuss the trade-offs between lens types for your priorities: the range you need (distance, intermediate, near), the chance of night halos, and expected need for glasses.'}</p>
+        <div class="q-result" role="status">
+          <p class="q-step-label">${tr('الملخص', 'Summary')}</p>
+          <h3>${tr('ملخص أولوياتك البصرية جاهز', 'Your discussion summary is ready')}</h3>
+          <p class="q-desc">${tr('بناءً على إجاباتك، هذه محاور يُستحسن مناقشتها خلال الاستشارة:', 'Based on your answers, these are topics worth raising in your consultation:')}</p>
+          <ol class="q-result-list">
+            <li class="q-result-item"><h4>${tr('الأولوية الوظيفية المستهدفة', 'Your visual focus')}</h4><p>${tr('الموازنة بين أنواع العدسات بحسب أولوياتك: نطاق الرؤية المطلوب، واحتمال الهالات الليلية، والحاجة المتوقعة للنظارة.', 'The trade-offs between lens types for your priorities: the range you need, the chance of night halos, and expected need for glasses.')}</p></li>
+            <li class="q-result-item"><h4>${tr('فحص القرنية', 'Corneal imaging')}</h4><p>${tr('فحص البنتاكام (Pentacam) لاستبعاد الاستجماتيزم غير المنتظم والتأكد من ملاءمة العدسات متعددة البؤرة لسطح قرنيتك.', 'Pentacam tomography to check for irregular astigmatism before considering multifocal lens designs.')}</p></li>
+            <li class="q-result-item"><h4>${tr('القرار النهائي', 'The final decision')}</h4><p>${tr('يُتخذ القرار بناءً على قياسات العين الحيوية وفحص قاع العين مع الطبيب.', 'Lens power is calculated from optical biometry together with a full clinical examination.')}</p></li>
+          </ol>
+          <div class="q-actions">
+            <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعد الفحص', 'Book an examination')}</span></a>
+            <a href="${getWhatsAppUrl('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.')}" ${EXT} class="btn btn-whatsapp" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب', 'WhatsApp')}</span></a>
+            <button type="button" class="btn btn-quiet" onclick="restartQ()">${tr('إعادة الاستبيان', 'Restart')}</button>
           </div>
-
-          <div class="q-result-item">
-            <h4>${currentLang === 'ar' ? 'الفحوصات الطبوغرافية الموصى بها' : 'Required Diagnostic Profiling'}</h4>
-            <p>${currentLang === 'ar' ? 'إجراء فحص البنتاكام (Pentacam) لاستبعاد الاستجماتيزم غير المنتظم والتأكد من ملاءمة العدسات متعددة البؤرة لسطح قرنيتك.' : 'Perform Pentacam Scheimpflug tomography to evaluate regular vs irregular astigmatism before premium IOL selection.'}</p>
-          </div>
-
-          <div class="q-result-item">
-            <h4>${currentLang === 'ar' ? 'تحديد الخيار الجراحي النهائي' : 'Final Surgical Confirmation'}</h4>
-            <p>${currentLang === 'ar' ? 'يتم اتخاذ القرار النهائي بناءً على قياسات طول العين بالموجات الضوئية (IOL Master) وفحص قاع العين المباشر مع الدكتور.' : 'Lens power is calculated from optical biometry together with a full clinical examination by your ophthalmologist.'}</p>
-          </div>
-
-          <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;margin-top:var(--space-8);">
-            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-              ${currentLang === 'ar' ? 'حجز موعد فحص القرنية والعدسات' : 'Book Exam Appointment'}
-            </a>
-            <a href="${getWhatsAppUrl('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-              ${currentLang === 'ar' ? 'تنسيق الموعد عبر واتساب' : 'Inquire via WhatsApp'}
-            </a>
-            <button class="btn btn-outline" onclick="restartQ()">
-              ${currentLang === 'ar' ? 'إعادة الاستبيان' : 'Restart'}
-            </button>
-          </div>
-
-          <div class="medical-disclaimer" style="margin-top:var(--space-6);text-align:start;">
-            <strong>${currentLang === 'ar' ? 'تنبيه سريري:' : 'Clinical Safety Notice:'}</strong>
-            ${currentLang === 'ar' ? 'هذا التقرير استرشادي وتثقيفي فقط ولا يمثل تشخيصاً طبياً أو وصفة ملزمة لنوع عدسة. القرار الطبي يتخذه الاستشاري حصراً بعد الفحص المجهري المباشر.' : 'This summary is for educational discussion only and does not constitute a prescription. Clinical diagnosis and treatment decisions are made exclusively following in-person examination.'}
-          </div>
+          <p class="q-safety"><strong>${tr('تنبيه:', 'Note:')}</strong> ${tr('هذا الملخص تثقيفي فقط ولا يمثل تشخيصاً أو وصفة لنوع عدسة. القرار الطبي يتخذه الاستشاري بعد الفحص المباشر.', 'This summary is educational only and is not a diagnosis or a lens prescription. Treatment decisions follow an in-person examination.')}</p>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
   const cur = content.steps[currentQStep];
   return `
     <div class="questionnaire">
-      <div class="q-progress">
-        ${content.steps.map((_, idx) => `
-          <div class="step ${idx < currentQStep ? 'done' : ''} ${idx === currentQStep ? 'current' : ''}"></div>
-        `).join('')}
+      <div class="q-progress" aria-hidden="true">${content.steps.map((_, i) => `<span class="step ${i < currentQStep ? 'done' : ''} ${i === currentQStep ? 'current' : ''}"></span>`).join('')}</div>
+      <p class="q-step-label">${tr(`الخطوة ${currentQStep + 1} من 4`, `Step ${currentQStep + 1} of 4`)}</p>
+      <h3 class="q-question">${cur.question}</h3>
+      <p class="q-desc">${cur.desc}</p>
+      <div class="q-options" role="group" aria-label="${cur.question}">
+        ${cur.options.map((opt, i) => `<button type="button" class="q-option ${qAnswers[currentQStep] === i ? 'selected' : ''}" aria-pressed="${qAnswers[currentQStep] === i}" onclick="selectQOption(${i})"><span class="q-radio" aria-hidden="true"></span><span>${opt}</span></button>`).join('')}
       </div>
-
-      <div style="margin-bottom:var(--space-4);">
-        <span style="font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;">
-          ${currentLang === 'ar' ? `الخطوة ${currentQStep + 1} من 4` : `Step ${currentQStep + 1} of 4`}
-        </span>
-        <h3 style="font-size:1.25rem;color:var(--text-primary);margin-top:4px;">${cur.question}</h3>
-        <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:2px;">${cur.desc}</p>
-      </div>
-
-      <div class="q-options">
-        ${cur.options.map((opt, optIdx) => `
-          <button class="q-option ${qAnswers[currentQStep] === optIdx ? 'selected' : ''}" onclick="selectQOption(${optIdx})">
-            <span>${opt}</span>
-          </button>
-        `).join('')}
-      </div>
-
       <div class="q-nav">
-        ${currentQStep > 0 ? `<button class="btn btn-outline btn-sm" onclick="prevQStep()">${currentLang === 'ar' ? 'السابق' : 'Previous'}</button>` : '<div></div>'}
-        <button class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[currentQStep] === undefined ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
-          ${currentQStep < content.steps.length - 1 ? (currentLang === 'ar' ? 'التالي ←' : 'Next →') : (currentLang === 'ar' ? 'عرض التقرير الاسترشادي' : 'View Lifestyle Summary')}
+        ${currentQStep > 0 ? `<button type="button" class="btn btn-quiet btn-sm" onclick="prevQStep()">${tr('السابق', 'Previous')}</button>` : '<span></span>'}
+        <button type="button" class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[currentQStep] === undefined ? 'disabled' : ''}>
+          ${currentQStep < content.steps.length - 1 ? tr('التالي', 'Next') : tr('عرض الملخص', 'View summary')}
         </button>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderQuestionnaire() {
   return `
-  <section class="section" id="questionnaire">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${currentLang === 'ar' ? 'استبيان نمط الحياة البصري' : 'Visual Lifestyle Questionnaire'}</div>
-        <h2>${currentLang === 'ar' ? '4 خطوات لاكتشاف خيارات العدسة الأنسب لك' : '4 Guided Steps to Identify Your Visual Needs'}</h2>
-        <p>${currentLang === 'ar' ? 'أداة تثقيفية لمساعدتك في تحديد أولوياتك اليومية قبل جلسة الفحص والاستشارة في العيادة.' : 'A guided tool to map your daily priorities before your comprehensive clinical consultation.'}</p>
+  <section class="section section-sand section-tight" id="questionnaire">
+    <div class="container q-layout">
+      <div class="q-intro fade-in">
+        <p class="eyebrow"><span>${tr('استبيان نمط الحياة البصري', 'Visual lifestyle questionnaire')}</span></p>
+        <h2>${tr('أربعة أسئلة قبل موعدك', 'Four questions before your visit')}</h2>
+        <p>${tr('أداة تثقيفية تساعدك على ترتيب أولوياتك اليومية قبل جلسة الفحص والاستشارة. لا تُحفظ إجاباتك ولا تُرسل.', 'An educational tool to organise your daily priorities before your consultation. Your answers are not stored or sent.')}</p>
       </div>
-
-      <div id="questionnaire-card-container">
-        ${renderQuestionnaireCard()}
-      </div>
+      <div id="questionnaire-card-container" class="fade-in">${renderQuestionnaireCard()}</div>
     </div>
   </section>`;
 }
 
-// --- EDUCATION & ARTICLES ---
+// --- VISION SIMULATOR (logic unchanged; surrounding section restyled) ---
+function renderSimulator() {
+  return `
+  <section class="section section-stage vs-section" id="simulator">
+    <div class="container">
+      ${sectionHead('05', tr('أداة تثقيفية تفاعلية', 'Interactive education'), tr('كيف قد تبدو رؤيتك بعد زراعة العدسة؟', 'How might vision look after lens implantation?'),
+        tr('اسحب الخط للمقارنة بين العدسة المختارة والساد غير المعالج، في القيادة ليلاً أو القراءة. محاكاة توضيحية مبنية على متوسطات منشورة.', 'Drag the line to compare a lens with an untreated cataract, at night or while reading. An illustrative simulation based on published averages.'), 'section-head-split')}
+      <div id="simulator-host" class="fade-in"></div>
+    </div>
+  </section>`;
+}
+
+// --- 3D CATARACT SURGERY (lazy-loaded module, mounted on demand) ---
+// The module lives in src/cataract-sim/ (owned by another engineer). The host node is created once and
+// kept outside the re-rendered markup so a language re-render never destroys the running scene.
+const c3d = { host: null, controller: null, state: 'idle' }; // idle | loading | active | error
+
+function renderCataract3D() {
+  const st = c3d.state;
+  return `
+  <section class="section section-stage section-stage-deep" id="cataract-3d" data-state="${st}">
+    <div class="container c3d-grid">
+      <div class="c3d-text fade-in">
+        <p class="eyebrow"><span class="eyebrow-num" aria-hidden="true">06</span><span>${tr('تجربة تعليمية ثلاثية الأبعاد', 'Interactive 3D education')}</span></p>
+        <h2>${tr('عملية الماء الأبيض، خطوة بخطوة', 'Cataract surgery, step by step')}</h2>
+        <p class="lede">${tr('نموذج ثلاثي الأبعاد للعين يوضح المراحل الرئيسية لعملية إزالة الساد الحديثة وزراعة العدسة، لتفهم ما يحدث قبل أن تسأل عنه في العيادة.', 'A 3D model of the eye that walks through the main stages of modern cataract removal and lens implantation — so you understand what happens before you ask about it in clinic.')}</p>
+        <ul class="c3d-notes">
+          <li>${icon('info', 18)}<span>${tr('محتوى تعليمي توضيحي قيد المراجعة الطبية من الطبيب.', 'Illustrative education, pending physician review.')}</span></li>
+          <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل عملية بحسب حالة العين.', 'Not a substitute for a consultation; every operation is tailored to the individual eye.')}</span></li>
+        </ul>
+        <div class="c3d-actions">
+          <button type="button" class="btn btn-gold btn-lg" id="cataract-3d-start" onclick="startCataract3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+            ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
+          </button>
+          <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
+        </div>
+      </div>
+
+      <figure class="c3d-poster fade-in" aria-hidden="true">
+        <svg viewBox="0 0 400 300" class="c3d-svg" focusable="false">
+          <g fill="none" stroke="currentColor" stroke-linecap="round">
+            <path class="c3d-sclera" d="M300 150c0 66-52 118-118 118S64 216 64 150 116 32 182 32s118 52 118 118z" stroke-width="1.2" opacity=".5"/>
+            <path class="c3d-cornea" d="M292 96c22 30 22 78 0 108" stroke-width="1.6"/>
+            <path d="M262 100c-6 16-6 84 0 100M262 100l-14 4M262 200l-14-4" stroke-width="1.2" opacity=".7"/>
+            <ellipse class="c3d-lens" cx="238" cy="150" rx="17" ry="40" stroke-width="1.6"/>
+            <ellipse cx="238" cy="150" rx="9" ry="26" stroke-width=".8" opacity=".55"/>
+            <path d="M238 110c-20-10-34-14-46-14M238 190c-20 10-34 14-46 14" stroke-width=".8" opacity=".5"/>
+            <path class="c3d-retina" d="M108 70c-36 40-36 120 0 160" stroke-width="2.4" opacity=".55"/>
+            <path d="M74 150h-34" stroke-width="3" opacity=".45"/>
+            <path class="c3d-ray" d="M392 120 240 128 104 150M392 180 240 172 104 150" stroke-width=".9" stroke-dasharray="3 5"/>
+          </g>
+          <g class="c3d-labels" font-size="15">
+            <text x="302" y="86">${tr('القرنية', 'Cornea')}</text>
+            <text x="222" y="236">${tr('العدسة', 'Lens')}</text>
+            <text x="84" y="60">${tr('الشبكية', 'Retina')}</text>
+          </g>
+        </svg>
+        <figcaption>${tr('رسم توضيحي للعين: الضوء يمر عبر القرنية والعدسة إلى الشبكية.', 'The eye in section: light passes through the cornea and lens to the retina.')}</figcaption>
+      </figure>
+
+      <div class="c3d-stage" id="cataract-3d-stage" ${st === 'active' || st === 'loading' ? '' : 'hidden'} aria-label="${tr('التجربة ثلاثية الأبعاد', '3D experience')}" role="region"></div>
+    </div>
+  </section>`;
+}
+
+function c3dSync() {
+  const sec = document.getElementById('cataract-3d');
+  if (!sec) return;
+  sec.dataset.state = c3d.state;
+  const stage = document.getElementById('cataract-3d-stage');
+  const btn = document.getElementById('cataract-3d-start');
+  const status = sec.querySelector('.c3d-status');
+  if (stage) {
+    stage.hidden = !(c3d.state === 'active' || c3d.state === 'loading');
+    if (c3d.host && c3d.host.parentNode !== stage) stage.appendChild(c3d.host);
+  }
+  if (btn) {
+    btn.toggleAttribute('aria-busy', c3d.state === 'loading');
+    const label = btn.querySelector('.btn-label');
+    if (label) label.textContent = c3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
+  }
+  if (status) status.textContent = c3d.state === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : '';
+}
+
+function closeCataract3D() {
+  const ctrl = c3d.controller;
+  c3d.controller = null;
+  try { if (ctrl) ctrl.destroy(); } catch (e) { /* already torn down */ }
+  if (c3d.host) c3d.host.remove();
+  c3d.host = null;
+  c3d.state = 'idle';
+  c3dSync();
+  const btn = document.getElementById('cataract-3d-start');
+  if (btn) btn.focus({ preventScroll: true });
+}
+
+window.startCataract3D = async function () {
+  if (c3d.state === 'loading' || c3d.state === 'active') return;
+  c3d.state = 'loading';
+  c3d.host = document.createElement('div');
+  c3d.host.className = 'c3d-host';
+  c3dSync();
+  try {
+    // Static specifier so Vite code-splits the module (and three.js) out of the main chunk.
+    const mod = await import('./src/cataract-sim/index.js');
+    const ctrl = await mod.mount(c3d.host, {
+      lang: currentLang,
+      theme: resolvedTheme(),
+      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    });
+    if (c3d.state !== 'loading') { ctrl && ctrl.destroy && ctrl.destroy(); return; }
+    c3d.controller = ctrl;
+    c3d.state = 'active';
+    // the visitor may have switched language or theme while the module was loading
+    ctrl.setLang(currentLang);
+    ctrl.setTheme(resolvedTheme());
+    if (ctrl && typeof ctrl.on === 'function') ctrl.on('close', closeCataract3D);
+    c3dSync();
+    document.getElementById('cataract-3d-stage')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  } catch (e) {
+    console.warn('3D cataract module unavailable:', e);
+    if (c3d.host) c3d.host.remove();
+    c3d.host = null;
+    c3d.controller = null;
+    c3d.state = 'error';
+    c3dSync();
+  }
+};
+window.closeCataract3D = closeCataract3D;
+
+// --- EDUCATION LIBRARY ---
 function renderEducation() {
   const articles = [
     {
       id: 'cataract-guide',
       titleAr: 'ما هي المياه البيضاء (الساد) ومتى تصبح الجراحة ضرورية؟',
-      titleEn: 'What is a Cataract and When is Surgery Indicated?',
+      titleEn: 'What is a cataract, and when is surgery indicated?',
       contentAr: `
         <h4>ما هو إعتام عدسة العين؟</h4>
         <p>المياه البيضاء ليست غشاءً ينمو فوق سطح العين، بل هي عتامة تدريجية في العدسة الطبيعية الشفافة الموجودة داخل العين خلف بؤبؤ العين. تؤدي هذه العتامة إلى تشتت الضوء الداخل إلى الشبكية، مما يسبب ضبابية الرؤية، بهتان الألوان، وصعوبة القيادة ليلاً بسبب الوهج.</p>
         <h4>متى ينبغي إجراء العملية؟</h4>
         <p>لا تتطلب المياه البيضاء الجراحة فور اكتشافها إلا إذا كانت تسبب مضاعفات نادرة كارتفاع ضغط العين. المعيار الأساسي هو مدى تأثير ضعف النظر على أنشطتك اليومية مثل القراءة، قيادة السيارة، أو التعرف على وجوه الأشخاص.</p>
         <h4>كيف تُجرى الجراحة الحديثة؟</h4>
-        <p>تُجرى عملية الفاكو (Phacoemulsification) عبر شق جراحي صغير، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>
-      `,
+        <p>تُجرى عملية الفاكو (Phacoemulsification) عبر شق جراحي صغير، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>`,
       contentEn: `
-        <h4>Understanding Cataracts</h4>
-        <p>A cataract is not a film over the eye, but rather a gradual clouding of the natural crystalline lens inside the eye. This clouding scatters light entering the retina, producing blurred vision, washed-out colors, and glare around light sources at night.</p>
-        <h4>When Should Surgery Be Performed?</h4>
-        <p>Cataract surgery is rarely urgent. The guiding criterion is whether reduced visual acuity interferes with your regular daily activities, such as driving, reading, working on screens, or personal safety.</p>
-        <h4>Modern Phacoemulsification</h4>
-        <p>Surgery is performed through a small incision. Ultrasound gently breaks up the clouded lens, which is aspirated, and an artificial intraocular lens (IOL) is implanted under topical drop anesthesia with no stitches required in most cases.</p>
-      `
+        <h4>Understanding cataracts</h4>
+        <p>A cataract is not a film over the eye, but rather a gradual clouding of the natural crystalline lens inside the eye. This clouding scatters light entering the retina, producing blurred vision, washed-out colours, and glare around light sources at night.</p>
+        <h4>When should surgery be performed?</h4>
+        <p>Cataract surgery is rarely urgent. The guiding criterion is whether reduced vision interferes with your regular daily activities, such as driving, reading, working on screens, or personal safety.</p>
+        <h4>Modern phacoemulsification</h4>
+        <p>Surgery is performed through a small incision. Ultrasound gently breaks up the clouded lens, which is aspirated, and an artificial intraocular lens (IOL) is implanted under anaesthetic eye drops, with no stitches required in most cases.</p>`
     },
     {
       id: 'keratoconus-guide',
       titleAr: 'القرنية المخروطية: الأعراض، التشخيص، وخيارات التثبيت (CXL)',
-      titleEn: 'Keratoconus: Diagnosis, Progression, and Corneal Cross-Linking (CXL)',
+      titleEn: 'Keratoconus: diagnosis, progression and corneal cross-linking (CXL)',
       contentAr: `
         <h4>ما هي القرنية المخروطية؟</h4>
         <p>القرنية هي النافذة الشفافة الأمامية للعين. في القرنية المخروطية، يضعف النسيج الضام وتبرز القرنية تدريجياً لتأخذ شكلاً مخروطياً، مما يؤدي إلى استجماتيزم غير منتظم وتدهور سريع في قياسات النظارة خاصة لدى فئة الشباب والمراهقين.</p>
         <h4>أهمية التشخيص المبكر وتصوير تضاريس القرنية (Pentacam)</h4>
         <p>يساعد التصوير الطبقي للقرنية في اكتشاف المرض قبل ظهور أي علامات واضحة بالفحص العادي. يُنصح كل من يلاحظ تغيراً متكرراً في مقاس النظارة أو فركاً مزمناً في العين بإجراء هذا الفحص.</p>
         <h4>عملية تثبيت القرنية بالكولاجين (CXL)</h4>
-        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. ويهدف إلى إبطاء تقدم المرض أو إيقافه للحفاظ على النظر، وتختلف الاستجابة من مريض لآخر.</p>
-      `,
+        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. ويهدف إلى إبطاء تقدم المرض أو إيقافه للحفاظ على النظر، وتختلف الاستجابة من مريض لآخر.</p>`,
       contentEn: `
-        <h4>What is Keratoconus?</h4>
-        <p>Keratoconus is a progressive condition where the cornea thins and bulges into an irregular conical shape. This produces progressive irregular astigmatism, frequently requiring frequent eyeglass prescription changes in adolescents and young adults.</p>
-        <h4>Early Diagnosis with Corneal Tomography</h4>
-        <p>High-resolution Scheimpflug tomography (Pentacam) detects subclinical keratoconus before overt signs appear on basic slit-lamp examination. Anyone with rapidly changing astigmatism or habitual eye rubbing should be screened.</p>
-        <h4>Corneal Collagen Cross-Linking (CXL)</h4>
-        <p>CXL strengthens corneal stromal collagen bonds using riboflavin (vitamin B2) drops activated by UVA light. It aims to slow or stop disease progression to help preserve vision; response varies between patients.</p>
-      `
+        <h4>What is keratoconus?</h4>
+        <p>Keratoconus is a progressive condition where the cornea thins and bulges into an irregular conical shape. This produces progressive irregular astigmatism, often requiring frequent changes of glasses prescription in adolescents and young adults.</p>
+        <h4>Early diagnosis with corneal tomography</h4>
+        <p>High-resolution Scheimpflug tomography (Pentacam) detects subclinical keratoconus before overt signs appear on a basic slit-lamp examination. Anyone with rapidly changing astigmatism or habitual eye rubbing should be screened.</p>
+        <h4>Corneal collagen cross-linking (CXL)</h4>
+        <p>CXL strengthens corneal collagen bonds using riboflavin (vitamin B2) drops activated by UVA light. It aims to slow or stop disease progression to help preserve vision; response varies between patients.</p>`
     },
     {
       id: 'lasik-candidacy',
-      titleAr: 'من هو المرشح المناسب لعمليات تصحيح الإبصار بالليزر (الليزك والفيمتو ليزك)؟',
-      titleEn: 'Who is an Ideal Candidate for Laser Vision Correction (LASIK / PRK)?',
+      titleAr: 'من هو المرشح المناسب لتصحيح الإبصار بالليزر (الليزك والفيمتو ليزك)؟',
+      titleEn: 'Who is a suitable candidate for laser vision correction (LASIK / PRK)?',
       contentAr: `
         <h4>المعايير الأساسية للأمان:</h4>
         <ul>
@@ -1910,264 +1622,175 @@ function renderEducation() {
           <li><strong>صحة سطح العين:</strong> علاج أي جفاف حاد قبل اتخاذ قرار الليزك.</li>
         </ul>
         <h4>ما الفرق بين الفيمتو ليزك والليزر السطحي (PRK)؟</h4>
-        <p>في الفيمتو ليزك يتم رفع قشرة رقيقة من القرنية بواسطة ليزر الفيمتوثانية ثم تصحيح النظر، مما يوفر تعافياً سريعاً جداً. أما الليزر السطحي فيتم دون رفع أي قشرة، ويعد الخيار الأنسب لأصحاب القرنيات الرقيقة أو من يمارسون رياضات عنيفة.</p>
-      `,
+        <p>في الفيمتو ليزك يتم رفع قشرة رقيقة من القرنية بواسطة ليزر الفيمتوثانية ثم تصحيح النظر، مما يوفر تعافياً سريعاً. أما الليزر السطحي فيتم دون رفع أي قشرة، وقد يكون مناسباً لأصحاب القرنيات الرقيقة أو من يمارسون رياضات عنيفة.</p>`,
       contentEn: `
-        <h4>Essential Safety Criteria:</h4>
+        <h4>Essential safety criteria</h4>
         <ul>
-          <li><strong>Age:</strong> At least 18 years to ensure ocular maturity.</li>
-          <li><strong>Refractive Stability:</strong> Stable eyeglass prescription for at least 12 months.</li>
-          <li><strong>Corneal Thickness & Shape:</strong> Adequate corneal pachymetry with no topographic evidence of ectasia or forme fruste keratoconus.</li>
-          <li><strong>Ocular Surface:</strong> Absence of severe untreated dry eye disease.</li>
+          <li><strong>Age:</strong> at least 18 years, so the eye has matured.</li>
+          <li><strong>Refractive stability:</strong> a stable glasses prescription for at least 12 months.</li>
+          <li><strong>Corneal thickness & shape:</strong> adequate thickness with no topographic evidence of ectasia or early keratoconus.</li>
+          <li><strong>Ocular surface:</strong> no severe untreated dry eye disease.</li>
         </ul>
-        <h4>Femto-LASIK vs. Surface Ablation (PRK)</h4>
-        <p>Femto-LASIK utilizes a femtosecond laser to create a precise flap for swift visual recovery. PRK reshapes the corneal surface without flap creation, making it preferable for patients with thinner corneas or active contact sports involvement.</p>
-      `
+        <h4>Femto-LASIK vs. surface laser (PRK)</h4>
+        <p>Femto-LASIK uses a femtosecond laser to create a precise flap for a quick visual recovery. PRK reshapes the corneal surface without a flap, which may suit patients with thinner corneas or those in contact sports.</p>`
     },
     {
       id: 'surgery-journey',
       titleAr: 'رحلة المريض: ماذا تتوقع قبل وأثناء وبعد جراحة المياه البيضاء؟',
-      titleEn: 'The Patient Journey: What to Expect Before, During, and After Cataract Surgery',
+      titleEn: 'What to expect before, during and after cataract surgery',
       contentAr: `
         <h4>قبل العملية (التحضير والقياسات):</h4>
-        <p>يخضع المريض لقياسات بصرية فائقة الدقة (Optical Biometry) لحساب قوة العدسة المناسبة، مع مناقشة نوع العدسة الأنسب لاحتياجاته.</p>
+        <p>يخضع المريض لقياسات بصرية دقيقة (Optical Biometry) لحساب قوة العدسة المناسبة، مع مناقشة نوع العدسة الأنسب لاحتياجاته.</p>
         <h4>يوم العملية:</h4>
         <p>إجراء يومي لا يستدعي المبيت. تستغرق الجراحة نحو 15 إلى 20 دقيقة تحت تخدير موضعي بالقطرات، مع شعور المريض بضغط خفيف أو أضواء دون ألم حقيقي.</p>
         <h4>بعد العملية:</h4>
-        <p>يغادر المريض بعد وقت وجيز مرتدياً غطاءً واقياً. من الضروري الالتزام بجدول القطرات المضادة للالتهاب والمضادات الحيوية، وتجنب فرك العين أو وصول الماء المباشر إليها خلال الأيام الأولى.</p>
-      `,
+        <p>يغادر المريض بعد وقت وجيز مرتدياً غطاءً واقياً. من الضروري الالتزام بجدول القطرات المضادة للالتهاب والمضادات الحيوية، وتجنب فرك العين أو وصول الماء المباشر إليها خلال الأيام الأولى.</p>`,
       contentEn: `
-        <h4>Pre-Operative Preparation:</h4>
-        <p>Precise optical biometry is performed to calculate target IOL power, paired with a detailed lifestyle discussion regarding distance, intermediate, and near visual needs.</p>
-        <h4>Day of Surgery:</h4>
-        <p>Performed as an outpatient day procedure under topical anesthetic eye drops. The surgical procedure typically lasts 15–20 minutes usually with little discomfort; most patients go home the same day.</p>
-        <h4>Post-Operative Care:</h4>
-        <p>Patients follow a structured regimen of anti-inflammatory and antibiotic eye drops, avoiding eye rubbing or direct tap water exposure during the initial healing window.</p>
-      `
+        <h4>Before surgery</h4>
+        <p>Precise optical biometry is performed to calculate the lens power, together with a discussion of your distance, intermediate and near vision needs.</p>
+        <h4>Day of surgery</h4>
+        <p>An outpatient day procedure under anaesthetic eye drops. The operation typically lasts 15–20 minutes, usually with little discomfort; most patients go home the same day.</p>
+        <h4>After surgery</h4>
+        <p>Patients follow a schedule of anti-inflammatory and antibiotic eye drops, avoiding eye rubbing or direct tap water in the first days of healing.</p>`
     }
   ];
 
   return `
-  <section class="section section-alt" id="education">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${currentLang === 'ar' ? 'المكتبة الطبية والتثقيف السريري' : 'Medical Library & Patient Education'}</div>
-        <h2>${currentLang === 'ar' ? 'إرشادات طبية موثقة لصحة عينيك' : 'Evidence-Based Eye Health Guidance'}</h2>
-        <p>${currentLang === 'ar' ? 'مقالات وأدلة سريرية أعدت بإشراف الدكتور معن بن عبدالله البري لتزويدك بالحقائق الطبية الدقيقة.' : 'Reviewed guides developed under Dr. Maan Al Barry’s clinical oversight.'}</p>
+  <section class="section" id="education">
+    <div class="container lib-grid">
+      <div class="lib-aside">
+        ${sectionHead('07', tr('المكتبة الطبية', 'Medical library'), tr('إجابات واضحة قبل القرار', 'Clear answers before any decision'),
+          tr('أدلة تثقيفية أُعدت بإشراف د. معن بن عبدالله البري.', 'Patient guides prepared under Dr. Maan Al Barry’s clinical oversight.'))}
+        <aside class="red-flags fade-in" aria-labelledby="red-flags-title">
+          <h3 id="red-flags-title">${icon('alert', 20)}<span>${tr('علامات تستوجب رعاية عاجلة', 'Seek urgent care for')}</span></h3>
+          <ul>
+            <li>${tr('فقدان مفاجئ أو تدهور سريع في الرؤية بأي من العينين.', 'Sudden loss or rapid worsening of vision in either eye.')}</li>
+            <li>${tr('ألم شديد مفاجئ في العين مع احمرار أو صداع وغثيان.', 'Severe, sudden eye pain with redness, headache or nausea.')}</li>
+            <li>${tr('ومضات ضوئية مفاجئة أو هطول كثيف لنقاط سوداء عائمة.', 'Sudden flashes of light or a shower of floating dark spots.')}</li>
+            <li>${tr('ظل أو ستارة داكنة تغطي جزءاً من مجال الرؤية.', 'A dark shadow or curtain across part of your vision.')}</li>
+          </ul>
+          <p>${tr('توجّه فوراً إلى أقرب طوارئ عيون متخصصة.', 'Go to the nearest eye emergency department immediately.')}</p>
+        </aside>
       </div>
 
       <div class="article-accordion fade-in">
-        ${articles.map(a => `
-          <div class="article-item ${openArticleId === a.id ? 'open' : ''}" id="art-item-${a.id}">
-            <button class="article-trigger" onclick="toggleArticle('${a.id}')" aria-expanded="${openArticleId === a.id ? 'true' : 'false'}" aria-controls="art-content-${a.id}">
-              <span>${currentLang === 'ar' ? a.titleAr : a.titleEn}</span>
-              <span class="trigger-icon">▼</span>
+        ${articles.map((a, i) => `
+        <div class="article-item ${openArticleId === a.id ? 'open' : ''}" id="art-item-${a.id}">
+          <h3 class="article-heading">
+            <button type="button" class="article-trigger" onclick="toggleArticle('${a.id}')" aria-expanded="${openArticleId === a.id ? 'true' : 'false'}" aria-controls="art-content-${a.id}">
+              <span class="article-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+              <span class="article-title">${tr(a.titleAr, a.titleEn)}</span>
+              <span class="trigger-icon" aria-hidden="true">${icon('chevron', 20)}</span>
             </button>
-            <div class="article-content" id="art-content-${a.id}">
-              ${currentLang === 'ar' ? a.contentAr : a.contentEn}
-              <div style="margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid var(--border-subtle);font-size:0.8rem;color:var(--text-muted);">
-                ${currentLang === 'ar' ? 'إشراف ومراجعة سريرية: د. معن بن عبدالله البري — استشاري طب وجراحة العيون' : 'Medically supervised by Dr. Maan Al Barry — Consultant Ophthalmologist'}
-              </div>
-            </div>
+          </h3>
+          <div class="article-content" id="art-content-${a.id}" role="region">
+            ${tr(a.contentAr, a.contentEn)}
+            <p class="article-byline">${tr('إشراف ومراجعة سريرية: د. معن بن عبدالله البري — استشاري طب وجراحة العيون', 'Clinical review: Dr. Maan Al Barry — Consultant Ophthalmologist')}</p>
           </div>
-        `).join('')}
-      </div>
-
-      <!-- Emergency Red Flags Card -->
-      <div class="emergency-card fade-in">
-        <div class="emergency-header">
-          <span>${currentLang === 'ar' ? 'علامات التحذير الطارئة (تستوجب الرعاية العاجلة فوراً)' : 'Emergency Red Flags (Require Immediate Ophthalmic Care)'}</span>
-        </div>
-        <p style="font-size:0.9rem;">
-          ${currentLang === 'ar' ? 'إذا كنت تعاني من أي من الأعراض التالية، يرجى التوجه فوراً لأقرب طوارئ عيون متخصصة:' : 'If you experience any of the following symptoms, seek urgent emergency ophthalmic care immediately:'}
-        </p>
-        <ul>
-          <li>${currentLang === 'ar' ? 'فقدان مفاجئ أو تدهور حاد وسريع في الرؤية بأي من العينين.' : 'Sudden vision loss or rapid deterioration of sight in either eye.'}</li>
-          <li>${currentLang === 'ar' ? 'ألم شديد ومفاجئ في العين مصحوب باحمرار أو صداع وغثيان.' : 'Severe, sudden eye pain accompanied by redness, headache, or nausea.'}</li>
-          <li>${currentLang === 'ar' ? 'ظهور ومضات ضوئية مفاجئة أو هطول كثيف من النقاط السوداء العائمة (ذباب طائر).' : 'Sudden onset of light flashes or a heavy shower of floating black spots.'}</li>
-          <li>${currentLang === 'ar' ? 'ظهور ما يشبه الستارة السوداء أو الظل الذي يغطي جزءاً من مجال الرؤية.' : 'A dark shadow or curtain falling across any portion of your visual field.'}</li>
-        </ul>
+        </div>`).join('')}
       </div>
     </div>
   </section>`;
 }
 
-// --- CLINIC LOCATION & DIRECT BOOKING ---
+// --- CLINIC, HOURS & BOOKING JOURNEY ---
 function renderClinic() {
-  const isAr = (currentLang === 'ar');
   return `
-  <section class="section" id="clinic">
+  <section class="section section-sand" id="clinic">
     <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${isAr ? 'العيادة والموقع الجغرافي' : 'Hospital Practice & Location'}</div>
-        <h2>${isAr ? 'العيادة والاستشارات وحجز المواعيد' : 'Clinic Location & Direct Appointment Booking'}</h2>
-        <p>${isAr ? 'نرحب بكم في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، المزودة بأحدث التجهيزات الجراحية والتشخيصية.' : 'We welcome you at Magrabi Health Eye & ENT Hospital in Madinah, fully equipped with state-of-the-art diagnostic and surgical technology.'}</p>
-      </div>
+      ${sectionHead('08', tr('العيادة والحجز', 'Clinic & booking'), tr('ثلاث طرق للوصول إلى موعدك', 'Three ways to your appointment'),
+        tr(`يستقبل د. معن مراجعيه في ${D.clinic.name.ar}.`, `Dr. Maan sees patients at ${D.clinic.name.en}.`))}
 
-      <div class="clinic-card fade-in">
-        <!-- Modern Expansive Map Section -->
-        <div class="clinic-map-pane">
-          <iframe 
-            src="https://maps.google.com/maps?q=Magrabi+Eye+Hospital+Madinah&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            title="${isAr ? 'خريطة موقع مستشفى مغربي المدينة المنورة' : 'Magrabi Eye Hospital Madinah Map'}"
-            loading="lazy"
-            allowfullscreen>
-          </iframe>
-          <div class="clinic-map-meta">
-            <div class="map-meta-info">
-              <span class="map-marker-icon" aria-hidden="true">📍</span>
-              <div>
-                <strong>${L(DOCTOR.clinic.name)}</strong>
-                <small>${L(DOCTOR.clinic.address)}</small>
+      <div class="clinic-grid">
+        <ol class="booking-ways fade-in">
+          <li class="way">
+            <span class="way-num" aria-hidden="true">1</span>
+            <div class="way-body">
+              <h3>${tr('الحجز الإلكتروني', 'Book online')}</h3>
+              <p>${tr('عبر البوابة الرسمية لمستشفيات مغربي — اختر د. معن البري وموعداً مناسباً.', 'Through Magrabi’s official booking portal — choose Dr. Maan Al Barry and a suitable time.')}</p>
+              <div class="clinic-cta-actions">
+                <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" id="clinic-booking-cta" data-cta="book">
+                  <span class="btn-label">${tr('الحجز عبر بوابة مغربي', 'Book on the Magrabi portal')}</span>${icon('external', 18)}
+                </a>
               </div>
             </div>
-            <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-map-action">
-              <span>${isAr ? 'الاتجاهات عبر Google Maps' : 'Open in Google Maps'}</span>
-              <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="clinic-info">
-          <div class="clinic-header-badge">
-            <span class="badge-dot-pulse"></span>
-            <span>${isAr ? 'مكان الممارسة | مغربي المدينة المنورة' : 'Hospital practice | Magrabi Madinah'}</span>
-          </div>
-
-          <h3>${isAr ? 'بيانات التواصل وأوقات الزيارة' : 'Clinic Contact & Practice Schedule'}</h3>
-
-          <div class="clinic-detail-list">
-            <div class="clinic-detail-item">
-              <div class="detail-icon-box" aria-hidden="true">🏥</div>
-              <div class="detail-text">
-                <strong>${isAr ? 'الموقع والصرح الطبي' : 'Medical Hospital'}</strong>
-                <span>${L(DOCTOR.clinic.name)}</span>
-                <small style="color:var(--text-muted);display:block;margin-top:2px;">${L(DOCTOR.clinic.address)}</small>
+          </li>
+          <li class="way way-featured">
+            <span class="way-num" aria-hidden="true">2</span>
+            <div class="way-body">
+              <h3>${tr('عيادة د. معن مباشرة — اتصال أو واتساب', 'Dr. Maan’s clinic — call or WhatsApp')}</h3>
+              <p class="way-number"><bdi dir="ltr">${C.clinicDirect.display}</bdi></p>
+              <div class="way-actions">
+                <a href="tel:${C.clinicDirect.tel}" class="btn btn-quiet" data-cta="call">${icon('phone', 18)}<span>${tr('اتصال', 'Call')}</span></a>
+                <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب', 'WhatsApp')}</span></a>
               </div>
             </div>
-
-            <div class="clinic-detail-item">
-              <div class="detail-icon-box" aria-hidden="true">📞</div>
-              <div class="detail-text">
-                <strong>${isAr ? 'مركز اتصال مغربي الصحية' : 'Magrabi Health contact center'}</strong>
-                <span class="contact-numbers">
-                  <a href="tel:${DOCTOR.contact.callCenter.tel}" class="contact-number" data-cta="call"><bdi dir="ltr">${DOCTOR.contact.callCenter.display}</bdi></a>
-                  <span aria-hidden="true">·</span>
-                  <a href="tel:${DOCTOR.contact.callCenterShort.tel}" class="contact-number" data-cta="call"><bdi dir="ltr">${DOCTOR.contact.callCenterShort.display}</bdi></a>
-                </span>
-              </div>
+          </li>
+          <li class="way">
+            <span class="way-num" aria-hidden="true">3</span>
+            <div class="way-body">
+              <h3>${tr('مركز اتصال مغربي الصحية', 'Magrabi Health contact center')}</h3>
+              <p class="contact-numbers">
+                <a href="tel:${C.callCenter.tel}" class="contact-number" data-cta="call">${icon('phone', 16)}<bdi dir="ltr">${C.callCenter.display}</bdi></a>
+                <a href="tel:${C.callCenterShort.tel}" class="contact-number" data-cta="call">${icon('phone', 16)}<bdi dir="ltr">${C.callCenterShort.display}</bdi></a>
+              </p>
             </div>
+          </li>
+        </ol>
 
-            <div class="clinic-detail-item">
-              <div class="detail-icon-box" aria-hidden="true">🕒</div>
-              <div class="detail-text">
-                <strong>${isAr ? 'مواعيد العيادة' : 'Clinic hours'}</strong>
-                <span>${DOCTOR.clinic.workingHours
-                  ? L(DOCTOR.clinic.workingHours)
-                  : (isAr ? 'تختلف مواعيد عيادة الطبيب؛ يرجى تأكيد الموعد عبر مركز الاتصال أو بوابة الحجز.' : 'The doctor’s clinic schedule varies; please confirm through the contact center or the booking portal.')}</span>
-              </div>
-            </div>
+        <div class="visit fade-in">
+          <div class="visit-hours">
+            <p class="visit-label">${icon('clock', 18)}<span>${tr('مواعيد العيادة', 'Clinic hours')}</span></p>
+            <p class="visit-hours-text">${L(D.clinic.workingHours)}</p>
+            <p class="visit-small">${tr('يُرجى تأكيد الموعد عبر الحجز، فقد يتغير الجدول.', 'Please confirm through booking, as the schedule can change.')}</p>
           </div>
-
-          <div class="clinic-cta-actions">
-            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-arrow-fill" id="clinic-booking-cta" data-cta="book">
-              <span class="btn-fill-effect" aria-hidden="true"></span>
-              <span class="btn-label">${isAr ? 'حجز موعد عبر البوابة الرسمية لمغربي' : 'Book via Magrabi Official Portal'}</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <svg class="btn-arrow-svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </span>
-            </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" data-cta="whatsapp">
-              <span>${isAr ? 'تنسيق واستفسار عبر واتساب' : 'Inquire via WhatsApp'}</span>
-            </a>
+          <div class="visit-place">
+            <p class="visit-label">${icon('pin', 18)}<span>${tr('العنوان', 'Address')}</span></p>
+            <p class="visit-strong">${L(D.clinic.name)}</p>
+            <p class="visit-small">${L(D.clinic.address)}</p>
           </div>
+          <div class="clinic-map">
+            <iframe src="https://maps.google.com/maps?q=${D.clinic.mapEmbedQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed" title="${tr('خريطة موقع مستشفى مغربي المدينة المنورة', 'Map of Magrabi Eye Hospital, Madinah')}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <a href="${D.clinic.mapUrl}" ${EXT} class="text-link">${tr('الاتجاهات عبر خرائط جوجل', 'Directions in Google Maps')}${icon('external', 16)}</a>
         </div>
       </div>
     </div>
   </section>`;
 }
 
-// --- FAQ SECTION ---
+// --- FAQ ---
 function renderFaq() {
-
   return `
-  <section class="section section-alt" id="faq">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-label">${currentLang === 'ar' ? 'الأسئلة الشائعة والاستفسارات' : 'Frequently Asked Questions'}</div>
-        <h2>${currentLang === 'ar' ? 'دليل إجابات صحة العين وجراحة الساد والقرنية' : 'Ophthalmic Health & Surgical Answers'}</h2>
-      </div>
-
+  <section class="section" id="faq">
+    <div class="container faq-grid">
+      ${sectionHead('09', tr('الأسئلة الشائعة', 'Questions'), tr('أسئلة يطرحها المرضى كثيراً', 'Questions patients often ask'))}
       <div class="faq-list fade-in">
         ${FAQ.map((f, idx) => `
-          <div class="faq-item" id="faq-${idx}">
-            <button class="faq-question" onclick="toggleFaq(${idx})" aria-expanded="false" aria-controls="faq-answer-${idx}">
-              <span>${L(f.q)}</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer" id="faq-answer-${idx}" role="region">
-              <p>${L(f.a)}</p>
-            </div>
-          </div>
-        `).join('')}
+        <div class="faq-item" id="faq-${idx}">
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" onclick="toggleFaq(${idx})" aria-expanded="false" aria-controls="faq-answer-${idx}"><span>${L(f.q)}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
+          </h3>
+          <div class="faq-answer" id="faq-answer-${idx}" role="region"><p>${L(f.a)}</p></div>
+        </div>`).join('')}
       </div>
     </div>
   </section>`;
 }
 
-// --- CTA BANNER ---
+// --- CLOSING CALL TO ACTION ---
 function renderCtaBanner() {
-  const isAr = (currentLang === 'ar');
   return `
-  <section class="section" style="padding-top: var(--space-4); padding-bottom: var(--space-14);">
-    <div class="container">
-      <div class="cta-banner fade-in">
-        <div class="cta-banner-decor" aria-hidden="true"></div>
-        <div class="cta-banner-content">
-          <div class="cta-badge">
-            <span class="badge-seal" aria-hidden="true">★</span>
-            <span>${isAr ? 'حجز مباشر | رعاية استشارية متخصصة منذ 1998' : 'Direct Booking | Specialist Care Since 1998'}</span>
-          </div>
-          <h2>${isAr ? 'جاهز لحجز موعد كشف أو استشارة مع <span class="font-doctor-highlight">د. معن البري</span>؟' : 'Ready to Book an Examination or Consultation with Dr. Maan?'}</h2>
-          <p>${isAr ? 'نرحب بك في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة لإجراء تقييم شامل لقرنية وعينك واختيار الحل الجراحي أو نوع العدسة الأنسب لنمط حياتك بكل دقة وشفافية.' : 'We welcome you at Magrabi Health Eye & ENT Hospital in Madinah for a comprehensive anterior segment exam and individualized surgical guidance.'}</p>
-          
-          <div class="cta-buttons-group">
-            <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-arrow-fill" id="cta-primary-btn" data-cta="book">
-              <span class="btn-fill-effect" aria-hidden="true"></span>
-              <span class="btn-label">${isAr ? 'احجز موعد كشف أو استشارة' : 'Book Clinic Appointment'}</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <svg class="btn-arrow-svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </span>
-            </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
-              <span>${isAr ? 'تنسيق واستفسار عبر واتساب' : 'Inquire via WhatsApp'}</span>
-            </a>
-            <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg">
-              <span>${isAr ? 'الاتجاهات وموقع المستشفى' : 'Hospital Location'}</span>
-            </a>
-          </div>
-
-          <div class="cta-trust-row">
-            <div class="cta-trust-item">
-              <span class="trust-check">✓</span>
-              <span>${isAr ? 'فحص تشخيصي مخصص' : 'Custom Diagnostic Profiling'}</span>
-            </div>
-            <div class="cta-trust-item">
-              <span class="trust-check">✓</span>
-              <span>${isAr ? 'استشارة استشارية مباشرة' : 'Direct Consultant Exam'}</span>
-            </div>
-            <div class="cta-trust-item">
-              <span class="trust-check">✓</span>
-              <span>${isAr ? 'مستشفى مغربي – طريق المطار' : 'Magrabi Hospital – Airport Rd'}</span>
-            </div>
-          </div>
-        </div>
+  <section class="closing" aria-labelledby="closing-title">
+    <div class="container closing-inner fade-in">
+      <div>
+        <p class="eyebrow"><span>${tr('مغربي المدينة المنورة · طريق المطار', 'Magrabi Madinah · Airport Road')}</span></p>
+        <h2 id="closing-title">${tr('موعدك مع د. معن البري يبدأ بخطوة', 'Your appointment with Dr. Maan starts here')}</h2>
+      </div>
+      <div class="closing-actions">
+        <a href="${C.bookingUrl}" ${EXT} class="btn btn-gold btn-lg" id="cta-primary-btn" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
+        <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب العيادة', 'Clinic WhatsApp')}</span></a>
+        <a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>
       </div>
     </div>
   </section>`;
@@ -2175,88 +1798,46 @@ function renderCtaBanner() {
 
 // --- FOOTER ---
 function renderFooter() {
+  const nav = id => NAV.find(n => n[0] === id) || DRAWER_NAV.find(n => n[0] === id);
+  const navLink = id => { const [, ar, en] = nav(id); return `<a href="#${id}" onclick="scrollToSection('${id}');return false;">${tr(ar, en)}</a>`; };
   return `
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);">
-            <div class="logo-icon" style="width:38px;height:38px;font-size:1.1rem;">م</div>
-            <div>
-              <strong class="${currentLang === 'ar' ? 'font-doctor-highlight' : ''}" style="color:var(--footer-title);font-size:1.15rem;display:block;">${L(DOCTOR.identity.name)}</strong>
-              <small style="color:var(--gold);font-size:0.75rem;">${L(DOCTOR.identity.title)}</small>
-            </div>
-          </div>
-          <p style="font-size:0.85rem;line-height:1.7;">
-            ${currentLang === 'ar'
-              ? 'الموقع الرسمي للتعريف بالخبرات الأكاديمية والسريرية للدكتور معن بن عبدالله البري، ونشر التثقيف الطبي الموثوق حول جراحات القرنية والماء الأبيض وتصحيح النظر.'
-              : 'Official medical portal presenting Dr. Maan Al Barry academic appointments and evidence-based patient education.'}
-          </p>
-          <div class="footer-social-links">
-            <a href="${DOCTOR.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-link-btn instagram" aria-label="Instagram" title="Instagram - Dr. Maan Albarry">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-            <a href="${DOCTOR.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-link-btn twitter" aria-label="X (Twitter)" title="X (Twitter) - Dr. Maan Albarry">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            <a href="${DOCTOR.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-link-btn youtube" aria-label="YouTube" title="YouTube - Dr. Maan Albarry">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            </a>
-            <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="social-link-btn whatsapp" aria-label="WhatsApp" title="WhatsApp">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-              </svg>
-            </a>
+          <p class="footer-name">${L(D.identity.name)}</p>
+          <p class="footer-title">${L(D.identity.title)}</p>
+          <div class="social-row">
+            <a href="${D.social.instagram}" ${EXT} class="icon-btn" aria-label="Instagram">${glyph('instagram')}</a>
+            <a href="${D.social.twitter}" ${EXT} class="icon-btn" aria-label="X (Twitter)">${glyph('x', 16)}</a>
+            <a href="${D.social.youtube}" ${EXT} class="icon-btn" aria-label="YouTube">${glyph('youtube')}</a>
+            <a href="${getWhatsAppUrl()}" ${EXT} class="icon-btn" aria-label="WhatsApp" data-cta="whatsapp">${glyph('whatsapp')}</a>
           </div>
         </div>
-
+        <nav class="footer-col" aria-label="${tr('روابط الموقع', 'Site links')}">
+          <h3>${tr('المحتويات', 'Contents')}</h3>
+          ${['profile', 'specialties', 'cataracts', 'simulator', 'cataract-3d', 'education', 'faq'].map(navLink).join('')}
+        </nav>
         <div class="footer-col">
-          <h4>${currentLang === 'ar' ? 'روابط الوصول السريع' : 'Quick Navigation'}</h4>
-          <a href="#home" onclick="scrollToSection('home');return false;">${currentLang === 'ar' ? 'الرئيسية' : 'Home'}</a>
-          <a href="#profile" onclick="scrollToSection('profile');return false;">${currentLang === 'ar' ? 'السيرة المهنية' : 'Biography'}</a>
-          <a href="#conferences" onclick="scrollToSection('conferences');return false;">${currentLang === 'ar' ? 'المشاركات العلمية والمؤتمرات الدولية' : 'Scientific Conferences'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'التخصصات الجراحية' : 'Specialties'}</a>
-          <a href="#simulator" onclick="scrollToSection('simulator');return false;">${currentLang === 'ar' ? 'محاكي الرؤية' : 'Simulator'}</a>
-          <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'دليل العدسات IOL' : 'IOL Guide'}</a>
-        </div>
-
-        <div class="footer-col footer-col-focus">
-          <h4>${currentLang === 'ar' ? 'التخصصات الدقيقة' : 'Clinical Focus'}</h4>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'جراحة الساد والماء الأبيض' : 'Cataract Surgery'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'زراعة العدسات ثلاثية البؤرة' : 'Trifocal / EDOF IOLs'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'القرنية المخروطية وتثبيت CXL' : 'Keratoconus (CXL)'}</a>
-          <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'الفيمتو ليزك وتصحيح النظر' : 'Femto-LASIK & PRK'}</a>
-        </div>
-
-        <div class="footer-col">
-          <h4>${currentLang === 'ar' ? 'العيادة والتواصل' : 'Hospital & Contact'}</h4>
-          <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'مغربي طريق المطار (Google Maps)' : 'Airport Road, Madinah (Maps)'}</a>
-          <a href="tel:${DOCTOR.contact.callCenter.tel}" data-cta="call">${currentLang === 'ar' ? 'مركز اتصال مغربي: ' : 'Magrabi contact center: '}<bdi dir="ltr">${DOCTOR.contact.callCenter.display}</bdi></a>
-          <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" data-cta="whatsapp">${currentLang === 'ar' ? 'واتساب مواعيد مغربي' : 'Magrabi appointments WhatsApp'}</a>
-          <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'بوابة الحجز الإلكتروني' : 'Online Booking'}</a>
+          <h3>${tr('التواصل', 'Contact')}</h3>
+          <a href="tel:${C.clinicDirect.tel}" data-cta="call">${tr('عيادة الدكتور: ', 'Clinic line: ')}<bdi dir="ltr">${C.clinicDirect.display}</bdi></a>
+          <a href="tel:${C.callCenter.tel}" data-cta="call">${tr('مركز اتصال مغربي: ', 'Magrabi contact center: ')}<bdi dir="ltr">${C.callCenter.display}</bdi></a>
+          <a href="${C.bookingUrl}" ${EXT}>${tr('بوابة الحجز الإلكتروني', 'Online booking')}</a>
+          <a href="${D.clinic.mapUrl}" ${EXT}>${tr('مغربي طريق المطار (خرائط جوجل)', 'Airport Road, Madinah (Maps)')}</a>
         </div>
       </div>
 
-      <div class="medical-disclaimer" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#94A3B8;margin-bottom:var(--space-6);">
-        <strong style="color:var(--gold);">${currentLang === 'ar' ? 'إخلاء مسؤولية طبي معتمد:' : 'Medical Disclaimer:'}</strong>
-        ${currentLang === 'ar'
-          ? 'المحتوى العلمي والمواد التثقيفية المنشورة على هذا الموقع مخصصة حصرياً للتوعية الطبية العامة، ولا تُعد بأي حال من الأحوال بديلاً عن الكشف الإكلينيكي المباشر والتشخيص العيني الدقيق لدى الطبيب الاستشاري.'
-          : 'Content published on this website is for educational and awareness purposes only and does not substitute for personalized clinical examination and medical diagnosis by an ophthalmologist.'}
-      </div>
+      <p class="footer-disclaimer"><strong>${tr('إخلاء مسؤولية طبي:', 'Medical disclaimer:')}</strong> ${tr(
+        'المحتوى المنشور على هذا الموقع مخصص للتوعية الطبية العامة، ولا يُعد بديلاً عن الفحص السريري المباشر والتشخيص لدى طبيب العيون.',
+        'Content on this website is for general education only and does not replace an in-person clinical examination and diagnosis by an ophthalmologist.')}</p>
 
       <div class="footer-bottom">
-        <p>© ${new Date().getFullYear()} ${L(DOCTOR.identity.name)} — ${currentLang === 'ar' ? 'جميع الحقوق محفوظة' : 'All Rights Reserved'}</p>
-        <div>
-          <a href="${DOCTOR.social.magrabiProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'الملف الطبي في مغربي' : 'Magrabi Profile'}</a> ·
-          <a href="${DOCTOR.social.taibahProfile}" target="_blank" rel="noopener noreferrer">${currentLang === 'ar' ? 'ملف جامعة طيبة' : 'Taibah University Profile'}</a> ·
-          <a href="${DOCTOR.clinic.mapUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
-        </div>
+        <p>© ${new Date().getFullYear()} ${L(D.identity.name)} — ${tr('جميع الحقوق محفوظة', 'All rights reserved')}</p>
+        <p class="footer-links">
+          <a href="${D.social.magrabiProfile}" ${EXT}>${tr('الملف الطبي في مغربي', 'Magrabi profile')}</a>
+          <a href="${D.social.taibahProfile}" ${EXT}>${tr('ملف جامعة طيبة', 'Taibah University profile')}</a>
+          <a href="${D.clinic.mapUrl}" ${EXT}>Google Maps</a>
+        </p>
       </div>
     </div>
   </footer>`;
@@ -2264,30 +1845,48 @@ function renderFooter() {
 
 // --- FIXED MOBILE BOOKING BAR ---
 // Three primary actions only (book, call, WhatsApp). Maps stays reachable from the clinic section,
-// the CTA banner and the footer.
+// the closing band, the drawer and the footer.
 function renderBookingBar() {
-  const isAr = (currentLang === 'ar');
-  const call = DOCTOR.contact.callCenter;
+  const call = C.callCenter;
   return `
-  <nav class="booking-bar" id="booking-bar" aria-label="${isAr ? 'إجراءات الحجز السريعة' : 'Quick booking actions'}">
+  <nav class="booking-bar" id="booking-bar" aria-label="${tr('إجراءات الحجز السريعة', 'Quick booking actions')}">
     <div class="booking-bar-inner">
-      <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="booking-action booking-action-book" data-cta="book">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
-        <span>${isAr ? 'احجز موعداً' : 'Book'}</span>
-      </a>
-      <a href="tel:${call.tel}" class="booking-action booking-action-call" data-cta="call" aria-label="${isAr ? `اتصال بمركز اتصال مغربي ${call.display}` : `Call Magrabi contact center ${call.display}`}">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg>
-        <span>${isAr ? 'اتصال' : 'Call'}</span>
-      </a>
-      <a href="${getWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="booking-action booking-action-whatsapp" data-cta="whatsapp" aria-label="${isAr ? 'واتساب مواعيد مغربي' : 'Magrabi appointments on WhatsApp'}">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
-        <span>${isAr ? 'واتساب' : 'WhatsApp'}</span>
-      </a>
+      <a href="${C.bookingUrl}" ${EXT} class="booking-action booking-action-book" data-cta="book">${icon('calendar', 20)}<span>${tr('احجز موعداً', 'Book')}</span></a>
+      <a href="tel:${call.tel}" class="booking-action booking-action-call" data-cta="call" aria-label="${tr(`اتصال بمركز اتصال مغربي ${call.display}`, `Call Magrabi contact center ${call.display}`)}">${icon('phone', 20)}<span>${tr('اتصال', 'Call')}</span></a>
+      <a href="${getWhatsAppUrl()}" ${EXT} class="booking-action booking-action-whatsapp" data-cta="whatsapp" aria-label="${tr('واتساب عيادة د. معن', 'Dr. Maan’s clinic on WhatsApp')}">${glyph('whatsapp', 20)}<span>${tr('واتساب', 'WhatsApp')}</span></a>
     </div>
   </nav>`;
 }
 
-// --- GLOBAL ATTACHMENTS & INTERACTION DISPATCHERS ---
+// --- THEME ---
+function applyTheme() {
+  const theme = resolvedTheme();
+  document.documentElement.setAttribute('data-theme', theme);
+  const isDark = theme === 'dark';
+  const label = isDark ? tr('الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري', 'Dark mode on. Switch to light mode')
+    : tr('الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي', 'Light mode on. Switch to dark mode');
+  document.querySelectorAll('.theme-toggle').forEach(btn => {
+    btn.setAttribute('aria-checked', String(isDark));
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  });
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', isDark ? '#0B1424' : '#F7F3EB');
+  if (c3d.controller && typeof c3d.controller.setTheme === 'function') {
+    try { c3d.controller.setTheme(theme); } catch (e) { /* module handles its own errors */ }
+  }
+}
+
+darkQuery.addEventListener('change', () => { if (!savedTheme) applyTheme(); });
+
+window.toggleTheme = function () {
+  savedTheme = resolvedTheme() === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('theme', savedTheme); } catch (e) { /* storage unavailable: session-only */ }
+  applyTheme();
+};
+window.cycleTheme = window.toggleTheme;
+
+// --- LANGUAGE ---
 window.toggleLang = function () {
   currentLang = (currentLang === 'ar' ? 'en' : 'ar');
   try { localStorage.setItem('lang', currentLang); } catch (e) { /* storage unavailable: session-only */ }
@@ -2300,114 +1899,56 @@ window.toggleLang = function () {
 };
 
 // --- ACTIVE SECTION TRACKER & SCROLLSPY ---
-const NAV_SECTION_IDS = [
-  'home',
-  'profile',
-  'conferences',
-  'specialties',
-  'simulator',
-  'cataracts',
-  'education',
-  'clinic'
-];
-
-let currentActiveNavId = 'home';
-let isClickScrolling = false;
-let clickScrollTimer = null;
-
 window.setActiveNav = function (id) {
   if (!id) return;
   currentActiveNavId = id;
-
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    const href = a.getAttribute('href');
-    if (href === `#${id}`) {
-      a.classList.add('active');
-    } else {
-      a.classList.remove('active');
-    }
-  });
-
-  document.querySelectorAll('.mobile-nav a').forEach(a => {
-    const href = a.getAttribute('href');
-    if (href === `#${id}`) {
-      a.classList.add('active');
-    } else {
-      a.classList.remove('active');
-    }
+  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => {
+    const on = a.getAttribute('href') === `#${id}`;
+    a.classList.toggle('active', on);
+    if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
   });
 };
 
 window.scrollToSection = function (id) {
   const el = document.getElementById(id);
-  if (el) {
-    window.setActiveNav(id);
-    isClickScrolling = true;
-    clearTimeout(clickScrollTimer);
-    clickScrollTimer = setTimeout(() => {
-      isClickScrolling = false;
-    }, 850);
-
-    const headerOffset = document.getElementById('site-header')?.offsetHeight || 74;
-    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = elementPosition - headerOffset - 12;
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    });
-  }
+  if (!el) return;
+  window.setActiveNav(id);
+  isClickScrolling = true;
+  clearTimeout(clickScrollTimer);
+  clickScrollTimer = setTimeout(() => { isClickScrolling = false; }, 850);
+  const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset - 8;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
 };
 
 function initScrollSpy() {
   function checkScroll() {
     if (isClickScrolling) return;
-
     const scrollY = window.scrollY;
-    const headerHeight = document.getElementById('site-header')?.offsetHeight || 74;
+    const headerHeight = document.getElementById('site-header')?.offsetHeight || 68;
     const scrollPos = scrollY + headerHeight + 120;
-
-    // Check if bottom of the page is reached
-    if ((window.innerHeight + scrollY) >= (document.documentElement.scrollHeight - 70)) {
-      window.setActiveNav('clinic');
-      return;
-    }
-
-    if (scrollY < 180) {
-      window.setActiveNav('home');
-      return;
-    }
-
+    if ((window.innerHeight + scrollY) >= (document.documentElement.scrollHeight - 70)) { window.setActiveNav('clinic'); return; }
+    if (scrollY < 180) { window.setActiveNav('home'); return; }
     let activeId = 'home';
-    for (let i = 0; i < NAV_SECTION_IDS.length; i++) {
-      const sectionId = NAV_SECTION_IDS[i];
+    for (const sectionId of NAV_SECTION_IDS) {
       const el = document.getElementById(sectionId);
-      if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY;
-        if (top <= scrollPos) {
-          activeId = sectionId;
-        }
-      }
+      if (el && el.getBoundingClientRect().top + window.scrollY <= scrollPos) activeId = sectionId;
     }
-
     window.setActiveNav(activeId);
   }
-
-  if (window.__scrollSpyHandler) {
-    window.removeEventListener('scroll', window.__scrollSpyHandler);
-  }
-  window.__scrollSpyHandler = () => {
-    window.requestAnimationFrame(checkScroll);
-  };
+  if (window.__scrollSpyHandler) window.removeEventListener('scroll', window.__scrollSpyHandler);
+  window.__scrollSpyHandler = () => { window.requestAnimationFrame(checkScroll); };
   window.addEventListener('scroll', window.__scrollSpyHandler, { passive: true });
-
-  // Initial check
   checkScroll();
 }
 
+// --- MOBILE DRAWER ---
 function setMobileMenu(open) {
   const nav = document.getElementById('mobile-nav');
   if (!nav) return;
   nav.classList.toggle('open', open);
+  document.documentElement.classList.toggle('drawer-open', open);
   document.querySelectorAll('.mobile-menu-btn').forEach(b => b.setAttribute('aria-expanded', String(open)));
 }
 
@@ -2416,9 +1957,7 @@ window.toggleMobileMenu = function () {
   setMobileMenu(!(nav && nav.classList.contains('open')));
 };
 
-window.closeMobileMenu = function () {
-  setMobileMenu(false);
-};
+window.closeMobileMenu = function () { setMobileMenu(false); };
 
 // Escape closes the drawer and returns focus to its button (registered once; survives re-renders).
 document.addEventListener('keydown', e => {
@@ -2431,44 +1970,21 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// --- QUESTIONNAIRE ---
 window.updateQuestionnaireUI = function () {
   const container = document.getElementById('questionnaire-card-container');
-  if (container) {
-    container.innerHTML = renderQuestionnaireCard();
-  }
+  if (container) container.innerHTML = renderQuestionnaireCard();
 };
-
-window.selectQOption = function (optIdx) {
-  qAnswers[currentQStep] = optIdx;
-  window.updateQuestionnaireUI();
-  // Absolutely no scrolling or whole page re-rendering!
-};
-
+window.selectQOption = function (optIdx) { qAnswers[currentQStep] = optIdx; window.updateQuestionnaireUI(); };
 window.nextQStep = function () {
-  if (qAnswers[currentQStep] !== undefined) {
-    if (currentQStep < 3) {
-      currentQStep++;
-    } else {
-      qCompleted = true;
-    }
-    window.updateQuestionnaireUI();
-  }
-};
-
-window.prevQStep = function () {
-  if (currentQStep > 0) {
-    currentQStep--;
-    window.updateQuestionnaireUI();
-  }
-};
-
-window.restartQ = function () {
-  currentQStep = 0;
-  qAnswers = [];
-  qCompleted = false;
+  if (qAnswers[currentQStep] === undefined) return;
+  if (currentQStep < 3) currentQStep++; else qCompleted = true;
   window.updateQuestionnaireUI();
 };
+window.prevQStep = function () { if (currentQStep > 0) { currentQStep--; window.updateQuestionnaireUI(); } };
+window.restartQ = function () { currentQStep = 0; qAnswers = []; qCompleted = false; window.updateQuestionnaireUI(); };
 
+// --- ACCORDIONS ---
 window.toggleArticle = function (id) {
   openArticleId = (openArticleId === id ? null : id);
   const el = document.getElementById(`art-item-${id}`);
@@ -2488,18 +2004,15 @@ window.toggleFaq = function (idx) {
   }
 };
 
+// --- REVEAL ON SCROLL ---
 let fadeObserver = null;
 function observeIntersection() {
   if (fadeObserver) fadeObserver.disconnect();
-  const observer = fadeObserver = new IntersectionObserver((entries) => {
+  const observer = fadeObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 }
 
@@ -2509,13 +2022,7 @@ function headerScrollShadow() {
   window.__headerShadowBound = true;
   window.addEventListener('scroll', () => {
     const header = document.getElementById('site-header');
-    if (header) {
-      if (window.scrollY > 40) {
-        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-      } else {
-        header.style.boxShadow = 'none';
-      }
-    }
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 24);
   }, { passive: true });
 }
 
@@ -2523,25 +2030,31 @@ function headerScrollShadow() {
 function renderApp() {
   document.documentElement.lang = currentLang;
   document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
-  document.body.className = (currentLang === 'en' ? 'lang-en' : '');
+  document.body.className = (currentLang === 'en' ? 'lang-en' : 'lang-ar');
 
-  document.title = (currentLang === 'ar')
-    ? 'د. معن بن عبدالله البري | استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار) | المدينة المنورة'
-    : 'Dr. Maan Al Barry | Consultant Ophthalmologist (Cornea, Cataract & Refractive Surgery) | Madinah';
+  document.title = tr(
+    'د. معن بن عبدالله البري | استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار) | المدينة المنورة',
+    'Dr. Maan Al Barry | Consultant Ophthalmologist (Cornea, Cataract & Refractive Surgery) | Madinah');
 
   const app = document.getElementById('app');
   if (!app) return;
 
+  // Keep a running 3D scene alive across the re-render: detach its host, re-insert it afterwards.
+  if (c3d.host) c3d.host.remove();
+  setMobileMenu(false);
+
   app.innerHTML = `
+    <a class="skip-link" href="#main">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
     ${renderHeader()}
-    <main>
+    <main id="main">
       ${renderHero()}
       ${renderQualifications()}
       ${renderProfile()}
       ${renderSpecialties()}
-      ${renderSimulator(currentLang)}
       ${renderIolGuide()}
       ${renderQuestionnaire()}
+      ${renderSimulator()}
+      ${renderCataract3D()}
       ${renderEducation()}
       ${renderClinic()}
       ${renderFaq()}
@@ -2551,16 +2064,19 @@ function renderApp() {
     ${renderBookingBar()}
   `;
 
-  applyTheme(currentTheme);
+  applyTheme();
   observeIntersection();
   headerScrollShadow();
   initScrollSpy();
   window.setActiveNav(currentActiveNavId);
 
-  const simHost = document.getElementById('simulator-host');
-  if (simHost && window.VisionSim) {
-    VisionSim.mount(simHost, { lang: currentLang });
+  c3dSync();
+  if (c3d.controller && typeof c3d.controller.setLang === 'function') {
+    try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
   }
+
+  const simHost = document.getElementById('simulator-host');
+  if (simHost && window.VisionSim) VisionSim.mount(simHost, { lang: currentLang });
 }
 
 // Initialize on page load

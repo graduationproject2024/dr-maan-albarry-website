@@ -1,0 +1,46 @@
+{
+  "viewport": "1440x900",
+  "emulatedMobile": false,
+  "avgFps": 59.5,
+  "p95FrameMs": 16.8,
+  "gpu": {
+    "vendor": "Google Inc. (NVIDIA)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl2": true
+  },
+  "render": {
+    "calls": 16,
+    "triangles": 235688,
+    "geometries": 15,
+    "textures": 5
+  },
+  "state": {
+    "state": "playing",
+    "playing": true,
+    "stageIndex": 0,
+    "stageId": "cloudy-lens",
+    "stageCount": 7,
+    "stageProgress": 0.6888555555555579,
+    "progress": 0.09117205882352973,
+    "lang": "en",
+    "theme": "light",
+    "reducedMotion": false,
+    "webgl": true,
+    "fallbackReason": null,
+    "labels": false,
+    "cutaway": true,
+    "focus": null,
+    "dpr": 1,
+    "fps": 60,
+    "camera": {
+      "distance": 49.999999999999986,
+      "azimuth": 0.9999999999999999,
+      "polar": 1.32,
+      "target": [
+        0,
+        0,
+        -4
+      ]
+    }
+  }
+}

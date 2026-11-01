@@ -6,9 +6,13 @@
 //   • JSON-LD structured data (injected into index.html at build — vite.config.js)
 //   • /llms.txt (generated at build — vite.config.js)
 //
-// Each fact carries a `source` key (see SOURCES) and, where it is not yet
-// confirmed by the clinic, `status: 'pending'`. Pending items are NOT rendered.
-// The open decisions are listed in docs/implementation/phase-0-phase-1/DOCTOR_DATA_DECISIONS.md
+// Each fact carries a `source` key (see SOURCES). Source categories are distinct:
+//   doctor  = personally confirmed by Dr. Maan (relayed by the site owner)
+//   magrabi / taibah = officially published by the institution
+//   owner   = supplied by the site owner, not separately confirmed
+// Items with `status: 'pending'` are NOT rendered. Items that must never ship
+// (e.g. the undefined "100%" statistic) live only in content/internal-registry.json,
+// which the app never imports. Governance: docs/implementation/recovery/DOCTOR_CONTENT_RECOVERY.md
 // ============================================================
 
 export const SOURCES = {
@@ -23,9 +27,14 @@ export const SOURCES = {
     accessed: '2026-10-31'
   },
   owner: {
-    label: 'Supplied by the site owner (commit 2fbf261, 2026-10-25) — awaiting written clinic confirmation',
+    label: 'Supplied by the site owner (commit 2fbf261, 2026-10-25)',
     url: null,
     accessed: null
+  },
+  doctor: {
+    label: 'Personally confirmed by Dr. Maan Al Barry, relayed by the site owner on 2026-11-01',
+    url: null,
+    accessed: '2026-11-01'
   }
 };
 
@@ -52,11 +61,12 @@ export const DOCTOR = {
   professional: {
     experienceSince: 1998, // source: owner
     qualifications: [
-      { id: 'frcs', ar: 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)', en: 'Fellow of the Royal College of Surgeons, UK (FRCS)', short: 'FRCS (UK)', source: 'magrabi' }
+      { id: 'frcs', ar: 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)', en: 'Fellow of the Royal College of Surgeons, UK (FRCS)', short: 'FRCS (UK)', source: 'magrabi' },
+      { id: 'saudi-board', ar: 'البورد السعودي في طب وجراحة العيون', en: 'Saudi Board in Ophthalmology', short: 'Saudi Board', source: 'doctor' }
     ],
     // Ordered as displayed. `current` drives present/past tense everywhere (UI, JSON-LD, llms.txt).
     roles: [
-      { id: 'magrabi-chief', current: true, source: 'owner',
+      { id: 'magrabi-chief', current: true, source: 'doctor',
         ar: 'كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)',
         en: 'Chief of Staff – Magrabi Health Madinah (General Supervisor of Medical, Administrative & Operational Affairs)',
         shortAr: 'كبير موظفي مركز مغربي المدينة المنورة', shortEn: 'Chief of Staff – Magrabi Health Madinah' },
@@ -79,9 +89,10 @@ export const DOCTOR = {
       { ar: 'الجمعية السعودية لطب وجراحة العيون', en: 'Saudi Ophthalmological Society', source: 'magrabi' },
       { ar: 'الجمعية الأمريكية لطب وجراحة العيون', en: 'American Academy of Ophthalmology', source: 'magrabi' }
     ],
-    academicRank: { ar: 'أستاذ مشارك – جامعة طيبة', en: 'Associate Professor – Taibah University', source: 'taibah' },
-    // No licence / board-certification statement has been verified against an official record.
-    // Keep null until the SCFHS record is supplied (BLOCKERS.md, B-3).
+    // Published on the Taibah faculty profile and confirmed by Dr. Maan (2026-11-01).
+    academicRank: { ar: 'أستاذ مشارك – جامعة طيبة', en: 'Associate Professor – Taibah University', source: 'doctor' },
+    // The Saudi Board (above) is a confirmed qualification. A practising-licence number / SCFHS
+    // classification has not been supplied, so no licence statement is published.
     licence: null
   },
 
@@ -90,12 +101,10 @@ export const DOCTOR = {
     callCenter: { display: '920018000', tel: '920018000', source: 'magrabi', status: 'verified' },
     // Magrabi Health unified short number — "اتصل بمركز الاتصال 19505" on the official profile page.
     callCenterShort: { display: '19505', tel: '19505', source: 'magrabi', status: 'verified' },
-    // WhatsApp appointment line that Magrabi publishes for Dr. Maan on his official profile page.
-    whatsapp: { number: '966508533309', source: 'magrabi', status: 'verified' },
-    // A direct clinic mobile number was added to the site on 2026-10-25 without a source. It is kept out
-    // of public code until the clinic confirms who answers it and for which role (call, WhatsApp, or both).
-    // Record and decision: DOCTOR_DATA_DECISIONS.md, D-1 / BLOCKERS.md, B-1.
-    clinicDirect: null,
+    // Dr. Maan's direct clinic line. Approved by Dr. Maan for public use for BOTH calls and WhatsApp
+    // (owner, 2026-11-01). It replaces the Magrabi WhatsApp line (966508533309) previously shown.
+    clinicDirect: { display: '055 494 6433', tel: '+966554946433', source: 'doctor', status: 'confirmed', roles: ['call', 'whatsapp'] },
+    whatsapp: { number: '966554946433', source: 'doctor', status: 'confirmed' },
     bookingUrl: 'https://ob.magrabi.com.sa/OnlineBooking/', // linked from the official Magrabi profile page
     email: null
   },
@@ -111,9 +120,15 @@ export const DOCTOR = {
     accreditations: ['JCI', 'CBAHI'], // stated on the official Magrabi profile page
     mapUrl: 'https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA',
     mapEmbedQuery: 'Magrabi+Eye+Hospital+Madinah',
-    // Dr. Maan's clinic hours have not been confirmed (site, JSON-LD and owner notes disagreed).
-    // Nothing is rendered or published until approved. BLOCKERS.md, B-4.
-    workingHours: null,
+    // Dr. Maan's clinic hours, confirmed by Dr. Maan (2026-11-01). Patients should still confirm a
+    // specific appointment through booking, as the schedule can change.
+    workingHours: {
+      ar: 'السبت إلى الخميس: ٩:٠٠ ص – ١:٠٠ م · ٥:٠٠ م – ٩:٣٠ م',
+      en: 'Saturday to Thursday: 9:00 AM – 1:00 PM · 5:00 PM – 9:30 PM',
+      days: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+      sessions: [['09:00', '13:00'], ['17:00', '21:30']],
+      source: 'doctor'
+    },
     source: 'magrabi'
   },
 
@@ -126,9 +141,14 @@ export const DOCTOR = {
   },
 
   credibility: {
-    // A statistic is shown only with a documented source and clinic approval. None currently qualify:
-    // "+15,000 procedures" and "100% protocol adherence" had no source and were removed.
-    statistics: [],
+    // A statistic is published only with a confirmed value AND a defined meaning.
+    // "+15,000" was confirmed by Dr. Maan as a combined total of eye examinations and surgical
+    // procedures (owner, 2026-11-01). "100%" has no measurable definition: internal registry only.
+    statistics: [
+      { id: 'cases-15000', value: '15,000+', source: 'doctor', status: 'confirmed',
+        scope: 'career total; eye examinations and surgical procedures combined, not surgeries alone and not a patient count',
+        label: { ar: 'فحص وإجراء جراحي في طب العيون', en: 'eye examinations & surgical procedures' } }
+    ],
     // A testimonial renders only when isPublishableTestimonial() passes. The three reviews previously shown
     // exist on the Magrabi profile page, but reuse permission is undocumented and the site's text was
     // reworded from the originals, so none are published. BLOCKERS.md, B-2.
@@ -185,8 +205,8 @@ export const FAQ = [
   {
     q: { ar: 'كيف يمكنني حجز موعد مع الطبيب؟', en: 'How can I book an appointment?' },
     a: {
-      ar: `عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو الاتصال بمركز اتصال مغربي على ${c.callCenter.display} أو ${c.callCenterShort.display}، أو الاستفسار عن أقرب موعد عبر واتساب مغربي المخصص لمواعيد د. معن.`,
-      en: `Through the official Magrabi online booking portal (ob.magrabi.com.sa), by calling the Magrabi contact center on ${c.callCenter.display} or ${c.callCenterShort.display}, or by asking about the nearest appointment through Magrabi's WhatsApp line for Dr. Maan.`
+      ar: `عبر بوابة الحجز الإلكتروني الرسمية لمغربي (ob.magrabi.com.sa)، أو الاتصال بمركز اتصال مغربي على ${c.callCenter.display} أو ${c.callCenterShort.display}، أو التواصل مباشرة مع عيادة د. معن اتصالاً أو واتساب على ${c.clinicDirect.display}.`,
+      en: `Through the official Magrabi online booking portal (ob.magrabi.com.sa), by calling the Magrabi contact center on ${c.callCenter.display} or ${c.callCenterShort.display}, or by contacting Dr. Maan's clinic directly by phone or WhatsApp on ${c.clinicDirect.display}.`
     }
   },
   {
@@ -250,13 +270,17 @@ export function buildJsonLd() {
         knowsAbout: ['Cataract Surgery', 'Intraocular Lens Implantation', 'Refractive Surgery', 'Corneal Cross-Linking (CXL)', 'Keratoconus'],
         hasCredential: d.professional.qualifications.map(q => ({
           '@type': 'EducationalOccupationalCredential',
-          credentialCategory: 'Fellowship',
+          credentialCategory: q.id === 'frcs' ? 'Fellowship' : 'Board certification',
           name: q.en,
-          recognizedBy: { '@type': 'Organization', name: 'Royal College of Surgeons, United Kingdom' }
+          recognizedBy: { '@type': 'Organization', name: q.id === 'frcs' ? 'Royal College of Surgeons, United Kingdom' : 'Saudi Commission for Health Specialties' }
+        })),
+        openingHoursSpecification: d.clinic.workingHours.sessions.map(([opens, closes]) => ({
+          '@type': 'OpeningHoursSpecification', dayOfWeek: d.clinic.workingHours.days, opens, closes
         })),
         memberOf: d.professional.memberships.map(m => ({ '@type': 'Organization', name: m.en })),
         worksFor: [hospital],
-        sameAs: [d.social.magrabiProfile, d.social.taibahProfile]
+        sameAs: [d.social.magrabiProfile, d.social.taibahProfile],
+        contactPoint: { '@type': 'ContactPoint', telephone: d.contact.clinicDirect.tel, contactType: 'appointments', availableLanguage: ['ar', 'en'] }
       },
       {
         '@type': 'FAQPage',
@@ -288,11 +312,12 @@ export function buildLlmsTxt() {
 - Title: ${d.identity.title.en}
 - Clinical, academic and surgical experience since ${d.professional.experienceSince}
 - Academic rank: ${d.professional.academicRank.en}
+${d.credibility.statistics.map(s => `- ${s.value} ${s.label.en} (${s.scope})`).join('\n')}
 
 ## Qualifications
 ${quals}
 
-## Appointments & roles (as stated by the site owner)
+## Appointments & roles
 ${roles}
 
 ## Clinic & patient access
@@ -300,10 +325,10 @@ ${roles}
 - Address: ${d.clinic.address.en}
 - Hospital accreditations (per Magrabi Health): ${d.clinic.accreditations.join(', ')}
 - Magrabi contact center: ${d.contact.callCenter.display} / ${d.contact.callCenterShort.display}
-- Magrabi WhatsApp line for Dr. Maan's appointments: +${d.contact.whatsapp.number}
+- Dr. Maan's clinic direct line (calls & WhatsApp): ${d.contact.clinicDirect.display} (${d.contact.clinicDirect.tel})
 - Official online booking portal: ${d.contact.bookingUrl}
 - Google Maps: ${d.clinic.mapUrl}
-- Clinic hours: please confirm with the Magrabi contact center or booking portal.
+- Clinic hours: ${d.clinic.workingHours.en}
 
 ## Lens & simulator information
 - Intraocular lens content on this website is educational. Monofocal, extended depth of focus (EDOF) and trifocal lenses each have trade-offs; no single lens suits every patient, and the choice is made individually after examination.

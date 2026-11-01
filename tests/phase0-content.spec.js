@@ -6,11 +6,13 @@ import path from 'node:path';
 import { DOCTOR, FAQ, isPublishableTestimonial } from '../doctor-data.js';
 
 const C = DOCTOR.contact;
-const APPROVED_TEL = new Set([C.callCenter.tel, C.callCenterShort.tel]);
+const APPROVED_TEL = new Set([C.callCenter.tel, C.callCenterShort.tel, C.clinicDirect.tel]);
 // `prefers-*` CSS media features (prefers-color-scheme, prefers-reduced-motion) are code, not claims.
 const PREFERENCE = /\bprefer(red|s)?\b(?![-\w])|favou?r(ed|s|ite)?\b|clinically (preferred|favou?red)|المفضل|يفضل|يفضّل|الخيار المفضل|المفضل سريري/i;
-const UNSUPPORTED_STATS = /15[,.]?000|\+\s?15|100\s?%\s*(التزام|adherence)|التزام طبي وفق بروتوكولات|Adherence to Diagnostic Protocols/i;
-const LICENCE = /الهيئة السعودية للتخصصات الصحية|Saudi Commission for Health Specialties|Board[- ]Certified|Saudi Board|الترخيص الاستشاري|البورد/i;
+// 15,000+ is now a doctor-confirmed statistic (content/internal-registry.json); 100% stays internal-only.
+const UNSUPPORTED_STATS = /100\s?%\s*(التزام|adherence)|التزام طبي وفق بروتوكولات|Adherence to Diagnostic Protocols/i;
+// Saudi Board is a confirmed qualification; a licence/SCFHS classification statement is still unsupplied.
+const LICENCE = /الهيئة السعودية للتخصصات الصحية|Saudi Commission for Health Specialties|Board[- ]Certified|الترخيص الاستشاري/i;
 const TESTIMONIAL_PLACEHOLDER = /pending final administrative confirmation|تخضع للمراجعة والتأكيد النهائي|Illustrative feedback|★★★★★/;
 const INCISION = /2[.,]2\s?(mm|ملم|مم)/i;
 
@@ -45,8 +47,11 @@ for (const lang of ['ar', 'en']) {
         else expect(h, h).toContain(`wa.me/${C.whatsapp.number}?`);
       }
       const text = await page.locator('body').innerText();
-      expect(C.clinicDirect).toBeNull(); // unconfirmed number stays out of public code
-      expect(await page.content()).not.toContain('554946433');
+      // the doctor-approved direct line is offered for both calls and WhatsApp
+      expect(C.clinicDirect.roles).toEqual(['call', 'whatsapp']);
+      expect(hrefs).toContain(`tel:${C.clinicDirect.tel}`);
+      expect(C.whatsapp.number).toBe(C.clinicDirect.tel.replace('+', ''));
+      expect(await page.content()).not.toContain('508533309'); // replaced Magrabi WhatsApp line
       const bookingHrefs = await page.$$eval('[data-cta="book"]', as => as.map(a => a.href));
       expect(bookingHrefs.length).toBeGreaterThanOrEqual(3);
       for (const h of bookingHrefs) expect(h).toBe(C.bookingUrl);
@@ -72,11 +77,11 @@ for (const lang of ['ar', 'en']) {
       await expect(page.locator('.hero-specialty-subtitle')).toHaveText(DOCTOR.identity.title[lang]);
     });
 
-    test('clinic hours are not stated until approved', async ({ page }) => {
+    test('doctor-confirmed clinic hours are shown in the clinic section', async ({ page }) => {
       await open(page, lang);
       const clinic = await page.locator('#clinic').innerText();
-      expect(DOCTOR.clinic.workingHours).toBeNull();
-      expect(clinic).not.toMatch(/9:00|9:30|1:00|5:00|٩|21:00/);
+      expect(DOCTOR.clinic.workingHours.source).toBe('doctor');
+      expect(clinic).toContain(DOCTOR.clinic.workingHours[lang]);
     });
   });
 }
@@ -96,7 +101,10 @@ test.describe('Phase 0 structured data & llms.txt', () => {
     expect(types).not.toContain('AggregateRating');
     expect(types).not.toContain('BreadcrumbList');
     const raw = blocks[0];
-    expect(raw).not.toMatch(/openingHours|aggregateRating|priceRange|554946433|المدير الطبي التنفيذي|Saudi Board/);
+    expect(raw).not.toMatch(/aggregateRating|priceRange|508533309|المدير الطبي التنفيذي|Adherence/);
+    expect(raw).toContain(C.clinicDirect.tel);
+    expect(raw).toContain('Saudi Board in Ophthalmology');
+    expect(raw).toMatch(/"opens":\s*"17:00"/);
 
     const physician = ld['@graph'].find(n => n['@type'] === 'Physician');
     expect(physician.telephone).toBe(C.callCenter.tel);
@@ -121,7 +129,10 @@ test.describe('Phase 0 structured data & llms.txt', () => {
     expect(txt).toContain(C.whatsapp.number);
     expect(txt).toContain(C.bookingUrl);
     expect(txt).not.toMatch(PREFERENCE);
-    expect(txt).not.toMatch(/554946433|15,000|Chief Medical Officer|26\+ years|9:00|21:00/);
+    expect(txt).not.toMatch(/508533309|Chief Medical Officer|26\+ years|Adherence|100%/);
+    expect(txt).toContain(C.clinicDirect.tel);
+    expect(txt).toContain('15,000+ eye examinations & surgical procedures');
+    expect(txt).toContain(DOCTOR.clinic.workingHours.en);
   });
 
   test('generated build output contains no obsolete claims', () => {
@@ -138,7 +149,7 @@ test.describe('Phase 0 structured data & llms.txt', () => {
     for (const f of files) {
       const body = fs.readFileSync(f, 'utf8');
       expect(body, f).not.toMatch(PREFERENCE);
-      expect(body, f).not.toMatch(/الهيئة السعودية للتخصصات الصحية|Board-Certified|554946433|2\.2 ?(mm|ملم)|Rakan|راكان|Maya Ahmed|مايا أحمد|الشراحيلي/);
+      expect(body, f).not.toMatch(/الهيئة السعودية للتخصصات الصحية|Board-Certified|508533309|Adherence to Diagnostic|التزام طبي وفق|2\.2 ?(mm|ملم)|Rakan|راكان|Maya Ahmed|مايا أحمد|الشراحيلي/);
     }
   });
 });
@@ -185,6 +196,13 @@ test.describe('Phase 0 testimonial publication gate', () => {
     expect(isPublishableTestimonial({ ...ok, attribution: ' ' })).toBe(false);
     expect(isPublishableTestimonial({ ...ok, approvedText: {} })).toBe(false);
     expect(DOCTOR.credibility.testimonials.every(isPublishableTestimonial)).toBe(true);
-    expect(DOCTOR.credibility.statistics).toEqual([]);
+    // Statistics are published only when confirmed, sourced and carrying a defined meaning in both languages
+    // (15,000+ was confirmed by Dr. Maan on 2026-11-01 — see content/internal-registry.json).
+    for (const s of DOCTOR.credibility.statistics) {
+      expect(s.status, s.id).toBe('confirmed');
+      expect(s.source, s.id).toBe('doctor');
+      expect(s.scope, s.id).toBeTruthy();
+      expect(s.label.ar && s.label.en, s.id).toBeTruthy();
+    }
   });
 });

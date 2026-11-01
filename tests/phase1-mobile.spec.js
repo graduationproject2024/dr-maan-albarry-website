@@ -102,10 +102,12 @@ for (const [w, h] of MOBILE) {
           for (const lens of ['edof', 'trifocal', 'monofocal', 'cataract']) {
             await page.locator(`[data-lens="${lens}"]`).click();
             await expect(page.locator(`[data-lens="${lens}"]`)).toHaveClass(/\bon\b/);
-            const view = await box(page, '#vs-view');
-            const [a, b] = await page.locator('.vs-tag').evaluateAll(els => els.map(el => {
-              const r = el.getBoundingClientRect(); return { x: r.x, right: r.right, y: r.y, bottom: r.bottom };
-            }));
+            // one synchronous snapshot: view and tags measured in the same frame, so a
+            // section reveal transition cannot shift one between two separate reads
+            const { view, tags: [a, b] } = await page.evaluate(() => {
+              const r = el => { const b = el.getBoundingClientRect(); return { x: b.x, right: b.right, y: b.y, bottom: b.bottom, w: b.width, h: b.height }; };
+              return { view: r(document.querySelector('#vs-view')), tags: [...document.querySelectorAll('.vs-tag')].map(r) };
+            });
             expect(overlap(a, b)).toBe(false);
             expect(inside(a, view)).toBe(true);
             expect(inside(b, view)).toBe(true);

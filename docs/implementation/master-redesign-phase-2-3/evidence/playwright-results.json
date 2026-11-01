@@ -1,0 +1,5329 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\sam20\\dr-maan-albarry-website\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "C:\\Users\\sam20\\dr-maan-albarry-website\\playwright.config.js",
+    "rootDir": "C:/Users/sam20/dr-maan-albarry-website/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/sam20/dr-maan-albarry-website/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/sam20/dr-maan-albarry-website/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.spec\\.js/"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\sam20\\dr-maan-albarry-website\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "name": "",
+        "testDir": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests",
+        "snapshotDir": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:4173/",
+          "launchOptions": {
+            "args": [
+              "--use-angle=d3d11",
+              "--enable-gpu",
+              "--ignore-gpu-blocklist"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run build && npx vite preview --port 4173 --strictPort",
+      "url": "http://localhost:4173/",
+      "env": {
+        "CSIM_HARNESS": "1"
+      },
+      "reuseExistingServer": false,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "cataract-integration.spec.js",
+      "file": "cataract-integration.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "language switched while the 3D module is still loading is applied once it is ready",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10240,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:28.416Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a27a91cc931f0f9bf76-f20d326f76158b5cc28c",
+          "file": "cataract-integration.spec.js",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "in-page 3D 390 en light: readable, no overlap, survives language toggle, closes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 11453,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:28.461Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a27a91cc931f0f9bf76-f31e7339685ff47016f2",
+          "file": "cataract-integration.spec.js",
+          "line": 35,
+          "column": 5
+        },
+        {
+          "title": "in-page 3D 390 ar dark: readable, no overlap, survives language toggle, closes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 11198,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:28.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a27a91cc931f0f9bf76-e8a6efe98b89e995aa3f",
+          "file": "cataract-integration.spec.js",
+          "line": 35,
+          "column": 5
+        },
+        {
+          "title": "in-page 3D 1440 en light: readable, no overlap, survives language toggle, closes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 11390,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:28.522Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a27a91cc931f0f9bf76-a922814ce37e82d9e2a6",
+          "file": "cataract-integration.spec.js",
+          "line": 35,
+          "column": 5
+        },
+        {
+          "title": "in-page 3D 1440 ar dark: readable, no overlap, survives language toggle, closes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 11108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:28.477Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a27a91cc931f0f9bf76-7bd46050827bd4ba5681",
+          "file": "cataract-integration.spec.js",
+          "line": 35,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "cataract-sim.spec.js",
+      "file": "cataract-sim.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "cataract simulator — desktop",
+          "file": "cataract-sim.spec.js",
+          "line": 29,
+          "column": 6,
+          "specs": [
+            {
+              "title": "mounts lazily, renders a non-blank canvas and shows the start overlay",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 4284,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:28.539Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-45debec124b5e3c85f4c",
+              "file": "cataract-sim.spec.js",
+              "line": 32,
+              "column": 3
+            },
+            {
+              "title": "destroy() disposes everything and is idempotent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2656,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:33.495Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-3791598ab82baec2f73d",
+              "file": "cataract-sim.spec.js",
+              "line": 46,
+              "column": 3
+            },
+            {
+              "title": "mount is idempotent per host (sequential and concurrent)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3436,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:36.229Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-95279773400f0e7d0fd2",
+              "file": "cataract-sim.spec.js",
+              "line": 61,
+              "column": 3
+            },
+            {
+              "title": "state machine: start, pause, resume, restart, completed; invalid transitions ignored",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4092,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:39.341Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-24ff5ede8777c587b00c",
+              "file": "cataract-sim.spec.js",
+              "line": 72,
+              "column": 3
+            },
+            {
+              "title": "next / prev / goToStage / timeline segments",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 7788,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:40.353Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-c2e2bfb1fbc65ae8c189",
+              "file": "cataract-sim.spec.js",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "timeline scrubber pauses and sets the exact progress",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2113,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:40.373Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-7bbefe98599589d7cc6b",
+              "file": "cataract-sim.spec.js",
+              "line": 134,
+              "column": 3
+            },
+            {
+              "title": "zoom buttons change and reset view restores the camera distance",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3833,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:40.804Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-c3e415e0d155959c95d4",
+              "file": "cataract-sim.spec.js",
+              "line": 150,
+              "column": 3
+            },
+            {
+              "title": "mouse drag rotates (azimuth changes) and wheel zooms within limits",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5503,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:40.796Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-7e9905aad06eff60c297",
+              "file": "cataract-sim.spec.js",
+              "line": 162,
+              "column": 3
+            },
+            {
+              "title": "setLang keeps the stage and playback, flips dir and text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3288,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:42.321Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-643e56bc1fc7c490f9eb",
+              "file": "cataract-sim.spec.js",
+              "line": 180,
+              "column": 3
+            },
+            {
+              "title": "setTheme switches UI tokens and the 3D background",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 1199,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:42.621Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-8c75e55952309567290f",
+              "file": "cataract-sim.spec.js",
+              "line": 200,
+              "column": 3
+            },
+            {
+              "title": "WebGL context loss shows the restoring note and restore resumes the previous state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3692,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:43.554Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-355a14864c8a25c0f4f9",
+              "file": "cataract-sim.spec.js",
+              "line": 211,
+              "column": 3
+            },
+            {
+              "title": "keyboard: Space toggles playback, arrows change stage (mirrored in RTL)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 1260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:43.853Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-8913e03856cbcfdd1ada",
+              "file": "cataract-sim.spec.js",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "aria-live announces stage changes; controls have labels in both languages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1204,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:44.749Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-aa795e83e42fc182ec48",
+              "file": "cataract-sim.spec.js",
+              "line": 256,
+              "column": 3
+            },
+            {
+              "title": "anatomy: labels toggle shows hotspots; choosing a structure focuses the camera and explains it",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2329,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:45.142Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-9df22d3afd52d87b25a8",
+              "file": "cataract-sim.spec.js",
+              "line": 270,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "cataract simulator — reduced motion & fallback",
+          "file": "cataract-sim.spec.js",
+          "line": 291,
+          "column": 6,
+          "specs": [
+            {
+              "title": "prefers-reduced-motion: no autoplay, stage changes jump-cut",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2293,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:45.709Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-dc7b86bf3ee76c651cb1",
+              "file": "cataract-sim.spec.js",
+              "line": 294,
+              "column": 3
+            },
+            {
+              "title": "autoplay starts without reduced motion when requested",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1019,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:45.983Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-aa3e50b9b24b9f3b6711",
+              "file": "cataract-sim.spec.js",
+              "line": 309,
+              "column": 3
+            },
+            {
+              "title": "WebGL unavailable: structured fallback with working stage navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 813,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:46.468Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-70c5862c5d4f534ee9c5",
+              "file": "cataract-sim.spec.js",
+              "line": 314,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "cataract simulator — mobile 390x844",
+          "file": "cataract-sim.spec.js",
+          "line": 341,
+          "column": 6,
+          "specs": [
+            {
+              "title": "no horizontal overflow, ≥44px touch targets, page still scrolls over the canvas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2312,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.036Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-5578418a0c04ed7405fb",
+              "file": "cataract-sim.spec.js",
+              "line": 344,
+              "column": 3
+            },
+            {
+              "title": "mobile playback works and the stage text sits below the viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1138,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.285Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-3c29d7064e1930de3b15",
+              "file": "cataract-sim.spec.js",
+              "line": 381,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "evidence 1440x900",
+          "file": "cataract-sim.spec.js",
+          "line": 408,
+          "column": 8,
+          "specs": [
+            {
+              "title": "stage screenshots",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "set CSIM_EVIDENCE=1 to capture evidence",
+                      "location": {
+                        "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                        "line": 411,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 113,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.321Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "set CSIM_EVIDENCE=1 to capture evidence",
+                          "location": {
+                            "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                            "line": 411,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-19c7b1825239bea20c74",
+              "file": "cataract-sim.spec.js",
+              "line": 410,
+              "column": 5
+            },
+            {
+              "title": "performance sample",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "set CSIM_PERF=1 to measure",
+                      "location": {
+                        "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                        "line": 430,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 135,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.457Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "set CSIM_PERF=1 to measure",
+                          "location": {
+                            "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                            "line": 430,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-2d8b9357769431095106",
+              "file": "cataract-sim.spec.js",
+              "line": 429,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "evidence 390x844",
+          "file": "cataract-sim.spec.js",
+          "line": 408,
+          "column": 8,
+          "specs": [
+            {
+              "title": "stage screenshots",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "set CSIM_EVIDENCE=1 to capture evidence",
+                      "location": {
+                        "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                        "line": 411,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 119,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.502Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "set CSIM_EVIDENCE=1 to capture evidence",
+                          "location": {
+                            "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                            "line": 411,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-fc018e5107d060d4920c",
+              "file": "cataract-sim.spec.js",
+              "line": 410,
+              "column": 5
+            },
+            {
+              "title": "performance sample",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "set CSIM_PERF=1 to measure",
+                      "location": {
+                        "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                        "line": 430,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 122,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:04:47.619Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "set CSIM_PERF=1 to measure",
+                          "location": {
+                            "file": "C:\\Users\\sam20\\dr-maan-albarry-website\\tests\\cataract-sim.spec.js",
+                            "line": 430,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "fb988d27dac1fb49d086-c21c99a04af0aa7c9c03",
+              "file": "cataract-sim.spec.js",
+              "line": 429,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "closure.spec.js",
+      "file": "closure.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "smoke 360x800 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 2286,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:47.676Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-0a6eea1bb6eae4096fca",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 360x800 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2505,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:47.818Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-b7668a880d3f95a75cd3",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 360x800 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 3394,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:48.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-99c3448616c1a605963e",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 360x800 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3326,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:48.301Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-27122449f81e071fc23a",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 390x844 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2458,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:48.503Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-0cae30400b9ea449cc2f",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 390x844 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2783,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:49.465Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-0fa298cc37caf4915160",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 390x844 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 3178,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:50.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-b10c30b420b9029f5963",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 390x844 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2833,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:50.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-c52fe4871e982b2eae30",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 430x932 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2912,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:50.986Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-eb18d132dc7b0b42a7a7",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 430x932 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 2326,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:51.519Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-9afca845eb1d807c0533",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 430x932 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2861,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:51.655Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-f5b33e88f584ba44af10",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 430x932 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3344,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:52.278Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-b1d1918000026387cd57",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 768x1024 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 2446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:53.209Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-daf95eef308edf8030c2",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 768x1024 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2504,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:53.240Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-aa6f2c7130170719e989",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 768x1024 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 3048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:53.871Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-8b0a18442ce4cf3434f5",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 768x1024 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3091,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:53.925Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-a0db15a2bd3b788c0526",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1366x768 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2564,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:54.558Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-65d4ee419221c0ddbaf4",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1366x768 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2547,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:55.649Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-d430b26b076165773004",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1366x768 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 2825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:55.687Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-2dde1792dcab3542dc20",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1366x768 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:55.771Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-e4f7dd570a604d5d2e62",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1440x900 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 2961,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:56.954Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-e51c60d8e35e37d80ebd",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1440x900 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3084,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:57.047Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-cdb9f4ab4ee961ef9a0f",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1440x900 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3545,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:57.156Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-8ca3cc7ff24dbf01ac1c",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1440x900 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3040,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:58.224Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-b084313417b8faf9d7de",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1920x1080 ar light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 2572,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:58.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-f970a1038a8b7486e449",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1920x1080 ar dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2761,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:59.130Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-692a4f9c59f96fdceeed",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1920x1080 en light: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 3033,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:04:59.969Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-53806757780b0f4947b5",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        },
+        {
+          "title": "smoke 1920x1080 en dark: loads, scrolls, links, no overflow/errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3025,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T17:05:00.170Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6227e60f254c4c533f55-dddc7216fd753787c6af",
+          "file": "closure.spec.js",
+          "line": 21,
+          "column": 7
+        }
+      ],
+      "suites": [
+        {
+          "title": "Interaction & accessibility fixes",
+          "file": "closure.spec.js",
+          "line": 57,
+          "column": 6,
+          "specs": [
+            {
+              "title": "language choice persists across reload",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:00.733Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-bfcbdd834da887c63db6",
+              "file": "closure.spec.js",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "mobile drawer: aria-expanded in sync, Escape closes and restores focus",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2425,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:01.127Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-c96deb81d7d097fbba45",
+              "file": "closure.spec.js",
+              "line": 69,
+              "column": 3
+            },
+            {
+              "title": "FAQ and article accordions keep aria-expanded in sync",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3825,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:01.306Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-94c4e3410032e5f52bb7",
+              "file": "closure.spec.js",
+              "line": 82,
+              "column": 3
+            },
+            {
+              "title": "simulator shows a fallback message when the WebGL context is lost",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2489,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:01.925Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-8fe995ad7ffa86c19ea3",
+              "file": "closure.spec.js",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "credential ledger and technology list keep every item in the DOM without horizontal overflow on phones",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2201,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:03.037Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-00bdd2b86a1e7740c967",
+              "file": "closure.spec.js",
+              "line": 111,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "SEO metadata",
+          "file": "closure.spec.js",
+          "line": 128,
+          "column": 6,
+          "specs": [
+            {
+              "title": "title, description, canonical, hreflang, robots and sitemap are served",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2609,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:03.229Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-e074f4b6f4afb230c0ab",
+              "file": "closure.spec.js",
+              "line": 129,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 2/3 — theme default, 3D section and navigation",
+          "file": "closure.spec.js",
+          "line": 139,
+          "column": 6,
+          "specs": [
+            {
+              "title": "with nothing saved, the theme follows prefers-color-scheme: dark",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 3001,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:03.571Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-bf4a6a116af479231958",
+              "file": "closure.spec.js",
+              "line": 141,
+              "column": 5
+            },
+            {
+              "title": "with nothing saved, the theme follows prefers-color-scheme: light",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2850,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:04.052Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-ffada0196cf9459e78f1",
+              "file": "closure.spec.js",
+              "line": 141,
+              "column": 5
+            },
+            {
+              "title": "3D cataract section exists with a start button and a header link — ar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2598,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:04.446Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-a147724ea2c94fdfdb4d",
+              "file": "closure.spec.js",
+              "line": 161,
+              "column": 5
+            },
+            {
+              "title": "3D cataract section exists with a start button and a header link — en",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3504,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:05.166Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-d559ca99a54d534b726a",
+              "file": "closure.spec.js",
+              "line": 161,
+              "column": 5
+            },
+            {
+              "title": "3D section link is in the phone drawer and scrolls to the section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 5411,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:05.265Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-f1c4cfdfc4e922230942",
+              "file": "closure.spec.js",
+              "line": 179,
+              "column": 3
+            },
+            {
+              "title": "3D module is code-split: three.js stays out of the main bundle",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:05.896Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6227e60f254c4c533f55-81404229ea9a56508689",
+              "file": "closure.spec.js",
+              "line": 188,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "content-registry.spec.js",
+      "file": "content-registry.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Protected doctor content registry",
+          "file": "content-registry.spec.js",
+          "line": 32,
+          "column": 6,
+          "specs": [
+            {
+              "title": "every public registry fact has a rendering contract and correct data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:05.952Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9dc434822a4895f7305e-9854bfb05c8b8b115942",
+              "file": "content-registry.spec.js",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "15,000+ keeps its confirmed combined meaning in both languages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:05.981Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9dc434822a4895f7305e-374f46ff49fd72e70946",
+              "file": "content-registry.spec.js",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "all public facts are rendered on the page — ar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2274,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:06.030Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9dc434822a4895f7305e-eef35557b0c782eca309",
+              "file": "content-registry.spec.js",
+              "line": 52,
+              "column": 5
+            },
+            {
+              "title": "all public facts are rendered on the page — en",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2234,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:06.620Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9dc434822a4895f7305e-8d130b24e51ea139cb0b",
+              "file": "content-registry.spec.js",
+              "line": 52,
+              "column": 5
+            },
+            {
+              "title": "internal-only facts never reach the built output",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 72,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:06.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9dc434822a4895f7305e-886b41b1eb7e1330910e",
+              "file": "content-registry.spec.js",
+              "line": 66,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase0-content.spec.js",
+      "file": "phase0-content.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 0 content — ar",
+          "file": "phase0-content.spec.js",
+          "line": 40,
+          "column": 8,
+          "specs": [
+            {
+              "title": "contact links come only from approved central data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2620,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:07.071Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-cf84d9bd1339780f1a47",
+              "file": "phase0-content.spec.js",
+              "line": 41,
+              "column": 5
+            },
+            {
+              "title": "no unsupported claims: stats, licence, testimonials, lens preference, incision size",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4277,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:07.096Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-f8f206af530dafd61f48",
+              "file": "phase0-content.spec.js",
+              "line": 60,
+              "column": 5
+            },
+            {
+              "title": "professional roles render exactly as the central data states",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2567,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:08.350Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-6c875afefdeaf2792bd6",
+              "file": "phase0-content.spec.js",
+              "line": 71,
+              "column": 5
+            },
+            {
+              "title": "doctor-confirmed clinic hours are shown in the clinic section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2460,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:08.723Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-bffdf9ace98687d844e5",
+              "file": "phase0-content.spec.js",
+              "line": 80,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Phase 0 content — en",
+          "file": "phase0-content.spec.js",
+          "line": 40,
+          "column": 8,
+          "specs": [
+            {
+              "title": "contact links come only from approved central data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 3515,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:08.910Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-b7e740507b003310ceb8",
+              "file": "phase0-content.spec.js",
+              "line": 41,
+              "column": 5
+            },
+            {
+              "title": "no unsupported claims: stats, licence, testimonials, lens preference, incision size",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 4301,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:09.725Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-bc64b15331811b84ec01",
+              "file": "phase0-content.spec.js",
+              "line": 60,
+              "column": 5
+            },
+            {
+              "title": "professional roles render exactly as the central data states",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2851,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:10.732Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-90ab210c581a423de579",
+              "file": "phase0-content.spec.js",
+              "line": 71,
+              "column": 5
+            },
+            {
+              "title": "doctor-confirmed clinic hours are shown in the clinic section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2912,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:10.944Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-ba1498a9b742c403f7ea",
+              "file": "phase0-content.spec.js",
+              "line": 80,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Phase 0 structured data & llms.txt",
+          "file": "phase0-content.spec.js",
+          "line": 89,
+          "column": 6,
+          "specs": [
+            {
+              "title": "JSON-LD parses and mirrors the visible page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3059,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:11.201Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-da525a8e13b9ca58b3ff",
+              "file": "phase0-content.spec.js",
+              "line": 90,
+              "column": 3
+            },
+            {
+              "title": "llms.txt is generated from central data and free of removed claims",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 61,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:11.406Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-4bca336a862dedab66d8",
+              "file": "phase0-content.spec.js",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "generated build output contains no obsolete claims",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 42,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:11.490Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-8ce7a9c103b802cf90f0",
+              "file": "phase0-content.spec.js",
+              "line": 138,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 0 testimonial rendering (records injected into the built bundle)",
+          "file": "phase0-content.spec.js",
+          "line": 157,
+          "column": 6,
+          "specs": [
+            {
+              "title": "a fully documented testimonial renders with its source link",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3263,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:11.551Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-756bc9eb0a69450609af",
+              "file": "phase0-content.spec.js",
+              "line": 169,
+              "column": 3
+            },
+            {
+              "title": "records missing permission or source never render",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2396,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:12.454Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-ce2a2c544654f65187ff",
+              "file": "phase0-content.spec.js",
+              "line": 179,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Phase 0 testimonial publication gate",
+          "file": "phase0-content.spec.js",
+          "line": 189,
+          "column": 6,
+          "specs": [
+            {
+              "title": "rejects records without source, permission, attribution or approved text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 13,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:13.616Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0eea8919defda9e219e-f045770a039fdf28beee",
+              "file": "phase0-content.spec.js",
+              "line": 190,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase1-mobile.spec.js",
+      "file": "phase1-mobile.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "360px ar light",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2495,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:13.722Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-5328cfefd8f01dc0659d",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3047,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:13.956Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-91391c0fa94e7c0bbb69",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2803,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:14.113Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-2ee120609042cdb6531c",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3016,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:14.313Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-44f7868d76be2e318754",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4623,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:14.874Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-11cff038e8d62c8b3e44",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "360px ar dark",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2737,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:14.906Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-29faac64fe2abb999331",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2956,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:16.242Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-2db8f72956ff955b8928",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2219,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:16.936Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-218da0633430885ad382",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2767,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:17.023Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-0f0b82533bdc44e90780",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4847,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:17.355Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-38bdbe2d3797a19560c6",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "360px en light",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 3241,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:17.667Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-95de89648abf59e52677",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2934,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:19.184Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-eaed7f38f744fdcf9b1c",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3058,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:19.221Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-083fa36515146df32e08",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3286,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:19.527Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-7f5ff16d3101acc36ad6",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5149,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:19.814Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-742d154ff3cce34907e6",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "360px en dark",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 3143,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:20.936Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-8587890ee6adcb6a6092",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2880,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:22.151Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-3f3611fe3fa6d9394a3c",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2562,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:22.232Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-4720bbd4dab2c53f85ea",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3287,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:22.314Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-0967fc382c2cd46c06ae",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5146,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:22.843Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-5f55255959d35d41b92a",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "390px ar light",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2361,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:24.104Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-c07e5ccb31b8ddab9082",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2498,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:24.824Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-ac47cc72ef7dc7fe366c",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2655,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:24.995Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-db2354176d2537e194a3",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2401,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:25.061Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-cffbe7759db634762810",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 4857,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:25.633Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-df9af13abe64ed43a87f",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "390px ar dark",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2648,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:26.491Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-1013073fb150d0f5eee8",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2627,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:27.346Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-ec1d9d82df903ebe39a9",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2376,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:27.491Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-851f7a72b6f6ed48c0a7",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2531,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:27.679Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-c3829b84a66d16791944",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4560,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:28.018Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-9a09e22f2b6f1b7bbf47",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "390px en light",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2832,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:29.165Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-872f16b2fb3d4f776862",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2958,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:29.893Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-ad8b643c9aa9af6bd387",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2878,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:30.002Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-b7766c5879d5e9b83539",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3042,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:30.246Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-2c8cc36429e64e6767fe",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 4658,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:30.519Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-f7030ec8a4398a1a251a",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "390px en dark",
+          "file": "phase1-mobile.spec.js",
+          "line": 29,
+          "column": 12,
+          "specs": [
+            {
+              "title": "sticky booking bar: 3 actions fully visible, no overlap, correct destinations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2902,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:32.025Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-bd2c0b317e21bae1b632",
+              "file": "phase1-mobile.spec.js",
+              "line": 32,
+              "column": 9
+            },
+            {
+              "title": "no horizontal overflow; bar never hides the end of the page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3142,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:32.606Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-48cff4eadc654dd6d12f",
+              "file": "phase1-mobile.spec.js",
+              "line": 60,
+              "column": 9
+            },
+            {
+              "title": "hero CTA: label fits, adequate target, above the fold",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3033,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:32.875Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-37a2159cf9181d29c379",
+              "file": "phase1-mobile.spec.js",
+              "line": 71,
+              "column": 9
+            },
+            {
+              "title": "clinic booking CTA: label fits, real portal destination",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2759,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:32.916Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-9bd92ea7b19194fce73f",
+              "file": "phase1-mobile.spec.js",
+              "line": 85,
+              "column": 9
+            },
+            {
+              "title": "simulator: tags never overlap, stay in frame, controls still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5042,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:33.310Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-8053302234e4c2dc8cc7",
+              "file": "phase1-mobile.spec.js",
+              "line": 99,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "Tablet and desktop",
+          "file": "phase1-mobile.spec.js",
+          "line": 137,
+          "column": 6,
+          "specs": [
+            {
+              "title": "768px: bar visible and fits",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2496,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:34.951Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-3950057034bb8cfd1aa0",
+              "file": "phase1-mobile.spec.js",
+              "line": 138,
+              "column": 3
+            },
+            {
+              "title": "1366px ar: bar hidden, hero CTA intact, no overflow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2842,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:35.199Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-b85e9a6759e2cb1a47c4",
+              "file": "phase1-mobile.spec.js",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "1366px en: bar hidden, hero CTA intact, no overflow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2661,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:35.706Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-530a83f04ffb34ba66ba",
+              "file": "phase1-mobile.spec.js",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "1440px ar: bar hidden, hero CTA intact, no overflow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2961,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:35.773Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-2b9c0713b771ee50a678",
+              "file": "phase1-mobile.spec.js",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "1440px en: bar hidden, hero CTA intact, no overflow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3169,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:35.933Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-78171352f95f15ad673b",
+              "file": "phase1-mobile.spec.js",
+              "line": 149,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Accessibility — booking actions contrast (WCAG AA 4.5:1)",
+          "file": "phase1-mobile.spec.js",
+          "line": 164,
+          "column": 6,
+          "specs": [
+            {
+              "title": "text contrast of booking/WhatsApp/call actions — light",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2553,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:37.468Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-d914a5bb511fc6cccaef",
+              "file": "phase1-mobile.spec.js",
+              "line": 167,
+              "column": 5
+            },
+            {
+              "title": "text contrast of booking/WhatsApp/call actions — dark",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2868,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:38.067Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-800ce7eafb167932567f",
+              "file": "phase1-mobile.spec.js",
+              "line": 167,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Regression — existing features",
+          "file": "phase1-mobile.spec.js",
+          "line": 185,
+          "column": 6,
+          "specs": [
+            {
+              "title": "no console errors or failed same-origin requests; language & theme switching",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3444,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:38.378Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-b9554da8f0f4a2897644",
+              "file": "phase1-mobile.spec.js",
+              "line": 188,
+              "column": 3
+            },
+            {
+              "title": "images load (lazy images after scrolling)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4969,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:38.392Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-956865edb0b2e7da4df1",
+              "file": "phase1-mobile.spec.js",
+              "line": 208,
+              "column": 3
+            },
+            {
+              "title": "mobile drawer, navigation and scroll-spy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4523,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:38.773Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-464ddcd7712bf328cf7d",
+              "file": "phase1-mobile.spec.js",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "FAQ, education accordion and questionnaire still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 5381,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:39.128Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-f67cc5c5a7b3bfe05ef2",
+              "file": "phase1-mobile.spec.js",
+              "line": 228,
+              "column": 3
+            },
+            {
+              "title": "active window scroll listeners do not accumulate across re-renders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 4231,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:40.044Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3b0770af2e74c6cbccdf-732000726ffafd5e979e",
+              "file": "phase1-mobile.spec.js",
+              "line": 244,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "seo.spec.js",
+      "file": "seo.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SEO — prerendered routes",
+          "file": "seo.spec.js",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "/ serves real content without JavaScript (ar)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3771,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:40.988Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c492e88247ecdf7201f5-dc0efb8469e0eae9f122",
+              "file": "seo.spec.js",
+              "line": 8,
+              "column": 5
+            },
+            {
+              "title": "/en/ serves real content without JavaScript (en)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:41.883Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c492e88247ecdf7201f5-54797ebcaa180ff5973a",
+              "file": "seo.spec.js",
+              "line": 8,
+              "column": 5
+            },
+            {
+              "title": "/en/ boots in English with working assets and no errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2729,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:43.376Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c492e88247ecdf7201f5-a66951c14d596c313b83",
+              "file": "seo.spec.js",
+              "line": 23,
+              "column": 3
+            },
+            {
+              "title": "canonical, hreflang, sitemap and robots agree and only list existing routes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-01T17:05:43.439Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c492e88247ecdf7201f5-b031e7414824df16baa3",
+              "file": "seo.spec.js",
+              "line": 34,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-01T17:04:18.242Z",
+    "duration": 88988.957,
+    "expected": 139,
+    "skipped": 4,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

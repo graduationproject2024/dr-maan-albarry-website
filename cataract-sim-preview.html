@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Cataract simulator preview (internal)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- @doctor-json-ld -->
+    <style>
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #eef1f2; color: #17242c; }
+      body[data-theme="dark"] { background: #070d10; color: #e6edf0; }
+      .pv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; font-size: 14px; }
+      .pv-bar button { min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #9aa7ad; background: #fff; cursor: pointer; }
+      .pv-wrap { padding: 0 16px 24px; }
+      .pv-filler { max-width: 760px; margin: 24px auto; padding: 0 16px 60vh; line-height: 1.7; }
+    </style>
+  </head>
+  <body>
+    <div class="pv-bar" aria-label="Preview harness controls">
+      <strong>Internal preview — cataract surgery simulator</strong>
+      <button type="button" id="pv-lang">Toggle language</button>
+      <button type="button" id="pv-theme">Toggle theme</button>
+      <span id="pv-status" aria-live="off"></span>
+    </div>
+    <div class="pv-wrap"><div id="csim-host"></div></div>
+    <div class="pv-filler">
+      <p>This page exists only to develop and test the lazily loaded simulator module in isolation. It is not linked from the public site.</p>
+      <p>Content below the simulator keeps the page scrollable so the mobile scroll behaviour can be verified.</p>
+    </div>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const opts = {
+        lang: q.get('lang') === 'en' ? 'en' : 'ar',
+        theme: q.get('theme') === 'dark' ? 'dark' : 'light',
+        debug: true,
+        autoplay: q.get('autoplay') === '1'
+      };
+      if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
+      document.body.dataset.theme = opts.theme;
+      const host = document.getElementById('csim-host');
+      const status = document.getElementById('pv-status');
+      window.__csimHost = host;
+      window.__csimEvents = [];
+      // Dynamic import: the simulator (and three.js) load as a separate lazy chunk, exactly as on the site.
+      const mod = await import('./src/cataract-sim/index.js');
+      window.__csimMount = (o = {}) => mod.mount(host, { ...opts, ...o });
+      window.__csimModule = mod;
+      const wire = (c) => {
+        ['statechange', 'stagechange', 'close', 'langchange', 'themechange', 'complete', 'error'].forEach((ev) =>
+          c.on(ev, (p) => window.__csimEvents.push({ ev, p })));
+        return c;
+      };
+      window.__csimWire = wire;
+      const controller = wire(await window.__csimMount());
+      window.__csim = controller;
+      host.addEventListener('cataract-sim:close', () => { document.body.dataset.closed = '1'; status.textContent = 'close event received'; });
+      document.getElementById('pv-lang').addEventListener('click', () => {
+        const c = window.__csim; c.setLang(c.getState().lang === 'ar' ? 'en' : 'ar');
+      });
+      document.getElementById('pv-theme').addEventListener('click', () => {
+        const c = window.__csim; const t = c.getState().theme === 'dark' ? 'light' : 'dark';
+        c.setTheme(t); document.body.dataset.theme = t;
+      });
+      document.body.dataset.ready = '1';
+    </script>
+  </body>
+</html>

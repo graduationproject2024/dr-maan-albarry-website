@@ -1,0 +1,1726 @@
+{
+  "360-ar-light": {
+    "vw": 360,
+    "docScrollW": 360,
+    "pageH": 18523,
+    "bookingBar": [
+      {
+        "x": 240,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 344,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 128,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 232,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "اتصال"
+      },
+      {
+        "x": 16,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 120,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 423,
+        "w": 328,
+        "h": 56,
+        "right": 344,
+        "scrollW": 326,
+        "clientW": 326,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 105,
+        "y": 441,
+        "w": 178,
+        "h": 20,
+        "right": 283,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 11863,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 264,
+        "y": 11863,
+        "w": 72,
+        "h": 20,
+        "right": 336,
+        "scrollW": 72,
+        "clientW": 72,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "360-ar-dark": {
+    "vw": 360,
+    "docScrollW": 360,
+    "pageH": 18523,
+    "bookingBar": [
+      {
+        "x": 240,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 344,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 128,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 232,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "اتصال"
+      },
+      {
+        "x": 16,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 120,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 423,
+        "w": 328,
+        "h": 56,
+        "right": 344,
+        "scrollW": 326,
+        "clientW": 326,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 105,
+        "y": 441,
+        "w": 178,
+        "h": 20,
+        "right": 283,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 11863,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 264,
+        "y": 11863,
+        "w": 72,
+        "h": 20,
+        "right": 336,
+        "scrollW": 72,
+        "clientW": 72,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "360-en-light": {
+    "vw": 360,
+    "docScrollW": 360,
+    "pageH": 19390,
+    "bookingBar": [
+      {
+        "x": 16,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 120,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "Book"
+      },
+      {
+        "x": 128,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 232,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "Call"
+      },
+      {
+        "x": 240,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 344,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 433,
+        "w": 328,
+        "h": 56,
+        "right": 344,
+        "scrollW": 326,
+        "clientW": 326,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 93,
+        "y": 451,
+        "w": 146,
+        "h": 20,
+        "right": 239,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 12514,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 228,
+        "y": 12514,
+        "w": 108,
+        "h": 20,
+        "right": 336,
+        "scrollW": 108,
+        "clientW": 108,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "360-en-dark": {
+    "vw": 360,
+    "docScrollW": 360,
+    "pageH": 19577,
+    "bookingBar": [
+      {
+        "x": 16,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 120,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "Book"
+      },
+      {
+        "x": 128,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 232,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "Call"
+      },
+      {
+        "x": 240,
+        "y": 738,
+        "w": 104,
+        "h": 54,
+        "right": 344,
+        "scrollW": 102,
+        "clientW": 102,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 434,
+        "w": 328,
+        "h": 56,
+        "right": 344,
+        "scrollW": 326,
+        "clientW": 326,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 94,
+        "y": 452,
+        "w": 144,
+        "h": 20,
+        "right": 238,
+        "scrollW": 144,
+        "clientW": 144,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 12506,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 231,
+        "y": 12506,
+        "w": 105,
+        "h": 20,
+        "right": 336,
+        "scrollW": 105,
+        "clientW": 105,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": [
+      "REQFAIL https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2",
+      "Failed to load resource: net::ERR_CONNECTION_RESET",
+      "REQFAIL https://maps.google.com/maps?q=Magrabi+Eye+Hospital+Madinah&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    ]
+  },
+  "390-ar-light": {
+    "vw": 390,
+    "docScrollW": 390,
+    "pageH": 18073,
+    "bookingBar": [
+      {
+        "x": 260,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 374,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 138,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 252,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "اتصال"
+      },
+      {
+        "x": 16,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 130,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 431,
+        "w": 358,
+        "h": 56,
+        "right": 374,
+        "scrollW": 356,
+        "clientW": 356,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 120,
+        "y": 449,
+        "w": 178,
+        "h": 20,
+        "right": 298,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 11593,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 294,
+        "y": 11593,
+        "w": 72,
+        "h": 20,
+        "right": 366,
+        "scrollW": 72,
+        "clientW": 72,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "390-ar-dark": {
+    "vw": 390,
+    "docScrollW": 390,
+    "pageH": 18073,
+    "bookingBar": [
+      {
+        "x": 260,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 374,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 138,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 252,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "اتصال"
+      },
+      {
+        "x": 16,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 130,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 431,
+        "w": 358,
+        "h": 56,
+        "right": 374,
+        "scrollW": 356,
+        "clientW": 356,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 120,
+        "y": 449,
+        "w": 178,
+        "h": 20,
+        "right": 298,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 11593,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 294,
+        "y": 11593,
+        "w": 72,
+        "h": 20,
+        "right": 366,
+        "scrollW": 72,
+        "clientW": 72,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "390-en-light": {
+    "vw": 390,
+    "docScrollW": 390,
+    "pageH": 18745,
+    "bookingBar": [
+      {
+        "x": 16,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 130,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "Book"
+      },
+      {
+        "x": 138,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 252,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "Call"
+      },
+      {
+        "x": 260,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 374,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 415,
+        "w": 358,
+        "h": 56,
+        "right": 374,
+        "scrollW": 356,
+        "clientW": 356,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 108,
+        "y": 433,
+        "w": 146,
+        "h": 20,
+        "right": 254,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 12074,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 258,
+        "y": 12074,
+        "w": 108,
+        "h": 20,
+        "right": 366,
+        "scrollW": 108,
+        "clientW": 108,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "390-en-dark": {
+    "vw": 390,
+    "docScrollW": 390,
+    "pageH": 18745,
+    "bookingBar": [
+      {
+        "x": 16,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 130,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "Book"
+      },
+      {
+        "x": 138,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 252,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "Call"
+      },
+      {
+        "x": 260,
+        "y": 782,
+        "w": 114,
+        "h": 54,
+        "right": 374,
+        "scrollW": 112,
+        "clientW": 112,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 16,
+        "y": 415,
+        "w": 358,
+        "h": 56,
+        "right": 374,
+        "scrollW": 356,
+        "clientW": 356,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 108,
+        "y": 433,
+        "w": 146,
+        "h": 20,
+        "right": 254,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 24,
+        "y": 12074,
+        "w": 43,
+        "h": 20,
+        "right": 67,
+        "scrollW": 43,
+        "clientW": 43,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 258,
+        "y": 12074,
+        "w": 108,
+        "h": 20,
+        "right": 366,
+        "scrollW": 108,
+        "clientW": 108,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "768-ar-light": {
+    "vw": 768,
+    "docScrollW": 768,
+    "pageH": 16432,
+    "bookingBar": [
+      {
+        "x": 496,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 704,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 280,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 488,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "اتصال"
+      },
+      {
+        "x": 64,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 272,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 478,
+        "y": 539,
+        "w": 260,
+        "h": 56,
+        "right": 737,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 533,
+        "y": 557,
+        "w": 178,
+        "h": 20,
+        "right": 710,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 43,
+        "y": 10329,
+        "w": 129,
+        "h": 27,
+        "right": 172,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 635,
+        "y": 10329,
+        "w": 90,
+        "h": 27,
+        "right": 725,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "768-ar-dark": {
+    "vw": 768,
+    "docScrollW": 768,
+    "pageH": 16432,
+    "bookingBar": [
+      {
+        "x": 496,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 704,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 280,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 488,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "اتصال"
+      },
+      {
+        "x": 64,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 272,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 478,
+        "y": 539,
+        "w": 260,
+        "h": 56,
+        "right": 737,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 533,
+        "y": 557,
+        "w": 178,
+        "h": 20,
+        "right": 710,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 43,
+        "y": 10329,
+        "w": 129,
+        "h": 27,
+        "right": 172,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 635,
+        "y": 10329,
+        "w": 90,
+        "h": 27,
+        "right": 725,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "768-en-light": {
+    "vw": 768,
+    "docScrollW": 768,
+    "pageH": 16386,
+    "bookingBar": [
+      {
+        "x": 64,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 272,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "Book"
+      },
+      {
+        "x": 280,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 488,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "Call"
+      },
+      {
+        "x": 496,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 704,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 31,
+        "y": 522,
+        "w": 228,
+        "h": 56,
+        "right": 259,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 58,
+        "y": 540,
+        "w": 146,
+        "h": 20,
+        "right": 204,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 43,
+        "y": 10295,
+        "w": 212,
+        "h": 27,
+        "right": 254,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 593,
+        "y": 10295,
+        "w": 132,
+        "h": 27,
+        "right": 725,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "768-en-dark": {
+    "vw": 768,
+    "docScrollW": 768,
+    "pageH": 16386,
+    "bookingBar": [
+      {
+        "x": 64,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 272,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "Book"
+      },
+      {
+        "x": 280,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 488,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "Call"
+      },
+      {
+        "x": 496,
+        "y": 964,
+        "w": 208,
+        "h": 52,
+        "right": 704,
+        "scrollW": 206,
+        "clientW": 206,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 31,
+        "y": 522,
+        "w": 228,
+        "h": 56,
+        "right": 259,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 58,
+        "y": 540,
+        "w": 146,
+        "h": 20,
+        "right": 204,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 43,
+        "y": 10295,
+        "w": 212,
+        "h": 27,
+        "right": 254,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 593,
+        "y": 10295,
+        "w": 132,
+        "h": 27,
+        "right": 725,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "1366-ar-light": {
+    "vw": 1366,
+    "docScrollW": 1366,
+    "pageH": 13393,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "اتصال"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 1043,
+        "y": 472,
+        "w": 260,
+        "h": 56,
+        "right": 1303,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 1098,
+        "y": 490,
+        "w": 178,
+        "h": 20,
+        "right": 1276,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 75,
+        "y": 8193,
+        "w": 129,
+        "h": 27,
+        "right": 204,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 1201,
+        "y": 8193,
+        "w": 90,
+        "h": 27,
+        "right": 1291,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "1366-ar-dark": {
+    "vw": 1366,
+    "docScrollW": 1366,
+    "pageH": 13393,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "اتصال"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 1043,
+        "y": 472,
+        "w": 260,
+        "h": 56,
+        "right": 1303,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 1098,
+        "y": 490,
+        "w": 178,
+        "h": 20,
+        "right": 1276,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 75,
+        "y": 8193,
+        "w": 129,
+        "h": 27,
+        "right": 204,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 1201,
+        "y": 8193,
+        "w": 90,
+        "h": 27,
+        "right": 1291,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "1366-en-light": {
+    "vw": 1366,
+    "docScrollW": 1366,
+    "pageH": 13754,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Book"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Call"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 63,
+        "y": 498,
+        "w": 228,
+        "h": 56,
+        "right": 291,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 90,
+        "y": 516,
+        "w": 146,
+        "h": 20,
+        "right": 236,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 75,
+        "y": 8419,
+        "w": 212,
+        "h": 27,
+        "right": 287,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 1159,
+        "y": 8419,
+        "w": 132,
+        "h": 27,
+        "right": 1291,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "1366-en-dark": {
+    "vw": 1366,
+    "docScrollW": 1366,
+    "pageH": 13754,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Book"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Call"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 63,
+        "y": 498,
+        "w": 228,
+        "h": 56,
+        "right": 291,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 90,
+        "y": 516,
+        "w": 146,
+        "h": 20,
+        "right": 236,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 75,
+        "y": 8419,
+        "w": 212,
+        "h": 27,
+        "right": 287,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 1159,
+        "y": 8419,
+        "w": 132,
+        "h": 27,
+        "right": 1291,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "1440-ar-light": {
+    "vw": 1440,
+    "docScrollW": 1440,
+    "pageH": 13545,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "اتصال"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 1080,
+        "y": 512,
+        "w": 260,
+        "h": 56,
+        "right": 1340,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 1135,
+        "y": 530,
+        "w": 178,
+        "h": 20,
+        "right": 1313,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 112,
+        "y": 8292,
+        "w": 129,
+        "h": 27,
+        "right": 241,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 1238,
+        "y": 8292,
+        "w": 90,
+        "h": 27,
+        "right": 1328,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "1440-ar-dark": {
+    "vw": 1440,
+    "docScrollW": 1440,
+    "pageH": 13545,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "احجز موعداً"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "اتصال"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "واتساب"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 1080,
+        "y": 512,
+        "w": 260,
+        "h": 56,
+        "right": 1340,
+        "scrollW": 258,
+        "clientW": 258,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 1135,
+        "y": 530,
+        "w": 178,
+        "h": 20,
+        "right": 1313,
+        "scrollW": 178,
+        "clientW": 178,
+        "text": "احجز موعد كشف أو استشارة"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 112,
+        "y": 8292,
+        "w": 129,
+        "h": 27,
+        "right": 241,
+        "scrollW": 129,
+        "clientW": 129,
+        "text": "ممتدة المدى (EDOF)EDOF"
+      },
+      {
+        "x": 1238,
+        "y": 8292,
+        "w": 90,
+        "h": 27,
+        "right": 1328,
+        "scrollW": 90,
+        "clientW": 90,
+        "text": "ساد غير معالج"
+      }
+    ],
+    "errors": []
+  },
+  "1440-en-light": {
+    "vw": 1440,
+    "docScrollW": 1440,
+    "pageH": 13906,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Book"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Call"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 100,
+        "y": 538,
+        "w": 228,
+        "h": 56,
+        "right": 328,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 127,
+        "y": 556,
+        "w": 146,
+        "h": 20,
+        "right": 273,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 112,
+        "y": 8517,
+        "w": 212,
+        "h": 27,
+        "right": 324,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 1196,
+        "y": 8517,
+        "w": 132,
+        "h": 27,
+        "right": 1328,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  },
+  "1440-en-dark": {
+    "vw": 1440,
+    "docScrollW": 1440,
+    "pageH": 13906,
+    "bookingBar": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Book"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "Call"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "right": 0,
+        "scrollW": 0,
+        "clientW": 0,
+        "text": "WhatsApp"
+      }
+    ],
+    "heroCta": [
+      {
+        "x": 100,
+        "y": 538,
+        "w": 228,
+        "h": 56,
+        "right": 328,
+        "scrollW": 226,
+        "clientW": 226,
+        "text": "Book a consultation"
+      }
+    ],
+    "heroCtaLabel": [
+      {
+        "x": 127,
+        "y": 556,
+        "w": 146,
+        "h": 20,
+        "right": 273,
+        "scrollW": 146,
+        "clientW": 146,
+        "text": "Book a consultation"
+      }
+    ],
+    "clinicCta": [],
+    "clinicCtaLabel": [],
+    "vsTags": [
+      {
+        "x": 112,
+        "y": 8517,
+        "w": 212,
+        "h": 27,
+        "right": 324,
+        "scrollW": 212,
+        "clientW": 212,
+        "text": "Extended Depth of Focus (EDOF)EDOF"
+      },
+      {
+        "x": 1196,
+        "y": 8517,
+        "w": 132,
+        "h": 27,
+        "right": 1328,
+        "scrollW": 132,
+        "clientW": 132,
+        "text": "Untreated cataract"
+      }
+    ],
+    "errors": []
+  }
+}
