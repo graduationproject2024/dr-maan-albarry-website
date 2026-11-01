@@ -1,0 +1,15 @@
+# Blockers — items that need a human decision or access
+
+Each blocker has a safe interim behaviour that is already live on this branch. None of them is marked complete.
+
+| ID | Blocker | Needs | Interim behaviour (implemented) | Blocks |
+|---|---|---|---|---|
+| B-1 | Ownership and role of mobile `0554946433` (added 2026-10-25 without a source; previously used for both calls and WhatsApp) | Clinic confirmation in writing | Not published anywhere, including the JS bundle. Calls go to Magrabi `920018000` (also `19505`); WhatsApp goes to Magrabi's published line for Dr. Maan, `966508533309`. | Nothing in the Phase 0/1 gates. Contact data is consistent and verified. |
+| B-2 | Testimonial reuse permission and approved verbatim text | Written consent per review + approved text | Section hidden; publication gate enforced in code | Re-enabling testimonials |
+| B-3 | Licence / SCFHS wording | Official record | No licence badge; verified FRCS shown instead | Showing a licence statement |
+| B-4 | Dr. Maan's clinic hours | Approved schedule | "Confirm via contact center / booking portal"; no hours in JSON-LD | Publishing hours |
+| B-5 | Booking-interaction measurement (P0-7) | There is no existing analytics on the site. A provider choice plus a privacy/consent decision (Saudi PDPL) are required before adding any tracker. | **Not implemented.** Booking, call and WhatsApp links carry inert `data-cta="book|call|whatsapp"` attributes, so a consented, privacy-respecting counter can later attach without touching markup. No personal or health data is collected. | P0-7 only |
+| B-6 | Production domain: `drmaanalbarry.com` does not resolve (DNS lookup failed 2026-10-31). The site actually deploys to GitHub Pages. Canonical, hreflang (`/ar/`, `/en/` paths that don't exist), sitemap.xml and robots.txt all point at it. | Domain decision | `SITE.url` centralised in `doctor-data.js`; fake BreadcrumbList removed. Canonical/hreflang/sitemap left unchanged: that is SEO-phase scope and needs the domain decision first. | Out of Phase 0/1 scope; recorded for the SEO phase |
+| B-7 | Owner-supplied role wording differs from the official Magrabi profile (Chief of Staff vs Executive Medical Director; Taibah chair "former, 10 years" vs present tense) | Doctor/clinic confirmation | Owner wording kept and made identical across UI, JSON-LD and llms.txt | Final sign-off of the "professional role" fact |
+| B-8 | Trello: separate "audit" and "cataract" boards named in the brief | Board names, if they exist | **Resolved in part.** The only matching board is "Dr. Maan website" (list "software"). Seven cards were added there: Phase 0, Phase 1, decisions, booking fixes ✔, regression tests ✔, independent review ✔, completion verification. Only cards whose criteria passed are marked done. No separate audit/cataract board exists; the Cataract 3D work was not touched. | — |
+| B-9 | Remote push / PR | Explicit permission (brief §3) | Work is on local branch `feat/phase0-phase1-trust-booking-mobile`; nothing pushed or deployed | Deployment |
