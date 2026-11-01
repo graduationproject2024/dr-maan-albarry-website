@@ -3798,3 +3798,64 @@ details.vs-sci ul {
   .vs-tag-full { display: none; }
   .vs-tag-short { display: inline; }
 }
+
+.vs-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+  background: rgba(11, 17, 24, 0.85);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Mobile length: smaller media and section rhythm on phones; no content removed.
+   The footer "Clinical Focus" column repeats four links to the same #specialties anchor, so it is hidden on phones. */
+@media (max-width: 600px) {
+  .section {
+    padding: var(--space-10) 0;
+  }
+  .profile-media-img {
+    height: 300px;
+  }
+  .sci-fig img {
+    height: 220px;
+  }
+  .specialty-img-wrap,
+  .specialty-img-wrap img {
+    height: 170px;
+  }
+  .footer-col-focus {
+    display: none;
+  }
+}
+
+/* Phones: card sets become a swipeable row (next card peeks at the edge) instead of a tall stack.
+   All text stays in the DOM and is keyboard-scrollable via the focusable region. */
+@media (max-width: 600px) {
+  .swipe-row {
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-template-columns: none !important;
+    grid-auto-columns: 84%;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+  }
+  .swipe-row > * {
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  .swipe-row:focus-visible {
+    outline: 2px solid var(--secondary-burgundy);
+    outline-offset: 4px;
+  }
+}
+

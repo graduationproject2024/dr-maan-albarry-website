@@ -725,15 +725,39 @@ void main(){
     dirty = true;
   }
 
+  // Release every geometry, material and texture a scene holds (renderer.dispose() alone does not).
+  function disposeScene(scene) {
+    if (!scene) return;
+    scene.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      const mats = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : [];
+      mats.forEach(m => {
+        Object.values(m).forEach(v => { if (v && v.isTexture) v.dispose(); });
+        if (m.uniforms) Object.values(m.uniforms).forEach(u => { if (u && u.value && u.value.isTexture) u.value.dispose(); });
+        m.dispose();
+      });
+    });
+  }
+
   function destroy() {
     cancelAnimationFrame(raf);
     io && io.disconnect();
     if (rdr) {
+      disposeScene(world);
+      disposeScene(postS);
+      if (RT) RT.dispose();
+      if (GT) GT.dispose();
       rdr.dispose();
       rdr.forceContextLoss();
     }
     rdr = null;
+    world = postS = RT = GT = null;
     root = null;
+  }
+
+  function showFallback(msg) {
+    if (!view || view.querySelector('.vs-fallback')) return;
+    view.insertAdjacentHTML('beforeend', '<p class="vs-fallback" role="status">' + msg + '</p>');
   }
 
   function mount(host, opt = {}) {
@@ -743,7 +767,13 @@ void main(){
     root = host.querySelector('#vs-root');
     view = root.querySelector('#vs-view');
     cv = root.querySelector('#vs-gl');
-    if (!initGL()) view.insertAdjacentHTML('beforeend', '<p style="position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-align:center;padding:20px">' + T('المتصفح لا يدعم WebGL2 أو تعذر تحميل three.js', 'WebGL2 / three.js unavailable') + '</p>');
+    if (!initGL()) showFallback(T('المتصفح لا يدعم WebGL2 أو تعذر تحميل three.js. باقي معلومات المقارنة أدناه متاحة.', 'WebGL2 / three.js is unavailable in this browser. The comparison details below still apply.'));
+    // GPU reset / tab backgrounding on mobile can drop the context: stop drawing and explain instead of freezing.
+    cv.addEventListener('webglcontextlost', e => {
+      e.preventDefault();
+      cancelAnimationFrame(raf);
+      showFallback(T('توقف عرض المحاكاة مؤقتاً. أعد تحميل الصفحة لاستئنافها.', 'The simulation display paused. Reload the page to resume.'));
+    });
     cur = targets().map(a => a.slice());
     fade = 1;
     root.addEventListener('click', e => {
@@ -834,7 +864,9 @@ function renderSimulator(lang) {
 }
 
 // --- APP STATE & LOCAL STORAGE ---
-let currentLang = 'ar';
+let currentLang = (() => {
+  try { return localStorage.getItem('lang') === 'en' ? 'en' : 'ar'; } catch (e) { return 'ar'; }
+})();
 let currentTheme = (() => {
   try {
     return localStorage.getItem('theme');
@@ -977,7 +1009,7 @@ function renderHeader() {
         <a href="${DOCTOR.contact.bookingUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-header-book">
           ${currentLang === 'ar' ? 'احجز موعداً' : 'Book Appointment'}
         </a>
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open Navigation">☰</button>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="${currentLang === 'ar' ? 'القائمة' : 'Menu'}" aria-expanded="false" aria-controls="mobile-nav">☰</button>
       </div>
     </div>
 
@@ -1200,7 +1232,7 @@ function renderQualifications() {
         <p>${isAr ? 'المؤهلات كما وردت في ملف مغربي الصحية، والمناصب كما زوّدنا بها مكتب الطبيب.' : 'Qualifications as listed by Magrabi Health; roles as provided by the doctor’s office.'}</p>
       </div>
 
-      <div class="qualifications-grid fade-in">
+      <div class="qualifications-grid swipe-row fade-in" role="region" tabindex="0" aria-label="${isAr ? 'المؤهلات (اسحب لرؤية المزيد)' : 'Qualifications (swipe for more)'}">
         ${cards.map(c => `
           <div class="qual-card">
             <div class="qual-icon-box" aria-hidden="true">${c.icon}</div>
@@ -1308,7 +1340,7 @@ function renderProfile() {
             <small style="color:var(--text-muted);">${isAr ? 'تجهيزات تشخيصية وجراحية متوفرة في مستشفى مغربي المدينة المنورة' : 'Diagnostic and surgical platforms available at Magrabi Health Madinah'}</small>
           </div>
         </div>
-        <div class="tech-grid">
+        <div class="tech-grid swipe-row" role="region" tabindex="0" aria-label="${isAr ? 'التقنيات (اسحب لرؤية المزيد)' : 'Technologies (swipe for more)'}">
           <div class="tech-card">
             <div class="tech-icon-box">🔬</div>
             <div>
@@ -1927,11 +1959,11 @@ function renderEducation() {
       <div class="article-accordion fade-in">
         ${articles.map(a => `
           <div class="article-item ${openArticleId === a.id ? 'open' : ''}" id="art-item-${a.id}">
-            <button class="article-trigger" onclick="toggleArticle('${a.id}')">
+            <button class="article-trigger" onclick="toggleArticle('${a.id}')" aria-expanded="${openArticleId === a.id ? 'true' : 'false'}" aria-controls="art-content-${a.id}">
               <span>${currentLang === 'ar' ? a.titleAr : a.titleEn}</span>
               <span class="trigger-icon">▼</span>
             </button>
-            <div class="article-content">
+            <div class="article-content" id="art-content-${a.id}">
               ${currentLang === 'ar' ? a.contentAr : a.contentEn}
               <div style="margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid var(--border-subtle);font-size:0.8rem;color:var(--text-muted);">
                 ${currentLang === 'ar' ? 'إشراف ومراجعة سريرية: د. معن بن عبدالله البري — استشاري طب وجراحة العيون' : 'Medically supervised by Dr. Maan Al Barry — Consultant Ophthalmologist'}
@@ -2194,7 +2226,7 @@ function renderFooter() {
           <a href="#cataracts" onclick="scrollToSection('cataracts');return false;">${currentLang === 'ar' ? 'دليل العدسات IOL' : 'IOL Guide'}</a>
         </div>
 
-        <div class="footer-col">
+        <div class="footer-col footer-col-focus">
           <h4>${currentLang === 'ar' ? 'التخصصات الدقيقة' : 'Clinical Focus'}</h4>
           <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'جراحة الساد والماء الأبيض' : 'Cataract Surgery'}</a>
           <a href="#specialties" onclick="scrollToSection('specialties');return false;">${currentLang === 'ar' ? 'زراعة العدسات ثلاثية البؤرة' : 'Trifocal / EDOF IOLs'}</a>
@@ -2258,6 +2290,7 @@ function renderBookingBar() {
 // --- GLOBAL ATTACHMENTS & INTERACTION DISPATCHERS ---
 window.toggleLang = function () {
   currentLang = (currentLang === 'ar' ? 'en' : 'ar');
+  try { localStorage.setItem('lang', currentLang); } catch (e) { /* storage unavailable: session-only */ }
   currentQStep = 0;
   qAnswers = [];
   qCompleted = false;
@@ -2371,15 +2404,32 @@ function initScrollSpy() {
   checkScroll();
 }
 
+function setMobileMenu(open) {
+  const nav = document.getElementById('mobile-nav');
+  if (!nav) return;
+  nav.classList.toggle('open', open);
+  document.querySelectorAll('.mobile-menu-btn').forEach(b => b.setAttribute('aria-expanded', String(open)));
+}
+
 window.toggleMobileMenu = function () {
   const nav = document.getElementById('mobile-nav');
-  if (nav) nav.classList.toggle('open');
+  setMobileMenu(!(nav && nav.classList.contains('open')));
 };
 
 window.closeMobileMenu = function () {
-  const nav = document.getElementById('mobile-nav');
-  if (nav) nav.classList.remove('open');
+  setMobileMenu(false);
 };
+
+// Escape closes the drawer and returns focus to its button (registered once; survives re-renders).
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const nav = document.getElementById('mobile-nav');
+  if (nav && nav.classList.contains('open')) {
+    setMobileMenu(false);
+    const btn = document.querySelector('.mobile-menu-btn');
+    if (btn) btn.focus();
+  }
+});
 
 window.updateQuestionnaireUI = function () {
   const container = document.getElementById('questionnaire-card-container');
@@ -2422,19 +2472,30 @@ window.restartQ = function () {
 window.toggleArticle = function (id) {
   openArticleId = (openArticleId === id ? null : id);
   const el = document.getElementById(`art-item-${id}`);
-  if (el) el.classList.toggle('open');
+  if (el) {
+    const open = el.classList.toggle('open');
+    const btn = el.querySelector('.article-trigger');
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+  }
 };
 
 window.toggleFaq = function (idx) {
   const item = document.getElementById(`faq-${idx}`);
-  if (item) item.classList.toggle('open');
+  if (item) {
+    const open = item.classList.toggle('open');
+    const btn = item.querySelector('.faq-question');
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+  }
 };
 
+let fadeObserver = null;
 function observeIntersection() {
-  const observer = new IntersectionObserver((entries) => {
+  if (fadeObserver) fadeObserver.disconnect();
+  const observer = fadeObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });

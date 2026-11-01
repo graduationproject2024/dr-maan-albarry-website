@@ -1,11 +1,14 @@
 // Evidence capture: screenshots + bounding-box measurements of key booking/mobile components.
 // Usage: node tests/measure.mjs <outDir> [baseUrl]
+// Without baseUrl it serves the current dist/ itself (vite preview on :4174) and shuts it down afterwards.
 import { chromium } from '@playwright/test';
+import { preview } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 
 const outDir = process.argv[2];
-const base = process.argv[3] || 'http://localhost:4173/';
+const server = process.argv[3] ? null : await preview({ preview: { port: 4174, strictPort: true }, logLevel: 'silent' });
+const base = process.argv[3] || 'http://localhost:4174/';
 fs.mkdirSync(outDir, { recursive: true });
 
 const viewports = [
@@ -59,6 +62,7 @@ for (const [name, w, h] of viewports) {
   }
 }
 await browser.close();
+if (server) await new Promise(r => server.httpServer.close(r));
 fs.writeFileSync(path.join(outDir, 'measurements.json'), JSON.stringify(report, null, 2));
 // Compact summary
 for (const [k, m] of Object.entries(report)) {
