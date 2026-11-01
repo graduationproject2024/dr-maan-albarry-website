@@ -19,7 +19,7 @@ Module: `src/cataract-sim/` (ES modules, `three@0.170.0` from npm, pinned exactl
 | `perf.js` | FPS sampling and adaptive DPR; IntersectionObserver + `visibilitychange` suspension |
 | `ui.js` | DOM, ARIA, i18n (`ar`/`en`), hotspots, live region |
 | `fallback.js` | Non-WebGL fallback: one inline SVG cross-section diagram per stage |
-| `styles.css` | All rules scoped under `.csim`. Tokens fall back to the site's `:root` variables. Imported by `index.js`, so it ships in the lazy chunk |
+| `styles.css` | All rules scoped under `.csim`. Colour tokens are self-contained (not inherited from the site's `:root`), so host CSS cannot drop text contrast. Imported by `index.js`, so it ships in the lazy chunk |
 
 ## Public API
 
