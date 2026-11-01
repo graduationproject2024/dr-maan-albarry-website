@@ -21,7 +21,8 @@ const META = {
   }
 };
 
-const server = await preview({ preview: { port: 4176, strictPort: true }, logLevel: 'silent' });
+const PORT = Number(process.env.PRERENDER_PORT || 4176);
+const server = await preview({ preview: { port: PORT, strictPort: true }, logLevel: 'silent' });
 const browser = await chromium.launch();
 async function render(lang) {
   const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, reducedMotion: 'reduce' });
@@ -29,7 +30,7 @@ async function render(lang) {
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.addInitScript(l => { try { localStorage.setItem('lang', l); localStorage.removeItem('theme'); } catch (e) { /* ignore */ } }, lang);
-  await page.goto('http://localhost:4176/', { waitUntil: 'load' });
+  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
   await page.waitForFunction(l => document.documentElement.lang === l && document.querySelector('#app h1'), lang);
   // Static markup only: drop live canvases / injected runtime nodes that make no sense without JS.
   const html = await page.evaluate(() => {
