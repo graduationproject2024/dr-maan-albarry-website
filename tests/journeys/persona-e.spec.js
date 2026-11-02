@@ -114,7 +114,9 @@ test('Persona E — keyboard and reduced motion', async ({ page }, testInfo) => 
   }, { critical: false });
 
   await j.step('Tab into the 3D viewer and use the arrow keys to change stage', 'ArrowRight → stage 2, ArrowRight → stage 3, ArrowLeft → stage 2; announced in the live region', async () => {
-    const { found } = await tabUntil(page, (f) => f.cls === 'csim-viewport', 30);
+    // focus now sits on the viewer's own Play control (inside the viewport), so the viewport is one Shift+Tab back
+    let { found } = await tabUntil(page, (f) => f.cls === 'csim-viewport', 4, 'Shift+Tab');
+    if (!found) ({ found } = await tabUntil(page, (f) => f.cls === 'csim-viewport', 30));
     if (!found) return { actual: 'viewport not focusable', ok: false };
     const seq = [];
     for (const k of ['ArrowRight', 'ArrowRight', 'ArrowLeft']) { await page.keyboard.press(k); await page.waitForTimeout(150); seq.push((await csim(page)).stageNum); }

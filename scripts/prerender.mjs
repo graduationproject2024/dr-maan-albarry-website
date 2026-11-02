@@ -45,7 +45,8 @@ async function render(page) {
   const html = await tab.evaluate(() => {
     const app = document.querySelector('#app').cloneNode(true);
     app.querySelectorAll('canvas, script').forEach(n => n.remove());
-    app.querySelectorAll('[data-vision-host]').forEach(n => { n.innerHTML = ''; });
+    // no simulator can mount without JS: drop the reserved height so no-JS readers get no blank gap (BUG-10)
+    app.querySelectorAll('[data-vision-host]').forEach(n => { n.innerHTML = ''; n.removeAttribute('data-reserve'); });
     app.querySelectorAll('.fade-in, .reveal').forEach(n => n.classList.add('visible'));
     return app.innerHTML;
   });
@@ -65,7 +66,8 @@ function documentFor(page, appHtml) {
   let doc = template
     .replace(/<div id="app"><\/div>/, () => `<div id="app">${appHtml}</div>`)
     .replace('<html lang="ar" dir="rtl">', `<html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">`)
-    .replace(/<head>/, `<head>\n  <base href="${base}">`)
+    .replace(/<head>/, `<head>\n  <base href="${base}">
+  <meta name="site-route" content="${page.path}">`)
     .replace(/<title>[^<]*<\/title>/, () => `<title>${esc(meta.title)}</title>`)
     .replace(/<meta name="description" content="[^"]*">/, () => `<meta name="description" content="${esc(meta.description)}">`)
     .replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${url}">`)

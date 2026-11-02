@@ -10,8 +10,17 @@
     // correct after client-side navigation changes the URL.
     (function () {
       var b = document.querySelector('base');
-      if (b) { b.setAttribute('href', b.href); return; }
       var m = location.pathname.match(/^(.*?\/)((?:en\/)?(?:procedures\/[a-z0-9-]+\/?)?(?:index\.html)?)$/);
+      if (b) {
+        // A prerendered page names the route it was rendered for. Served at that URL, its relative <base> is right.
+        // A host's SPA fallback may serve it at another depth (an unknown or mistyped URL): then derive the root
+        // from the URL, or every script and stylesheet 404s and the page never starts (BUG-11).
+        var r = document.querySelector('meta[name="site-route"]');
+        var here = m ? m[2].replace(/index\.html$/, '') : null;
+        if (!r || here === r.getAttribute('content')) { b.setAttribute('href', b.href); return; }
+        b.setAttribute('href', m ? m[1] : '/');
+        return;
+      }
       b = document.createElement('base');
       b.setAttribute('href', m ? m[1] : '/');
       document.head.insertBefore(b, document.head.firstChild);

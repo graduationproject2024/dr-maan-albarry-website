@@ -4,10 +4,14 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 
 export const BG = { light: 0xdfe5e7, dark: 0x0c171d };
 
+// The capability probe releases its context at once: browsers cap live WebGL contexts (~16) and an unreleased
+// probe per mount used to add one leaked context every time the viewer was opened (BUG-03).
 export function hasWebGL() {
   try {
     const c = document.createElement('canvas');
-    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    const gl = c.getContext('webgl2') || c.getContext('webgl');
+    if (gl) { const ext = gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); }
+    return !!gl;
   } catch {
     return false;
   }

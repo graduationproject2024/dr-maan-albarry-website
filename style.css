@@ -195,7 +195,7 @@ main:focus, main h1:focus { outline: none; }
 .site-header { position: sticky; top: 0; z-index: 50; background: var(--bg); border-bottom: 1px solid transparent; transition: border-color .2s, box-shadow .2s; }
 .site-header.is-scrolled { border-bottom-color: var(--line); box-shadow: var(--shadow-1); }
 .header-inner { display: flex; align-items: center; gap: var(--s-4); height: var(--header-h); max-width: calc(var(--container) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
-.wordmark { display: flex; align-items: center; gap: 10px; min-width: 0; margin-inline-end: auto; color: var(--ink); }
+.wordmark { display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 44px; margin-inline-end: auto; color: var(--ink); }
 .wordmark-mark { color: var(--primary-ink); }
 .wordmark-text { display: grid; min-width: 0; }
 .wordmark-name { font-family: var(--f-display); font-weight: 600; font-size: 1.12rem; line-height: 1.25; white-space: nowrap; }
@@ -420,10 +420,13 @@ html.drawer-open .site-header { z-index: 130; }
 .section-stage-deep { background: var(--stage-2); }
 .vsim-launch { border-radius: var(--radius-xl); padding: clamp(12px, 2vw, 24px); background: #0F1B1E; border: 1px solid var(--stage-line); }
 /* Reserve the mounted simulator's height (measured at 320-1920px, AR/EN) so the lazy mount never shifts the
-   sections below it, e.g. while a header link is scrolling past it to #clinic. */
-.vsim-host { min-height: 1580px; }
-@media (max-width: 1023px) { .vsim-host { min-height: 1420px; } }
-@media (max-width: 767px) { .vsim-host { min-height: 1540px; } }
+   sections below it, e.g. while a header link is scrolling past it to #clinic. Only while a mount is expected
+   (data-reserve, set by the app): no-JS / prerendered pages and a failed load keep no blank gap (BUG-09/10). */
+.vsim-host[data-reserve] { min-height: 1580px; }
+@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1420px; } }
+@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1540px; } }
+.vsim-load-error { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--radius-lg); border: 1px solid var(--stage-line); background: var(--surface); color: var(--ink-2); }
+.vsim-load-error p { max-width: 60ch; }
 /* phones: the simulator view gets the full content width (no frame padding) */
 @media (max-width: 639px) { .vsim-launch { padding: 0; border: 0; background: none; } }
 .disclaimers { display: grid; gap: var(--s-3); margin-top: var(--s-5); }
@@ -572,7 +575,7 @@ html.drawer-open .site-header { z-index: 130; }
 .crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: var(--fs-caption); color: var(--muted); }
 .crumbs li { display: inline-flex; align-items: center; gap: 8px; }
 .crumbs li + li::before { content: "/"; opacity: .6; }
-.crumbs a { display: inline-flex; align-items: center; min-height: 44px; color: var(--primary-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.crumbs a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; color: var(--primary-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
 .crumbs [aria-current] { color: var(--ink-2); }
 .proc-hero-grid { display: grid; gap: var(--s-6); align-items: center; margin-top: var(--s-3); }
 @media (min-width: 960px) { .proc-hero-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s-8); } }
@@ -582,6 +585,8 @@ html.drawer-open .site-header { z-index: 130; }
 .review-status .ic { margin-top: 2px; }
 .review-status strong { font-weight: 700; }
 .proc-cta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-5); }
+/* phones hide the page contents list, so the 3D walkthrough gets its own jump link near the top (BUG-04) */
+.proc-3d-jump { margin-top: var(--s-3); }
 @media (max-width: 639px) { .proc-cta .btn { flex: 1 1 100%; } }
 .proc-figure { margin: 0; }
 .proc-figure .illus { border-radius: var(--radius-xl); border: 1px solid var(--line); box-shadow: var(--shadow-2); }
@@ -611,13 +616,13 @@ html.drawer-open .site-header { z-index: 130; }
 .anat-parts { display: grid; gap: var(--s-2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 .anat-parts div { padding: var(--s-4); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
 .anat-parts dt { font-family: var(--f-display); font-weight: 600; color: var(--ink); }
-.anat-parts dd { font-size: var(--fs-small); color: var(--ink-2); line-height: 1.6; }
+.anat-parts dd { font-size: var(--fs-body); color: var(--ink-2); line-height: 1.6; }
 .types { display: grid; gap: var(--s-3); }
 @media (min-width: 720px) { .types { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .type { padding: var(--s-5); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
 .type-code { font-family: var(--f-en-text); font-size: .75rem; font-weight: 700; letter-spacing: .06em; color: var(--accent); }
 .type h3 { font-size: 1.1rem; margin-block: 2px var(--s-2); }
-.type p:last-child { font-size: var(--fs-small); line-height: 1.7; }
+.type p:last-child { font-size: var(--fs-body); line-height: 1.7; }
 .steps { display: grid; gap: var(--s-3); counter-reset: s; }
 .steps li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: var(--s-4); align-items: start; }
 .step-num { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-strong); color: var(--primary-ink); font-family: var(--f-en-text); font-weight: 700; font-size: .9rem; background: var(--surface); }
@@ -628,8 +633,8 @@ html.drawer-open .site-header { z-index: 130; }
 .pane h3 { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; margin-bottom: var(--s-3); }
 .pane h3 .ic { color: var(--muted); }
 .pane-pos h3 .ic { color: var(--primary-ink); }
-.pane .bullets li { font-size: var(--fs-small); }
-.proc-note { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s-4); padding: var(--s-3) var(--s-4); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); font-size: var(--fs-small); color: var(--ink-2); }
+.pane .bullets li { font-size: var(--fs-body); }
+.proc-note { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s-4); padding: var(--s-3) var(--s-4); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); font-size: var(--fs-body); color: var(--ink-2); }
 .proc-note .ic { margin-top: 3px; color: var(--primary-ink); }
 .proc-note-alert { background: var(--alert-bg); border-color: var(--alert-line); color: var(--alert-ink); }
 .proc-note-alert .ic { color: var(--alert-ink); }
@@ -666,13 +671,14 @@ html.drawer-open .site-header { z-index: 130; }
 .footer-col { display: grid; align-content: start; }
 .footer-col h3 { font-family: var(--f-text); font-size: var(--fs-caption); font-weight: 700; color: var(--stage-ink); margin-bottom: var(--s-2); }
 :root[lang="en"] .footer-col h3 { text-transform: uppercase; letter-spacing: .09em; font-size: .72rem; }
-.footer-col a { display: flex; align-items: center; min-height: 40px; font-size: var(--fs-small); color: var(--stage-muted); }
+.footer-col a { display: flex; align-items: center; min-height: 44px; font-size: var(--fs-small); color: var(--stage-muted); }
+/* 44px touch targets in the footer, header wordmark and breadcrumb (BUG-15) */
 .footer-col a:hover { color: var(--stage-ink); }
 .footer-disclaimer { margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--stage-line); font-size: var(--fs-caption); max-width: 90ch; }
 .footer-disclaimer strong { color: var(--stage-ink); }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-5); font-size: var(--fs-caption); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
-.footer-links a { display: inline-flex; align-items: center; min-height: 40px; color: var(--stage-muted); }
+.footer-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--stage-muted); }
 @media (max-width: 719px) {
   nav.footer-col { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-4); }
   nav.footer-col h3 { grid-column: 1 / -1; }

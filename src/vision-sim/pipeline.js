@@ -89,8 +89,13 @@ function falloffTexture(size, fn) {
   return t;
 }
 
+// Releases the probe context immediately (an unreleased probe leaked one WebGL context per mount — BUG-03).
 export function hasWebGL2() {
-  try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    if (gl) { const ext = gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); }
+    return !!gl;
+  } catch { return false; }
 }
 
 export function createPipeline({ canvas, debug = false }) {

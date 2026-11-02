@@ -447,7 +447,7 @@ function renderSimulator() {
       ${sectionHead(tr('أداة تثقيفية تفاعلية', 'Interactive education'), tr('محاكي الرؤية: كيف قد تبدو الرؤية بعد زراعة العدسة؟', 'Vision simulator: how might vision look after a lens implant?'),
         tr('قارن بين أنواع العدسات على مسافات النظر المختلفة وفي ظروف إضاءة مختلفة. نموذج تقريبي تثقيفي، وليس توقعاً لرؤيتك.', 'Compare lens types at different viewing distances and in different lighting. An educational approximation, not a prediction of your vision.'), 'section-head-split')}
       <div class="vsim-launch fade-in">
-        <div class="vsim-host" id="simulator-host" data-vision-host></div>
+        <div class="vsim-host" id="simulator-host" data-vision-host ${vsim.failed ? '' : 'data-reserve'}></div>
       </div>
       <ul class="disclaimers fade-in">
         <li>${icon('info', 18)}<span>${tr('أداة تعليمية توضح الفروق العامة بين العدسات، ولا تتنبأ بنتيجة عينك.', 'An educational tool showing general differences between lenses. It does not predict your own result.')}</span></li>
@@ -462,7 +462,40 @@ function renderSimulator() {
 // The module lives in src/cataract-sim/ (owned by another engineer). The host node is created once and
 // kept outside the re-rendered markup so a re-render never destroys the running scene.
 // Vision simulator: one host node and controller for the page's lifetime; mounted lazily near the viewport.
-const vsim = { host: null, ctrl: null, loading: false, io: null };
+const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false };
+async function loadVisionSim() {
+  if (vsim.loading || vsim.ctrl) return;
+  vsim.loading = true;
+  try {
+    const mod = await import('./src/vision-sim/index.js');
+    if (!vsim.host || !vsim.host.isConnected) return; // visitor left the page while it loaded
+    vsim.host.innerHTML = ''; // drop a previous load-error message
+    vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches });
+    vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
+    vsim.failed = false;
+  } catch (err) {
+    console.warn('Vision simulator failed to load', err);
+    showVisionSimError();
+  } finally { vsim.loading = false; }
+}
+// A failed download used to leave an empty 1,500 px reserved box with no explanation (BUG-09): say what happened,
+// release the reserved height and offer a retry.
+function showVisionSimError() {
+  vsim.failed = true;
+  const slot = document.getElementById('simulator-host');
+  if (!slot || !vsim.host) return;
+  slot.removeAttribute('data-reserve');
+  vsim.host.innerHTML = `<div class="vsim-load-error" role="status">
+      <p>${tr('تعذر تحميل محاكي الرؤية على هذا الجهاز أو الاتصال. يمكنك المحاولة مرة أخرى، أو قراءة شرح أنواع العدسات أدناه.', 'The vision simulator could not load on this device or connection. You can try again, or read about lens types below.')}</p>
+      <button type="button" class="btn btn-light" data-vsim-retry>${tr('إعادة المحاولة', 'Try again')}</button>
+    </div>`;
+  vsim.host.querySelector('[data-vsim-retry]').addEventListener('click', () => {
+    const s = document.getElementById('simulator-host');
+    if (s) s.setAttribute('data-reserve', '');
+    vsim.host.innerHTML = '';
+    loadVisionSim();
+  });
+}
 function mountVisionSim() {
   const slot = document.getElementById('simulator-host');
   if (!slot) { destroyVisionSim(); return; }
@@ -470,18 +503,12 @@ function mountVisionSim() {
   if (vsim.host.parentNode !== slot) slot.appendChild(vsim.host); // survive renderApp() re-renders
   if (vsim.ctrl) { vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); return; }
   if (vsim.loading) return;
+  if (vsim.failed) { showVisionSimError(); return; } // re-render in the new language; retry stays one tap away
   if (vsim.io) vsim.io.disconnect();
-  vsim.io = new IntersectionObserver(async ([e]) => {
+  vsim.io = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting) return;
-    vsim.io.disconnect(); vsim.io = null; vsim.loading = true;
-    try {
-      const mod = await import('./src/vision-sim/index.js');
-      if (!vsim.host || !vsim.host.isConnected) return; // visitor left the page while it loaded
-      vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches });
-      vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
-    } catch (err) {
-      console.warn('Vision simulator failed to load', err);
-    } finally { vsim.loading = false; }
+    vsim.io.disconnect(); vsim.io = null;
+    loadVisionSim();
   }, { rootMargin: '400px 0px' });
   vsim.io.observe(slot);
 }
@@ -489,6 +516,7 @@ function destroyVisionSim() {
   if (vsim.io) { vsim.io.disconnect(); vsim.io = null; }
   if (vsim.ctrl) { try { vsim.ctrl.destroy(); } catch (e) { /* module handles its own errors */ } vsim.ctrl = null; }
   if (vsim.host) { vsim.host.remove(); vsim.host = null; }
+  vsim.failed = false;
 }
 
 const c3d = { host: null, controller: null, state: 'idle' }; // idle | loading | active | error
@@ -554,7 +582,8 @@ function c3dSync() {
     if (c3d.host && c3d.host.parentNode !== stage) stage.appendChild(c3d.host);
   }
   if (btn) {
-    btn.toggleAttribute('aria-busy', c3d.state === 'loading');
+    // aria-busy must be the string "true" (an empty value means false) — BUG-08
+    if (c3d.state === 'loading') btn.setAttribute('aria-busy', 'true'); else btn.removeAttribute('aria-busy');
     const label = btn.querySelector('.btn-label');
     if (label) label.textContent = c3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
   }
@@ -594,7 +623,14 @@ window.startCataract3D = async function () {
     ctrl.setLang(currentLang);
     ctrl.setTheme(resolvedTheme());
     if (ctrl && typeof ctrl.on === 'function') ctrl.on('close', closeCataract3D);
+    // The Start button is hidden once the viewer is active; if it held focus (keyboard or tap), hand focus to the
+    // viewer's own start control so keyboard users are not dropped to <body> — BUG-06
+    const hadFocus = document.activeElement === document.getElementById('cataract-3d-start') || document.activeElement === document.body;
     c3dSync();
+    if (hadFocus && c3d.host) {
+      const target = [...c3d.host.querySelectorAll('[data-ref="start"], [data-ref="playPause"], [data-ref="viewport"]')].find(el => el.offsetParent !== null);
+      if (target) target.focus({ preventScroll: true });
+    }
     document.getElementById('cataract-3d-stage')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   } catch (e) {
     console.warn('3D cataract module unavailable:', e);
@@ -944,6 +980,7 @@ function renderProcedurePage(p) {
               <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" data-cta="book">${icon('calendar', 20)}<span class="btn-label">${tr('احجز استشارة مع د. معن', 'Book a consultation with Dr. Maan')}</span></a>
               <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-quiet btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('اسأل عبر واتساب', 'Ask on WhatsApp')}</span></a>
             </div>
+            ${p.simulator ? `<p class="proc-3d-jump"><a href="${hereHref('cataract-3d')}" data-nav class="text-link">${icon('cube', 18)}<span>${tr('شاهد شرح العملية ثلاثي الأبعاد', 'Watch the 3D walkthrough')}</span></a></p>` : ''}
           </div>
           <figure class="proc-figure">
             ${illustration(p, { eager: true, cls: 'proc-hero-illus' })}
@@ -1361,5 +1398,18 @@ function renderApp(navigated = false) {
 
 // Initialize: on a procedure URL, wait for its content so the prerendered page is replaced only
 // by an equally complete one (no flash of a loading state).
-if (route.slug) loadProcedureContent().then(() => renderApp(false), () => renderApp(false));
-else renderApp(false);
+// A deep link such as /en/procedures/icl/#p-risks: the browser scrolled to the anchor in the prerendered markup,
+// but replacing #app collapses the document for a moment and that position is lost. Re-apply it once the app
+// has rendered (instantly — this is a page load, not a click) — BUG-12.
+function applyInitialHash() {
+  let id = '';
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+  const el = id && document.getElementById(id);
+  if (!el) return;
+  if (isHome() && NAV_SECTION_IDS.includes(id)) window.setActiveNav(id);
+  const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
+  window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - headerOffset - 8);
+}
+const boot = () => { renderApp(false); requestAnimationFrame(applyInitialHash); };
+if (route.slug) loadProcedureContent().then(boot, boot);
+else boot();

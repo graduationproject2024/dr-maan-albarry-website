@@ -165,9 +165,9 @@ export class Journey {
 
   get viewportLabel() { const v = this.page.viewportSize(); return v ? `${v.width}×${v.height}` : 'n/a'; }
 
-  async step(action, expected, fn, { shot = false, critical = true, timeout = 45000 } = {}) {
+  async step(action, expected, fn, { shot = false, critical = true, timeout = 45000, knownBug = null } = {}) {
     const n = this.steps.length + 1;
-    const rec = { step: n, action, expected, actual: '', status: 'PASS', screenshot: null, consoleErrors: [], pageErrors: [], failedRequests: [], ms: 0, url: '' };
+    const rec = { step: n, action, expected, actual: '', status: 'PASS', knownBug, screenshot: null, consoleErrors: [], pageErrors: [], failedRequests: [], ms: 0, url: '' };
     this.steps.push(rec);
     if (this.blocked) { rec.status = 'BLOCKED'; rec.actual = 'Not executed: an earlier critical step failed.'; return rec; }
     const c0 = this.console.length, e0 = this.pageErrors.length, r0 = this.failedRequests.length;
@@ -227,7 +227,9 @@ export class Journey {
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(path.join(dir, `${this.meta.id}.json`), json);
     }
-    const bad = steps.filter((s) => s.status !== 'PASS').map((s) => `#${s.step} ${s.status}: ${s.action} → ${s.actual}`);
+    // A step tagged with an OPEN bug-register ID keeps its real assertion and is logged and reported as FAIL,
+    // but does not turn the suite red (the defect is tracked in BUG_REGISTER.md). Any other failure does.
+    const bad = steps.filter((s) => s.status !== 'PASS' && !(s.status === 'FAIL' && s.knownBug)).map((s) => `#${s.step} ${s.status}: ${s.action} → ${s.actual}`);
     expect(bad, `journey ${this.meta.id} steps`).toEqual([]);
     return log;
   }

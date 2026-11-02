@@ -185,7 +185,7 @@
    text colours must win regardless of where it is mounted. */
 .csim :is(h1, h2, h3, h4, p, li, dt, dd, summary) { color: inherit; }
 .csim .csim-title, .csim .csim-stage-title { color: var(--csim-text); }
-.csim-stage-text { margin: 0; color: var(--csim-muted); font-size: 0.97rem; }
+.csim-stage-text { margin: 0; color: var(--csim-muted); font-size: 1rem; } /* >= 16px body text (BUG-02) */
 .csim-focus { padding: 10px 12px; border-radius: 12px; background: var(--csim-raised); border-inline-start: 3px solid var(--csim-accent); }
 .csim-focus h4, .csim-anatomy h4 { margin: 0 0 2px; font-size: 0.8rem; font-weight: 700; color: var(--csim-subtle); }
 .csim-focus p { margin: 0; font-size: 0.92rem; }
