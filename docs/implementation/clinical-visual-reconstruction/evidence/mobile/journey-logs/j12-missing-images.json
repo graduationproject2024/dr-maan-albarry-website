@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J12 › J12 — procedure images missing",
-  "startedAt": "2026-11-02T16:58:12.709Z",
-  "finishedAt": "2026-11-02T16:58:27.939Z",
+  "startedAt": "2026-11-02T17:36:53.160Z",
+  "finishedAt": "2026-11-02T17:37:08.106Z",
   "totals": {
     "steps": 2,
     "pass": 2,
@@ -44,82 +44,82 @@
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4673/images/procedures/cataract-surgery.webp",
+      "url": "http://localhost:4173/images/procedures/cataract-surgery.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/lens-implants.webp",
+      "url": "http://localhost:4173/images/procedures/lens-implants.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/laser-vision-correction.webp",
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/icl.webp",
+      "url": "http://localhost:4173/images/procedures/icl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/keratoconus-cxl.webp",
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/corneal-transplant.webp",
+      "url": "http://localhost:4173/images/procedures/corneal-transplant.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/intravitreal-injections.webp",
+      "url": "http://localhost:4173/images/procedures/intravitreal-injections.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/cataract-surgery.webp",
+      "url": "http://localhost:4173/images/procedures/cataract-surgery.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/lens-implants.webp",
+      "url": "http://localhost:4173/images/procedures/lens-implants.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/laser-vision-correction.webp",
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/icl.webp",
+      "url": "http://localhost:4173/images/procedures/icl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/keratoconus-cxl.webp",
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/corneal-transplant.webp",
+      "url": "http://localhost:4173/images/procedures/corneal-transplant.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/intravitreal-injections.webp",
+      "url": "http://localhost:4173/images/procedures/intravitreal-injections.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/icl.webp",
+      "url": "http://localhost:4173/images/procedures/icl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/images/procedures/icl.webp",
+      "url": "http://localhost:4173/images/procedures/icl.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     }
@@ -151,7 +151,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 13695,
+      "ms": 13499,
       "url": "/"
     },
     {
@@ -168,7 +168,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1302,
+      "ms": 1260,
       "url": "/procedures/icl/"
     }
   ]

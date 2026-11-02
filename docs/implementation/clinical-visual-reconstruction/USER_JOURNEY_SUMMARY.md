@@ -11,21 +11,21 @@ Journeys and steps are counted separately; one step can contain several assertio
 | Journey logs (personas A–H, J01–J13, WebKit run, touch suite, stress suite) | 24 |
 | — of which user journeys (personas + core + WebKit) | 22 |
 | Steps executed (latest run, all logs) | 217 of 217 |
-| Steps passed | 216 |
-| Steps failed | 1 |
+| Steps passed | 217 |
+| Steps failed | 0 |
 | Steps blocked | 0 |
-| Steps repaired (non-PASS in the baseline run → PASS now) | 32 |
+| Steps repaired (non-PASS in the baseline run → PASS now) | 33 |
 | Journeys re-run after fixes (retested) | 24 (the whole journey suite was re-run, not just the failing steps) |
-| Journeys PASS — Verified | 23 |
-| Journeys PARTIAL / FAIL / BLOCKED | persona-d: PARTIAL — open defect(s) BUG-05 |
+| Journeys PASS — Verified | 24 |
+| Journeys PARTIAL / FAIL / BLOCKED | none |
 | Baseline run: steps failed / blocked | 19 / 15 |
-| Defects registered | 17 (13 fixed, 3 open / won't fix, 1 rejected) |
+| Defects registered | 18 (14 fixed, 3 open / won't fix, 1 rejected) |
 | P0 / P1 remaining | 0 / 0 |
 
 Remaining non-PASS steps (latest run):
-- persona-d#2 FAIL (BUG-05): Watch the first screen while the slow page finishes loading
+- none
 
-Repaired steps: j05-loading-failure#5, j07-repeated-3d#3, j07-repeated-3d#4, j07-repeated-3d#5, j07-repeated-3d#6, j07-repeated-3d#7, j07-repeated-3d#8, j07-repeated-3d#9, j13-no-js-prerender#2, persona-a#5, persona-a#9, persona-a#11, persona-a#12, persona-a#13, persona-c#5, persona-d#5, persona-d#6, persona-d#7, persona-d#9, persona-d#10, persona-e#8, persona-f#5, persona-f#6, persona-f#7, persona-f#8, persona-f#9, persona-g#3, persona-g#4, persona-g#5, persona-g#6, persona-g#7, stress#7
+Repaired steps: j05-loading-failure#5, j07-repeated-3d#3, j07-repeated-3d#4, j07-repeated-3d#5, j07-repeated-3d#6, j07-repeated-3d#7, j07-repeated-3d#8, j07-repeated-3d#9, j13-no-js-prerender#2, persona-a#5, persona-a#9, persona-a#11, persona-a#12, persona-a#13, persona-c#5, persona-d#2, persona-d#5, persona-d#6, persona-d#7, persona-d#9, persona-d#10, persona-e#8, persona-f#5, persona-f#6, persona-f#7, persona-f#8, persona-f#9, persona-g#3, persona-g#4, persona-g#5, persona-g#6, persona-g#7, stress#7
 
 ## Most frequently failing pages (baseline run, FAIL steps by the URL at the end of the step; BLOCKED steps excluded)
 

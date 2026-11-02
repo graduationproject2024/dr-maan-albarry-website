@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "488×830",
   "test": "journeys\\webkit.spec.js › WebKit — English iPhone journey with both simulators",
-  "startedAt": "2026-11-02T16:59:46.306Z",
-  "finishedAt": "2026-11-02T17:00:03.613Z",
+  "startedAt": "2026-11-02T17:38:21.589Z",
+  "finishedAt": "2026-11-02T17:38:37.619Z",
   "totals": {
     "steps": 8,
     "pass": 8,
@@ -22,10 +22,7 @@
   },
   "verdict": "PASS",
   "consoleErrors": [],
-  "consoleWarnings": [
-    "The resource http://localhost:4673/assets/cataract-sim-WPsBARml.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it wasn't preloaded for nothing.",
-    "The resource http://localhost:4673/assets/three.module-DzC5FhdE.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it wasn't preloaded for nothing."
-  ],
+  "consoleWarnings": [],
   "pageErrors": [],
   "failedRequests": [],
   "expectedFailedRequests": [],
@@ -41,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1477,
+      "ms": 1475,
       "url": "/en/"
     },
     {
@@ -55,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1194,
+      "ms": 1099,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -69,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5568,
+      "ms": 4807,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -83,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3588,
+      "ms": 3306,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -97,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1133,
+      "ms": 1010,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -111,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2462,
+      "ms": 2514,
       "url": "/en/#simulator"
     },
     {
@@ -125,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 589,
+      "ms": 579,
       "url": "/en/#simulator"
     },
     {
@@ -139,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 316,
+      "ms": 309,
       "url": "/en/#simulator"
     }
   ]

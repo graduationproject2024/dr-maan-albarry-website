@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\core-journeys.spec.js › J10 › J10 — trust and contact",
-  "startedAt": "2026-11-02T16:58:05.638Z",
-  "finishedAt": "2026-11-02T16:58:14.311Z",
+  "startedAt": "2026-11-02T17:36:46.123Z",
+  "finishedAt": "2026-11-02T17:36:54.629Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3020,
+      "ms": 2866,
       "url": "/#profile"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8,
+      "ms": 7,
       "url": "/#profile"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1104,
+      "ms": 1144,
       "url": "/#procedures"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2287,
+      "ms": 2289,
       "url": "/#faq"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 167,
+      "ms": 178,
       "url": "/#faq"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1705,
+      "ms": 1665,
       "url": "/#faq"
     }
   ]

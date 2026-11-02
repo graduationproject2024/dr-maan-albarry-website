@@ -6,6 +6,23 @@
    ============================================================ */
 
 /* ------------------------------------------------------------
+   0. METRIC-MATCHED FALLBACK FONTS (BUG-05)
+   While the Google Fonts load (display=swap), text renders in a local system font scaled to the web
+   font's width and vertical metrics, so the swap no longer re-wraps lines or moves the hero.
+   Values were measured in Chromium on Windows (canvas measureText, AR/EN sample text, 400 and 700)
+   with: size-adjust = web width / local width; ascent/descent-override = web metric / size-adjust.
+   Faces whose local() font is missing on a device are skipped and the next family in the stack is used.
+   ------------------------------------------------------------ */
+@font-face { font-family: "Noto Sans Arabic Fallback"; src: local("Segoe UI"); font-weight: 100 549; size-adjust: 97.93%; ascent-override: 139.9%; descent-override: 75.57%; line-gap-override: 0%; }
+@font-face { font-family: "Noto Sans Arabic Fallback"; src: local("Segoe UI Bold"), local("SegoeUI-Bold"); font-weight: 550 900; size-adjust: 106.82%; ascent-override: 128.26%; descent-override: 69.28%; line-gap-override: 0%; }
+@font-face { font-family: "Readex Pro Fallback"; src: local("Segoe UI"); font-weight: 100 549; size-adjust: 108.6%; ascent-override: 92.08%; descent-override: 23.02%; line-gap-override: 0%; }
+@font-face { font-family: "Readex Pro Fallback"; src: local("Segoe UI Bold"), local("SegoeUI-Bold"); font-weight: 550 900; size-adjust: 114.31%; ascent-override: 87.48%; descent-override: 21.87%; line-gap-override: 0%; }
+@font-face { font-family: "Public Sans Fallback"; src: local("Arial"), local("ArialMT"); font-weight: 100 549; size-adjust: 103.68%; ascent-override: 91.62%; descent-override: 22.18%; line-gap-override: 0%; }
+@font-face { font-family: "Public Sans Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 550 900; size-adjust: 100.52%; ascent-override: 94.51%; descent-override: 22.88%; line-gap-override: 0%; }
+@font-face { font-family: "Source Serif 4 Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"); font-weight: 100 549; size-adjust: 100.34%; ascent-override: 103.64%; descent-override: 33.88%; line-gap-override: 0%; }
+@font-face { font-family: "Source Serif 4 Fallback"; src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"); font-weight: 550 900; size-adjust: 96.17%; ascent-override: 108.14%; descent-override: 35.35%; line-gap-override: 0%; }
+
+/* ------------------------------------------------------------
    1. TOKENS
    ------------------------------------------------------------ */
 :root {
@@ -41,10 +58,10 @@
   --ap-line: #6E7F7A; --ap-fill: #F7FAF9;
 
   /* type families (SIL Open Font License, Google Fonts) */
-  --f-ar-display: "Readex Pro", "Noto Sans Arabic", system-ui, sans-serif;
-  --f-ar-text: "Noto Sans Arabic", "Readex Pro", system-ui, sans-serif;
-  --f-en-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
-  --f-en-text: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ar-display: "Readex Pro", "Readex Pro Fallback", "Noto Sans Arabic", system-ui, sans-serif;
+  --f-ar-text: "Noto Sans Arabic", "Noto Sans Arabic Fallback", system-ui, sans-serif;
+  --f-en-display: "Source Serif 4", "Source Serif 4 Fallback", "Iowan Old Style", Georgia, serif;
+  --f-en-text: "Public Sans", "Public Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-ar: var(--f-ar-text); --font-en: var(--f-en-text); /* consumed by src/cataract-sim */
   --f-display: var(--f-ar-display);
   --f-text: var(--f-ar-text);

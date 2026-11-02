@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×800",
   "test": "journeys\\core-journeys.spec.js › J06 › J06 — 360 px full scroll, booking and simulator open/close",
-  "startedAt": "2026-11-02T16:58:01.316Z",
-  "finishedAt": "2026-11-02T16:58:29.655Z",
+  "startedAt": "2026-11-02T17:36:42.216Z",
+  "finishedAt": "2026-11-02T17:37:10.715Z",
   "totals": {
     "steps": 12,
     "pass": 12,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1278,
+      "ms": 1243,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1758,
+      "ms": 1748,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4983,
+      "ms": 4986,
       "url": "/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4408,
+      "ms": 4578,
       "url": "/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4199,
+      "ms": 4170,
       "url": "/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1674,
+      "ms": 1699,
       "url": "/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5767,
+      "ms": 5871,
       "url": "/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1705,
+      "ms": 1703,
       "url": "/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 24,
+      "ms": 18,
       "url": "/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1597,
+      "ms": 1512,
       "url": "/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 50,
+      "ms": 63,
       "url": "/"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 538,
+      "ms": 537,
       "url": "/"
     }
   ]

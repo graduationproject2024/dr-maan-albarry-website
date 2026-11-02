@@ -140,48 +140,6 @@
     "incomplete": 1
   },
   {
-    "page": "/",
-    "theme": "light",
-    "violations": [],
-    "passes": 53,
-    "incomplete": 2
-  },
-  {
-    "page": "/procedures/cataract-surgery/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/lens-implants/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/laser-vision-correction/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/icl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/keratoconus-cxl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
     "page": "/procedures/lens-implants/",
     "theme": "dark",
     "violations": [],
@@ -219,6 +177,48 @@
   {
     "page": "/procedures/intravitreal-injections/",
     "theme": "dark",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/",
+    "theme": "light",
+    "violations": [],
+    "passes": 53,
+    "incomplete": 2
+  },
+  {
+    "page": "/procedures/cataract-surgery/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/lens-implants/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/laser-vision-correction/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/icl/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/keratoconus-cxl/",
+    "theme": "light",
     "violations": [],
     "passes": 44,
     "incomplete": 0

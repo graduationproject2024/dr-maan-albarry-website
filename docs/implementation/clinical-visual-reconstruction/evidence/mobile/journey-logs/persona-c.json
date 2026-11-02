@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×664",
   "test": "journeys\\persona-c.spec.js › Persona C — English mobile user",
-  "startedAt": "2026-11-02T16:58:26.311Z",
-  "finishedAt": "2026-11-02T16:58:42.398Z",
+  "startedAt": "2026-11-02T17:37:06.266Z",
+  "finishedAt": "2026-11-02T17:37:21.783Z",
   "totals": {
     "steps": 11,
     "pass": 11,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1343,
+      "ms": 1228,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 245,
+      "ms": 154,
       "url": "/en/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6728,
+      "ms": 6637,
       "url": "/en/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 139,
+      "ms": 164,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3340,
+      "ms": 3184,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1128,
+      "ms": 1098,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1867,
+      "ms": 1821,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 20,
+      "ms": 18,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 436,
+      "ms": 418,
       "url": "/en/"
     }
   ]

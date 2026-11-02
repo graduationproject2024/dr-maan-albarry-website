@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J03 › J03 — vision comparison",
-  "startedAt": "2026-11-02T16:57:57.741Z",
-  "finishedAt": "2026-11-02T16:58:04.816Z",
+  "startedAt": "2026-11-02T17:36:38.345Z",
+  "finishedAt": "2026-11-02T17:36:45.334Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3703,
+      "ms": 3664,
       "url": "/en/#simulator"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 16,
+      "ms": 15,
       "url": "/en/#simulator"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 590,
+      "ms": 588,
       "url": "/en/#simulator"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 495,
+      "ms": 494,
       "url": "/en/#simulator"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1063,
+      "ms": 1090,
       "url": "/en/#simulator"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 946,
+      "ms": 881,
       "url": "/en/#simulator"
     }
   ]

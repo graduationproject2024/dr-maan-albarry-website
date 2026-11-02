@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J09 › J09 — WebGL context loss and restore (both simulators)",
-  "startedAt": "2026-11-02T16:58:04.976Z",
-  "finishedAt": "2026-11-02T16:58:12.591Z",
+  "startedAt": "2026-11-02T17:36:45.506Z",
+  "finishedAt": "2026-11-02T17:36:53.021Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -299,7 +299,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1511,
+      "ms": 1358,
       "url": "/en/"
     },
     {
@@ -313,7 +313,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 468,
+      "ms": 503,
       "url": "/en/"
     },
     {
@@ -327,7 +327,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1434,
+      "ms": 1395,
       "url": "/en/"
     },
     {
@@ -341,7 +341,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2413,
+      "ms": 2518,
       "url": "/en/"
     },
     {
@@ -355,7 +355,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 461,
+      "ms": 467,
       "url": "/en/"
     },
     {
@@ -369,7 +369,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 992,
+      "ms": 991,
       "url": "/en/"
     }
   ]

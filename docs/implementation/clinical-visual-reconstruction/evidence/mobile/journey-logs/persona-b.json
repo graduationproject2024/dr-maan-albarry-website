@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "412×839",
   "test": "journeys\\persona-b.spec.js › Persona B — first-time visitor",
-  "startedAt": "2026-11-02T16:58:22.708Z",
-  "finishedAt": "2026-11-02T16:58:46.553Z",
+  "startedAt": "2026-11-02T17:37:03.178Z",
+  "finishedAt": "2026-11-02T17:37:26.632Z",
   "totals": {
     "steps": 12,
     "pass": 12,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1175,
+      "ms": 1103,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 499,
+      "ms": 496,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 891,
+      "ms": 868,
       "url": "/#procedures"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 349,
+      "ms": 353,
       "url": "/#procedures"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 203,
+      "ms": 180,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 168,
+      "ms": 169,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 318,
+      "ms": 312,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1487,
+      "ms": 1447,
       "url": "/#profile"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 17737,
+      "ms": 17688,
       "url": "/#profile"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5,
+      "ms": 3,
       "url": "/#profile"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 109,
+      "ms": 82,
       "url": "/#profile"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4,
+      "ms": 2,
       "url": "/#profile"
     }
   ]

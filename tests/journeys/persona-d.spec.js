@@ -39,7 +39,7 @@ test('Persona D — slow network, low-power phone', async ({ page }, testInfo) =
     const cls = await page.evaluate(() => window.__cls);
     j.metrics.cls = cls;
     return { actual: `CLS ${cls.toFixed(3)}`, ok: cls < 0.1 };
-  }, { critical: false, knownBug: 'BUG-05' });
+  }); // BUG-05 regression: was CLS 0.25–0.28 before the metric-matched fallback fonts
 
   await j.step('Swipe down through the procedure cards (images)', 'Each card shows an image or its line-drawing fallback; no broken images; page keeps up', async () => {
     let s = null;

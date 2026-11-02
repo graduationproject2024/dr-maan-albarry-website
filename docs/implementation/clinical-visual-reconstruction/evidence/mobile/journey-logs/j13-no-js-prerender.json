@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J13 › J13 — prerendered page without JavaScript",
-  "startedAt": "2026-11-02T16:58:14.457Z",
-  "finishedAt": "2026-11-02T16:58:15.889Z",
+  "startedAt": "2026-11-02T17:36:54.730Z",
+  "finishedAt": "2026-11-02T17:36:56.103Z",
   "totals": {
     "steps": 4,
     "pass": 4,
@@ -27,12 +27,12 @@
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4673/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     },
@@ -42,12 +42,12 @@
       "expected": true
     },
     {
-      "url": "http://localhost:4673/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4673/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     }
@@ -64,7 +64,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1185,
+      "ms": 1143,
       "url": "/"
     },
     {
@@ -78,7 +78,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 26,
+      "ms": 24,
       "url": "/"
     },
     {
@@ -92,7 +92,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4,
+      "ms": 6,
       "url": "/"
     },
     {
@@ -106,7 +106,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 124,
+      "ms": 110,
       "url": "/procedures/keratoconus-cxl/"
     }
   ]

@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "768×1024",
   "test": "journeys\\persona-h.spec.js › Persona H — comparing lens options",
-  "startedAt": "2026-11-02T16:58:40.988Z",
-  "finishedAt": "2026-11-02T16:58:51.285Z",
+  "startedAt": "2026-11-02T17:37:21.445Z",
+  "finishedAt": "2026-11-02T17:37:31.250Z",
   "totals": {
     "steps": 11,
     "pass": 11,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3968,
+      "ms": 3692,
       "url": "/#simulator"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 7,
+      "ms": 4,
       "url": "/#simulator"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 989,
+      "ms": 975,
       "url": "/#simulator"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1074,
+      "ms": 1064,
       "url": "/#simulator"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1151,
+      "ms": 1183,
       "url": "/#simulator"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1724,
+      "ms": 1654,
       "url": "/#simulator"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 16,
+      "ms": 17,
       "url": "/#simulator"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 207,
+      "ms": 227,
       "url": "/procedures/lens-implants/"
     }
   ]
