@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const PAGE = 'cataract-sim-preview.html';
-const EVIDENCE = 'docs/implementation/master-redesign-phase-2-3/evidence/simulator';
+const EVIDENCE = process.env.CSIM_EVIDENCE_DIR || 'docs/implementation/master-redesign-phase-2-3/evidence/simulator';
 
 function watchConsole(page) {
   const errors = [];

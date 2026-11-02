@@ -26,6 +26,7 @@ export function createScene({ canvas, debug = false, theme = 'light' }) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.setPixelRatio(maxDpr());
+  renderer.localClippingEnabled = true; // cross-section clipping planes (eye-model.js)
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(BG[theme] ?? BG.light);

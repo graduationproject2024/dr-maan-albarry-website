@@ -2,7 +2,8 @@
 // local origin and its shaft/handle along local +Z; local +Y is the "up" side (blade face / bevel up).
 import * as THREE from 'three';
 import { latheGeometry } from './lathe.js';
-import { INCISION, ENTRY_OUT } from './anatomy.js';
+import { instrumentAxis } from './anatomy.js';
+import { NOZZLE_BORE } from './surgery.js';
 
 function ridgedHandle(r0, r1, z0, z1, ridges) {
   const pts = [[0, z0], [r0 * 0.6, z0], [r0, z0 + 0.6]];
@@ -75,7 +76,8 @@ export function phaco(m) {
 
 export function injector(m) {
   const g = new THREE.Group();
-  const nozzle = latheGeometry([[0.55, 2.2], [0.55, 0], [0.55, 0], [0.9, 0], [0.9, 0], [1.0, 3], [1.8, 7.5], [2.4, 9.5], [2.4, 22], [0, 22]], { segments: 40 });
+  const b = NOZZLE_BORE, o = NOZZLE_BORE + 0.18; // ~2 mm bore, ~2.4 mm tip: passes the ~2.2–2.4 mm wound
+  const nozzle = latheGeometry([[b, 4], [b, 0], [b, 0], [o, 0], [o, 0], [o, 4], [1.9, 8], [2.4, 9.5], [2.4, 22], [0, 22]], { segments: 40 });
   const nm = new THREE.Mesh(nozzle, m.plastic);
   nm.renderOrder = 12;
   g.add(nm);
@@ -94,14 +96,13 @@ export function injector(m) {
 }
 
 const _x = new THREE.Vector3(), _y = new THREE.Vector3(), _z = new THREE.Vector3(), _m = new THREE.Matrix4();
-const OUT = new THREE.Vector3(...ENTRY_OUT), INC = new THREE.Vector3(...INCISION), HINT = new THREE.Vector3(0, 0, 1);
+const HINT = new THREE.Vector3(0, 0, 1);
 
-// Place an instrument so its tip is at `tip` and its shaft passes through the incision (fulcrum).
+// Place an instrument so its tip is at `tip` and its shaft passes through the incision (fulcrum). The axis comes
+// from anatomy.instrumentAxis, the same function the constraint validator checks.
 export function poseInstrument(obj, tipArr) {
-  const tip = _y.set(tipArr[0], tipArr[1], tipArr[2]);
-  obj.position.copy(tip);
-  const outside = _z.copy(tip).sub(INC).dot(OUT) > -0.05;
-  if (outside) _z.copy(OUT); else _z.copy(INC).sub(tip).normalize();
+  obj.position.set(tipArr[0], tipArr[1], tipArr[2]);
+  _z.set(...instrumentAxis(tipArr));
   _x.crossVectors(HINT, _z).normalize();
   _y.crossVectors(_z, _x).normalize();
   _m.makeBasis(_x, _y, _z);

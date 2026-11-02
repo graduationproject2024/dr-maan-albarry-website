@@ -241,3 +241,39 @@
 .csim--fallback .csim-scrubber { display: none; }
 .csim[data-state="error"] .csim-btn--play,
 .csim[data-state="error"] [data-ref="replayStage"] { visibility: hidden; }
+
+/* Caption shown whenever light rays are drawn: they are an illustration, not a vision simulation. */
+.csim-raynote {
+  position: absolute; inset-inline-start: 12px; bottom: 12px; max-width: min(70%, 420px); margin: 0; padding: 6px 10px;
+  border-radius: 10px; background: var(--csim-overlay); color: var(--csim-muted); font-size: 0.78rem; line-height: 1.35;
+  pointer-events: none; box-shadow: 0 1px 6px rgba(11, 31, 58, 0.12);
+}
+.csim-raynote[hidden] { display: none; }
+@media (max-width: 600px) { .csim-raynote { bottom: 64px; font-size: 0.72rem; } }
+
+/* Clinical review mode (doctor workflow). */
+.csim-review {
+  margin-top: 16px; padding: 14px 16px; border: 1px dashed var(--csim-border-strong); border-radius: var(--csim-radius);
+  background: var(--csim-surface); color: var(--csim-text); font-size: 0.9rem;
+}
+.csim-review-title { margin: 0 0 4px; font-size: 1.05rem; }
+.csim-review-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0; border: 0; padding: 0; }
+.csim-review-layers legend, .csim-review-label { font-weight: 600; margin-inline-end: 6px; }
+.csim-review-layers label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+.csim-review select, .csim-review input[type="text"], .csim-review textarea {
+  min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--csim-border-strong);
+  background: var(--csim-raised); color: var(--csim-text); font: inherit;
+}
+.csim-review input[type="text"] { flex: 1 1 220px; }
+.csim-review-block { display: block; }
+.csim-review textarea { display: block; width: 100%; box-sizing: border-box; margin-top: 6px; resize: vertical; }
+.csim-rbtn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 12px;
+  border-radius: 10px; border: 1px solid var(--csim-border-strong); background: var(--csim-raised); color: var(--csim-text);
+  font: inherit; cursor: pointer;
+}
+.csim-rbtn:focus-visible, .csim-review select:focus-visible, .csim-review textarea:focus-visible, .csim-review input:focus-visible { outline: 3px solid var(--csim-focus); outline-offset: 2px; }
+.csim-review-issues { margin: 6px 0; padding-inline-start: 20px; }
+.csim-review-issues li { margin: 4px 0; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.csim-review-msg { color: var(--csim-muted); }
+.csim-review-version code { font-size: 0.85em; }
