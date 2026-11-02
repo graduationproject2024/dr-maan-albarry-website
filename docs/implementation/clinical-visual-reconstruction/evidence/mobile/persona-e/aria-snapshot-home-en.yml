@@ -1,0 +1,341 @@
+- link "Skip to content":
+  - /url: en/#main
+- banner:
+  - link "Dr. Maan Al Barry Consultant Ophthalmologist — home":
+    - /url: en/
+  - navigation "Main navigation":
+    - link "About":
+      - /url: en/#profile
+    - link "Procedures":
+      - /url: en/#procedures
+    - link "Vision simulator":
+      - /url: en/#simulator
+    - link "3D surgery":
+      - /url: en/#cataract-3d
+    - link "Patient education":
+      - /url: en/#education
+    - link "Clinic & booking":
+      - /url: en/#clinic
+  - button "التحويل إلى العربية": ع
+  - switch "Light mode on. Switch to dark mode"
+  - link "Book appointment":
+    - /url: https://ob.magrabi.com.sa/OnlineBooking/
+- main:
+  - paragraph: Consultant ophthalmologist Madinah
+  - heading "Dr. Maan bin Abdullah Al Barry" [level=1]
+  - paragraph: Consultant Ophthalmologist (Cornea, Cataract & Refractive Surgery)
+  - link "Book a consultation":
+    - /url: https://ob.magrabi.com.sa/OnlineBooking/
+  - link "Clinic line 055 494 6433":
+    - /url: tel:+966554946433
+  - paragraph:
+    - text: The same number is on
+    - link "WhatsApp":
+      - /url: https://wa.me/966554946433?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20consultation%20with%20Dr.%20Maan%20bin%20Abdullah%20Al%20Barry%20at%20Magrabi%20Madinah.
+  - complementary "Doctor card":
+    - figure:
+      - img "Portrait of Dr. Maan bin Abdullah Al Barry"
+    - term: Current role
+    - definition: Chief of Staff – Magrabi Health Madinah
+    - term: Academic
+    - definition: Associate Professor – Taibah University
+    - term: Clinic
+    - definition: Magrabi Health Eye & ENT Hospital – Madinah
+  - list "Professional facts":
+    - listitem:
+      - strong: "1998"
+      - text: In clinical & surgical practice since 28 years of experience
+    - listitem:
+      - strong: 15,000+
+      - text: eye examinations & surgical procedures
+    - listitem:
+      - strong: FRCS
+      - text: Royal College of Surgeons, UK
+  - paragraph: Procedures & treatments
+  - heading "What Dr. Maan treats" [level=2]
+  - paragraph: Seven eye procedures. Each has its own page explaining the anatomy, the steps, recovery and risks in plain language.
+  - group "Filter by group":
+    - button "All procedures" [pressed]
+    - button "Cataract & lens surgery"
+    - button "Vision correction"
+    - button "Cornea & retina care"
+  - article:
+    - img "Anatomical cross-section of the eye highlighting the natural lens behind the iris"
+    - paragraph: Cataract & lens surgery
+    - heading "Cataract surgery" [level=3]
+    - paragraph: The clouded natural lens is removed and replaced with a clear artificial lens once blurred vision starts to affect daily life.
+    - paragraph: With a 3D walkthrough
+    - 'link "Procedure details : Cataract surgery"':
+      - /url: en/procedures/cataract-surgery/
+  - article:
+    - img "Anatomical illustration of an artificial lens implant sitting inside the eye’s lens capsule"
+    - paragraph: Cataract & lens surgery
+    - heading "Lens implants (IOLs)" [level=3]
+    - paragraph: "The lenses placed during cataract surgery: monofocal, extended depth of focus, multifocal or trifocal, and toric for astigmatism."
+    - 'link "Procedure details : Lens implants (IOLs)"':
+      - /url: en/procedures/lens-implants/
+  - article:
+    - img "Anatomical illustration of the cornea in section showing the area reshaped by laser"
+    - paragraph: Vision correction
+    - heading "Laser vision correction" [level=3]
+    - paragraph: Reshaping the cornea with a laser (LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.
+    - 'link "Procedure details : Laser vision correction"':
+      - /url: en/procedures/laser-vision-correction/
+  - article:
+    - img "Anatomical illustration of an ICL positioned between the iris and the natural lens"
+    - paragraph: Vision correction
+    - heading "Implantable contact lens (ICL)" [level=3]
+    - paragraph: A thin lens placed inside the eye while keeping the natural lens — an option for vision correction when laser is not suitable.
+    - 'link "Procedure details : Implantable contact lens (ICL)"':
+      - /url: en/procedures/icl/
+  - article:
+    - img "Anatomical illustration of a cone-shaped cornea compared with a normal cornea"
+    - paragraph: Cornea & retina care
+    - heading "Keratoconus & corneal cross-linking (CXL)" [level=3]
+    - paragraph: Diagnosing a thinning, bulging cornea, and cross-linking it with riboflavin drops and UV light to help slow progression.
+    - 'link "Procedure details : Keratoconus & corneal cross-linking (CXL)"':
+      - /url: en/procedures/keratoconus-cxl/
+  - article:
+    - img "Anatomical illustration of the corneal layers showing the part replaced in a transplant"
+    - paragraph: Cornea & retina care
+    - heading "Corneal transplant (keratoplasty)" [level=3]
+    - paragraph: Replacing all or part of a damaged cornea with donor corneal tissue when other treatments are not enough.
+    - 'link "Procedure details : Corneal transplant (keratoplasty)"':
+      - /url: en/procedures/corneal-transplant/
+  - article:
+    - img "Anatomical cross-section of the eye showing the vitreous, retina and macula"
+    - paragraph: Cornea & retina care
+    - heading "Intravitreal injections" [level=3]
+    - paragraph: Medicine delivered directly inside the eye to treat retinal conditions such as wet macular degeneration and diabetic macular oedema.
+    - 'link "Procedure details : Intravitreal injections"':
+      - /url: en/procedures/intravitreal-injections/
+  - complementary:
+    - paragraph: Not sure?
+    - heading "Start with an examination" [level=3]
+    - paragraph: You do not need to know the procedure name. An examination finds the cause and the options that suit your eye.
+    - link "Book an examination":
+      - /url: https://ob.magrabi.com.sa/OnlineBooking/
+  - paragraph: Qualifications & experience
+  - heading "Clinical and academic experience since 1998" [level=2]
+  - paragraph: Dr. Maan Al Barry works within the cataract unit and the cornea & refractive unit at Magrabi Health Eye & ENT Hospital – Madinah. Qualifications and roles as published by Magrabi Health and Taibah University, or confirmed by Dr. Maan himself.
+  - heading "Qualifications" [level=3]
+  - list:
+    - listitem: FRCS (UK) Fellow of the Royal College of Surgeons, UK (FRCS)
+    - listitem: Saudi Board Saudi Board in Ophthalmology
+  - heading "Academic" [level=3]
+  - list:
+    - listitem: Rank Associate Professor – Taibah University
+    - listitem: Former Former Chair of Ophthalmology – Taibah Univ. (10 yrs)
+  - heading "Leadership" [level=3]
+  - list:
+    - listitem: Current Chief of Staff – Magrabi Health Madinah
+    - listitem: Former 1st President – Saudi Cornea, Cataract & Refractive Surgeons
+  - heading "Memberships" [level=3]
+  - list:
+    - listitem: Member Saudi Ophthalmological Society
+    - listitem: Member American Academy of Ophthalmology
+  - heading "Appointments" [level=3]
+  - list:
+    - listitem:
+      - text: Current
+      - heading "Chief of Staff – Magrabi Health Madinah (General Supervisor of Medical, Administrative & Operational Affairs)" [level=4]
+    - listitem:
+      - text: Previously
+      - heading "First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons" [level=4]
+    - listitem:
+      - text: Previously
+      - heading "Former Chairman, Department of Ophthalmology – Taibah University (10 years)" [level=4]
+    - listitem:
+      - text: Previously
+      - heading "Former Representative of the Saudi Ophthalmological Society in Madinah" [level=4]
+    - listitem:
+      - text: Previously
+      - heading "Co-Founder of the Red Sea International Ophthalmology Conference" [level=4]
+  - text: Dr. Maan’s channels
+  - link "Instagram":
+    - /url: https://www.instagram.com/dr_maan_albarry
+  - link "X (Twitter)":
+    - /url: https://x.com/maanalbarry
+  - link "YouTube":
+    - /url: https://www.youtube.com/@drmaanalbarry3195
+  - paragraph: Interactive education
+  - 'heading "Vision simulator: how might vision look after a lens implant?" [level=2]'
+  - paragraph: Compare lens types at different viewing distances and in different lighting. An educational approximation, not a prediction of your vision.
+  - list:
+    - listitem: An educational tool showing general differences between lenses. It does not predict your own result.
+    - listitem: The lens type is chosen after examination, measurements and a conversation about your priorities.
+    - listitem:
+      - link "Read about lens implant types":
+        - /url: en/procedures/lens-implants/
+  - paragraph: Interactive 3D education
+  - heading "Cataract surgery, step by step" [level=2]
+  - paragraph: A 3D model of the eye that walks through the main stages of modern cataract removal and lens implantation — so you understand what happens before you ask about it in clinic.
+  - list:
+    - listitem: Illustrative education, pending physician review.
+    - listitem: Not a substitute for a consultation; every operation is tailored to the individual eye.
+  - button "Start the 3D experience"
+  - link "Cataract surgery guide":
+    - /url: en/procedures/cataract-surgery/
+  - paragraph: Patient education
+  - heading "Worth knowing before your visit" [level=2]
+  - paragraph: Short answers to common questions, with links to the procedure pages for detail. General education that does not replace an examination.
+  - heading "What is a cataract, and when is surgery considered?" [level=3]:
+    - button "What is a cataract, and when is surgery considered?"
+  - heading "Glasses keep changing? Learn about keratoconus" [level=3]:
+    - button "Glasses keep changing? Learn about keratoconus"
+  - heading "Is laser vision correction right for me?" [level=3]:
+    - button "Is laser vision correction right for me?"
+  - heading "What to expect before, on the day and after surgery" [level=3]:
+    - button "What to expect before, on the day and after surgery"
+  - complementary "Seek urgent care for":
+    - heading "Seek urgent care for" [level=3]
+    - list:
+      - listitem: Sudden loss or rapid worsening of vision in either eye.
+      - listitem: Severe, sudden eye pain with redness, headache or nausea.
+      - listitem: Sudden flashes of light or a shower of floating dark spots.
+      - listitem: A dark shadow or curtain across part of your vision.
+    - paragraph: Go to the nearest eye emergency department immediately.
+  - 'heading "Before any procedure: the core assessments" [level=3]'
+  - list "Assessments":
+    - listitem:
+      - heading "Corneal tomography" [level=4]
+      - paragraph: Maps corneal shape and thickness — essential before laser and for diagnosing keratoconus.
+    - listitem:
+      - heading "Optical biometry" [level=4]
+      - paragraph: Measures the eye’s length and corneal curve to calculate an implant’s power.
+    - listitem:
+      - heading "Retinal imaging (OCT)" [level=4]
+      - paragraph: Cross-sectional images of the macula and retina for diagnosis and to guide injections.
+    - listitem:
+      - heading "Full eye examination" [level=4]
+      - paragraph: Vision, eye pressure, slit-lamp and retina checks before any decision.
+  - paragraph: Visual lifestyle questionnaire
+  - heading "Four questions before your visit" [level=3]
+  - paragraph: An educational tool to organise your daily priorities before your consultation. Your answers are not stored or sent.
+  - paragraph: Step 1 of 4
+  - heading "What is your approximate age group?" [level=3]
+  - paragraph: Guides expectations regarding neuroadaptation and ocular surface status.
+  - group "What is your approximate age group?":
+    - button "Under 45 years"
+    - button "45 to 58 years"
+    - button "59 to 70 years"
+    - button "Over 70 years"
+    - button "Not certain"
+  - button "Next" [disabled]
+  - paragraph: Questions
+  - heading "Questions patients often ask" [level=2]
+  - heading "What are Dr. Maan Al Barry's areas of specialty?" [level=3]:
+    - button "What are Dr. Maan Al Barry's areas of specialty?"
+  - heading "Where is Dr. Maan Al Barry's clinic located?" [level=3]:
+    - button "Where is Dr. Maan Al Barry's clinic located?"
+  - heading "How can I book an appointment?" [level=3]:
+    - button "How can I book an appointment?"
+  - heading "Does the Vision Simulator guarantee the actual result of surgery?" [level=3]:
+    - button "Does the Vision Simulator guarantee the actual result of surgery?"
+  - heading "Can I stop wearing glasses completely after cataract surgery?" [level=3]:
+    - button "Can I stop wearing glasses completely after cataract surgery?"
+  - heading "What are the main criteria for laser vision correction (LASIK)?" [level=3]:
+    - button "What are the main criteria for laser vision correction (LASIK)?"
+  - paragraph: Clinic & booking
+  - heading "Three ways to your appointment" [level=2]
+  - paragraph: Dr. Maan sees patients at Magrabi Health Eye & ENT Hospital – Madinah.
+  - list:
+    - listitem:
+      - heading "Book online" [level=3]
+      - paragraph: Through Magrabi’s official booking portal — choose Dr. Maan Al Barry and a suitable time.
+      - link "Book on the Magrabi portal":
+        - /url: https://ob.magrabi.com.sa/OnlineBooking/
+    - listitem:
+      - heading "Dr. Maan’s clinic — call or WhatsApp" [level=3]
+      - paragraph: 055 494 6433
+      - link "Call":
+        - /url: tel:+966554946433
+      - link "WhatsApp":
+        - /url: https://wa.me/966554946433?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20consultation%20with%20Dr.%20Maan%20bin%20Abdullah%20Al%20Barry%20at%20Magrabi%20Madinah.
+    - listitem:
+      - heading "Magrabi Health contact center" [level=3]
+      - paragraph:
+        - link "920018000":
+          - /url: tel:920018000
+        - link "19505":
+          - /url: tel:19505
+  - paragraph: Clinic hours
+  - paragraph: "Saturday to Thursday: 9:00 AM – 1:00 PM · 5:00 PM – 9:30 PM"
+  - paragraph: Please confirm through booking, as the schedule can change.
+  - paragraph: Address
+  - paragraph: Magrabi Health Eye & ENT Hospital – Madinah
+  - paragraph: Airport Road, Madinah, Saudi Arabia
+  - iframe
+  - link "Directions in Google Maps":
+    - /url: https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA
+  - paragraph: Magrabi Health Eye & ENT Hospital – Madinah is accredited by Joint Commission International (JCI) and CBAHI.
+  - region "Your appointment with Dr. Maan starts here":
+    - paragraph: Magrabi Madinah · Airport Road
+    - heading "Your appointment with Dr. Maan starts here" [level=2]
+    - link "Book appointment":
+      - /url: https://ob.magrabi.com.sa/OnlineBooking/
+    - link "Clinic WhatsApp":
+      - /url: https://wa.me/966554946433?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20consultation%20with%20Dr.%20Maan%20bin%20Abdullah%20Al%20Barry%20at%20Magrabi%20Madinah.
+    - link "Hospital location":
+      - /url: https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA
+- contentinfo:
+  - paragraph: Dr. Maan bin Abdullah Al Barry
+  - paragraph: Consultant Ophthalmologist (Cornea, Cataract & Refractive Surgery)
+  - link "Instagram":
+    - /url: https://www.instagram.com/dr_maan_albarry
+  - link "X (Twitter)":
+    - /url: https://x.com/maanalbarry
+  - link "YouTube":
+    - /url: https://www.youtube.com/@drmaanalbarry3195
+  - link "WhatsApp":
+    - /url: https://wa.me/966554946433?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20consultation%20with%20Dr.%20Maan%20bin%20Abdullah%20Al%20Barry%20at%20Magrabi%20Madinah.
+  - navigation "Procedures":
+    - heading "Procedures" [level=3]
+    - link "Cataract surgery":
+      - /url: en/procedures/cataract-surgery/
+    - link "Lens implants (IOLs)":
+      - /url: en/procedures/lens-implants/
+    - link "Laser vision correction":
+      - /url: en/procedures/laser-vision-correction/
+    - link "Implantable contact lens (ICL)":
+      - /url: en/procedures/icl/
+    - link "Keratoconus & corneal cross-linking (CXL)":
+      - /url: en/procedures/keratoconus-cxl/
+    - link "Corneal transplant (keratoplasty)":
+      - /url: en/procedures/corneal-transplant/
+    - link "Intravitreal injections":
+      - /url: en/procedures/intravitreal-injections/
+  - navigation "Site links":
+    - heading "Contents" [level=3]
+    - link "About":
+      - /url: en/#profile
+    - link "Vision simulator":
+      - /url: en/#simulator
+    - link "3D surgery":
+      - /url: en/#cataract-3d
+    - link "Patient education":
+      - /url: en/#education
+    - link "Questions":
+      - /url: en/#faq
+    - link "Clinic & booking":
+      - /url: en/#clinic
+  - heading "Contact" [level=3]
+  - 'link "Clinic line: 055 494 6433"':
+    - /url: tel:+966554946433
+  - 'link "Magrabi contact center: 920018000"':
+    - /url: tel:920018000
+  - link "Online booking":
+    - /url: https://ob.magrabi.com.sa/OnlineBooking/
+  - link "Airport Road, Madinah (Maps)":
+    - /url: https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA
+  - paragraph:
+    - strong: "Medical disclaimer:"
+    - text: Content on this website is for general education only and does not replace an in-person clinical examination and diagnosis by an ophthalmologist.
+  - paragraph: © 2026 Dr. Maan bin Abdullah Al Barry — All rights reserved
+  - paragraph:
+    - link "Magrabi profile":
+      - /url: https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry
+    - link "Taibah University profile":
+      - /url: https://www.taibahu.edu.sa/the-university/about-taibah-university/faculty-members/1431
+    - link "Google Maps":
+      - /url: https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA

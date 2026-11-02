@@ -1,0 +1,139 @@
+{
+  "pages": [
+    {
+      "page": "/",
+      "newTabLinks": 28,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": [
+        "https://maps.google.com/maps"
+      ]
+    },
+    {
+      "page": "/procedures/cataract-surgery/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/lens-implants/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/laser-vision-correction/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/icl/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/keratoconus-cxl/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/corneal-transplant/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/intravitreal-injections/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/",
+      "newTabLinks": 28,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": [
+        "https://maps.google.com/maps"
+      ]
+    },
+    {
+      "page": "/en/procedures/cataract-surgery/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/lens-implants/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/laser-vision-correction/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/icl/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/keratoconus-cxl/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/corneal-transplant/",
+      "newTabLinks": 23,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/intravitreal-injections/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    }
+  ],
+  "externalHosts": {
+    "ob.magrabi.com.sa": 84,
+    "maps.app.goo.gl": 66,
+    "www.instagram.com": 34,
+    "x.com": 34,
+    "www.youtube.com": 34,
+    "tel:": 70,
+    "wa.me": 52,
+    "www.magrabihealth.com": 16,
+    "www.taibahu.edu.sa": 16,
+    "www.aao.org": 34,
+    "www.nei.nih.gov": 6,
+    "www.nhs.uk": 12,
+    "www.fda.gov": 2
+  },
+  "storageKeys": [
+    "lang=en",
+    "theme=dark"
+  ]
+}

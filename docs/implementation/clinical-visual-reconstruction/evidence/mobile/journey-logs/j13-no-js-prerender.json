@@ -1,0 +1,113 @@
+{
+  "emulation": "emulated",
+  "browser": "chromium (Playwright 1.64.1)",
+  "accessibilityMode": "none",
+  "network": "unthrottled (localhost)",
+  "id": "j13-no-js-prerender",
+  "persona": "Core journey (extra)",
+  "objective": "Without JavaScript the prerendered pages are complete and usable, and the reserved simulator space does not leave a large blank gap.",
+  "device": "Generic phone profile 390×844 (JavaScript disabled)",
+  "language": "ar",
+  "theme": "light (no JS)",
+  "startUrl": "/",
+  "viewport": "390×844",
+  "test": "journeys\\core-journeys.spec.js › J13 › J13 — prerendered page without JavaScript",
+  "startedAt": "2026-11-02T16:58:14.457Z",
+  "finishedAt": "2026-11-02T16:58:15.889Z",
+  "totals": {
+    "steps": 4,
+    "pass": 4,
+    "fail": 0,
+    "blocked": 0
+  },
+  "verdict": "PASS",
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "expectedFailedRequests": [
+    {
+      "url": "http://localhost:4673/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "csp",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/preload-helper-CRzLMJPS.js",
+      "reason": "csp",
+      "expected": true
+    },
+    {
+      "url": "https://maps.gstatic.com/maps-api-v3/embed/js/66/12d/init_embed.js",
+      "reason": "csp",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "csp",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/preload-helper-CRzLMJPS.js",
+      "reason": "csp",
+      "expected": true
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Open / without JavaScript",
+      "expected": "Prerendered heading and procedures present",
+      "actual": "h1=\"د. معن بن عبدالله البري\" cards=7",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1185,
+      "url": "/"
+    },
+    {
+      "step": 2,
+      "action": "Measure the simulator section",
+      "expected": "No blank reserved gap (host height < 300 px when nothing can mount)",
+      "actual": "host 0px, children 0, text \"\"",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j13-no-js-prerender/02-measure-the-simulator-section.jpg",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 26,
+      "url": "/"
+    },
+    {
+      "step": 3,
+      "action": "Check the booking link works without JS",
+      "expected": "Booking anchor has the portal URL",
+      "actual": "https://ob.magrabi.com.sa/OnlineBooking/",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 4,
+      "url": "/"
+    },
+    {
+      "step": 4,
+      "action": "Open a prerendered procedure page",
+      "expected": "Full text present",
+      "actual": "8 sections",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 124,
+      "url": "/procedures/keratoconus-cxl/"
+    }
+  ]
+}

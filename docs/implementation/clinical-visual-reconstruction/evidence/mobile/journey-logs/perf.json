@@ -1,0 +1,197 @@
+{
+  "measuredAt": "2026-11-02T16:48:48.024Z",
+  "loads": [
+    {
+      "page": "home ar",
+      "url": "/",
+      "network": "localhost (no throttling)",
+      "lcpMs": 660,
+      "cls": 0,
+      "domContentLoadedMs": 555,
+      "loadMs": 953,
+      "transferKiB": 543,
+      "jsKiB": 33,
+      "imgKiB": 478,
+      "fontKiB": 0,
+      "requests": 14
+    },
+    {
+      "page": "home en",
+      "url": "/en/",
+      "network": "localhost (no throttling)",
+      "lcpMs": 524,
+      "cls": 0,
+      "domContentLoadedMs": 512,
+      "loadMs": 772,
+      "transferKiB": 542,
+      "jsKiB": 33,
+      "imgKiB": 478,
+      "fontKiB": 0,
+      "requests": 14
+    },
+    {
+      "page": "cataract page ar",
+      "url": "/procedures/cataract-surgery/",
+      "network": "localhost (no throttling)",
+      "lcpMs": 696,
+      "cls": 0,
+      "domContentLoadedMs": 511,
+      "loadMs": 907,
+      "transferKiB": 128,
+      "jsKiB": 51,
+      "imgKiB": 50,
+      "fontKiB": 0,
+      "requests": 8
+    },
+    {
+      "page": "home ar",
+      "url": "/",
+      "network": "fast-3g + CPU×4",
+      "lcpMs": 3044,
+      "cls": 0.009,
+      "domContentLoadedMs": 2995,
+      "loadMs": 7158,
+      "transferKiB": 543,
+      "jsKiB": 33,
+      "imgKiB": 478,
+      "fontKiB": 0,
+      "requests": 14
+    },
+    {
+      "page": "cataract page ar",
+      "url": "/procedures/cataract-surgery/",
+      "network": "fast-3g + CPU×4",
+      "lcpMs": 4080,
+      "cls": 0.056,
+      "domContentLoadedMs": 2804,
+      "loadMs": 4216,
+      "transferKiB": 128,
+      "jsKiB": 51,
+      "imgKiB": 50,
+      "fontKiB": 0,
+      "requests": 8
+    }
+  ],
+  "threeD": [
+    {
+      "sim": "cataract 3D",
+      "network": "localhost",
+      "tapToReadyMs": 4810,
+      "chunkKiB": 174
+    },
+    {
+      "sim": "cataract 3D",
+      "network": "fast-3g + CPU×4",
+      "tapToReadyMs": 4599,
+      "chunkKiB": 174
+    }
+  ],
+  "frames": [
+    {
+      "sim": "cataract 3D (playing)",
+      "cpu": "×1",
+      "frames": 300,
+      "fps": 60,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 16.8,
+      "max": 16.8,
+      "over33ms": 0
+    },
+    {
+      "sim": "vision simulator (distance changing every ~80 ms)",
+      "cpu": "×1",
+      "frames": 300,
+      "fps": 60,
+      "p50": 16.7,
+      "p95": 16.7,
+      "p99": 16.8,
+      "max": 16.8,
+      "over33ms": 0
+    },
+    {
+      "sim": "cataract 3D (playing)",
+      "cpu": "×4",
+      "frames": 300,
+      "fps": 60,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 16.8,
+      "max": 16.8,
+      "over33ms": 0
+    },
+    {
+      "sim": "vision simulator (distance changing every ~80 ms)",
+      "cpu": "×4",
+      "frames": 297,
+      "fps": 59.4,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.2,
+      "max": 33.3,
+      "over33ms": 0
+    }
+  ],
+  "cleanup": {
+    "heapBeforeMiB": 9.5,
+    "cycles": [
+      {
+        "cycle": 1,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 2,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 3,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 4,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 5,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 6,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 7,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      },
+      {
+        "cycle": 8,
+        "liveWhileOpen": 1,
+        "liveAfterClose": 0,
+        "heapMiB": 9.5,
+        "canvases": 0
+      }
+    ]
+  },
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

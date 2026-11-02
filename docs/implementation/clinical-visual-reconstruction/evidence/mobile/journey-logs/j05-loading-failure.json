@@ -1,0 +1,143 @@
+{
+  "emulation": "emulated",
+  "browser": "chromium (Playwright 1.64.1)",
+  "accessibilityMode": "none",
+  "network": "localhost; the 3D chunks are aborted with route.abort until the retry",
+  "id": "j05-loading-failure",
+  "persona": "Core journey",
+  "objective": "When the 3D code fails to download, the visitor sees a clear message and can retry successfully.",
+  "device": "Generic phone profile 390×844, touch",
+  "language": "en",
+  "theme": "light",
+  "startUrl": "/en/procedures/cataract-surgery/",
+  "viewport": "390×844",
+  "test": "journeys\\core-journeys.spec.js › J05 › J05 — 3D loading failure and retry",
+  "startedAt": "2026-11-02T16:58:00.403Z",
+  "finishedAt": "2026-11-02T16:58:09.806Z",
+  "totals": {
+    "steps": 5,
+    "pass": 5,
+    "fail": 0,
+    "blocked": 0
+  },
+  "verdict": "PASS",
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_FAILED",
+    "Failed to load resource: net::ERR_CONNECTION_FAILED",
+    "Failed to load resource: net::ERR_CONNECTION_FAILED",
+    "Failed to load resource: net::ERR_CONNECTION_FAILED",
+    "Failed to load resource: net::ERR_CONNECTION_FAILED"
+  ],
+  "consoleWarnings": [
+    "3D cataract module unavailable: TypeError: Failed to fetch dynamically imported module: http://localhost:4673/assets/cataract-sim-WPsBARml.js",
+    "Vision simulator failed to load TypeError: Failed to fetch dynamically imported module: http://localhost:4673/assets/vision-sim-CcIsNhyF.js"
+  ],
+  "pageErrors": [],
+  "failedRequests": [],
+  "expectedFailedRequests": [
+    {
+      "url": "http://localhost:4673/assets/cataract-sim-WPsBARml.js",
+      "reason": "net::ERR_CONNECTION_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/three.module-DzC5FhdE.js",
+      "reason": "net::ERR_CONNECTION_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/cataract-sim-WPsBARml.js",
+      "reason": "net::ERR_CONNECTION_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/vision-sim-CcIsNhyF.js",
+      "reason": "net::ERR_CONNECTION_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4673/assets/vision-sim-CcIsNhyF.js",
+      "reason": "net::ERR_CONNECTION_FAILED",
+      "expected": true
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Open the cataract page",
+      "expected": "Page loads",
+      "actual": "Cataract surgery",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1115,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 2,
+      "action": "Tap \"Start the 3D experience\" while the 3D download fails",
+      "expected": "An error message is announced and the Start button is offered again",
+      "actual": "section=error; status=\"The 3D experience could not load on this device. You can try again.\"; start visible=true",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j05-loading-failure/02-tap-start-the-3d-experience-while-the-3d.jpg",
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_FAILED",
+        "Failed to load resource: net::ERR_CONNECTION_FAILED",
+        "Failed to load resource: net::ERR_CONNECTION_FAILED"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1697,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 3,
+      "action": "Network comes back; tap Start again",
+      "expected": "The 3D viewer loads and works",
+      "actual": "section=active state=ready status=\"\"",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j05-loading-failure/03-network-comes-back-tap-start-again.jpg",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1198,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 4,
+      "action": "Tap Next and Play",
+      "expected": "Stage changes and playback runs",
+      "actual": "Stage 2 of 7; mode=pause",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1180,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 5,
+      "action": "Abort the vision-simulator chunk, open the home simulator section",
+      "expected": "The section shows the simulator or a clear fallback — never an empty reserved gap",
+      "actual": "host 189px tall, children=1, text=\"The vision simulator could not load on this device or connection. You can try ag\"",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j05-loading-failure/05-abort-the-vision-simulator-chunk-open-th.jpg",
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_FAILED",
+        "Failed to load resource: net::ERR_CONNECTION_FAILED"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 3900,
+      "url": "/en/#simulator"
+    }
+  ]
+}
