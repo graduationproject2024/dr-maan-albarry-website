@@ -20,7 +20,7 @@ export default defineConfig({
     command: `npm run build && npx vite preview --port ${port} --strictPort`,
     url: `http://localhost:${port}/`,
     env: { CSIM_HARNESS: '1' }, // also build the 3D simulator test harness page
-    reuseExistingServer: false, // always rebuild: tests also scan dist/ directly
+    reuseExistingServer: !!process.env.PW_REUSE, // always rebuild (tests also scan dist/ directly); PW_REUSE=1 only for local iteration against a running preview
     timeout: 120_000
   }
 });
