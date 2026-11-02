@@ -4,7 +4,7 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { DOCTOR } from '../doctor-data.js';
+import { DOCTOR, PROCEDURES } from '../doctor-data.js';
 
 const registry = JSON.parse(fs.readFileSync(path.resolve('content/internal-registry.json'), 'utf8'));
 const byId = id => registry.facts.find(f => f.id === id);
@@ -26,7 +26,9 @@ const RENDERED = {
   'rank-associate-professor': { ar: [DOCTOR.professional.academicRank.ar], en: [DOCTOR.professional.academicRank.en] },
   'contact-clinic-direct': { ar: [DOCTOR.contact.clinicDirect.display], en: [DOCTOR.contact.clinicDirect.display] },
   'contact-magrabi-callcenter': { ar: [DOCTOR.contact.callCenter.display], en: [DOCTOR.contact.callCenter.display] },
-  'clinic-hours': { ar: [DOCTOR.clinic.workingHours.ar], en: [DOCTOR.clinic.workingHours.en] }
+  'clinic-hours': { ar: [DOCTOR.clinic.workingHours.ar], en: [DOCTOR.clinic.workingHours.en] },
+  // Procedure scope (clinical visual reconstruction): every procedure is named on the homepage gallery.
+  ...Object.fromEntries(PROCEDURES.map(p => [`procedure-${p.slug}`, { ar: [p.name.ar], en: [p.name.en] }]))
 };
 
 test.describe('Protected doctor content registry', () => {
@@ -37,6 +39,23 @@ test.describe('Protected doctor content registry', () => {
     expect(stat.value).toBe(byId('cases-15000').expect);
     expect(DOCTOR.contact.clinicDirect.tel).toBe(byId('contact-clinic-direct').expect);
     for (const f of registry.facts.filter(f => f.source === 'doctor')) expect(f.status, f.id).toBe('confirmed');
+  });
+
+  test('procedure scope: registry and doctor-data agree on the 7 procedures and their provenance', () => {
+    const slugs = ['cataract-surgery', 'lens-implants', 'laser-vision-correction', 'icl', 'keratoconus-cxl', 'corneal-transplant', 'intravitreal-injections'];
+    expect(PROCEDURES.map(p => p.slug)).toEqual(slugs);
+    for (const p of PROCEDURES) {
+      const f = byId(`procedure-${p.slug}`);
+      expect(f, p.slug).toBeTruthy();
+      expect(f.source).toBe(p.source);
+      expect(f.status).toBe(p.status);
+      expect(f.ar).toBe(p.name.ar);
+      expect(f.en).toBe(p.name.en);
+      expect(f.history.length).toBeGreaterThan(0);
+    }
+    // Magrabi-published scope vs owner-confirmed scope (2026-11-01)
+    expect(PROCEDURES.filter(p => p.source === 'magrabi').map(p => p.slug)).toEqual(['cataract-surgery', 'lens-implants', 'laser-vision-correction', 'keratoconus-cxl']);
+    for (const p of PROCEDURES.filter(p => p.source === 'owner')) { expect(p.status).toBe('confirmed'); expect(p.confirmedOn).toBe('2026-11-01'); }
   });
 
   test('15,000+ keeps its confirmed combined meaning in both languages', () => {

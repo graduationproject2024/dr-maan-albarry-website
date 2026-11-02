@@ -171,8 +171,11 @@ test.describe('Phase 2/3 — theme default, 3D section and navigation', () => {
       // poster first: nothing heavy is mounted until the visitor asks for it
       await expect(section.locator('.c3d-poster')).toBeVisible();
       await expect(page.locator('#cataract-3d-stage')).toBeHidden();
-      await expect(page.locator('#site-header .nav-links a[href="#cataract-3d"]')).toBeVisible();
-      await expect(page.locator('#mobile-nav a[href="#cataract-3d"]')).toHaveCount(1);
+      // Path routing: section links carry the language's home path (AR "#id", EN "en/#id") so they
+      // also work from procedure pages; the link must still be exactly one, visible, pointing at the section.
+      const href = lang === 'ar' ? '#cataract-3d' : 'en/#cataract-3d';
+      await expect(page.locator(`#site-header .nav-links a[href="${href}"]`)).toBeVisible();
+      await expect(page.locator(`#mobile-nav a[href="${href}"]`)).toHaveCount(1);
     });
   }
 

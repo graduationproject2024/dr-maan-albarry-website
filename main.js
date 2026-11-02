@@ -4,7 +4,9 @@
 // ============================================================
 
 // --- DATA LAYER: single source of truth (see doctor-data.js) ---
-import { DOCTOR, FAQ, whatsappUrl, publishableTestimonials, yearsOfExperience } from './doctor-data.js';
+import { DOCTOR, FAQ, PROCEDURES, PROCEDURE_GROUPS, procedureBySlug, whatsappUrl, publishableTestimonials, yearsOfExperience, buildJsonLd, buildProcedureJsonLd } from './doctor-data.js';
+// --- ROUTES: one table for the app, the build and the prerenderer (see site-routes.js) ---
+import { parseRoute, splitPath, pathFor, pageMeta } from './site-routes.js';
 
 // Pick the current-language value from an { ar, en } pair.
 const L = (pair) => pair[currentLang];
@@ -849,17 +851,44 @@ void main(){
 window.VisionSim = VisionSim;
 
 // ============================================================
-// APP SHELL — Phase 2/3 master redesign ("the consultant's folio")
-// Design system: docs/implementation/master-redesign-phase-2-3/CLAUDE_DESIGN_SYSTEM.md
-// Every doctor fact below is read from doctor-data.js; nothing factual is hard-coded here.
+// APP SHELL — clinical visual reconstruction ("the clinical atlas")
+// Design system: docs/implementation/clinical-visual-reconstruction/DESIGN_SYSTEM.md
+// Information architecture: docs/implementation/clinical-visual-reconstruction/INFORMATION_ARCHITECTURE.md
+// Every doctor fact below is read from doctor-data.js; every procedure from PROCEDURES.
 // ============================================================
 
-// --- APP STATE & LOCAL STORAGE ---
-// Initial language: the prerendered /en/ route ships <html lang="en">; otherwise the saved choice; otherwise Arabic.
-let currentLang = (() => {
-  if (document.documentElement.lang === 'en') return 'en';
-  try { return localStorage.getItem('lang') === 'en' ? 'en' : 'ar'; } catch (e) { return 'ar'; }
+// --- ROUTING -------------------------------------------------
+// The site lives at a domain root or under a GitHub Pages subpath. index.html pins <base> to the
+// site root before anything loads, so every relative URL in this file is relative to the root.
+const SITE_URL = (typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://drmaanalbarry.com').replace(/\/+$/, '');
+const PROC_IMAGES = typeof __PROC_IMAGES__ !== 'undefined' ? __PROC_IMAGES__ : {};
+const SITE_ROOT = (() => {
+  const b = document.querySelector('base');
+  return new URL(b ? b.href : splitPath(location.pathname).root, location.href);
 })();
+/** Site-root-relative path of an absolute URL, or null when it is outside this site. */
+const relOf = href => {
+  const u = new URL(href, SITE_ROOT);
+  if (u.origin !== SITE_ROOT.origin || !u.pathname.startsWith(SITE_ROOT.pathname)) return null;
+  return u.pathname.slice(SITE_ROOT.pathname.length);
+};
+
+let route = parseRoute(relOf(location.href) || '');
+
+// --- APP STATE & LOCAL STORAGE ---
+// Language comes from the URL. The bare Arabic root still honours a saved English choice
+// (and moves to /en/), so a returning English reader lands on English.
+let currentLang = route.lang;
+(() => {
+  let saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) { /* storage unavailable */ }
+  if (!route.slug && route.lang === 'ar' && relOf(location.href) === '' && saved === 'en') {
+    route = { ...route, lang: 'en' };
+    currentLang = 'en';
+    history.replaceState(history.state, '', new URL(pathFor('en') + location.hash, SITE_ROOT));
+  }
+})();
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 // Theme: an explicit visitor choice ('light' | 'dark') is stored under localStorage 'theme'.
 // With no saved choice the site follows the device (prefers-color-scheme), live.
@@ -873,12 +902,25 @@ let currentQStep = 0;
 let qAnswers = [];
 let qCompleted = false;
 let openArticleId = null;
+let procFilter = 'all';
+
+// Long-form procedure text is a separate lazy chunk: the homepage never downloads it.
+let PROC = null;
+const loadProcedureContent = () => PROC ? Promise.resolve(PROC) : import('./src/procedures/content.js').then(m => (PROC = m));
 
 const tr = (ar, en) => (currentLang === 'ar' ? ar : en);
+const isHome = () => !route.slug;
 
-// --- ICONS: one inline SVG set (24px grid, 1.75 stroke). No emoji anywhere. ---
+/** href of a page (relative to the site root). The Arabic home is './'. */
+const pageHref = (lang = currentLang, slug = null) => pathFor(lang, slug) || './';
+/** href of a homepage section, valid from any page. */
+const secHref = id => `${currentLang === 'en' ? 'en/' : ''}#${id}`;
+/** href of an anchor on the current page. */
+const hereHref = id => `${pathFor(currentLang, route.slug)}#${id}`;
+
+// --- ICONS: one inline SVG set (24px grid, 1.6 stroke, round joins). No emoji anywhere. ---
 const IC = {
-  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
   phone: '<path d="M20.5 16.3v2.8a1.9 1.9 0 0 1-2.1 1.9A18.6 18.6 0 0 1 3 5.6 1.9 1.9 0 0 1 4.9 3.5h2.8a1.9 1.9 0 0 1 1.9 1.6c.1.9.4 1.8.7 2.6a1.9 1.9 0 0 1-.4 2l-1.2 1.2a15 15 0 0 0 5.4 5.4l1.2-1.2a1.9 1.9 0 0 1 2-.4c.8.3 1.7.6 2.6.7a1.9 1.9 0 0 1 1.6 1.9z"/>',
   pin: '<path d="M12 21s-7-6.1-7-11.4a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.6" r="2.4"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
@@ -893,12 +935,18 @@ const IC = {
   alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.1"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
   globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.3 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.3-3.5-8.5s1.1-6.1 3.5-8.5z"/>',
-  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 7.8v.1"/>'
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 7.8v.1"/>',
+  draft: '<path d="M14.5 3.5H6.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8.5z"/><path d="M14.5 3.5v5h5M8.5 13h7M8.5 16.5h4.5"/>',
+  layers: '<path d="m12 3.5 8.5 4.5-8.5 4.5L3.5 8z"/><path d="m3.5 12 8.5 4.5 8.5-4.5M3.5 16l8.5 4.5 8.5-4.5"/>',
+  cube: '<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+  book: '<path d="M4.5 5.5A2 2 0 0 1 6.5 3.5h13v15h-13a2 2 0 0 0-2 2z"/><path d="M4.5 20.5a2 2 0 0 1 2-2h13v2z"/>'
 };
 const icon = (name, size = 20) =>
-  `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${IC[name]}</svg>`;
+  `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${IC[name]}</svg>`;
 
 // Brand glyphs (filled) — Instagram, X, YouTube, WhatsApp.
 const GLYPH = {
@@ -914,9 +962,9 @@ const EXT = 'target="_blank" rel="noopener noreferrer"';
 const D = DOCTOR;
 const C = DOCTOR.contact;
 const role = id => D.professional.roles.find(r => r.id === id);
-const qual = id => D.professional.qualifications.find(q => q.id === id);
 const short = r => (currentLang === 'ar' ? (r.shortAr || r.ar) : (r.shortEn || r.en));
 const STAT = D.credibility.statistics.find(s => s.id === 'cases-15000');
+const groupOf = id => PROCEDURE_GROUPS.find(g => g.id === id);
 
 function getWhatsAppUrl(msg) {
   return whatsappUrl(msg || tr(
@@ -924,30 +972,71 @@ function getWhatsAppUrl(msg) {
     'Hello, I would like to inquire about booking a consultation with Dr. Maan bin Abdullah Al Barry at Magrabi Madinah.'));
 }
 
-// Shared section head: index numeral + eyebrow + title + optional lede.
-const sectionHead = (idx, eyebrow, title, lede = '', cls = '') => `
+// Shared section head: small kicker + title + optional lede.
+const sectionHead = (kicker, title, lede = '', cls = '') => `
       <header class="section-head ${cls} fade-in">
-        <p class="eyebrow"><span class="eyebrow-num" aria-hidden="true">${idx}</span><span>${eyebrow}</span></p>
+        <p class="kicker">${kicker}</p>
         <h2>${title}</h2>
         ${lede ? `<p class="lede">${lede}</p>` : ''}
       </header>`;
 
+// --- ANATOMICAL ILLUSTRATIONS ---
+// The 3D renders (public/images/procedures/<slug>.webp, 1600×1000, plus <slug>-dark.webp) are
+// referenced only when they exist at build time (__PROC_IMAGES__). Otherwise — or if one fails
+// to load — a schematic line drawing of the eye in section stands in, with the structure each
+// procedure concerns highlighted. Same plate, same light, same angle for every procedure.
+const EYE_BASE = `
+  <circle class="ap-globe" cx="150" cy="100" r="78"/>
+  <path class="ap-retina" d="M118 30a74 74 0 0 0 0 140"/>
+  <path class="ap-nerve" d="M73 92h-34M73 108h-34"/>
+  <path class="ap-cornea" d="M214 56c26 22 26 66 0 88"/>
+  <path class="ap-iris" d="M212 60v26M212 114v26"/>
+  <path class="ap-zonule" d="M196 72l14-8M196 128l14 8"/>`;
+const EYE_FOCUS = {
+  'cataract-surgery': '<ellipse class="ap-focus ap-cloud" cx="196" cy="100" rx="12" ry="28"/><ellipse class="ap-focus-line" cx="196" cy="100" rx="6" ry="17"/>',
+  'lens-implants': '<ellipse class="ap-focus" cx="196" cy="100" rx="8" ry="20"/><path class="ap-focus-line" d="M196 80c-8-6-10-12-6-18M196 120c-8 6-10 12-6 18"/>',
+  'laser-vision-correction': '<path class="ap-focus-stroke" d="M214 56c26 22 26 66 0 88"/><path class="ap-beam" d="M300 70l-58 20M300 100h-56M300 130l-58-20"/>',
+  icl: '<ellipse class="ap-lens-ghost" cx="196" cy="100" rx="12" ry="28"/><path class="ap-focus-stroke" d="M206 74c4 8 4 44 0 52"/>',
+  'keratoconus-cxl': '<path class="ap-focus-stroke" d="M214 56c18 12 34 34 38 46-6 14-20 32-38 42"/><path class="ap-beam" d="M300 84l-40 10M300 116l-40-10"/>',
+  'corneal-transplant': '<path class="ap-focus-stroke" d="M226 70c12 18 12 42 0 60"/><path class="ap-graft" d="M226 70l-6-4M226 130l-6 4"/>',
+  'intravitreal-injections': '<circle class="ap-vitreous" cx="150" cy="100" r="62"/><circle class="ap-focus" cx="78" cy="100" r="6"/><path class="ap-needle" d="M190 30l-18 34"/>'
+};
+// Two crops of the same drawing: the full plate, and a close-up of the front of the eye
+// (where every highlighted structure sits) for the small thumbnails of the phone card rows.
+function anatomyPlate(slug, label) {
+  const g = `<g class="ap-base">${EYE_BASE}</g><g class="ap-hl">${EYE_FOCUS[slug] || ''}</g>`;
+  return `<svg class="anat-plate" viewBox="0 0 320 200" role="img" aria-label="${label}" focusable="false" preserveAspectRatio="xMidYMid meet">${g}</svg>`
+    + `<svg class="anat-thumb" viewBox="${slug === 'intravitreal-injections' ? '60 14 180 172' : '128 22 156 156'}" role="img" aria-label="${label}" focusable="false" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+}
+/** Procedure illustration: the 3D render when it exists, otherwise the schematic plate. */
+function illustration(p, { eager = false, cls = '' } = {}) {
+  const img = PROC_IMAGES[p.slug] || {};
+  const alt = L(p.alt);
+  const plate = anatomyPlate(p.slug, alt);
+  if (!img.light) return `<div class="illus is-plate ${cls}">${plate}</div>`;
+  const dark = img.dark ? `images/procedures/${p.slug}-dark.webp` : '';
+  const src = dark && resolvedTheme() === 'dark' ? dark : `images/procedures/${p.slug}.webp`;
+  return `<div class="illus ${cls}">
+      <img src="${src}" data-light="images/procedures/${p.slug}.webp" ${dark ? `data-dark="${dark}"` : ''} width="1600" height="1000" alt="${alt}" ${eager ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.parentNode.classList.add('is-plate');this.remove()">
+      ${plate}
+    </div>`;
+}
+
 // --- NAVIGATION MODEL ---
 const NAV = [
   ['profile', 'عن الدكتور', 'About'],
-  ['specialties', 'التخصصات', 'Expertise'],
-  ['cataracts', 'الماء الأبيض والعدسات', 'Cataract & lenses'],
+  ['procedures', 'الإجراءات', 'Procedures'],
   ['simulator', 'محاكي الرؤية', 'Vision simulator'],
   ['cataract-3d', 'الجراحة ثلاثية الأبعاد', '3D surgery'],
-  ['education', 'المكتبة الطبية', 'Library'],
+  ['education', 'التثقيف الصحي', 'Patient education'],
   ['clinic', 'العيادة والحجز', 'Clinic & booking']
 ];
 const DRAWER_NAV = [
   ['home', 'الرئيسية', 'Home'],
-  ...NAV.slice(0, 3),
+  ...NAV.slice(0, 5),
   ['questionnaire', 'استبيان نمط الحياة البصري', 'Lifestyle questionnaire'],
-  ...NAV.slice(3),
-  ['faq', 'الأسئلة الشائعة', 'Questions']
+  ['faq', 'الأسئلة الشائعة', 'Questions'],
+  NAV[5]
 ];
 const NAV_SECTION_IDS = ['home', ...NAV.map(n => n[0])];
 
@@ -970,13 +1059,14 @@ function renderLangToggle(extra = '') {
 
 // --- HEADER ---
 function renderHeader() {
-  const link = ([id, ar, en], i, drawer) => `<a href="#${id}" onclick="scrollToSection('${id}');${drawer ? 'closeMobileMenu();' : ''}return false;" class="${currentActiveNavId === id ? 'active' : ''}">${drawer ? `<span class="drawer-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>` : ''}<span>${tr(ar, en)}</span></a>`;
+  const link = ([id, ar, en], i, drawer) => `<a href="${id === 'home' ? pageHref() : secHref(id)}" data-nav data-section="${id}" class="${isHome() && currentActiveNavId === id ? 'active' : ''}">${drawer ? `<span class="drawer-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>` : ''}<span>${tr(ar, en)}</span></a>`;
   return `
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      <a href="#home" class="wordmark" onclick="scrollToSection('home');return false;" aria-label="${L(D.identity.shortName)}">
-        <span class="wordmark-name">${L(D.identity.shortName)}</span>
-        <span class="wordmark-sub">${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span>
+      <a href="${pageHref()}" data-nav data-section="home" class="wordmark" aria-label="${L(D.identity.shortName)} — ${tr('الصفحة الرئيسية', 'home')}">
+        <span class="wordmark-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 16s4.6-6.5 11-6.5S27 16 27 16s-4.6 6.5-11 6.5S5 16 5 16z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="3.4" fill="currentColor"/></svg></span>
+        <span class="wordmark-text"><span class="wordmark-name">${L(D.identity.shortName)}</span>
+        <span class="wordmark-sub">${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span></span>
       </a>
 
       <nav class="header-nav" aria-label="${tr('التنقل الرئيسي', 'Main navigation')}">
@@ -999,6 +1089,10 @@ function renderHeader() {
         <button type="button" class="icon-btn" onclick="closeMobileMenu();document.querySelector('.mobile-menu-btn').focus();" aria-label="${tr('إغلاق القائمة', 'Close menu')}">${icon('close', 22)}</button>
       </div>
       <div class="drawer-links">${DRAWER_NAV.map((n, i) => link(n, i, true)).join('')}</div>
+      <div class="drawer-procs">
+        <p class="drawer-label">${tr('الإجراءات', 'Procedures')}</p>
+        <ul>${PROCEDURES.map(p => `<li><a href="${pageHref(currentLang, p.slug)}" data-nav ${route.slug === p.slug ? 'aria-current="page"' : ''}>${L(p.name)}</a></li>`).join('')}</ul>
+      </div>
       <div class="drawer-foot">
         <a href="${D.clinic.mapUrl}" ${EXT} class="drawer-map">${icon('pin', 18)}<span>${tr('موقع المستشفى على خرائط جوجل', 'Hospital on Google Maps')}</span></a>
         <div class="drawer-row">
@@ -1018,38 +1112,43 @@ function renderHeader() {
   </header>`;
 }
 
-// --- HERO ---
+// ============================================================
+// HOMEPAGE — a patient journey, not an encyclopedia:
+// doctor → procedures → credentials → simulator → 3D surgery → education → FAQ → clinic → book
+// ============================================================
+
+// 1. Doctor introduction
 function renderHero() {
   const chief = role('magrabi-chief');
   const years = yearsOfExperience();
-  const portrait = (cls, eager) => `<img src="./images/dr-maan-redsea.jpg" width="682" height="1024" alt="${cls === 'hero-cameo-img' ? '' : L(D.identity.name)}" class="${cls}" ${eager ? 'loading="eager" fetchpriority="high"' : 'loading="eager"'} decoding="async">`;
   return `
   <section class="hero" id="home">
     <div class="container hero-grid">
       <div class="hero-text">
-        <p class="eyebrow hero-eyebrow"><span>${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span><span class="dot" aria-hidden="true"></span><span>${tr('المدينة المنورة', 'Madinah')}</span></p>
-        <div class="hero-id">
-          <h1 class="hero-title">${L(D.identity.name)}</h1>
-          <div class="hero-cameo" aria-hidden="true">${portrait('hero-cameo-img', false)}</div>
-        </div>
+        <p class="kicker hero-kicker"><span>${tr('استشاري طب وجراحة العيون', 'Consultant ophthalmologist')}</span><span class="dot" aria-hidden="true"></span><span>${tr('المدينة المنورة', 'Madinah')}</span></p>
+        <h1 class="hero-title">${L(D.identity.name)}</h1>
         <p class="hero-specialty-subtitle">${L(D.identity.title)}</p>
-        <p class="hero-role"><span class="hero-role-label">${tr('المنصب الحالي', 'Current role')}</span><span class="hero-role-text">${short(chief)}</span></p>
-
         <div class="hero-cta">
           <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" id="hero-primary-cta" data-cta="book">
-            <span class="btn-label">${tr('احجز موعد كشف أو استشارة', 'Book a consultation')}</span>${icon('arrow', 18)}
+            ${icon('calendar', 20)}<span class="btn-label">${tr('احجز موعد كشف أو استشارة', 'Book a consultation')}</span>
           </a>
           <a href="tel:${C.clinicDirect.tel}" class="btn btn-quiet btn-lg" id="hero-call-cta" data-cta="call">
             ${icon('phone', 18)}<span class="btn-label">${tr('عيادة الدكتور', 'Clinic line')} <bdi dir="ltr">${C.clinicDirect.display}</bdi></span>
           </a>
         </div>
-        <p class="hero-aside">${tr('الرقم نفسه متاح على', 'The same number is on')} <a href="${getWhatsAppUrl()}" ${EXT} class="text-link" data-cta="whatsapp">${tr('واتساب', 'WhatsApp')}</a></p>
+        <p class="hero-aside">${glyph('whatsapp', 16)}<span>${tr('الرقم نفسه متاح على', 'The same number is on')} <a href="${getWhatsAppUrl()}" ${EXT} class="text-link" data-cta="whatsapp">${tr('واتساب', 'WhatsApp')}</a></span></p>
       </div>
 
-      <figure class="hero-portrait">
-        <div class="hero-portrait-frame"><div class="hero-portrait-clip">${portrait('hero-portrait-img', true)}</div></div>
-        <figcaption>${tr('في مؤتمر البحر الأحمر الدولي لطب العيون', 'At the Red Sea International Ophthalmology Conference')}</figcaption>
-      </figure>
+      <aside class="hero-card" aria-label="${tr('بطاقة الطبيب', 'Doctor card')}">
+        <figure class="hero-portrait">
+          <img src="images/dr-maan-portrait.png" width="295" height="225" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
+        </figure>
+        <dl class="hero-card-rows">
+          <div><dt>${tr('المنصب الحالي', 'Current role')}</dt><dd class="hero-role-text">${short(chief)}</dd></div>
+          <div><dt>${tr('الصفة الأكاديمية', 'Academic')}</dt><dd>${L(D.professional.academicRank)}</dd></div>
+          <div><dt>${tr('مكان العيادة', 'Clinic')}</dt><dd>${L(D.clinic.name)}</dd></div>
+        </dl>
+      </aside>
     </div>
 
     <div class="container">
@@ -1071,80 +1170,71 @@ function renderHero() {
   </section>`;
 }
 
-// --- CREDENTIALS LEDGER (replaces the card-per-credential grid) ---
-function renderQualifications() {
-  const groups = [
-    {
-      title: tr('المؤهلات', 'Qualifications'),
-      rows: D.professional.qualifications.map(q => [q.short, L(q)])
-    },
-    {
-      title: tr('الصفة الأكاديمية', 'Academic'),
-      rows: [
-        [tr('حالياً', 'Rank'), L(D.professional.academicRank)],
-        [tr('سابقاً', 'Former'), short(role('taibah-chair'))]
-      ]
-    },
-    {
-      title: tr('القيادة', 'Leadership'),
-      rows: [
-        [tr('حالياً', 'Current'), short(role('magrabi-chief')), true],
-        [tr('سابقاً', 'Former'), short(role('sscc-president'))]
-      ]
-    },
-    {
-      title: tr('العضويات', 'Memberships'),
-      rows: D.professional.memberships.map(m => [tr('عضو', 'Member'), L(m)])
-    }
-  ];
+// 2. Procedures gallery — the main discovery surface
+function procCard(p, { featured = false, compact = false } = {}) {
+  const g = groupOf(p.group);
   return `
-  <section class="section section-ledger" id="qualifications">
+        <article class="proc-card${featured ? ' is-featured' : ''}${compact ? ' is-compact' : ''}" data-group="${p.group}">
+          ${illustration(p, { cls: 'proc-card-illus' })}
+          <div class="proc-card-body">
+            <p class="proc-card-group">${L(g)}</p>
+            <h3 class="proc-card-title">${L(p.name)}</h3>
+            <p class="proc-card-text">${L(p.summary)}</p>
+            ${p.simulator ? `<p class="proc-card-badge">${icon('cube', 16)}<span>${tr('مع تجربة ثلاثية الأبعاد', 'With a 3D walkthrough')}</span></p>` : ''}
+            <a class="proc-card-link" href="${pageHref(currentLang, p.slug)}" data-nav>${tr('تفاصيل الإجراء', 'Procedure details')}<span class="sr-only">: ${L(p.name)}</span>${icon('arrow', 18)}</a>
+          </div>
+        </article>`;
+}
+
+function renderProcedures() {
+  const chips = [['all', tr('جميع الإجراءات', 'All procedures')], ...PROCEDURE_GROUPS.map(g => [g.id, L(g)])];
+  return `
+  <section class="section" id="procedures">
     <div class="container">
-      ${sectionHead('01', tr('المؤهلات والمناصب', 'Credentials'), tr('سيرة مهنية تُقرأ في سطور', 'Credentials at a glance'),
-        tr('مؤهلات ومناصب منشورة لدى مغربي الصحية وجامعة طيبة، أو أكدها د. معن البري شخصياً.', 'Qualifications and roles published by Magrabi Health and Taibah University, or confirmed by Dr. Maan Al Barry himself.'), 'section-head-split')}
-      <div class="ledger qualifications-grid fade-in">
-        ${groups.map(g => `
-        <div class="ledger-group">
-          <h3 class="ledger-title">${g.title}</h3>
-          <ul class="ledger-list">
-            ${g.rows.map(([k, v, em]) => `<li class="ledger-row${em ? ' is-emphasis' : ''}"><span class="ledger-key">${k}</span><span class="ledger-val">${v}</span></li>`).join('')}
-          </ul>
-        </div>`).join('')}
+      ${sectionHead(tr('الإجراءات والعلاجات', 'Procedures & treatments'), tr('ما الذي يعالجه د. معن؟', 'What Dr. Maan treats'),
+        tr('سبعة إجراءات في طب وجراحة العيون. لكل إجراء صفحة تشرح التشريح وخطوات الإجراء والتعافي والمخاطر بلغة واضحة.', 'Seven eye procedures. Each has its own page explaining the anatomy, the steps, recovery and risks in plain language.'), 'section-head-split')}
+      <div class="proc-filter fade-in" role="group" aria-label="${tr('تصفية حسب المجموعة', 'Filter by group')}">
+        ${chips.map(([id, label]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" onclick="filterProcedures('${id}')">${label}</button>`).join('')}
+      </div>
+      <div class="proc-grid fade-in" data-filter="${procFilter}">
+        ${PROCEDURES.map((p, i) => procCard(p, { featured: i === 0 })).join('')}
+        <aside class="proc-help">
+          <p class="proc-card-group">${tr('غير متأكد؟', 'Not sure?')}</p>
+          <h3>${tr('ابدأ بفحص شامل', 'Start with an examination')}</h3>
+          <p>${tr('لا تحتاج إلى معرفة اسم الإجراء مسبقاً. يحدد الفحص سبب المشكلة والخيارات المناسبة لعينك.', 'You do not need to know the procedure name. An examination finds the cause and the options that suit your eye.')}</p>
+          <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعد فحص', 'Book an examination')}</span></a>
+        </aside>
       </div>
     </div>
   </section>`;
 }
 
-// --- BIOGRAPHY, APPOINTMENTS & CONFERENCES ---
+// 3. Qualifications & experience (concise)
 function renderProfile() {
-  const isAr = currentLang === 'ar';
+  const groups = [
+    { title: tr('المؤهلات', 'Qualifications'), rows: D.professional.qualifications.map(q => [q.short, L(q)]) },
+    { title: tr('الصفة الأكاديمية', 'Academic'), rows: [[tr('حالياً', 'Rank'), L(D.professional.academicRank)], [tr('سابقاً', 'Former'), short(role('taibah-chair'))]] },
+    { title: tr('القيادة', 'Leadership'), rows: [[tr('حالياً', 'Current'), short(role('magrabi-chief')), true], [tr('سابقاً', 'Former'), short(role('sscc-president'))]] },
+    { title: tr('العضويات', 'Memberships'), rows: D.professional.memberships.map(m => [tr('عضو', 'Member'), L(m)]) }
+  ];
   return `
-  <section class="section section-sand" id="profile">
+  <section class="section section-band" id="profile">
     <div class="container">
-      ${sectionHead('02', tr('السيرة المهنية', 'Biography'), tr('بين العيادة وغرفة العمليات وقاعة المحاضرات', 'Between the clinic, the operating theatre and the lecture hall'))}
-      <div class="bio-grid">
-        <aside class="bio-aside fade-in">
-          <figure class="bio-portrait">
-            <img src="./images/dr-maan-portrait.png" width="295" height="225" alt="${L(D.identity.name)}" loading="lazy" decoding="async">
-          </figure>
-          <p class="bio-aside-name">${L(D.identity.name)}</p>
-          <p class="bio-aside-title">${L(D.identity.specialty)}</p>
-          <div class="social-row">
-            <a href="${D.social.instagram}" ${EXT} class="icon-btn" aria-label="Instagram">${glyph('instagram')}</a>
-            <a href="${D.social.twitter}" ${EXT} class="icon-btn" aria-label="X (Twitter)">${glyph('x', 16)}</a>
-            <a href="${D.social.youtube}" ${EXT} class="icon-btn" aria-label="YouTube">${glyph('youtube')}</a>
-          </div>
-        </aside>
-
-        <div class="bio-main fade-in">
-          <p class="bio-lede">${isAr
-            ? `د. معن بن عبدالله البري استشاري طب وجراحة العيون في مستشفيات ومراكز مغربي للعيون والأذن بالمدينة المنورة، بخبرة سريرية وأكاديمية وجراحية ممتدة منذ عام <bdi>${D.professional.experienceSince}</bdi>.`
-            : `Dr. Maan bin Abdullah Al Barry is a Consultant Ophthalmologist at Magrabi Health Eye & ENT Hospital in Madinah, with clinical, academic and surgical experience since <bdi>${D.professional.experienceSince}</bdi>.`}</p>
-          <p class="bio-body">${isAr
-            ? 'يعمل ضمن وحدة جراحة الماء الأبيض ووحدة جراحة القرنية وتصحيح النظر، ويساعد المرضى في تقييم الحالات التي تتطلب دقة في فحص عدسة العين، وتشخيص القرنية المخروطية، وتحديد خيارات تصحيح الإبصار بالليزر أو زراعة العدسات.'
-            : 'He works within the cataract unit and the cornea & refractive surgery unit, helping patients whose care depends on careful assessment of the lens and cornea — from keratoconus diagnosis to laser vision correction and lens implantation.'}</p>
-
-          <h3 class="sub-title">${tr('المناصب والمسيرة', 'Appointments')}</h3>
+      ${sectionHead(tr('المؤهلات والخبرة', 'Qualifications & experience'), tr('خبرة سريرية وأكاديمية منذ', 'Clinical and academic experience since') + ` <bdi>${D.professional.experienceSince}</bdi>`,
+        tr(`يعمل د. معن البري ضمن وحدة الماء الأبيض ووحدة القرنية وتصحيح النظر في ${D.clinic.name.ar}. مؤهلات ومناصب منشورة لدى مغربي الصحية وجامعة طيبة، أو أكدها د. معن شخصياً.`,
+          `Dr. Maan Al Barry works within the cataract unit and the cornea & refractive unit at ${D.clinic.name.en}. Qualifications and roles as published by Magrabi Health and Taibah University, or confirmed by Dr. Maan himself.`), 'section-head-split')}
+      <div class="profile-grid" id="qualifications">
+        <div class="ledger qualifications-grid fade-in">
+          ${groups.map(g => `
+          <div class="ledger-group">
+            <h3 class="ledger-title">${g.title}</h3>
+            <ul class="ledger-list">
+              ${g.rows.map(([k, v, em]) => `<li class="ledger-row${em ? ' is-emphasis' : ''}"><span class="ledger-key">${k}</span><span class="ledger-val">${v}</span></li>`).join('')}
+            </ul>
+          </div>`).join('')}
+        </div>
+        <div class="appointments fade-in">
+          <h3 class="ledger-title">${tr('المناصب والمسيرة', 'Appointments')}</h3>
           <ol class="timeline">
             ${D.professional.roles.map(r => `
             <li class="timeline-item${r.current ? ' is-current' : ''}">
@@ -1152,39 +1242,27 @@ function renderProfile() {
               <h4>${r[currentLang]}</h4>
             </li>`).join('')}
           </ol>
-          <p class="signature" aria-hidden="true">${L(D.identity.shortName)}</p>
+          <div class="social-row profile-social">
+            <span>${tr('قنوات الدكتور', 'Dr. Maan’s channels')}</span>
+            <a href="${D.social.instagram}" ${EXT} class="icon-btn" aria-label="Instagram">${glyph('instagram')}</a>
+            <a href="${D.social.twitter}" ${EXT} class="icon-btn" aria-label="X (Twitter)">${glyph('x', 16)}</a>
+            <a href="${D.social.youtube}" ${EXT} class="icon-btn" aria-label="YouTube">${glyph('youtube')}</a>
+          </div>
         </div>
       </div>
-
-      <div class="conferences" id="conferences">
-        <figure class="conf-figure fade-in">
-          <img src="./images/dr-maan-faculty.jpg" width="1024" height="768" alt="${tr('د. معن البري مع نخبة من أطباء العيون في الجلسات العلمية لمؤتمر البحر الأحمر 2024', 'Dr. Maan Al Barry with fellow faculty at the scientific sessions, Saudi Ophthalmology 2024')}" loading="lazy" decoding="async">
-        </figure>
-        <div class="conf-text fade-in">
-          <p class="eyebrow"><span>${tr('المشاركات العلمية', 'Scientific participation')}</span></p>
-          <h3>${tr('المشاركات العلمية والمؤتمرات الدولية', 'Scientific meetings & conferences')}</h3>
-          <p>${tr('حضور وتمثيل علمي في مؤتمرات طب وجراحة العيون الإقليمية والدولية.', 'Representing ophthalmology at national and international meetings.')}</p>
-          <dl class="conf-list">
-            <div><dt>${tr('مؤتمر البحر الأحمر لطب وجراحة العيون 2024', 'Saudi Ophthalmology 2024 — The Red Sea')}</dt><dd>${tr('عضو المجلس العلمي للمؤتمر', 'Scientific Council Member')}</dd></div>
-            <div><dt>${tr('الجلسات العلمية الدولية', 'International scientific sessions')}</dt><dd>${tr('مع نخبة من أطباء وجراحي العيون', 'With ophthalmic surgeons and faculty')}</dd></div>
-          </dl>
-        </div>
-      </div>
-
       ${renderTestimonials()}
     </div>
   </section>`;
 }
 
-// --- PATIENT TESTIMONIALS (publication-gated) ---
-// Renders nothing unless at least one testimonial has a source URL, documented reuse
-// permission, attribution and approved text (see isPublishableTestimonial in doctor-data.js).
+// PATIENT TESTIMONIALS (publication-gated) — renders nothing unless a testimonial has a source
+// URL, documented reuse permission, attribution and approved text (isPublishableTestimonial).
 function renderTestimonials() {
   const items = publishableTestimonials();
   if (!items.length) return '';
   return `
       <div class="testimonials fade-in" id="testimonials">
-        <p class="eyebrow"><span>${tr('آراء المرضى', 'Patient testimonials')}</span></p>
+        <p class="kicker">${tr('آراء المرضى', 'Patient testimonials')}</p>
         <div class="reviews-grid">
           ${items.map(t => `
           <figure class="review-card">
@@ -1198,171 +1276,147 @@ function renderTestimonials() {
       </div>`;
 }
 
-// --- EXPERTISE, PROCEDURES, TECHNOLOGY & CARE PATHWAY ---
-function renderSpecialties() {
-  const areas = [
-    {
-      titleAr: 'جراحة الماء الأبيض (الساد) وزراعة العدسات', titleEn: 'Cataract surgery & lens implantation',
-      descAr: 'استبدال العدسة المعتمة بتقنية الفاكو وزراعة عدسة داخل العين — أحادية البؤرة أو ممتدة المدى (EDOF) أو ثلاثية البؤرة — بحسب الفحص والقياسات واحتياجات المريض.',
-      descEn: 'Phacoemulsification to replace the clouded lens with an intraocular lens — monofocal, extended depth of focus (EDOF) or trifocal — chosen from the examination, measurements and the patient’s needs.',
-      tagsAr: ['إزالة الساد بالفاكو', 'العدسات التوريكية للاستجماتيزم', 'عدسات EDOF وثلاثية البؤرة'],
-      tagsEn: ['Phacoemulsification', 'Toric lenses for astigmatism', 'EDOF & trifocal lenses'],
-      more: 'cataracts', moreAr: 'دليل العدسات', moreEn: 'Lens guide'
-    },
-    {
-      titleAr: 'أمراض القرنية والقرنية المخروطية', titleEn: 'Cornea & keratoconus',
-      descAr: 'التشخيص المبكر للقرنية المخروطية بالتصوير الطبقي، وتثبيت القرنية بالريبوفلافين والأشعة فوق البنفسجية (CXL) بهدف إبطاء تطور المرض، مع خطط متابعة.',
-      descEn: 'Early keratoconus detection with corneal tomography, and corneal cross-linking (CXL) with riboflavin and UVA aimed at slowing progression, with structured follow-up.',
-      tagsAr: ['تثبيت القرنية CXL', 'التصوير الطبقي للقرنية', 'أمراض سطح العين'],
-      tagsEn: ['Corneal cross-linking (CXL)', 'Corneal tomography', 'Ocular surface disease'],
-      more: 'education', moreAr: 'اقرأ عن القرنية المخروطية', moreEn: 'Read about keratoconus'
-    },
-    {
-      titleAr: 'تصحيح الإبصار بالليزر', titleEn: 'Laser vision correction',
-      descAr: 'تقييم شامل لملاءمة الفيمتو ليزك والليزر السطحي (PRK): سماكة القرنية وشكلها وثبات النظر وصحة سطح العين، قبل اتخاذ أي قرار.',
-      descEn: 'A full suitability assessment for Femto-LASIK and surface laser (PRK): corneal thickness and shape, prescription stability and ocular-surface health, before any decision.',
-      tagsAr: ['الفيمتو ليزك', 'الليزر السطحي PRK', 'فحص سماكة القرنية'],
-      tagsEn: ['Femto-LASIK', 'Surface laser (PRK)', 'Corneal thickness check'],
-      more: 'faq', moreAr: 'معايير الترشيح', moreEn: 'Candidacy criteria'
-    }
-  ];
-  const tech = [
-    [tr('تصوير القرنية الطبقي (Pentacam)', 'Corneal tomography (Pentacam)'), tr('قياس تضاريس وسماكة القرنية لتشخيص القرنية المخروطية المبكرة وتحديد ملاءمة تصحيح النظر.', 'Maps corneal shape and thickness to detect early keratoconus and assess refractive-surgery suitability.')],
-    [tr('جراحة الفاكو (Phacoemulsification)', 'Phacoemulsification'), tr('إزالة الساد عبر شق صغير وزراعة عدسة قابلة للطي، غالباً تحت تخدير موضعي بالقطرات.', 'Small-incision cataract removal with a foldable lens, usually under anaesthetic eye drops.')],
-    [tr('القياسات البصرية الحيوية (Optical Biometry)', 'Optical biometry'), tr('حساب قوة العدسة المزروعة بالقياس البصري ومعادلات حسابية حديثة.', 'Calculates the implant power with optical measurement and modern formulas.')],
-    [tr('تثبيت القرنية (Cross-Linking)', 'Corneal cross-linking (CXL)'), tr('الريبوفلافين والأشعة فوق البنفسجية بهدف إبطاء تطور القرنية المخروطية أو إيقافه.', 'Riboflavin and UVA light that aim to slow or stop keratoconus progression.')]
-  ];
-  const steps = [
-    [tr('الفحص والتصوير', 'Examination & imaging'), tr('تصوير القرنية وقياس العين لبناء خطة موضوعية.', 'Corneal imaging and eye measurements build an objective plan.')],
-    [tr('الاستشارة', 'Consultation'), tr('شرح النتائج ومناقشة الخيارات والتوقعات الواقعية مع د. معن.', 'Results, options and realistic expectations, discussed with Dr. Maan.')],
-    [tr('الإجراء', 'Procedure'), tr('في غرف عمليات مستشفى مغربي، غالباً تحت تخدير موضعي.', 'In Magrabi’s operating theatres, usually under local anaesthetic.')],
-    [tr('المتابعة', 'Follow-up'), tr('زيارات مجدولة لمتابعة التعافي واستقرار الرؤية.', 'Scheduled visits to follow healing and visual stability.')]
-  ];
+// 4. Vision Simulator entry. The section shell is final; the legacy simulator (VisionSim, above)
+// mounts into the host for now. The replacement module (src/vision-sim, another workstream)
+// mounts into the same [data-vision-host] element: mount(host, { lang, theme, reducedMotion }).
+function renderSimulator() {
   return `
-  <section class="section" id="specialties">
+  <section class="section section-stage vs-section" id="simulator">
     <div class="container">
-      ${sectionHead('03', tr('التخصصات والخدمات', 'Expertise'), tr('ثلاثة مجالات، وعناية واحدة بالتفاصيل', 'Three areas of focus, one standard of care'),
-        tr('يعمل د. معن ضمن وحدتي الماء الأبيض والقرنية وتصحيح النظر في مغربي المدينة المنورة.', 'Dr. Maan works within the cataract unit and the cornea & refractive unit at Magrabi Madinah.'))}
-
-      <div class="expertise-grid">
-        <figure class="expertise-figure fade-in">
-          <img src="./images/clinic-exam-room.jpg" width="512" height="279" alt="${tr('غرفة الفحص والإجراءات في مستشفى مغربي مع شاشة تصوير القرنية', 'Examination and procedure room at Magrabi with corneal imaging on screen')}" loading="lazy" decoding="async">
-          <figcaption>${tr('تصوير القرنية جزء من كل تقييم قبل الجراحة.', 'Corneal imaging is part of every pre-surgical assessment.')}</figcaption>
-        </figure>
-        <ol class="index-list fade-in">
-          ${areas.map((a, i) => `
-          <li class="index-item">
-            <span class="index-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
-            <div class="index-body">
-              <h3>${tr(a.titleAr, a.titleEn)}</h3>
-              <p>${tr(a.descAr, a.descEn)}</p>
-              <p class="index-tags">${(currentLang === 'ar' ? a.tagsAr : a.tagsEn).map(t => `<span>${t}</span>`).join('')}</p>
-              <div class="index-links">
-                <a href="#${a.more}" onclick="scrollToSection('${a.more}');return false;" class="text-link">${tr(a.moreAr, a.moreEn)}${icon('arrow', 16)}</a>
-                <a href="${C.bookingUrl}" ${EXT} class="text-link text-link-quiet" data-cta="book">${tr('احجز تقييماً', 'Book an assessment')}</a>
-              </div>
-            </div>
-          </li>`).join('')}
-        </ol>
+      ${sectionHead(tr('أداة تثقيفية تفاعلية', 'Interactive education'), tr('محاكي الرؤية: كيف قد تبدو الرؤية بعد زراعة العدسة؟', 'Vision simulator: how might vision look after a lens implant?'),
+        tr('قارن بين أنواع العدسات والساد غير المعالج في القيادة ليلاً والقراءة. محاكاة توضيحية مبنية على متوسطات منشورة.', 'Compare lens types with an untreated cataract while night driving or reading. An illustrative simulation based on published averages.'), 'section-head-split')}
+      <div class="vsim-launch fade-in">
+        <div class="vsim-host" id="simulator-host" data-vision-host></div>
       </div>
+      <ul class="disclaimers fade-in">
+        <li>${icon('info', 18)}<span>${tr('أداة تعليمية توضح الفروق العامة بين العدسات، ولا تتنبأ بنتيجة عينك.', 'An educational tool showing general differences between lenses. It does not predict your own result.')}</span></li>
+        <li>${icon('eye', 18)}<span>${tr('يُختار نوع العدسة بعد الفحص والقياسات ومناقشة أولوياتك مع الطبيب.', 'The lens type is chosen after examination, measurements and a conversation about your priorities.')}</span></li>
+        <li>${icon('arrow', 18)}<span><a href="${pageHref(currentLang, 'lens-implants')}" data-nav class="text-link">${tr('اقرأ عن أنواع العدسات المزروعة', 'Read about lens implant types')}</a></span></li>
+      </ul>
+    </div>
+  </section>`;
+}
 
-      <div class="tech-block">
-        <h3 class="sub-title fade-in">${tr('التشخيص والتقنيات في مغربي المدينة المنورة', 'Diagnostics & technology at Magrabi Madinah')}</h3>
-        <ul class="tech-grid fade-in" aria-label="${tr('التقنيات', 'Technologies')}">
-          ${tech.map(([t, d]) => `<li class="tech-item"><h4>${t}</h4><p>${d}</p></li>`).join('')}
+// 5. Featured 3D cataract surgery (lazy-loaded module, mounted on demand).
+// The module lives in src/cataract-sim/ (owned by another engineer). The host node is created once and
+// kept outside the re-rendered markup so a re-render never destroys the running scene.
+const c3d = { host: null, controller: null, state: 'idle' }; // idle | loading | active | error
+
+function renderCataract3D(onProcedurePage = false) {
+  const st = c3d.state;
+  return `
+  <section class="section section-stage section-stage-deep" id="cataract-3d" data-state="${st}">
+    <div class="container c3d-grid">
+      <div class="c3d-text fade-in">
+        <p class="kicker">${tr('تجربة تعليمية ثلاثية الأبعاد', 'Interactive 3D education')}</p>
+        <h2>${tr('عملية الماء الأبيض، خطوة بخطوة', 'Cataract surgery, step by step')}</h2>
+        <p class="lede">${tr('نموذج ثلاثي الأبعاد للعين يوضح المراحل الرئيسية لعملية إزالة الساد الحديثة وزراعة العدسة، لتفهم ما يحدث قبل أن تسأل عنه في العيادة.', 'A 3D model of the eye that walks through the main stages of modern cataract removal and lens implantation — so you understand what happens before you ask about it in clinic.')}</p>
+        <ul class="c3d-notes">
+          <li>${icon('info', 18)}<span>${tr('محتوى تعليمي توضيحي قيد المراجعة الطبية من الطبيب.', 'Illustrative education, pending physician review.')}</span></li>
+          <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل عملية بحسب حالة العين.', 'Not a substitute for a consultation; every operation is tailored to the individual eye.')}</span></li>
         </ul>
-      </div>
-
-      <div class="pathway-block">
-        <h3 class="sub-title fade-in">${tr('رحلة المريض: من الفحص إلى المتابعة', 'Your path: from examination to follow-up')}</h3>
-        <ol class="pathway fade-in">
-          ${steps.map(([t, d], i) => `<li class="pathway-step"><span class="pathway-num" aria-hidden="true">${i + 1}</span><h4>${t}</h4><p>${d}</p></li>`).join('')}
-        </ol>
-      </div>
-
-      <p class="accreditation fade-in">${icon('shield', 22)}<span>${tr(
-        `تُجرى الفحوصات والعمليات في ${D.clinic.name.ar}، المعتمد من الهيئة المشتركة الدولية (JCI) والمركز السعودي لاعتماد المنشآت الصحية (CBAHI).`,
-        `Examinations and surgery take place at ${D.clinic.name.en}, accredited by Joint Commission International (JCI) and CBAHI.`)}</span></p>
-    </div>
-  </section>`;
-}
-
-// --- CATARACT & IOL EDUCATION ---
-function renderIolGuide() {
-  const lenses = [
-    {
-      n: tr('ممتدة المدى', 'Extended depth of focus'), code: 'EDOF',
-      sub: tr('نطاق رؤية ممتد من البعيد إلى المتوسط، وهالات ليلية أقل عادةً من العدسات متعددة البؤر.', 'An extended range from distance to intermediate, usually with fewer night halos than multifocal designs.'),
-      d: [4, tr('ممتازة', 'Excellent')], m: [4, tr('جيدة جداً (الشاشات ولوحة القيادة)', 'Very good (screens & dashboard)')],
-      nr: [2, tr('جيدة للأنشطة اليومية، ونظارة خفيفة للخط الدقيق', 'Functional for daily tasks; light glasses for fine print')],
-      h: [2, tr('منخفضة عادةً', 'Usually low')], g: tr('غالباً نظارة للقراءة الدقيقة', 'Often needed for fine print')
-    },
-    {
-      n: tr('ثلاثية البؤرة', 'Trifocal'), code: 'Trifocal',
-      sub: tr('لتقليل الحاجة للنظارة مع احتمال هالات ليلية.', 'Less need for glasses, with a chance of night halos.'),
-      d: [4, tr('ممتازة', 'Excellent')], m: [4, tr('جيدة جداً', 'Very good')],
-      nr: [4, tr('جيدة للقراءة دون نظارة غالباً', 'Good; glasses rarely needed')],
-      h: [4, tr('أكثر شيوعاً (هالات حلقية ووهج حول الأضواء)', 'More frequent (rings and glare around lights)')], g: tr('استغناء كبير، ويختلف بحسب الإضاءة والتكيف', 'High independence; depends on lighting & adaptation')
-    },
-    {
-      n: tr('أحادية البؤرة', 'Monofocal'), code: 'Monofocal',
-      sub: tr('لأعلى نقاء للبعيد مع نظارة للقريب والمتوسط.', 'The sharpest distance vision, with glasses for near and intermediate.'),
-      d: [4, tr('ممتازة ونقية', 'Excellent & crisp')], m: [2, tr('تحتاج نظارة غالباً', 'Glasses usually needed')],
-      nr: [1, tr('تحتاج نظارة قراءة', 'Reading glasses needed')],
-      h: [1, tr('الأقل بين العدسات', 'Lowest of the three')], g: tr('للقراءة والكمبيوتر', 'For reading and computer')
-    }
-  ];
-  const scale = ([score, note], kind) => `<span class="scale scale-${kind}" role="img" aria-label="${score} / 4">${[1, 2, 3, 4].map(k => `<i class="${k <= score ? 'on' : ''}"></i>`).join('')}</span><span class="scale-note">${note}</span>`;
-  const rows = [
-    ['d', tr('الرؤية البعيدة', 'Distance'), 'good'],
-    ['m', tr('المتوسطة (الكمبيوتر)', 'Intermediate (computer)'), 'good'],
-    ['nr', tr('القريبة (القراءة)', 'Near (reading)'), 'good'],
-    ['h', tr('الهالات الليلية', 'Night halos'), 'halo']
-  ];
-  return `
-  <section class="section section-sand" id="cataracts">
-    <div class="container">
-      ${sectionHead('04', tr('الماء الأبيض والعدسات', 'Cataract & lens guide'), tr('ماذا يعني الماء الأبيض، وكيف تُختار العدسة؟', 'What a cataract is, and how a lens is chosen'))}
-
-      <div class="cataract-intro">
-        <div class="cataract-text fade-in">
-          <p class="lede-serif">${tr('الماء الأبيض ليس غشاءً فوق العين، بل عتامة تدريجية في العدسة الطبيعية خلف البؤبؤ، تسبب ضبابية الرؤية وبهتان الألوان والوهج ليلاً.', 'A cataract is not a film over the eye but a gradual clouding of the natural lens behind the pupil — blurring vision, dulling colours and adding glare at night.')}</p>
-          <p>${tr('المعيار الأساسي لتوقيت الجراحة هو تأثير ضعف النظر على أنشطتك اليومية. تُستبدل العدسة المعتمة بعدسة صناعية، ويُختار نوعها بعد الفحص والقياسات ومناقشة أولوياتك.', 'The main criterion for timing surgery is how reduced vision affects your daily life. The clouded lens is replaced by an artificial one, whose type is chosen after examination, measurements and a conversation about your priorities.')}</p>
-          <a href="#simulator" onclick="scrollToSection('simulator');return false;" class="text-link">${tr('شاهد الفرق في محاكي الرؤية', 'See the difference in the vision simulator')}${icon('arrow', 16)}</a>
+        <div class="c3d-actions">
+          <button type="button" class="btn btn-light btn-lg" id="cataract-3d-start" onclick="startCataract3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+            ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
+          </button>
+          ${onProcedurePage ? '' : `<a href="${pageHref(currentLang, 'cataract-surgery')}" data-nav class="text-link text-link-light">${tr('دليل جراحة الماء الأبيض', 'Cataract surgery guide')}${icon('arrow', 16)}</a>`}
+          <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
         </div>
-        <figure class="cataract-figure fade-in">
-          <img src="./images/surgery-phaco.jpg" width="512" height="279" alt="${tr('قطرات ونظارة واقية تُستخدم بعد عملية الماء الأبيض', 'Eye drops and protective glasses used after cataract surgery')}" loading="lazy" decoding="async">
-          <figcaption>${tr('بعد العملية: قطرات ونظارة واقية وتعليمات متابعة.', 'After surgery: drops, protective glasses and follow-up instructions.')}</figcaption>
-        </figure>
       </div>
 
-      <div class="iol-sheet fade-in" role="group" aria-label="${tr('مقارنة العدسات داخل العين', 'Intraocular lens comparison')}">
-        ${lenses.map(l => `
-        <article class="iol-col">
-          <header class="iol-head">
-            <p class="iol-code"><bdi dir="ltr">${l.code}</bdi></p>
-            <h3>${l.n}</h3>
-            <p>${l.sub}</p>
-          </header>
-          <dl class="iol-rows">
-            ${rows.map(([k, label, kind]) => `<div class="iol-row"><dt>${label}</dt><dd>${scale(l[k], kind)}</dd></div>`).join('')}
-            <div class="iol-row iol-row-glasses"><dt>${tr('الحاجة للنظارة', 'Glasses')}</dt><dd>${l.g}</dd></div>
-          </dl>
-        </article>`).join('')}
-      </div>
-      <p class="iol-legend fade-in"><span class="scale scale-good" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>${tr('عدد الخانات الممتلئة يعبّر عن مستوى الأداء، أو عن تكرار الهالات في صف الهالات.', 'Filled marks show the level of performance — or, for halos, how often they occur.')}</p>
+      <figure class="c3d-poster fade-in" aria-hidden="true">
+        <svg viewBox="0 0 400 300" class="c3d-svg" focusable="false">
+          <g fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M300 150c0 66-52 118-118 118S64 216 64 150 116 32 182 32s118 52 118 118z" stroke-width="1.2" opacity=".5"/>
+            <path d="M292 96c22 30 22 78 0 108" stroke-width="1.6"/>
+            <path d="M262 100c-6 16-6 84 0 100M262 100l-14 4M262 200l-14-4" stroke-width="1.2" opacity=".7"/>
+            <ellipse class="c3d-lens" cx="238" cy="150" rx="17" ry="40" stroke-width="1.6"/>
+            <ellipse cx="238" cy="150" rx="9" ry="26" stroke-width=".8" opacity=".55"/>
+            <path d="M238 110c-20-10-34-14-46-14M238 190c-20 10-34 14-46 14" stroke-width=".8" opacity=".5"/>
+            <path d="M108 70c-36 40-36 120 0 160" stroke-width="2.4" opacity=".55"/>
+            <path d="M74 150h-34" stroke-width="3" opacity=".45"/>
+            <path class="c3d-ray" d="M392 120 240 128 104 150M392 180 240 172 104 150" stroke-width=".9" stroke-dasharray="3 5"/>
+          </g>
+          <g class="c3d-labels" font-size="15">
+            <text x="302" y="86">${tr('القرنية', 'Cornea')}</text>
+            <text x="222" y="236">${tr('العدسة', 'Lens')}</text>
+            <text x="84" y="60">${tr('الشبكية', 'Retina')}</text>
+          </g>
+        </svg>
+        <figcaption>${tr('رسم توضيحي للعين: الضوء يمر عبر القرنية والعدسة إلى الشبكية.', 'The eye in section: light passes through the cornea and lens to the retina.')}</figcaption>
+      </figure>
 
-      <aside class="note fade-in">
-        <h3>${tr('كيف يُحدَّد نوع العدسة؟', 'How is the lens chosen?')}</h3>
-        <p>${tr(
-          'لا توجد عدسة واحدة تناسب جميع المرضى. لكل نوع مزايا وحدود: أحادية البؤرة تعطي رؤية بعيدة نقية مع الحاجة لنظارة للقريب، وممتدة المدى توسّع نطاق الرؤية للمسافات المتوسطة، وثلاثية البؤرة تقلل الحاجة لنظارة القراءة مع احتمال أكبر للهالات. يُبنى الاختيار على الفحص السريري وقياسات العين وعلى أولوياتك اليومية، بالتشاور مع طبيب العيون المعالج.',
-          'No single lens suits every patient. Each type has trade-offs: monofocal lenses give clear distance vision but need glasses for near; EDOF lenses extend the range into intermediate distances; trifocal lenses reduce the need for reading glasses with a higher chance of halos. The choice depends on your examination, eye measurements and daily priorities, decided with your treating ophthalmologist.')}</p>
-      </aside>
+      <div class="c3d-stage" id="cataract-3d-stage" ${st === 'active' || st === 'loading' ? '' : 'hidden'} aria-label="${tr('التجربة ثلاثية الأبعاد', '3D experience')}" role="region"></div>
     </div>
   </section>`;
 }
 
-// --- QUESTIONNAIRE ---
+function c3dSync() {
+  const sec = document.getElementById('cataract-3d');
+  if (!sec) return;
+  sec.dataset.state = c3d.state;
+  const stage = document.getElementById('cataract-3d-stage');
+  const btn = document.getElementById('cataract-3d-start');
+  const status = sec.querySelector('.c3d-status');
+  if (stage) {
+    stage.hidden = !(c3d.state === 'active' || c3d.state === 'loading');
+    if (c3d.host && c3d.host.parentNode !== stage) stage.appendChild(c3d.host);
+  }
+  if (btn) {
+    btn.toggleAttribute('aria-busy', c3d.state === 'loading');
+    const label = btn.querySelector('.btn-label');
+    if (label) label.textContent = c3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
+  }
+  if (status) status.textContent = c3d.state === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : '';
+}
+
+function closeCataract3D(refocus = true) {
+  const ctrl = c3d.controller;
+  c3d.controller = null;
+  try { if (ctrl) ctrl.destroy(); } catch (e) { /* already torn down */ }
+  if (c3d.host) c3d.host.remove();
+  c3d.host = null;
+  c3d.state = 'idle';
+  c3dSync();
+  const btn = document.getElementById('cataract-3d-start');
+  if (btn && refocus !== false) btn.focus({ preventScroll: true });
+}
+
+window.startCataract3D = async function () {
+  if (c3d.state === 'loading' || c3d.state === 'active') return;
+  c3d.state = 'loading';
+  c3d.host = document.createElement('div');
+  c3d.host.className = 'c3d-host';
+  c3dSync();
+  try {
+    // Static specifier so Vite code-splits the module (and three.js) out of the main chunk.
+    const mod = await import('./src/cataract-sim/index.js');
+    const ctrl = await mod.mount(c3d.host, {
+      lang: currentLang,
+      theme: resolvedTheme(),
+      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    });
+    if (c3d.state !== 'loading') { ctrl && ctrl.destroy && ctrl.destroy(); return; }
+    c3d.controller = ctrl;
+    c3d.state = 'active';
+    // the visitor may have switched language or theme while the module was loading
+    ctrl.setLang(currentLang);
+    ctrl.setTheme(resolvedTheme());
+    if (ctrl && typeof ctrl.on === 'function') ctrl.on('close', closeCataract3D);
+    c3dSync();
+    document.getElementById('cataract-3d-stage')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  } catch (e) {
+    console.warn('3D cataract module unavailable:', e);
+    if (c3d.host) c3d.host.remove();
+    c3d.host = null;
+    c3d.controller = null;
+    c3d.state = 'error';
+    c3dSync();
+  }
+};
+window.closeCataract3D = closeCataract3D;
+
+// 6. Patient education — short, practical, and linked to the procedure pages for depth.
 function renderQuestionnaireCard() {
   const content = {
     ar: {
@@ -1424,243 +1478,61 @@ function renderQuestionnaireCard() {
     </div>`;
 }
 
-function renderQuestionnaire() {
-  return `
-  <section class="section section-sand section-tight" id="questionnaire">
-    <div class="container q-layout">
-      <div class="q-intro fade-in">
-        <p class="eyebrow"><span>${tr('استبيان نمط الحياة البصري', 'Visual lifestyle questionnaire')}</span></p>
-        <h2>${tr('أربعة أسئلة قبل موعدك', 'Four questions before your visit')}</h2>
-        <p>${tr('أداة تثقيفية تساعدك على ترتيب أولوياتك اليومية قبل جلسة الفحص والاستشارة. لا تُحفظ إجاباتك ولا تُرسل.', 'An educational tool to organise your daily priorities before your consultation. Your answers are not stored or sent.')}</p>
-      </div>
-      <div id="questionnaire-card-container" class="fade-in">${renderQuestionnaireCard()}</div>
-    </div>
-  </section>`;
-}
-
-// --- VISION SIMULATOR (logic unchanged; surrounding section restyled) ---
-function renderSimulator() {
-  return `
-  <section class="section section-stage vs-section" id="simulator">
-    <div class="container">
-      ${sectionHead('05', tr('أداة تثقيفية تفاعلية', 'Interactive education'), tr('كيف قد تبدو رؤيتك بعد زراعة العدسة؟', 'How might vision look after lens implantation?'),
-        tr('اسحب الخط للمقارنة بين العدسة المختارة والساد غير المعالج، في القيادة ليلاً أو القراءة. محاكاة توضيحية مبنية على متوسطات منشورة.', 'Drag the line to compare a lens with an untreated cataract, at night or while reading. An illustrative simulation based on published averages.'), 'section-head-split')}
-      <div id="simulator-host" class="fade-in"></div>
-    </div>
-  </section>`;
-}
-
-// --- 3D CATARACT SURGERY (lazy-loaded module, mounted on demand) ---
-// The module lives in src/cataract-sim/ (owned by another engineer). The host node is created once and
-// kept outside the re-rendered markup so a language re-render never destroys the running scene.
-const c3d = { host: null, controller: null, state: 'idle' }; // idle | loading | active | error
-
-function renderCataract3D() {
-  const st = c3d.state;
-  return `
-  <section class="section section-stage section-stage-deep" id="cataract-3d" data-state="${st}">
-    <div class="container c3d-grid">
-      <div class="c3d-text fade-in">
-        <p class="eyebrow"><span class="eyebrow-num" aria-hidden="true">06</span><span>${tr('تجربة تعليمية ثلاثية الأبعاد', 'Interactive 3D education')}</span></p>
-        <h2>${tr('عملية الماء الأبيض، خطوة بخطوة', 'Cataract surgery, step by step')}</h2>
-        <p class="lede">${tr('نموذج ثلاثي الأبعاد للعين يوضح المراحل الرئيسية لعملية إزالة الساد الحديثة وزراعة العدسة، لتفهم ما يحدث قبل أن تسأل عنه في العيادة.', 'A 3D model of the eye that walks through the main stages of modern cataract removal and lens implantation — so you understand what happens before you ask about it in clinic.')}</p>
-        <ul class="c3d-notes">
-          <li>${icon('info', 18)}<span>${tr('محتوى تعليمي توضيحي قيد المراجعة الطبية من الطبيب.', 'Illustrative education, pending physician review.')}</span></li>
-          <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل عملية بحسب حالة العين.', 'Not a substitute for a consultation; every operation is tailored to the individual eye.')}</span></li>
-        </ul>
-        <div class="c3d-actions">
-          <button type="button" class="btn btn-gold btn-lg" id="cataract-3d-start" onclick="startCataract3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
-            ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
-          </button>
-          <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
-        </div>
-      </div>
-
-      <figure class="c3d-poster fade-in" aria-hidden="true">
-        <svg viewBox="0 0 400 300" class="c3d-svg" focusable="false">
-          <g fill="none" stroke="currentColor" stroke-linecap="round">
-            <path class="c3d-sclera" d="M300 150c0 66-52 118-118 118S64 216 64 150 116 32 182 32s118 52 118 118z" stroke-width="1.2" opacity=".5"/>
-            <path class="c3d-cornea" d="M292 96c22 30 22 78 0 108" stroke-width="1.6"/>
-            <path d="M262 100c-6 16-6 84 0 100M262 100l-14 4M262 200l-14-4" stroke-width="1.2" opacity=".7"/>
-            <ellipse class="c3d-lens" cx="238" cy="150" rx="17" ry="40" stroke-width="1.6"/>
-            <ellipse cx="238" cy="150" rx="9" ry="26" stroke-width=".8" opacity=".55"/>
-            <path d="M238 110c-20-10-34-14-46-14M238 190c-20 10-34 14-46 14" stroke-width=".8" opacity=".5"/>
-            <path class="c3d-retina" d="M108 70c-36 40-36 120 0 160" stroke-width="2.4" opacity=".55"/>
-            <path d="M74 150h-34" stroke-width="3" opacity=".45"/>
-            <path class="c3d-ray" d="M392 120 240 128 104 150M392 180 240 172 104 150" stroke-width=".9" stroke-dasharray="3 5"/>
-          </g>
-          <g class="c3d-labels" font-size="15">
-            <text x="302" y="86">${tr('القرنية', 'Cornea')}</text>
-            <text x="222" y="236">${tr('العدسة', 'Lens')}</text>
-            <text x="84" y="60">${tr('الشبكية', 'Retina')}</text>
-          </g>
-        </svg>
-        <figcaption>${tr('رسم توضيحي للعين: الضوء يمر عبر القرنية والعدسة إلى الشبكية.', 'The eye in section: light passes through the cornea and lens to the retina.')}</figcaption>
-      </figure>
-
-      <div class="c3d-stage" id="cataract-3d-stage" ${st === 'active' || st === 'loading' ? '' : 'hidden'} aria-label="${tr('التجربة ثلاثية الأبعاد', '3D experience')}" role="region"></div>
-    </div>
-  </section>`;
-}
-
-function c3dSync() {
-  const sec = document.getElementById('cataract-3d');
-  if (!sec) return;
-  sec.dataset.state = c3d.state;
-  const stage = document.getElementById('cataract-3d-stage');
-  const btn = document.getElementById('cataract-3d-start');
-  const status = sec.querySelector('.c3d-status');
-  if (stage) {
-    stage.hidden = !(c3d.state === 'active' || c3d.state === 'loading');
-    if (c3d.host && c3d.host.parentNode !== stage) stage.appendChild(c3d.host);
-  }
-  if (btn) {
-    btn.toggleAttribute('aria-busy', c3d.state === 'loading');
-    const label = btn.querySelector('.btn-label');
-    if (label) label.textContent = c3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
-  }
-  if (status) status.textContent = c3d.state === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : '';
-}
-
-function closeCataract3D() {
-  const ctrl = c3d.controller;
-  c3d.controller = null;
-  try { if (ctrl) ctrl.destroy(); } catch (e) { /* already torn down */ }
-  if (c3d.host) c3d.host.remove();
-  c3d.host = null;
-  c3d.state = 'idle';
-  c3dSync();
-  const btn = document.getElementById('cataract-3d-start');
-  if (btn) btn.focus({ preventScroll: true });
-}
-
-window.startCataract3D = async function () {
-  if (c3d.state === 'loading' || c3d.state === 'active') return;
-  c3d.state = 'loading';
-  c3d.host = document.createElement('div');
-  c3d.host.className = 'c3d-host';
-  c3dSync();
-  try {
-    // Static specifier so Vite code-splits the module (and three.js) out of the main chunk.
-    const mod = await import('./src/cataract-sim/index.js');
-    const ctrl = await mod.mount(c3d.host, {
-      lang: currentLang,
-      theme: resolvedTheme(),
-      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    });
-    if (c3d.state !== 'loading') { ctrl && ctrl.destroy && ctrl.destroy(); return; }
-    c3d.controller = ctrl;
-    c3d.state = 'active';
-    // the visitor may have switched language or theme while the module was loading
-    ctrl.setLang(currentLang);
-    ctrl.setTheme(resolvedTheme());
-    if (ctrl && typeof ctrl.on === 'function') ctrl.on('close', closeCataract3D);
-    c3dSync();
-    document.getElementById('cataract-3d-stage')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  } catch (e) {
-    console.warn('3D cataract module unavailable:', e);
-    if (c3d.host) c3d.host.remove();
-    c3d.host = null;
-    c3d.controller = null;
-    c3d.state = 'error';
-    c3dSync();
-  }
-};
-window.closeCataract3D = closeCataract3D;
-
-// --- EDUCATION LIBRARY ---
 function renderEducation() {
   const articles = [
     {
-      id: 'cataract-guide',
-      titleAr: 'ما هي المياه البيضاء (الساد) ومتى تصبح الجراحة ضرورية؟',
-      titleEn: 'What is a cataract, and when is surgery indicated?',
-      contentAr: `
-        <h4>ما هو إعتام عدسة العين؟</h4>
-        <p>المياه البيضاء ليست غشاءً ينمو فوق سطح العين، بل هي عتامة تدريجية في العدسة الطبيعية الشفافة الموجودة داخل العين خلف بؤبؤ العين. تؤدي هذه العتامة إلى تشتت الضوء الداخل إلى الشبكية، مما يسبب ضبابية الرؤية، بهتان الألوان، وصعوبة القيادة ليلاً بسبب الوهج.</p>
-        <h4>متى ينبغي إجراء العملية؟</h4>
-        <p>لا تتطلب المياه البيضاء الجراحة فور اكتشافها إلا إذا كانت تسبب مضاعفات نادرة كارتفاع ضغط العين. المعيار الأساسي هو مدى تأثير ضعف النظر على أنشطتك اليومية مثل القراءة، قيادة السيارة، أو التعرف على وجوه الأشخاص.</p>
-        <h4>كيف تُجرى الجراحة الحديثة؟</h4>
-        <p>تُجرى عملية الفاكو (Phacoemulsification) عبر شق جراحي صغير، حيث يتم تفتيت العدسة المعتمة بالموجات فوق الصوتية وشفطها، ثم زراعة عدسة صناعية قابلة للطي مكانها تحت تخدير موضعي بقطرات ودون الحاجة لغرز جراحية في الغالبية العظمى من الحالات.</p>`,
-      contentEn: `
-        <h4>Understanding cataracts</h4>
-        <p>A cataract is not a film over the eye, but rather a gradual clouding of the natural crystalline lens inside the eye. This clouding scatters light entering the retina, producing blurred vision, washed-out colours, and glare around light sources at night.</p>
-        <h4>When should surgery be performed?</h4>
-        <p>Cataract surgery is rarely urgent. The guiding criterion is whether reduced vision interferes with your regular daily activities, such as driving, reading, working on screens, or personal safety.</p>
-        <h4>Modern phacoemulsification</h4>
-        <p>Surgery is performed through a small incision. Ultrasound gently breaks up the clouded lens, which is aspirated, and an artificial intraocular lens (IOL) is implanted under anaesthetic eye drops, with no stitches required in most cases.</p>`
+      id: 'cataract-guide', slug: 'cataract-surgery',
+      t: tr('ما هي المياه البيضاء، ومتى تصبح الجراحة مناسبة؟', 'What is a cataract, and when is surgery considered?'),
+      c: tr('المياه البيضاء ليست غشاءً فوق العين، بل عتامة تدريجية في العدسة الطبيعية خلف البؤبؤ تسبب الضبابية وبهتان الألوان والوهج ليلاً. لا تحتاج الجراحة فور اكتشافها؛ المعيار هو تأثير ضعف الرؤية على أنشطتك اليومية.',
+        'A cataract is not a film over the eye but a gradual clouding of the natural lens behind the pupil, causing blur, faded colours and glare at night. Surgery is rarely urgent; the guide is how much reduced vision affects your daily activities.')
     },
     {
-      id: 'keratoconus-guide',
-      titleAr: 'القرنية المخروطية: الأعراض، التشخيص، وخيارات التثبيت (CXL)',
-      titleEn: 'Keratoconus: diagnosis, progression and corneal cross-linking (CXL)',
-      contentAr: `
-        <h4>ما هي القرنية المخروطية؟</h4>
-        <p>القرنية هي النافذة الشفافة الأمامية للعين. في القرنية المخروطية، يضعف النسيج الضام وتبرز القرنية تدريجياً لتأخذ شكلاً مخروطياً، مما يؤدي إلى استجماتيزم غير منتظم وتدهور سريع في قياسات النظارة خاصة لدى فئة الشباب والمراهقين.</p>
-        <h4>أهمية التشخيص المبكر وتصوير تضاريس القرنية (Pentacam)</h4>
-        <p>يساعد التصوير الطبقي للقرنية في اكتشاف المرض قبل ظهور أي علامات واضحة بالفحص العادي. يُنصح كل من يلاحظ تغيراً متكرراً في مقاس النظارة أو فركاً مزمناً في العين بإجراء هذا الفحص.</p>
-        <h4>عملية تثبيت القرنية بالكولاجين (CXL)</h4>
-        <p>إجراء علاجي يهدف إلى تقوية الروابط بين ألياف القرنية باستخدام قطرات فيتامين ب2 (الريبوفلافين) مع الأشعة فوق البنفسجية UVA. ويهدف إلى إبطاء تقدم المرض أو إيقافه للحفاظ على النظر، وتختلف الاستجابة من مريض لآخر.</p>`,
-      contentEn: `
-        <h4>What is keratoconus?</h4>
-        <p>Keratoconus is a progressive condition where the cornea thins and bulges into an irregular conical shape. This produces progressive irregular astigmatism, often requiring frequent changes of glasses prescription in adolescents and young adults.</p>
-        <h4>Early diagnosis with corneal tomography</h4>
-        <p>High-resolution Scheimpflug tomography (Pentacam) detects subclinical keratoconus before overt signs appear on a basic slit-lamp examination. Anyone with rapidly changing astigmatism or habitual eye rubbing should be screened.</p>
-        <h4>Corneal collagen cross-linking (CXL)</h4>
-        <p>CXL strengthens corneal collagen bonds using riboflavin (vitamin B2) drops activated by UVA light. It aims to slow or stop disease progression to help preserve vision; response varies between patients.</p>`
+      id: 'keratoconus-guide', slug: 'keratoconus-cxl',
+      t: tr('تغيّر مقاس النظارة باستمرار؟ اعرف عن القرنية المخروطية', 'Glasses keep changing? Learn about keratoconus'),
+      c: tr('في القرنية المخروطية تترقق القرنية وتتحدب تدريجياً، وتظهر غالباً لدى الشباب. يساعد التصوير الطبقي للقرنية على اكتشافها مبكراً، ويُنصح بتجنب فرك العين.',
+        'In keratoconus the cornea thins and bulges gradually, often in young people. Corneal tomography helps detect it early, and avoiding eye rubbing is advised.')
     },
     {
-      id: 'lasik-candidacy',
-      titleAr: 'من هو المرشح المناسب لتصحيح الإبصار بالليزر (الليزك والفيمتو ليزك)؟',
-      titleEn: 'Who is a suitable candidate for laser vision correction (LASIK / PRK)?',
-      contentAr: `
-        <h4>المعايير الأساسية للأمان:</h4>
-        <ul>
-          <li><strong>العمر:</strong> ألا يقل عن 18 عاماً لضمان استقرار نمو العين.</li>
-          <li><strong>استقرار النظر:</strong> ثبات قياسات النظارة لمدة عام على الأقل.</li>
-          <li><strong>سماكة القرنية وشكلها:</strong> خلو القرنية تماماً من أي علامات للقرنية المخروطية أو الترقق غير الطبيعي.</li>
-          <li><strong>صحة سطح العين:</strong> علاج أي جفاف حاد قبل اتخاذ قرار الليزك.</li>
-        </ul>
-        <h4>ما الفرق بين الفيمتو ليزك والليزر السطحي (PRK)؟</h4>
-        <p>في الفيمتو ليزك يتم رفع قشرة رقيقة من القرنية بواسطة ليزر الفيمتوثانية ثم تصحيح النظر، مما يوفر تعافياً سريعاً. أما الليزر السطحي فيتم دون رفع أي قشرة، وقد يكون مناسباً لأصحاب القرنيات الرقيقة أو من يمارسون رياضات عنيفة.</p>`,
-      contentEn: `
-        <h4>Essential safety criteria</h4>
-        <ul>
-          <li><strong>Age:</strong> at least 18 years, so the eye has matured.</li>
-          <li><strong>Refractive stability:</strong> a stable glasses prescription for at least 12 months.</li>
-          <li><strong>Corneal thickness & shape:</strong> adequate thickness with no topographic evidence of ectasia or early keratoconus.</li>
-          <li><strong>Ocular surface:</strong> no severe untreated dry eye disease.</li>
-        </ul>
-        <h4>Femto-LASIK vs. surface laser (PRK)</h4>
-        <p>Femto-LASIK uses a femtosecond laser to create a precise flap for a quick visual recovery. PRK reshapes the corneal surface without a flap, which may suit patients with thinner corneas or those in contact sports.</p>`
+      id: 'lasik-candidacy', slug: 'laser-vision-correction',
+      t: tr('هل يناسبني تصحيح الإبصار بالليزر؟', 'Is laser vision correction right for me?'),
+      c: tr('من المعايير الشائعة: عمر 18 عاماً فأكثر، وثبات درجة النظر، وسماكة قرنية كافية، وسطح عين صحي. يُحسم القرار بعد تصوير القرنية والفحص الشامل.',
+        'Common criteria include age 18 or over, a stable prescription, enough corneal thickness and a healthy eye surface. The decision follows corneal imaging and a full examination.')
     },
     {
-      id: 'surgery-journey',
-      titleAr: 'رحلة المريض: ماذا تتوقع قبل وأثناء وبعد جراحة المياه البيضاء؟',
-      titleEn: 'What to expect before, during and after cataract surgery',
-      contentAr: `
-        <h4>قبل العملية (التحضير والقياسات):</h4>
-        <p>يخضع المريض لقياسات بصرية دقيقة (Optical Biometry) لحساب قوة العدسة المناسبة، مع مناقشة نوع العدسة الأنسب لاحتياجاته.</p>
-        <h4>يوم العملية:</h4>
-        <p>إجراء يومي لا يستدعي المبيت. تستغرق الجراحة نحو 15 إلى 20 دقيقة تحت تخدير موضعي بالقطرات، مع شعور المريض بضغط خفيف أو أضواء دون ألم حقيقي.</p>
-        <h4>بعد العملية:</h4>
-        <p>يغادر المريض بعد وقت وجيز مرتدياً غطاءً واقياً. من الضروري الالتزام بجدول القطرات المضادة للالتهاب والمضادات الحيوية، وتجنب فرك العين أو وصول الماء المباشر إليها خلال الأيام الأولى.</p>`,
-      contentEn: `
-        <h4>Before surgery</h4>
-        <p>Precise optical biometry is performed to calculate the lens power, together with a discussion of your distance, intermediate and near vision needs.</p>
-        <h4>Day of surgery</h4>
-        <p>An outpatient day procedure under anaesthetic eye drops. The operation typically lasts 15–20 minutes, usually with little discomfort; most patients go home the same day.</p>
-        <h4>After surgery</h4>
-        <p>Patients follow a schedule of anti-inflammatory and antibiotic eye drops, avoiding eye rubbing or direct tap water in the first days of healing.</p>`
+      id: 'surgery-journey', slug: 'cataract-surgery',
+      t: tr('ماذا تتوقع قبل الجراحة وفي يومها وبعدها؟', 'What to expect before, on the day and after surgery'),
+      c: tr('قبل الجراحة: قياسات للعين ومناقشة الخيارات. يوم الجراحة: إجراء خارجي غالباً تحت تخدير موضعي. بعدها: قطرات حسب الجدول، وتجنب فرك العين، ومواعيد متابعة.',
+        'Before: eye measurements and a discussion of options. On the day: usually an outpatient procedure under local anaesthetic. After: drops on schedule, no eye rubbing, and follow-up visits.')
     }
   ];
-
+  const assess = [
+    [tr('تصوير القرنية الطبقي', 'Corneal tomography'), tr('خريطة لشكل القرنية وسماكتها، أساسية قبل الليزر ولتشخيص القرنية المخروطية.', 'Maps corneal shape and thickness — essential before laser and for diagnosing keratoconus.')],
+    [tr('القياسات البصرية الحيوية', 'Optical biometry'), tr('قياس طول العين وانحناء القرنية لحساب قوة العدسة المزروعة.', 'Measures the eye’s length and corneal curve to calculate an implant’s power.')],
+    [tr('التصوير المقطعي للشبكية (OCT)', 'Retinal imaging (OCT)'), tr('صور مقطعية للبقعة والشبكية لتشخيص الحالات ومتابعة العلاج بالحقن.', 'Cross-sectional images of the macula and retina for diagnosis and to guide injections.')],
+    [tr('فحص شامل للعين', 'Full eye examination'), tr('قياس النظر وضغط العين وفحص المصباح الشقي وقاع العين قبل أي قرار.', 'Vision, eye pressure, slit-lamp and retina checks before any decision.')]
+  ];
   return `
   <section class="section" id="education">
-    <div class="container lib-grid">
-      <div class="lib-aside">
-        ${sectionHead('07', tr('المكتبة الطبية', 'Medical library'), tr('إجابات واضحة قبل القرار', 'Clear answers before any decision'),
-          tr('أدلة تثقيفية أُعدت بإشراف د. معن بن عبدالله البري.', 'Patient guides prepared under Dr. Maan Al Barry’s clinical oversight.'))}
+    <div class="container">
+      ${sectionHead(tr('التثقيف الصحي', 'Patient education'), tr('ما يفيد معرفته قبل موعدك', 'Worth knowing before your visit'),
+        tr('إجابات قصيرة عن أكثر الأسئلة شيوعاً، مع روابط إلى صفحات الإجراءات للتفاصيل. محتوى توعوي عام لا يغني عن الفحص.', 'Short answers to common questions, with links to the procedure pages for detail. General education that does not replace an examination.'), 'section-head-split')}
+      <div class="edu-grid">
+        <div class="article-accordion fade-in">
+          ${articles.map((a, i) => `
+          <div class="article-item ${openArticleId === a.id ? 'open' : ''}" id="art-item-${a.id}">
+            <h3 class="article-heading">
+              <button type="button" class="article-trigger" onclick="toggleArticle('${a.id}')" aria-expanded="${openArticleId === a.id ? 'true' : 'false'}" aria-controls="art-content-${a.id}">
+                <span class="article-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+                <span class="article-title">${a.t}</span>
+                <span class="trigger-icon" aria-hidden="true">${icon('chevron', 20)}</span>
+              </button>
+            </h3>
+            <div class="article-content" id="art-content-${a.id}" role="region">
+              <p>${a.c}</p>
+              <a href="${pageHref(currentLang, a.slug)}" data-nav class="text-link">${tr('اقرأ الدليل الكامل', 'Read the full guide')}: ${L(procedureBySlug(a.slug).name)}${icon('arrow', 16)}</a>
+            </div>
+          </div>`).join('')}
+        </div>
         <aside class="red-flags fade-in" aria-labelledby="red-flags-title">
           <h3 id="red-flags-title">${icon('alert', 20)}<span>${tr('علامات تستوجب رعاية عاجلة', 'Seek urgent care for')}</span></h3>
           <ul>
@@ -1673,37 +1545,55 @@ function renderEducation() {
         </aside>
       </div>
 
-      <div class="article-accordion fade-in">
-        ${articles.map((a, i) => `
-        <div class="article-item ${openArticleId === a.id ? 'open' : ''}" id="art-item-${a.id}">
-          <h3 class="article-heading">
-            <button type="button" class="article-trigger" onclick="toggleArticle('${a.id}')" aria-expanded="${openArticleId === a.id ? 'true' : 'false'}" aria-controls="art-content-${a.id}">
-              <span class="article-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
-              <span class="article-title">${tr(a.titleAr, a.titleEn)}</span>
-              <span class="trigger-icon" aria-hidden="true">${icon('chevron', 20)}</span>
-            </button>
+      <div class="assess fade-in">
+        <h3 class="sub-title">${tr('قبل أي إجراء: الفحوصات الأساسية', 'Before any procedure: the core assessments')}</h3>
+        <ul class="tech-grid" aria-label="${tr('الفحوصات', 'Assessments')}">
+          ${assess.map(([t, d], i) => `<li class="tech-item"><span class="tech-num" aria-hidden="true">${i + 1}</span><h4>${t}</h4><p>${d}</p></li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="q-layout" id="questionnaire">
+        <div class="q-intro fade-in">
+          <p class="kicker">${tr('استبيان نمط الحياة البصري', 'Visual lifestyle questionnaire')}</p>
+          <h3>${tr('أربعة أسئلة قبل موعدك', 'Four questions before your visit')}</h3>
+          <p>${tr('أداة تثقيفية تساعدك على ترتيب أولوياتك اليومية قبل جلسة الفحص والاستشارة. لا تُحفظ إجاباتك ولا تُرسل.', 'An educational tool to organise your daily priorities before your consultation. Your answers are not stored or sent.')}</p>
+        </div>
+        <div id="questionnaire-card-container" class="fade-in">${renderQuestionnaireCard()}</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+// 7. FAQ
+function renderFaq() {
+  return `
+  <section class="section section-band" id="faq">
+    <div class="container faq-grid">
+      ${sectionHead(tr('الأسئلة الشائعة', 'Questions'), tr('أسئلة يطرحها المرضى كثيراً', 'Questions patients often ask'))}
+      <div class="faq-list fade-in">
+        ${FAQ.map((f, idx) => `
+        <div class="faq-item" id="faq-${idx}">
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" onclick="toggleFaq(${idx})" aria-expanded="false" aria-controls="faq-answer-${idx}"><span>${L(f.q)}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
           </h3>
-          <div class="article-content" id="art-content-${a.id}" role="region">
-            ${tr(a.contentAr, a.contentEn)}
-            <p class="article-byline">${tr('إشراف ومراجعة سريرية: د. معن بن عبدالله البري — استشاري طب وجراحة العيون', 'Clinical review: Dr. Maan Al Barry — Consultant Ophthalmologist')}</p>
-          </div>
+          <div class="faq-answer" id="faq-answer-${idx}" role="region"><p>${L(f.a)}</p></div>
         </div>`).join('')}
       </div>
     </div>
   </section>`;
 }
 
-// --- CLINIC, HOURS & BOOKING JOURNEY ---
+// 8. Clinic location & contact
 function renderClinic() {
   return `
-  <section class="section section-sand" id="clinic">
+  <section class="section" id="clinic">
     <div class="container">
-      ${sectionHead('08', tr('العيادة والحجز', 'Clinic & booking'), tr('ثلاث طرق للوصول إلى موعدك', 'Three ways to your appointment'),
-        tr(`يستقبل د. معن مراجعيه في ${D.clinic.name.ar}.`, `Dr. Maan sees patients at ${D.clinic.name.en}.`))}
+      ${sectionHead(tr('العيادة والحجز', 'Clinic & booking'), tr('ثلاث طرق للوصول إلى موعدك', 'Three ways to your appointment'),
+        tr(`يستقبل د. معن مراجعيه في ${D.clinic.name.ar}.`, `Dr. Maan sees patients at ${D.clinic.name.en}.`), 'section-head-split')}
 
       <div class="clinic-grid">
         <ol class="booking-ways fade-in">
-          <li class="way">
+          <li class="way way-featured">
             <span class="way-num" aria-hidden="true">1</span>
             <div class="way-body">
               <h3>${tr('الحجز الإلكتروني', 'Book online')}</h3>
@@ -1715,7 +1605,7 @@ function renderClinic() {
               </div>
             </div>
           </li>
-          <li class="way way-featured">
+          <li class="way">
             <span class="way-num" aria-hidden="true">2</span>
             <div class="way-body">
               <h3>${tr('عيادة د. معن مباشرة — اتصال أو واتساب', 'Dr. Maan’s clinic — call or WhatsApp')}</h3>
@@ -1739,12 +1629,12 @@ function renderClinic() {
         </ol>
 
         <div class="visit fade-in">
-          <div class="visit-hours">
+          <div class="visit-row">
             <p class="visit-label">${icon('clock', 18)}<span>${tr('مواعيد العيادة', 'Clinic hours')}</span></p>
             <p class="visit-hours-text">${L(D.clinic.workingHours)}</p>
             <p class="visit-small">${tr('يُرجى تأكيد الموعد عبر الحجز، فقد يتغير الجدول.', 'Please confirm through booking, as the schedule can change.')}</p>
           </div>
-          <div class="visit-place">
+          <div class="visit-row">
             <p class="visit-label">${icon('pin', 18)}<span>${tr('العنوان', 'Address')}</span></p>
             <p class="visit-strong">${L(D.clinic.name)}</p>
             <p class="visit-small">${L(D.clinic.address)}</p>
@@ -1753,42 +1643,26 @@ function renderClinic() {
             <iframe src="https://maps.google.com/maps?q=${D.clinic.mapEmbedQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed" title="${tr('خريطة موقع مستشفى مغربي المدينة المنورة', 'Map of Magrabi Eye Hospital, Madinah')}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
           <a href="${D.clinic.mapUrl}" ${EXT} class="text-link">${tr('الاتجاهات عبر خرائط جوجل', 'Directions in Google Maps')}${icon('external', 16)}</a>
+          <p class="accreditation">${icon('shield', 20)}<span>${tr(
+            `${D.clinic.name.ar} معتمد من الهيئة المشتركة الدولية (JCI) والمركز السعودي لاعتماد المنشآت الصحية (CBAHI).`,
+            `${D.clinic.name.en} is accredited by Joint Commission International (JCI) and CBAHI.`)}</span></p>
         </div>
       </div>
     </div>
   </section>`;
 }
 
-// --- FAQ ---
-function renderFaq() {
-  return `
-  <section class="section" id="faq">
-    <div class="container faq-grid">
-      ${sectionHead('09', tr('الأسئلة الشائعة', 'Questions'), tr('أسئلة يطرحها المرضى كثيراً', 'Questions patients often ask'))}
-      <div class="faq-list fade-in">
-        ${FAQ.map((f, idx) => `
-        <div class="faq-item" id="faq-${idx}">
-          <h3 class="faq-heading">
-            <button type="button" class="faq-question" onclick="toggleFaq(${idx})" aria-expanded="false" aria-controls="faq-answer-${idx}"><span>${L(f.q)}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
-          </h3>
-          <div class="faq-answer" id="faq-answer-${idx}" role="region"><p>${L(f.a)}</p></div>
-        </div>`).join('')}
-      </div>
-    </div>
-  </section>`;
-}
-
-// --- CLOSING CALL TO ACTION ---
+// 9. Booking CTA
 function renderCtaBanner() {
   return `
   <section class="closing" aria-labelledby="closing-title">
     <div class="container closing-inner fade-in">
       <div>
-        <p class="eyebrow"><span>${tr('مغربي المدينة المنورة · طريق المطار', 'Magrabi Madinah · Airport Road')}</span></p>
+        <p class="kicker">${tr('مغربي المدينة المنورة · طريق المطار', 'Magrabi Madinah · Airport Road')}</p>
         <h2 id="closing-title">${tr('موعدك مع د. معن البري يبدأ بخطوة', 'Your appointment with Dr. Maan starts here')}</h2>
       </div>
       <div class="closing-actions">
-        <a href="${C.bookingUrl}" ${EXT} class="btn btn-gold btn-lg" id="cta-primary-btn" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
+        <a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" id="cta-primary-btn" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
         <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب العيادة', 'Clinic WhatsApp')}</span></a>
         <a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>
       </div>
@@ -1796,10 +1670,135 @@ function renderCtaBanner() {
   </section>`;
 }
 
+function renderHome() {
+  return `
+      ${renderHero()}
+      ${renderProcedures()}
+      ${renderProfile()}
+      ${renderSimulator()}
+      ${renderCataract3D()}
+      ${renderEducation()}
+      ${renderFaq()}
+      ${renderClinic()}
+      ${renderCtaBanner()}`;
+}
+
+// ============================================================
+// PROCEDURE PAGE — /procedures/<slug>/ and /en/procedures/<slug>/
+// ============================================================
+const PROC_SECTIONS = [
+  ['anatomy', 'التشريح: أين يحدث الإجراء؟', 'Anatomy: where it happens'],
+  ['purpose', 'الهدف من الإجراء', 'What it is for'],
+  ['types', 'الأنواع والخيارات', 'Types and options'],
+  ['candidates', 'لمن قد يكون مناسباً؟', 'Who may be considered'],
+  ['steps', 'ماذا يحدث؟ شرح مبسّط', 'What happens, in plain words'],
+  ['benefits', 'الفوائد والحدود', 'Benefits and limitations'],
+  ['risks', 'المخاطر والمضاعفات المحتملة', 'Risks and possible complications'],
+  ['recovery', 'التعافي', 'Recovery'],
+  ['faq', 'أسئلة شائعة', 'Questions']
+];
+
+function reviewStatus(cls = '') {
+  return `<p class="review-status ${cls}" role="note">${icon('draft', 18)}<span><strong>${tr('حالة المراجعة الطبية:', 'Medical review status:')}</strong> ${tr('مسودة بانتظار مراجعة د. معن', 'draft pending review by Dr. Maan')}</span></p>`;
+}
+
+function renderProcedurePage(p) {
+  const c = PROC && PROC.CONTENT[p.slug] ? PROC.CONTENT[p.slug][currentLang] : null;
+  const g = groupOf(p.group);
+  const sections = c ? PROC_SECTIONS.filter(([id]) => id !== 'types' || c.types) : [];
+  const list = (items, cls = '') => `<ul class="bullets ${cls}">${items.map(t => `<li>${t}</li>`).join('')}</ul>`;
+  const sec = (id, inner) => {
+    const s = PROC_SECTIONS.find(x => x[0] === id);
+    return `<section class="proc-sec" id="p-${id}" aria-labelledby="p-${id}-h"><h2 id="p-${id}-h">${tr(s[1], s[2])}</h2>${inner}</section>`;
+  };
+  const body = !c ? `<p class="proc-loading" role="status">${tr('جارٍ تحميل المحتوى…', 'Loading content…')}</p>` : `
+        ${sec('anatomy', `<div class="anat"><p>${c.anatomy.text}</p><dl class="anat-parts">${c.anatomy.parts.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl></div>`)}
+        ${sec('purpose', `<p class="proc-p-lg">${c.purpose}</p>`)}
+        ${c.types ? sec('types', `<ul class="types">${c.types.map(([n, code, d]) => `<li class="type"><p class="type-code"><bdi dir="ltr">${code}</bdi></p><h3>${n}</h3><p>${d}</p></li>`).join('')}</ul>`) : ''}
+        ${sec('candidates', `${list(c.candidates, 'bullets-check')}<p class="proc-note">${icon('info', 18)}<span>${tr('اعتبارات عامة فقط؛ يحدد الطبيب الملاءمة بعد فحص عينك.', 'General considerations only; suitability is decided by your doctor after examining your eye.')}</span></p>`)}
+        ${sec('steps', `<ol class="steps">${c.steps.map((t, i) => `<li><span class="step-num" aria-hidden="true">${i + 1}</span><p>${t}</p></li>`).join('')}</ol>`)}
+        ${sec('benefits', `<div class="two-col"><div class="pane pane-pos"><h3>${icon('check', 18)}${tr('الفوائد المحتملة', 'Possible benefits')}</h3>${list(c.benefits)}</div><div class="pane"><h3>${icon('minus', 18)}${tr('الحدود', 'Limitations')}</h3>${list(c.limitations)}</div></div>`)}
+        ${sec('risks', `${list(c.risks)}<p class="proc-note proc-note-alert">${icon('alert', 18)}<span>${tr('تواصل مع العيادة فوراً عند ألم متزايد، أو احمرار شديد، أو تراجع مفاجئ في الرؤية.', 'Contact the clinic at once for increasing pain, marked redness or a sudden drop in vision.')}</span></p>`)}
+        ${sec('recovery', list(c.recovery))}
+        ${sec('faq', `<div class="faq-list">${c.faq.map((f, i) => `
+          <div class="faq-item" id="pfaq-${i}">
+            <h3 class="faq-heading"><button type="button" class="faq-question" onclick="toggleFaq(${i},'pfaq')" aria-expanded="false" aria-controls="pfaq-answer-${i}"><span>${f.q}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button></h3>
+            <div class="faq-answer" id="pfaq-answer-${i}" role="region"><p>${f.a}</p></div>
+          </div>`).join('')}</div>`)}
+        <aside class="proc-sources">
+          <h2 class="sub-title">${tr('المصادر والمراجعة', 'Sources and review')}</h2>
+          <p>${tr('معلومات توعوية عامة أُعدت من مصادر طبية للمرضى، ولا تغني عن الفحص والاستشارة:', 'General patient education prepared from these patient-information sources; it does not replace an examination:')}</p>
+          <ul>${(PROC.SOURCES[p.slug] || []).map(([label, url]) => `<li><a href="${url}" ${EXT} class="text-link">${label}${icon('external', 14)}</a></li>`).join('')}</ul>
+          ${reviewStatus()}
+        </aside>`;
+  const related = p.related.map(procedureBySlug).filter(Boolean);
+  return `
+  <article class="proc-page" data-slug="${p.slug}">
+    <header class="proc-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="${tr('مسار التنقل', 'Breadcrumb')}">
+          <ol>
+            <li><a href="${pageHref()}" data-nav>${tr('الرئيسية', 'Home')}</a></li>
+            <li><a href="${secHref('procedures')}" data-nav>${tr('الإجراءات', 'Procedures')}</a></li>
+            <li aria-current="page">${L(p.name)}</li>
+          </ol>
+        </nav>
+        <div class="proc-hero-grid">
+          <div class="proc-hero-text">
+            <p class="kicker">${L(g)}</p>
+            <h1 class="proc-title">${L(p.name)}</h1>
+            <p class="proc-lede">${c ? c.intro : L(p.summary)}</p>
+            ${reviewStatus('review-status-hero')}
+            <div class="proc-cta">
+              <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" data-cta="book">${icon('calendar', 20)}<span class="btn-label">${tr('احجز استشارة مع د. معن', 'Book a consultation with Dr. Maan')}</span></a>
+              <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-quiet btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('اسأل عبر واتساب', 'Ask on WhatsApp')}</span></a>
+            </div>
+          </div>
+          <figure class="proc-figure">
+            ${illustration(p, { eager: true, cls: 'proc-hero-illus' })}
+            <figcaption>${L(p.alt)}</figcaption>
+          </figure>
+        </div>
+      </div>
+    </header>
+
+    <div class="container proc-layout">
+      ${c ? `<nav class="proc-toc" aria-label="${tr('في هذه الصفحة', 'On this page')}">
+        <p class="drawer-label">${tr('في هذه الصفحة', 'On this page')}</p>
+        <ol>${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav>${tr(ar, en)}</a></li>`).join('')}${p.simulator ? `<li><a href="${hereHref('cataract-3d')}" data-nav>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</a></li>` : ''}</ol>
+      </nav>` : ''}
+      <div class="proc-body">${body}</div>
+    </div>
+
+    ${p.simulator ? renderCataract3D(true) : ''}
+
+    <section class="section section-band proc-related" aria-labelledby="related-title">
+      <div class="container">
+        <header class="section-head"><p class="kicker">${tr('تابع القراءة', 'Keep reading')}</p><h2 id="related-title">${tr('إجراءات ذات صلة', 'Related procedures')}</h2></header>
+        <div class="related-grid">${related.map(r => procCard(r, { compact: true })).join('')}</div>
+      </div>
+    </section>
+
+    <section class="closing proc-book" aria-labelledby="proc-book-title">
+      <div class="container closing-inner">
+        <div>
+          <p class="kicker">${tr('الخطوة التالية', 'Next step')}</p>
+          <h2 id="proc-book-title">${tr(`ناقش ${p.name.ar} مع د. معن البري`, `Discuss ${p.name.en.toLowerCase().startsWith('icl') ? p.name.en : p.name.en.charAt(0).toLowerCase() + p.name.en.slice(1)} with Dr. Maan Al Barry`)}</h2>
+          <p class="closing-sub">${tr('يبدأ كل قرار علاجي بفحص شامل لعينك.', 'Every treatment decision starts with a full examination of your eye.')}</p>
+        </div>
+        <div class="closing-actions">
+          <a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
+          <a href="tel:${C.clinicDirect.tel}" class="btn btn-ghost-light btn-lg" data-cta="call">${icon('phone', 18)}<span><bdi dir="ltr">${C.clinicDirect.display}</bdi></span></a>
+          <a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>
+        </div>
+      </div>
+    </section>
+  </article>`;
+}
+
 // --- FOOTER ---
 function renderFooter() {
-  const nav = id => NAV.find(n => n[0] === id) || DRAWER_NAV.find(n => n[0] === id);
-  const navLink = id => { const [, ar, en] = nav(id); return `<a href="#${id}" onclick="scrollToSection('${id}');return false;">${tr(ar, en)}</a>`; };
+  const navLink = id => { const [, ar, en] = DRAWER_NAV.find(n => n[0] === id); return `<a href="${secHref(id)}" data-nav>${tr(ar, en)}</a>`; };
   return `
   <footer class="site-footer">
     <div class="container">
@@ -1814,9 +1813,13 @@ function renderFooter() {
             <a href="${getWhatsAppUrl()}" ${EXT} class="icon-btn" aria-label="WhatsApp" data-cta="whatsapp">${glyph('whatsapp')}</a>
           </div>
         </div>
+        <nav class="footer-col" aria-label="${tr('الإجراءات', 'Procedures')}">
+          <h3>${tr('الإجراءات', 'Procedures')}</h3>
+          ${PROCEDURES.map(p => `<a href="${pageHref(currentLang, p.slug)}" data-nav>${L(p.name)}</a>`).join('')}
+        </nav>
         <nav class="footer-col" aria-label="${tr('روابط الموقع', 'Site links')}">
           <h3>${tr('المحتويات', 'Contents')}</h3>
-          ${['profile', 'specialties', 'cataracts', 'simulator', 'cataract-3d', 'education', 'faq'].map(navLink).join('')}
+          ${['profile', 'simulator', 'cataract-3d', 'education', 'faq', 'clinic'].map(navLink).join('')}
         </nav>
         <div class="footer-col">
           <h3>${tr('التواصل', 'Contact')}</h3>
@@ -1858,6 +1861,32 @@ function renderBookingBar() {
   </nav>`;
 }
 
+// --- HEAD METADATA (client-side navigation keeps it in step with the prerendered pages) ---
+function updateHead(full) {
+  const meta = pageMeta(currentLang, route.slug);
+  document.title = meta.title;
+  if (!full) return;
+  const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+  const url = (lang, slug = route.slug) => `${SITE_URL}/${pathFor(lang, slug)}`;
+  set('meta[name="description"]', 'content', meta.description);
+  set('link[rel="canonical"]', 'href', url(currentLang));
+  set('link[rel="alternate"][hreflang="ar"]', 'href', url('ar'));
+  set('link[rel="alternate"][hreflang="en"]', 'href', url('en'));
+  set('link[rel="alternate"][hreflang="x-default"]', 'href', url('ar'));
+  set('meta[property="og:url"]', 'content', url(currentLang));
+  set('meta[property="og:title"]', 'content', meta.title);
+  set('meta[property="og:description"]', 'content', meta.description);
+  set('meta[name="twitter:title"]', 'content', meta.title);
+  set('meta[name="twitter:description"]', 'content', meta.description);
+  set('meta[property="og:locale"]', 'content', currentLang === 'ar' ? 'ar_SA' : 'en_US');
+  set('meta[property="og:locale:alternate"]', 'content', currentLang === 'ar' ? 'en_US' : 'ar_SA');
+  const ld = document.querySelector('script[type="application/ld+json"]');
+  if (ld) {
+    const faq = route.slug && PROC ? PROC.CONTENT[route.slug][currentLang].faq : [];
+    ld.textContent = JSON.stringify(route.slug ? buildProcedureJsonLd(route.slug, currentLang, url(currentLang), SITE_URL, faq) : buildJsonLd(), null, 2);
+  }
+}
+
 // --- THEME ---
 function applyTheme() {
   const theme = resolvedTheme();
@@ -1870,8 +1899,13 @@ function applyTheme() {
     btn.setAttribute('aria-label', label);
     btn.setAttribute('title', label);
   });
+  // procedure renders have a dark-studio variant
+  document.querySelectorAll('.illus img[data-dark]').forEach(img => {
+    const want = isDark ? img.dataset.dark : img.dataset.light;
+    if (img.getAttribute('src') !== want) img.setAttribute('src', want);
+  });
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', isDark ? '#0B1424' : '#F7F3EB');
+  if (meta) meta.setAttribute('content', isDark ? '#0E1716' : '#F4F6F5');
   if (c3d.controller && typeof c3d.controller.setTheme === 'function') {
     try { c3d.controller.setTheme(theme); } catch (e) { /* module handles its own errors */ }
   }
@@ -1886,24 +1920,76 @@ window.toggleTheme = function () {
 };
 window.cycleTheme = window.toggleTheme;
 
-// --- LANGUAGE ---
+// --- LANGUAGE: switches to the same page in the other language (its own URL) ---
 window.toggleLang = function () {
-  currentLang = (currentLang === 'ar' ? 'en' : 'ar');
-  try { localStorage.setItem('lang', currentLang); } catch (e) { /* storage unavailable: session-only */ }
+  const lang = currentLang === 'ar' ? 'en' : 'ar';
+  try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable: session-only */ }
   currentQStep = 0;
   qAnswers = [];
   qCompleted = false;
   openArticleId = null;
-  renderApp();
-  window.scrollTo(0, 0);
+  go({ lang, slug: route.slug }, { scrollTo: 0 });
 };
+
+// --- CLIENT-SIDE NAVIGATION ---
+// Commit a route: push history, re-render, then scroll (to a section, a saved position or the top).
+function go(next, { push = true, hash = '', scrollTo = null } = {}) {
+  const commit = () => {
+    const changed = next.lang !== route.lang || next.slug !== route.slug;
+    if (changed) {
+      if (push) {
+        history.replaceState({ ...(history.state || {}), y: window.scrollY }, '');
+        history.pushState({ y: 0 }, '', new URL(pathFor(next.lang, next.slug) + hash, SITE_ROOT));
+      }
+      route = { lang: next.lang, slug: next.slug, known: true };
+      currentLang = next.lang;
+      if (!route.slug) currentActiveNavId = hash ? hash.slice(1) : 'home';
+      renderApp(true);
+    } else if (push && hash) {
+      history.replaceState(history.state, '', new URL(pathFor(next.lang, next.slug) + hash, SITE_ROOT));
+    }
+    const target = hash ? hash.slice(1) : null;
+    if (target && document.getElementById(target)) {
+      requestAnimationFrame(() => window.scrollToSection(target));
+    } else if (changed || scrollTo !== null) {
+      window.scrollTo(0, scrollTo || 0);
+      if (changed && push) document.querySelector('main h1, #main')?.focus({ preventScroll: true });
+    }
+  };
+  if (next.slug && !PROC) loadProcedureContent().then(commit, commit); else commit();
+}
+
+// One delegated handler for every internal link (data-nav): header, drawer, cards, breadcrumbs, TOC.
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[data-nav]');
+  if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const rel = relOf(a.href);
+  if (rel === null) return;
+  e.preventDefault();
+  setMobileMenu(false);
+  const next = parseRoute(rel);
+  go(next, { hash: new URL(a.href).hash });
+});
+
+window.addEventListener('popstate', e => {
+  const next = parseRoute(relOf(location.href) || '');
+  const y = e.state && typeof e.state.y === 'number' ? e.state.y : 0;
+  const hash = location.hash;
+  if (next.lang === route.lang && next.slug === route.slug) {
+    if (hash && document.getElementById(hash.slice(1))) window.scrollToSection(hash.slice(1));
+    return;
+  }
+  go(next, { push: false, scrollTo: y });
+  // restore the reading position once the page has rendered
+  requestAnimationFrame(() => window.scrollTo(0, y));
+});
 
 // --- ACTIVE SECTION TRACKER & SCROLLSPY ---
 window.setActiveNav = function (id) {
   if (!id) return;
   currentActiveNavId = id;
-  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => {
-    const on = a.getAttribute('href') === `#${id}`;
+  document.querySelectorAll('.nav-links a, .mobile-nav a[data-section]').forEach(a => {
+    const on = isHome() && a.dataset.section === id;
     a.classList.toggle('active', on);
     if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
   });
@@ -1924,7 +2010,7 @@ window.scrollToSection = function (id) {
 
 function initScrollSpy() {
   function checkScroll() {
-    if (isClickScrolling) return;
+    if (isClickScrolling || !isHome()) return;
     const scrollY = window.scrollY;
     const headerHeight = document.getElementById('site-header')?.offsetHeight || 68;
     const scrollPos = scrollY + headerHeight + 120;
@@ -1970,6 +2056,15 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// --- PROCEDURE GALLERY FILTER ---
+window.filterProcedures = function (id) {
+  procFilter = id;
+  const grid = document.querySelector('.proc-grid');
+  if (grid) grid.dataset.filter = id;
+  document.querySelectorAll('.proc-filter .chip').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === id)));
+  document.querySelectorAll('.proc-grid .proc-card').forEach(card => { card.hidden = id !== 'all' && card.dataset.group !== id; });
+};
+
 // --- QUESTIONNAIRE ---
 window.updateQuestionnaireUI = function () {
   const container = document.getElementById('questionnaire-card-container');
@@ -1995,8 +2090,8 @@ window.toggleArticle = function (id) {
   }
 };
 
-window.toggleFaq = function (idx) {
-  const item = document.getElementById(`faq-${idx}`);
+window.toggleFaq = function (idx, prefix = 'faq') {
+  const item = document.getElementById(`${prefix}-${idx}`);
   if (item) {
     const open = item.classList.toggle('open');
     const btn = item.querySelector('.faq-question');
@@ -2017,7 +2112,7 @@ function observeIntersection() {
 }
 
 function headerScrollShadow() {
-  // renderApp() runs again on every language switch; register the listener only once.
+  // renderApp() runs again on every navigation; register the listener only once.
   if (window.__headerShadowBound) return;
   window.__headerShadowBound = true;
   window.addEventListener('scroll', () => {
@@ -2027,14 +2122,13 @@ function headerScrollShadow() {
 }
 
 // --- MASTER APPLICATION RENDERER ---
-function renderApp() {
+// `navigated` = true after a client-side route change (head metadata is rewritten then; on the
+// first render the prerendered head is already correct for this URL).
+function renderApp(navigated = false) {
   document.documentElement.lang = currentLang;
   document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
-  document.body.className = (currentLang === 'en' ? 'lang-en' : 'lang-ar');
-
-  document.title = tr(
-    'د. معن بن عبدالله البري | استشاري طب وجراحة العيون (تخصص جراحات القرنية والماء الأبيض وتصحيح الإبصار) | المدينة المنورة',
-    'Dr. Maan Al Barry | Consultant Ophthalmologist (Cornea, Cataract & Refractive Surgery) | Madinah');
+  document.body.className = `${currentLang === 'en' ? 'lang-en' : 'lang-ar'} ${route.slug ? 'is-procedure' : 'is-home'}`;
+  updateHead(navigated);
 
   const app = document.getElementById('app');
   if (!app) return;
@@ -2043,22 +2137,12 @@ function renderApp() {
   if (c3d.host) c3d.host.remove();
   setMobileMenu(false);
 
+  const proc = route.slug ? procedureBySlug(route.slug) : null;
   app.innerHTML = `
-    <a class="skip-link" href="#main">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
+    <a class="skip-link" href="${hereHref('main')}">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
     ${renderHeader()}
-    <main id="main">
-      ${renderHero()}
-      ${renderQualifications()}
-      ${renderProfile()}
-      ${renderSpecialties()}
-      ${renderIolGuide()}
-      ${renderQuestionnaire()}
-      ${renderSimulator()}
-      ${renderCataract3D()}
-      ${renderEducation()}
-      ${renderClinic()}
-      ${renderFaq()}
-      ${renderCtaBanner()}
+    <main id="main" tabindex="-1">
+      ${proc ? renderProcedurePage(proc) : renderHome()}
     </main>
     ${renderFooter()}
     ${renderBookingBar()}
@@ -2068,16 +2152,24 @@ function renderApp() {
   observeIntersection();
   headerScrollShadow();
   initScrollSpy();
+  if (!proc) window.filterProcedures(procFilter);
   window.setActiveNav(currentActiveNavId);
 
+  // 3D: survives re-renders on pages that host it; torn down when the visitor leaves them.
+  if ((c3d.state === 'active' || c3d.state === 'loading') && !document.getElementById('cataract-3d-stage')) closeCataract3D(false);
   c3dSync();
   if (c3d.controller && typeof c3d.controller.setLang === 'function') {
     try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
   }
 
-  const simHost = document.getElementById('simulator-host');
+  const simHost = document.querySelector('[data-vision-host]');
   if (simHost && window.VisionSim) VisionSim.mount(simHost, { lang: currentLang });
+  else if (window.VisionSim) VisionSim.destroy();
+
+  if (proc && !PROC) loadProcedureContent().then(() => { if (route.slug === proc.slug) renderApp(navigated); }, () => {});
 }
 
-// Initialize on page load
-renderApp();
+// Initialize: on a procedure URL, wait for its content so the prerendered page is replaced only
+// by an equally complete one (no flash of a loading state).
+if (route.slug) loadProcedureContent().then(() => renderApp(false), () => renderApp(false));
+else renderApp(false);
