@@ -1,0 +1,57 @@
+{
+  "viewport": "390x844",
+  "emulatedMobile": true,
+  "avgFps": 59.7,
+  "p95FrameMs": 16.8,
+  "gpu": {
+    "vendor": "Google Inc. (NVIDIA)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl2": true
+  },
+  "render": {
+    "calls": 33,
+    "triangles": 242708,
+    "geometries": 28,
+    "textures": 5
+  },
+  "state": {
+    "state": "playing",
+    "playing": true,
+    "stageIndex": 0,
+    "stageId": "cloudy-lens",
+    "stageCount": 7,
+    "stageProgress": 0.6814555555555577,
+    "progress": 0.09019264705882381,
+    "lang": "en",
+    "theme": "light",
+    "reducedMotion": false,
+    "webgl": true,
+    "fallbackReason": null,
+    "labels": false,
+    "cutaway": true,
+    "focus": null,
+    "dpr": 2,
+    "fps": 60.00198353664588,
+    "review": false,
+    "speed": 1,
+    "layers": {
+      "cornea": true,
+      "iris": true,
+      "lens": true,
+      "iol": true,
+      "instruments": true,
+      "rays": true
+    },
+    "modelVersion": "csim-anatomy-2026.11-r2",
+    "camera": {
+      "distance": 40,
+      "azimuth": 0.9999999999999999,
+      "polar": 1.32,
+      "target": [
+        0,
+        0,
+        -3.5
+      ]
+    }
+  }
+}

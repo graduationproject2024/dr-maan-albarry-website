@@ -1,6 +1,7 @@
 // Materials and procedural textures. Every texture is painted at runtime on a <canvas> by the code in this
 // file (original work, no downloaded images), so the licensing is clean — see ASSET_LICENSES.md.
 import * as THREE from 'three';
+import { WOUND, EYE } from './anatomy.js';
 
 // Small deterministic PRNG so textures look identical on every load.
 export function rng(seed = 1) {
@@ -241,7 +242,9 @@ export function createMaterials() {
   const corneaUniforms = {
     uIncision: { value: 0 },
     uIncisionPhi: { value: 0 },
-    uLimbusR: { value: 5.85 }
+    uIncR0: { value: WOUND.internalR },
+    uIncR1: { value: WOUND.externalR },
+    uLimbusR: { value: EYE.corneaRadius }
   };
   const cornea = fresnelShell(new THREE.MeshPhysicalMaterial({
     color: 0xffffff, transparent: true, opacity: 0.05, roughness: 0.04, metalness: 0,
@@ -249,26 +252,26 @@ export function createMaterials() {
     depthWrite: false
   }), {
     edgeAlpha: 0.46, power: 2.6, extraUniforms: corneaUniforms,
-    fragHead: 'uniform float uIncision; uniform float uIncisionPhi; uniform float uLimbusR;',
+    fragHead: 'uniform float uIncision; uniform float uIncisionPhi; uniform float uLimbusR; uniform float uIncR0; uniform float uIncR1;',
     fragBody: `
       float rr = length(vObjPos.xy);
       float limb = smoothstep(uLimbusR - 0.45, uLimbusR, rr);
       outgoingLight = mix(outgoingLight, vec3(0.74, 0.79, 0.82), limb * 0.45);
       shellA = max(shellA, limb * 0.42);
       float ang = atan(vObjPos.y, vObjPos.x) - uIncisionPhi;
-      float inc = (1.0 - smoothstep(0.17, 0.2, abs(ang))) * (1.0 - smoothstep(0.03, 0.09, abs(rr - 5.25)));
+      float inc = (1.0 - smoothstep(0.19, 0.22, abs(ang))) * smoothstep(uIncR0 - 0.05, uIncR0 + 0.05, rr) * (1.0 - smoothstep(uIncR1 - 0.05, uIncR1 + 0.05, rr)) * (0.55 + 0.45 * smoothstep(uIncR1 - 0.25, uIncR1, rr));
       outgoingLight = mix(outgoingLight, vec3(0.93, 0.95, 0.96), inc * uIncision * 0.85);
       shellA = max(shellA, inc * uIncision * 0.75);`
   });
 
-  const capsuleUniforms = { uOpen: { value: 0 }, uRhexisR: { value: 2.5 }, uEqZ: { value: -1.3 } };
+  const capsuleUniforms = { uOpen: { value: 0 }, uRhexisR: { value: EYE.rhexisR }, uEqZ: { value: EYE.lensEqZ } };
   const capsule = fresnelShell(new THREE.MeshPhysicalMaterial({
     color: 0xf3f6f7, transparent: true, opacity: 0.04, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.05,
     ior: 1.4, depthWrite: false, side: THREE.DoubleSide
   }), {
     edgeAlpha: 0.32, power: 2.4, extraUniforms: capsuleUniforms,
     fragHead: 'uniform float uOpen; uniform float uRhexisR; uniform float uEqZ;',
-    fragBody: 'if (uOpen > 0.001 && vObjPos.z > uEqZ + 0.3 && length(vObjPos.xy) < uRhexisR) discard;'
+    fragBody: 'if (uOpen > 0.001 && vObjPos.z > uEqZ + 0.05 && length(vObjPos.xy) < uRhexisR) discard;'
   });
 
   const flap = fresnelShell(new THREE.MeshPhysicalMaterial({
@@ -276,13 +279,15 @@ export function createMaterials() {
   }), { edgeAlpha: 0.4, power: 2 });
 
   const iol = fresnelShell(new THREE.MeshPhysicalMaterial({
-    color: 0xcfe4ff, transparent: true, opacity: 0.26, roughness: 0.03, metalness: 0, clearcoat: 1,
+    color: 0xbcd8ff, transparent: true, opacity: 0.34, roughness: 0.03, metalness: 0, clearcoat: 1,
     clearcoatRoughness: 0.02, ior: 1.47, specularIntensity: 1, envMapIntensity: 1.4, depthWrite: false
   }), { edgeAlpha: 0.85, power: 2.0 });
   const haptic = new THREE.MeshPhysicalMaterial({
     color: 0xcfe2f6, transparent: true, opacity: 0.88, roughness: 0.15, clearcoat: 1, clearcoatRoughness: 0.05,
-    envMapIntensity: 1.2, depthWrite: true
+    envMapIntensity: 1.2, depthWrite: true, side: THREE.DoubleSide
   });
+  // Cut faces of the cross-section (flat, matte, so the section reads as tissue rather than glass).
+  const capMat = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0, side: THREE.DoubleSide, ...extra });
 
   const mats = {
     tex,
@@ -292,12 +297,19 @@ export function createMaterials() {
       sheen: 0.25, sheenRoughness: 0.6, sheenColor: new THREE.Color(0xffeedd)
     }),
     scleraCut: new THREE.MeshStandardMaterial({ color: 0xd9cdc1, roughness: 0.8 }),
-    iris: new THREE.MeshStandardMaterial({ map: tex.iris, bumpMap: tex.iris, bumpScale: 2.2, roughness: 0.72, metalness: 0 }),
+    iris: new THREE.MeshStandardMaterial({ map: tex.iris, bumpMap: tex.iris, bumpScale: 2.2, roughness: 0.72, metalness: 0, side: THREE.DoubleSide }),
     ciliary: new THREE.MeshStandardMaterial({ color: 0x4a2219, roughness: 0.78 }),
+    ciliaryBody: new THREE.MeshStandardMaterial({ color: 0x4a2219, roughness: 0.78 }),
+    corneaCap: capMat(0xb9d3df, { transparent: true, opacity: 0.6, depthWrite: false, roughness: 0.3 }),
+    irisCap: capMat(0x3d2414),
+    nucleusCap: capMat(0xb98a45, { roughness: 0.6 }),
+    cortexCap: capMat(0xe9dfc4, { transparent: true, opacity: 0.55, depthWrite: false }),
+    capsuleCap: capMat(0xf4f1ea, { roughness: 0.5 }),
+    iolCap: capMat(0xc7defa, { transparent: true, opacity: 0.75, roughness: 0.2, depthWrite: false }),
     ciliaryCut: new THREE.MeshStandardMaterial({ color: 0x6a3226, roughness: 0.85 }),
     nucleus: new THREE.MeshPhysicalMaterial({
-      map: tex.nucleus, color: 0xf0d7a8, roughness: 0.42, transparent: true, opacity: 0.9, clearcoat: 0.3,
-      sheen: 0.4, sheenColor: new THREE.Color(0xffe2a8), emissive: new THREE.Color(0x000000), depthWrite: true
+      map: tex.nucleus, color: 0xf0d7a8, roughness: 0.48, clearcoat: 0.2, clearcoatRoughness: 0.4,
+      sheen: 0.4, sheenColor: new THREE.Color(0xffe2a8), emissive: new THREE.Color(0x000000), side: THREE.DoubleSide
     }),
     cortex: new THREE.MeshPhysicalMaterial({
       color: 0xeee3c6, alphaMap: tex.cortex, transparent: true, opacity: 0.55, roughness: 0.6,

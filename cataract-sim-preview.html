@@ -35,7 +35,8 @@
         lang: q.get('lang') === 'en' ? 'en' : 'ar',
         theme: q.get('theme') === 'dark' ? 'dark' : 'light',
         debug: true,
-        autoplay: q.get('autoplay') === '1'
+        autoplay: q.get('autoplay') === '1',
+        review: q.get('review') === '1'
       };
       if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
       document.body.dataset.theme = opts.theme;

@@ -11,8 +11,11 @@ import { createTimeline } from './timeline.js';
 import { createStateMachine } from './state.js';
 import { createUI } from './ui.js';
 import { createAdaptiveQuality, observeVisibility } from './perf.js';
+import { createReviewPanel, LAYERS } from './review.js';
+import { MODEL_VERSION } from './anatomy.js';
 
 export { STAGES, STRUCTURES } from './stages.js';
+export { MODEL_VERSION } from './anatomy.js';
 
 // Global debug counters (exposed on window only in debug mode) used by tests to prove clean teardown.
 export const counters = { mounts: 0, destroys: 0, live: 0, listeners: 0, observers: 0, rafLoops: 0, renderers: 0 };
@@ -42,7 +45,9 @@ class Simulator {
     const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.reduced = typeof o.reducedMotion === 'boolean' ? o.reducedMotion : !!(mq && mq.matches);
     this.autoplay = o.autoplay === true;
+    this.reviewMode = o.review === true;
     this.rate = this.reduced ? 0.6 : 1;
+    this.speed = 1; // review-mode slow playback multiplier (0.25 / 0.5 / 1)
     this.disposers = [];
     this.events = new Map();
     this.timers = new Set();
@@ -188,11 +193,61 @@ class Simulator {
       this.visible = v;
       if (v) this.startLoop(); else this.stopLoop();
     }, { listen: (t, e, f, o) => this.listen(t, e, f, o), observer: (d) => { counters.observers += d; } }));
+    if (this.reviewMode) this.setupReview();
     this.sm.to('ready');
     ui.showStart(true);
     this.startLoop();
     if (this.autoplay && !this.reduced) this.play();
     if (this.debug) this.exposeDebug();
+  }
+
+  setupReview() {
+    this.review = createReviewPanel(this.ui.root, {
+      getLang: () => this.lang,
+      getState: () => this.getState(),
+      getSpeed: () => this.speed,
+      getLayers: () => (this.eye ? this.eye.layers : {}),
+      goToStage: (i) => this.goToStage(i),
+      setSpeed: (v) => this.setSpeed(v),
+      step: (n) => this.stepFrames(n),
+      camera: (name) => this.cameraPreset(name),
+      setLayer: (id, on) => this.setLayer(id, on),
+      screenshot: () => this.screenshot(),
+      listen: (t, e, f, o) => this.listen(t, e, f, o)
+    });
+    this.ui.root.classList.add('csim--review');
+  }
+  setSpeed(v) {
+    const allowed = [0.25, 0.5, 1];
+    this.speed = allowed.includes(Number(v)) ? Number(v) : 1;
+  }
+  // Frame stepping (review): pauses and moves the timeline by n frames of 1/30 s of animation time.
+  stepFrames(n) {
+    if (!this.ready3D) return;
+    if (this.isPlaying()) this.pause();
+    if (this.state === 'transitioning') { this.fly = null; this.sm.to('paused'); }
+    this.timeline.set(this.timeline.elapsed + (Number(n) || 0) / 30);
+    if (this.state !== 'paused') this.sm.to('paused');
+    this.ui.showStart(false);
+    this.applyTimeline(0);
+  }
+  cameraPreset(name) {
+    if (!this.ready3D) return;
+    const sph = (target, az, polar, dist) => ({ target, position: [target[0] + dist * Math.sin(polar) * Math.sin(az), target[1] + dist * Math.cos(polar), target[2] + dist * Math.sin(polar) * Math.cos(az)] });
+    const P = { surgeon: sph([0, 0, 0], 0, Math.PI / 2, 30), side: sph([0, 0, -1.5], 1.45, Math.PI / 2, 34) }[name];
+    this.flyTo(P || STAGES[this.stageIndex].camera, 0.6);
+  }
+  setLayer(id, on) {
+    if (!this.eye || !LAYERS.includes(id)) return;
+    this.eye.setLayers({ [id]: !!on });
+    this.applyTimeline(0);
+    this.dirty = true;
+  }
+  screenshot() {
+    if (!this.three || !this.ready3D) return null;
+    const { renderer, scene, camera } = this.three;
+    renderer.render(scene, camera); // same task as toDataURL, so the drawing buffer is still intact
+    return renderer.domElement.toDataURL('image/png');
   }
 
   setupControls(canvas) {
@@ -227,6 +282,7 @@ class Simulator {
       this.three = null;
       counters.renderers--;
     }
+    if (this.review) { this.review.destroy(); this.review = null; }
     if (this.ui) { this.ui.destroy(); this.ui = null; }
     this.events.clear();
     if (instances.get(this.host) === this.controller) instances.delete(this.host);
@@ -274,7 +330,7 @@ class Simulator {
     this.time += dt;
     const playing = this.state === 'playing';
     if (playing) {
-      const done = this.timeline.advance(dt * this.rate);
+      const done = this.timeline.advance(dt * this.rate * this.speed);
       this.applyTimeline(dt);
       if (done) this.complete();
     } else {
@@ -302,6 +358,9 @@ class Simulator {
     const cut = this.eye ? (this.eye.userCutaway === null ? this.params.cutaway : this.eye.userCutaway) : false;
     this.ui.setCutaway(cut);
     this.ui.setProgress(this.timeline.progress, index, p);
+    const layersOn = !this.eye || this.eye.layers.rays;
+    this.ui.setRayNote(layersOn && (this.params.scatterRays > 0.001 || this.params.focusRays > 0.001));
+    if (this.review) this.review.updatePosition();
   }
 
   setStageIndex(i, fly) {
@@ -314,6 +373,7 @@ class Simulator {
       this.ui.setStage(i);
       this.ui.announce(`${this.ui.stageLabel(i)}: ${STAGES[i].title[this.lang]}`);
       this.emit('stagechange', { index: i, id: STAGES[i].id });
+      if (this.review) this.review.refresh();
     }
     if (fly && this.three) this.flyTo(STAGES[i].camera);
     this.dirty = true;
@@ -518,6 +578,7 @@ class Simulator {
     if (l === this.lang) return;
     this.lang = l;
     this.ui.setLang(l);
+    if (this.review) this.review.refresh();
     this.dirty = true;
     this.emit('langchange', { lang: l });
   }
@@ -616,6 +677,10 @@ class Simulator {
       focus: this.focusId,
       dpr: this.three ? this.three.renderer.getPixelRatio() : null,
       fps: this.quality ? this.quality.fps : null,
+      review: this.reviewMode,
+      speed: this.speed,
+      layers: this.eye ? this.eye.layers : null,
+      modelVersion: MODEL_VERSION,
       camera: cam
     };
   }
@@ -631,6 +696,10 @@ class Simulator {
       get params() { return self.params; },
       get frames() { return self.frames || 0; },
       setFocus: (id) => self.focusStructure(id),
+      setLayer: (id, on) => self.setLayer(id, on),
+      screenshot: () => self.screenshot(),
+      step: (n) => self.stepFrames(n),
+      get review() { return self.review ? self.review.data : null; },
       transition: (to) => self.sm.to(to),
       // Render now and summarise the frame buffer (proves the canvas is not blank).
       sample() {

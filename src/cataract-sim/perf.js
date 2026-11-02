@@ -6,11 +6,14 @@ export function createAdaptiveQuality({ initialDpr, onChange, windowMs = 2000, m
   let level = 0;
   let frames = 0, start = 0;
   let lastFps = 0;
+  // The first window after a (re)start is a warm-up (shader compilation, texture upload) and is ignored, and the
+  // quality only steps down after two consecutive slow windows, so one hitch never blurs the view for good.
+  let warm = false, slow = 0;
   return {
     get dpr() { return levels[level]; },
     get fps() { return lastFps; },
     get level() { return level; },
-    reset() { frames = 0; start = 0; },
+    reset() { frames = 0; start = 0; warm = false; slow = 0; },
     tick(now) {
       if (!start) { start = now; frames = 0; return; }
       frames++;
@@ -18,8 +21,10 @@ export function createAdaptiveQuality({ initialDpr, onChange, windowMs = 2000, m
       if (span >= windowMs) {
         lastFps = (frames * 1000) / span;
         frames = 0; start = now;
-        if (lastFps < minFps && level < levels.length - 1) {
-          level++;
+        if (!warm) { warm = true; return; }
+        slow = lastFps < minFps ? slow + 1 : 0;
+        if (slow >= 2 && level < levels.length - 1) {
+          level++; slow = 0;
           onChange(levels[level], lastFps);
         }
       }

@@ -56,6 +56,24 @@ try {
           written.push(f);
         }
       }
+      if (!s.mobile) {
+        // close-up cross-sections (cut-away forced on) so cut faces and layer order can be inspected
+        for (const [i, p] of [[0, 0.6], [3, 0.5], [4, 0.55], [5, 1], [6, 0.8]]) {
+          await seekStage(page, i, p);
+          const pressed = await page.locator('[data-ref="cutaway"]').getAttribute('aria-pressed');
+          if (pressed !== 'true') await page.locator('[data-ref="cutaway"]').click();
+          await page.evaluate(() => {
+            const d = window.__cataractSim, az = 0.95, polar = 1.4, dist = 19, t = [0, 0, -0.8];
+            d.controls.target.set(...t);
+            d.camera.position.set(t[0] + dist * Math.sin(polar) * Math.sin(az), t[1] + dist * Math.cos(polar), t[2] + dist * Math.sin(polar) * Math.cos(az));
+            d.controls.update();
+          });
+          await page.waitForTimeout(350);
+          const f = path.join(outDir, `section-stage${i + 1}-p${String(Math.round(p * 100)).padStart(2, '0')}.jpg`);
+          await page.locator('.csim-viewport').screenshot({ path: f, ...SHOT });
+          written.push(f);
+        }
+      }
       await ctx.close();
     }
   } else if (mode === 'review') {

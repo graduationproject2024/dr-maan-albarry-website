@@ -32,7 +32,8 @@ export const I18N = {
     fallbackNote: '3D view isn’t available on this device, so each stage is shown as an illustrated diagram.',
     disclaimer: 'Illustrative patient education only — not a substitute for a consultation with your eye doctor. Simplified animation; content pending physician review.',
     announcePlaying: 'Playing', announcePaused: 'Paused', announceCompleted: 'Walkthrough complete. Press Replay to watch again.',
-    announceRestored: '3D view restored.'
+    announceRestored: '3D view restored.',
+    rayNote: 'Illustrative light path — simplified model eye, not a vision test'
   },
   ar: {
     eyebrow: 'تثقيف صحي · ثلاثي الأبعاد',
@@ -63,7 +64,8 @@ export const I18N = {
     fallbackNote: 'العرض ثلاثي الأبعاد غير متاح على هذا الجهاز، لذلك تُعرض كل مرحلة في رسم توضيحي.',
     disclaimer: 'محتوى توضيحي للتثقيف الصحي فقط، ولا يُغني عن استشارة طبيب العيون. الرسوم مبسّطة، والمحتوى قيد المراجعة الطبية.',
     announcePlaying: 'جارٍ التشغيل', announcePaused: 'متوقف مؤقتًا', announceCompleted: 'اكتملت الجولة. اضغط «إعادة التشغيل» للمشاهدة مرة أخرى.',
-    announceRestored: 'تمت استعادة العرض ثلاثي الأبعاد.'
+    announceRestored: 'تمت استعادة العرض ثلاثي الأبعاد.',
+    rayNote: 'مسار ضوئي توضيحي — نموذج مبسّط للعين، وليس اختبارًا للنظر'
   }
 };
 
@@ -134,6 +136,7 @@ export function createUI(host, ctx) {
           <p class="csim-start-hint" data-i18n="startHint"></p>
         </div>
         <p class="csim-note" data-ref="note" role="status" hidden></p>
+        <p class="csim-raynote" data-ref="rayNote" data-i18n="rayNote" hidden></p>
       </div>
       <div class="csim-playbar" role="group" data-i18n-label="playback">
         <div class="csim-transport">
@@ -307,6 +310,7 @@ export function createUI(host, ctx) {
       if (!key) { ref.note.hidden = true; ref.note.dataset.key = ''; return; }
       ref.note.hidden = false; ref.note.dataset.key = key; ref.note.textContent = t(key);
     },
+    setRayNote(v) { if (ref.rayNote.hidden === v) ref.rayNote.hidden = !v; },
     setLoadingProgress(pct) { ref.loadingText.textContent = `${t('loading')} ${Math.round(pct)}%`; },
     setLabels(v) { S.labels = v; ref.labels.setAttribute('aria-pressed', String(v)); root.classList.toggle('csim--labels', v); if (!v) Object.values(hotspots).forEach((b) => { b.hidden = true; }); },
     setCutaway(v) { S.cutaway = v; ref.cutaway.setAttribute('aria-pressed', String(v)); },
