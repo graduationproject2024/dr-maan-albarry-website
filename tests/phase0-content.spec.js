@@ -25,9 +25,12 @@ async function open(page, lang) {
 /** Visible page text plus text that only appears after interaction (every simulator lens, questionnaire result). */
 async function fullText(page) {
   const chunks = [await page.locator('body').innerText()];
-  for (const lens of ['edof', 'trifocal', 'monofocal', 'cataract']) {
-    await page.locator(`[data-lens="${lens}"]`).click();
-    chunks.push(await page.locator('#vs-root').innerText());
+  await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+  await page.locator('#simulator-host .vsim').waitFor({ timeout: 20_000 });
+  for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
+    await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
+    await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
+    chunks.push(await page.locator('#simulator-host .vsim').innerText());
   }
   await page.evaluate(() => {
     for (let i = 0; i < 4; i++) { window.selectQOption(0); window.nextQStep(); }

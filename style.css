@@ -419,7 +419,11 @@ html.drawer-open .site-header { z-index: 130; }
 }
 .section-stage-deep { background: var(--stage-2); }
 .vsim-launch { border-radius: var(--radius-xl); padding: clamp(12px, 2vw, 24px); background: #0F1B1E; border: 1px solid var(--stage-line); }
-.vsim-host { min-height: 240px; }
+/* Reserve the mounted simulator's height (measured at 320-1920px, AR/EN) so the lazy mount never shifts the
+   sections below it, e.g. while a header link is scrolling past it to #clinic. */
+.vsim-host { min-height: 1580px; }
+@media (max-width: 1023px) { .vsim-host { min-height: 1420px; } }
+@media (max-width: 767px) { .vsim-host { min-height: 1540px; } }
 /* phones: the simulator view gets the full content width (no frame padding) */
 @media (max-width: 639px) { .vsim-launch { padding: 0; border: 0; background: none; } }
 .disclaimers { display: grid; gap: var(--s-3); margin-top: var(--s-5); }
@@ -697,86 +701,10 @@ html.drawer-open .site-header { z-index: 130; }
 }
 
 /* ------------------------------------------------------------
-   18. LEGACY VISION SIMULATOR — internals unchanged (being replaced by src/vision-sim).
-   The original tokens are re-declared on its root so the shell redesign does not restyle it.
-   ------------------------------------------------------------ */
-.vs-card {
-  --ink: #EFE8DA; --ink-2: #C3CAD4; --muted: #9AA6B8; --gold: #D6B57E; --rule: #23365A; --rule-strong: #6B7D9A;
-  --f-display: var(--f-en-display);
-  --vs-surface: #0C1830; --vs-ink: #EFE8DA; --vs-grid: #26385A; --vs-band: rgba(214, 181, 126, 0.12);
-}
-/* Vision simulator (markup and WebGL logic in main.js are unchanged) */
-.vs-card { color: var(--ink-2); }
-.vs-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.vs-seg { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; }
-.vs-lens, .vs-dist { display: flex; flex-wrap: wrap; gap: 8px; }
-.vs-dist { margin-top: 14px; }
-.vs-card button {
-  font: inherit; min-height: 44px; padding: 0 16px; border: 1px solid transparent; border-radius: 6px;
-  background: none; color: var(--ink-2); cursor: pointer; font-size: 0.9rem; font-weight: 500;
-  transition: background-color .15s, color .15s, border-color .15s;
-}
-.vs-seg button:hover { color: var(--ink); }
-.vs-seg button.on { background: #1A2D4F; color: var(--ink); }
-.vs-lens button, .vs-dist button { border-color: var(--rule-strong); color: var(--ink); }
-.vs-lens button:hover, .vs-dist button:hover { border-color: var(--gold); }
-.vs-lens button.on, .vs-dist button.on { background: var(--gold); border-color: var(--gold); color: #0B1424; }
-.vs-card button:focus-visible, .vs-view:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-.vs-view {
-  position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: #050B15;
-  cursor: ew-resize; user-select: none; touch-action: pan-y; box-shadow: 0 0 0 1px var(--rule);
-}
-.vs-view canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.vs-line { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 14px rgba(255, 255, 255, .6); pointer-events: none; transform: translateX(-1px); }
-.vs-line i {
-  position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px; border-radius: 50%;
-  background: #fff; box-shadow: 0 2px 12px rgba(0, 0, 0, .44); display: grid; place-items: center;
-  color: #13233A; font: 700 14px/1 sans-serif; letter-spacing: 2px;
-}
-.vs-line i::before { content: "\2039 \203A"; }
-.vs-tag {
-  position: absolute; top: 12px; padding: 5px 12px; border-radius: 99px; background: rgba(5, 11, 21, .74);
-  color: #fff; font-size: 0.8rem; font-style: normal; line-height: 1.3;
-}
-.vs-tag.l { left: 12px; }
-.vs-tag.r { right: 12px; }
-.vs-tag-short { display: none; }
-.vs-hint, .vs-note { text-align: center; color: var(--muted); font-size: 0.82rem; margin-top: 10px; }
-.vs-svg { width: 100%; height: auto; }
-.vs-t { fill: var(--muted); font-size: 11px; }
-.vs-t2 { fill: var(--muted); font-size: 10px; }
-.vs-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: vsd 1.1s ease-out forwards; }
-@keyframes vsd { to { stroke-dashoffset: 0; } }
-.vs-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); }
-.vs-metrics small, .vs-metrics span { display: block; color: var(--muted); font-size: 0.82rem; }
-.vs-metrics strong { display: block; font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; color: var(--ink); }
-.vs-metrics .ok { color: #8FD3A8; }
-.vs-metrics .warn { color: #F0B27A; }
-.vs-metrics p { grid-column: 1 / -1; color: var(--ink-2); font-size: 0.95rem; }
-.vs-disclaimer-note { display: flex; gap: 12px; margin-top: 16px; padding: 12px 16px; border: 1px solid var(--rule); border-inline-start: 3px solid var(--gold); border-radius: 6px; font-size: 0.82rem; line-height: 1.7; color: var(--ink-2); }
-.vs-note-icon { flex: none; margin-top: 3px; color: var(--gold); }
-details.vs-sci { margin-top: 12px; font-size: 0.85rem; color: var(--ink-2); }
-details.vs-sci summary { cursor: pointer; font-weight: 600; color: var(--ink); min-height: 44px; display: flex; align-items: center; }
-details.vs-sci ul { padding-inline-start: 20px; list-style: disc; }
-.vs-fallback { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 20px; color: #fff; text-align: center; background: rgba(5, 11, 21, .88); font-size: .9rem; line-height: 1.6; }
-@media (max-width: 600px) {
-  .vs-seg { width: 100%; }
-  .vs-seg button { flex: 1; padding: 0 6px; font-size: 0.82rem; }
-  .vs-lens button { flex: 1 1 calc(50% - 8px); padding: 0 8px; font-size: 0.82rem; }
-  .vs-dist button { flex: 1 1 calc(33.33% - 8px); padding: 0 6px; font-size: 0.78rem; }
-  .vs-metrics { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .vs-tag { max-width: calc(50% - 22px); font-size: 0.68rem; padding: 3px 8px; border-radius: 8px; top: 8px; }
-  .vs-tag.l { left: 8px; } .vs-tag.r { right: 8px; }
-  .vs-disclaimer-note { font-size: 0.76rem; padding: 10px 12px; }
-}
-@media (max-width: 440px) { .vs-tag-full { display: none; } .vs-tag-short { display: inline; } }
-
-/* ------------------------------------------------------------
    19. MOTION PREFERENCES
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .fade-in { opacity: 1; transform: none; }
   .proc-card:hover { transform: none; }
-  .vs-draw { animation: none; stroke-dashoffset: 0; }
 }

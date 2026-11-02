@@ -94,16 +94,17 @@ test.describe('Interaction & accessibility fixes', () => {
 
   test('simulator shows a fallback message when the WebGL context is lost', async ({ page }) => {
     await open(page);
-    await page.locator('#vs-view').scrollIntoViewIfNeeded();
+    await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await expect(page.locator('#simulator-host .vsim canvas')).toBeVisible({ timeout: 20_000 });
     const lost = await page.evaluate(() => {
-      const gl = document.querySelector('#vs-gl').getContext('webgl2');
+      const gl = document.querySelector('#simulator-host .vsim canvas').getContext('webgl2');
       const ext = gl && gl.getExtension('WEBGL_lose_context');
       if (!ext) return false;
       ext.loseContext();
       return true;
     });
     expect(lost).toBe(true);
-    await expect(page.locator('#vs-view .vs-fallback')).toBeVisible();
+    await expect(page.locator('#simulator-host .vsim-note')).toBeVisible();
   });
 
   // Phase 2/3 replaced the phone swipe rows with stacked editorial lists. Same guarantee as before:
