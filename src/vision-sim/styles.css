@@ -119,6 +119,9 @@
   position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 4;
   padding: 10px 12px; border-radius: 10px; background: rgba(9, 18, 26, 0.86); color: #fff; font-size: 0.9rem;
 }
+/* Headings take the simulator's own ink: the host page styles h1–h4 with its --ink, which is the light stage ink
+   inside the dark band and made card / meter titles ~1.1:1 on the light simulator surface (BUG-16, axe). */
+.vsim h3, .vsim h4 { color: var(--vsim-text); }
 .vsim-fallback { position: relative; z-index: 5; background: var(--vsim-surface); color: var(--vsim-text); padding: 16px; }
 .vsim--fallback .vsim-viewport { aspect-ratio: auto; background: var(--vsim-surface); }
 .vsim-fallback-body { display: grid; gap: 12px; }

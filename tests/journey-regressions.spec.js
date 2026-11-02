@@ -136,6 +136,28 @@ test.describe('journey regressions — phone', () => {
     await page.waitForFunction(() => document.querySelector('#simulator-host .vsim-viewport'));
     expect((await page.locator('#simulator-host .vsim-viewport').boundingBox()).width).toBeGreaterThanOrEqual(390 - 56);
   });
+
+  test('BUG-16 vision simulator card and meter titles are readable in the light theme (contrast >= 4.5)', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('theme', 'light'));
+    await page.goto('/en/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector('#simulator-host .vsim-card h3'));
+    const ratios = await page.locator('#simulator-host .vsim-card h3, #simulator-host .vsim-meters-title').evaluateAll((els) => els.map((e) => {
+      const rgb = (c) => c.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number);
+      const lum = ([r, g, b]) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+      let bgEl = e; let bg = 'rgba(0, 0, 0, 0)';
+      while (bgEl && /rgba\(0, 0, 0, 0\)|transparent/.test(bg)) { bg = getComputedStyle(bgEl).backgroundColor; bgEl = bgEl.parentElement; }
+      const a = lum(rgb(getComputedStyle(e).color)), b = lum(rgb(bg));
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    }));
+    expect(ratios.length).toBeGreaterThan(1);
+    for (const r of ratios) expect(r).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('BUG-17 header controls have names that contain their visible text', async ({ page }) => {
+    await page.goto('/'); await page.locator('main h1').waitFor();
+    await expect(page.locator('.site-header .lang-switch')).toHaveAccessibleName(/^EN/);
+    await expect(page.locator('.site-header .wordmark')).toHaveAccessibleName(/^د\. معن البري/);
+  });
 });
 
 test.describe('journey regressions — keyboard', () => {

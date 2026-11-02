@@ -214,7 +214,7 @@ function renderThemeToggle(id) {
 }
 
 function renderLangToggle(extra = '') {
-  return `<button type="button" class="icon-btn lang-switch ${extra}" onclick="toggleLang()" aria-label="${tr('Switch to English', 'التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
+  return `<button type="button" class="icon-btn lang-switch ${extra}" onclick="toggleLang()" aria-label="${tr('EN — Switch to English', 'التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
           <span lang="${tr('en', 'ar')}">${tr('EN', 'ع')}</span>
         </button>`;
 }
@@ -225,10 +225,10 @@ function renderHeader() {
   return `
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      <a href="${pageHref()}" data-nav data-section="home" class="wordmark" aria-label="${L(D.identity.shortName)} — ${tr('الصفحة الرئيسية', 'home')}">
+      <a href="${pageHref()}" data-nav data-section="home" class="wordmark">
         <span class="wordmark-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 16s4.6-6.5 11-6.5S27 16 27 16s-4.6 6.5-11 6.5S5 16 5 16z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="3.4" fill="currentColor"/></svg></span>
         <span class="wordmark-text"><span class="wordmark-name">${L(D.identity.shortName)}</span>
-        <span class="wordmark-sub">${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span></span>
+        <span class="wordmark-sub">${tr('استشاري طب وجراحة العيون', 'Consultant Ophthalmologist')}</span><span class="sr-only"> — ${tr('الصفحة الرئيسية', 'home')}</span></span>
       </a>
 
       <nav class="header-nav" aria-label="${tr('التنقل الرئيسي', 'Main navigation')}">
