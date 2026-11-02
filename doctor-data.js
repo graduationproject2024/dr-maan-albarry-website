@@ -185,7 +185,7 @@ export const PROCEDURES = [
       ar: 'إزالة عدسة العين المعتمة واستبدالها بعدسة صناعية شفافة، عندما يبدأ ضعف الرؤية بالتأثير في حياتك اليومية.',
       en: 'The clouded natural lens is removed and replaced with a clear artificial lens once blurred vision starts to affect daily life.'
     },
-    alt: { ar: 'رسم تشريحي ثلاثي الأبعاد لمقطع العين يُبرز العدسة الطبيعية خلف القزحية', en: '3D anatomical cross-section of the eye highlighting the natural lens behind the iris' },
+    alt: { ar: 'رسم تشريحي لمقطع العين يُبرز العدسة الطبيعية خلف القزحية', en: 'Anatomical cross-section of the eye highlighting the natural lens behind the iris' },
     related: ['lens-implants', 'laser-vision-correction', 'icl']
   },
   {

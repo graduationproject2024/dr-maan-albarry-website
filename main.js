@@ -999,14 +999,14 @@ const EYE_FOCUS = {
   icl: '<ellipse class="ap-lens-ghost" cx="196" cy="100" rx="12" ry="28"/><path class="ap-focus-stroke" d="M206 74c4 8 4 44 0 52"/>',
   'keratoconus-cxl': '<path class="ap-focus-stroke" d="M214 56c18 12 34 34 38 46-6 14-20 32-38 42"/><path class="ap-beam" d="M300 84l-40 10M300 116l-40-10"/>',
   'corneal-transplant': '<path class="ap-focus-stroke" d="M226 70c12 18 12 42 0 60"/><path class="ap-graft" d="M226 70l-6-4M226 130l-6 4"/>',
-  'intravitreal-injections': '<circle class="ap-vitreous" cx="150" cy="100" r="62"/><circle class="ap-focus" cx="78" cy="100" r="6"/><path class="ap-needle" d="M190 30l-18 34"/>'
+  'intravitreal-injections': '<path class="ap-vitreous" d="M186 44a68 68 0 1 0 0 112c-8-18-8-94 0-112z"/><path class="ap-focus-stroke" d="M118 30a74 74 0 0 0 0 140"/><circle class="ap-focus" cx="76" cy="100" r="5"/><path class="ap-needle" d="M230 4l-30 40"/><circle class="ap-drop" cx="186" cy="60" r="3"/>'
 };
 // Two crops of the same drawing: the full plate, and a close-up of the front of the eye
 // (where every highlighted structure sits) for the small thumbnails of the phone card rows.
 function anatomyPlate(slug, label) {
   const g = `<g class="ap-base">${EYE_BASE}</g><g class="ap-hl">${EYE_FOCUS[slug] || ''}</g>`;
   return `<svg class="anat-plate" viewBox="0 0 320 200" role="img" aria-label="${label}" focusable="false" preserveAspectRatio="xMidYMid meet">${g}</svg>`
-    + `<svg class="anat-thumb" viewBox="${slug === 'intravitreal-injections' ? '60 14 180 172' : '128 22 156 156'}" role="img" aria-label="${label}" focusable="false" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+    + `<svg class="anat-thumb" viewBox="${slug === 'intravitreal-injections' ? '62 6 188 188' : '122 18 172 164'}" role="img" aria-label="${label}" focusable="false" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
 }
 /** Procedure illustration: the 3D render when it exists, otherwise the schematic plate. */
 function illustration(p, { eager = false, cls = '' } = {}) {

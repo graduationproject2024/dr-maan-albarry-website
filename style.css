@@ -272,7 +272,7 @@ html.drawer-open .site-header { z-index: 130; }
 .hero-card-rows dt { font-size: var(--fs-caption); color: var(--muted); }
 .hero-card-rows dd { font-size: var(--fs-small); color: var(--ink); font-weight: 500; line-height: 1.55; }
 .hero-facts { display: grid; gap: var(--s-4); margin-top: clamp(28px, 4vw, 56px); padding-top: var(--s-5); border-top: 1px solid var(--line); }
-.hero-fact { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-4); align-items: center; }
+.hero-fact { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: var(--s-4); align-items: center; }
 .hero-fact-value { font-family: var(--f-en-display); font-weight: 600; font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.6rem); color: var(--ink); line-height: 1; font-variant-numeric: lining-nums tabular-nums; min-width: 4.6ch; }
 .hero-fact-label { font-size: var(--fs-small); color: var(--ink-2); line-height: 1.5; }
 .hero-fact-sub { display: block; color: var(--muted); font-size: var(--fs-caption); }
@@ -316,7 +316,8 @@ html.drawer-open .site-header { z-index: 130; }
 .ap-lens-ghost { fill: none; stroke: var(--ap-line); stroke-width: 1.4; stroke-dasharray: 3 3; }
 .ap-beam { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 4 4; opacity: .9; }
 .ap-graft { fill: none; stroke: var(--accent); stroke-width: 1.4; }
-.ap-vitreous { fill: var(--accent-soft); stroke: none; opacity: .6; }
+.ap-vitreous { fill: var(--accent-soft); stroke: none; }
+.ap-drop { fill: var(--accent); }
 .ap-needle { fill: none; stroke: var(--ink); stroke-width: 2; }
 
 /* ------------------------------------------------------------
