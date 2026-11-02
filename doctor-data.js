@@ -160,6 +160,98 @@ export const DOCTOR = {
   medicalPreferences: {}
 };
 
+// ------------------------------------------------------------
+// PROCEDURE SCOPE — the procedures this site describes as part of Dr. Maan's practice.
+// Single source of truth for the homepage gallery, the /procedures/<slug>/ pages, the
+// sitemap/prerender route list and the procedure JSON-LD.
+//   source 'magrabi' = listed on the official Magrabi Health doctor profile (SOURCES.magrabi)
+//   source 'owner'   = confirmed by the site owner on 2026-11-01 as procedures Dr. Maan
+//                      personally performs (status 'confirmed'; not a Magrabi publication)
+// History lives in content/internal-registry.json (ids `procedure-<slug>`).
+// The long patient-education text for each page lives in src/procedures/content.js and is
+// general education from AAO / NEI / NHS sources — it is NOT physician-reviewed yet.
+// ------------------------------------------------------------
+export const PROCEDURE_GROUPS = [
+  { id: 'lens', ar: 'الماء الأبيض والعدسات', en: 'Cataract & lens surgery' },
+  { id: 'refractive', ar: 'تصحيح الإبصار', en: 'Vision correction' },
+  { id: 'cornea-retina', ar: 'القرنية والشبكية', en: 'Cornea & retina care' }
+];
+
+export const PROCEDURES = [
+  {
+    slug: 'cataract-surgery', group: 'lens', source: 'magrabi', status: 'published', kind: 'SurgicalProcedure', simulator: true,
+    name: { ar: 'جراحة الماء الأبيض (الساد)', en: 'Cataract surgery' },
+    summary: {
+      ar: 'إزالة عدسة العين المعتمة واستبدالها بعدسة صناعية شفافة، عندما يبدأ ضعف الرؤية بالتأثير في حياتك اليومية.',
+      en: 'The clouded natural lens is removed and replaced with a clear artificial lens once blurred vision starts to affect daily life.'
+    },
+    alt: { ar: 'رسم تشريحي لمقطع العين يُبرز العدسة الطبيعية خلف القزحية', en: 'Anatomical cross-section of the eye highlighting the natural lens behind the iris' },
+    related: ['lens-implants', 'laser-vision-correction', 'icl']
+  },
+  {
+    slug: 'lens-implants', group: 'lens', source: 'magrabi', status: 'published', kind: 'SurgicalProcedure',
+    name: { ar: 'العدسات المزروعة داخل العين', en: 'Lens implants (IOLs)' },
+    summary: {
+      ar: 'أنواع العدسات التي تُزرع بعد إزالة الساد: أحادية البؤرة، ممتدة المدى، متعددة أو ثلاثية البؤرة، والتوريكية للاستجماتيزم.',
+      en: 'The lenses placed during cataract surgery: monofocal, extended depth of focus, multifocal or trifocal, and toric for astigmatism.'
+    },
+    alt: { ar: 'رسم تشريحي لعدسة صناعية مزروعة داخل محفظة العدسة في العين', en: 'Anatomical illustration of an artificial lens implant sitting inside the eye’s lens capsule' },
+    related: ['cataract-surgery', 'icl', 'laser-vision-correction']
+  },
+  {
+    slug: 'laser-vision-correction', group: 'refractive', source: 'magrabi', status: 'published', kind: 'SurgicalProcedure',
+    name: { ar: 'تصحيح الإبصار بالليزر', en: 'Laser vision correction' },
+    summary: {
+      ar: 'إعادة تشكيل القرنية بالليزر (ليزك، الليزر السطحي PRK، سمايل) لتقليل الاعتماد على النظارة أو العدسات اللاصقة.',
+      en: 'Reshaping the cornea with a laser (LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.'
+    },
+    alt: { ar: 'رسم تشريحي لمقطع القرنية يوضح منطقة إعادة التشكيل بالليزر', en: 'Anatomical illustration of the cornea in section showing the area reshaped by laser' },
+    related: ['icl', 'keratoconus-cxl', 'lens-implants']
+  },
+  {
+    slug: 'icl', group: 'refractive', source: 'owner', status: 'confirmed', confirmedOn: '2026-11-01', kind: 'SurgicalProcedure',
+    name: { ar: 'زراعة العدسة اللاصقة الداخلية (ICL)', en: 'Implantable contact lens (ICL)' },
+    summary: {
+      ar: 'عدسة رقيقة تُزرع داخل العين مع الإبقاء على العدسة الطبيعية، خياراً لتصحيح النظر عندما لا يناسب الليزر.',
+      en: 'A thin lens placed inside the eye while keeping the natural lens — an option for vision correction when laser is not suitable.'
+    },
+    alt: { ar: 'رسم تشريحي لعدسة ICL مزروعة بين القزحية والعدسة الطبيعية', en: 'Anatomical illustration of an ICL positioned between the iris and the natural lens' },
+    related: ['laser-vision-correction', 'lens-implants', 'keratoconus-cxl']
+  },
+  {
+    slug: 'keratoconus-cxl', group: 'cornea-retina', source: 'magrabi', status: 'published', kind: 'TherapeuticProcedure',
+    name: { ar: 'القرنية المخروطية وتثبيت القرنية (CXL)', en: 'Keratoconus & corneal cross-linking (CXL)' },
+    summary: {
+      ar: 'تشخيص ترقق القرنية وتحدّبها، وتثبيتها بقطرات الريبوفلافين والأشعة فوق البنفسجية بهدف إبطاء تطور الحالة.',
+      en: 'Diagnosing a thinning, bulging cornea, and cross-linking it with riboflavin drops and UV light to help slow progression.'
+    },
+    alt: { ar: 'رسم تشريحي لقرنية مخروطية الشكل مقارنة بالقرنية الطبيعية', en: 'Anatomical illustration of a cone-shaped cornea compared with a normal cornea' },
+    related: ['corneal-transplant', 'laser-vision-correction', 'icl']
+  },
+  {
+    slug: 'corneal-transplant', group: 'cornea-retina', source: 'owner', status: 'confirmed', confirmedOn: '2026-11-01', kind: 'SurgicalProcedure',
+    name: { ar: 'زراعة القرنية', en: 'Corneal transplant (keratoplasty)' },
+    summary: {
+      ar: 'استبدال القرنية المتضررة كلياً أو جزئياً بنسيج قرنية من متبرع، حين لا تكفي العلاجات الأخرى.',
+      en: 'Replacing all or part of a damaged cornea with donor corneal tissue when other treatments are not enough.'
+    },
+    alt: { ar: 'رسم تشريحي لطبقات القرنية يوضح الجزء المستبدل في زراعة القرنية', en: 'Anatomical illustration of the corneal layers showing the part replaced in a transplant' },
+    related: ['keratoconus-cxl', 'cataract-surgery', 'intravitreal-injections']
+  },
+  {
+    slug: 'intravitreal-injections', group: 'cornea-retina', source: 'owner', status: 'confirmed', confirmedOn: '2026-11-01', kind: 'TherapeuticProcedure',
+    name: { ar: 'حقن العين (داخل الجسم الزجاجي)', en: 'Intravitreal injections' },
+    summary: {
+      ar: 'إيصال الدواء مباشرة إلى داخل العين لعلاج حالات في الشبكية، مثل التنكس البقعي الرطب ووذمة البقعة السكرية.',
+      en: 'Medicine delivered directly inside the eye to treat retinal conditions such as wet macular degeneration and diabetic macular oedema.'
+    },
+    alt: { ar: 'رسم تشريحي لمقطع العين يوضح الجسم الزجاجي والشبكية والبقعة', en: 'Anatomical cross-section of the eye showing the vitreous, retina and macula' },
+    related: ['cataract-surgery', 'corneal-transplant', 'lens-implants']
+  }
+];
+
+export const procedureBySlug = slug => PROCEDURES.find(p => p.slug === slug) || null;
+
 /** Returns true only for testimonials that meet every publication requirement. */
 export function isPublishableTestimonial(t) {
   return Boolean(
@@ -267,7 +359,7 @@ export function buildJsonLd() {
         url: SITE.url,
         telephone: d.contact.callCenter.tel,
         medicalSpecialty: ['Ophthalmologic'],
-        knowsAbout: ['Cataract Surgery', 'Intraocular Lens Implantation', 'Refractive Surgery', 'Corneal Cross-Linking (CXL)', 'Keratoconus'],
+        knowsAbout: PROCEDURES.map(p => p.name.en),
         hasCredential: d.professional.qualifications.map(q => ({
           '@type': 'EducationalOccupationalCredential',
           credentialCategory: q.id === 'frcs' ? 'Fellowship' : 'Board certification',
@@ -330,6 +422,10 @@ ${roles}
 - Google Maps: ${d.clinic.mapUrl}
 - Clinic hours: ${d.clinic.workingHours.en}
 
+## Procedures described on this website
+${PROCEDURES.map(p => `- ${p.name.en} (${p.name.ar}) — ${p.source === 'magrabi' ? 'listed on the Magrabi Health profile' : 'confirmed by the site owner as performed by Dr. Maan'}`).join('\n')}
+- Procedure pages are general patient education (AAO, NEI, NHS sources) and are marked as drafts pending Dr. Maan's medical review.
+
 ## Lens & simulator information
 - Intraocular lens content on this website is educational. Monofocal, extended depth of focus (EDOF) and trifocal lenses each have trade-offs; no single lens suits every patient, and the choice is made individually after examination.
 - Vision simulator: an educational illustration of relative differences across viewing distances. Individual results depend on a full clinical evaluation.
@@ -338,4 +434,45 @@ ${roles}
 - ${SOURCES.magrabi.label}: ${SOURCES.magrabi.url}
 - ${SOURCES.taibah.label}: ${SOURCES.taibah.url}
 `;
+}
+
+// ------------------------------------------------------------
+// Procedure page structured data: a MedicalWebPage about a MedicalProcedure.
+// No ratings, reviews, outcomes, prices, `reviewedBy` or `lastReviewed`: the pages
+// have not been medically reviewed yet.
+//   pageUrl  absolute canonical URL of the page
+//   siteUrl  absolute site root (no trailing slash)
+//   faq      [{ q, a }] in the page language, exactly as rendered
+// ------------------------------------------------------------
+export function buildProcedureJsonLd(slug, lang, pageUrl, siteUrl, faq = []) {
+  const p = procedureBySlug(slug);
+  if (!p) throw new Error(`unknown procedure ${slug}`);
+  const graph = [
+    {
+      '@type': 'MedicalWebPage',
+      '@id': `${pageUrl}#webpage`,
+      url: pageUrl,
+      name: p.name[lang],
+      description: p.summary[lang],
+      inLanguage: lang,
+      about: { '@id': `${pageUrl}#procedure` },
+      mainEntity: { '@id': `${pageUrl}#procedure` },
+      audience: { '@type': 'PeopleAudience', audienceType: 'Patient' },
+      isPartOf: { '@type': 'WebSite', url: `${siteUrl}/`, name: DOCTOR.identity.name[lang] }
+    },
+    {
+      '@type': p.kind === 'TherapeuticProcedure' ? 'TherapeuticProcedure' : 'SurgicalProcedure',
+      '@id': `${pageUrl}#procedure`,
+      name: p.name[lang],
+      alternateName: p.name[lang === 'ar' ? 'en' : 'ar'],
+      description: p.summary[lang],
+      bodyLocation: lang === 'ar' ? 'العين' : 'Eye'
+    }
+  ];
+  if (faq.length) graph.push({
+    '@type': 'FAQPage',
+    '@id': `${pageUrl}#faq`,
+    mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+  });
+  return { '@context': 'https://schema.org', '@graph': graph };
 }

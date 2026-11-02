@@ -1,7 +1,7 @@
 // SEO: prerendered localized HTML, routes that really exist, and metadata that agrees
 // across canonical / hreflang / sitemap / robots.
 import { test, expect } from '@playwright/test';
-import { DOCTOR } from '../doctor-data.js';
+import { DOCTOR, PROCEDURES } from '../doctor-data.js';
 
 test.describe('SEO — prerendered routes', () => {
   for (const [route, lang, dir] of [['/', 'ar', 'rtl'], ['/en/', 'en', 'ltr']]) {
@@ -42,7 +42,16 @@ test.describe('SEO — prerendered routes', () => {
     expect(enHtml).toContain(`<link rel="canonical" href="${alts.en}">`);
     const sitemap = await (await request.get('/sitemap.xml')).text();
     const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-    expect(locs).toEqual([alts.ar, alts.en]);
+    // 16 real pages: both homes + 7 procedure pages per language (procedure pages added in the
+    // clinical visual reconstruction); every one must exist, see the loop below.
+    expect(locs).toEqual(expect.arrayContaining([alts.ar, alts.en]));
+    expect(locs[0]).toBe(alts.ar);
+    expect(locs).toHaveLength(16);
+    expect(new Set(locs).size).toBe(16);
+    for (const slug of PROCEDURES.map(p => p.slug)) {
+      expect(locs).toContain(new URL(`procedures/${slug}/`, alts.ar).href);
+      expect(locs).toContain(new URL(`en/procedures/${slug}/`, alts.ar).href);
+    }
     expect(sitemap).not.toContain('#');
     for (const loc of locs) {
       const path = new URL(loc).pathname; // must exist on this server
