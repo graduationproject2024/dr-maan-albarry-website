@@ -1,0 +1,146 @@
+// Vision simulator — UI strings (Arabic first; English mirror). Clinical wording pending review by Dr. Maan.
+export const STRINGS = {
+  ar: {
+    region: 'محاكي الرؤية التعليمي',
+    disclaimer: 'رسم توضيحي تثقيفي — ليس توقعاً لرؤيتك؛ سيقدّم لك جرّاحك المشورة.',
+    lens: 'العدسة',
+    compare: 'قارن بين عدستين',
+    compareWith: 'قارن مع',
+    distance: 'مسافة النظر',
+    lighting: 'الإضاءة',
+    eye: 'إعدادات العين (اختياري)',
+    astig: 'استجماتيزم القرنية',
+    axis: 'محور الاستجماتيزم',
+    sphere: 'قصر أو طول نظر متبقٍّ',
+    none: 'لا يوجد',
+    lenses: {
+      monofocal: { name: 'أحادية البؤرة', short: 'أحادية' },
+      edof: { name: 'ممتدة العمق (EDOF)', short: 'EDOF' },
+      trifocal: { name: 'ثلاثية البؤرة', short: 'ثلاثية' },
+      toric: { name: 'توريك (للاستجماتيزم)', short: 'توريك' },
+      cataract: { name: 'الساد قبل العملية', short: 'ساد' },
+    },
+    presets: { near: 'قريب', intermediate: 'متوسط', distance: 'بعيد' },
+    presetDist: { near: '٤٠ سم', intermediate: '٦٦ سم', distance: '٦ م+' },
+    objects: { near: 'الهاتف', intermediate: 'الحاسوب', distance: 'اللوحة المرورية' },
+    lights: { day: 'نهار', dusk: 'غروب', night: 'ليل' },
+    sharpness: 'مؤشر الوضوح',
+    sharpnessNote: 'مؤشر نسبي من النموذج (١ = عدسة أحادية في بؤرتها)، وليس قياساً لحدة الإبصار.',
+    model: 'قيم النموذج (تقريبية)',
+    pupil: 'قطر البؤبؤ المفترض',
+    defocus: 'عدم التركيز عند الهدف',
+    blur: 'زاوية التشويش',
+    halo: 'مؤشر الهالات (نسبي)',
+    contrast: 'مؤشر التباين (نسبي)',
+    intended: 'المدى المصمَّم له',
+    tradeoffs: 'الموازنات',
+    how: 'كيف تعمل هذه المحاكاة؟',
+    divider: 'خط المقارنة بين العدستين',
+    viewerLabel: (a, b) => (b ? `مقارنة بين ${a} و${b}` : `محاكاة الرؤية بعدسة ${a}`),
+    announce: (lens, dist, band, light, b) => `${lens}${b ? ` مقابل ${b}` : ''}. ${dist}، ${band}. ${light}.`,
+    restoring: 'توقّف العرض مؤقتاً بسبب إعادة ضبط الرسوميات. جارٍ الاستعادة…',
+    restored: 'استؤنف العرض.',
+    fallbackTitle: 'العرض ثلاثي الأبعاد غير متاح على هذا الجهاز',
+    fallbackIntro: 'بدلاً منه: مقارنة ثابتة مبنية على النموذج نفسه. المنحنى يوضح شكل «منحنى عدم التركيز» لكل عدسة: كلما ارتفع الخط كانت الصورة أوضح عند تلك المسافة.',
+    chartTitle: 'شكل منحنى عدم التركيز (توضيحي)',
+    chartX: 'المسافة',
+    chartY: 'الوضوح النسبي',
+    qual: { sharp: 'واضح غالباً', soft: 'أقل وضوحاً', blur: 'مشوّش غالباً' },
+    cm: 'سم', m: 'م', D: 'ديوبتر', mm: 'مم', arcmin: 'دقيقة قوسية',
+    howBody: [
+      'تُرسم المشاهد بثلاث طبقات عمق: الهاتف (قريب)، الحاسوب (متوسط)، والشارع (بعيد). تُحسب لكل طبقة درجة عدم التركيز بالديوبتر = (١ ÷ المسافة بالمتر) − بؤرة العدسة.',
+      'زاوية التشويش ≈ قطر البؤبؤ × عدم التركيز. البؤبؤ أوسع في الإضاءة المنخفضة، لذلك يزداد التشويش والهالات ليلاً.',
+      'العدسات متعددة البؤر تقسم الضوء بين عدة بؤر، فتُرى صورة واضحة وأخرى مشوّشة في الوقت نفسه؛ لذلك يقل التباين وتظهر هالات حول الأضواء.',
+      'القيم مستوحاة من أشكال منحنيات منشورة في الأبحاث، وليست نتائج منتج بعينه، ولم يتم التحقق منها سريرياً.',
+      'لا تعكس المحاكاة التكيّف العصبي، ولا قياسات عينك، ولا صحة الشبكية أو سطح العين.',
+    ],
+  },
+  en: {
+    region: 'Educational vision simulator',
+    disclaimer: 'Educational illustration — not a prediction of your vision; your surgeon will advise.',
+    lens: 'Lens',
+    compare: 'Compare two lenses',
+    compareWith: 'Compare with',
+    distance: 'Viewing distance',
+    lighting: 'Lighting',
+    eye: 'Eye settings (optional)',
+    astig: 'Corneal astigmatism',
+    axis: 'Astigmatism axis',
+    sphere: 'Leftover short- or long-sightedness',
+    none: 'None',
+    lenses: {
+      monofocal: { name: 'Monofocal', short: 'Monofocal' },
+      edof: { name: 'Extended depth of focus (EDOF)', short: 'EDOF' },
+      trifocal: { name: 'Trifocal', short: 'Trifocal' },
+      toric: { name: 'Toric (for astigmatism)', short: 'Toric' },
+      cataract: { name: 'Cataract (before surgery)', short: 'Cataract' },
+    },
+    presets: { near: 'Near', intermediate: 'Intermediate', distance: 'Distance' },
+    presetDist: { near: '40 cm', intermediate: '66 cm', distance: '6 m+' },
+    objects: { near: 'phone', intermediate: 'laptop', distance: 'road sign' },
+    lights: { day: 'Day', dusk: 'Dusk', night: 'Night' },
+    sharpness: 'Sharpness index',
+    sharpnessNote: 'A relative model index (1 = a monofocal lens in focus), not a measure of visual acuity.',
+    model: 'Model values (approximate)',
+    pupil: 'Assumed pupil',
+    defocus: 'Defocus at target',
+    blur: 'Blur angle',
+    halo: 'Halo index (relative)',
+    contrast: 'Contrast index (relative)',
+    intended: 'Designed for',
+    tradeoffs: 'Trade-offs',
+    how: 'How does this simulation work?',
+    divider: 'Comparison divider between the two lenses',
+    viewerLabel: (a, b) => (b ? `Comparison of ${a} and ${b}` : `Simulated view with a ${a} lens`),
+    announce: (lens, dist, band, light, b) => `${lens}${b ? ` versus ${b}` : ''}. ${dist}, ${band}. ${light}.`,
+    restoring: 'The display paused because the graphics were reset. Restoring…',
+    restored: 'Display restored.',
+    fallbackTitle: '3D view is not available on this device',
+    fallbackIntro: 'Instead: a static comparison from the same model. The chart shows the shape of each lens’s “defocus curve”: the higher the line, the clearer the image at that distance.',
+    chartTitle: 'Defocus-curve shape (illustrative)',
+    chartX: 'Distance',
+    chartY: 'Relative sharpness',
+    qual: { sharp: 'Usually clear', soft: 'Softer', blur: 'Usually blurred' },
+    cm: 'cm', m: 'm', D: 'D', mm: 'mm', arcmin: 'arcmin',
+    howBody: [
+      'The view is drawn as three depth layers: the phone (near), the laptop (intermediate) and the street (distance). For each layer the defocus in dioptres = (1 ÷ distance in metres) − the lens focus.',
+      'Blur angle ≈ pupil diameter × defocus. Pupils are larger in low light, so blur and halos grow at night.',
+      'Multifocal lenses split light between several foci, so a sharp and a blurred image are seen at the same time — contrast is lower and halos appear around lights.',
+      'Values follow the shapes of defocus curves published in research. They are not any product’s results and have not been clinically validated.',
+      'The simulation does not include neural adaptation, your own eye measurements, or the health of your retina and eye surface.',
+    ],
+  },
+};
+
+/** Neutral, non-promotional lens descriptions: intended range and trade-offs. */
+export const LENS_INFO = {
+  ar: {
+    monofocal: { intended: 'رؤية واضحة لمسافة واحدة، غالباً البعيد.', tradeoffs: 'أقل هالات ليلية وأعلى تباين، لكن غالباً تلزم نظارة للقراءة والشاشات.' },
+    edof: { intended: 'مدى ممتد من البعيد إلى المسافات المتوسطة (الشاشات ولوحة القيادة).', tradeoffs: 'قد تلزم نظارة للقراءة الدقيقة؛ تباين أقل قليلاً وهالات خفيفة لدى بعض التصاميم.' },
+    trifocal: { intended: 'ثلاث بؤر: بعيد ومتوسط وقريب، لتقليل الحاجة إلى النظارة.', tradeoffs: 'انقسام الضوء يقلل التباين وقد يسبب هالات ووهجاً ليلاً، ويحتاج تكيّفاً.' },
+    toric: { intended: 'تصحيح استجماتيزم القرنية مع البؤرة المختارة (هنا: أحادية البؤرة).', tradeoffs: 'تعتمد الفائدة على دقة محور العدسة وثباته؛ الدوران يقلل التصحيح.' },
+    cataract: { intended: 'للمقارنة فقط: عدسة طبيعية معتمة قبل الجراحة.', tradeoffs: 'تشتت الضوء يسبب ضبابية ووهجاً واصفراراً للألوان، ولا تصححه النظارات بالكامل.' },
+  },
+  en: {
+    monofocal: { intended: 'Clear vision at one distance, usually far.', tradeoffs: 'Fewest night halos and highest contrast; glasses are usually needed for reading and screens.' },
+    edof: { intended: 'An extended range from distance to intermediate (screens, dashboard).', tradeoffs: 'Reading glasses may be needed for fine print; slightly lower contrast and mild halos with some designs.' },
+    trifocal: { intended: 'Three foci — distance, intermediate and near — to reduce reliance on glasses.', tradeoffs: 'Splitting light lowers contrast and can cause halos and glare at night; adaptation takes time.' },
+    toric: { intended: 'Corrects corneal astigmatism with the chosen focus (shown here: monofocal).', tradeoffs: 'The benefit depends on accurate, stable lens alignment; rotation reduces the correction.' },
+    cataract: { intended: 'For comparison only: a cloudy natural lens before surgery.', tradeoffs: 'Light scatter causes haze, glare and faded colours; glasses cannot fully correct it.' },
+  },
+};
+
+export function fmt(lang, n, digits = 0) {
+  try {
+    return new Intl.NumberFormat(lang === 'ar' ? 'ar-SA' : 'en-GB', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n);
+  } catch {
+    return n.toFixed(digits);
+  }
+}
+
+export function formatDistance(lang, m) {
+  const s = STRINGS[lang];
+  if (m >= 5.95) return lang === 'ar' ? `${fmt(lang, 6)} ${s.m}+` : `6 ${s.m}+`;
+  if (m >= 1) return `${fmt(lang, m, 1)} ${s.m}`;
+  return `${fmt(lang, Math.round(m * 100))} ${s.cm}`;
+}

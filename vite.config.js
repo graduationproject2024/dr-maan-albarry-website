@@ -71,7 +71,8 @@ export default defineConfig({
       // The 3D simulator harness page is test-only: built when CSIM_HARNESS=1 (Playwright sets it).
       input: {
         index: resolve(import.meta.dirname, 'index.html'),
-        ...(process.env.CSIM_HARNESS ? { cataractSimPreview: resolve(import.meta.dirname, 'cataract-sim-preview.html') } : {})
+        ...(process.env.CSIM_HARNESS ? { cataractSimPreview: resolve(import.meta.dirname, 'cataract-sim-preview.html') } : {}),
+        ...(process.env.CSIM_HARNESS ? { visionSimPreview: resolve(import.meta.dirname, 'vision-sim-preview.html') } : {})
       }
     }
   }
