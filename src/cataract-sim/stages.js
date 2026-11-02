@@ -4,9 +4,10 @@
 // No instrument settings, energies, sizes, durations or outcome promises are stated anywhere.
 // Stage `duration` values are animation playback seconds only, not surgical timings.
 
+import { EYE, FULCRUM, ENTRY_OUT, lerp, smooth, along } from './anatomy.js';
 import {
-  EYE, INCISION, ENTRY_OUT, lerp, smooth, along, pathAt, lensAntZ
-} from './anatomy.js';
+  TAU, forcepsGrasp, phacoTip, nucleusPieces, particlesAt, PHACO, iolState, nozzleTip, IOL_SCHEDULE, pathKeys
+} from './surgery.js';
 
 export const SOURCES = [
   { name: 'American Academy of Ophthalmology (EyeSmart) — What Is Cataract Surgery?', url: 'https://www.aao.org/eye-health/diseases/what-is-cataract-surgery' },
@@ -34,9 +35,10 @@ function preset(target, az, polar, dist) {
   };
 }
 
-const FAR = 26; // instrument parking distance outside the eye (mm along the entry axis)
-const outside = (s) => along(INCISION, ENTRY_OUT, s);
-const inside = (s) => along(INCISION, ENTRY_OUT, -s);
+const FAR = 26; // instrument parking distance outside the eye (mm along the tunnel axis)
+// Instruments only ever enter and leave along the tunnel axis through the incision (fulcrum).
+export const outside = (s) => along(FULCRUM, ENTRY_OUT, s);
+export const inside = (s) => along(FULCRUM, ENTRY_OUT, -s);
 
 export const STAGES = [
   {
@@ -48,7 +50,7 @@ export const STAGES = [
       ar: 'خلف القزحية الملوّنة توجد عدسة العين الطبيعية التي تُركّز الضوء على الشبكية. وفي حالة الساد (الماء الأبيض) تفقد هذه العدسة شفافيتها تدريجيًا وقد تميل إلى الاصفرار، فيتشتّت الضوء بدلًا من أن يتركّز بوضوح؛ ولهذا قد تبدو الرؤية ضبابية أو باهتة أو مصحوبة بوهج.'
     },
     focus: { en: 'Lens nucleus and cortex; the path of light through the eye', ar: 'نواة العدسة وقشرتها، ومسار الضوء داخل العين' },
-    camera: preset([0, 0, -4], 1.0, 1.32, 50),
+    camera: preset([0, 0, -4.5], 1.0, 1.32, 50),
     highlight: ['lens'],
     review: review([1, 3]),
     animate(p, P) {
@@ -83,18 +85,20 @@ export const STAGES = [
       ar: 'يُجرى شقّ صغير جدًا عند حافة القرنية حيث تلتقي القرنية الشفافة ببياض العين. يسمح هذا المدخل الدقيق بوصول الأدوات الجراحية الدقيقة إلى العدسة، وغالبًا ما يلتئم من تلقاء نفسه.'
     },
     focus: { en: 'Cornea and limbus (where the cornea meets the white of the eye)', ar: 'القرنية والحوف (منطقة التقاء القرنية ببياض العين)' },
-    camera: preset([3.2, 0, 1.2], 0.42, 1.22, 25),
+    camera: preset([3.4, 0, 0.9], 0.5, 1.2, 22),
     highlight: ['cornea'],
     review: review([0, 2]),
     animate(p, P) {
-      if (p < 0.92) {
-        const tip = pathAt([
-          { t: 0, p: outside(FAR) }, { t: 0.35, p: outside(0.5) },
-          { t: 0.6, p: inside(1.8) }, { t: 0.92, p: outside(FAR) }
+      // keratome: approaches along the tunnel axis, cuts through the clear cornea into the anterior chamber
+      // (tip ~1.6 mm past the fulcrum, above the iris) and withdraws along the same axis
+      if (p < 0.995) {
+        const tip = pathKeys([
+          { t: 0, p: outside(FAR) }, { t: 0.32, p: outside(0.7) },
+          { t: 0.58, p: inside(1.6) }, { t: 0.66, p: inside(1.6) }, { t: 0.95, p: outside(FAR) }
         ], p);
         P.instrument = { kind: 'keratome', tip };
       }
-      P.incision = smooth(0.38, 0.6, p);
+      P.incision = smooth(0.4, 0.58, p);
       if (p < 0.4) P.highlight = ['cornea'];
     }
   },
@@ -111,17 +115,21 @@ export const STAGES = [
     highlight: ['capsule'],
     review: review([0, 2]),
     animate(p, P) {
-      const R = EYE.rhexisR, zc = lensAntZ(R) + 0.12;
-      const circle = (a) => [R * Math.cos(a), R * Math.sin(a), zc];
-      const arc = smooth(0.18, 0.82, p);
-      P.rhexisArc = arc;
-      P.rhexisOpen = smooth(0.83, 0.93, p);
+      // continuous curvilinear tear: the tear front runs once around a circle; the torn flap is folded over and
+      // held by the forceps just behind the front; the free flap is then gathered and removed through the incision
+      const A = 0.16, B = 0.8, C = 0.86;
+      const arcFrac = smooth(A, B, p);
+      const arc = arcFrac * TAU;
+      P.rhexisArc = arcFrac;
+      P.rhexisOpen = p >= A;
+      const anchor = forcepsGrasp(TAU);
       let tip;
-      if (p < 0.18) tip = pathAt([{ t: 0, p: outside(FAR) }, { t: 0.1, p: INCISION }, { t: 0.18, p: circle(0) }], p);
-      else if (p < 0.82) tip = circle(arc * Math.PI * 2);
-      else tip = pathAt([{ t: 0.82, p: circle(Math.PI * 2) }, { t: 0.88, p: [0.6, 0, lensAntZ(0) + 0.6] }, { t: 0.95, p: INCISION }, { t: 1, p: outside(FAR) }], p);
+      if (p < A) tip = pathKeys([{ t: 0, p: outside(FAR) }, { t: 0.07, p: outside(0.4) }, { t: 0.11, p: inside(1.4) }, { t: A, p: forcepsGrasp(0) }], p);
+      else if (p < B) tip = forcepsGrasp(arc);
+      else if (p < C) tip = anchor;
+      else tip = pathKeys([{ t: C, p: anchor }, { t: 0.92, p: inside(1.4) }, { t: 0.95, p: outside(0.4) }, { t: 1, p: outside(FAR) }], p);
       if (p < 0.995) P.instrument = { kind: 'forceps', tip };
-      if (P.rhexisOpen > 0 && P.rhexisOpen < 1) P.flap = { tip, open: P.rhexisOpen };
+      if (p >= A && p < 0.95) P.flap = { arc, bunch: smooth(B, C, p), tip, anchor };
       P.highlight = p > 0.1 && p < 0.85 ? ['capsule'] : [];
     }
   },
@@ -134,26 +142,21 @@ export const STAGES = [
       ar: 'يُستخدم مسبار دقيق يعمل بالموجات فوق الصوتية لتفتيت العدسة المعتمة إلى أجزاء صغيرة وشفطها بلطف، وتُعرف هذه التقنية باسم استحلاب العدسة (الفاكو). وتبقى المحفظة الشفافة في مكانها كجيبٍ طبيعي.'
     },
     focus: { en: 'Lens nucleus and the capsular bag', ar: 'نواة العدسة والكيس المحفظي' },
-    camera: preset([0, 0, -0.6], 0.3, 1.25, 26),
+    camera: preset([0, 0, -1.0], 0.38, 1.12, 24),
     highlight: ['lens'],
     review: review([0, 2, 3]),
     animate(p, P) {
-      P.nucleusScale = 1 - smooth(0.2, 0.8, p);
-      P.cortexOpacity = 1 - smooth(0.5, 0.86, p);
-      P.cataract = 1 - smooth(0.2, 0.86, p);
-      let tip;
-      const work = [0.4, 0, -0.45];
-      if (p < 0.2) tip = pathAt([{ t: 0, p: outside(FAR) }, { t: 0.12, p: inside(0.6) }, { t: 0.2, p: work }], p);
-      else if (p < 0.8) {
-        const q = (p - 0.2) / 0.6;
-        const rad = 0.9 * (1 - 0.6 * q) * smooth(0, 0.08, q);
-        const a = q * Math.PI * 5;
-        tip = [work[0] * (1 - q) + rad * Math.cos(a), rad * Math.sin(a), work[2] - 0.35 * q];
-      } else tip = pathAt([{ t: 0.8, p: [0, 0, -0.8] }, { t: 0.9, p: inside(0.6) }, { t: 1, p: outside(FAR) }], p);
+      // fragmentation and emulsification INSIDE the capsular bag: central sculpting, cracking into four
+      // quadrants, each quadrant drawn to the probe tip and aspirated there; then the cortex clears
+      const tip = phacoTip(p, outside, inside);
       if (p < 0.995) P.instrument = { kind: 'phaco', tip };
-      P.fragments = p > 0.2 && p < 0.82 ? 1 : 0;
-      P.fragPhase = p;
-      P.highlight = p > 0.15 && p < 0.6 ? ['lens'] : [];
+      P.nucleusP = p;
+      const pieces = nucleusPieces(p);
+      P.particles = particlesAt(p, tip, pieces);
+      const removed = pieces.reduce((a, q) => a + (1 - (q.visible ? q.scale : 0)), 0) / 4;
+      P.cataract = 1 - removed;
+      P.cortexOpacity = 1 - smooth(PHACO.cortex[0], PHACO.cortex[1], p);
+      P.highlight = p > 0.12 && p < 0.4 ? ['lens'] : [];
     }
   },
   {
@@ -165,23 +168,19 @@ export const STAGES = [
       ar: 'تُطوى عدسة صناعية شفافة (عدسة داخل العين) لتمرّ عبر الفتحة الصغيرة. وداخل العين تنفرد بلطف، وتعمل ذراعاها المرنتان على تثبيتها في منتصف المحفظة.'
     },
     focus: { en: 'Intraocular lens inside the capsular bag', ar: 'العدسة الصناعية داخل الكيس المحفظي' },
-    camera: preset([0, 0, -0.6], -0.22, 1.24, 27),
+    camera: preset([0, 0, -1.0], -0.3, 1.15, 25),
     highlight: ['iol'],
     review: review([0, 2]),
     animate(p, P) {
-      if (p < 0.85) {
-        const tip = pathAt([{ t: 0, p: outside(FAR) }, { t: 0.15, p: inside(0.5) }, { t: 0.65, p: inside(0.5) }, { t: 0.85, p: outside(FAR) }], p);
+      // folded IOL leaves the cartridge nozzle (held in the incision), unfolds inside the capsular bag, the
+      // haptics open into the bag equator and the optic is centred behind the iris; then the empty bag settles
+      const S = IOL_SCHEDULE;
+      if (p < S.out[1]) {
+        const tip = pathKeys([{ t: 0, p: outside(FAR) }, { t: 0.1, p: outside(0.4) }, { t: 0.16, p: nozzleTip() }, { t: S.out[0], p: nozzleTip() }, { t: 0.55, p: outside(0.4) }, { t: S.out[1], p: outside(FAR) }], p);
         P.instrument = { kind: 'injector', tip };
       }
-      if (p > 0.15) {
-        const bag = [0, 0, EYE.lensEqZ + 0.05];
-        P.iol = {
-          pos: pathAt([{ t: 0.15, p: inside(1.3) }, { t: 0.35, p: [2.1, 0, 0.15] }, { t: 0.55, p: [0.3, 0, -1.05] }, { t: 0.85, p: bag }], p),
-          fold: 1 - smooth(0.3, 0.6, p),
-          open: smooth(0.55, 0.85, p),
-          spin: lerp(-0.7, 0, smooth(0.55, 0.92, p))
-        };
-      }
+      P.iol = iolState(p);
+      P.bagCollapse = smooth(S.collapse[0], S.collapse[1], p);
       P.highlight = p > 0.62 ? ['iol'] : [];
     }
   },
@@ -194,7 +193,7 @@ export const STAGES = [
       ar: 'تُسحب الأدوات وتعود الحدقة تدريجيًا نحو حجمها المعتاد. ومع وجود العدسة الصناعية الشفافة يمكن للضوء أن يعبر مجددًا ويتركّز على الشبكية. وتختلف فترة التعافي والنتائج من شخص لآخر، لذا سيرشدك طبيبك خلال مواعيد المتابعة.'
     },
     focus: { en: 'Light path through the new lens to the retina', ar: 'مسار الضوء عبر العدسة الجديدة نحو الشبكية' },
-    camera: preset([0, 0, -6.5], 1.0, 1.36, 58),
+    camera: preset([0, 0, -7], 1.0, 1.36, 58),
     highlight: [],
     review: review([0, 2, 3]),
     animate(p, P) {
@@ -234,9 +233,9 @@ export const STRUCTURES = [
 // Anatomical state shared by all stages.
 export function defaultParams() {
   return {
-    pupilR: EYE.pupilNormal, cataract: 1, nucleusScale: 1, cortexOpacity: 1,
-    rhexisArc: 0, rhexisOpen: 0, flap: null, incision: 0,
-    instrument: null, fragments: 0, fragPhase: 0, iol: null,
+    pupilR: EYE.pupilNormal, cataract: 1, nucleusP: 0, cortexOpacity: 1,
+    rhexisArc: 0, rhexisOpen: false, flap: null, incision: 0, bagCollapse: 0,
+    instrument: null, particles: [], iol: null,
     scatterRays: 0, focusRays: 0, cutaway: false, highlight: []
   };
 }
@@ -244,9 +243,11 @@ export function defaultParams() {
 // Deterministic scene state for (stage, local progress): the end state of every earlier stage, then the
 // current stage at p. Presentation-only fields are reset so they never leak between stages.
 export function paramsAt(index, p) {
+  index = Math.max(0, Math.min(STAGES.length - 1, Math.round(Number(index) || 0)));
+  p = Math.min(1, Math.max(0, Number(p) || 0));
   const P = defaultParams();
   for (let k = 0; k < index; k++) STAGES[k].animate(1, P);
-  Object.assign(P, { instrument: null, flap: null, fragments: 0, scatterRays: 0, focusRays: 0, cutaway: false, highlight: [] });
+  Object.assign(P, { instrument: null, flap: null, particles: [], scatterRays: 0, focusRays: 0, cutaway: false, highlight: [] });
   STAGES[index].animate(p, P);
   return P;
 }
