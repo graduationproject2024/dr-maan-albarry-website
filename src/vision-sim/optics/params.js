@@ -82,10 +82,10 @@ export const LENSES = Object.freeze({
     id: 'edof',
     // continuous extended focus approximated by 4 closely spaced foci with decreasing energy
     foci: Object.freeze([
-      { vergenceD: 0, weight: 0.55 },
-      { vergenceD: 0.5, weight: 0.22 },
-      { vergenceD: 1.0, weight: 0.13 },
-      { vergenceD: 1.5, weight: 0.06 },
+      { vergenceD: 0, weight: 0.50 },
+      { vergenceD: 0.5, weight: 0.20 },
+      { vergenceD: 1.0, weight: 0.15 },
+      { vergenceD: 1.5, weight: 0.11 },
     ]),
     lossFraction: 0.04,
     lossSpreadDeg: 1.5,
