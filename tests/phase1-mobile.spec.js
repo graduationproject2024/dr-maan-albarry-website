@@ -96,36 +96,39 @@ for (const [w, h] of MOBILE) {
           await expect(cta).toHaveAttribute('target', '_blank');
         });
 
-        test('simulator: tags never overlap, stay in frame, controls still work', async ({ page }) => {
+        test('simulator: lens tag stays in frame, controls fit and still work', async ({ page }) => {
           await open(page, { lang, theme });
-          await page.locator('#vs-view').scrollIntoViewIfNeeded();
-          for (const lens of ['edof', 'trifocal', 'monofocal', 'cataract']) {
-            await page.locator(`[data-lens="${lens}"]`).click();
-            await expect(page.locator(`[data-lens="${lens}"]`)).toHaveClass(/\bon\b/);
-            const view = await box(page, '#vs-view');
-            const [a, b] = await page.locator('.vs-tag').evaluateAll(els => els.map(el => {
-              const r = el.getBoundingClientRect(); return { x: r.x, right: r.right, y: r.y, bottom: r.bottom };
-            }));
-            expect(overlap(a, b)).toBe(false);
-            expect(inside(a, view)).toBe(true);
-            expect(inside(b, view)).toBe(true);
+          await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+          await expect(page.locator('#simulator-host .vsim-viewport')).toBeVisible({ timeout: 20_000 });
+          for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
+            await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
+            await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
+            // one synchronous snapshot: view and tag measured in the same frame
+            const { view, tag } = await page.evaluate(() => {
+              const r = el => { const b = el.getBoundingClientRect(); return { x: b.x, right: b.right, y: b.y, bottom: b.bottom, w: b.width, h: b.height }; };
+              return { view: r(document.querySelector('#simulator-host .vsim-viewport')), tag: r(document.querySelector('#simulator-host .vsim-tag-a')) };
+            });
+            expect(inside(tag, view)).toBe(true);
           }
-          const view = await box(page, '#vs-view');
+          const view = await box(page, '#simulator-host .vsim-viewport');
           expect(view.w).toBeGreaterThanOrEqual(w - 56); // baseline was 290px at 360px
-
-          expect(view.h / view.w).toBeCloseTo(9 / 16, 1);
-          // before/after slider via keyboard
-          await page.locator('#vs-view').focus();
+          expect(view.right).toBeLessThanOrEqual(w);
+          // every segmented control is a comfortable touch target and none is clipped
+          const bad = await page.evaluate(() => [...document.querySelectorAll('#simulator-host .vsim-seg-btn')]
+            .filter(l => !l.closest('[hidden], details:not([open])'))
+            .filter(l => { const b = l.getBoundingClientRect(); return b.height < 44 || b.right > innerWidth + 1 || b.x < -1; }).length);
+          expect(bad).toBe(0);
+          // distance slider via keyboard
+          const range = page.locator('#simulator-host .vsim-range');
+          await range.focus();
           await page.keyboard.press('Home');
-          await expect(page.locator('#vs-view')).toHaveAttribute('aria-valuenow', '0');
+          await expect(range).toHaveValue('0');
           await page.keyboard.press('End');
-          await expect(page.locator('#vs-view')).toHaveAttribute('aria-valuenow', '100');
-          // scene switching + curve tab
-          await page.locator('[data-scene="read"]').click();
-          await expect(page.locator('#vs-dist')).toBeVisible();
-          await page.locator('[data-tab="curve"]').click();
-          await expect(page.locator('#vs-curve svg')).toBeVisible();
-          await expect(page.locator('.vs-disclaimer-note')).toBeVisible();
+          await expect(range).toHaveValue('1000');
+          // lighting switch + persistent disclaimer
+          await page.locator('#simulator-host input[data-group="lighting"][value="night"] + label').click();
+          await expect(page.locator('#simulator-host input[data-group="lighting"][value="night"]')).toBeChecked();
+          await expect(page.locator('#simulator-host .vsim-disclaimer')).toBeVisible();
         });
       });
     }

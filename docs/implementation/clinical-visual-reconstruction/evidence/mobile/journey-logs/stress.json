@@ -1,0 +1,349 @@
+{
+  "emulation": "emulated",
+  "browser": "chromium (Playwright 1.64.1)",
+  "accessibilityMode": "none",
+  "network": "unthrottled (localhost)",
+  "id": "stress",
+  "persona": "Stress suite",
+  "objective": "Hammer every interactive surface with seeded random sequences (seed 20261102); the app must end in a consistent state with no errors or leaks.",
+  "device": "Generic phone profile 390×844, touch",
+  "language": "en/ar",
+  "theme": "light/dark",
+  "startUrl": "/en/procedures/cataract-surgery/",
+  "viewport": "390×844",
+  "test": "journeys\\stress.spec.js › Stress — seeded rapid interaction",
+  "startedAt": "2026-11-02T17:37:24.985Z",
+  "finishedAt": "2026-11-02T17:38:12.470Z",
+  "totals": {
+    "steps": 13,
+    "pass": 13,
+    "fail": 0,
+    "blocked": 0
+  },
+  "verdict": "PASS",
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedRequests": [
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    }
+  ],
+  "expectedFailedRequests": [],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Open the cataract page and start the 3D viewer",
+      "expected": "Ready",
+      "actual": "ready",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 2674,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 2,
+      "action": "20× play/pause with seeded gaps (30–150 ms)",
+      "expected": "Final mode matches the parity of the taps; one viewer",
+      "actual": "gaps=[39,88,54,77,57,105,62,90,58,77,43,77,51,42,57,72,78,33,38,135]; mode pause → pause; state=playing; instances=1",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 3414,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 3,
+      "action": "20 rapid seeded stage changes (next / prev / segment taps)",
+      "expected": "Stage always within 1…7 and the panel matches the last command",
+      "actual": "seq=seg4 next seg1 prev next seg3 next next next seg3 next next prev prev prev prev seg2 next seg1 next; final Stage 2 of 7",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 2508,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 4,
+      "action": "Rapid scrubbing: 25 seeded taps along the timeline",
+      "expected": "Scrubber value tracks the last tap position (±8%)",
+      "actual": "positions=[0.28,0.27,0.22,0.70,0.37,0.82,0.61,0.29,0.70,0.47,0.82,0.62,0.35,0.40,0.79,0.33,0.36,0.76,0.60,0.37,0.31,0.18,0.88,0.49,0.09]; final value 0.064",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1527,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 5,
+      "action": "Out-of-range input: ArrowRight ×20 and End/Home on the focused viewer",
+      "expected": "Stage clamps at 7 of 7 and 1 of 7; no errors",
+      "actual": "Stage 7 of 7 / Stage 1 of 7",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 225,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 6,
+      "action": "Resize while rendering: play, then 10 seeded viewport sizes (320–1440 wide)",
+      "expected": "Canvas always matches its container; no overflow; still one viewer",
+      "actual": "sizes=362×1019 800×1006 1084×744 641×588 529×1035 690×568 1079×901 380×806 1122×768 1087×631; mismatches=none; instances=1",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 3313,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 7,
+      "action": "Mount/destroy: close and reopen the viewer 10 times",
+      "expected": "Always one viewer; live WebGL contexts do not grow",
+      "actual": "live contexts after each reopen: 1,1,1,1,1,1,1,1,1,1; instances=1; \"too many contexts\" warnings=0",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 8905,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 8,
+      "action": "Back during animation: play, then browser Back",
+      "expected": "Previous page renders; the viewer is torn down; no errors",
+      "actual": "path=/en/; 3D instances=1 section=active; canvases=1",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 5147,
+      "url": "/en/"
+    },
+    {
+      "step": 9,
+      "action": "Refresh during loading ×3: tap Start and reload immediately",
+      "expected": "Each reload gives a clean page with the Start button; no uncaught errors",
+      "actual": "section after each reload: idle,idle,idle",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 6912,
+      "url": "/en/procedures/cataract-surgery/"
+    },
+    {
+      "step": 10,
+      "action": "Navigation cycle: visit all 14 procedure pages through the footer links (seeded order)",
+      "expected": "Every page renders its own h1; no errors; no overflow",
+      "actual": "order=lens-implants,cataract-surgery,keratoconus-cxl,keratoconus-cxl,lens-implants,lens-implants,icl,intravitreal-injections,icl,cataract-surgery,icl,corneal-transplant,lens-implants,laser-vision-correction; mismatches=none; overflow 0px",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 2544,
+      "url": "/procedures/laser-vision-correction/"
+    },
+    {
+      "step": 11,
+      "action": "Repeated theme (10×) and language (6×) toggles on the home page with the simulator mounted",
+      "expected": "Ends in the expected theme/language; exactly one vision simulator; its dir/theme follow",
+      "actual": "theme light → light; lang en; vsim instances=1 dir=ltr theme=light",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 5977,
+      "url": "/en/"
+    },
+    {
+      "step": 12,
+      "action": "Rapid lens switching: 30 seeded taps across the 5 lens buttons",
+      "expected": "Selected lens equals the last tap; explanation card follows; one canvas",
+      "actual": "seq=trifocal,cataract,monofocal,cataract,edof,monofocal,toric,monofocal,monofocal,toric,toric,trifocal,toric,monofocal,monofocal,edof,monofocal,monofocal,edof,edof,monofocal,edof,cataract,cataract,monofocal,trifocal,trifocal,toric,cataract,trifocal; final lens=trifocal; canvases=1",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1974,
+      "url": "/en/"
+    },
+    {
+      "step": 13,
+      "action": "Unknown and hostile URLs: /procedures/not-a-procedure/, a path and hash containing markup",
+      "expected": "Falls back safely; no script runs; nothing from the URL is rendered as HTML",
+      "actual": "/procedures/not-a-procedure/ → h1=\"د. معن بن عبدالله البري\" xss=0 injectedImgs=0 injectedScripts=0 | /procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/ → h1=\"د. معن بن عبدالله البري\" xss=0 injectedImgs=0 injectedScripts=0 | /en/#%3Cimg%20src=x%20onerror=window.__xss=1%3E → h1=\"Dr. Maan bin Abdullah Al Barry\" xss=0 injectedImgs=0 injectedScripts=0 | /en/?q=%3Cscript%3Ewindow.__xss=1%3C/script%3E#p-risks → h1=\"Dr. Maan bin Abdullah Al Barry\" xss=0 injectedImgs=0 injectedScripts=0",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pageErrors": [],
+      "failedRequests": [
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        }
+      ],
+      "ms": 2363,
+      "url": "/en/?q=%3Cscript%3Ewindow.__xss=1%3C/script%3E#p-risks"
+    }
+  ]
+}

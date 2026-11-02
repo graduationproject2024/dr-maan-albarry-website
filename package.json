@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
@@ -13,10 +13,14 @@
     "test:evidence": "npm run build && node tests/measure.mjs docs/implementation/phase-0-phase-1/final-closure/evidence"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
     "gh-pages": "^6.3.0",
     "puppeteer-core": "^25.16.0",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "three": "0.170.0"
   }
 }

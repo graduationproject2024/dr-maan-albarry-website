@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Vision simulator preview (internal)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- @doctor-json-ld -->
+    <style>
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #eef1f2; color: #17242c; }
+      body[data-theme="dark"] { background: #070d10; color: #e6edf0; }
+      .pv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; font-size: 14px; }
+      .pv-bar button { min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #9aa7ad; background: #fff; cursor: pointer; }
+      .pv-wrap { padding: 0 16px 24px; }
+      .pv-filler { max-width: 760px; margin: 24px auto; padding: 0 16px 40vh; line-height: 1.7; }
+      @media (max-width: 400px) { .pv-wrap { padding: 0 8px 16px; } }
+    </style>
+  </head>
+  <body>
+    <div class="pv-bar" aria-label="Preview harness controls">
+      <strong>Internal preview — vision simulator</strong>
+      <button type="button" id="pv-lang">Toggle language</button>
+      <button type="button" id="pv-theme">Toggle theme</button>
+    </div>
+    <div class="pv-wrap"><div id="vsim-host"></div></div>
+    <div class="pv-filler">
+      <p>This page exists only to develop and test the lazily loaded vision simulator module in isolation. It is not linked from the public site.</p>
+    </div>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const opts = { lang: q.get('lang') === 'en' ? 'en' : 'ar', theme: q.get('theme') === 'dark' ? 'dark' : 'light', debug: true };
+      if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
+      for (const k of ['lens', 'lensB', 'lighting']) if (q.has(k)) opts[k] = q.get(k);
+      if (q.has('d')) opts.distanceM = Number(q.get('d'));
+      if (q.get('compare') === '1') opts.compare = true;
+      if (q.has('cyl')) opts.refraction = { cylD: -Number(q.get('cyl')), axisDeg: Number(q.get('axis') || 180) };
+      if (q.get('nowebgl') === '1') {
+        // test hook: pretend the browser has no WebGL so the static fallback can be verified
+        const orig = HTMLCanvasElement.prototype.getContext;
+        HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return /webgl/.test(type) ? null : orig.call(this, type, ...rest); };
+      }
+      document.body.dataset.theme = opts.theme;
+      const host = document.getElementById('vsim-host');
+      window.__vsimHost = host;
+      window.__vsimEvents = [];
+      const mod = await import('./src/vision-sim/index.js');
+      window.__vsimModule = mod;
+      window.__vsimWire = (c) => { ['change', 'langchange', 'themechange', 'error', 'restored', 'ready'].forEach((ev) => c.on(ev, (p) => window.__vsimEvents.push({ ev, p }))); return c; };
+      window.__vsimMount = async (o = {}) => window.__vsimWire(await mod.mount(host, { ...opts, ...o }));
+      window.__vsim = await window.__vsimMount();
+      document.getElementById('pv-lang').addEventListener('click', () => { const c = window.__vsim; c.setLang(c.getState().lang === 'ar' ? 'en' : 'ar'); });
+      document.getElementById('pv-theme').addEventListener('click', () => {
+        const c = window.__vsim; const t = c.getState().theme === 'dark' ? 'light' : 'dark'; c.setTheme(t); document.body.dataset.theme = t;
+      });
+      document.body.dataset.ready = '1';
+    </script>
+  </body>
+</html>

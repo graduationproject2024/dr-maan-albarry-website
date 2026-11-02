@@ -1,0 +1,8 @@
+390-ar-light: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=18073
+390-en-dark: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=18745
+390-ar-dark: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=18073
+390-en-light: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=18745
+1440-ar-light: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=13545
+1440-en-dark: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=13906
+1440-ar-dark: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=13545
+1440-en-light: site-header, home, qualifications, profile, specialties, cataracts, questionnaire, simulator, cataract-3d, education, clinic, faq, footer | pageH=13906

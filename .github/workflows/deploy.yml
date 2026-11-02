@@ -33,8 +33,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The build prerenders / and /en/ in headless Chromium (scripts/prerender.mjs).
+      - name: Install Chromium for prerendering
+        run: npx playwright install --with-deps chromium
+
+      # drmaanalbarry.com does not resolve yet (D-14), so canonical/hreflang/sitemap/robots point at the
+      # GitHub Pages address. Change SITE_URL here once the production domain is live.
       - name: Build production bundle
         run: npm run build
+        env:
+          SITE_URL: https://graduationproject2024.github.io/dr-maan-albarry-website
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

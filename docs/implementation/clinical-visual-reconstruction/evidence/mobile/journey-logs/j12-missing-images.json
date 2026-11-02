@@ -1,0 +1,175 @@
+{
+  "emulation": "emulated",
+  "browser": "chromium (Playwright 1.64.1)",
+  "accessibilityMode": "none",
+  "network": "images/procedures/* aborted with route.abort",
+  "id": "j12-missing-images",
+  "persona": "Core journey (extra)",
+  "objective": "If the procedure illustrations fail to load, cards and pages fall back to the line drawing — no broken-image icons, no empty boxes.",
+  "device": "Generic phone profile 390×844, touch",
+  "language": "ar",
+  "theme": "light",
+  "startUrl": "/",
+  "viewport": "390×844",
+  "test": "journeys\\core-journeys.spec.js › J12 › J12 — procedure images missing",
+  "startedAt": "2026-11-02T17:36:53.160Z",
+  "finishedAt": "2026-11-02T17:37:08.106Z",
+  "totals": {
+    "steps": 2,
+    "pass": 2,
+    "fail": 0,
+    "blocked": 0
+  },
+  "verdict": "PASS",
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "expectedFailedRequests": [
+    {
+      "url": "http://localhost:4173/images/procedures/cataract-surgery.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/lens-implants.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/corneal-transplant.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/intravitreal-injections.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/cataract-surgery.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/lens-implants.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/corneal-transplant.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/intravitreal-injections.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Open / and swipe through the procedure cards",
+      "expected": "Every card shows the schematic plate; no broken <img>",
+      "actual": "plate, plate, plate, plate, plate, plate, plate",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j12-missing-images/01-open-and-swipe-through-the-procedure-car.jpg",
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 13499,
+      "url": "/"
+    },
+    {
+      "step": 2,
+      "action": "Open the ICL page",
+      "expected": "Hero figure falls back to the plate",
+      "actual": "{\"plate\":true,\"img\":false,\"h\":224}",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j12-missing-images/02-open-the-icl-page.jpg",
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 1260,
+      "url": "/procedures/icl/"
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+/* Vision simulator — every rule is scoped under .vsim. Colour tokens are self-contained (never inherited
+   from the host page). Palette follows the site's navy / gold / ivory system. */
+.vsim {
+  --vsim-bg: #fbfaf7;
+  --vsim-surface: #f2efe8;
+  --vsim-raised: #ffffff;
+  --vsim-text: #13212b;
+  --vsim-muted: #44525c;
+  --vsim-border: #ddd8cc;
+  --vsim-border-strong: #b9b2a3;
+  --vsim-primary: #15323d;
+  --vsim-on-primary: #ffffff;
+  --vsim-accent: #8a6a3a;
+  --vsim-accent-soft: rgba(184, 149, 90, 0.16);
+  --vsim-focus: #b07d2c;
+  --vsim-view: #1b2229;
+  --vsim-warn-bg: #fff6e5;
+  --vsim-warn-text: #5b4013;
+  --vsim-warn-border: #e5c98f;
+  --vsim-bar: #2f6b7a;
+  --vsim-bar-b: #9a6b2f;
+  --vsim-c-mono: #2f6b7a;
+  --vsim-c-edof: #2d8a63;
+  --vsim-c-tri: #9a6b2f;
+  --vsim-c-toric: #5b5fa8;
+  --vsim-c-cat: #a3473d;
+  --vsim-radius: 14px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(12px, 2.2vw, 26px);
+  display: grid;
+  gap: 18px;
+  color: var(--vsim-text);
+  background: var(--vsim-bg);
+  border: 1px solid var(--vsim-border);
+  border-radius: calc(var(--vsim-radius) + 6px);
+  font-family: "Inter", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  text-align: start;
+  -webkit-tap-highlight-color: transparent;
+}
+.vsim[lang="ar"] { font-family: "IBM Plex Sans Arabic", "Alexandria", "Segoe UI", Tahoma, sans-serif; line-height: 1.7; }
+.vsim[data-theme="dark"] {
+  --vsim-bg: #0f1b22;
+  --vsim-surface: #15242c;
+  --vsim-raised: #1a2c35;
+  --vsim-text: #e7edf0;
+  --vsim-muted: #a9bac3;
+  --vsim-border: #24384a;
+  --vsim-border-strong: #3d5a68;
+  --vsim-primary: #d4b98d;
+  --vsim-on-primary: #0f1b22;
+  --vsim-accent: #d4b98d;
+  --vsim-accent-soft: rgba(212, 185, 141, 0.14);
+  --vsim-focus: #e8c98f;
+  --vsim-view: #070c10;
+  --vsim-warn-bg: #2a2214;
+  --vsim-warn-text: #f1dcb1;
+  --vsim-warn-border: #6b5428;
+  --vsim-bar: #7fc0cf;
+  --vsim-bar-b: #e0b27a;
+  --vsim-c-mono: #7fc0cf;
+  --vsim-c-edof: #79d0a6;
+  --vsim-c-tri: #e0b27a;
+  --vsim-c-toric: #a9adf0;
+  --vsim-c-cat: #ef8e82;
+}
+.vsim *, .vsim *::before, .vsim *::after { box-sizing: border-box; }
+.vsim [hidden] { display: none !important; }
+.vsim :focus-visible { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim h3 { margin: 0 0 6px; font-size: 1rem; line-height: 1.35; }
+.vsim p { margin: 0; }
+.vsim b { font-weight: 600; }
+
+/* ---------- viewer ---------- */
+.vsim-stage { display: grid; gap: 10px; min-width: 0; }
+.vsim-viewport {
+  position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden;
+  border-radius: var(--vsim-radius); background: var(--vsim-view); isolation: isolate;
+  touch-action: pan-y;
+}
+@media (max-width: 640px) {
+  .vsim-viewport { aspect-ratio: 4 / 3; }
+  /* phones: the viewer bleeds to the card edge so it keeps the full content width (Phase 1 guarantee: >= viewport - 56px) */
+  .vsim-stage { margin-inline: -8px; }
+}
+.vsim-canvas-host, .vsim-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vsim-tag {
+  position: absolute; top: 10px; z-index: 2; max-width: 44%;
+  padding: 4px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; line-height: 1.3;
+  color: #fff; background: rgba(9, 18, 26, 0.72); backdrop-filter: blur(6px);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;
+}
+.vsim-tag-a { left: 10px; }
+.vsim-tag-b { right: 10px; }
+.vsim-tag-a::before { content: "A · "; opacity: 0.75; }
+.vsim-tag-b::before { content: "B · "; opacity: 0.75; }
+.vsim-divider {
+  position: absolute; top: 0; bottom: 0; z-index: 3; width: 44px; margin-left: -22px;
+  cursor: ew-resize; touch-action: none; display: flex; justify-content: center; align-items: center;
+}
+.vsim-divider-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: rgba(255, 255, 255, 0.92); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35); }
+.vsim-divider-knob {
+  position: relative; width: 34px; height: 34px; border-radius: 50%;
+  background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.vsim-divider-knob::before, .vsim-divider-knob::after {
+  content: ""; position: absolute; top: 11px; border: 6px solid transparent;
+}
+.vsim-divider-knob::before { left: 2px; border-right-color: #15323d; }
+.vsim-divider-knob::after { right: 2px; border-left-color: #15323d; }
+.vsim-divider:focus-visible { outline: none; }
+.vsim-divider:focus-visible .vsim-divider-knob { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim-note {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 4;
+  padding: 10px 12px; border-radius: 10px; background: rgba(9, 18, 26, 0.86); color: #fff; font-size: 0.9rem;
+}
+/* Headings take the simulator's own ink: the host page styles h1–h4 with its --ink, which is the light stage ink
+   inside the dark band and made card / meter titles ~1.1:1 on the light simulator surface (BUG-16, axe). */
+.vsim h3, .vsim h4 { color: var(--vsim-text); }
+.vsim-fallback { position: relative; z-index: 5; background: var(--vsim-surface); color: var(--vsim-text); padding: 16px; }
+.vsim--fallback .vsim-viewport { aspect-ratio: auto; background: var(--vsim-surface); }
+.vsim-fallback-body { display: grid; gap: 12px; }
+.vsim-fallback-title { font-size: 1.05rem; }
+.vsim-lens-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.vsim-lens-list li { display: grid; gap: 4px; padding: 12px; background: var(--vsim-raised); border: 1px solid var(--vsim-border); border-radius: 10px; font-size: 0.9rem; }
+
+.vsim-disclaimer {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 14px; border-radius: 10px; font-size: 0.92rem; font-weight: 500;
+  background: var(--vsim-warn-bg); color: var(--vsim-warn-text); border: 1px solid var(--vsim-warn-border);
+}
+.vsim-disclaimer svg { flex: none; margin-top: 2px; }
+
+/* ---------- controls ---------- */
+.vsim-controls { display: grid; gap: 16px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: start; min-width: 0; }
+.vsim-field, .vsim-field-sub { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 8px; }
+.vsim-field-lens { grid-column: 1 / -1; }
+.vsim-legend-title { padding: 0; margin: 0 0 2px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--vsim-muted); }
+.vsim[lang="ar"] .vsim-legend-title { letter-spacing: 0; text-transform: none; font-size: 0.9rem; }
+.vsim-seg {
+  display: grid; gap: 4px; padding: 4px; border-radius: 12px;
+  background: var(--vsim-surface); border: 1px solid var(--vsim-border);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));
+}
+.vsim-seg-lens { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 560px) { .vsim-seg-lens { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 360px) { .vsim-seg-lens { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.vsim-seg-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vsim-seg-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vsim-radio { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.vsim-seg-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  min-height: 44px; padding: 6px 8px; border-radius: 9px; cursor: pointer; text-align: center;
+  font-size: 0.92rem; font-weight: 600; line-height: 1.2; color: var(--vsim-text);
+  transition: background-color 0.15s ease, color 0.15s ease; overflow-wrap: break-word; hyphens: auto; min-width: 0;
+}
+.vsim-seg-btn:hover { background: var(--vsim-accent-soft); }
+.vsim-seg-sub { font-size: 0.78rem; font-weight: 500; color: var(--vsim-muted); }
+.vsim-radio:checked + .vsim-seg-btn { background: var(--vsim-primary); color: var(--vsim-on-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18); }
+.vsim-radio:checked + .vsim-seg-btn .vsim-seg-sub { color: inherit; opacity: 0.85; }
+.vsim-radio:focus-visible + .vsim-seg-btn { outline: 3px solid var(--vsim-focus); outline-offset: 1px; }
+
+.vsim-switch { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 600; width: fit-content; max-width: 100%; }
+.vsim-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.vsim-switch-track { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--vsim-border-strong); transition: background-color 0.15s ease; }
+.vsim-switch-track::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start 0.15s ease; }
+.vsim-switch input:checked + .vsim-switch-track { background: var(--vsim-primary); }
+.vsim-switch input:checked + .vsim-switch-track::after { inset-inline-start: 21px; }
+.vsim-switch input:focus-visible + .vsim-switch-track { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+
+.vsim-range-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.vsim-range-out { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.92rem; }
+@media (max-width: 400px) { .vsim-range-row { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+.vsim-range { width: 100%; height: 44px; margin: 0; background: transparent; accent-color: var(--vsim-primary); cursor: pointer; direction: ltr; }
+.vsim[dir="rtl"] .vsim-range { direction: rtl; }
+
+.vsim-eye { grid-column: 1 / -1; border: 1px solid var(--vsim-border); border-radius: 12px; padding: 0 12px; }
+.vsim-eye[open] { padding-bottom: 12px; }
+.vsim-eye > .vsim-field-sub { margin-top: 10px; }
+.vsim summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+
+/* ---------- info ---------- */
+.vsim-info { display: grid; gap: 16px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); min-width: 0; }
+.vsim-lensinfo { display: grid; gap: 10px; min-width: 0; align-content: start; }
+.vsim-card { padding: 14px; border-radius: 12px; background: var(--vsim-raised); border: 1px solid var(--vsim-border); display: grid; gap: 6px; align-content: start; font-size: 0.92rem; }
+.vsim-card-tag { display: inline-block; margin-inline-end: 8px; padding: 0 8px; border-radius: 6px; background: var(--vsim-accent-soft); color: var(--vsim-accent); font-size: 0.8rem; }
+.vsim-meters { min-width: 0; }
+.vsim-meters ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.vsim-meters li { display: grid; gap: 4px; padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; }
+.vsim-meters li.is-subject { border-color: var(--vsim-border-strong); background: var(--vsim-surface); }
+.vsim-meter-label { font-size: 0.88rem; font-weight: 600; }
+.vsim-meter-bars { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; }
+.vsim-bar { height: 8px; border-radius: 4px; background: var(--vsim-surface); border: 1px solid var(--vsim-border); overflow: hidden; }
+.vsim-bar > span { display: block; height: 100%; background: var(--vsim-bar); border-radius: inherit; }
+.vsim-meter-bars .vsim-bar:nth-of-type(2) > span { background: var(--vsim-bar-b); }
+.vsim-bar-val { font-size: 0.82rem; font-variant-numeric: tabular-nums; color: var(--vsim-muted); min-width: 4.5ch; }
+.vsim-fine { margin-top: 8px !important; font-size: 0.8rem; color: var(--vsim-muted); }
+.vsim-modelbox { margin-top: 6px; }
+.vsim-model { margin: 0; display: grid; gap: 4px; font-size: 0.86rem; }
+.vsim-model > div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--vsim-border); padding: 3px 0; }
+.vsim-model dt { color: var(--vsim-muted); }
+.vsim-model dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
+.vsim-model-tag { font-weight: 700; margin-top: 6px; }
+
+.vsim-how { border-top: 1px solid var(--vsim-border); padding-top: 4px; }
+.vsim-how [data-ref="how"] { display: grid; gap: 10px; font-size: 0.92rem; }
+.vsim-figure { margin: 0; display: grid; gap: 6px; }
+.vsim-chart { width: 100%; height: auto; max-height: 320px; }
+.vsim-grid { stroke: var(--vsim-border); stroke-width: 1; }
+.vsim-grid-v { stroke-dasharray: 3 4; }
+.vsim-axis { fill: var(--vsim-muted); font-size: 13px; font-family: inherit; }
+.vsim-axis-title { font-weight: 600; }
+.vsim-figure figcaption { display: grid; gap: 4px; font-size: 0.84rem; color: var(--vsim-muted); }
+.vsim-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.vsim-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.vsim-sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+@media (max-width: 400px) {
+  .vsim { font-size: 14px; gap: 14px; border-radius: 14px; }
+  .vsim-seg-btn { font-size: 0.8rem; padding: 6px 2px; }
+}
+.vsim[data-reduced-motion="true"] *, .vsim[data-reduced-motion="true"] *::before, .vsim[data-reduced-motion="true"] *::after { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .vsim *, .vsim *::before, .vsim *::after { transition: none !important; animation: none !important; } }

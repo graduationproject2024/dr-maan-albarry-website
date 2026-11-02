@@ -1,0 +1,407 @@
+{
+  "_purpose": "Internal content governance registry for doctor facts. NEVER imported by the app, so nothing here ships in the public bundle. tests/content-registry.spec.js asserts every 'public' fact below is present in doctor-data.js and rendered, and every 'internal' fact is absent from dist/.",
+  "_sourceCategories": {
+    "doctor": "Personally confirmed by Dr. Maan, relayed by the site owner",
+    "clinic": "Confirmed by an authorised clinic representative",
+    "owner": "Supplied by the website owner, not separately confirmed",
+    "magrabi": "Officially published by Magrabi Health",
+    "taibah": "Officially published by Taibah University",
+    "medical-reference": "Independently medically sourced",
+    "pending": "Awaiting confirmation",
+    "contradictory": "Conflicting sources, unresolved",
+    "no-permission": "Ineligible for publication without permission"
+  },
+  "facts": [
+    {
+      "id": "experience-since-1998",
+      "ar": "خبرة سريرية وأكاديمية وجراحية منذ عام 1998",
+      "en": "Clinical, academic and surgical experience since 1998",
+      "source": "owner",
+      "evidence": "commit 2fbf261 (2026-10-25); kept through Phase 0/1",
+      "status": "published",
+      "display": "public",
+      "dataPath": "professional.experienceSince",
+      "expect": 1998,
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "2fbf261",
+          "change": "added by owner"
+        }
+      ]
+    },
+    {
+      "id": "cases-15000",
+      "ar": "+15,000 فحص وإجراء جراحي في طب العيون",
+      "en": "15,000+ eye examinations & surgical procedures",
+      "meaning": "career total; examinations and surgical procedures combined; not surgeries alone, not patients",
+      "source": "doctor",
+      "evidence": "Original wording commit 9da524c (Arabic: 'فحص وإجراء جراحي دقيق'; English then read 'Specialized Ophthalmic Procedures'). Meaning confirmed by owner on behalf of Dr. Maan, 2026-11-01.",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "credibility.statistics[id=cases-15000].value",
+      "expect": "15,000+",
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "9da524c",
+          "change": "added as hero stat; AR/EN meanings differed"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "0a9d4f2",
+          "change": "removed in Phase 0: no source, undefined meaning"
+        },
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "restored with combined meaning confirmed by Dr. Maan; adjective 'دقيق' dropped as promotional"
+        }
+      ]
+    },
+    {
+      "id": "stat-100-percent",
+      "ar": "100% التزام طبي وفق بروتوكولات الفحص الدقيق",
+      "en": "100% Adherence to Diagnostic Protocols",
+      "source": "owner",
+      "evidence": "commit 9da524c",
+      "status": "no-measurable-definition",
+      "display": "internal",
+      "reason": "No defined measure, period or audit; reads as an outcome guarantee in medical marketing. Owner decision 2026-11-01: keep internal only.",
+      "forbiddenPattern": "100\\s?%\\s*(التزام|adherence)|Adherence to Diagnostic Protocols",
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "9da524c",
+          "change": "added as hero stat"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "0a9d4f2",
+          "change": "removed in Phase 0"
+        },
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "owner chose internal-only retention"
+        }
+      ]
+    },
+    {
+      "id": "role-chief-of-staff",
+      "ar": "كبير موظفي مركز مغربي المدينة المنورة (المشرف العام على الشؤون الطبية والإدارية والتشغيلية بالفرع)",
+      "en": "Chief of Staff – Magrabi Health Madinah (General Supervisor of Medical, Administrative & Operational Affairs)",
+      "source": "doctor",
+      "evidence": "Owner wording since 2fbf261 (earlier English read 'Chief Medical Officer'; owner replaced it). Supervision scope confirmed by Dr. Maan 2026-11-01. Magrabi's own profile uses different wording (outdated or simplified institutional text).",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "professional.roles[id=magrabi-chief]",
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "2fbf261",
+          "change": "added by owner"
+        },
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "source upgraded owner → doctor"
+        }
+      ]
+    },
+    {
+      "id": "role-sscc-first-president",
+      "en": "First President of the Saudi Association of Cornea, Cataract & Refractive Surgeons",
+      "source": "owner",
+      "status": "published",
+      "display": "public",
+      "dataPath": "professional.roles[id=sscc-president]",
+      "evidence": "commit 2fbf261"
+    },
+    {
+      "id": "role-taibah-chair",
+      "en": "Former Chairman, Department of Ophthalmology – Taibah University (10 years)",
+      "source": "owner",
+      "status": "published",
+      "display": "public",
+      "dataPath": "professional.roles[id=taibah-chair]",
+      "evidence": "commit 2fbf261"
+    },
+    {
+      "id": "role-sos-rep",
+      "en": "Former Representative of the Saudi Ophthalmological Society in Madinah",
+      "source": "owner",
+      "status": "published",
+      "display": "public",
+      "dataPath": "professional.roles[id=sos-rep]",
+      "evidence": "commit 2fbf261"
+    },
+    {
+      "id": "role-redsea-cofounder",
+      "en": "Co-Founder of the Red Sea International Ophthalmology Conference",
+      "source": "owner",
+      "status": "published",
+      "display": "public",
+      "dataPath": "professional.roles[id=redsea]",
+      "evidence": "commit 2fbf261"
+    },
+    {
+      "id": "qual-frcs",
+      "en": "Fellow of the Royal College of Surgeons, UK (FRCS)",
+      "source": "magrabi",
+      "status": "verified",
+      "display": "public",
+      "dataPath": "professional.qualifications[id=frcs]",
+      "evidence": "Magrabi profile"
+    },
+    {
+      "id": "qual-saudi-board",
+      "ar": "البورد السعودي في طب وجراحة العيون",
+      "en": "Saudi Board in Ophthalmology",
+      "source": "doctor",
+      "evidence": "Original wording 9da524c ('Royal College Fellowship & Saudi Board'); confirmed by Dr. Maan 2026-11-01",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "professional.qualifications[id=saudi-board]",
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "9da524c",
+          "change": "added"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "0a9d4f2",
+          "change": "removed in Phase 0: unverified"
+        },
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "restored, confirmed by Dr. Maan"
+        }
+      ]
+    },
+    {
+      "id": "rank-associate-professor",
+      "en": "Associate Professor – Taibah University",
+      "source": "doctor",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "professional.academicRank",
+      "evidence": "Taibah faculty profile + Dr. Maan 2026-11-01"
+    },
+    {
+      "id": "contact-clinic-direct",
+      "en": "Dr. Maan's clinic direct line 0554946433 — calls and WhatsApp",
+      "source": "doctor",
+      "evidence": "In site since 9da524c without source; approved by Dr. Maan for calls + WhatsApp 2026-11-01",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "contact.clinicDirect",
+      "expect": "+966554946433",
+      "history": [
+        {
+          "date": "2026-10-25",
+          "commit": "9da524c",
+          "change": "replaced Magrabi WhatsApp 966508533309 without source"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "0a9d4f2",
+          "change": "removed in Phase 0"
+        },
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "restored for calls + WhatsApp, approved by Dr. Maan"
+        }
+      ]
+    },
+    {
+      "id": "contact-magrabi-callcenter",
+      "en": "Magrabi contact center 920018000 / 19505",
+      "source": "magrabi",
+      "status": "verified",
+      "display": "public",
+      "dataPath": "contact.callCenter"
+    },
+    {
+      "id": "clinic-hours",
+      "en": "Saturday to Thursday: 9:00 AM – 1:00 PM · 5:00 PM – 9:30 PM",
+      "source": "doctor",
+      "evidence": "Original wording 2fbf261; confirmed by Dr. Maan 2026-11-01",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "clinic.workingHours"
+    },
+    {
+      "id": "testimonials-magrabi",
+      "en": "Three patient reviews from the official Magrabi profile",
+      "source": "no-permission",
+      "status": "pending-permission",
+      "display": "internal",
+      "reason": "Reuse permission undocumented; the site's previous text was reworded from the originals. Needs verbatim text, attribution and written permission."
+    },
+    {
+      "id": "procedure-cataract-surgery",
+      "ar": "جراحة الماء الأبيض (الساد)",
+      "en": "Cataract surgery",
+      "source": "magrabi",
+      "evidence": "Listed among Dr. Maan’s services on the official Magrabi Health doctor profile (https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry, accessed 2026-10-31).",
+      "status": "published",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=cataract-surgery]",
+      "expect": "cataract-surgery",
+      "pages": [
+        "/procedures/cataract-surgery/",
+        "/en/procedures/cataract-surgery/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "procedure page and homepage card added in the clinical visual reconstruction (scope: Magrabi profile)"
+        }
+      ]
+    },
+    {
+      "id": "procedure-lens-implants",
+      "ar": "العدسات المزروعة داخل العين",
+      "en": "Lens implants (IOLs)",
+      "source": "magrabi",
+      "evidence": "Listed among Dr. Maan’s services on the official Magrabi Health doctor profile (https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry, accessed 2026-10-31).",
+      "status": "published",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=lens-implants]",
+      "expect": "lens-implants",
+      "pages": [
+        "/procedures/lens-implants/",
+        "/en/procedures/lens-implants/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "procedure page and homepage card added in the clinical visual reconstruction (scope: Magrabi profile)"
+        }
+      ]
+    },
+    {
+      "id": "procedure-laser-vision-correction",
+      "ar": "تصحيح الإبصار بالليزر",
+      "en": "Laser vision correction",
+      "source": "magrabi",
+      "evidence": "Listed among Dr. Maan’s services on the official Magrabi Health doctor profile (https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry, accessed 2026-10-31).",
+      "status": "published",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=laser-vision-correction]",
+      "expect": "laser-vision-correction",
+      "pages": [
+        "/procedures/laser-vision-correction/",
+        "/en/procedures/laser-vision-correction/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "procedure page and homepage card added in the clinical visual reconstruction (scope: Magrabi profile)"
+        }
+      ]
+    },
+    {
+      "id": "procedure-icl",
+      "ar": "زراعة العدسة اللاصقة الداخلية (ICL)",
+      "en": "Implantable contact lens (ICL)",
+      "source": "owner",
+      "evidence": "Confirmed by the site owner on 2026-11-01 as a procedure Dr. Maan personally performs. Not published by Magrabi; keep the owner’s written record of this confirmation.",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=icl]",
+      "expect": "icl",
+      "pages": [
+        "/procedures/icl/",
+        "/en/procedures/icl/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "owner confirmed Dr. Maan performs this procedure; procedure page and homepage card added"
+        }
+      ]
+    },
+    {
+      "id": "procedure-keratoconus-cxl",
+      "ar": "القرنية المخروطية وتثبيت القرنية (CXL)",
+      "en": "Keratoconus & corneal cross-linking (CXL)",
+      "source": "magrabi",
+      "evidence": "Listed among Dr. Maan’s services on the official Magrabi Health doctor profile (https://www.magrabihealth.com/ar/sa/eye/our-doctors/dr-maan-abdullah-barry, accessed 2026-10-31).",
+      "status": "published",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=keratoconus-cxl]",
+      "expect": "keratoconus-cxl",
+      "pages": [
+        "/procedures/keratoconus-cxl/",
+        "/en/procedures/keratoconus-cxl/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "procedure page and homepage card added in the clinical visual reconstruction (scope: Magrabi profile)"
+        }
+      ]
+    },
+    {
+      "id": "procedure-corneal-transplant",
+      "ar": "زراعة القرنية",
+      "en": "Corneal transplant (keratoplasty)",
+      "source": "owner",
+      "evidence": "Confirmed by the site owner on 2026-11-01 as a procedure Dr. Maan personally performs. Not published by Magrabi; keep the owner’s written record of this confirmation.",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=corneal-transplant]",
+      "expect": "corneal-transplant",
+      "pages": [
+        "/procedures/corneal-transplant/",
+        "/en/procedures/corneal-transplant/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "owner confirmed Dr. Maan performs this procedure; procedure page and homepage card added"
+        }
+      ]
+    },
+    {
+      "id": "procedure-intravitreal-injections",
+      "ar": "حقن العين (داخل الجسم الزجاجي)",
+      "en": "Intravitreal injections",
+      "source": "owner",
+      "evidence": "Confirmed by the site owner on 2026-11-01 as a procedure Dr. Maan personally performs. Not published by Magrabi; keep the owner’s written record of this confirmation.",
+      "status": "confirmed",
+      "display": "public",
+      "dataPath": "PROCEDURES[slug=intravitreal-injections]",
+      "expect": "intravitreal-injections",
+      "pages": [
+        "/procedures/intravitreal-injections/",
+        "/en/procedures/intravitreal-injections/"
+      ],
+      "medicalReview": "draft — patient-education text pending review by Dr. Maan",
+      "history": [
+        {
+          "date": "2026-11-01",
+          "commit": null,
+          "change": "owner confirmed Dr. Maan performs this procedure; procedure page and homepage card added"
+        }
+      ]
+    }
+  ]
+}
