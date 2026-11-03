@@ -1,10 +1,16 @@
-// Render page: builds a procedure scene, renders it (2x supersampled), composites it onto the light and
-// dark backgrounds and exposes WebP data URLs to the Playwright driver (scripts/illustrations/render.mjs).
+// Render page: builds a procedure composition, renders its 3D passes (2x supersampled), composites them on the
+// light and dark backgrounds with any 2D overlays, and exposes WebP data URLs to the Playwright driver
+// (scripts/illustrations/render.mjs).
+//
+// A composition is { passes: [{ scene, camera, rect?, mask?, fade? }], under?(g, theme), over?(g, theme) }.
+//   pass.rect  [x, y, w, h] in output px (default: full frame)
+//   pass.mask  (g) => void, draws an alpha mask in output px; the pass keeps only what the mask covers
+//   pass.fade  { cx, cy, rx, ry, inner } soft elliptical edge fade in output px
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { SCENES, SLUGS } from './scenes.js';
-import { materials, makeSection } from './kit.js';
-import { OUT_W, OUT_H, SS, CAMERA, BG } from './style.js';
+import { SCENES, SLUGS } from './scenes/index.js';
+import { materials } from './kit.js';
+import { OUT_W, OUT_H, SS, BG, LIGHT_RIG } from './style.js';
 
 const RW = OUT_W * SS, RH = OUT_H * SS;
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true, premultipliedAlpha: true });
@@ -13,146 +19,143 @@ renderer.setSize(RW, RH, false);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping;
 renderer.toneMappingExposure = 1.0;
+renderer.localClippingEnabled = true;
 renderer.setClearColor(0x000000, 0);
 document.body.appendChild(renderer.domElement);
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-const yaw = CAMERA.yawDeg * Math.PI / 180, pitch = CAMERA.pitchDeg * Math.PI / 180;
-const VIEW_DIR = new THREE.Vector3(Math.sin(pitch), -Math.cos(pitch) * Math.cos(yaw), Math.cos(pitch) * Math.sin(yaw)).normalize();
+const v3 = (a) => new THREE.Vector3(...a);
 
-function makeCamera(frame) {
-  const cam = new THREE.PerspectiveCamera(CAMERA.fov, OUT_W / OUT_H, 1, 2000);
-  const dist = (frame.H / 2) / Math.tan((CAMERA.fov / 2) * Math.PI / 180);
-  const target = new THREE.Vector3(frame.target[0], 0, frame.target[1]);
-  cam.position.copy(target).addScaledVector(VIEW_DIR, dist);
-  cam.up.set(1, 0, 0);
-  cam.lookAt(target);
+// Camera from a target, a direction towards the camera, an up vector and the visible height (mm) at the target.
+function makeCamera({ target, dir, up = [0, 1, 0], H, fov = 18, ortho = false, aspect = OUT_W / OUT_H, shift = [0, 0] }) {
+  const t = v3(target), d = v3(dir).normalize();
+  let cam;
+  if (ortho) {
+    cam = new THREE.OrthographicCamera(-H * aspect / 2, H * aspect / 2, H / 2, -H / 2, 0.1, 4000);
+    cam.position.copy(t).addScaledVector(d, 400);
+  } else {
+    cam = new THREE.PerspectiveCamera(fov, aspect, 1, 4000);
+    cam.position.copy(t).addScaledVector(d, (H / 2) / Math.tan((fov / 2) * Math.PI / 180));
+  }
+  cam.up.copy(v3(up));
+  cam.lookAt(t);
   cam.updateMatrixWorld();
+  if (shift[0] || shift[1]) { // slide the frame (mm, screen right/up) so the subject sits off-centre
+    const r = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0), u = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 1);
+    const off = r.multiplyScalar(shift[0]).add(u.multiplyScalar(shift[1]));
+    cam.position.add(off); t.add(off); cam.updateMatrixWorld();
+  }
+  cam.updateProjectionMatrix();
+  cam.userData.target = t;
   return cam;
 }
 
-function lights(scene) {
-  scene.add(new THREE.HemisphereLight(0xfffaf2, 0xb8b2aa, 1.25));
-  const key = new THREE.DirectionalLight(0xfff6ea, 2.0); key.position.set(9, -12, 10); scene.add(key);
-  const fill = new THREE.DirectionalLight(0xe6eef5, 0.55); fill.position.set(-8, -6, -6); scene.add(fill);
-  const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(5, 10, -8); scene.add(rim);
-}
-
-function ctxFor() {
-  const mats = materials(envMap);
-  return {
-    mats,
-    scene() { const s = new THREE.Scene(); lights(s); return s; },
-    section(frame) {
-      const hx = (frame.H / 2) * 1.3, hz = (frame.H * (OUT_W / OUT_H) / 2) * 1.3;
-      const ppm = Math.min(RH / frame.H, 4096 / (2 * hx), 4096 / (2 * hz));
-      const [tx, tz] = frame.target;
-      return makeSection({ x0: tx - hx, x1: tx + hx, z0: tz - hz, z1: tz + hz }, ppm);
-    }
-  };
+// One light rig for the whole series, defined in CAMERA space so every composition is lit from the same
+// screen direction (key from the upper left, cool fill from the right, rim from behind).
+function lightScene(cam) {
+  const s = new THREE.Scene();
+  const right = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0);
+  const up = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 1);
+  const back = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 2);
+  const t = cam.userData.target;
+  const at = (v) => t.clone().addScaledVector(right, v[0] * 50).addScaledVector(up, v[1] * 50).addScaledVector(back, v[2] * 50);
+  const hemi = new THREE.HemisphereLight(LIGHT_RIG.hemi.sky, LIGHT_RIG.hemi.ground, LIGHT_RIG.hemi.i);
+  hemi.position.copy(up); s.add(hemi);
+  for (const L of LIGHT_RIG.dirs) {
+    const l = new THREE.DirectionalLight(L.color, L.i);
+    l.position.copy(at(L.v)); l.target.position.copy(t);
+    s.add(l, l.target);
+  }
+  return s;
 }
 
 function canvas2d(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
 
-function grab() {
+function project(cam, p, rect = [0, 0, OUT_W, OUT_H]) {
+  const v = v3(p).project(cam);
+  return [rect[0] + (v.x * 0.5 + 0.5) * rect[2], rect[1] + (-v.y * 0.5 + 0.5) * rect[3]];
+}
+
+function renderPass(p) {
+  const rect = p.rect || [0, 0, OUT_W, OUT_H];
+  const [w, h] = [rect[2], rect[3]];
+  renderer.setSize(w * SS, h * SS, false);
+  renderer.render(p.scene, p.camera);
   const [c, g] = canvas2d(OUT_W, OUT_H);
   g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-  g.drawImage(renderer.domElement, 0, 0, OUT_W, OUT_H);
+  g.drawImage(renderer.domElement, rect[0], rect[1], w, h);
+  if (p.fade) {
+    const f = p.fade;
+    g.save(); g.globalCompositeOperation = 'destination-in';
+    g.translate(f.cx, f.cy); g.scale(1, f.ry / f.rx);
+    const gr = g.createRadialGradient(0, 0, 0, 0, 0, f.rx);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(f.inner, 'rgba(0,0,0,1)');
+    gr.addColorStop(f.inner + (1 - f.inner) * 0.55, 'rgba(0,0,0,0.42)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.fillRect(-OUT_W * 4, -OUT_H * 4, OUT_W * 8, OUT_H * 8);
+    g.restore();
+  }
+  if (p.mask) {
+    const [m, mg] = canvas2d(OUT_W, OUT_H);
+    p.mask(mg);
+    g.save(); g.globalCompositeOperation = 'destination-in'; g.drawImage(m, 0, 0); g.restore();
+  }
+  renderer.setSize(RW, RH, false);
   return c;
-}
-
-function project(cam, x, z) {
-  const v = new THREE.Vector3(x, 0, z).project(cam);
-  return [(v.x * 0.5 + 0.5) * OUT_W, (-v.y * 0.5 + 0.5) * OUT_H];
-}
-
-function applyFade(layer, cam, fade) {
-  const g = layer.getContext('2d');
-  const [cx, cy] = project(cam, fade.center[0], fade.center[1]);
-  const [px] = project(cam, fade.center[0], fade.center[1] - fade.rz);
-  const [, py] = project(cam, fade.center[0] + fade.rx, fade.center[1]);
-  const rxp = Math.abs(px - cx), ryp = Math.abs(cy - py);
-  g.save();
-  g.globalCompositeOperation = 'destination-in';
-  g.translate(cx, cy); g.scale(1, ryp / rxp);
-  const gr = g.createRadialGradient(0, 0, 0, 0, 0, rxp);
-  gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(fade.inner, 'rgba(0,0,0,1)');
-  gr.addColorStop(fade.inner + (1 - fade.inner) * 0.5, 'rgba(0,0,0,0.45)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = gr; g.fillRect(-OUT_W * 4, -OUT_H * 4, OUT_W * 8, OUT_H * 8);
-  g.restore();
 }
 
 function background(g, theme) {
   const b = BG[theme];
-  const gr = g.createRadialGradient(OUT_W * 0.45, OUT_H * 0.45, 0, OUT_W * 0.5, OUT_H * 0.5, OUT_W * 0.75);
+  const gr = g.createRadialGradient(OUT_W * 0.46, OUT_H * 0.42, 0, OUT_W * 0.5, OUT_H * 0.5, OUT_W * 0.78);
   gr.addColorStop(0, b.inner); gr.addColorStop(1, b.outer);
   g.fillStyle = gr; g.fillRect(0, 0, OUT_W, OUT_H);
 }
 
-function roundRect(g, x, y, w, h, r) {
-  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
-  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+// On the dark background a faded-out bright tissue edge reads as a glowing halo. Tone the fading margin towards
+// the background colour so the subject sinks into the dark instead.
+function sinkEdges(layer, f) {
+  const [c, g] = canvas2d(OUT_W, OUT_H);
+  g.drawImage(layer, 0, 0);
+  g.globalCompositeOperation = 'source-atop';
+  g.translate(f.cx, f.cy); g.scale(1, f.ry / f.rx);
+  const gr = g.createRadialGradient(0, 0, 0, 0, 0, f.rx);
+  const t = Math.max(0, f.inner - 0.22);
+  gr.addColorStop(0, 'rgba(22,24,28,0)'); gr.addColorStop(t, 'rgba(22,24,28,0)');
+  gr.addColorStop(f.inner, 'rgba(22,24,28,0.4)'); gr.addColorStop(f.inner + (1 - f.inner) * 0.4, 'rgba(22,24,28,0.8)'); gr.addColorStop(1, 'rgba(22,24,28,0.96)');
+  g.fillStyle = gr; g.fillRect(-OUT_W * 4, -OUT_H * 4, OUT_W * 8, OUT_H * 8);
+  return c;
 }
 
 const outputs = {};
-
 window.SLUGS = SLUGS;
 window.renderSlug = (slug) => {
-  const ctx = ctxFor();
+  const mats = materials(envMap);
+  const ctx = {
+    mats, envMap, THREE,
+    camera: makeCamera,
+    scene: lightScene,
+    project,
+    W: OUT_W, H: OUT_H
+  };
   const def = SCENES[slug](ctx);
-  const cam = makeCamera(def.frame);
-
-  renderer.render(def.scene, cam);
-  const full = grab();
-  applyFade(full, cam, def.fade);
-
-  // instruments are drawn again without the edge fade so they enter the frame crisply
-  const hidden = [];
-  def.scene.traverse((o) => { if ((o.isMesh || o.isLine || o.isSprite) && !isInstrument(o) && o.visible) { hidden.push(o); o.visible = false; } });
-  renderer.render(def.scene, cam);
-  const inst = grab();
-  hidden.forEach((o) => { o.visible = true; });
-
-  let insetLayer = null;
-  if (def.inset) {
-    const [w, h] = [def.inset.rect[2], def.inset.rect[3]];
-    const width = def.inset.width, height = width * (RH / RW);
-    const oc = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0.1, 200);
-    oc.position.set(0, 0, 60); oc.up.set(1, 0, 0); oc.lookAt(0, 0, 0);
-    renderer.render(def.inset.scene, oc);
-    const [c, g] = canvas2d(w, h); g.imageSmoothingQuality = 'high';
-    g.drawImage(renderer.domElement, 0, 0, w, h);
-    insetLayer = c;
-  }
-
+  const layers = def.passes.map(renderPass);
   for (const theme of ['light', 'dark']) {
     const [c, g] = canvas2d(OUT_W, OUT_H);
     background(g, theme);
-    g.drawImage(full, 0, 0);
-    g.drawImage(inst, 0, 0);
-    if (insetLayer) {
-      const [x, y, w, h] = def.inset.rect;
-      roundRect(g, x, y, w, h, 18);
-      g.fillStyle = theme === 'light' ? 'rgba(255,255,255,0.72)' : 'rgba(40,44,50,0.82)'; g.fill();
-      g.lineWidth = 1.5; g.strokeStyle = theme === 'light' ? 'rgba(80,60,50,0.16)' : 'rgba(255,255,255,0.12)'; g.stroke();
-      g.beginPath(); g.moveTo(x + w / 2, y + 26); g.lineTo(x + w / 2, y + h - 26);
-      g.strokeStyle = theme === 'light' ? 'rgba(80,60,50,0.12)' : 'rgba(255,255,255,0.10)'; g.stroke();
-      g.drawImage(insetLayer, x, y);
-    }
+    if (def.under) { g.save(); def.under(g, theme); g.restore(); }
+    layers.forEach((l, i) => {
+      const p = def.passes[i];
+      if (p.before) { g.save(); p.before(g, theme); g.restore(); }
+      g.drawImage(theme === 'dark' && p.fade ? sinkEdges(l, p.fade) : l, 0, 0);
+    });
+    if (def.over) { g.save(); def.over(g, theme); g.restore(); }
     const [s, sg] = canvas2d(OUT_W / 2, OUT_H / 2); sg.imageSmoothingQuality = 'high';
     sg.drawImage(c, 0, 0, OUT_W / 2, OUT_H / 2);
     outputs[theme] = c; outputs[theme + '-800'] = s;
   }
-  // free GPU memory
-  for (const sc of [def.scene, def.inset?.scene].filter(Boolean)) sc.traverse((o) => { o.geometry?.dispose?.(); if (o.material) { o.material.map?.dispose?.(); o.material.dispose?.(); } });
+  for (const p of def.passes) p.scene.traverse((o) => { o.geometry?.dispose?.(); if (o.material) { o.material.map?.dispose?.(); o.material.dispose?.(); } });
   return true;
 };
 window.encode = (name, q, type = 'image/webp') => outputs[name].toDataURL(type, q);
-
-function isInstrument(o) {
-  for (let p = o; p; p = p.parent) if (p.userData.instrument) return true;
-  return false;
-}
 window.READY = true;
