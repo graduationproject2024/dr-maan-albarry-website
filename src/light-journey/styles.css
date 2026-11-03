@@ -1,0 +1,349 @@
+/* How Vision Works: Interactive Light Journey. Every rule is scoped under .lj and every colour is a local token,
+   so the module never inherits or leaks styles. The palette follows the site (porcelain, deep lagoon, terracotta)
+   and the procedure illustrations (tissue colours). */
+.lj {
+  --lj-bg: #fbfaf7;
+  --lj-surface: #ffffff;
+  --lj-stage-a: #fbf8f2;
+  --lj-stage-b: #eef1ef;
+  --lj-ink: #13201e;
+  --lj-ink-2: #34433f;
+  --lj-muted: #56655f;
+  --lj-line: #dfe5e2;
+  --lj-line-strong: #7c8b87;
+  --lj-primary: #0b5a52;
+  --lj-primary-hover: #08473f;
+  --lj-on-primary: #ffffff;
+  --lj-primary-soft: #dcebe7;
+  --lj-accent: #9e4322;
+  --lj-accent-soft: rgba(158, 67, 34, 0.08);
+  --lj-focus: #0b5a52;
+  --lj-ray: #d38a22;
+  --lj-ray-flow: rgba(255, 251, 238, 0.95);
+  --lj-shadow: 0 1px 2px rgba(19, 32, 30, 0.06), 0 12px 32px -18px rgba(19, 32, 30, 0.28);
+  /* anatomy */
+  --lj-sclera: #e4d9c5;
+  --lj-sclera-line: #c9b9a0;
+  --lj-cornea: rgba(170, 210, 222, 0.55);
+  --lj-cornea-line: #5f8e9c;
+  --lj-tear: #5fb7d3;
+  --lj-aqueous: rgba(160, 210, 224, 0.26);
+  --lj-iris: #7a5038;
+  --lj-iris-line: #4e3020;
+  --lj-ciliary: #8a4a3c;
+  --lj-lens: #f2e8cf;
+  --lj-lens-line: #b79e72;
+  --lj-gel-a: rgba(220, 236, 240, 0.85);
+  --lj-gel-b: rgba(226, 238, 240, 0.35);
+  --lj-retina: #d9806a;
+  --lj-choroid: #7a3328;
+  --lj-mac-a: #b8662e;
+  --lj-mac-b: rgba(214, 160, 70, 0);
+  --lj-nerve: #efe5d2;
+  --lj-nerve-line: #c3b292;
+  --lj-brain: #eddcd3;
+  --lj-brain-line: #b99a8b;
+  --lj-signal: #c7533a;
+  --lj-sky-a: #fff1cf;
+  --lj-sky-dim: #d7deea;
+  --lj-sun: #e5ab3c;
+  --lj-moon: #8d9bbb;
+  --lj-tree: #6f8d5e;
+  --lj-trunk: #7a5a40;
+  --lj-book: #f6f1e6;
+  --lj-book-line: #9a8a6c;
+  --lj-ground: #c9c2b4;
+  --lj-photo: #e9b7a4;
+  --lj-cone: #c96f3e;
+  --lj-rod: #8d6f9a;
+
+  --lj-f-display: "Source Serif 4", "Source Serif 4 Fallback", "Iowan Old Style", Georgia, serif;
+  --lj-f-text: "Public Sans", "Public Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  container-type: inline-size;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(18px, 3.4cqi, 44px);
+  display: grid;
+  gap: clamp(18px, 2.6cqi, 32px);
+  color: var(--lj-ink);
+  background: var(--lj-bg);
+  border: 1px solid var(--lj-line);
+  border-radius: 28px;
+  font-family: var(--lj-f-text);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-align: start;
+  -webkit-tap-highlight-color: transparent;
+}
+.lj[lang="ar"] {
+  --lj-f-display: "Readex Pro", "Readex Pro Fallback", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --lj-f-text: "Noto Sans Arabic", "Noto Sans Arabic Fallback", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  line-height: 1.85;
+}
+.lj[data-theme="dark"] {
+  --lj-bg: #0d1618;
+  --lj-surface: #13201f;
+  --lj-stage-a: #13201f;
+  --lj-stage-b: #0a1213;
+  --lj-ink: #e8efed;
+  --lj-ink-2: #c9d5d2;
+  --lj-muted: #a3b4b0;
+  --lj-line: #25373a;
+  --lj-line-strong: #6f8783;
+  --lj-primary: #7fcfc3;
+  --lj-primary-hover: #a0e0d6;
+  --lj-on-primary: #062522;
+  --lj-primary-soft: rgba(127, 207, 195, 0.12);
+  --lj-accent: #e9a183;
+  --lj-accent-soft: rgba(233, 161, 131, 0.09);
+  --lj-focus: #9fe3d8;
+  --lj-ray: #f2bf5e;
+  --lj-ray-flow: rgba(255, 246, 214, 0.95);
+  --lj-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 36px -20px rgba(0, 0, 0, 0.8);
+  --lj-sclera: #3a3a36;
+  --lj-sclera-line: #6d6656;
+  --lj-cornea: rgba(120, 180, 198, 0.42);
+  --lj-cornea-line: #8fc3d2;
+  --lj-tear: #8fdcf2;
+  --lj-aqueous: rgba(120, 180, 198, 0.16);
+  --lj-iris: #9a6a4c;
+  --lj-iris-line: #c9a184;
+  --lj-ciliary: #a35c4b;
+  --lj-lens: #d9cfb5;
+  --lj-lens-line: #e2cb9a;
+  --lj-gel-a: rgba(120, 160, 170, 0.22);
+  --lj-gel-b: rgba(120, 160, 170, 0.08);
+  --lj-retina: #e08b74;
+  --lj-choroid: #9b4637;
+  --lj-mac-a: #e2a043;
+  --lj-nerve: #4a453b;
+  --lj-nerve-line: #8a7d62;
+  --lj-brain: #4b3d3a;
+  --lj-brain-line: #a58777;
+  --lj-signal: #f08b6e;
+  --lj-sky-a: rgba(242, 191, 94, 0.22);
+  --lj-sky-dim: rgba(141, 155, 187, 0.18);
+  --lj-sun: #f2bf5e;
+  --lj-moon: #b8c3de;
+  --lj-tree: #8fae7d;
+  --lj-trunk: #a8835f;
+  --lj-book: #e6dfd0;
+  --lj-ground: #3d4a48;
+  --lj-photo: #5a3a33;
+}
+.lj *, .lj *::before, .lj *::after { box-sizing: border-box; }
+.lj :focus-visible { outline: 3px solid var(--lj-focus); outline-offset: 3px; border-radius: 10px; }
+.lj a { color: var(--lj-primary); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lj a:hover { color: var(--lj-primary-hover); }
+.lj p, .lj h2, .lj h3, .lj ol, .lj ul { margin: 0; }
+.lj-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
+
+/* ---- header */
+.lj-head { display: grid; gap: 8px; max-width: 62ch; }
+.lj-kicker { display: inline-flex; align-items: center; gap: 10px; color: var(--lj-primary); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.lj[lang="ar"] .lj-kicker { letter-spacing: 0; text-transform: none; font-size: 0.875rem; }
+.lj-kicker::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+.lj-title { font-family: var(--lj-f-display); font-weight: 500; font-size: clamp(1.75rem, 1.2rem + 2.6cqi, 2.9rem); line-height: 1.12; letter-spacing: -0.015em; color: var(--lj-ink); text-wrap: balance; }
+.lj[lang="ar"] .lj-title { letter-spacing: 0; line-height: 1.35; font-weight: 600; }
+.lj-lede { color: var(--lj-ink-2); font-size: clamp(1rem, 0.95rem + 0.3cqi, 1.125rem); max-width: 60ch; }
+
+/* ---- stage */
+.lj-stage { display: grid; gap: 10px; min-width: 0; }
+.lj-figure {
+  position: relative; min-width: 0; border-radius: 22px; overflow: hidden;
+  background: radial-gradient(120% 90% at 30% 35%, var(--lj-stage-a), var(--lj-stage-b));
+  border: 1px solid var(--lj-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.lj[data-theme="dark"] .lj-figure { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+.lj-svg { display: block; width: 100%; height: auto; }
+.lj-note { display: flex; align-items: center; gap: 8px; color: var(--lj-muted); font-size: 0.875rem; }
+.lj-note-dot { width: 18px; height: 3px; border-radius: 2px; background: var(--lj-ray); flex: none; }
+
+/* ---- diagram */
+.lj-svg text { font-family: var(--lj-f-text); font-size: 23px; font-weight: 600; fill: var(--lj-ink); paint-order: stroke; stroke: var(--lj-stage-a); stroke-width: 6px; stroke-linejoin: round; }
+.lj-part { transition: opacity 0.45s ease; }
+.lj-part:not(.is-active) { opacity: 0.5; }
+.lj-part.is-active { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--lj-primary) 35%, transparent)); }
+.lj-sky { opacity: 0.95; transition: opacity 0.5s ease; }
+.lj[data-light="dim"] .lj-sky { opacity: 0.55; }
+.lj-sky-a { stop-color: var(--lj-sky-a); }
+.lj[data-light="dim"] .lj-sky-a { stop-color: var(--lj-sky-dim); }
+.lj-sky-b { stop-color: var(--lj-stage-a); stop-opacity: 0; }
+.lj-sun circle { fill: var(--lj-sun); }
+.lj-sun line { stroke: var(--lj-sun); stroke-width: 4; stroke-linecap: round; }
+.lj-moon { fill: var(--lj-moon); }
+.lj-sun, .lj-moon, .lj-obj { opacity: 0; transition: opacity 0.4s ease; }
+.lj-sun.is-on, .lj-moon.is-on, .lj-obj.is-on { opacity: 1; }
+.lj-ground { stroke: var(--lj-ground); stroke-width: 2; stroke-linecap: round; }
+.lj-canopy { fill: var(--lj-tree); }
+.lj-trunk { fill: var(--lj-trunk); }
+.lj-book { fill: var(--lj-book); stroke: var(--lj-book-line); stroke-width: 2; stroke-linejoin: round; }
+.lj-book-lines { fill: none; stroke: var(--lj-book-line); stroke-width: 1.6; stroke-linecap: round; }
+.lj-src { fill: var(--lj-ray); }
+.lj-sclera { fill: none; stroke: var(--lj-sclera); stroke-width: 15; }
+.lj-axis { stroke: var(--lj-line-strong); stroke-width: 1.2; stroke-dasharray: 2 7; opacity: 0.5; }
+.lj-choroid { fill: none; stroke: var(--lj-choroid); stroke-width: 3; opacity: 0.8; }
+.lj-retina { fill: none; stroke: var(--lj-retina); stroke-width: 7; stroke-linecap: round; }
+.lj-mac-a { stop-color: var(--lj-mac-a); }
+.lj-mac-b { stop-color: var(--lj-mac-b); stop-opacity: 0; }
+.lj-gel-a { stop-color: var(--lj-gel-a); }
+.lj-gel-b { stop-color: var(--lj-gel-b); }
+.lj-cornea { fill: var(--lj-cornea); stroke: var(--lj-cornea-line); stroke-width: 2; }
+.lj-tear { fill: none; stroke: var(--lj-tear); stroke-width: 4; stroke-linecap: round; }
+.lj-aqueous { fill: var(--lj-aqueous); }
+.lj-iris { fill: var(--lj-iris); stroke: var(--lj-iris-line); stroke-width: 1.5; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-ciliary path { fill: var(--lj-ciliary); opacity: 0.85; }
+.lj-zonules line { stroke: var(--lj-lens-line); stroke-width: 1; opacity: 0.55; transition: all 0.6s ease; }
+.lj-lens { fill: var(--lj-lens); stroke: var(--lj-lens-line); stroke-width: 2; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-lens-shine { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 3; stroke-linecap: round; transition: d 0.6s ease; }
+.lj-nerve { fill: var(--lj-nerve); stroke: var(--lj-nerve-line); stroke-width: 2; }
+.lj-nerve-fibres { fill: none; stroke: var(--lj-nerve-line); stroke-width: 1.2; opacity: 0.6; }
+.lj-brain { fill: var(--lj-brain); stroke: var(--lj-brain-line); stroke-width: 2; }
+.lj-gyri { fill: none; stroke: var(--lj-brain-line); stroke-width: 2; stroke-linecap: round; }
+.lj-signal { fill: none; stroke: var(--lj-signal); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 0.03 0.05; opacity: 0; transition: opacity 0.4s ease; }
+.lj-signal.is-on { opacity: 1; }
+
+/* illustrative rays, revealed stage by stage */
+.lj-ray { fill: none; stroke: var(--lj-ray); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.75s cubic-bezier(0.4, 0, 0.2, 1), d 0.6s ease; }
+.lj-ray.is-on { stroke-dashoffset: 0; }
+.lj-ray--blocked { stroke-width: 2; opacity: 0.45; }
+.lj-flow { fill: none; stroke: var(--lj-ray-flow); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0.035 0.09; opacity: 0; transition: opacity 0.4s ease 0.5s, d 0.6s ease; }
+.lj[data-motion="full"] .lj-flow.is-on { opacity: 0.85; animation: lj-flow 1.6s linear infinite; }
+.lj[data-motion="full"] .lj-signal.is-on { animation: lj-flow 1.2s linear infinite; }
+@keyframes lj-flow { to { stroke-dashoffset: -0.125; } }
+.lj-focus { fill: var(--lj-ray); opacity: 0; transition: opacity 0.4s ease; }
+.lj-focus-glow { fill: var(--lj-ray); opacity: 0; transition: opacity 0.4s ease; }
+.lj-focus.is-on { opacity: 1; }
+.lj-focus-glow.is-on { opacity: 0.55; }
+
+/* photoreceptor inset */
+.lj-inset { opacity: 0; transition: opacity 0.45s ease; pointer-events: none; }
+.lj-inset.is-on { opacity: 1; }
+.lj-inset-bg { fill: var(--lj-surface); }
+.lj-inset-ring { fill: none; stroke: var(--lj-retina); stroke-width: 3; }
+.lj-inset-lead { stroke: var(--lj-retina); stroke-width: 2; stroke-dasharray: 4 5; }
+.lj-rod { fill: var(--lj-rod); }
+.lj-cone { fill: var(--lj-cone); }
+.lj-inset-ray { fill: none; stroke: var(--lj-ray); stroke-width: 3; stroke-linecap: round; }
+
+/* labels and the "illustrative" chip */
+.lj-label { opacity: 0; transition: opacity 0.35s ease; }
+.lj-label.is-active { opacity: 1; }
+.lj-label line { stroke: var(--lj-ink); stroke-width: 1.5; opacity: 0.55; }
+.lj-label circle { fill: var(--lj-accent); stroke: var(--lj-stage-a); stroke-width: 3; }
+.lj-illus rect { fill: var(--lj-surface); stroke: var(--lj-line); stroke-width: 1.5; opacity: 0.9; }
+.lj-illus circle { fill: var(--lj-ray); }
+.lj-svg .lj-illus text { font-size: 16px; font-weight: 600; fill: var(--lj-muted); stroke: none; letter-spacing: 0.04em; text-transform: uppercase; }
+.lj[lang="ar"] .lj-svg .lj-illus text { letter-spacing: 0; text-transform: none; font-size: 21px; }
+
+/* pointer targets inside the drawing */
+.lj-hits * { fill: transparent; cursor: pointer; pointer-events: all; }
+.lj-hits .lj-hit-line { fill: none; stroke: transparent; stroke-width: 40; pointer-events: stroke; }
+.lj-hits .lj-hit-line--thin { stroke-width: 14; }
+.lj-hits .lj-hit-line--wide { fill: transparent; pointer-events: all; stroke-width: 28; }
+
+/* ---- deck: explanation + navigation */
+.lj-deck { display: grid; gap: clamp(20px, 3cqi, 40px); min-width: 0; }
+.lj-panel { display: grid; gap: 12px; align-content: start; min-width: 0; outline: none; }
+.lj-count { font-family: var(--lj-f-display); color: var(--lj-muted); font-size: 1rem; line-height: 1; font-variant-numeric: tabular-nums lining-nums; }
+.lj-count-n { font-size: 2.6rem; color: var(--lj-primary); font-weight: 400; letter-spacing: -0.02em; }
+.lj-step-title { font-family: var(--lj-f-display); font-weight: 500; font-size: clamp(1.3rem, 1.1rem + 1.1cqi, 1.85rem); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+.lj[lang="ar"] .lj-step-title { line-height: 1.45; letter-spacing: 0; font-weight: 600; }
+.lj-body { color: var(--lj-ink-2); font-size: 1.0625rem; max-width: 62ch; }
+.lj-role { font-size: 0.9375rem; color: var(--lj-ink); padding-block: 10px; border-block: 1px solid var(--lj-line); }
+.lj-role-k { color: var(--lj-primary); font-weight: 700; }
+.lj-wrong:empty { display: none; }
+.lj-wrong { display: grid; gap: 8px; padding: 14px 16px; border-radius: 14px; background: var(--lj-accent-soft); border-inline-start: 3px solid var(--lj-accent); }
+.lj-wrong-k { font-size: 0.8125rem; font-weight: 700; color: var(--lj-accent); letter-spacing: 0.04em; text-transform: uppercase; }
+.lj[lang="ar"] .lj-wrong-k { letter-spacing: 0; text-transform: none; font-size: 0.875rem; }
+.lj-wrong ul { list-style: none; padding: 0; display: grid; gap: 4px; }
+.lj-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; text-decoration: none; }
+.lj-link:hover { text-decoration: underline; }
+.lj-sources { color: var(--lj-muted); font-size: 0.8125rem; }
+.lj-sources a { color: inherit; }
+
+.lj-side { display: grid; gap: 22px; align-content: start; min-width: 0; }
+.lj-nav { display: grid; gap: 14px; }
+.lj-rail { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; position: relative; }
+.lj-stop {
+  appearance: none; display: grid; justify-items: center; align-content: center; gap: 2px; width: 100%; min-width: 44px; min-height: 44px; padding: 0;
+  border: 0; background: transparent; color: var(--lj-muted); font: inherit; cursor: pointer; border-radius: 12px;
+}
+.lj-stop-n {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; font-size: 0.875rem; font-weight: 700; font-variant-numeric: tabular-nums;
+  border: 1.5px solid var(--lj-line-strong); background: var(--lj-surface); color: var(--lj-ink-2); transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.lj-stop-l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.lj-stop:hover .lj-stop-n { border-color: var(--lj-primary); color: var(--lj-primary); }
+.lj-stop.is-done .lj-stop-n { background: var(--lj-primary-soft); border-color: transparent; color: var(--lj-primary); }
+.lj-stop[aria-current="step"] .lj-stop-n { background: var(--lj-primary); border-color: var(--lj-primary); color: var(--lj-on-primary); transform: scale(1.08); }
+.lj-pn { display: flex; gap: 10px; flex-wrap: wrap; }
+.lj-btn {
+  appearance: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 20px; flex: 1 1 0;
+  border-radius: 999px; border: 1.5px solid var(--lj-line-strong); background: var(--lj-surface); color: var(--lj-ink); font: inherit; font-weight: 600; cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+.lj-btn:hover:not(:disabled) { border-color: var(--lj-primary); }
+.lj-btn:active:not(:disabled) { transform: scale(0.98); }
+.lj-btn--primary { background: var(--lj-primary); border-color: var(--lj-primary); color: var(--lj-on-primary); }
+.lj-btn--primary:hover:not(:disabled) { background: var(--lj-primary-hover); border-color: var(--lj-primary-hover); }
+.lj-btn:disabled { opacity: 0.45; cursor: default; }
+.lj-arrow::before { content: "\2192"; display: inline-block; }
+.lj[dir="rtl"] .lj-arrow::before { transform: scaleX(-1); }
+.lj-prev .lj-arrow::before { transform: scaleX(-1); }
+.lj[dir="rtl"] .lj-prev .lj-arrow::before { transform: none; }
+
+.lj-controls { display: grid; gap: 12px; padding: 16px; border-radius: 18px; background: var(--lj-surface); border: 1px solid var(--lj-line); box-shadow: var(--lj-shadow); }
+.lj-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 14px; background: var(--lj-bg); border: 1px solid var(--lj-line); }
+.lj-toggle-k { grid-column: 1 / -1; padding: 2px 8px 4px; font-size: 0.8125rem; font-weight: 600; color: var(--lj-muted); }
+.lj-seg {
+  appearance: none; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: var(--lj-ink-2);
+  font: inherit; font-weight: 600; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.lj-seg[aria-pressed="true"] { background: var(--lj-surface); color: var(--lj-primary); box-shadow: 0 0 0 1.5px var(--lj-primary), 0 4px 10px -6px rgba(0, 0, 0, 0.3); }
+.lj[data-theme="dark"] .lj-seg[aria-pressed="true"] { background: var(--lj-primary-soft); }
+
+.lj-text { border-top: 1px solid var(--lj-line); padding-top: 14px; }
+.lj-text summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-weight: 600; color: var(--lj-primary); }
+.lj-text ol { display: grid; gap: 12px; padding-inline-start: 1.4em; margin-top: 8px; color: var(--lj-ink-2); max-width: 75ch; }
+.lj-disclaimer { margin-top: 12px; font-size: 0.875rem; color: var(--lj-muted); }
+
+/* ---- wide containers: diagram on top, explanation beside the navigation */
+@container (min-width: 880px) {
+  .lj-deck { grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); }
+  .lj-rail { grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px; }
+  .lj-rail::before { content: ""; position: absolute; inset-inline: 5%; top: 22px; height: 1.5px; background: var(--lj-line); z-index: 0; }
+  .lj-stop { position: relative; z-index: 1; align-content: start; padding-top: 5px; min-height: 64px; }
+  .lj-stop-l { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; display: block; font-size: 0.6875rem; line-height: 1.25; text-align: center; color: var(--lj-muted); padding-inline: 2px; }
+  .lj-stop[aria-current="step"] .lj-stop-l { color: var(--lj-ink); font-weight: 700; }
+  .lj-controls { grid-template-columns: 1fr 1fr; }
+}
+/* narrow containers: navigation right under the drawing, then the explanation, then the switches */
+@container (max-width: 879px) {
+  .lj-side { display: contents; }
+  .lj-nav { order: 1; }
+  .lj-panel { order: 2; }
+  .lj-controls { order: 3; }
+}
+/* small containers: the drawing keeps only the essentials */
+@container (max-width: 560px) {
+  .lj-labels, .lj-illus { display: none; }
+  .lj { border-radius: 22px; }
+  .lj-figure { border-radius: 16px; margin-inline: -4px; }
+}
+
+/* ---- reduced motion: no autonomous animation, no transitions; changes happen step by step */
+.lj[data-motion="reduce"] *, .lj[data-motion="reduce"] *::before, .lj[data-motion="reduce"] *::after { transition: none !important; animation: none !important; }
+.lj[data-motion="reduce"] .lj-flow { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .lj:not([data-motion="full"]) *, .lj:not([data-motion="full"]) *::before { transition: none !important; animation: none !important; }
+}
+@media (forced-colors: active) {
+  .lj-ray { stroke: Highlight; }
+  .lj-stop[aria-current="step"] .lj-stop-n { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}

@@ -4,8 +4,16 @@ export const OUT_W = 1600;
 export const OUT_H = 1000;
 export const SS = 2; // supersampling factor of the WebGL render (3200 x 2000, downsampled to 1600 x 1000)
 
-// Camera language: slightly elevated three-quarter view of a sagittal cut-away, anterior to the LEFT.
-export const CAMERA = { fov: 14, yawDeg: 24, pitchDeg: 9 };
+// One light rig for the whole series, in camera space ([right, up, towards-viewer]): a warm key light from the
+// upper left, a cool fill from the right, a rim light from behind and a soft warm/grey hemisphere.
+export const LIGHT_RIG = {
+  hemi: { sky: 0xfffaf2, ground: 0xb4aea6, i: 1.15 },
+  dirs: [
+    { color: 0xfff4e6, i: 2.1, v: [-0.55, 0.62, 0.56] },
+    { color: 0xe4edf6, i: 0.6, v: [0.75, -0.15, 0.45] },
+    { color: 0xffffff, i: 0.75, v: [0.25, 0.55, -0.8] }
+  ]
+};
 
 // Line weight of the ink outlines, in output pixels at 1600 px width.
 export const INK_PX = 2.1;

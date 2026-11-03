@@ -102,7 +102,7 @@ function ringTexture() {
 }
 
 // Phakic posterior-chamber plate lens: vaulted plate with central optic and footplates resting in the sulcus.
-export function phakicLens(mats, { L = 5.75, Rb = 17, zApex = 0.84 } = {}) {
+export function phakicLens(mats, { L = 5.75, Rb = 17, zApex = 0.84, full = false } = {}) {
   const hw = (x) => {
     const ax = Math.abs(x);
     if (ax <= 2.6) return 3.25;
@@ -118,7 +118,7 @@ export function phakicLens(mats, { L = 5.75, Rb = 17, zApex = 0.84 } = {}) {
   for (let i = 0; i <= Nu; i++) {
     const x = -L + (2 * L * i) / Nu, w = hw(x);
     for (let j = 0; j <= Nv; j++) {
-      const y = (w * j) / Nv, z = base(x, y); // kept half only (y >= 0), like the tissues
+      const y = full ? -w + (2 * w * j) / Nv : (w * j) / Nv, z = base(x, y); // half: y >= 0 only, like the tissues
       bot.push(x, y, z); topV.push(x, y, z + th(x, y));
     }
   }
@@ -129,7 +129,7 @@ export function phakicLens(mats, { L = 5.75, Rb = 17, zApex = 0.84 } = {}) {
     idx.push(a, b, d, a, d, c); // top
     idx.push(off + a, off + d, off + b, off + a, off + c, off + d); // bottom
   }
-  for (let i = 0; i < Nu; i++) for (const j of [Nv]) { // outer side wall (the y = 0 cut is painted)
+  for (let i = 0; i < Nu; i++) for (const j of full ? [0, Nv] : [Nv]) { // side walls (a y = 0 cut is painted)
     const a = i * cols + j, b = (i + 1) * cols + j;
     idx.push(a, off + a, off + b, a, off + b, b);
   }

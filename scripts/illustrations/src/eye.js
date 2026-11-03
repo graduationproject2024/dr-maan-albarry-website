@@ -285,8 +285,8 @@ function zonules3D(lens) {
 }
 
 // Optic nerve leaving the globe ~15 degrees nasal (lower half of the image) to the posterior pole.
-const NERVE_A = 165 * DEG;
-const nerveW = spline([[EYE.Ri - 0.6, 0.78], [EYE.scleraR, 0.8], [EYE.scleraR + 1.6, 1.45], [EYE.scleraR + 9, 1.5]]);
+export const NERVE_A = 157 * DEG; // optic disc ~4.4 mm nasal to the fovea
+export const nerveW = spline([[EYE.Ri - 0.6, 0.78], [EYE.scleraR, 0.8], [EYE.scleraR + 1.6, 1.45], [EYE.scleraR + 9, 1.5]]);
 function nerveFrame() {
   const dx = -Math.sin(NERVE_A), dz = Math.cos(NERVE_A); // left (x < 0) half
   return { d: [dx, dz], p: [dz, -dx], O: [0, EYE.cz] };

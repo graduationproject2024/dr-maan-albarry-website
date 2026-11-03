@@ -72,7 +72,7 @@ export function corneaSpec(over = {}) {
 }
 
 // Half (y >= 0) 3D cornea solid from a corneaSpec. `radii` lets callers add sample rings at sharp features.
-export function corneaMesh(spec, { radii = [], segments = 160, rings = 90 } = {}) {
+export function corneaMesh(spec, { radii = [], segments = 160, rings = 90, phiLength = Math.PI } = {}) {
   const R = spec.R;
   let rs = [];
   for (let k = 0; k <= rings; k++) rs.push(R * Math.sin((k / rings) * Math.PI / 2));
@@ -81,7 +81,7 @@ export function corneaMesh(spec, { radii = [], segments = 160, rings = 90 } = {}
   const mk = (fn) => {
     const pos = [];
     for (let i = 0; i <= segments; i++) {
-      const phi = (i / segments) * Math.PI;
+      const phi = (i / segments) * phiLength;
       for (let j = 0; j < nR; j++) pos.push(...fn(rs[j] * Math.cos(phi), rs[j] * Math.sin(phi)));
     }
     return pos;
@@ -103,7 +103,7 @@ export function corneaMesh(spec, { radii = [], segments = 160, rings = 90 } = {}
   // rim strip at r = R
   const rim = [];
   for (let i = 0; i <= segments; i++) {
-    const phi = (i / segments) * Math.PI, x = R * Math.cos(phi), y = R * Math.sin(phi);
+    const phi = (i / segments) * phiLength, x = R * Math.cos(phi), y = R * Math.sin(phi);
     rim.push(x, y, spec.G(x, y), ...spec.post(x, y));
   }
   const ridx = [];
@@ -245,4 +245,98 @@ export function offsetLine(pts, d) {
     const tx = b[0] - a[0], tz = b[1] - a[1], l = Math.hypot(tx, tz) || 1;
     return [p[0] - (tz / l) * d, p[1] + (tx / l) * d];
   });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Wedge cut-aways. The removed wedge spans polar angle phi0 -> phi1 (counter-clockwise, < 180 deg) around
+// the optical (Z) axis. Materials use clipIntersection, so only the region behind BOTH planes is discarded.
+export function wedgePlanes(phi0, phi1) {
+  return [
+    new THREE.Plane(new THREE.Vector3(Math.sin(phi0), -Math.cos(phi0), 0), 0),
+    new THREE.Plane(new THREE.Vector3(-Math.sin(phi1), Math.cos(phi1), 0), 0)
+  ];
+}
+export function clipAll(obj, planes) {
+  obj.traverse((o) => {
+    if (!o.material) return;
+    for (const m of Array.isArray(o.material) ? o.material : [o.material]) { m.clippingPlanes = planes; m.clipIntersection = true; }
+  });
+  return obj;
+}
+
+// Half-plane quad at polar angle phi carrying a painted section (canvas x = radius r >= 0, so build the
+// section with bounds.x0 = 0). `tone` darkens the unlit painting to suggest the face's orientation.
+export function capPlane(k, phi, { tone = 1 } = {}) {
+  const { x0, x1, z0, z1 } = k.bounds;
+  const c = Math.cos(phi), s = Math.sin(phi);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute([
+    x0 * c, x0 * s, z1, x0 * c, x0 * s, z0, x1 * c, x1 * s, z0, x1 * c, x1 * s, z1
+  ], 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2));
+  g.setIndex([0, 1, 2, 0, 2, 3]);
+  const tex = new THREE.CanvasTexture(k.canvas);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 16; tex.minFilter = THREE.LinearMipmapLinearFilter;
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex, color: new THREE.Color(tone, tone, tone), transparent: true, toneMapped: false, depthWrite: false,
+    side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1
+  });
+  const mesh = new THREE.Mesh(g, mat);
+  mesh.renderOrder = 10;
+  return mesh;
+}
+
+// Generic planar painted quad: corners in 3D (a = canvas top-left, b = top-right, d = bottom-left).
+export function paintedQuad(canvas, a, b, d, { tone = 1, order = 10, depthWrite = false } = {}) {
+  const c = [b[0] + d[0] - a[0], b[1] + d[1] - a[1], b[2] + d[2] - a[2]];
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute([...a, ...b, ...c, ...d], 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 1, 1, 1, 1, 0, 0, 0], 2));
+  g.setIndex([0, 3, 2, 0, 2, 1]);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 16; tex.minFilter = THREE.LinearMipmapLinearFilter;
+  const mat = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(tone, tone, tone), transparent: true, toneMapped: false, depthWrite, side: THREE.DoubleSide });
+  const m = new THREE.Mesh(g, mat); m.renderOrder = order;
+  return m;
+}
+
+// Per-vertex colours from a function of the vertex position.
+export function colorize(g, fn) {
+  const p = g.attributes.position, col = new Float32Array(p.count * 3), c = new THREE.Color();
+  for (let i = 0; i < p.count; i++) {
+    fn(p.getX(i), p.getY(i), p.getZ(i), c);
+    col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return g;
+}
+
+// Normal map (tangent space) from a height function h(u, v) over [0, 1]^2, painted on a canvas.
+export function normalMapFrom(h, N = 1024, strength = 4) {
+  const c = document.createElement('canvas'); c.width = c.height = N;
+  const g = c.getContext('2d'), img = g.createImageData(N, N), d = img.data, e = 1 / N;
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const u = (i + 0.5) / N, v = 1 - (j + 0.5) / N;
+    const dx = (h(u + e, v) - h(u - e, v)) * strength, dy = (h(u, v + e) - h(u, v - e)) * strength;
+    const l = Math.hypot(dx, dy, 1), k = (j * N + i) * 4;
+    d[k] = (-dx / l * 0.5 + 0.5) * 255; d[k + 1] = (-dy / l * 0.5 + 0.5) * 255; d[k + 2] = (1 / l * 0.5 + 0.5) * 255; d[k + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 8;
+  return t;
+}
+
+// Soft radial sprite (glows, drug bolus, beam hits).
+export function glowSprite(pos, size, rgb = [140, 123, 224], alpha = 0.8, { order = 22, depthTest = true } = {}) {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  const [r, gg, b] = rgb;
+  gr.addColorStop(0, `rgba(${r},${gg},${b},${alpha})`); gr.addColorStop(0.3, `rgba(${r},${gg},${b},${alpha * 0.45})`);
+  gr.addColorStop(0.65, `rgba(${r},${gg},${b},${alpha * 0.12})`); gr.addColorStop(1, `rgba(${r},${gg},${b},0)`);
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, depthTest, toneMapped: false }));
+  s.scale.set(size, size, 1); s.position.set(...pos); s.renderOrder = order;
+  return s;
 }
