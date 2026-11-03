@@ -1,0 +1,261 @@
+/* Vision & Lens Lab — every rule is scoped under .llab. Colour tokens are self-contained (never inherited from the
+   host page) and follow the site's "clinical atlas" palette. RTL-first: only logical properties are used. */
+.llab {
+  --llab-bg: #f4f6f5;
+  --llab-surface: #ffffff;
+  --llab-band: #e9efed;
+  --llab-text: #0f1e1c;
+  --llab-text-2: #33433f;
+  --llab-muted: #4e5d58;
+  --llab-line: #d6dfdc;
+  --llab-line-strong: #7c8b87;
+  --llab-primary: #0b5a52;
+  --llab-on-primary: #ffffff;
+  --llab-link: #0b5a52;
+  --llab-accent: #9e4322;
+  --llab-diff-bg: #fbf1df;
+  --llab-diff-line: #c98a2b;
+  --llab-note-bg: #fbf1df;
+  --llab-note-text: #5c3a08;
+  --llab-note-line: #e2bf85;
+  --llab-lvl-on: #0b5a52;
+  --llab-lvl-off: #d6dfdc;
+  --llab-focus: #9e4322;
+  --llab-radius: 14px;
+  --llab-font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --llab-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  container-type: inline-size;
+  container-name: llab;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 32px);
+  display: grid;
+  gap: clamp(20px, 3vw, 32px);
+  color: var(--llab-text);
+  background: var(--llab-bg);
+  border: 1px solid var(--llab-line);
+  border-radius: calc(var(--llab-radius) + 6px);
+  font-family: var(--llab-font);
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: start;
+  -webkit-text-size-adjust: 100%;
+}
+.llab[lang="ar"] {
+  --llab-font: "Noto Sans Arabic", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --llab-display: "Readex Pro", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  line-height: 1.75;
+}
+.llab[data-theme="dark"] {
+  --llab-bg: #0e1716;
+  --llab-surface: #14201f;
+  --llab-band: #111c1b;
+  --llab-text: #e7efec;
+  --llab-text-2: #c4d2ce;
+  --llab-muted: #a9bab6;
+  --llab-line: #223230;
+  --llab-line-strong: #5e716d;
+  --llab-primary: #6ccbbe;
+  --llab-on-primary: #06201d;
+  --llab-link: #7dd3c7;
+  --llab-accent: #eba27f;
+  --llab-diff-bg: #2a2112;
+  --llab-diff-line: #b8862f;
+  --llab-note-bg: #2a2112;
+  --llab-note-text: #f0cb8c;
+  --llab-note-line: #6b5428;
+  --llab-lvl-on: #6ccbbe;
+  --llab-lvl-off: #2c403d;
+  --llab-focus: #eba27f;
+}
+.llab *, .llab *::before, .llab *::after { box-sizing: border-box; }
+.llab [hidden] { display: none !important; }
+.llab :focus-visible { outline: 3px solid var(--llab-focus); outline-offset: 2px; }
+.llab h2, .llab h3, .llab h4, .llab p, .llab ul, .llab ol, .llab dl, .llab dd, .llab figure { margin: 0; }
+.llab h2, .llab h3, .llab h4 { color: var(--llab-text); font-family: var(--llab-display); }
+.llab b { font-weight: 650; }
+.llab a { color: var(--llab-link); text-underline-offset: 3px; }
+.llab small { font-size: 0.84em; color: var(--llab-muted); font-weight: 500; }
+.llab-sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- header ---------- */
+.llab-head { display: grid; gap: 12px; max-width: 72ch; }
+.llab-kicker { color: var(--llab-accent); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.llab[lang="ar"] .llab-kicker { letter-spacing: 0; text-transform: none; font-size: 0.95rem; }
+.llab-title { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem); line-height: 1.2; letter-spacing: -0.01em; font-weight: 650; }
+.llab[lang="ar"] .llab-title { line-height: 1.4; letter-spacing: 0; }
+.llab-lede { font-size: 1.08rem; color: var(--llab-text-2); }
+.llab-review { font-size: 0.86rem; color: var(--llab-muted); }
+.llab-label {
+  display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px;
+  background: var(--llab-note-bg); color: var(--llab-note-text); border: 1px solid var(--llab-note-line);
+  font-weight: 600; font-size: 0.98rem; line-height: 1.5;
+}
+.llab-label svg { flex: none; margin-top: 2px; }
+.llab-label .llab-link { color: inherit; font-weight: 700; white-space: nowrap; display: inline-block; min-height: 24px; }
+
+/* ---------- sections ---------- */
+.llab-sec { display: grid; gap: 14px; min-width: 0; }
+.llab-h { font-size: clamp(1.3rem, 1.1rem + 1vw, 1.7rem); line-height: 1.3; font-weight: 650; }
+.llab-h4 { font-size: 1.12rem; line-height: 1.35; font-weight: 650; }
+.llab-intro { color: var(--llab-text-2); max-width: 75ch; }
+.llab-toric { font-size: 0.95rem; color: var(--llab-text-2); padding-inline-start: 12px; border-inline-start: 3px solid var(--llab-accent); max-width: 75ch; }
+.llab-fine { font-size: 0.88rem; color: var(--llab-muted); }
+.llab-subhead { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px !important; }
+.llab-list { padding-inline-start: 1.15em; display: grid; gap: 6px; }
+.llab-list li::marker { color: var(--llab-line-strong); }
+.llab-badge {
+  display: inline-grid; place-items: center; flex: none; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 8px;
+  background: var(--llab-primary); color: var(--llab-on-primary); font-family: var(--llab-font); font-size: 0.85rem; font-weight: 700; line-height: 1;
+}
+
+/* level indicator: three segments + words (the words carry the meaning; the bar is a visual summary) */
+.llab-lvl { display: grid; gap: 6px; }
+.llab-lvl-bar { display: inline-grid; grid-template-columns: repeat(3, 18px); gap: 4px; }
+.llab-lvl-bar i { display: block; height: 8px; border-radius: 4px; background: var(--llab-lvl-off); }
+.llab-lvl[data-level="1"] .llab-lvl-bar i:nth-child(-n+1),
+.llab-lvl[data-level="2"] .llab-lvl-bar i:nth-child(-n+2),
+.llab-lvl[data-level="3"] .llab-lvl-bar i:nth-child(-n+3) { background: var(--llab-lvl-on); }
+.llab-lvl-text { font-size: 0.95rem; line-height: 1.45; }
+
+/* ---------- comparison table (wide containers) ---------- */
+.llab-table-wrap {
+  overflow-x: auto; overscroll-behavior-x: contain; border: 1px solid var(--llab-line); border-radius: var(--llab-radius);
+  background: var(--llab-surface); max-width: 100%;
+}
+.llab-table { width: 100%; min-width: 900px; border-collapse: separate; border-spacing: 0; font-size: 0.95rem; table-layout: fixed; }
+.llab-table th, .llab-table td { padding: 12px 14px; vertical-align: top; text-align: start; border-bottom: 1px solid var(--llab-line); }
+.llab-table tbody tr:last-child > * { border-bottom: 0; }
+.llab-table thead th { background: var(--llab-band); font-family: var(--llab-display); font-size: 1.02rem; line-height: 1.3; position: sticky; top: 0; }
+.llab-table th[scope="row"], .llab-corner {
+  position: sticky; inset-inline-start: 0; z-index: 1; width: 190px; background: var(--llab-band); font-weight: 650;
+  border-inline-end: 1px solid var(--llab-line);
+}
+.llab-corner { z-index: 2; font-family: var(--llab-font) !important; font-size: 0.9rem !important; color: var(--llab-muted); }
+.llab-table th[scope="row"] small { display: block; font-weight: 500; }
+.llab-th-name { display: block; }
+.llab-code { display: inline-block; margin-top: 4px; font-family: var(--llab-font); font-size: 0.78rem; font-weight: 600; color: var(--llab-muted); }
+.llab-row-text td { font-size: 0.92rem; }
+.llab-table .llab-list { gap: 4px; }
+
+/* stacked cards: the narrow-container layout of the same comparison */
+.llab-cards { display: none; gap: 14px; }
+.llab-card {
+  display: grid; gap: 12px; align-content: start; padding: 16px; min-width: 0;
+  background: var(--llab-surface); border: 1px solid var(--llab-line); border-radius: var(--llab-radius);
+}
+.llab-card-title { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; line-height: 1.3; }
+.llab-what { color: var(--llab-text-2); }
+.llab-dims { display: grid; gap: 0; border-top: 1px solid var(--llab-line); }
+.llab-dim { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 4px 14px; padding: 10px 0; border-bottom: 1px solid var(--llab-line); }
+.llab-dim dt { font-weight: 650; font-size: 0.93rem; line-height: 1.4; }
+.llab-dim dt small { display: block; font-weight: 500; }
+.llab-dims-tight .llab-dim { padding: 8px 0; }
+.llab-procon { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.llab-ask { padding: 12px 14px; border-radius: 10px; background: var(--llab-band); }
+
+@container llab (max-width: 760px) {
+  .llab-table-wrap { display: none; }
+  .llab-cards { display: grid; }
+}
+/* narrow screens: one lens card at a time, chosen with the chips above it */
+.llab-glance-pick { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 8px; }
+.llab-glance-pick legend { padding: 0; margin-bottom: 8px; font-weight: 700; }
+.llab-chips-glance { grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr)); }
+.llab-cards > .llab-card:not(.is-shown) { display: none; }
+@container llab (max-width: 420px) {
+  .llab-dim { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- compare two ---------- */
+.llab-pickers { display: grid; gap: 14px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.llab-pick, .llab-scn { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 8px; }
+.llab-pick legend, .llab-scn legend { display: flex; align-items: center; gap: 8px; padding: 0; margin-bottom: 8px; font-weight: 700; font-size: 1rem; }
+.llab-chips { display: grid; gap: 6px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr)); }
+@container llab (min-width: 900px) { .llab-pick .llab-chips { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.llab-chips-scn { grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.llab-radio { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.llab-chip {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px;
+  padding: 8px 10px; border-radius: 10px; border: 1px solid var(--llab-line-strong); background: var(--llab-surface);
+  color: var(--llab-text); font-weight: 650; font-size: 0.98rem; line-height: 1.25; text-align: center; cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.llab-chip-scn { min-height: 60px; }
+.llab-chip small { font-weight: 500; }
+.llab-chip:hover { border-color: var(--llab-primary); }
+.llab-radio:checked + .llab-chip { background: var(--llab-primary); border-color: var(--llab-primary); color: var(--llab-on-primary); }
+.llab-radio:checked + .llab-chip small { color: inherit; opacity: 0.9; }
+.llab-radio:focus-visible + .llab-chip { outline: 3px solid var(--llab-focus); outline-offset: 2px; }
+.llab-swap { font-size: 0.9rem; color: var(--llab-muted); min-height: 0; }
+.llab-swap:empty { display: none; }
+
+.llab-situation { display: grid; gap: 8px; padding: 16px; border-radius: var(--llab-radius); background: var(--llab-surface); border: 1px solid var(--llab-line); }
+.llab-sit-detail { color: var(--llab-text-2); }
+.llab-sit-list { list-style: none; padding: 0; display: grid; gap: 12px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.llab-sit-lens { display: flex; align-items: center; gap: 8px; }
+
+.llab-diff { display: grid; gap: 10px; padding: 16px; border-radius: var(--llab-radius); background: var(--llab-diff-bg); border: 1px solid var(--llab-diff-line); }
+.llab-difflist { list-style: none; padding: 0; display: grid; gap: 10px; }
+.llab-difflist li { display: grid; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid var(--llab-diff-line); }
+.llab-difflist li:last-child { border-bottom: 0; padding-bottom: 0; }
+.llab-difflist li > span { display: flex; gap: 8px; align-items: flex-start; }
+
+.llab-sim { display: grid; gap: 10px; min-width: 0; }
+.llab-help { color: var(--llab-text-2); font-size: 0.95rem; }
+.llab-assume { font-size: 0.93rem; padding-inline-start: 12px; border-inline-start: 3px solid var(--llab-accent); }
+.llab-sim-slot { position: relative; min-width: 0; border-radius: var(--llab-radius); background: var(--llab-band); }
+.llab[data-sim="idle"] .llab-sim-slot, .llab[data-sim="loading"] .llab-sim-slot { aspect-ratio: 16 / 10; display: grid; place-items: center; }
+.llab-sim-status { padding: 16px; text-align: center; color: var(--llab-muted); }
+.llab[data-sim="failed"] .llab-sim-status, .llab[data-sim="off"] .llab-sim-status { text-align: start; }
+@container llab (max-width: 640px) {
+  .llab[data-sim] .llab-sim-slot { margin-inline: calc(-1 * clamp(16px, 3vw, 32px)); border-radius: 0; }
+  .llab[data-sim="idle"] .llab-sim-slot, .llab[data-sim="loading"] .llab-sim-slot { aspect-ratio: 7 / 6; }
+}
+
+.llab-side { display: grid; gap: 14px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.llab-flag {
+  display: inline-block; margin-inline-start: 8px; padding: 0 8px; border-radius: 6px; font-family: var(--llab-font);
+  font-size: 0.75rem; font-weight: 700; line-height: 1.7; vertical-align: 1px; color: var(--llab-muted); border: 1px solid var(--llab-line);
+}
+.llab-dim.is-diff { background: var(--llab-diff-bg); box-shadow: inset 3px 0 0 var(--llab-diff-line); padding-inline: 10px; margin-inline: -10px; }
+.llab[dir="rtl"] .llab-dim.is-diff { box-shadow: inset -3px 0 0 var(--llab-diff-line); }
+.llab-dim.is-diff .llab-flag { color: var(--llab-note-text); border-color: var(--llab-diff-line); }
+
+.llab details > summary {
+  min-height: 48px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; list-style: none;
+}
+.llab details > summary::-webkit-details-marker { display: none; }
+.llab details > summary::before { content: "+"; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--llab-line-strong); font-weight: 700; flex: none; }
+.llab details[open] > summary::before { content: "−"; }
+.llab-adv, .llab-sources { border: 1px solid var(--llab-line); border-radius: 12px; padding: 0 14px; background: var(--llab-surface); }
+.llab-adv[open], .llab-sources[open] { padding-bottom: 14px; }
+.llab-adv > div { display: grid; gap: 10px; }
+.llab-adv-wrap { overflow-x: auto; }
+.llab-adv-table { border-collapse: collapse; font-size: 0.93rem; width: 100%; }
+.llab-adv-table th, .llab-adv-table td { padding: 6px 12px 6px 0; text-align: start; border-bottom: 1px dashed var(--llab-line); }
+.llab[dir="rtl"] .llab-adv-table th, .llab[dir="rtl"] .llab-adv-table td { padding: 6px 0 6px 12px; }
+
+.llab-limits { padding: 18px; border-radius: var(--llab-radius); background: var(--llab-surface); border: 1px solid var(--llab-line); scroll-margin-top: 96px; }
+.llab-limits:focus { outline: none; }
+.llab-limits:focus-visible { outline: 3px solid var(--llab-focus); }
+.llab-sources ol { padding-inline-start: 1.4em; display: grid; gap: 8px; font-size: 0.9rem; overflow-wrap: anywhere; }
+.llab-kind { display: inline-block; padding: 0 6px; border-radius: 6px; border: 1px solid var(--llab-line-strong); font-size: 0.75rem; color: var(--llab-muted); }
+
+/* the embedded simulator is the viewer only; let it fill the slot. Its own disclaimer is hidden because the lab's
+   persistent label (same message, plus the link to the model limitations) sits directly under the picture. */
+.llab .llab-sim-mount .vsim { max-width: none; }
+.llab .llab-sim-mount .vsim-disclaimer { display: none; }
+/* Arabic: lens A is drawn on the right (see index.js left()/right()); relabel the simulator's corner tags */
+.llab[dir="rtl"] .llab-sim-mount .vsim-tag-a::before { content: "B · "; }
+.llab[dir="rtl"] .llab-sim-mount .vsim-tag-b::before { content: "A · "; }
+
+@media (max-width: 400px) { .llab { font-size: 16px; } }
+.llab[data-reduced-motion="true"] *, .llab[data-reduced-motion="true"] *::before, .llab[data-reduced-motion="true"] *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+@media (prefers-reduced-motion: reduce) { .llab *, .llab *::before, .llab *::after { transition: none !important; animation: none !important; } }
+@media (forced-colors: active) {
+  .llab-lvl-bar i { border: 1px solid CanvasText; }
+  .llab-lvl[data-level="1"] .llab-lvl-bar i:nth-child(-n+1), .llab-lvl[data-level="2"] .llab-lvl-bar i:nth-child(-n+2), .llab-lvl[data-level="3"] .llab-lvl-bar i:nth-child(-n+3) { background: CanvasText; }
+}

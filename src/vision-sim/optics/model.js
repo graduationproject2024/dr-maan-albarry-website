@@ -2,7 +2,7 @@
 // Educational approximation — not patient-specific, not clinically validated. Pending review by Dr. Maan.
 // Equations and assumptions: docs/implementation/clinical-visual-reconstruction/VISION_OPTICAL_MODEL.md
 import {
-  BOUNDS, BANDS, DISTANCES, LENSES, LENS_IDS, LIGHTING_IDS, LIGHTING_GRADE, PUPIL_BY_LIGHTING, VIEWING,
+  BOUNDS, BANDS, DISTANCES, LENSES, LENS_IDS, LIGHTING_IDS, LIGHTING_GRADE, PUPIL_BY_LIGHTING, VIEWING, SCENARIOS, SCENARIO_IDS,
 } from './params.js';
 
 const ARCMIN_PER_RAD = (180 / Math.PI) * 60; // ≈ 3437.75
@@ -183,21 +183,22 @@ export function rangeOfFocus(lens, opts = {}, threshold = 0.5) {
   return { fromD: c[a].vergenceD, toD: c[b].vergenceD, max: c[iMax].sharpness, peakD: c[iMax].vergenceD };
 }
 
-// Normaliser for the halo index: the strongest configuration the model allows (trifocal, 8 mm pupil).
+// Normaliser for the halo index: the strongest configuration the model allows (largest raw value over every
+// lens profile at an 8 mm pupil — the bifocal-type multifocal since it was added; previously the trifocal).
 const HALO_RAW = (prof, p) => {
   const primary = prof.foci[0].vergenceD;
   let raw = 0;
   for (const f of prof.foci.slice(1)) raw += f.weight * p * Math.abs(f.vergenceD - primary);
   return raw + prof.lossFraction * p * 1.0;
 };
-const HALO_REF = HALO_RAW(LENSES.trifocal, BOUNDS.pupilMm[1]);
+const HALO_REF = Math.max(...LENS_IDS.map((id) => HALO_RAW(LENSES[id], BOUNDS.pupilMm[1])));
 
 /**
  * Halo and glare around a DISTANT point light (relative, educational scale).
  *  - each non-distance focus images a far light as a defocused disk of angular diameter p·|V_i − V_0|
  *    carrying energy w_i  → halos grow with pupil size and add power;
  *  - lost light → a wide veil; straylight (scatter) → glare, relative to a healthy pseudophakic eye.
- * haloIndex ∈ [0,1] is normalised to the model's maximum (trifocal at an 8 mm pupil). Not a clinical scale.
+ * haloIndex ∈ [0,1] is normalised to the model's maximum (strongest lens at an 8 mm pupil). Not a clinical scale.
  */
 export function haloGlare({ lens = 'monofocal', pupilMm, lighting } = {}) {
   const prof = lensProfile(lens);
@@ -280,4 +281,10 @@ export function sliderToDistance(t) {
 export function distanceToSlider(m) {
   const d = clamp(m, DISTANCES.sliderMin, DISTANCES.sliderMax, DISTANCES.distance);
   return Math.round((1000 * Math.log(d / DISTANCES.sliderMin)) / Math.log(DISTANCES.sliderMax / DISTANCES.sliderMin));
+}
+
+/** The everyday situation (scenario id) that matches a distance + lighting pair, or null. */
+export function scenarioFor(distanceM, lighting) {
+  const l = lightingId(lighting);
+  return SCENARIO_IDS.find((id) => SCENARIOS[id].lighting === l && Math.abs(SCENARIOS[id].distanceM - distanceM) < 0.005) || null;
 }

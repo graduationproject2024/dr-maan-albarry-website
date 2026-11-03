@@ -108,6 +108,22 @@ export const LENSES = Object.freeze({
     correctsCylinder: false,
     tint: null,
   }),
+  multifocal: Object.freeze({
+    id: 'multifocal',
+    // Bifocal-type diffractive multifocal: distance and near (≈40 cm) foci only, no dedicated intermediate focus.
+    // A half-wave diffractive profile puts ≈40.5 % of the light in each of the two working orders (scalar
+    // diffraction, sinc²(½) ≈ 0.405) and ≈19 % in higher orders (Davison & Simpson 2006). Near focus 2.5 D at
+    // the spectacle plane (≈ +3.0–3.25 D add at the IOL plane). Pupil-independent split (apodisation ignored).
+    foci: Object.freeze([
+      { vergenceD: 0, weight: 0.41 },
+      { vergenceD: 2.5, weight: 0.41 },
+    ]),
+    lossFraction: 0.18,
+    lossSpreadDeg: 1.5,
+    straylight: 1.3,
+    correctsCylinder: false,
+    tint: null,
+  }),
   toric: Object.freeze({
     id: 'toric',
     // a monofocal toric: same focus as monofocal, plus correction of corneal astigmatism
@@ -132,8 +148,23 @@ export const LENSES = Object.freeze({
   }),
 });
 
-export const LENS_IDS = Object.freeze(['monofocal', 'edof', 'trifocal', 'toric', 'cataract']);
+export const LENS_IDS = Object.freeze(['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract']);
 export const LIGHTING_IDS = Object.freeze(['day', 'dusk', 'night']);
+
+/**
+ * Everyday situations (the simulator's primary control). Each one is only a viewing distance + a lighting
+ * level for the same scene; the near object drawn is a phone, which also stands in for a book page.
+ * Distances: phone ≈ 35 cm (Bababekova et al. 2011: 32–36 cm mean for smartphones), book / hard copy 40 cm,
+ * laptop / dashboard 66 cm, road signs 6 m. Night driving uses the 6 m target with the night pupil.
+ */
+export const SCENARIOS = Object.freeze({
+  signs: Object.freeze({ distanceM: 6, lighting: 'day' }),
+  laptop: Object.freeze({ distanceM: 0.66, lighting: 'day' }),
+  phone: Object.freeze({ distanceM: 0.35, lighting: 'day' }),
+  book: Object.freeze({ distanceM: 0.40, lighting: 'day' }),
+  'night-driving': Object.freeze({ distanceM: 6, lighting: 'night' }),
+});
+export const SCENARIO_IDS = Object.freeze(['signs', 'laptop', 'phone', 'book', 'night-driving']);
 
 /** Source TYPES the model draws on. Full citations: CLINICAL_SOURCES.md → "Vision simulator". */
 export const REFERENCES = Object.freeze([
@@ -144,4 +175,6 @@ export const REFERENCES = Object.freeze([
   { id: 'escrs', type: 'professional society', note: 'ESCRS guidance / educational material on presbyopia-correcting IOLs and patient selection.' },
   { id: 'toric', type: 'peer-reviewed', note: 'Residual astigmatism after toric IOL rotation ≈ 2·C·sin(misalignment) (vector analysis; ~3.3 % loss per degree).' },
   { id: 'straylight', type: 'peer-reviewed', note: 'van den Berg TJTP et al. Straylight / forward light scatter in cataract and pseudophakia.' },
+  { id: 'diffractive-split', type: 'peer-reviewed review', note: 'Davison JA, Simpson MJ. History and development of the apodized diffractive intraocular lens. J Cataract Refract Surg 2006;32:849–858 — ≈41/41 % distance/near split of a bifocal diffractive optic, the rest in higher orders.' },
+  { id: 'phone-distance', type: 'peer-reviewed', note: 'Bababekova Y et al. Font size and viewing distance of handheld smart phones. Optom Vis Sci 2011;88:795–797 — 32–36 cm mean viewing distance.' },
 ]);
