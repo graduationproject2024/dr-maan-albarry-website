@@ -89,7 +89,7 @@
   --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
   --gutter: clamp(20px, 4.5vw, 64px);
   --container: 1280px;
-  --section-y: clamp(56px, 6.2vw, 96px);
+  --section-y: clamp(40px, 4.4vw, 68px);
   --header-h: 64px;
 
   /* shape & depth */
@@ -360,19 +360,23 @@ html.drawer-open .site-header { z-index: 130; }
 .expertise-grid { display: grid; gap: var(--s-6); align-items: start; }
 .expertise-intro .section-head { margin-bottom: var(--s-4); }
 .expertise-cols { display: grid; gap: var(--s-5); }
-.ledger-block { padding: var(--s-5); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+.ledger-block { padding-top: var(--s-4); border-top: 2px solid var(--ink); }
 .ledger-title { font-family: var(--f-text); font-size: var(--fs-caption); font-weight: 700; color: var(--muted); margin-bottom: var(--s-3); letter-spacing: 0; }
 :root[lang="en"] .ledger-title { text-transform: uppercase; letter-spacing: .1em; font-size: .8125rem; }
 .cred-list { display: grid; }
-.cred { display: grid; grid-template-columns: minmax(84px, auto) minmax(0, 1fr); gap: 2px var(--s-4); padding-block: 12px; border-top: 1px solid var(--line); align-items: baseline; }
+.cred { display: grid; grid-template-columns: minmax(78px, auto) minmax(0, 1fr); gap: 2px var(--s-4); padding-block: 10px; border-top: 1px solid var(--line); align-items: baseline; }
 .cred:first-child { border-top: 0; padding-top: 0; }
 .cred-key { font-family: var(--f-en-display); font-weight: 600; color: var(--gold); font-size: 1.05rem; }
 .cred-val { color: var(--ink); font-weight: 500; line-height: 1.6; }
-.cred .src-tag { grid-column: 2; justify-self: start; margin: 4px 0 0; }
+.cred .src-tag { margin-inline-start: 6px; }
 .cred-quiet .cred-key { font-family: var(--f-text); font-size: var(--fs-caption); color: var(--muted); font-weight: 600; }
 .cred-quiet .cred-val { font-weight: 400; color: var(--ink-2); }
 @media (min-width: 720px) { .expertise-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1100px) { .expertise-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-8); } .expertise-intro { position: sticky; top: calc(var(--header-h) + 32px); } }
+@media (min-width: 1100px) { .expertise-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-7); } .expertise-cols { gap: var(--s-6); } }
+@media (max-width: 719px) {
+  /* phones: the three earlier roles live on /about/ (link above); current + two most recent stay here */
+  #main[data-page="home"] .expertise-cols .timeline-item:nth-child(n+4) { display: none; }
+}
 
 /* timeline (home ledger and /about/) */
 .timeline { display: grid; }
@@ -405,8 +409,9 @@ html.drawer-open .site-header { z-index: 130; }
 .spec-card:hover .spec-link .ic-arrow { translate: 4px 0; }
 [dir="rtl"] .spec-card:hover .spec-link .ic-arrow { translate: -4px 0; }
 .spec-card.is-lead .spec-title { font-size: clamp(1.6rem, 1.3rem + 1vw, 2.15rem); }
-.spec-card.is-lead .spec-text { font-size: var(--fs-body); line-height: var(--lh-body); max-width: 56ch; }
-.spec-index { display: grid; gap: var(--s-3); align-items: center; margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--line); }
+.spec-card.is-lead .spec-text { font-size: var(--fs-body); line-height: var(--lh-body); max-width: 60ch; }
+.spec-stack .spec-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.spec-index { display: grid; gap: var(--s-2) var(--s-3); align-items: center; margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--line); }
 .spec-index-label { font-size: var(--fs-caption); font-weight: 600; color: var(--muted); }
 .spec-index ul { display: flex; flex-wrap: wrap; gap: 4px var(--s-5); }
 .spec-index ul a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--line-strong); text-decoration-thickness: 1px; }
@@ -418,9 +423,11 @@ html.drawer-open .site-header { z-index: 130; }
 @media (min-width: 1024px) {
   .spec-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-5); }
   .spec-card.is-lead { grid-template-rows: auto 1fr; }
-  .spec-card.is-lead .spec-body { padding: var(--s-6); }
+  .spec-card.is-lead .illus { aspect-ratio: 2 / 1; }
+  .spec-card.is-lead .spec-body { padding: var(--s-5) var(--s-6); }
   .spec-stack .spec-card { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
-  .spec-stack .spec-card .illus { aspect-ratio: auto; height: 100%; min-height: 220px; }
+  .spec-stack .spec-card .illus { aspect-ratio: auto; height: 100%; min-height: 200px; }
+  .spec-stack .spec-body { padding: var(--s-4) var(--s-5); }
   .spec-index { grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--s-5); }
 }
 
@@ -454,29 +461,28 @@ html.drawer-open .site-header { z-index: 130; }
 /* ------------------------------------------------------------
    11. HOME — 4. VISION DISCOVERY
    ------------------------------------------------------------ */
+.discover-layout { display: grid; gap: var(--s-5); align-items: start; }
+.discover-layout .section-head { margin-bottom: 0; }
 .discover-grid { display: grid; gap: var(--s-5); }
-.disc-card { display: grid; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+.disc-card { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
 .disc-visual { display: grid; place-items: center; padding: var(--s-5) var(--s-5) 0; color: var(--primary-ink); }
-.disc-art { width: 100%; height: auto; }
+.disc-art { width: 100%; height: auto; max-height: 150px; }
 .da-zones rect { fill: var(--plate); stroke: var(--surface); stroke-width: 4; }
 .da-zones rect:nth-child(2) { fill: color-mix(in srgb, var(--plate) 70%, var(--primary-soft)); }
 .da-labels text { fill: var(--ink-2); font-family: var(--f-text); }
 .da-bands rect { fill: var(--accent); opacity: .7; }
 .da-bands rect:nth-child(2) { opacity: .5; }
 .da-bands rect:nth-child(3) { opacity: .32; }
-.light-art { max-width: 420px; color: var(--ap-line); }
+.light-art { color: var(--ap-line); }
 .la-rays path { stroke: var(--accent); }
 .la-focus { fill: var(--accent); }
-.disc-body { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-5); }
+.disc-body { display: flex; flex-direction: column; gap: var(--s-2); padding: var(--s-5); }
 .disc-body h3 { font-size: var(--fs-h3); }
-.disc-body > p:not(.spec-group) { color: var(--ink-2); }
-.disc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-5); margin-top: auto; padding-top: var(--s-2); }
-@media (min-width: 1024px) {
-  .discover-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-  .disc-lab { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); align-items: center; }
-  .disc-lab .disc-visual { padding: var(--s-6); padding-inline-end: 0; }
-  .disc-body { padding: var(--s-6); }
-}
+.disc-body > p:not(.spec-group) { color: var(--ink-2); font-size: var(--fs-small); line-height: var(--lh-small); }
+.disc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-5); margin-top: auto; padding-top: var(--s-2); }
+@media (max-width: 639px) { .disc-visual { display: none; } }
+@media (min-width: 720px) { .discover-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .discover-layout { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-7); } }
 
 /* ------------------------------------------------------------
    12. STAGE BANDS — surgical education, vision simulator (always dark "instrument" surfaces)
@@ -526,13 +532,16 @@ html.drawer-open .site-header { z-index: 130; }
 #cataract-3d[data-state="active"] .c3d-poster, #cataract-3d[data-state="loading"] .c3d-poster { display: none; }
 #cataract-3d[data-state="active"] .c3d-actions { display: none; }
 #cataract-3d[data-state="active"] .c3d-text .lede, #cataract-3d[data-state="active"] .c3d-notes { display: none; }
-.stage-list { display: grid; gap: var(--s-2); margin-top: var(--s-5); counter-reset: s; }
+.stage-list { display: grid; gap: var(--s-2); margin-top: var(--s-4); }
+.surgery-preview .c3d-actions { margin-top: var(--s-5); }
+.surgery-preview .c3d-svg { max-height: 380px; margin-inline: auto; }
+@media (max-width: 899px) { .surgery-preview .c3d-poster { display: none; } }
 .stage-list li { display: flex; align-items: center; gap: var(--s-3); color: var(--ink); font-weight: 500; }
 .stage-list li span { display: inline-grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 50%; border: 1px solid var(--line-strong); color: var(--primary-ink); font-family: var(--f-en-text); font-size: .875rem; font-weight: 700; }
 @media (min-width: 900px) {
   .c3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
-  .c3d-text { grid-column: 1 / span 5; }
-  .c3d-poster { grid-column: 7 / span 6; }
+  .c3d-text { grid-column: 1 / span 6; }
+  .c3d-poster { grid-column: 8 / span 5; }
   #cataract-3d[data-state="active"] .c3d-text, #cataract-3d[data-state="loading"] .c3d-text { grid-column: 1 / span 8; }
   .stage-list { grid-template-columns: 1fr 1fr; }
 }
@@ -543,14 +552,15 @@ html.drawer-open .site-header { z-index: 130; }
 .edu-grid { display: grid; gap: var(--s-7); align-items: start; }
 @media (min-width: 1024px) { .edu-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-8); } }
 .guide-list { display: grid; border-top: 1px solid var(--line); }
-.guide-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-5); padding-block: var(--s-5); border-bottom: 1px solid var(--line); }
+.guide-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-4); padding-block: var(--s-4); border-bottom: 1px solid var(--line); }
+@media (max-width: 639px) { .guide-row p { display: none; } .guide-row h3 { margin-bottom: 0; font-size: 1.2rem; } }
 .guide-num { font-family: var(--f-en-display); font-weight: 600; font-size: 1.5rem; line-height: 1.4; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
 .guide-row h3 { font-size: var(--fs-h3); margin-bottom: var(--s-2); }
 .guide-row h3 a { background-image: linear-gradient(currentColor, currentColor); background-size: 0 1px; background-repeat: no-repeat; background-position: 100% 100%; transition: background-size .25s var(--ease), color .15s; }
 [dir="ltr"] .guide-row h3 a { background-position: 0 100%; }
 .guide-row h3 a:hover { color: var(--primary-ink); background-size: 100% 1px; }
 .guide-row p { color: var(--ink-2); font-size: var(--fs-small); line-height: var(--lh-small); max-width: 60ch; }
-.guide-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); padding-top: var(--s-5); }
+.guide-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-5); padding-top: var(--s-4); }
 .faq-block-title { font-size: var(--fs-h3); margin-bottom: var(--s-3); }
 
 /* FAQ (homepage + procedure pages) */
@@ -937,7 +947,7 @@ html.drawer-open .site-header { z-index: 130; }
 .footer-col a:hover { color: var(--stage-ink); }
 .footer-hours { margin-top: var(--s-2); font-size: var(--fs-caption); line-height: 1.6; }
 .footer-notices { display: grid; gap: var(--s-3); margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--stage-line); }
-.footer-disclaimer { font-size: var(--fs-caption); max-width: 100ch; line-height: 1.75; }
+.footer-disclaimer { font-size: var(--fs-caption); max-width: 110ch; line-height: 1.7; }
 .footer-disclaimer strong { color: var(--stage-ink); }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-5); font-size: var(--fs-caption); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
@@ -945,6 +955,12 @@ html.drawer-open .site-header { z-index: 130; }
 @media (max-width: 719px) {
   nav.footer-col { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-4); }
   nav.footer-col h3 { grid-column: 1 / -1; }
+  /* phones: every procedure is one tap away in the menu drawer and the library page */
+  .footer-procs { display: none; }
+}
+@media (min-width: 1100px) and (hover: hover) {
+  .footer-col a { min-height: 36px; }
+  .site-footer { padding-top: var(--s-7); }
 }
 
 /* ------------------------------------------------------------

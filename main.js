@@ -485,9 +485,9 @@ const LIGHT_ART = () => `
 function renderDiscovery() {
   return `
   <section class="section section-band discover" id="discover" aria-labelledby="discover-title">
-    <div class="container">
+    <div class="container discover-layout">
       ${sectionHead('03', tr('اكتشف رؤيتك', 'Vision discovery'), tr('افهم كيف ترى، وما الذي يغيّره كل خيار', 'Understand how you see, and what each option changes'),
-        tr('أداتان تثقيفيتان لمن يستعد لموعده، ولكل من يحب أن يفهم العين: مقارنة العدسات المزروعة على مسافات النظر، ورحلة الضوء من القرنية إلى الشبكية.', 'Two educational tools for anyone preparing for a visit, and for anyone curious about the eye: a comparison of lens implants across viewing distances, and the journey of light from cornea to retina.'), { cls: 'section-head-split', id: 'discover-title' })}
+        tr('أداتان تثقيفيتان لمن يستعد لموعده، ولكل من يحب أن يفهم العين: مقارنة العدسات المزروعة على مسافات النظر، ورحلة الضوء من القرنية إلى الشبكية.', 'Two educational tools for anyone preparing for a visit, and for anyone curious about the eye: a comparison of lens implants across viewing distances, and the journey of light from cornea to retina.'), { id: 'discover-title' })}
       <div class="discover-grid fade-in">
         <article class="disc-card disc-lab">
           <div class="disc-visual">${LENS_LAB_ART()}</div>
@@ -1485,7 +1485,7 @@ function renderFooter() {
           <a href="${pageHref()}" data-nav>${tr('الرئيسية', 'Home')}</a>
           ${SECTION_PAGES.map(s => `<a href="${P(s.key)}" data-nav>${L(s.crumb)}</a>`).join('')}
         </nav>
-        <nav class="footer-col" aria-label="${tr('الإجراءات', 'Procedures')}">
+        <nav class="footer-col footer-procs" aria-label="${tr('الإجراءات', 'Procedures')}">
           <h3>${tr('الإجراءات', 'Procedures')}</h3>
           ${PROCEDURES.map(p => `<a href="${pageHref(currentLang, p.slug)}" data-nav>${L(p.name)}</a>`).join('')}
         </nav>
