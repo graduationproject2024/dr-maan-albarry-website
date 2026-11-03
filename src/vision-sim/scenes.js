@@ -87,7 +87,11 @@ export function buildScenes({ lighting = 'day', lang = 'en', aspect = 1.6 }) {
   const T = TEXT[lang] || TEXT.en;
   const tex = [], geos = [], mats = [];
   const rnd = seeded(20261101);
-  const k = Math.min(1, aspect / 1.6); // pull the foreground objects towards the centre on narrow screens
+  // Horizontal half-field (deg). On narrow frames the laptop (≈26° wide) and the phone (≈10°) are fitted to the field
+  // so they never overlap down to a 7:6 frame; at 16:10 this gives exactly the original -9° / 13.5° placement.
+  const hf = Math.atan(Math.tan((VIEWING.vFovDeg / 2) * DEG) * aspect) / DEG;
+  const laptopAz = -Math.max(0, Math.min(9, hf - 13.4));
+  const phoneAz = Math.max(0, Math.min(13.5, hf - 5.6));
   const basic = (opts) => { const m = new THREE.MeshBasicMaterial(opts); mats.push(m); return m; };
   const geo = (g) => { geos.push(g); return g; };
   const mesh = (g, m) => new THREE.Mesh(geo(g), m);
@@ -242,7 +246,7 @@ export function buildScenes({ lighting = 'day', lang = 'en', aspect = 1.6 }) {
   }, tex);
   const screen = mesh(new THREE.PlaneGeometry(screenW, screenH), basic({ map: laptopTex, color: col('#ffffff', P.screenDim) }));
   screen.position.z = 0.001; laptop.add(screen);
-  placeAt(laptop, 0.66, -9 * k, -11.5);
+  placeAt(laptop, 0.66, laptopAz, -11.5);
   mid.add(laptop);
 
   // ---------------- near layer: a phone held in the hand ----------------
@@ -265,7 +269,7 @@ export function buildScenes({ lighting = 'day', lang = 'en', aspect = 1.6 }) {
   }, tex);
   const phoneScreen = mesh(new THREE.PlaneGeometry(pw, ph), basic({ map: phoneTex, color: col('#ffffff', P.screenDim) }));
   phoneScreen.position.z = 0.001; phone.add(phoneScreen);
-  placeAt(phone, 0.40, 13.5 * k, -9.5);
+  placeAt(phone, 0.40, phoneAz, -9.5);
   phone.rotateZ((lang === 'ar' ? 1 : -1) * 0.06);
   near.add(phone);
 

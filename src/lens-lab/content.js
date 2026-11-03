@@ -57,6 +57,7 @@ const AR = {
   tableIntro: 'الأشرطة تقرأ بالطريقة نفسها في كل صف: كلما امتلأ الشريط كان الأمر أفضل لك (رؤية أوضح، هالات أقل، تباين أفضل، حاجة أقل للنظارة). الكلمات بجانب كل شريط هي الأهم.',
   tableCaption: 'مقارنة تثقيفية مبسطة بين خمسة أنواع من العدسات المزروعة',
   rowHead: 'الجانب',
+  showLens: 'اختر نوعاً لعرض تفاصيله',
   toricNote: 'التوريك ليس تصميماً مستقلاً للتركيز: هو تصحيح للاستجماتيزم (عدم انتظام انحناء القرنية) يمكن إضافته إلى العدسة أحادية البؤرة أو ممتدة المدى أو متعددة البؤر أو ثلاثية البؤرة. القيم في عمود التوريك هنا لعدسة توريك أحادية البؤرة.',
   legend: { 3: 'ملائم غالباً', 2: 'متوسط أو يختلف', 1: 'محدود غالباً' },
   dims: {
@@ -70,7 +71,7 @@ const AR = {
   rows: { what: 'ما هي؟', pros: 'المزايا', cons: 'الحدود', ask: 'أسئلة تناقشها مع جرّاحك' },
   // compare-two
   compareTitle: 'قارن بين عدستين',
-  compareIntro: 'اختر عدستين ثم موقفاً يومياً. ستظهر الفروق الأساسية أولاً، ثم صورة توضيحية للعدستين جنباً إلى جنب.',
+  compareIntro: 'اختر عدستين ثم موقفاً يومياً. ستظهر صورة توضيحية للعدستين جنباً إلى جنب، ثم الفروق الأساسية بينهما.',
   pickA: 'العدسة الأولى',
   pickB: 'العدسة الثانية',
   differences: 'الفروق الأساسية',
@@ -80,7 +81,7 @@ const AR = {
   scenarioTitle: 'اختر موقفاً يومياً',
   inThisSituation: 'في هذا الموقف',
   simTitle: 'كيف قد تبدو الصورة؟',
-  simHelp: 'الجهة اليسرى من الصورة تمثل العدسة الأولى، واليمنى العدسة الثانية. اسحب الخط الفاصل أو استخدم الأسهم لتحريكه.',
+  simHelp: 'الجهة اليمنى من الصورة تمثل العدسة الأولى (أ)، واليسرى العدسة الثانية (ب). اسحب الخط الفاصل أو استخدم الأسهم لتحريكه.',
   simLoading: 'جارٍ تحميل الصورة التوضيحية…',
   simLater: 'ستظهر الصورة التوضيحية عند الوصول إلى هذا الجزء.',
   simFailed: 'تعذّر عرض الصورة التوضيحية على هذا الجهاز. المقارنة المكتوبة أعلاه تبقى صحيحة.',
@@ -93,7 +94,6 @@ const AR = {
   advDistance: 'مسافة النظر في هذا الموقف',
   advDefocus: 'عدم التركيز عند هذه المسافة',
   advDefocusNote: 'عدم التركيز = (١ ÷ المسافة بالمتر) − بؤرة العدسة الأقرب. كلما زاد، زاد التشويش؛ والبؤبؤ الأوسع يزيده أكثر.',
-  advLight: 'نصيب الضوء في البؤرة الأوضح',
   advAssumptions: [
     'عين بلا قدرة على التكيّف (بعد إزالة العدسة الطبيعية)، ومركزية تماماً، دون أمراض أخرى.',
     'التشويش محسوب هندسياً: زاوية التشويش ≈ قطر البؤبؤ × عدم التركيز. هذا يبالغ قليلاً في التشويش عند الفروق الصغيرة.',
@@ -216,6 +216,7 @@ const EN = {
   tableIntro: 'The bars read the same way in every row: a fuller bar is more favourable for you (clearer vision, fewer halos, better contrast, less need for glasses). The words next to each bar matter most.',
   tableCaption: 'A simplified educational comparison of five types of lens implant',
   rowHead: 'Aspect',
+  showLens: 'Choose a type to see its details',
   toricNote: 'Toric is not a separate focusing design: it is a correction for astigmatism (an uneven curve of the cornea) that can be added to a monofocal, EDOF, multifocal or trifocal lens. The toric column here describes a monofocal toric lens.',
   legend: { 3: 'Usually favourable', 2: 'Moderate or varies', 1: 'Usually limited' },
   dims: {
@@ -228,7 +229,7 @@ const EN = {
   },
   rows: { what: 'What it is', pros: 'Advantages', cons: 'Limitations', ask: 'Questions to discuss with your surgeon' },
   compareTitle: 'Compare two lenses',
-  compareIntro: 'Choose two lenses, then an everyday situation. The key differences come first, then an illustration of the two lenses side by side.',
+  compareIntro: 'Choose two lenses, then an everyday situation. An illustration shows the two lenses side by side, followed by the key differences.',
   pickA: 'First lens',
   pickB: 'Second lens',
   differences: 'Key differences',
@@ -238,7 +239,7 @@ const EN = {
   scenarioTitle: 'Choose an everyday situation',
   inThisSituation: 'In this situation',
   simTitle: 'How might it look?',
-  simHelp: 'The left side of the picture shows the first lens and the right side the second lens. Drag the dividing line, or use the arrow keys, to move it.',
+  simHelp: 'The left side of the picture shows the first lens (A) and the right side the second lens (B). Drag the dividing line, or use the arrow keys, to move it.',
   simLoading: 'Loading the illustration…',
   simLater: 'The illustration appears when you reach this part.',
   simFailed: 'The illustration cannot be shown on this device. The written comparison above still applies.',
@@ -250,7 +251,6 @@ const EN = {
   advDistance: 'Viewing distance in this situation',
   advDefocus: 'Defocus at this distance',
   advDefocusNote: 'Defocus = (1 ÷ distance in metres) − the nearest focus of the lens. The larger it is, the more blur; a wider pupil adds more.',
-  advLight: 'Share of light in the sharpest focus',
   advAssumptions: [
     'An eye with no focusing ability of its own (the natural lens has been removed), perfectly centred, with no other disease.',
     'Blur is computed geometrically: blur angle ≈ pupil diameter × defocus. This slightly overstates blur for small amounts of defocus.',

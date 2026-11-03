@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Lens lab preview (internal)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- @doctor-json-ld -->
+    <style>
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #e4ece9; color: #17242c; }
+      body[data-theme="dark"] { background: #070d10; color: #e6edf0; }
+      .pv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; font-size: 14px; }
+      .pv-bar button { min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #9aa7ad; background: #fff; color: #17242c; cursor: pointer; }
+      main { padding: 0 16px 40px; }
+      @media (max-width: 400px) { main { padding: 0 8px 24px; } }
+    </style>
+  </head>
+  <body>
+    <header class="pv-bar" aria-label="Preview harness controls">
+      <strong>Internal preview — Vision &amp; Lens Lab</strong>
+      <button type="button" id="pv-lang">Toggle language</button>
+      <button type="button" id="pv-theme">Toggle theme</button>
+    </header>
+    <main><div id="llab-host" data-lens-lab-host></div></main>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const opts = { lang: q.get('lang') === 'en' ? 'en' : 'ar', theme: q.get('theme') === 'dark' ? 'dark' : 'light', debug: true };
+      if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
+      if (q.has('sim')) opts.simulator = q.get('sim');
+      for (const k of ['lensA', 'lensB', 'scenario']) if (q.has(k)) opts[k] = q.get(k);
+      if (q.get('nowebgl') === '1') {
+        // test hook: pretend the browser has no WebGL so the fallback path can be verified
+        const orig = HTMLCanvasElement.prototype.getContext;
+        HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return /webgl/.test(type) ? null : orig.call(this, type, ...rest); };
+      }
+      document.body.dataset.theme = opts.theme;
+      document.documentElement.lang = opts.lang;
+      const host = document.getElementById('llab-host');
+      window.__llabHost = host;
+      window.__llabEvents = [];
+      const mod = await import('./src/lens-lab/index.js');
+      window.__llabModule = mod;
+      window.__llabWire = (c) => { ['change', 'langchange', 'themechange', 'ready', 'simready', 'simerror'].forEach((ev) => c.on(ev, (p) => window.__llabEvents.push({ ev, p }))); return c; };
+      window.__llabMount = async (o = {}) => window.__llabWire(await mod.mount(host, { ...opts, ...o }));
+      window.__llab = await window.__llabMount();
+      document.getElementById('pv-lang').addEventListener('click', () => { const c = window.__llab; const l = c.getState().lang === 'ar' ? 'en' : 'ar'; c.setLang(l); document.documentElement.lang = l; });
+      document.getElementById('pv-theme').addEventListener('click', () => {
+        const c = window.__llab; const t = c.getState().theme === 'dark' ? 'light' : 'dark'; c.setTheme(t); document.body.dataset.theme = t;
+      });
+      document.body.dataset.ready = '1';
+    </script>
+  </body>
+</html>

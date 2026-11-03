@@ -30,7 +30,7 @@ export const STRINGS = {
     lenses: {
       monofocal: { name: 'أحادية البؤرة', short: 'أحادية' },
       edof: { name: 'ممتدة العمق (EDOF)', short: 'EDOF' },
-      multifocal: { name: 'متعددة البؤر (ثنائية البؤرة)', short: 'متعددة' },
+      multifocal: { name: 'متعددة البؤر (ثنائية البؤرة)', short: 'متعددة البؤر' },
       trifocal: { name: 'ثلاثية البؤرة', short: 'ثلاثية' },
       toric: { name: 'توريك (للاستجماتيزم)', short: 'توريك' },
       cataract: { name: 'الساد قبل العملية', short: 'ساد' },

@@ -211,6 +211,82 @@ test.describe('vision simulator — desktop', () => {
     expect(await C(page)).toMatchObject({ renderers: 0, rafLoops: 0 });
   });
 
+  test('everyday situations are the primary control and drive distance + lighting', async ({ page }) => {
+    await open(page);
+    const scn = page.getByRole('group', { name: 'Everyday situation' });
+    await expect(scn).toBeVisible();
+    // situation → picture → lens → explore → compare → explanation → limitations → questions → advanced
+    const order = await page.evaluate(() => ['.vsim-field-scenario', '.vsim-stage', '.vsim-field-lens', '.vsim-field-explore', '.vsim-field-compare', '.vsim-explain', '.vsim-limits', '.vsim-questions', '.vsim-adv']
+      .map((sel) => document.querySelector(sel).getBoundingClientRect().top));
+    for (let i = 1; i < order.length; i++) expect(order[i]).toBeGreaterThanOrEqual(order[i - 1]);
+    expect((await S(page)).scenario).toBe('signs');
+    const expectations = { 'Laptop work': [0.66, 'day', 'laptop'], 'Reading a phone': [0.35, 'day', 'phone'], 'Reading a book': [0.4, 'day', 'book'], 'Night driving': [6, 'night', 'night-driving'], 'Distance signs': [6, 'day', 'signs'] };
+    for (const [label, [d, light, id]] of Object.entries(expectations)) {
+      await scn.getByText(label, { exact: true }).click();
+      const s = await S(page);
+      expect(s.distanceM).toBeCloseTo(d, 6);
+      expect(s).toMatchObject({ lighting: light, scenario: id });
+      await expect(scn.getByRole('radio', { name: new RegExp(label) })).toBeChecked();
+    }
+    // a fine adjustment leaves the presets: no situation is checked and a note says so
+    await page.getByRole('group', { name: 'Lighting' }).getByText('Dusk', { exact: true }).click();
+    expect((await S(page)).scenario).toBe(null);
+    await expect(page.locator('.vsim-custom')).toBeVisible();
+    await expect(scn.getByRole('radio', { checked: true })).toHaveCount(0);
+    await page.evaluate(() => window.__vsim.setScenario('phone'));
+    expect(await S(page)).toMatchObject({ scenario: 'phone', lighting: 'day', subject: 'near' });
+    // the explanation is visible; limitations and questions for the doctor are one tap away, clearly labelled
+    await expect(page.locator('.vsim-seeing')).toContainText('Reading a phone screen');
+    await expect(page.locator('.vsim-limits > summary')).toBeVisible();
+    await expect(page.locator('.vsim-questions > summary')).toBeVisible();
+    await page.locator('.vsim-limits > summary').click();
+    await expect(page.locator('.vsim-limits li')).toHaveCount(5);
+    await page.locator('.vsim-questions > summary').click();
+    await expect(page.locator('.vsim-questions li').first()).toBeVisible();
+    // technical controls are not shown until "Advanced" is opened
+    await expect(page.getByRole('group', { name: 'Corneal astigmatism' })).toBeHidden();
+    await expect(page.locator('.vsim-range')).toBeHidden();
+    await page.locator('.vsim-adv > summary').click();
+    await expect(page.getByRole('group', { name: 'Corneal astigmatism' })).toBeVisible();
+    await expect(page.locator('.vsim-range')).toBeVisible();
+    await expect(page.locator('.vsim-model')).toContainText('Assumed pupil');
+  });
+
+  test('multifocal (two-focus) lens is available and differs from trifocal at the laptop', async ({ page }) => {
+    await open(page, 'lang=en&d=0.66');
+    await pick(lensGroup(page), 'Multifocal');
+    const s = await S(page);
+    expect(s.lens).toBe('multifocal');
+    const tri = await page.evaluate(() => { window.__vsim.setLens('trifocal'); return window.__vsim.getState().optics.A.layers.intermediate.sharpness; });
+    expect(s.optics.A.layers.intermediate.sharpness).toBeLessThan(tri);
+  });
+
+  test('enlarge view: opens over the page, Escape closes it and focus returns to the button', async ({ page }) => {
+    await open(page);
+    await page.getByRole('button', { name: 'Enlarge view' }).click();
+    expect((await S(page)).expanded).toBe(true);
+    await expect(page.locator('.vsim')).toHaveClass(/vsim--expanded/);
+    const vp = await page.locator('.vsim-viewport').boundingBox();
+    expect(vp.width).toBeGreaterThan(1100);
+    await page.keyboard.press('Escape');
+    await expect.poll(async () => (await S(page)).expanded).toBe(false);
+    await expect(page.getByRole('button', { name: 'Enlarge view' })).toBeFocused();
+    expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('');
+    expect((await sample(page)).uniqueColors).toBeGreaterThan(150);
+  });
+
+  test('viewer-only mode renders the picture without the controls', async ({ page }) => {
+    await open(page);
+    await page.evaluate(async () => { window.__vsim = await window.__vsimMount({ ui: 'viewer', compare: true, lens: 'edof', lensB: 'trifocal', scenario: 'night-driving' }); });
+    await page.waitForFunction(() => window.__vsim.getState().state === 'ready');
+    expect(await S(page)).toMatchObject({ ui: 'viewer', compare: true, lens: 'edof', lensB: 'trifocal', scenario: 'night-driving', lighting: 'night' });
+    await expect(page.locator('.vsim--viewer canvas')).toHaveCount(1);
+    await expect(page.locator('.vsim--viewer .vsim-seg-btn')).toHaveCount(0);
+    await expect(page.getByRole('slider', { name: /Comparison divider/ })).toBeVisible();
+    await expect(page.locator('.vsim-disclaimer')).toHaveText(DISCLAIMER_EN);
+    expect((await sample(page)).uniqueColors).toBeGreaterThan(150);
+  });
+
   test('reduced motion is honoured', async ({ page }) => {
     await open(page, 'lang=en&reduced=1');
     expect((await S(page)).reducedMotion).toBe(true);
@@ -231,6 +307,8 @@ test.describe('vision simulator — keyboard', () => {
     await expect(lensGroup(page).getByRole('radio', { name: 'EDOF' })).toBeChecked();
     expect((await S(page)).lens).toBe('edof');
     await expect(page.locator('.vsim-sr')).toContainText('Extended depth of focus (EDOF)');
+    // the raw distance slider lives in the "Advanced" disclosure (patient-first simplification, 2026-11)
+    await page.locator('.vsim-adv > summary').click();
     const range = page.getByRole('slider', { name: 'Viewing distance' });
     await range.focus();
     await page.keyboard.press('Home');
@@ -256,6 +334,8 @@ test.describe('vision simulator — mobile', () => {
     expect((await S(page)).lens).toBe('trifocal');
     await page.getByRole('group', { name: 'مسافة النظر' }).getByText('قريب', { exact: true }).tap();
     expect((await S(page)).subject).toBe('near');
+    await page.getByRole('group', { name: 'موقف يومي' }).getByText('قراءة الهاتف', { exact: true }).tap();
+    expect((await S(page))).toMatchObject({ subject: 'near', scenario: 'phone' });
     await page.getByRole('group', { name: 'الإضاءة' }).getByText('ليل', { exact: true }).tap();
     expect((await S(page)).lighting).toBe('night');
     await page.getByText('قارن بين عدستين').tap();
@@ -270,6 +350,10 @@ test.describe('vision simulator — mobile', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
     const st = await S(page);
     expect(st.quality.internal.width).toBeGreaterThanOrEqual(300);
+    // phones: the viewer runs edge to edge in the card at 7:6 (was 4:3 with an 8 px bleed)
+    const vp = await page.locator('.vsim-viewport').boundingBox();
+    expect(vp.height / vp.width).toBeCloseTo(6 / 7, 2);
+    expect(vp.width).toBeGreaterThanOrEqual(390 - 40);
     expect((await sample(page)).uniqueColors).toBeGreaterThan(100);
   });
 });
@@ -280,7 +364,7 @@ for (const lang of ['ar', 'en']) {
 
     test('no horizontal overflow and no overlapping controls', async ({ page }) => {
       await open(page, `lang=${lang}&compare=1`);
-      await page.locator('.vsim-eye summary').click();
+      await page.locator('.vsim-adv > summary').click();
       const r = await page.evaluate(() => {
         const box = (e) => { const b = e.getBoundingClientRect(); return { x: b.left, y: b.top, r: b.right, b: b.bottom }; };
         const overlap = (a, b) => a.x < b.r - 0.5 && b.x < a.r - 0.5 && a.y < b.b - 0.5 && b.y < a.b - 0.5;

@@ -106,15 +106,14 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     <section class="vsim-meters" data-ref="meters" aria-labelledby="vsim${n}-clarity"></section>
   </div>
   <div class="vsim-help">
-    <section class="vsim-limits" aria-labelledby="vsim${n}-limits">
-      <h3 id="vsim${n}-limits">${s.limitsTitle}</h3>
+    <details class="vsim-limits" data-ref="limits">
+      <summary>${s.limitsTitle}</summary>
       <ul>${lab.limits.map((x) => `<li>${x}</li>`).join('')}</ul>
-    </section>
-    <section class="vsim-questions" aria-labelledby="vsim${n}-q">
-      <h3 id="vsim${n}-q">${s.questionsTitle}</h3>
+    </details>
+    <details class="vsim-questions" data-ref="qbox">
+      <summary>${s.questionsTitle}</summary>
       <ul data-ref="questions"></ul>
-    </section>
-  </div>
+    </details>
   <details class="vsim-adv" data-ref="adv">
     <summary>${s.advanced}</summary>
     <div class="vsim-adv-body">
@@ -136,6 +135,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     </div>
   </details>
   <details class="vsim-how"><summary>${s.how}</summary><div data-ref="how"></div></details>
+  </div>
   <p class="vsim-sr" data-ref="live" aria-live="polite" aria-atomic="true"></p>`;
     }
     for (const k of Object.keys(ref)) delete ref[k];
@@ -156,13 +156,22 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.expand.title = expanded ? s.shrink : s.enlarge;
     if (ref.expandIcon) ref.expandIcon.setAttribute('d', expanded ? 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5' : 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5');
   }
+  // Real full screen where the browser allows it (escapes any transformed host ancestor); otherwise a fixed overlay.
   function setExpanded(on) {
     if (expanded === on) return;
     expanded = on;
     applyExpanded();
+    const fsEl = document.fullscreenElement;
+    if (on && ref.stage && ref.stage.requestFullscreen && !fsEl) {
+      try { const p = ref.stage.requestFullscreen({ navigationUI: 'hide' }); if (p && p.catch) p.catch(() => {}); } catch { /* overlay only */ }
+    } else if (!on && fsEl && root.contains(fsEl) && document.exitFullscreen) {
+      try { const p = document.exitFullscreen(); if (p && p.catch) p.catch(() => {}); } catch { /* ignore */ }
+    }
     if (ref.expand) ref.expand.focus({ preventScroll: true });
     if (handlers.expand) handlers.expand(on);
   }
+  // leaving browser full screen (Esc / back gesture) also closes the enlarged view
+  listen(document, 'fullscreenchange', () => { if (expanded && !document.fullscreenElement) setExpanded(false); });
 
   // ---------- delegated listeners ----------
   listen(root, 'change', (e) => {
@@ -236,8 +245,10 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.divider.style.left = `${state.split * 100}%`;
     ref.divider.setAttribute('aria-valuenow', String(Math.round(state.split * 100)));
     ref.divider.setAttribute('aria-valuetext', `${s.lenses[state.lens].short} ${fmt(L, Math.round(state.split * 100))}% · ${s.lenses[state.lensB].short} ${fmt(L, 100 - Math.round(state.split * 100))}%`);
-    ref.viewport.setAttribute('role', 'img');
-    ref.viewport.setAttribute('aria-label', `${s.viewerLabel(s.lenses[state.lens].name, state.compare ? s.lenses[state.lensB].name : null)}. ${distText} · ${obj}. ${s.lights[state.lighting]}.`);
+    // role="img" sits on the picture layer, not on the viewport: the viewport also holds the comparison divider and
+    // the enlarge button, and interactive controls must not be nested inside an image (axe nested-interactive).
+    ref.canvasHost.setAttribute('role', 'img');
+    ref.canvasHost.setAttribute('aria-label', `${s.viewerLabel(s.lenses[state.lens].name, state.compare ? s.lenses[state.lensB].name : null)}. ${distText} · ${obj}. ${s.lights[state.lighting]}.`);
     if (viewerOnly) return;
 
     const scn = scenarioFor(state.distanceM, state.lighting);
@@ -322,9 +333,9 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     setLang(l, state) {
       const active = document.activeElement;
       const key = active && root.contains(active) ? (active.id || active.dataset.ref) : null;
-      const advOpen = ref.adv ? ref.adv.open : false;
+      const open = ['adv', 'limits', 'qbox'].filter((k) => ref[k] && ref[k].open);
       L = l; build(state);
-      if (ref.adv) ref.adv.open = advOpen;
+      for (const k of open) if (ref[k]) ref[k].open = true;
       if (key) { const el = root.querySelector(`#${CSS.escape(key)}`) || ref[key]; if (el) el.focus({ preventScroll: true }); }
     },
     setTheme(t) { theme = t; root.dataset.theme = t; },
