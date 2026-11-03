@@ -1,11 +1,14 @@
 // Vision simulator — public entry point (lazy-loaded chunk).
-// API: mount(host, { lang, theme, reducedMotion, debug }) → controller
-//   { destroy, setLang, setTheme, getState, setLens, setDistance, setLighting, setCompare, setRefraction, setSplit, on }
+// API: mount(host, { lang, theme, reducedMotion, debug, lens, lensB, compare, distanceM, lighting, refraction,
+//                     scenario, ui: 'full' | 'viewer' }) → controller
+//   { destroy, setLang, setTheme, getState, setLens, setDistance, setLighting, setCompare, setRefraction, setSplit,
+//     setScenario, on }
+// ui 'viewer' renders only the picture (+ disclaimer and comparison divider) for hosts with their own controls.
 // Educational illustration — not a prediction of anyone's vision. See
 // docs/implementation/clinical-visual-reconstruction/VISION_SIMULATOR_REBUILD.md
 import './styles.css';
-import { computeView, clamp, normalizeRefraction } from './optics/model.js';
-import { DISTANCES, LENS_IDS, LIGHTING_IDS } from './optics/params.js';
+import { computeView, clamp, normalizeRefraction, scenarioFor } from './optics/model.js';
+import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIOS, SCENARIO_IDS } from './optics/params.js';
 import { createUI } from './ui.js';
 import { STRINGS, formatDistance } from './i18n.js';
 
@@ -32,6 +35,7 @@ class VisionSimulator {
     this.lang = o.lang === 'en' ? 'en' : 'ar';
     this.theme = o.theme === 'dark' ? 'dark' : 'light';
     this.debug = !!o.debug;
+    this.mode = o.ui === 'viewer' ? 'viewer' : 'full';
     const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.reduced = typeof o.reducedMotion === 'boolean' ? o.reducedMotion : !!(mq && mq.matches);
     this.state = {
@@ -43,6 +47,7 @@ class VisionSimulator {
       refraction: normalizeRefraction(o.refraction),
       split: 0.5,
     };
+    if (SCENARIO_IDS.includes(o.scenario)) Object.assign(this.state, { distanceM: SCENARIOS[o.scenario].distanceM, lighting: SCENARIOS[o.scenario].lighting });
     this.status = 'idle';
     this.disposers = [];
     this.events = new Map();
@@ -70,6 +75,7 @@ class VisionSimulator {
       setCompare: (on, lensB) => self.setCompare(on, lensB),
       setRefraction: (r) => self.setRefraction(r),
       setSplit: (x) => self.setSplit(x),
+      setScenario: (id) => self.setScenario(id),
       on: (ev, cb) => self.on(ev, cb),
     };
   }
@@ -109,7 +115,7 @@ class VisionSimulator {
   // ---------- lifecycle ----------
   async init() {
     this.ui = createUI(this.host, {
-      lang: this.lang, theme: this.theme,
+      lang: this.lang, theme: this.theme, mode: this.mode,
       listen: (t, e, f, o) => this.listen(t, e, f, o),
       handlers: {
         lens: (id) => this.setLens(id, 'A', true),
@@ -119,6 +125,8 @@ class VisionSimulator {
         lighting: (l) => this.setLighting(l, true),
         refraction: (r) => this.setRefraction(r, true),
         split: (x) => this.setSplit(x),
+        scenario: (id) => this.setScenario(id, true),
+        expand: (on) => this.onExpand(on),
       },
     });
     this.ui.build(this.state);
@@ -189,9 +197,18 @@ class VisionSimulator {
     if (this.visible) this.startLoop(); else this.stopLoop();
   }
 
+  // The enlarged view covers the page; the page behind it must not scroll (restored on close / destroy).
+  onExpand(on) {
+    const de = document.documentElement;
+    if (on) { this.prevOverflow = de.style.overflow; de.style.overflow = 'hidden'; } else if (this.prevOverflow !== undefined) { de.style.overflow = this.prevOverflow; this.prevOverflow = undefined; }
+    this.dirty = true; this.resizePending = true;
+    this.emit('change', { what: 'expanded', state: this.getState() });
+  }
+
   destroy() {
     if (this.destroyed) return;
     this.destroyed = true;
+    if (this.prevOverflow !== undefined) { document.documentElement.style.overflow = this.prevOverflow; this.prevOverflow = undefined; }
     this.stopLoop();
     for (const id of this.timers) clearTimeout(id);
     this.timers.clear();
@@ -347,6 +364,17 @@ class VisionSimulator {
     if (rebuild) this.rebuildScenes();
     this.changed('lighting', true);
   }
+  /** Everyday situation: one distance + one lighting level (see SCENARIOS). Unknown ids are ignored. */
+  setScenario(id, fromUI = false) {
+    if (this.destroyed || !SCENARIO_IDS.includes(id)) return;
+    const sc = SCENARIOS[id];
+    if (!fromUI && scenarioFor(this.state.distanceM, this.state.lighting) === id) return;
+    const rebuild = sc.lighting !== this.state.lighting;
+    this.state.distanceM = sc.distanceM;
+    this.state.lighting = sc.lighting;
+    if (rebuild) this.rebuildScenes();
+    this.changed('scenario', true);
+  }
   setRefraction(r = {}, fromUI = false) {
     if (this.destroyed) return;
     this.state.refraction = normalizeRefraction({ ...this.state.refraction, ...r });
@@ -426,6 +454,9 @@ class VisionSimulator {
       distanceM: this.state.distanceM,
       subject: v.A.subject,
       lighting: this.state.lighting,
+      scenario: scenarioFor(this.state.distanceM, this.state.lighting),
+      ui: this.mode,
+      expanded: !!(this.ui && this.ui.expanded),
       pupilMm: v.A.pupilMm,
       refraction: { ...this.state.refraction },
       lang: this.lang,
