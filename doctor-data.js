@@ -437,6 +437,78 @@ ${PROCEDURES.map(p => `- ${p.name.en} (${p.name.ar}) — ${p.source === 'magrabi
 }
 
 // ------------------------------------------------------------
+// BreadcrumbList for every page below the home page. `trail` = [{ name, path }] from
+// site-routes.js breadcrumbFor(); paths are site-root-relative.
+// ------------------------------------------------------------
+export function buildBreadcrumbJsonLd(trail, siteUrl, pageUrl) {
+  return {
+    '@type': 'BreadcrumbList',
+    '@id': `${pageUrl}#breadcrumb`,
+    itemListElement: trail.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: `${siteUrl}/${c.path}` }))
+  };
+}
+
+// The hospital as published by Magrabi Health (shared by the home graph and the clinic page).
+function hospitalNode() {
+  const d = DOCTOR;
+  return {
+    '@type': 'Hospital',
+    name: d.clinic.name.ar,
+    alternateName: d.clinic.name.en,
+    url: d.clinic.hospitalUrl,
+    telephone: d.contact.callCenter.tel,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: d.clinic.address.street,
+      addressLocality: d.clinic.address.locality,
+      addressRegion: d.clinic.address.region,
+      addressCountry: d.clinic.address.country
+    }
+  };
+}
+
+/**
+ * Structured data for the Phase 1 section pages (/about/, /procedures/, /lens-lab/, /surgical-education/,
+ * /education/, /how-vision-works/, /clinic/). Built only from facts in this module; no ratings, no outcomes.
+ *   page      section key (site-routes.js SECTION_PAGES)
+ *   meta      { title, description } of the page
+ *   trail     breadcrumb trail (site-routes.js breadcrumbFor)
+ *   extra     { procedureUrls: [{ name, url }] } for the procedure library
+ */
+export function buildSectionJsonLd(page, lang, pageUrl, siteUrl, meta, trail, extra = {}) {
+  const d = DOCTOR;
+  const physicianRef = { '@id': `${SITE.url}/#physician` };
+  const site = { '@type': 'WebSite', url: `${siteUrl}/`, name: d.identity.name[lang] };
+  const base = { '@id': `${pageUrl}#webpage`, url: pageUrl, name: meta.title, description: meta.description, inLanguage: lang, isPartOf: site, breadcrumb: { '@id': `${pageUrl}#breadcrumb` } };
+  const graph = [];
+  if (page === 'about') {
+    const physician = buildJsonLd()['@graph'].find(n => n['@type'] === 'Physician');
+    graph.push({ '@type': 'ProfilePage', ...base, mainEntity: physician });
+  } else if (page === 'procedures') {
+    graph.push({ '@type': 'CollectionPage', ...base, about: physicianRef,
+      mainEntity: { '@type': 'ItemList', itemListElement: (extra.procedureUrls || []).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: p.url })) } });
+  } else if (page === 'clinic') {
+    graph.push({ '@type': 'ContactPage', ...base, about: { '@id': `${pageUrl}#clinic` } });
+    graph.push({
+      '@type': 'MedicalClinic',
+      '@id': `${pageUrl}#clinic`,
+      name: lang === 'ar' ? `عيادة ${d.identity.shortName.ar} – ${d.clinic.name.ar}` : `${d.identity.shortName.en}'s clinic – ${d.clinic.name.en}`,
+      url: pageUrl,
+      telephone: d.contact.clinicDirect.tel,
+      medicalSpecialty: 'Ophthalmologic',
+      address: hospitalNode().address,
+      openingHoursSpecification: d.clinic.workingHours.sessions.map(([opens, closes]) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: d.clinic.workingHours.days, opens, closes })),
+      parentOrganization: hospitalNode(),
+      employee: physicianRef
+    });
+  } else {
+    graph.push({ '@type': 'MedicalWebPage', ...base, audience: { '@type': 'PeopleAudience', audienceType: 'Patient' } });
+  }
+  graph.push(buildBreadcrumbJsonLd(trail, siteUrl, pageUrl));
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+// ------------------------------------------------------------
 // Procedure page structured data: a MedicalWebPage about a MedicalProcedure.
 // No ratings, reviews, outcomes, prices, `reviewedBy` or `lastReviewed`: the pages
 // have not been medically reviewed yet.
@@ -444,7 +516,7 @@ ${PROCEDURES.map(p => `- ${p.name.en} (${p.name.ar}) — ${p.source === 'magrabi
 //   siteUrl  absolute site root (no trailing slash)
 //   faq      [{ q, a }] in the page language, exactly as rendered
 // ------------------------------------------------------------
-export function buildProcedureJsonLd(slug, lang, pageUrl, siteUrl, faq = []) {
+export function buildProcedureJsonLd(slug, lang, pageUrl, siteUrl, faq = [], trail = null) {
   const p = procedureBySlug(slug);
   if (!p) throw new Error(`unknown procedure ${slug}`);
   const graph = [
@@ -474,5 +546,6 @@ export function buildProcedureJsonLd(slug, lang, pageUrl, siteUrl, faq = []) {
     '@id': `${pageUrl}#faq`,
     mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
   });
+  if (trail && trail.length) graph.push(buildBreadcrumbJsonLd(trail, siteUrl, pageUrl));
   return { '@context': 'https://schema.org', '@graph': graph };
 }
