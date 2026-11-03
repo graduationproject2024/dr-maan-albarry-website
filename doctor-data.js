@@ -430,6 +430,16 @@ ${PROCEDURES.map(p => `- ${p.name.en} (${p.name.ar}) — ${p.source === 'magrabi
 - Intraocular lens content on this website is educational. Monofocal, extended depth of focus (EDOF) and trifocal lenses each have trade-offs; no single lens suits every patient, and the choice is made individually after examination.
 - Vision simulator: an educational illustration of relative differences across viewing distances. Individual results depend on a full clinical evaluation.
 
+## Pages (Arabic at the site root, English under /en/)
+- / — home: the physician, expertise, core specialties, booking
+- /about/ — professional profile: qualifications, appointments, dated record
+- /procedures/ — procedure library; /procedures/<slug>/ — one guide per procedure
+- /lens-lab/ — Vision & Lens Lab (educational lens comparison and vision simulator)
+- /surgical-education/ — 3D cataract surgery walkthrough
+- /education/ — patient education guides, visual lifestyle questionnaire, warning signs
+- /how-vision-works/ — the light journey through the eye
+- /clinic/ — booking routes, clinic hours, visit pathway, map
+
 ## Sources
 - ${SOURCES.magrabi.label}: ${SOURCES.magrabi.url}
 - ${SOURCES.taibah.label}: ${SOURCES.taibah.url}

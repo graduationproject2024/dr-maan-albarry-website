@@ -995,6 +995,7 @@ async function loadVisionSim() {
     vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
     vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
     vsim.failed = false;
+    document.getElementById('simulator-host')?.removeAttribute('data-reserve'); // mounted: it sizes itself now
   } catch (err) {
     console.warn('Vision simulator failed to load', err);
     showVisionSimError();
@@ -1023,7 +1024,7 @@ function mountVisionSim() {
   if (!slot) { destroyVisionSim(); return; }
   if (!vsim.host) vsim.host = document.createElement('div');
   if (vsim.host.parentNode !== slot) slot.appendChild(vsim.host); // survive renderApp() re-renders
-  if (vsim.ctrl) { vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); return; }
+  if (vsim.ctrl) { slot.removeAttribute('data-reserve'); vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); return; }
   if (vsim.loading) return;
   if (vsim.failed) { showVisionSimError(); return; } // re-render in the new language; retry stays one tap away
   if (vsim.io) vsim.io.disconnect();

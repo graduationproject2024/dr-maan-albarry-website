@@ -16,8 +16,8 @@
    ------------------------------------------------------------ */
 @font-face { font-family: "Noto Sans Arabic Fallback"; src: local("Segoe UI"); font-weight: 100 549; size-adjust: 97.93%; ascent-override: 139.9%; descent-override: 75.57%; line-gap-override: 0%; }
 @font-face { font-family: "Noto Sans Arabic Fallback"; src: local("Segoe UI Bold"), local("SegoeUI-Bold"); font-weight: 550 900; size-adjust: 106.82%; ascent-override: 128.26%; descent-override: 69.28%; line-gap-override: 0%; }
-@font-face { font-family: "Noto Naskh Arabic Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"); font-weight: 100 549; size-adjust: 100%; ascent-override: 106%; descent-override: 55%; line-gap-override: 0%; }
-@font-face { font-family: "Noto Naskh Arabic Fallback"; src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"); font-weight: 550 900; size-adjust: 100%; ascent-override: 106%; descent-override: 55%; line-gap-override: 0%; }
+@font-face { font-family: "Noto Naskh Arabic Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"); font-weight: 100 549; size-adjust: 111.52%; ascent-override: 95.95%; descent-override: 56.49%; line-gap-override: 0%; }
+@font-face { font-family: "Noto Naskh Arabic Fallback"; src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"); font-weight: 550 900; size-adjust: 111.7%; ascent-override: 95.8%; descent-override: 56.4%; line-gap-override: 0%; }
 @font-face { font-family: "Public Sans Fallback"; src: local("Arial"), local("ArialMT"); font-weight: 100 549; size-adjust: 103.68%; ascent-override: 91.62%; descent-override: 22.18%; line-gap-override: 0%; }
 @font-face { font-family: "Public Sans Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 550 900; size-adjust: 100.52%; ascent-override: 94.51%; descent-override: 22.88%; line-gap-override: 0%; }
 @font-face { font-family: "Source Serif 4 Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"); font-weight: 100 549; size-adjust: 100.34%; ascent-override: 103.64%; descent-override: 33.88%; line-gap-override: 0%; }
@@ -546,9 +546,11 @@ html.drawer-open .site-header { z-index: 130; }
 /* Reserve the mounted simulator's height (measured at 320-1920px, AR/EN) so the lazy mount never shifts the
    sections below it. Only while a mount is expected (data-reserve, set by the app): no-JS / prerendered pages and
    a failed load keep no blank gap (BUG-09/10). */
-.vsim-host[data-reserve] { min-height: var(--vsim-reserve-lg, 1540px); }
-@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: var(--vsim-reserve-md, 1460px); } }
-@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: var(--vsim-reserve-sm, 1920px); } }
+/* Measured after mounting (2026-11-04, simplified simulator, AR/EN): 1,395–1,555 px at ≥1024; 1,415 px at 768;
+   1,843–1,921 px at 320–390. The reservation is released once the simulator has mounted and sizes itself. */
+.vsim-host[data-reserve] { min-height: 1560px; }
+@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1440px; } }
+@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1930px; } }
 .vsim-load-error { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--radius-lg); border: 1px solid var(--stage-line); background: var(--surface); color: var(--ink-2); }
 .vsim-load-error p { max-width: 60ch; }
 @media (max-width: 639px) { .vsim-launch { padding: 0; border: 0; background: none; } }
@@ -804,9 +806,9 @@ html.drawer-open .site-header { z-index: 130; }
 .feature { display: grid; gap: var(--s-5); }
 .feature-slot:not([data-reserve]):empty { display: none; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--radius-lg); background: linear-gradient(90deg, var(--band), var(--surface), var(--band)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
-.feature-lens-lab .feature-slot[data-reserve] { min-height: 960px; }
+.feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
 .feature-light-journey .feature-slot[data-reserve] { min-height: 640px; }
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1400px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 900px; } }
+@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1600px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 900px; } }
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--radius-lg); border: 1px solid var(--warn-line); background: var(--warn-bg); color: var(--warn-ink); }
