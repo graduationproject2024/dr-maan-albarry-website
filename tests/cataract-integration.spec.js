@@ -15,7 +15,8 @@ function contrast(fg, bg) {
 async function start(page, { lang, theme, width, height }) {
   await page.setViewportSize({ width, height });
   await page.addInitScript(([l, t]) => { try { localStorage.setItem('lang', l); localStorage.setItem('theme', t); } catch (e) { /* ignore */ } }, [lang, theme]);
-  await page.goto('/');
+  // since Phase 1 the full 3D walkthrough lives on /surgical-education/ (and the cataract page), not the homepage
+  await page.goto(lang === 'en' ? '/en/surgical-education/' : '/surgical-education/');
   const before = await page.evaluate(() => performance.getEntriesByType('resource').filter(r => /cataract-sim/.test(r.name)).length);
   expect(before).toBe(0); // nothing 3D is downloaded until the visitor asks for it
   await page.locator('#cataract-3d-start').click();
@@ -23,7 +24,7 @@ async function start(page, { lang, theme, width, height }) {
 }
 
 test('language switched while the 3D module is still loading is applied once it is ready', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/surgical-education/');
   await page.locator('#cataract-3d-start').click();
   await page.evaluate(() => window.toggleLang()); // immediately, before mount resolves
   await expect(page.locator('#cataract-3d')).toHaveAttribute('data-state', 'active', { timeout: 20_000 });

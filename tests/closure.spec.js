@@ -86,14 +86,20 @@ test.describe('Interaction & accessibility fixes', () => {
     await expect(q).toHaveAttribute('aria-expanded', 'true');
     await q.click();
     await expect(q).toHaveAttribute('aria-expanded', 'false');
-    const t = page.locator('.article-trigger').first();
+    // Phase 1: the four articles are full, always-open guides on /education/ (no accordion); the remaining
+    // accordions are the procedure-page FAQs, which must keep the same ARIA contract.
+    await page.goto('/procedures/icl/');
+    const t = page.locator('#pfaq-0 .faq-question');
     await expect(t).toHaveAttribute('aria-expanded', 'false');
     await t.click();
     await expect(t).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#pfaq-answer-0')).toBeVisible();
+    await t.click();
+    await expect(t).toHaveAttribute('aria-expanded', 'false');
   });
 
   test('simulator shows a fallback message when the WebGL context is lost', async ({ page }) => {
-    await open(page);
+    await page.goto('/lens-lab/'); // the full simulator lives on the Lens Lab page since Phase 1
     await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await expect(page.locator('#simulator-host .vsim canvas')).toBeVisible({ timeout: 20_000 });
     const lost = await page.evaluate(() => {
@@ -110,9 +116,10 @@ test.describe('Interaction & accessibility fixes', () => {
   // Phase 2/3 replaced the phone swipe rows with stacked editorial lists. Same guarantee as before:
   // every item stays in the DOM and readable, nothing scrolls the page sideways.
   test('credential ledger and technology list keep every item in the DOM without horizontal overflow on phones', async ({ page }) => {
-    await open(page);
     const P = DOCTOR.professional;
-    for (const [sel, groups] of [['.qualifications-grid', 4], ['.tech-grid', 4]]) {
+    // Phase 1: the credential ledger is on /about/, the assessments list on /clinic/
+    for (const [sel, groups, at] of [['.qualifications-grid', 4, '/about/'], ['.tech-grid', 4, '/clinic/']]) {
+      await page.goto(at);
       const list = page.locator(sel);
       await expect(list.locator(':scope > *')).toHaveCount(groups);
       const { sw, cw } = await list.evaluate(e => ({ sw: e.scrollWidth, cw: e.clientWidth }));
@@ -121,6 +128,7 @@ test.describe('Interaction & accessibility fixes', () => {
       for (const b of boxes) { expect(b.x).toBeGreaterThanOrEqual(0); expect(b.right).toBeLessThanOrEqual(390); expect(b.h).toBeGreaterThan(0); }
     }
     // every qualification, the academic rank, the two leadership roles and every membership are listed
+    await page.goto('/about/');
     await expect(page.locator('.qualifications-grid .ledger-row')).toHaveCount(P.qualifications.length + 2 + 2 + P.memberships.length);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
@@ -161,7 +169,12 @@ test.describe('Phase 2/3 — theme default, 3D section and navigation', () => {
   for (const lang of ['ar', 'en']) {
     test(`3D cataract section exists with a start button and a header link — ${lang}`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
+      // Phase 1: the 3D walkthrough has its own page; the homepage shows a preview that links to it
       await open(page, { lang });
+      const preview = page.locator('#surgery-3d');
+      await expect(preview.locator(`a[href="${lang === 'ar' ? '' : 'en/'}surgical-education/"]`)).toBeVisible();
+      await expect(page.locator('#cataract-3d-start')).toHaveCount(0); // nothing 3D on the homepage
+      await page.goto(lang === 'ar' ? '/surgical-education/' : '/en/surgical-education/');
       const section = page.locator('section#cataract-3d');
       await expect(section).toHaveCount(1);
       await expect(section.locator('h2')).not.toBeEmpty();
@@ -172,9 +185,10 @@ test.describe('Phase 2/3 — theme default, 3D section and navigation', () => {
       // poster first: nothing heavy is mounted until the visitor asks for it
       await expect(section.locator('.c3d-poster')).toBeVisible();
       await expect(page.locator('#cataract-3d-stage')).toBeHidden();
-      // Path routing: section links carry the language's home path (AR "#id", EN "en/#id") so they
-      // also work from procedure pages; the link must still be exactly one, visible, pointing at the section.
-      const href = lang === 'ar' ? '#cataract-3d' : 'en/#cataract-3d';
+      // Path routing: page links carry the language prefix (AR "<page>/", EN "en/<page>/") so they work from every
+      // page; the link must be exactly one, visible, pointing at the 3D page (marked as the current page here).
+      const href = lang === 'ar' ? 'surgical-education/' : 'en/surgical-education/';
+      await expect(page.locator(`#site-header .nav-links a[href="${href}"]`)).toHaveAttribute('aria-current', 'page');
       await expect(page.locator(`#site-header .nav-links a[href="${href}"]`)).toBeVisible();
       await expect(page.locator(`#mobile-nav a[href="${href}"]`)).toHaveCount(1);
     });
@@ -184,9 +198,12 @@ test.describe('Phase 2/3 — theme default, 3D section and navigation', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await open(page);
     await page.locator('.mobile-menu-btn').click();
-    await page.locator('#mobile-nav a[href="#cataract-3d"]').click();
+    await page.locator('#mobile-nav a[href="surgical-education/"]').click();
     await expect(page.locator('#mobile-nav')).not.toHaveClass(/open/);
-    await expect.poll(() => page.locator('#cataract-3d').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
+    await expect(page).toHaveURL(/\/surgical-education\/$/);
+    // the 3D section (with its start button) begins on the first screen of its page
+    await expect.poll(() => page.locator('#cataract-3d').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(844);
+    await expect(page.locator('#cataract-3d-start')).toBeVisible();
   });
 
   test('3D module is code-split: three.js stays out of the main bundle', () => {

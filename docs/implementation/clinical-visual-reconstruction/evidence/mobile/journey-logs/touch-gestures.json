@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\touch-gestures.spec.js › Touch and gesture checks",
-  "startedAt": "2026-11-02T17:37:25.179Z",
-  "finishedAt": "2026-11-02T17:37:52.276Z",
+  "startedAt": "2026-11-03T21:49:57.712Z",
+  "finishedAt": "2026-11-03T21:50:28.927Z",
   "totals": {
     "steps": 15,
     "pass": 15,
@@ -38,21 +38,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3543,
+      "ms": 4575,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 2,
       "action": "One-finger vertical swipe starting on the 3D canvas",
       "expected": "The page scrolls; the canvas does not trap the gesture",
-      "actual": "scrollY 5443 → 5675",
+      "actual": "scrollY 6189 → 6394",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 986,
+      "ms": 2007,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4049,
+      "ms": 4505,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -80,21 +80,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 651,
+      "ms": 738,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 5,
       "action": "Tap \"Explore 3D\", then drag horizontally on the canvas",
       "expected": "Explore mode on (aria-pressed=true); the drag rotates the model; the page does not scroll",
-      "actual": "aria-pressed=true; view rotated; scrollY 5447 → 5447",
+      "actual": "aria-pressed=true; view rotated; scrollY 6137 → 6137",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/touch-gestures/05-tap-explore-3d-then-drag-horizontally-on.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2815,
+      "ms": 3174,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1960,
+      "ms": 2203,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3916,
+      "ms": 4097,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1043,
+      "ms": 1084,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 192,
+      "ms": 187,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2537,
+      "ms": 2543,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 826,
+      "ms": 823,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -192,22 +192,22 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 94,
+      "ms": 88,
       "url": "/en/procedures/lens-implants/"
     },
     {
       "step": 13,
       "action": "Vision simulator: horizontal swipe on the viewer (no compare)",
       "expected": "Nothing happens to the page (no sideways scroll); vertical swipe still scrolls",
-      "actual": "scrollX=0; vertical swipe scrollY 5402 → 5587",
+      "actual": "scrollX=0; vertical swipe scrollY 10778 → 10963",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3197,
-      "url": "/en/"
+      "ms": 3633,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 14,
@@ -220,8 +220,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1157,
-      "url": "/en/"
+      "ms": 1390,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 15,
@@ -234,8 +234,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 54,
-      "url": "/en/"
+      "ms": 53,
+      "url": "/en/lens-lab/"
     }
   ]
 }

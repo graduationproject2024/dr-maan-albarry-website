@@ -114,11 +114,13 @@ test('Stress — seeded rapid interaction', async ({ page }, testInfo) => {
     return { actual: `section after each reload: ${out.join(',')}`, ok: out.every((x) => x === 'idle') };
   }, { critical: false, timeout: 90000 });
 
-  await j.step('Navigation cycle: visit all 14 procedure pages through the footer links (seeded order)', 'Every page renders its own h1; no errors; no overflow', async () => {
+  await j.step('Navigation cycle: visit all 14 procedure pages through the procedure links in the menu drawer (seeded order)', 'Every page renders its own h1; no errors; no overflow', async () => {
+    // Phase 1: on phones the footer omits the procedure list (it is in the drawer and the library), so the cycle uses the drawer
     const order = []; const bad = [];
     for (let i = 0; i < 14; i++) {
       const slug = pick(rnd, SLUGS); order.push(slug);
-      const l = page.locator(`.site-footer a[href$="procedures/${slug}/"]`).first(); await l.scrollIntoViewIfNeeded(); await l.tap();
+      await page.locator('.mobile-menu-btn').tap(); await page.waitForTimeout(250);
+      const l = page.locator(`#mobile-nav .drawer-procs a[href$="procedures/${slug}/"]`).first(); await l.scrollIntoViewIfNeeded(); await l.tap();
       await page.waitForURL(new RegExp(`procedures/${slug}/$`));
       const s = await docState(page); const lang = s.lang;
       if (s.h1 !== NAME[slug][lang]) bad.push(`${slug}:${s.h1}`);
@@ -127,8 +129,8 @@ test('Stress — seeded rapid interaction', async ({ page }, testInfo) => {
     return { actual: `order=${order.join(',')}; mismatches=${bad.join(' ') || 'none'}; overflow ${await hOverflow(page)}px`, ok: !bad.length };
   }, { critical: false, timeout: 120000 });
 
-  await j.step('Repeated theme (10×) and language (6×) toggles on the home page with the simulator mounted', 'Ends in the expected theme/language; exactly one vision simulator; its dir/theme follow', async () => {
-    await page.goto('/en/'); await page.locator('main h1').waitFor();
+  await j.step('Repeated theme (10×) and language (6×) toggles on the Lens Lab page with the simulator mounted', 'Ends in the expected theme/language; exactly one vision simulator; its dir/theme follow', async () => {
+    await page.goto('/en/lens-lab/'); await page.locator('main h1').waitFor();
     await page.locator('#simulator-host').scrollIntoViewIfNeeded(); await waitVsim(page, 30000);
     await page.mouse.wheel(0, -100000); await page.waitForTimeout(200);
     const t0 = await page.evaluate(() => document.documentElement.dataset.theme);

@@ -27,15 +27,16 @@ test('Persona C — English mobile user', async ({ page }, testInfo) => {
     return { actual: `${s.path} lang=${s.lang} dir=${s.dir} h1="${s.h1}" y=${s.scrollY}`, ok: s.lang === 'en' && s.dir === 'ltr' && s.h1 === DOCTOR_NAME.en && s.scrollY < 10 };
   }, { shot: true });
 
-  await j.step('Swipe through the procedure cards', 'Seven English cards scroll past; each has a title and a details link ≥44px tall', async () => {
-    const cards = page.locator('#procedures .proc-card');
+  await j.step('Swipe through the specialties', 'All seven procedures scroll past in English (three featured cards + the index); each link ≥44px tall', async () => {
+    // Phase 1: the homepage features three specialties with artwork and lists the other four as an index
+    const items = page.locator('#procedures :is(.spec-card .proc-card-title, .spec-index li a)');
     let cdp = null; const titles = [];
     for (let i = 0; i < 40 && titles.length < 7; i++) {
       cdp = await swipe(page, { x: 195, y: 560, dy: -300, cdp });
-      const vis = await cards.evaluateAll((els) => els.filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; }).map((e) => e.querySelector('.proc-card-title').textContent.trim()));
+      const vis = await items.evaluateAll((els) => els.filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; }).map((e) => e.textContent.trim()));
       for (const t of vis) if (!titles.includes(t)) titles.push(t);
     }
-    const linkH = await cards.locator('.proc-card-link').evaluateAll((els) => Math.min(...els.map((e) => e.getBoundingClientRect().height)));
+    const linkH = await page.locator('#procedures :is(.proc-card-link, .spec-index li a)').evaluateAll((els) => Math.min(...els.map((e) => e.getBoundingClientRect().height)));
     return { actual: `${titles.length} cards seen: ${titles.join(', ')}; smallest link ${Math.round(linkH)}px`, ok: titles.length === 7 && linkH >= 44 };
   }, { shot: true });
 

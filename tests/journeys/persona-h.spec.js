@@ -17,11 +17,13 @@ test('Persona H — comparing lens options', async ({ page }, testInfo) => {
     device: 'iPad Mini (Playwright descriptor: 768×1024, DPR 2, iPadOS UA) — rendered by Chromium', language: 'ar', theme: 'light', startUrl: '/',
   });
 
-  await j.step('Open the home page and tap "محاكي الرؤية" in the navigation', 'Scrolls to the simulator section; the simulator loads in place', async () => {
+  await j.step('Open the home page, tap "مختبر العدسات" in the navigation, then "محاكي الرؤية بكل أدواته"', 'Opens the Lens Lab page and jumps to the simulator section; the simulator loads in place', async () => {
     await openUrl(page, '/');
-    const navLink = page.locator('.header-nav a[data-section="simulator"]');
+    const navLink = page.locator('.header-nav a[data-section="lens-lab"]');
     if (await navLink.isVisible()) await navLink.tap();
-    else { await page.locator('.mobile-menu-btn').tap(); await page.waitForTimeout(300); await page.locator('#mobile-nav a[data-section="simulator"]').tap(); }
+    else { await page.locator('.mobile-menu-btn').tap(); await page.waitForTimeout(300); await page.locator('#mobile-nav a[data-section="lens-lab"]').tap(); }
+    await page.waitForURL(/\/lens-lab\/$/);
+    await page.locator('#sim-jump').tap();
     const s = await waitVsim(page, 40000);
     await page.waitForTimeout(900);
     const top = (await rect(page.locator('#simulator'))).y;

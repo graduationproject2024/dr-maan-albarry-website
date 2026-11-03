@@ -28,8 +28,8 @@ test('WebKit — English iPhone journey with both simulators', async ({ page }, 
     return { actual: `after play mode=${a.mode}; after next+pause ${b.stageNum} mode=${b.mode}`, ok: a.mode === 'pause' && b.mode === 'play' };
   });
   await j.step('Tap "Back to site" (close)', 'Viewer closed', async () => { const c = page.locator('#cataract-3d-stage [data-ref="close"]'); await revealInFreeArea(page, c); await c.click(); await page.waitForTimeout(300); const s = await csim(page); return { actual: `mounted=${s.mounted}`, ok: !s.mounted }; });
-  await j.step('Go to the home simulator, choose trifocal and compare', 'Vision simulator renders in WebKit; controls work', async () => {
-    await page.goto('/en/#simulator'); await page.locator('main h1').waitFor(); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+  await j.step('Go to the simulator (Lens Lab page), choose trifocal and compare', 'Vision simulator renders in WebKit; controls work', async () => {
+    await page.goto('/en/lens-lab/#simulator'); await page.locator('main h1').waitFor(); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     const s0 = await waitVsim(page, 60000);
     await revealInFreeArea(page, lbl('lensA', 'trifocal')); await lbl('lensA', 'trifocal').click();
     const sw = page.locator('#simulator-host .vsim-switch'); await revealInFreeArea(page, sw); await sw.click(); await page.waitForTimeout(300);

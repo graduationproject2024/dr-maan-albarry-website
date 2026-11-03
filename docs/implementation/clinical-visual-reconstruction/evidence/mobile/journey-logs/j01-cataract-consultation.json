@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J01 › J01 — cataract consultation",
-  "startedAt": "2026-11-02T17:36:25.984Z",
-  "finishedAt": "2026-11-02T17:36:35.047Z",
+  "startedAt": "2026-11-03T21:48:59.593Z",
+  "finishedAt": "2026-11-03T21:49:08.348Z",
   "totals": {
     "steps": 7,
     "pass": 7,
@@ -38,40 +38,40 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1506,
+      "ms": 1949,
       "url": "/"
     },
     {
       "step": 2,
       "action": "Open the menu and tap \"التثقيف الصحي\"",
-      "expected": "Education section on screen",
-      "actual": "#education top=73",
+      "expected": "Education library page opens at the top (Phase 1: its own page)",
+      "actual": "/education/; page header top=65",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2242,
-      "url": "/#education"
+      "ms": 1426,
+      "url": "/education/"
     },
     {
       "step": 3,
-      "action": "Tap the first article \"ما هي المياه البيضاء…؟\"",
-      "expected": "Article expands (aria-expanded=true) with a link to the full guide",
-      "actual": "aria-expanded=true, guide link visible=true",
+      "action": "Read the first guide \"ما هي المياه البيضاء…؟\"",
+      "expected": "Guide shows its headed sections and a link to the full procedure guide",
+      "actual": "3 headed sections, guide link visible=true",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j01-cataract-consultation/03-tap-the-first-article.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j01-cataract-consultation/03-read-the-first-guide.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 78,
-      "url": "/#education"
+      "ms": 36,
+      "url": "/education/"
     },
     {
       "step": 4,
-      "action": "Tap \"اقرأ الدليل الكامل\"",
+      "action": "Tap \"الدليل الكامل للإجراء\"",
       "expected": "Cataract page opens at the top",
       "actual": "/procedures/cataract-surgery/ \"جراحة الماء الأبيض (الساد)\" y=0",
       "status": "PASS",
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 183,
+      "ms": 384,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 309,
+      "ms": 245,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4265,
+      "ms": 4203,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 213,
+      "ms": 205,
       "url": "/procedures/cataract-surgery/"
     }
   ]
