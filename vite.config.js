@@ -92,7 +92,8 @@ export default defineConfig({
       input: {
         index: resolve(import.meta.dirname, 'index.html'),
         ...(process.env.CSIM_HARNESS ? { cataractSimPreview: resolve(import.meta.dirname, 'cataract-sim-preview.html') } : {}),
-        ...(process.env.CSIM_HARNESS ? { visionSimPreview: resolve(import.meta.dirname, 'vision-sim-preview.html') } : {})
+        ...(process.env.CSIM_HARNESS ? { visionSimPreview: resolve(import.meta.dirname, 'vision-sim-preview.html') } : {}),
+        ...(process.env.CSIM_HARNESS ? { lightJourneyPreview: resolve(import.meta.dirname, 'light-journey-preview.html') } : {})
       }
     }
   }
