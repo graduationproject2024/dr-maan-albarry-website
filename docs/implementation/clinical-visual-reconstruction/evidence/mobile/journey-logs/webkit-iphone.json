@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "488×830",
   "test": "journeys\\webkit.spec.js › WebKit — English iPhone journey with both simulators",
-  "startedAt": "2026-11-02T17:38:21.589Z",
-  "finishedAt": "2026-11-02T17:38:37.619Z",
+  "startedAt": "2026-11-03T21:30:15.108Z",
+  "finishedAt": "2026-11-03T21:30:42.669Z",
   "totals": {
     "steps": 8,
     "pass": 8,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1475,
+      "ms": 1832,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1099,
+      "ms": 1084,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4807,
+      "ms": 5691,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3306,
+      "ms": 14182,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -94,22 +94,22 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1010,
+      "ms": 946,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 6,
-      "action": "Go to the home simulator, choose trifocal and compare",
+      "action": "Go to the simulator (Lens Lab page), choose trifocal and compare",
       "expected": "Vision simulator renders in WebKit; controls work",
       "actual": "canvases=1 fallback=false; lens=trifocal compare=true",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/webkit-iphone/06-go-to-the-home-simulator-choose-trifocal.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/webkit-iphone/06-go-to-the-simulator-lens-lab-page-choose.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2514,
-      "url": "/en/#simulator"
+      "ms": 2188,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 7,
@@ -122,8 +122,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 579,
-      "url": "/en/#simulator"
+      "ms": 595,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 8,
@@ -136,8 +136,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 309,
-      "url": "/en/#simulator"
+      "ms": 208,
+      "url": "/en/lens-lab/#simulator"
     }
   ]
 }

@@ -351,7 +351,7 @@ function renderHero() {
         <div class="portrait-plate">
           <img src="images/dr-maan-portrait.png" width="295" height="225" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
         </div>
-        <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role">${short(chief)}</span></figcaption>
+        <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
       </figure>
     </div>
 
@@ -424,9 +424,9 @@ function specCard(p, big) {
           ${illustration(p, { cls: 'spec-illus', sizes: big ? '(min-width: 1024px) 58vw, 100vw' : '(min-width: 1024px) 22vw, 100vw' })}
           <div class="spec-body">
             <p class="spec-group">${L(g)}</p>
-            <h3 class="spec-title">${L(p.name)}</h3>
+            <h3 class="spec-title proc-card-title">${L(p.name)}</h3>
             <p class="spec-text">${L(p.summary)}</p>
-            <a class="spec-link" href="${pageHref(currentLang, p.slug)}" data-nav>${tr('اقرأ الدليل', 'Read the guide')}<span class="sr-only">: ${L(p.name)}</span>${icon('arrow', 18)}</a>
+            <a class="proc-card-link spec-link" href="${pageHref(currentLang, p.slug)}" data-nav>${tr('اقرأ الدليل', 'Read the guide')}<span class="sr-only">: ${L(p.name)}</span>${icon('arrow', 18)}</a>
           </div>
         </article>`;
 }
@@ -867,8 +867,9 @@ function renderProceduresPage() {
       title: tr('سبعة إجراءات، بلغة واضحة', 'Seven procedures, in plain language'),
       lede: tr('لكل إجراء صفحة تشرح التشريح وخطوات الإجراء والتعافي والمخاطر. معلومات توعوية عامة بانتظار مراجعة د. معن، ولا تغني عن الفحص.', 'Each procedure has a page explaining the anatomy, the steps, recovery and risks. General education pending Dr. Maan’s review; it does not replace an examination.')
     })}
-    <section class="section" id="procedures" aria-label="${tr('الإجراءات', 'Procedures')}">
+    <section class="section" id="procedures" aria-labelledby="library-title">
       <div class="container">
+        <h2 class="sr-only" id="library-title">${tr('جميع الإجراءات', 'All procedures')}</h2>
         <div class="proc-filter" role="group" aria-label="${tr('تصفية حسب المجموعة', 'Filter by group')}">
           ${chips.map(([id, label]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" onclick="filterProcedures('${id}')">${label}</button>`).join('')}
         </div>
@@ -949,7 +950,8 @@ function renderLensLabPage() {
     ${pageHero({
       kicker: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab'),
       title: tr('قارن العدسات المزروعة، مسافةً بمسافة', 'Compare lens implants, distance by distance'),
-      lede: tr('أداة تثقيفية لمن يستعد لجراحة الماء الأبيض أو يسأل عن العدسات: ماذا تقدم كل عدسة على المسافة البعيدة والمتوسطة والقريبة، وماذا يحدث للأضواء ليلاً. لا تتنبأ بنتيجة عينك.', 'An educational tool for anyone preparing for cataract surgery or asking about lenses: what each lens offers at far, intermediate and near distances, and what happens to lights at night. It does not predict your own result.')
+      lede: tr('أداة تثقيفية لمن يستعد لجراحة الماء الأبيض أو يسأل عن العدسات: ماذا تقدم كل عدسة على المسافة البعيدة والمتوسطة والقريبة، وماذا يحدث للأضواء ليلاً. لا تتنبأ بنتيجة عينك.', 'An educational tool for anyone preparing for cataract surgery or asking about lenses: what each lens offers at far, intermediate and near distances, and what happens to lights at night. It does not predict your own result.'),
+      aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a></nav>`
     })}
     <section class="section" id="lab" aria-labelledby="lab-title">
       <div class="container">
@@ -1311,7 +1313,8 @@ function renderClinicPage() {
       title: tr('موعدك مع د. معن البري', 'Your appointment with Dr. Maan Al Barry'),
       lede: tr(`يستقبل د. معن مراجعيه في ${D.clinic.name.ar}، طريق المطار. ثلاث طرق للحجز، ومواعيد ثابتة، وخطوات واضحة للزيارة.`, `Dr. Maan sees patients at ${D.clinic.name.en}, Airport Road. Three ways to book, regular hours and a clear visit pathway.`)
     })}
-    <section class="section" id="clinic" aria-label="${tr('طرق الحجز', 'Ways to book')}">
+    <section class="section" id="clinic" aria-labelledby="ways-title">
+      <h2 class="sr-only" id="ways-title">${tr('طرق الحجز', 'Ways to book')}</h2>
       <div class="container clinic-grid">
         ${bookingWays()}
         <div class="clinic-side">${visitFacts({ map: true })}</div>

@@ -286,13 +286,7 @@ test.describe('Feature loaders (src/feature-loaders.js)', () => {
   });
 
   test('a module that fails to load releases its reservation and offers a retry', async ({ page }) => {
-    // abort only the Lens Lab chunk (identified by its own error string), so the rest of the app still boots
-    await page.route(/\/assets\/[^/]+\.js$/, async r => {
-      const res = await r.fetch();
-      const body = await res.text();
-      if (body.includes('lens-lab mount(host)')) return r.abort();
-      return r.fulfill({ response: res, body });
-    });
+    await page.route(/\/assets\/lens-lab-[^/]+\.js$/, r => r.abort()); // only the Lens Lab chunk fails
     await page.goto('/lens-lab/');
     await page.locator('#lens-lab-host').scrollIntoViewIfNeeded();
     await expect(page.locator('#lens-lab-host .feature-status')).toBeVisible({ timeout: 30_000 });

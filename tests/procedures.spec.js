@@ -70,9 +70,12 @@ test.describe('Procedure pages render in both languages', () => {
     await page.locator('.proc-related a.proc-card-link').first().click();
     await expect(page.locator('main h1')).toHaveText(PROCEDURES.find(p => p.slug === 'lens-implants').name.en);
     await expect(page.locator('canvas')).toHaveCount(0);
-    // …and the homepage then shows the poster again, nothing mounted
+    // …the homepage shows only the poster preview (Phase 1), and the 3D page starts idle again, nothing mounted
     await page.locator('.crumbs a').first().click();
     await expect(page.locator('h1.hero-title')).toBeVisible();
+    await expect(page.locator('#surgery-3d .c3d-poster')).toBeVisible();
+    await expect(page.locator('canvas')).toHaveCount(0);
+    await page.locator('#surgery-3d a[href="en/surgical-education/"]').click();
     await expect(page.locator('#cataract-3d')).toHaveAttribute('data-state', 'idle');
     await expect(page.locator('#cataract-3d-stage canvas')).toHaveCount(0);
   });
@@ -125,11 +128,15 @@ test.describe('Prerendered procedure HTML (no JavaScript)', () => {
     });
   }
 
-  test('the homepage gallery is in the prerendered HTML with working links (no JS)', async ({ browser }) => {
+  test('the procedure library is in the prerendered HTML with working links (no JS)', async ({ browser }) => {
     const ctx = await browser.newContext({ javaScriptEnabled: false });
     const page = await ctx.newPage();
     for (const [lang] of LANGS) {
+      // the homepage links every procedure (three featured cards + the index) without JavaScript
       await page.goto(lang === 'en' ? '/en/' : '/');
+      for (const p of PROCEDURES) await expect(page.locator(`#procedures a[href="${lang === 'en' ? 'en/' : ''}procedures/${p.slug}/"]`).first()).toContainText(p.name[lang]);
+      // the full gallery lives on the library page (Phase 1)
+      await page.goto(lang === 'en' ? '/en/procedures/' : '/procedures/');
       const cards = page.locator('#procedures .proc-card');
       await expect(cards).toHaveCount(7);
       for (const p of PROCEDURES) {
@@ -150,7 +157,7 @@ test.describe('Gallery → procedure page → back', () => {
   for (const [lang] of LANGS) {
     test(`card click opens the page and Back returns to the gallery — ${lang}`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto(lang === 'en' ? '/en/' : '/');
+      await page.goto(lang === 'en' ? '/en/procedures/' : '/procedures/'); // the gallery is the library page (Phase 1)
       const p = PROCEDURES.find(x => x.slug === 'keratoconus-cxl');
       const card = page.locator(`#procedures .proc-card:has(a[href$="procedures/${p.slug}/"])`);
       await card.scrollIntoViewIfNeeded();
@@ -163,8 +170,8 @@ test.describe('Gallery → procedure page → back', () => {
       expect(await page.evaluate(() => window.scrollY)).toBeLessThan(50);
       expect(await page.title()).toContain(p.name[lang]);
       await page.goBack();
-      await expect(page.locator('h1.hero-title')).toHaveText(DOCTOR.identity.name[lang]);
-      await expect(page).toHaveURL(lang === 'en' ? /\/en\/$/ : /\/$/);
+      await expect(page.locator('main')).toHaveAttribute('data-page', 'procedures');
+      await expect(page).toHaveURL(lang === 'en' ? /\/en\/procedures\/$/ : /\/procedures\/$/);
       // the reading position is restored: the same card is back on screen
       await expect.poll(() => card.evaluate(el => { const r = el.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; })).toBe(true);
       await page.goForward();
@@ -173,7 +180,7 @@ test.describe('Gallery → procedure page → back', () => {
   }
 
   test('the gallery filter shows one group at a time and keeps every card in the DOM', async ({ page }) => {
-    await page.goto('/en/');
+    await page.goto('/en/procedures/');
     await page.locator('.proc-filter [data-filter="cornea-retina"]').click();
     await expect(page.locator('.proc-filter [data-filter="cornea-retina"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('#procedures .proc-card:visible')).toHaveCount(3);

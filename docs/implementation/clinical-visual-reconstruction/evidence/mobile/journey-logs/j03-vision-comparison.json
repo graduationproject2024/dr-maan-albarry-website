@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J03 › J03 — vision comparison",
-  "startedAt": "2026-11-02T17:36:38.345Z",
-  "finishedAt": "2026-11-02T17:36:45.334Z",
+  "startedAt": "2026-11-03T21:28:34.409Z",
+  "finishedAt": "2026-11-03T21:28:43.051Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -29,17 +29,17 @@
   "steps": [
     {
       "step": 1,
-      "action": "Open /en/, open the menu, tap \"Vision simulator\"",
+      "action": "Open /en/, open the menu, tap \"Lens Lab\", then \"The full vision simulator\"",
       "expected": "Simulator section on screen and mounted",
       "actual": "mounted=true canvases=1; #simulator top=73",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j03-vision-comparison/01-open-en-open-the-menu-tap-vision-simulat.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j03-vision-comparison/01-open-en-open-the-menu-tap-lens-lab-then-.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3664,
-      "url": "/en/#simulator"
+      "ms": 4192,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 2,
@@ -52,8 +52,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 15,
-      "url": "/en/#simulator"
+      "ms": 17,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 3,
@@ -66,8 +66,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 588,
-      "url": "/en/#simulator"
+      "ms": 569,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 4,
@@ -80,8 +80,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 494,
-      "url": "/en/#simulator"
+      "ms": 379,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 5,
@@ -94,22 +94,22 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1090,
-      "url": "/en/#simulator"
+      "ms": 1084,
+      "url": "/en/lens-lab/#simulator"
     },
     {
       "step": 6,
       "action": "Swipe vertically on the viewer",
       "expected": "The page scrolls (the canvas does not trap a one-finger vertical swipe)",
-      "actual": "scrollY 5402 → 5587",
+      "actual": "scrollY 10778 → 10963",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 881,
-      "url": "/en/#simulator"
+      "ms": 2108,
+      "url": "/en/lens-lab/#simulator"
     }
   ]
 }

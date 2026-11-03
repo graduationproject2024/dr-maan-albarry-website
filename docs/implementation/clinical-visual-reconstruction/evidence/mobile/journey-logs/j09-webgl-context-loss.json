@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J09 › J09 — WebGL context loss and restore (both simulators)",
-  "startedAt": "2026-11-02T17:36:45.506Z",
-  "finishedAt": "2026-11-02T17:36:53.021Z",
+  "startedAt": "2026-11-03T21:28:40.742Z",
+  "finishedAt": "2026-11-03T21:28:52.603Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -290,7 +290,7 @@
   "steps": [
     {
       "step": 1,
-      "action": "Open /en/ and scroll to the vision simulator",
+      "action": "Open /en/lens-lab/ and scroll to the vision simulator",
       "expected": "Simulator mounted",
       "actual": "canvases=1",
       "status": "PASS",
@@ -299,8 +299,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1358,
-      "url": "/en/"
+      "ms": 2755,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 2,
@@ -313,26 +313,26 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 503,
-      "url": "/en/"
+      "ms": 511,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 3,
       "action": "GPU restores the context; tap \"Night\"",
       "expected": "Note disappears; controls work; image renders again",
-      "actual": "note=\"\" lighting=night; viewer screenshot 280419 bytes",
+      "actual": "note=\"\" lighting=night; viewer screenshot 310221 bytes",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j09-webgl-context-loss/03-gpu-restores-the-context-tap-night.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1395,
-      "url": "/en/"
+      "ms": 1451,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 4,
-      "action": "Open the 3D viewer",
+      "action": "Open the 3D viewer (3D page)",
       "expected": "Ready",
       "actual": "ready",
       "status": "PASS",
@@ -341,8 +341,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2518,
-      "url": "/en/"
+      "ms": 5321,
+      "url": "/en/surgical-education/"
     },
     {
       "step": 5,
@@ -355,8 +355,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 467,
-      "url": "/en/"
+      "ms": 525,
+      "url": "/en/surgical-education/"
     },
     {
       "step": 6,
@@ -369,8 +369,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 991,
-      "url": "/en/"
+      "ms": 976,
+      "url": "/en/surgical-education/"
     }
   ]
 }

@@ -43,7 +43,7 @@ test.describe('journey regressions — phone', () => {
 
   test('BUG-03 the vision simulator keeps exactly one live WebGL context', async ({ page }) => {
     await page.addInitScript(GL_PROBE);
-    await page.goto('/en/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.goto('/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host canvas'));
     expect(await liveGL(page)).toBe(1);
   });
@@ -74,7 +74,7 @@ test.describe('journey regressions — phone', () => {
   test('BUG-09 a failed vision-simulator download explains itself, frees the reserved space and retries', async ({ page }) => {
     const VS = /\/assets\/vision-sim[^/]*\.js/;
     await page.route(VS, (r) => r.abort('connectionfailed'));
-    await page.goto('/en/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.goto('/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     const err = page.locator('#simulator-host .vsim-load-error');
     await expect(err).toBeVisible();
     await expect(err).toContainText('could not load');
@@ -107,7 +107,7 @@ test.describe('journey regressions — phone', () => {
   });
 
   test('VS-RTL in Arabic the sharpness bars fill from the right (single and compare)', async ({ page }) => {
-    await page.goto('/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.goto('/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host canvas'));
     const check = () => page.locator('#simulator-host .vsim-bar').evaluateAll((els) => els.filter((b) => b.getClientRects().length).map((b) => {
       const r = b.getBoundingClientRect(), f = b.firstElementChild.getBoundingClientRect();
@@ -120,26 +120,35 @@ test.describe('journey regressions — phone', () => {
     for (const b of bars) expect(b.gapRight).toBeLessThanOrEqual(2);
   });
 
-  test('FIXED-1 tapping "Clinic & booking" from the top lands on the clinic section (lazy mount does not shift it)', async ({ page }) => {
+  test('FIXED-1 tapping "Clinic & booking" from the top lands on the clinic page, booking first, nothing shifts it', async ({ page }) => {
+    // Phase 1: "Clinic & booking" is its own page; the homepage no longer mounts a simulator above the clinic.
     await page.goto('/en/'); await page.locator('main h1').waitFor();
     await page.locator('.mobile-menu-btn').tap();
     await page.locator('#mobile-nav a[data-section="clinic"]').tap();
-    await page.waitForFunction(() => document.querySelector('#simulator-host canvas'), null, { timeout: 30000 }).catch(() => {});
+    await expect(page).toHaveURL(/\/en\/clinic\/$/);
     await page.waitForTimeout(1500);
-    const top = (await page.locator('#clinic').boundingBox()).y;
+    const top = (await page.locator('main h1').boundingBox()).y;
     expect(top).toBeGreaterThan(-10);
     expect(top).toBeLessThan(200);
+    const cta = (await page.locator('#clinic-booking-cta').boundingBox()).y;
+    expect(cta).toBeLessThan(844 * 1.5);
+    // the homepage clinic section stays reachable by its anchor and is not shifted by any lazy mount
+    await page.goto('/en/#clinic'); await page.locator('main h1').waitFor();
+    await page.waitForTimeout(1500);
+    const sec = (await page.locator('#clinic').boundingBox()).y;
+    expect(sec).toBeGreaterThan(-10);
+    expect(sec).toBeLessThan(200);
   });
 
   test('FIXED-2 the vision viewer keeps at least viewport − 56 px at 390 px', async ({ page }) => {
-    await page.goto('/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.goto('/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host .vsim-viewport'));
     expect((await page.locator('#simulator-host .vsim-viewport').boundingBox()).width).toBeGreaterThanOrEqual(390 - 56);
   });
 
   test('BUG-16 vision simulator card and meter titles are readable in the light theme (contrast >= 4.5)', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('theme', 'light'));
-    await page.goto('/en/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await page.goto('/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host .vsim-card h3'));
     const ratios = await page.locator('#simulator-host .vsim-card h3, #simulator-host .vsim-meters-title').evaluateAll((els) => els.map((e) => {
       const rgb = (c) => c.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number);
@@ -176,8 +185,9 @@ test.describe('journey regressions — keyboard', () => {
 test.describe('journey regressions — no JavaScript', () => {
   test.use({ ...phone, javaScriptEnabled: false });
   test('BUG-10 prerendered pages reserve no blank simulator space', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/lens-lab/'); // the simulator and the Lens Lab live here since Phase 1
     expect((await page.locator('#simulator-host').boundingBox()).height).toBeLessThan(100);
-    for (const f of ['dist/index.html', 'dist/en/index.html']) expect(fs.readFileSync(f, 'utf8')).not.toMatch(/data-reserve/);
+    expect((await page.locator('#lens-lab-host').boundingBox())?.height || 0).toBeLessThan(100);
+    for (const f of ['dist/index.html', 'dist/en/index.html', 'dist/lens-lab/index.html', 'dist/en/lens-lab/index.html', 'dist/how-vision-works/index.html']) expect(fs.readFileSync(f, 'utf8')).not.toMatch(/data-reserve/);
   });
 });

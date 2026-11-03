@@ -148,7 +148,7 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
   });
 
   await j.step('Vision simulator: horizontal swipe on the viewer (no compare)', 'Nothing happens to the page (no sideways scroll); vertical swipe still scrolls', async () => {
-    await openUrl(page, '/en/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded(); await waitVsim(page, 30000);
+    await openUrl(page, '/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded(); await waitVsim(page, 30000);
     const v = page.locator('#simulator-host .vsim-viewport'); const r = await revealInFreeArea(page, v);
     cdp = await swipe(page, { x: r.x + r.w * 0.2, y: r.y + r.h / 2, dx: 200, steps: 10, cdp });
     const sx = await page.evaluate(() => scrollX);

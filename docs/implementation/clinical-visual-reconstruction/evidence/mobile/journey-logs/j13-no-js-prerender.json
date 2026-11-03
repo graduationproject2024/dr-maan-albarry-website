@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J13 › J13 — prerendered page without JavaScript",
-  "startedAt": "2026-11-02T17:36:54.730Z",
-  "finishedAt": "2026-11-02T17:36:56.103Z",
+  "startedAt": "2026-11-03T21:28:52.729Z",
+  "finishedAt": "2026-11-03T21:28:54.199Z",
   "totals": {
     "steps": 4,
     "pass": 4,
@@ -27,27 +27,32 @@
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "https://maps.gstatic.com/maps-api-v3/embed/js/66/12d/init_embed.js",
+      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "reason": "csp",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     }
@@ -56,33 +61,19 @@
     {
       "step": 1,
       "action": "Open / without JavaScript",
-      "expected": "Prerendered heading and procedures present",
-      "actual": "h1=\"د. معن بن عبدالله البري\" cards=7",
+      "expected": "Prerendered heading and every procedure linked",
+      "actual": "h1=\"د. معن بن عبدالله البري\" procedure links=8",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1143,
+      "ms": 641,
       "url": "/"
     },
     {
       "step": 2,
-      "action": "Measure the simulator section",
-      "expected": "No blank reserved gap (host height < 300 px when nothing can mount)",
-      "actual": "host 0px, children 0, text \"\"",
-      "status": "PASS",
-      "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j13-no-js-prerender/02-measure-the-simulator-section.jpg",
-      "consoleErrors": [],
-      "pageErrors": [],
-      "failedRequests": [],
-      "ms": 24,
-      "url": "/"
-    },
-    {
-      "step": 3,
       "action": "Check the booking link works without JS",
       "expected": "Booking anchor has the portal URL",
       "actual": "https://ob.magrabi.com.sa/OnlineBooking/",
@@ -92,8 +83,22 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6,
+      "ms": 3,
       "url": "/"
+    },
+    {
+      "step": 3,
+      "action": "Measure the simulator section (Lens Lab page)",
+      "expected": "No blank reserved gap (host height < 300 px when nothing can mount)",
+      "actual": "host 0px, children 0, text \"\"",
+      "status": "PASS",
+      "knownBug": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j13-no-js-prerender/03-measure-the-simulator-section-lens-lab-p.jpg",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "ms": 646,
+      "url": "/lens-lab/"
     },
     {
       "step": 4,
@@ -106,7 +111,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 110,
+      "ms": 113,
       "url": "/procedures/keratoconus-cxl/"
     }
   ]
