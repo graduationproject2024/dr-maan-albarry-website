@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\core-journeys.spec.js › J10 › J10 — trust and contact",
-  "startedAt": "2026-11-03T21:42:02.830Z",
-  "finishedAt": "2026-11-03T21:42:12.332Z",
+  "startedAt": "2026-11-03T21:49:11.090Z",
+  "finishedAt": "2026-11-03T21:49:18.601Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3554,
+      "ms": 3108,
       "url": "/about/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1220,
+      "ms": 1145,
       "url": "/procedures/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3650,
+      "ms": 2085,
       "url": "/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 169,
+      "ms": 193,
       "url": "/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 565,
+      "ms": 579,
       "url": "/"
     }
   ]

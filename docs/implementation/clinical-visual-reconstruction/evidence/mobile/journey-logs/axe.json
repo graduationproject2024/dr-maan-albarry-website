@@ -70,76 +70,6 @@
     "incomplete": 1
   },
   {
-    "page": "/procedures/laser-vision-correction/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/icl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/keratoconus-cxl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/corneal-transplant/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/intravitreal-injections/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/en/",
-    "theme": "light",
-    "violations": [],
-    "passes": 43,
-    "incomplete": 1
-  },
-  {
-    "page": "/en/about/",
-    "theme": "light",
-    "violations": [],
-    "passes": 42,
-    "incomplete": 1
-  },
-  {
-    "page": "/en/procedures/",
-    "theme": "light",
-    "violations": [],
-    "passes": 43,
-    "incomplete": 2
-  },
-  {
-    "page": "/en/lens-lab/",
-    "theme": "light",
-    "violations": [],
-    "passes": 47,
-    "incomplete": 3
-  },
-  {
-    "page": "/en/surgical-education/",
-    "theme": "light",
-    "violations": [],
-    "passes": 40,
-    "incomplete": 1
-  },
-  {
     "page": "/en/education/",
     "theme": "dark",
     "violations": [],
@@ -207,6 +137,76 @@
     "theme": "dark",
     "violations": [],
     "passes": 44,
+    "incomplete": 1
+  },
+  {
+    "page": "/procedures/laser-vision-correction/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/icl/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/keratoconus-cxl/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/corneal-transplant/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/intravitreal-injections/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/en/",
+    "theme": "light",
+    "violations": [],
+    "passes": 43,
+    "incomplete": 1
+  },
+  {
+    "page": "/en/about/",
+    "theme": "light",
+    "violations": [],
+    "passes": 42,
+    "incomplete": 1
+  },
+  {
+    "page": "/en/procedures/",
+    "theme": "light",
+    "violations": [],
+    "passes": 43,
+    "incomplete": 2
+  },
+  {
+    "page": "/en/lens-lab/",
+    "theme": "light",
+    "violations": [],
+    "passes": 47,
+    "incomplete": 3
+  },
+  {
+    "page": "/en/surgical-education/",
+    "theme": "light",
+    "violations": [],
+    "passes": 40,
     "incomplete": 1
   },
   {

@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J12 › J12 — procedure images missing",
-  "startedAt": "2026-11-03T21:42:11.679Z",
-  "finishedAt": "2026-11-03T21:42:39.070Z",
+  "startedAt": "2026-11-03T21:49:17.970Z",
+  "finishedAt": "2026-11-03T21:49:45.168Z",
   "totals": {
     "steps": 2,
     "pass": 2,
@@ -123,7 +123,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 25292,
+      "ms": 24790,
       "url": "/procedures/"
     },
     {
@@ -140,7 +140,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1867,
+      "ms": 2172,
       "url": "/procedures/icl/"
     }
   ]

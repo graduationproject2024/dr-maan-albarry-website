@@ -12,8 +12,8 @@
   "startUrl": "/procedures/cataract-surgery/",
   "viewport": "320×568",
   "test": "journeys\\persona-f.spec.js › Persona F — impatient user",
-  "startedAt": "2026-11-03T21:38:40.930Z",
-  "finishedAt": "2026-11-03T21:38:56.868Z",
+  "startedAt": "2026-11-03T21:49:41.054Z",
+  "finishedAt": "2026-11-03T21:49:57.296Z",
   "totals": {
     "steps": 9,
     "pass": 9,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1642,
+      "ms": 1588,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1581,
+      "ms": 2112,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1463,
+      "ms": 1612,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2148,
+      "ms": 2054,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4232,
+      "ms": 3953,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 605,
+      "ms": 634,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1742,
+      "ms": 1734,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1797,
+      "ms": 1821,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 518,
+      "ms": 514,
       "url": "/en/procedures/cataract-surgery/"
     }
   ]

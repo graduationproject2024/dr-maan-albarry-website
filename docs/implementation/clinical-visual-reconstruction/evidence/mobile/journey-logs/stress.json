@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\stress.spec.js › Stress — seeded rapid interaction",
-  "startedAt": "2026-11-03T21:38:49.269Z",
-  "finishedAt": "2026-11-03T21:39:49.993Z",
+  "startedAt": "2026-11-03T21:49:54.020Z",
+  "finishedAt": "2026-11-03T21:50:58.466Z",
   "totals": {
     "steps": 13,
     "pass": 13,
@@ -33,12 +33,12 @@
   "pageErrors": [],
   "failedRequests": [
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-h5sLSGfY.js",
+      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-h5sLSGfY.js",
+      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
@@ -63,12 +63,12 @@
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-h5sLSGfY.js",
+      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-h5sLSGfY.js",
+      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
@@ -106,7 +106,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4258,
+      "ms": 4576,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -120,7 +120,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3414,
+      "ms": 3618,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -134,7 +134,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3048,
+      "ms": 5712,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -148,7 +148,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2405,
+      "ms": 4329,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -162,7 +162,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 208,
+      "ms": 771,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -176,7 +176,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3495,
+      "ms": 3838,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -190,7 +190,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 10298,
+      "ms": 11331,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -204,7 +204,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6129,
+      "ms": 6383,
       "url": "/en/"
     },
     {
@@ -218,7 +218,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 9173,
+      "ms": 6892,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -232,7 +232,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 7088,
+      "ms": 6998,
       "url": "/procedures/laser-vision-correction/"
     },
     {
@@ -246,7 +246,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5686,
+      "ms": 6072,
       "url": "/en/lens-lab/"
     },
     {
@@ -260,7 +260,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1553,
+      "ms": 1611,
       "url": "/en/lens-lab/"
     },
     {
@@ -282,12 +282,12 @@
       "pageErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-h5sLSGfY.js",
+          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-h5sLSGfY.js",
+          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
@@ -312,12 +312,12 @@
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-h5sLSGfY.js",
+          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-h5sLSGfY.js",
+          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
@@ -342,7 +342,7 @@
           "expected": false
         }
       ],
-      "ms": 3967,
+      "ms": 2311,
       "url": "/en/?q=%3Cscript%3Ewindow.__xss=1%3C/script%3E#p-risks"
     }
   ]

@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×800",
   "test": "journeys\\core-journeys.spec.js › J08 › J08 — slow connection (Slow 3G)",
-  "startedAt": "2026-11-03T21:41:58.214Z",
-  "finishedAt": "2026-11-03T21:42:35.514Z",
+  "startedAt": "2026-11-03T21:49:08.498Z",
+  "finishedAt": "2026-11-03T21:49:40.887Z",
   "totals": {
     "steps": 3,
     "pass": 3,
@@ -27,55 +27,55 @@
   "failedRequests": [],
   "expectedFailedRequests": [],
   "metrics": {
-    "h1": 5556,
-    "load": 18044,
-    "lcp": 5556,
+    "h1": 5293,
+    "load": 17704,
+    "lcp": 5296,
     "cls": 0.011,
     "kib": 214,
-    "proc": 4338,
-    "threeD": 12608
+    "proc": 4368,
+    "threeD": 8228
   },
   "steps": [
     {
       "step": 1,
       "action": "Cold load of / on Slow 3G",
       "expected": "Prerendered heading readable before the scripts finish; LCP recorded",
-      "actual": "h1 visible after 5556 ms; load 18044 ms; LCP 5556 ms; CLS 0.011; 214 KiB",
+      "actual": "h1 visible after 5293 ms; load 17704 ms; LCP 5296 ms; CLS 0.011; 214 KiB",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j08-slow-3g/01-cold-load-of-on-slow-3g.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 19562,
+      "ms": 19225,
       "url": "/"
     },
     {
       "step": 2,
       "action": "Tap the cataract card",
       "expected": "Procedure page renders (content chunk over Slow 3G)",
-      "actual": "content after 4338 ms",
+      "actual": "content after 4368 ms",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4535,
+      "ms": 4574,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 3,
       "action": "Tap Start on the 3D section",
       "expected": "Loading state visible immediately, then ready",
-      "actual": "label while loading \"جارٍ التحميل…\"; ready after 12608 ms",
+      "actual": "label while loading \"جارٍ التحميل…\"; ready after 8228 ms",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j08-slow-3g/03-tap-start-on-the-3d-section.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 12764,
+      "ms": 8381,
       "url": "/procedures/cataract-surgery/"
     }
   ]

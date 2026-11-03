@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J05 › J05 — 3D loading failure and retry",
-  "startedAt": "2026-11-03T21:41:49.489Z",
-  "finishedAt": "2026-11-03T21:42:04.241Z",
+  "startedAt": "2026-11-03T21:49:04.468Z",
+  "finishedAt": "2026-11-03T21:49:14.775Z",
   "totals": {
     "steps": 5,
     "pass": 5,
@@ -73,7 +73,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1796,
+      "ms": 2074,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -91,7 +91,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1763,
+      "ms": 1682,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -105,7 +105,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5413,
+      "ms": 1140,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -119,7 +119,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1171,
+      "ms": 1188,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4117,
+      "ms": 3809,
       "url": "/en/lens-lab/#simulator"
     }
   ]

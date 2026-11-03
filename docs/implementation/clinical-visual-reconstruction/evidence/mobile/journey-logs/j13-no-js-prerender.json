@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J13 › J13 — prerendered page without JavaScript",
-  "startedAt": "2026-11-03T21:42:12.523Z",
-  "finishedAt": "2026-11-03T21:42:14.429Z",
+  "startedAt": "2026-11-03T21:49:18.739Z",
+  "finishedAt": "2026-11-03T21:49:20.794Z",
   "totals": {
     "steps": 4,
     "pass": 4,
@@ -69,7 +69,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1600,
+      "ms": 705,
       "url": "/"
     },
     {
@@ -83,7 +83,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4,
+      "ms": 5,
       "url": "/"
     },
     {
@@ -97,7 +97,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 93,
+      "ms": 1150,
       "url": "/lens-lab/"
     },
     {
@@ -111,7 +111,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 139,
+      "ms": 113,
       "url": "/procedures/keratoconus-cxl/"
     }
   ]
