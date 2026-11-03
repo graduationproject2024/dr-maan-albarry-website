@@ -70,6 +70,76 @@
     "incomplete": 1
   },
   {
+    "page": "/procedures/laser-vision-correction/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/icl/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/keratoconus-cxl/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/corneal-transplant/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/intravitreal-injections/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/en/",
+    "theme": "light",
+    "violations": [],
+    "passes": 43,
+    "incomplete": 1
+  },
+  {
+    "page": "/en/about/",
+    "theme": "light",
+    "violations": [],
+    "passes": 42,
+    "incomplete": 1
+  },
+  {
+    "page": "/en/procedures/",
+    "theme": "light",
+    "violations": [],
+    "passes": 43,
+    "incomplete": 2
+  },
+  {
+    "page": "/en/lens-lab/",
+    "theme": "light",
+    "violations": [],
+    "passes": 47,
+    "incomplete": 3
+  },
+  {
+    "page": "/en/surgical-education/",
+    "theme": "light",
+    "violations": [],
+    "passes": 40,
+    "incomplete": 1
+  },
+  {
     "page": "/en/education/",
     "theme": "dark",
     "violations": [],
@@ -140,74 +210,74 @@
     "incomplete": 1
   },
   {
-    "page": "/procedures/laser-vision-correction/",
+    "page": "/",
     "theme": "light",
     "violations": [],
     "passes": 44,
     "incomplete": 0
   },
   {
-    "page": "/procedures/icl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/keratoconus-cxl/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/corneal-transplant/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/intravitreal-injections/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/en/",
-    "theme": "light",
-    "violations": [],
-    "passes": 43,
-    "incomplete": 1
-  },
-  {
-    "page": "/en/about/",
+    "page": "/about/",
     "theme": "light",
     "violations": [],
     "passes": 42,
-    "incomplete": 1
+    "incomplete": 0
   },
   {
-    "page": "/en/procedures/",
+    "page": "/procedures/",
     "theme": "light",
     "violations": [],
     "passes": 43,
-    "incomplete": 2
+    "incomplete": 0
   },
   {
-    "page": "/en/lens-lab/",
+    "page": "/lens-lab/",
     "theme": "light",
     "violations": [],
     "passes": 47,
-    "incomplete": 3
+    "incomplete": 2
   },
   {
-    "page": "/en/surgical-education/",
+    "page": "/surgical-education/",
     "theme": "light",
     "violations": [],
     "passes": 40,
-    "incomplete": 1
+    "incomplete": 0
+  },
+  {
+    "page": "/education/",
+    "theme": "light",
+    "violations": [],
+    "passes": 40,
+    "incomplete": 0
+  },
+  {
+    "page": "/how-vision-works/",
+    "theme": "light",
+    "violations": [],
+    "passes": 40,
+    "incomplete": 0
+  },
+  {
+    "page": "/clinic/",
+    "theme": "light",
+    "violations": [],
+    "passes": 47,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/cataract-surgery/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
+  },
+  {
+    "page": "/procedures/lens-implants/",
+    "theme": "light",
+    "violations": [],
+    "passes": 44,
+    "incomplete": 0
   },
   {
     "page": "/procedures/laser-vision-correction/",
@@ -345,76 +415,6 @@
   {
     "page": "/procedures/lens-implants/",
     "theme": "dark",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/about/",
-    "theme": "light",
-    "violations": [],
-    "passes": 42,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/",
-    "theme": "light",
-    "violations": [],
-    "passes": 43,
-    "incomplete": 0
-  },
-  {
-    "page": "/lens-lab/",
-    "theme": "light",
-    "violations": [],
-    "passes": 47,
-    "incomplete": 2
-  },
-  {
-    "page": "/surgical-education/",
-    "theme": "light",
-    "violations": [],
-    "passes": 40,
-    "incomplete": 0
-  },
-  {
-    "page": "/education/",
-    "theme": "light",
-    "violations": [],
-    "passes": 40,
-    "incomplete": 0
-  },
-  {
-    "page": "/how-vision-works/",
-    "theme": "light",
-    "violations": [],
-    "passes": 40,
-    "incomplete": 0
-  },
-  {
-    "page": "/clinic/",
-    "theme": "light",
-    "violations": [],
-    "passes": 47,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/cataract-surgery/",
-    "theme": "light",
-    "violations": [],
-    "passes": 44,
-    "incomplete": 0
-  },
-  {
-    "page": "/procedures/lens-implants/",
-    "theme": "light",
     "violations": [],
     "passes": 44,
     "incomplete": 0

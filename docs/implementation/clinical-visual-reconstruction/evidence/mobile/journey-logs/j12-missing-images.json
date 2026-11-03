@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J12 › J12 — procedure images missing",
-  "startedAt": "2026-11-03T21:28:52.007Z",
-  "finishedAt": "2026-11-03T21:29:18.887Z",
+  "startedAt": "2026-11-03T21:42:11.679Z",
+  "finishedAt": "2026-11-03T21:42:39.070Z",
   "totals": {
     "steps": 2,
     "pass": 2,
@@ -33,30 +33,12 @@
     "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED",
-    "Failed to load resource: net::ERR_FAILED",
-    "Failed to load resource: net::ERR_FAILED",
-    "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED"
   ],
   "consoleWarnings": [],
   "pageErrors": [],
   "failedRequests": [],
   "expectedFailedRequests": [
-    {
-      "url": "http://localhost:4973/images/procedures/cataract-surgery-800.webp",
-      "reason": "net::ERR_FAILED",
-      "expected": true
-    },
-    {
-      "url": "http://localhost:4973/images/procedures/laser-vision-correction-800.webp",
-      "reason": "net::ERR_FAILED",
-      "expected": true
-    },
-    {
-      "url": "http://localhost:4973/images/procedures/keratoconus-cxl-800.webp",
-      "reason": "net::ERR_FAILED",
-      "expected": true
-    },
     {
       "url": "http://localhost:4973/images/procedures/cataract-surgery-800.webp",
       "reason": "net::ERR_FAILED",
@@ -137,14 +119,11 @@
         "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED",
-        "Failed to load resource: net::ERR_FAILED",
-        "Failed to load resource: net::ERR_FAILED",
-        "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED"
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 24975,
+      "ms": 25292,
       "url": "/procedures/"
     },
     {
@@ -161,7 +140,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1751,
+      "ms": 1867,
       "url": "/procedures/icl/"
     }
   ]

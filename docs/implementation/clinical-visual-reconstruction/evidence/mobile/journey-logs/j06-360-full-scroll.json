@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×800",
   "test": "journeys\\core-journeys.spec.js › J06 › J06 — 360 px full scroll, booking and simulator open/close",
-  "startedAt": "2026-11-03T21:28:36.746Z",
-  "finishedAt": "2026-11-03T21:28:59.549Z",
+  "startedAt": "2026-11-03T21:41:49.408Z",
+  "finishedAt": "2026-11-03T21:42:13.538Z",
   "totals": {
     "steps": 12,
     "pass": 12,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1817,
+      "ms": 2278,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3414,
+      "ms": 3309,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2448,
+      "ms": 1926,
       "url": "/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3956,
+      "ms": 4606,
       "url": "/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 901,
+      "ms": 907,
       "url": "/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 906,
+      "ms": 919,
       "url": "/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 877,
+      "ms": 893,
       "url": "/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1736,
+      "ms": 2304,
       "url": "/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 10,
+      "ms": 4,
       "url": "/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5803,
+      "ms": 6084,
       "url": "/surgical-education/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 56,
+      "ms": 45,
       "url": "/surgical-education/"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 548,
+      "ms": 532,
       "url": "/surgical-education/"
     }
   ]

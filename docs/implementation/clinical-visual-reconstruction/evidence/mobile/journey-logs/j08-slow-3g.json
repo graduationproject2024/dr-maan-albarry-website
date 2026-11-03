@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×800",
   "test": "journeys\\core-journeys.spec.js › J08 › J08 — slow connection (Slow 3G)",
-  "startedAt": "2026-11-03T21:28:37.536Z",
-  "finishedAt": "2026-11-03T21:29:13.797Z",
+  "startedAt": "2026-11-03T21:41:58.214Z",
+  "finishedAt": "2026-11-03T21:42:35.514Z",
   "totals": {
     "steps": 3,
     "pass": 3,
@@ -27,27 +27,27 @@
   "failedRequests": [],
   "expectedFailedRequests": [],
   "metrics": {
-    "h1": 5777,
-    "load": 18185,
-    "lcp": 5896,
+    "h1": 5556,
+    "load": 18044,
+    "lcp": 5556,
     "cls": 0.011,
     "kib": 214,
     "proc": 4338,
-    "threeD": 11511
+    "threeD": 12608
   },
   "steps": [
     {
       "step": 1,
       "action": "Cold load of / on Slow 3G",
       "expected": "Prerendered heading readable before the scripts finish; LCP recorded",
-      "actual": "h1 visible after 5777 ms; load 18185 ms; LCP 5896 ms; CLS 0.011; 214 KiB",
+      "actual": "h1 visible after 5556 ms; load 18044 ms; LCP 5556 ms; CLS 0.011; 214 KiB",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j08-slow-3g/01-cold-load-of-on-slow-3g.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 19704,
+      "ms": 19562,
       "url": "/"
     },
     {
@@ -61,21 +61,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4539,
+      "ms": 4535,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 3,
       "action": "Tap Start on the 3D section",
       "expected": "Loading state visible immediately, then ready",
-      "actual": "label while loading \"جارٍ التحميل…\"; ready after 11511 ms",
+      "actual": "label while loading \"جارٍ التحميل…\"; ready after 12608 ms",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j08-slow-3g/03-tap-start-on-the-3d-section.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 11691,
+      "ms": 12764,
       "url": "/procedures/cataract-surgery/"
     }
   ]

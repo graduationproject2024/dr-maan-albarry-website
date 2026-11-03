@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J09 › J09 — WebGL context loss and restore (both simulators)",
-  "startedAt": "2026-11-03T21:28:40.742Z",
-  "finishedAt": "2026-11-03T21:28:52.603Z",
+  "startedAt": "2026-11-03T21:41:59.232Z",
+  "finishedAt": "2026-11-03T21:42:11.541Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -299,7 +299,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2755,
+      "ms": 2329,
       "url": "/en/lens-lab/"
     },
     {
@@ -313,7 +313,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 511,
+      "ms": 532,
       "url": "/en/lens-lab/"
     },
     {
@@ -327,7 +327,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1451,
+      "ms": 1420,
       "url": "/en/lens-lab/"
     },
     {
@@ -341,7 +341,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5321,
+      "ms": 6193,
       "url": "/en/surgical-education/"
     },
     {
@@ -355,7 +355,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 525,
+      "ms": 535,
       "url": "/en/surgical-education/"
     },
     {
@@ -369,7 +369,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 976,
+      "ms": 995,
       "url": "/en/surgical-education/"
     }
   ]

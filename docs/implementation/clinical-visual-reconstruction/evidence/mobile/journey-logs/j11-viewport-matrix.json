@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "1920×1080",
   "test": "journeys\\core-journeys.spec.js › J11 › J11 — viewport matrix (9 viewports × AR/EN)",
-  "startedAt": "2026-11-03T21:28:48.735Z",
-  "finishedAt": "2026-11-03T21:29:44.882Z",
+  "startedAt": "2026-11-03T21:42:04.427Z",
+  "finishedAt": "2026-11-03T21:42:59.307Z",
   "totals": {
     "steps": 18,
     "pass": 18,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4233,
+      "ms": 4569,
       "url": "/lens-lab/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3806,
+      "ms": 3216,
       "url": "/en/lens-lab/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2959,
+      "ms": 3035,
       "url": "/lens-lab/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2494,
+      "ms": 2452,
       "url": "/en/lens-lab/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2646,
+      "ms": 2889,
       "url": "/lens-lab/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2438,
+      "ms": 2481,
       "url": "/en/lens-lab/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2734,
+      "ms": 2914,
       "url": "/lens-lab/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3059,
+      "ms": 2522,
       "url": "/en/lens-lab/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2805,
+      "ms": 3351,
       "url": "/lens-lab/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2535,
+      "ms": 3302,
       "url": "/en/lens-lab/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3548,
+      "ms": 3805,
       "url": "/lens-lab/"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2611,
+      "ms": 2904,
       "url": "/en/lens-lab/"
     },
     {
@@ -206,7 +206,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3466,
+      "ms": 4060,
       "url": "/lens-lab/"
     },
     {
@@ -220,7 +220,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3191,
+      "ms": 2435,
       "url": "/en/lens-lab/"
     },
     {
@@ -234,7 +234,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3460,
+      "ms": 3006,
       "url": "/lens-lab/"
     },
     {
@@ -248,7 +248,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3302,
+      "ms": 2631,
       "url": "/en/lens-lab/"
     },
     {
@@ -262,7 +262,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3319,
+      "ms": 2714,
       "url": "/lens-lab/"
     },
     {
@@ -276,7 +276,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3532,
+      "ms": 2591,
       "url": "/en/lens-lab/"
     }
   ]

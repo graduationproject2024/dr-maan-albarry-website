@@ -12,15 +12,15 @@
   "startUrl": "/",
   "viewport": "412×839",
   "test": "journeys\\persona-b.spec.js › Persona B — first-time visitor",
-  "startedAt": "2026-11-03T21:28:59.677Z",
-  "finishedAt": "2026-11-03T21:29:05.212Z",
+  "startedAt": "2026-11-03T21:38:20.044Z",
+  "finishedAt": "2026-11-03T21:38:28.572Z",
   "totals": {
     "steps": 12,
-    "pass": 7,
-    "fail": 1,
-    "blocked": 4
+    "pass": 12,
+    "fail": 0,
+    "blocked": 0
   },
-  "verdict": "FAIL",
+  "verdict": "PASS",
   "consoleErrors": [],
   "consoleWarnings": [],
   "pageErrors": [],
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1603,
+      "ms": 1621,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 491,
+      "ms": 494,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 713,
+      "ms": 708,
       "url": "/procedures/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 253,
+      "ms": 250,
       "url": "/procedures/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 167,
+      "ms": 173,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 145,
+      "ms": 129,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -129,71 +129,71 @@
       "step": 8,
       "action": "Open the menu and tap \"عن الدكتور\" (qualifications)",
       "expected": "The physician profile opens at the top; FRCS and the current role are listed in the qualifications ledger",
-      "actual": "h1 top=172px; FRCS listed=true; current role listed=true; ledger rows=8",
-      "status": "FAIL",
+      "actual": "page header top=65px; FRCS listed=true; current role listed=true; ledger rows=8",
+      "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/08-open-the-menu-and-tap-qualifications.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1276,
+      "ms": 1282,
       "url": "/about/"
     },
     {
       "step": 9,
       "action": "Open the menu, tap \"العيادة والحجز\", swipe to the directions and tap \"الاتجاهات عبر خرائط جوجل\"",
       "expected": "Google Maps link with the hospital location opens in a new tab (intercepted)",
-      "actual": "Not executed: an earlier critical step failed.",
-      "status": "BLOCKED",
+      "actual": "tapped → https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA (_blank); address shown: \"المستشفى والعنوان مغربي الصحية للعيون والأذن – المدينة المنورة طريق المطار، المد\"",
+      "status": "PASS",
       "knownBug": null,
-      "screenshot": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/09-open-the-menu-tap-swipe-to-the-direction.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 0,
-      "url": ""
+      "ms": 2645,
+      "url": "/clinic/"
     },
     {
       "step": 10,
       "action": "Check the embedded map has an accessible title",
       "expected": "Map iframe has a descriptive title",
-      "actual": "Not executed: an earlier critical step failed.",
-      "status": "BLOCKED",
+      "actual": "iframe title=\"خريطة موقع مستشفى مغربي المدينة المنورة\"",
+      "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 0,
-      "url": ""
+      "ms": 4,
+      "url": "/clinic/"
     },
     {
       "step": 11,
       "action": "Tap \"الحجز عبر بوابة مغربي\"",
       "expected": "Targets the Magrabi booking portal in a new tab with rel=noopener",
-      "actual": "Not executed: an earlier critical step failed.",
-      "status": "BLOCKED",
+      "actual": "→ https://ob.magrabi.com.sa/OnlineBooking/ target=_blank rel=noopener noreferrer",
+      "status": "PASS",
       "knownBug": null,
-      "screenshot": null,
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/11-tap.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 0,
-      "url": ""
+      "ms": 103,
+      "url": "/clinic/"
     },
     {
       "step": 12,
       "action": "Check the page does not scroll sideways",
       "expected": "No horizontal overflow",
-      "actual": "Not executed: an earlier critical step failed.",
-      "status": "BLOCKED",
+      "actual": "horizontal overflow 0px",
+      "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 0,
-      "url": ""
+      "ms": 2,
+      "url": "/clinic/"
     }
   ]
 }

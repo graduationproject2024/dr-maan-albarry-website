@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "488×830",
   "test": "journeys\\webkit.spec.js › WebKit — English iPhone journey with both simulators",
-  "startedAt": "2026-11-03T21:30:15.108Z",
-  "finishedAt": "2026-11-03T21:30:42.669Z",
+  "startedAt": "2026-11-03T21:40:20.363Z",
+  "finishedAt": "2026-11-03T21:40:51.091Z",
   "totals": {
     "steps": 8,
     "pass": 8,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1832,
+      "ms": 1958,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1084,
+      "ms": 1068,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5691,
+      "ms": 5291,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 14182,
+      "ms": 14454,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 946,
+      "ms": 925,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2188,
+      "ms": 5287,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 595,
+      "ms": 583,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 208,
+      "ms": 230,
       "url": "/en/lens-lab/#simulator"
     }
   ]

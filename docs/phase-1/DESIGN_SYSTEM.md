@@ -117,4 +117,79 @@ is not used (third parties). See `PHYSICIAN_PROFILE_REVIEW.md`.
 
 ## 9. Visual QA (three evidence-based passes)
 
-See §9 below the results table; screenshots in `docs/phase-1/evidence/after/`.
+Every pass used real full-page screenshots (Chromium, DPR 1, reduced motion, fonts loaded, lazy images loaded by
+scrolling), viewed directly, plus the DOM height probe. Final screenshots: `docs/phase-1/evidence/after/`
+(JPEG q72; file name = `<page>-<lang>-<width>-<theme>.jpg`; `heights.json` lists every page height and
+horizontal overflow); before/after pairs: `docs/phase-1/evidence/after/pairs/`.
+
+### Homepage height (measured, `scripts/qa-measure.mjs`, fonts loaded)
+
+| | Before (baseline, HEAD `95702cd`) | After | Change |
+|---|---|---|---|
+| AR 1440 | 10,746 px | 5,363 px | −50% |
+| EN 1440 | 11,026 px | 5,585 px | −49% |
+| AR 390 | 14,943 px | 8,015 px | −46% |
+| EN 390 | 15,322 px | 8,272 px | −46% |
+
+Targets were ≤ ~5,500 (1440) and ≤ ~8,000 (390): Arabic 1440 meets it; Arabic 390 is 15 px over (the street
+address was kept visible on phones after pass 3); English is 85 px and 272 px over because English copy runs
+longer (two-line display name, longer labels). `tests/phase1-pages.spec.js` guards
+5,750 / 8,350 px and the ≥ 45% reduction. No type was shrunk to get there (body 18 px throughout); detail moved
+to the dedicated pages.
+
+### Pass 1 — layout and hierarchy
+
+Found (first build, `home-ar-1440`, 7,086 px; `home-ar-390`, 13,183 px):
+1. Specialties section 1,236 px: the lead card used a 16:10 image at 58% width (≈ 470 px) and the two side cards
+   had full text — the tallest block on the page.
+2. Discovery (942 px) and surgical education (703 px) were two full sections for two previews.
+3. Expertise ledger 816 px: boxed columns with a source tag on its own grid row; roles with long wording.
+4. Footer 713 px; section rhythm 96 px.
+5. Lead specialty image appeared blank in captures — a capture artefact (lazy image not yet requested in a
+   full-page screenshot), not a site defect; the capture script now walks the page first.
+Fixed: lead image 16:7 (desktop) / 16:9 (phone), side cards clamp to 3 lines; one dark "explore" band holds
+Vision discovery (03) and Surgical education (04) side by side; ledger boxes replaced by top rules, source tags
+inline, short role names on the homepage with a "Roles in detail" link to `/about/`; footer tightened; rhythm
+`clamp(40px, 3.9vw, 60px)`. Result 5,363 px (AR 1440).
+
+### Pass 2 — typography, illustration and visual polish
+
+Found: (a) the phone hero's clinic-line sentence wrapped the phone icon onto its own line; (b) footer contact
+lines lost the space between label and number ("Clinic line:055…") because flex dropped the trailing space;
+(c) the `/about/` portrait filled the whole phone width (≈ 437 px tall); (d) Arabic display type: Naskh at
+68 px needs ≥ 1.4 leading — confirmed no clipping of marks at 1.42; (e) dark theme: the studio-grey portrait
+plate reads as a printed photograph, kept deliberately; (f) the explore band art (distance zones, light path,
+3D poster) is consistent line art in one palette, distinct from the procedure renders.
+Fixed: (a) the aside is now an inline paragraph with an inline icon; (b) `column-gap` on footer links;
+(c) the portrait is capped at 300 px on phones. Naskh fallback metrics recalibrated (§4).
+
+### Pass 3 — mobile and accessibility
+
+Checked: 320/390/768/1024/1366/1440 for all 15 page types (no horizontal overflow — tested), the booking bar
+never covering the footer (tested), 44 px targets on phones, one `<h1>` per page and no skipped heading levels
+(tested on every section page), alt text on every content image (tested on prerendered pages), axe-core on
+all 30 pages × light/dark (`tests/journeys/axe.spec.js`, page list from `site-routes.js` `PAGES`), keyboard
+journey (persona E), reduced motion. Found: `/procedures/` and `/clinic/` jumped from `h1` to `h3` (cards and
+booking ways had no section heading). Fixed with visually hidden `h2`s ("All procedures", "Ways to book").
+Phone-specific compositions verified in the 390 captures (hero facts strip, scrollable intent row, compact
+specialty rows, 2-column procedure index, no decorative art in the explore band). The full suite then found one
+real phone regression: the homepage hid the clinic's street address on phones (journey J10, "find the address").
+Fixed: only the "please confirm" note and the accreditation line are hidden on the homepage at phone width;
+the address stays (both remain on `/clinic/`).
+
+### 21st-ui-review checklist (applied manually — CLI not installed)
+
+| Check | Result |
+|---|---|
+| Semantic controls, accessible names | Buttons are `<button>`, links `<a>`; icon buttons labelled; axe clean |
+| Keyboard, focus visibility, menus | 2 px focus ring everywhere; drawer Escape returns focus; skip link per page |
+| Image alternatives | Alt on every content image in the page language; decorative SVG `aria-hidden` |
+| Touch targets, disabled/loading | ≥ 44 px on phones; disabled questionnaire "Next"; loading shimmer and `aria-busy` on 3D start |
+| Responsive overflow | None at 320–1440 (tested) |
+| Reduced motion | Transitions/animation removed; reveal disabled |
+| Token drift / hard-coded values | Colours via tokens; the stage band and portrait plate use documented fixed values |
+| Duplicate primitives | Specialty cards reuse the procedure-card link contract; one button system |
+| Typography / radius / spacing consistency | One scale per language; 4 radii; 8-pt spacing |
+| Fake data / placeholder copy | None; "coming soon" note only where a module is genuinely absent |
+
+Owner acceptance is pending; these passes record defects found and fixed, not a verdict on quality.

@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "320×658",
   "test": "journeys\\persona-d.spec.js › Persona D — slow network, low-power phone",
-  "startedAt": "2026-11-03T21:29:06.801Z",
-  "finishedAt": "2026-11-03T21:29:48.427Z",
+  "startedAt": "2026-11-03T21:38:28.693Z",
+  "finishedAt": "2026-11-03T21:39:06.450Z",
   "totals": {
     "steps": 10,
     "pass": 10,
@@ -23,46 +23,46 @@
   "verdict": "PASS",
   "consoleErrors": [],
   "consoleWarnings": [
-    "3D cataract module unavailable: TypeError: cataract-sim mount(host): host must be an element\n    at Module.Dr (http://localhost:4973/assets/cataract-sim-WPsBARml.js:130:2339)\n    at window.startCataract3D (http://localhost:4973/assets/index-BSOgidb1.js:593:1300)"
+    "3D cataract module unavailable: TypeError: cataract-sim mount(host): host must be an element\n    at Module.Dr (http://localhost:4973/assets/cataract-sim-WPsBARml.js:130:2339)\n    at window.startCataract3D (http://localhost:4973/assets/index-h5sLSGfY.js:593:1300)"
   ],
   "pageErrors": [],
   "failedRequests": [],
   "expectedFailedRequests": [],
   "metrics": {
-    "tH1": 2791,
-    "tLoad": 5874,
-    "lcp": 4576,
-    "cls": 0.0069551368634646876,
-    "bytes": 207012,
-    "retry3D": 7223
+    "tH1": 3072,
+    "tLoad": 5947,
+    "lcp": 3496,
+    "cls": 0.013311445319537249,
+    "bytes": 207059,
+    "retry3D": 5008
   },
   "steps": [
     {
       "step": 1,
       "action": "Open the home page on the throttled connection",
       "expected": "Main heading readable within 10 s; LCP and CLS recorded",
-      "actual": "h1 after 2791 ms, load event 5874 ms, LCP 4576 ms, transferred 202 KiB",
+      "actual": "h1 after 3072 ms, load event 5947 ms, LCP 3496 ms, transferred 202 KiB",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-d/01-open-the-home-page-on-the-throttled-conn.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6905,
+      "ms": 6971,
       "url": "/"
     },
     {
       "step": 2,
       "action": "Watch the first screen while the slow page finishes loading",
       "expected": "Layout stays put: cumulative layout shift < 0.1",
-      "actual": "CLS 0.007",
+      "actual": "CLS 0.013",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6,
+      "ms": 5,
       "url": "/"
     },
     {
@@ -76,21 +76,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 11715,
+      "ms": 11235,
       "url": "/"
     },
     {
       "step": 4,
       "action": "Tap the cataract card's details link",
       "expected": "Cataract page opens (content chunk loads over the slow link)",
-      "actual": "/procedures/cataract-surgery/ h1=\"جراحة الماء الأبيض (الساد)\" after 1473 ms",
+      "actual": "/procedures/cataract-surgery/ h1=\"جراحة الماء الأبيض (الساد)\" after 1626 ms",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1538,
+      "ms": 1653,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -104,7 +104,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1909,
+      "ms": 449,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -118,7 +118,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8919,
+      "ms": 8857,
       "url": "/"
     },
     {
@@ -139,28 +139,28 @@
       "step": 8,
       "action": "Tap Start again (retry) — or, if the viewer was carried over, close it first and start it again",
       "expected": "The 3D viewer becomes ready",
-      "actual": "state=ready after 7223 ms; canvases=1",
+      "actual": "state=ready after 5008 ms; canvases=1",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-d/08-tap-start-again-retry-or-if-the-viewer-w.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 7266,
+      "ms": 5072,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 9,
       "action": "Tap Next three times",
       "expected": "Stage 4 of 7 shown; buttons respond on the slow CPU",
-      "actual": "المرحلة 4 من 7 \"فتح الجزء الأمامي من محفظة العدسة\" (1504 ms for 3 taps)",
+      "actual": "المرحلة 4 من 7 \"فتح الجزء الأمامي من محفظة العدسة\" (1692 ms for 3 taps)",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-d/09-tap-next-three-times.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1504,
+      "ms": 1692,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -174,7 +174,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6,
+      "ms": 18,
       "url": "/procedures/cataract-surgery/"
     }
   ]

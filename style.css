@@ -453,7 +453,7 @@ html.drawer-open .site-header { z-index: 130; }
   #main[data-page="home"] .cred-quiet { display: none; }
   .disc-body > p:not(.spec-group) { display: none; }
   .disc-body { padding: var(--s-4); }
-  #main[data-page="home"] .visit-small, #main[data-page="home"] .accreditation { display: none; }
+  #main[data-page="home"] .visit-row:first-child .visit-small, #main[data-page="home"] .accreditation { display: none; } /* the street address stays */
   .footer-hours { display: none; }
   .faq-question { font-size: 1rem; min-height: 56px; }
   .spec-card.is-lead .illus { aspect-ratio: 16 / 9; }

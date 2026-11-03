@@ -125,3 +125,21 @@ Row IDs refer to `CONTENT_PRESERVATION_MATRIX.md`. "Lens Lab agent" = content ow
   Reservation measured after mounting: 1,560 px ≥1024, 1,440 px 768–1023, 1,930 px <768; released once mounted.
 - **3D cataract** (`src/cataract-sim`): unchanged on-demand mount on `/surgical-education/` and on the cataract
   procedure page (`#cataract-3d`). The homepage shows a poster and links there.
+
+## 5. Benchmark principles applied (`BENCHMARK_RESEARCH.md` §4)
+
+| # | Principle | Where |
+|---|---|---|
+| 1 | Person and action on the first screen, intent buttons beneath | Hero: portrait, name, title, Book + "Discover his expertise", clinic line/WhatsApp, four intent shortcuts |
+| 2 | Verifiable, dated, specific facts with provenance | Expertise ledger and `/about/` ledger with source tags; 15,000+ keeps its meaning; dated record shows only 1998 and 2024 |
+| 3 | Symptom-led discovery | Intent shortcuts ("my vision is cloudy or glary", "my prescription keeps changing", …) map to procedure pages and the Lens Lab |
+| 4 | Same procedure template; cross-link by decision | Procedure template unchanged; lens pages link to the Lens Lab; related procedures; library page |
+| 5 | Honest interactive tools; printable take-away | Every tool labelled educational; questionnaire summary is answer-driven and printable |
+| 6 | One consistent set of three actions + "what happens next" | Booking bar (Book / Call / WhatsApp); `/clinic/` visit pathway and "what to bring"; homepage eye-emergency link |
+| 7 | Truthful review status; no copied reviews | "Draft pending review" kept; testimonials gate unchanged |
+| 8 | Authentic photography, original illustration, low weight | Real portraits only; faculty group photo skipped; in-house illustrations with 800 px `srcset` |
+| 9 | Arabic as the primary typographic case | Arabic sized first (18 px / 1.9), no Arabic letter-spacing, Naskh display face, logical properties, `<bdi>` for numbers |
+
+Recommended order (benchmark §5) vs. what shipped: the benchmark put procedures before the biography; the owner's
+complaint 6 (identity not prominent) and the Phase 1 brief put expertise second. The intent shortcuts in the hero
+give the procedure-first visitor a one-tap path, so both needs are served.
