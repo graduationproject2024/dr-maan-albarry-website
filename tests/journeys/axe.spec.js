@@ -27,7 +27,10 @@ for (const theme of ['light', 'dark']) {
       await page.waitForTimeout(400);
       // BUG-18: let running transitions (section fade-ins, theme colours) settle so colour-contrast never samples a
       // half-faded frame on a loaded machine; a finished frame is what visitors see.
-      await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+      // Infinite loops (the Light Journey's illustrative ray flow) never finish, so only finite ones are awaited.
+      await page.evaluate(() => Promise.all(document.getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => {}))));
       const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']).analyze();
       const v = r.violations.map((x) => ({ id: x.id, impact: x.impact, help: x.help, nodes: x.nodes.length, targets: x.nodes.slice(0, 4).map((n) => n.target.join(' ')) }));
       results.push({ page: `/${p.path}`, theme, violations: v, passes: r.passes.length, incomplete: r.incomplete.length });
