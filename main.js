@@ -386,17 +386,17 @@ function renderExpertise() {
     <div class="container expertise-grid">
       <div class="expertise-intro">
         ${sectionHead('01', tr('الخبرة المهنية', 'Professional expertise'), tr('خبرة سريرية وأكاديمية منذ', 'Clinical and academic experience since') + ` <bdi>${P_.experienceSince}</bdi>`,
-          tr(`يعمل د. معن البري ضمن وحدة الماء الأبيض ووحدة القرنية وتصحيح النظر في ${D.clinic.name.ar}. كل مؤهل ومنصب هنا منشور لدى مغربي الصحية أو جامعة طيبة، أو أكده د. معن شخصياً.`,
-            `Dr. Maan Al Barry works within the cataract unit and the cornea & refractive unit at ${D.clinic.name.en}. Every qualification and role here is published by Magrabi Health or Taibah University, or confirmed by Dr. Maan himself.`), { id: 'profile-title' })}
+          tr('يعمل ضمن وحدة الماء الأبيض ووحدة القرنية وتصحيح النظر. كل بند هنا منشور لدى مغربي الصحية أو جامعة طيبة، أو أكده د. معن شخصياً.',
+            'He works within the cataract unit and the cornea & refractive unit. Every item here is published by Magrabi Health or Taibah University, or confirmed by Dr. Maan himself.'), { id: 'profile-title' })}
         <a href="${P('about')}" data-nav class="text-link fade-in">${tr('السيرة المهنية الكاملة', 'Full professional profile')}${icon('arrow', 16)}</a>
       </div>
       <div class="expertise-cols fade-in" id="qualifications">
         <div class="ledger-block">
           <h3 class="ledger-title">${tr('المؤهلات والصفة الأكاديمية', 'Qualifications & academic rank')}</h3>
           <ul class="cred-list">
-            ${P_.qualifications.map(q => `<li class="cred"><span class="cred-key"><bdi dir="ltr">${q.short}</bdi></span><span class="cred-val">${L(q)}</span>${sourceTag(q.source)}</li>`).join('')}
-            <li class="cred"><span class="cred-key">${tr('أكاديمي', 'Academic')}</span><span class="cred-val">${L(P_.academicRank)}</span>${sourceTag(P_.academicRank.source)}</li>
-            <li class="cred cred-quiet"><span class="cred-key">${tr('عضوية', 'Member')}</span><span class="cred-val">${P_.memberships.map(m => L(m)).join(tr('، ', ', '))}</span>${sourceTag('magrabi')}</li>
+            ${P_.qualifications.map(q => `<li class="cred"><span class="cred-key"><bdi dir="ltr">${q.short}</bdi></span><span class="cred-val">${L(q)} ${sourceTag(q.source)}</span></li>`).join('')}
+            <li class="cred"><span class="cred-key">${tr('أكاديمي', 'Academic')}</span><span class="cred-val">${L(P_.academicRank)} ${sourceTag(P_.academicRank.source)}</span></li>
+            <li class="cred cred-quiet"><span class="cred-key">${tr('عضوية', 'Member')}</span><span class="cred-val">${P_.memberships.map(m => L(m)).join(tr('، ', ', '))} ${sourceTag('magrabi')}</span></li>
           </ul>
         </div>
         <div class="ledger-block">
@@ -405,9 +405,10 @@ function renderExpertise() {
             ${P_.roles.map(r => `
             <li class="timeline-item${r.current ? ' is-current' : ''}">
               <span class="timeline-when">${r.current ? tr('حالياً', 'Current') : tr('سابقاً', 'Previously')}</span>
-              <h4>${r[currentLang]}</h4>
+              <h4>${short(r)}</h4>
             </li>`).join('')}
           </ol>
+          <a href="${P('about')}#profile" data-nav class="text-link timeline-more">${tr('المناصب بالتفصيل', 'Roles in detail')}${icon('arrow', 16)}</a>
         </div>
       </div>
     </div>
@@ -436,7 +437,7 @@ function renderSpecialties() {
   <section class="section" id="procedures" aria-labelledby="procedures-title">
     <div class="container">
       ${sectionHead('02', tr('التخصصات الرئيسية', 'Core specialties'), tr('ما الذي يعالجه د. معن؟', 'What Dr. Maan treats'),
-        tr('ثلاثة مجالات يتمحور حولها عمله: الماء الأبيض والعدسات، وتصحيح الإبصار، وأمراض القرنية. لكل إجراء دليل مبسّط للتشريح والخطوات والتعافي والمخاطر.', 'Three fields at the centre of his work: cataract and lenses, vision correction, and corneal disease. Each procedure has a plain-language guide to anatomy, steps, recovery and risks.'), { cls: 'section-head-split', id: 'procedures-title' })}
+        tr('ثلاثة مجالات يتمحور حولها عمله، ولكل إجراء دليل مبسّط للتشريح والخطوات والتعافي والمخاطر.', 'Three fields at the centre of his work. Each procedure has a plain-language guide to anatomy, steps, recovery and risks.'), { cls: 'section-head-split', id: 'procedures-title' })}
       <div class="spec-grid fade-in">
         ${specCard(lead, true)}
         <div class="spec-stack">${rest.map(p => specCard(p, false)).join('')}</div>
@@ -484,37 +485,34 @@ const LIGHT_ART = () => `
   </svg>`;
 function renderDiscovery() {
   return `
-  <section class="section section-band discover" id="discover" aria-labelledby="discover-title">
-    <div class="container discover-layout">
-      ${sectionHead('03', tr('اكتشف رؤيتك', 'Vision discovery'), tr('افهم كيف ترى، وما الذي يغيّره كل خيار', 'Understand how you see, and what each option changes'),
-        tr('أداتان تثقيفيتان لمن يستعد لموعده، ولكل من يحب أن يفهم العين: مقارنة العدسات المزروعة على مسافات النظر، ورحلة الضوء من القرنية إلى الشبكية.', 'Two educational tools for anyone preparing for a visit, and for anyone curious about the eye: a comparison of lens implants across viewing distances, and the journey of light from cornea to retina.'), { id: 'discover-title' })}
-      <div class="discover-grid fade-in">
-        <article class="disc-card disc-lab">
-          <div class="disc-visual">${LENS_LAB_ART()}</div>
-          <div class="disc-body">
-            <p class="spec-group">${tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab')}</p>
-            <h3>${tr('قارن العدسات كما تعيش يومك', 'Compare lenses the way you live your day')}</h3>
-            <p>${tr('أحادية البؤرة، وممتدة المدى، وثلاثية البؤرة، والتوريكية: ماذا يحدث للرؤية البعيدة والمتوسطة والقريبة، وللأضواء ليلاً؟ مع محاكي رؤية تقريبي.', 'Monofocal, extended depth of focus, trifocal and toric: what happens to far, intermediate and near vision, and to lights at night? With an approximate vision simulator.')}</p>
-            <div class="disc-actions">
-              <a href="${P('lens-lab')}" data-nav class="btn btn-primary">${tr('افتح مختبر العدسات', 'Open the Lens Lab')}${icon('arrow', 18)}</a>
-              <a href="${pageHref(currentLang, null, 'lens-lab')}#simulator" data-nav class="text-link">${icon('eye', 18)}${tr('جرّب محاكي الرؤية', 'Try the vision simulator')}</a>
+      <div class="explore-part explore-discover" id="discover" aria-labelledby="discover-title" role="region">
+        ${sectionHead('03', tr('اكتشف رؤيتك', 'Vision discovery'), tr('افهم كيف ترى، وما الذي يغيّره كل خيار', 'Understand how you see, and what each option changes'),
+          tr('أداتان تثقيفيتان لمن يستعد لموعده، ولكل من يحب أن يفهم العين.', 'Two educational tools for anyone preparing for a visit, and for anyone curious about the eye.'), { id: 'discover-title' })}
+        <div class="discover-grid fade-in">
+          <article class="disc-card disc-lab">
+            <div class="disc-visual">${LENS_LAB_ART()}</div>
+            <div class="disc-body">
+              <p class="spec-group">${tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab')}</p>
+              <h3>${tr('قارن العدسات كما تعيش يومك', 'Compare lenses the way you live your day')}</h3>
+              <p>${tr('ماذا تقدم كل عدسة مزروعة للرؤية البعيدة والمتوسطة والقريبة، وللأضواء ليلاً؟ مع محاكي رؤية تقريبي.', 'What does each lens implant give at far, intermediate and near distances, and to lights at night? With an approximate vision simulator.')}</p>
+              <div class="disc-actions">
+                <a href="${P('lens-lab')}" data-nav class="btn btn-light">${tr('افتح مختبر العدسات', 'Open the Lens Lab')}${icon('arrow', 18)}</a>
+              </div>
             </div>
-          </div>
-        </article>
-        <article class="disc-card disc-light">
-          <div class="disc-visual">${LIGHT_ART()}</div>
-          <div class="disc-body">
-            <p class="spec-group">${tr('رحلة الضوء', 'The light journey')}</p>
-            <h3>${tr('كيف تتحول الأشعة إلى صورة؟', 'How does light become an image?')}</h3>
-            <p>${tr('تتبّع الضوء عبر القرنية والعدسة حتى الشبكية، واعرف أين يحدث كل إجراء.', 'Follow light through the cornea and lens to the retina, and see where each procedure takes place.')}</p>
-            <div class="disc-actions">
-              <a href="${P('how-vision-works')}" data-nav class="btn btn-quiet">${tr('ابدأ رحلة الضوء', 'Start the light journey')}${icon('arrow', 18)}</a>
+          </article>
+          <article class="disc-card disc-light">
+            <div class="disc-visual">${LIGHT_ART()}</div>
+            <div class="disc-body">
+              <p class="spec-group">${tr('رحلة الضوء', 'The light journey')}</p>
+              <h3>${tr('كيف تتحول الأشعة إلى صورة؟', 'How does light become an image?')}</h3>
+              <p>${tr('تتبّع الضوء عبر القرنية والعدسة حتى الشبكية، واعرف أين يحدث كل إجراء.', 'Follow light through the cornea and lens to the retina, and see where each procedure takes place.')}</p>
+              <div class="disc-actions">
+                <a href="${P('how-vision-works')}" data-nav class="btn btn-ghost-light">${tr('ابدأ رحلة الضوء', 'Start the light journey')}${icon('arrow', 18)}</a>
+              </div>
             </div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>`;
+          </article>
+        </div>
+      </div>`;
 }
 
 // 5. Surgical education preview — the 3D simulator itself lives on /surgical-education/ and the cataract page.
@@ -539,22 +537,26 @@ const C3D_POSTER = () => `
         </svg>`;
 function renderSurgeryPreview() {
   return `
-  <section class="section section-stage surgery-preview" id="surgery-3d" aria-labelledby="surgery-3d-title">
-    <div class="container c3d-grid">
-      <div class="c3d-text fade-in">
-        <p class="kicker"><span class="kicker-num" aria-hidden="true">04</span><span>${tr('التثقيف الجراحي', 'Surgical education')}</span></p>
-        <h2 id="surgery-3d-title">${tr('عملية الماء الأبيض، خطوة بخطوة، بالأبعاد الثلاثة', 'Cataract surgery, step by step, in 3D')}</h2>
-        <p class="lede">${tr('نموذج تفاعلي للعين يوضح المراحل الرئيسية لإزالة الساد وزراعة العدسة، لتفهم ما يحدث قبل أن تسأل عنه في العيادة.', 'An interactive model of the eye that walks through the main stages of cataract removal and lens implantation, so you understand what happens before you ask about it in clinic.')}</p>
+      <div class="explore-part explore-surgery" id="surgery-3d" aria-labelledby="surgery-3d-title" role="region">
+        ${sectionHead('04', tr('التثقيف الجراحي', 'Surgical education'), tr('عملية الماء الأبيض بالأبعاد الثلاثة', 'Cataract surgery in 3D'),
+          tr('نموذج تفاعلي للعين يشرح مراحل إزالة الساد وزراعة العدسة، لتفهم ما يحدث قبل موعدك.', 'An interactive model of the eye that walks through cataract removal and lens implantation, so you understand what happens before your visit.'), { id: 'surgery-3d-title' })}
+        <figure class="c3d-poster fade-in">
+          ${C3D_POSTER()}
+          <figcaption>${tr('رسم توضيحي للعين: الضوء يمر عبر القرنية والعدسة إلى الشبكية.', 'The eye in section: light passes through the cornea and lens to the retina.')}</figcaption>
+        </figure>
         <ol class="stage-list">${SURGERY_STAGES[currentLang].map(([t], i) => `<li><span aria-hidden="true">${i + 1}</span>${t}</li>`).join('')}</ol>
         <div class="c3d-actions">
-          <a href="${P('surgical-education')}" data-nav class="btn btn-light btn-lg">${icon('play', 20)}<span class="btn-label">${tr('شاهد التجربة ثلاثية الأبعاد', 'Open the 3D walkthrough')}</span></a>
+          <a href="${P('surgical-education')}" data-nav class="btn btn-light">${icon('play', 20)}<span class="btn-label">${tr('شاهد التجربة ثلاثية الأبعاد', 'Open the 3D walkthrough')}</span></a>
           <a href="${pageHref(currentLang, 'cataract-surgery')}" data-nav class="text-link text-link-light">${tr('دليل جراحة الماء الأبيض', 'Cataract surgery guide')}${icon('arrow', 16)}</a>
         </div>
-      </div>
-      <figure class="c3d-poster fade-in">
-        ${C3D_POSTER()}
-        <figcaption>${tr('رسم توضيحي للعين: الضوء يمر عبر القرنية والعدسة إلى الشبكية.', 'The eye in section: light passes through the cornea and lens to the retina.')}</figcaption>
-      </figure>
+      </div>`;
+}
+function renderExplore() {
+  return `
+  <section class="section section-stage explore" aria-label="${tr('اكتشف وتعلّم', 'Explore and learn')}">
+    <div class="container explore-grid">
+      ${renderDiscovery()}
+      ${renderSurgeryPreview()}
     </div>
   </section>`;
 }
@@ -666,7 +668,7 @@ function renderClinicHome() {
   <section class="section section-band" id="clinic" aria-labelledby="clinic-title">
     <div class="container">
       ${sectionHead('06', tr('العيادة والحجز', 'Clinic & booking'), tr('موعدك مع د. معن البري', 'Your appointment with Dr. Maan'),
-        tr(`ثلاث طرق للحجز، ويستقبل د. معن مراجعيه في ${D.clinic.name.ar}.`, `Three ways to book. Dr. Maan sees patients at ${D.clinic.name.en}.`), { cls: 'section-head-split', id: 'clinic-title' })}
+        tr('ثلاث طرق للحجز، ومواعيد ثابتة، وعنوان واحد.', 'Three ways to book, regular hours, one address.'), { cls: 'section-head-split', id: 'clinic-title' })}
       <div class="clinic-grid">
         ${bookingWays()}
         <div class="clinic-side">
@@ -705,8 +707,7 @@ function renderHome() {
       ${renderHero()}
       ${renderExpertise()}
       ${renderSpecialties()}
-      ${renderDiscovery()}
-      ${renderSurgeryPreview()}
+      ${renderExplore()}
       ${renderEducationPreview()}
       ${renderClinicHome()}`;
 }
@@ -1501,7 +1502,7 @@ function renderFooter() {
 
       <div class="footer-notices">
         <p class="footer-disclaimer"><strong>${tr('إخلاء مسؤولية طبي:', 'Medical disclaimer:')}</strong> ${L(DISCLAIMER)}</p>
-        <p class="footer-disclaimer"><strong>${tr('عن المحتوى التثقيفي:', 'About the educational content:')}</strong> ${tr('أدلة الإجراءات والأدوات التفاعلية (محاكي الرؤية، مختبر العدسات، الجراحة ثلاثية الأبعاد) تثقيفية وتوضيحية، أُعدت من مصادر طبية للمرضى، وهي بانتظار مراجعة د. معن. لا تتنبأ بنتيجة عينك.', 'Procedure guides and the interactive tools (vision simulator, Lens Lab, 3D surgery) are educational illustrations prepared from patient-information sources and pending Dr. Maan’s review. They do not predict your own result.')}</p>
+        <p class="footer-disclaimer"><strong>${tr('عن المحتوى التثقيفي:', 'About the educational content:')}</strong> ${tr('الأدلة والأدوات التفاعلية توضيحية، أُعدت من مصادر طبية للمرضى وهي بانتظار مراجعة د. معن، ولا تتنبأ بنتيجة عينك.', 'Guides and interactive tools are educational illustrations from patient-information sources, pending Dr. Maan’s review; they do not predict your own result.')}</p>
       </div>
 
       <div class="footer-bottom">

@@ -28,6 +28,9 @@ for (const { p, lang, w, theme } of todo) {
   await page.goto(new URL(`${lang === 'en' ? 'en/' : ''}${p}`, base).href, { waitUntil: 'networkidle' });
   await page.locator('#app main h1').first().waitFor();
   await page.evaluate(() => document.fonts.ready);
+  // walk the page once so lazy images load, then return to the top
+  await page.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } scrollTo(0, 0); });
+  await page.evaluate(() => Promise.all([...document.images].filter(i => !i.complete).map(i => new Promise(r => { i.onload = i.onerror = r; }))));
   await page.evaluate(() => document.querySelectorAll('.fade-in').forEach(n => n.classList.add('visible')));
   await page.waitForTimeout(300);
   const h = await page.evaluate(() => document.documentElement.scrollHeight);
