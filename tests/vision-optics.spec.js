@@ -3,7 +3,7 @@
 import { test, expect } from '@playwright/test';
 import * as O from '../src/vision-sim/optics/index.js';
 
-const LENSES = ['monofocal', 'edof', 'trifocal', 'toric', 'cataract'];
+const LENSES = ['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'];
 const close = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 
 test.describe('defocus', () => {
@@ -148,6 +148,19 @@ test.describe('IOL through-focus shapes (educational approximations)', () => {
     expect(O.rangeOfFocus('edof').toD).toBeGreaterThan(O.rangeOfFocus('monofocal').toD);
   });
 
+  test('multifocal (two-focus): distance and near peaks with no intermediate peak', () => {
+    const c = O.throughFocus('multifocal');
+    expect(O.findPeaks(c).map((p) => p.vergenceD)).toEqual([0, 2.5]);
+    const at = (v) => c.find((p) => close(p.vergenceD, v, 1e-6)).sharpness;
+    const mono = O.throughFocus('monofocal')[0].sharpness;
+    expect(at(0)).toBeLessThan(mono);
+    expect(at(1.5)).toBeLessThan(at(0) / 4);   // dip at intermediate (≈66 cm)
+    const q = (lens, m) => O.layerOptics({ lens, distanceM: m, pupilMm: 3 }).sharpness;
+    expect(q('multifocal', 0.66)).toBeLessThan(q('trifocal', 0.66));
+    expect(q('multifocal', 0.4)).toBeGreaterThan(q('monofocal', 0.4));
+    expect(O.contrast({ lens: 'multifocal' }).contrastIndex).toBeLessThan(O.contrast({ lens: 'edof' }).contrastIndex);
+  });
+
   test('weights and lost light sum to 1 for every lens', () => {
     for (const id of LENSES) {
       const p = O.LENSES[id];
@@ -174,7 +187,11 @@ test.describe('halo, glare and contrast', () => {
       expect(h('trifocal')).toBeGreaterThan(h('edof'));
     }
     expect(O.haloGlare({ lens: 'trifocal', lighting: 'night' }).haloIndex).toBeGreaterThan(O.haloGlare({ lens: 'trifocal', lighting: 'day' }).haloIndex);
-    expect(O.haloGlare({ lens: 'trifocal', pupilMm: 8 }).haloIndex).toBeCloseTo(1, 9); // normaliser
+    // normaliser: the strongest lens at the largest pupil (the bifocal-type multifocal since it was added)
+    expect(O.haloGlare({ lens: 'multifocal', pupilMm: 8 }).haloIndex).toBeCloseTo(1, 9);
+    for (const id of LENSES) expect(O.haloGlare({ lens: id, pupilMm: 8 }).haloIndex).toBeLessThanOrEqual(1 + 1e-12);
+    expect(O.haloGlare({ lens: 'trifocal', pupilMm: 8 }).haloIndex).toBeLessThan(1);
+    expect(O.haloGlare({ lens: 'multifocal', lighting: 'night' }).haloIndex).toBeGreaterThan(O.haloGlare({ lens: 'edof', lighting: 'night' }).haloIndex);
     // halo disk diameter = pupil × add (angle): 5 mm × 2.5 D = 12.5 mrad
     const near = O.haloGlare({ lens: 'trifocal', pupilMm: 5 }).halos.at(-1);
     expect(near.diameterArcmin).toBeCloseTo(0.0125 * (180 / Math.PI) * 60, 6);
@@ -204,6 +221,21 @@ test.describe('bounds, layers and determinism', () => {
     expect(O.normalizeRefraction({ sphereD: -99 }).sphereD).toBe(-3);
     expect(O.sliderToDistance(-10)).toBeCloseTo(O.DISTANCES.sliderMin, 9);
     expect(O.sliderToDistance(5000)).toBeCloseTo(O.DISTANCES.sliderMax, 9);
+  });
+
+  test('everyday situations map to one distance + one lighting level', () => {
+    expect(O.SCENARIO_IDS).toEqual(['signs', 'laptop', 'phone', 'book', 'night-driving']);
+    for (const id of O.SCENARIO_IDS) {
+      const sc = O.SCENARIOS[id];
+      expect(O.scenarioFor(sc.distanceM, sc.lighting)).toBe(id);
+      expect(sc.distanceM).toBeGreaterThanOrEqual(O.DISTANCES.sliderMin);
+      expect(sc.distanceM).toBeLessThanOrEqual(O.DISTANCES.sliderMax);
+    }
+    expect(O.bandOf(O.SCENARIOS.phone.distanceM)).toBe('near');
+    expect(O.bandOf(O.SCENARIOS.laptop.distanceM)).toBe('intermediate');
+    expect(O.SCENARIOS['night-driving'].lighting).toBe('night');
+    expect(O.scenarioFor(1.0, 'day')).toBe(null);
+    expect(Object.isFrozen(O.SCENARIOS)).toBe(true);
   });
 
   test('slider mapping round-trips the presets', () => {

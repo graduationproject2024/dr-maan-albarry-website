@@ -1,26 +1,27 @@
 /* Vision simulator — every rule is scoped under .vsim. Colour tokens are self-contained (never inherited
-   from the host page). Palette follows the site's navy / gold / ivory system. */
+   from the host page). Palette follows the site's "clinical atlas" system (porcelain / lagoon / terracotta). */
 .vsim {
-  --vsim-bg: #fbfaf7;
-  --vsim-surface: #f2efe8;
+  --vsim-bg: #f4f6f5;
+  --vsim-surface: #e9efed;
   --vsim-raised: #ffffff;
-  --vsim-text: #13212b;
-  --vsim-muted: #44525c;
-  --vsim-border: #ddd8cc;
-  --vsim-border-strong: #b9b2a3;
-  --vsim-primary: #15323d;
+  --vsim-text: #0f1e1c;
+  --vsim-muted: #46554f;
+  --vsim-border: #d6dfdc;
+  --vsim-border-strong: #7c8b87;
+  --vsim-primary: #0b5a52;
   --vsim-on-primary: #ffffff;
-  --vsim-accent: #8a6a3a;
-  --vsim-accent-soft: rgba(184, 149, 90, 0.16);
-  --vsim-focus: #b07d2c;
+  --vsim-accent: #9e4322;
+  --vsim-accent-soft: rgba(11, 90, 82, 0.10);
+  --vsim-focus: #9e4322;
   --vsim-view: #1b2229;
   --vsim-warn-bg: #fff6e5;
   --vsim-warn-text: #5b4013;
   --vsim-warn-border: #e5c98f;
-  --vsim-bar: #2f6b7a;
-  --vsim-bar-b: #9a6b2f;
+  --vsim-bar: #0b5a52;
+  --vsim-bar-b: #9e4322;
   --vsim-c-mono: #2f6b7a;
   --vsim-c-edof: #2d8a63;
+  --vsim-c-multi: #7a4f9a;
   --vsim-c-tri: #9a6b2f;
   --vsim-c-toric: #5b5fa8;
   --vsim-c-cat: #a3473d;
@@ -45,26 +46,27 @@
 }
 .vsim[lang="ar"] { font-family: "IBM Plex Sans Arabic", "Alexandria", "Segoe UI", Tahoma, sans-serif; line-height: 1.7; }
 .vsim[data-theme="dark"] {
-  --vsim-bg: #0f1b22;
-  --vsim-surface: #15242c;
-  --vsim-raised: #1a2c35;
-  --vsim-text: #e7edf0;
-  --vsim-muted: #a9bac3;
-  --vsim-border: #24384a;
-  --vsim-border-strong: #3d5a68;
-  --vsim-primary: #d4b98d;
-  --vsim-on-primary: #0f1b22;
-  --vsim-accent: #d4b98d;
-  --vsim-accent-soft: rgba(212, 185, 141, 0.14);
-  --vsim-focus: #e8c98f;
+  --vsim-bg: #0e1716;
+  --vsim-surface: #14201f;
+  --vsim-raised: #182625;
+  --vsim-text: #e7efec;
+  --vsim-muted: #a9bab6;
+  --vsim-border: #223230;
+  --vsim-border-strong: #5e716d;
+  --vsim-primary: #6ccbbe;
+  --vsim-on-primary: #06201d;
+  --vsim-accent: #eba27f;
+  --vsim-accent-soft: rgba(108, 203, 190, 0.12);
+  --vsim-focus: #eba27f;
   --vsim-view: #070c10;
   --vsim-warn-bg: #2a2214;
   --vsim-warn-text: #f1dcb1;
   --vsim-warn-border: #6b5428;
-  --vsim-bar: #7fc0cf;
-  --vsim-bar-b: #e0b27a;
+  --vsim-bar: #6ccbbe;
+  --vsim-bar-b: #eba27f;
   --vsim-c-mono: #7fc0cf;
   --vsim-c-edof: #79d0a6;
+  --vsim-c-multi: #c9a6ec;
   --vsim-c-tri: #e0b27a;
   --vsim-c-toric: #a9adf0;
   --vsim-c-cat: #ef8e82;
@@ -84,9 +86,13 @@
   touch-action: pan-y;
 }
 @media (max-width: 640px) {
-  .vsim-viewport { aspect-ratio: 4 / 3; }
-  /* phones: the viewer bleeds to the card edge so it keeps the full content width (Phase 1 guarantee: >= viewport - 56px) */
-  .vsim-stage { margin-inline: -8px; }
+  /* Phones (audit 2026-11, "the viewer is small on phones"): 7:6 instead of 4:3 (+14 % height) and the viewer
+     bleeds to the card edge. 7:6 is the narrowest frame in which the laptop and the phone do not overlap
+     (scenes.js fits them to the horizontal field). An "Enlarge" button gives a full-screen view. */
+  .vsim-viewport { aspect-ratio: 7 / 6; }
+  .vsim-stage { margin-inline: calc(-1 * clamp(12px, 2.2vw, 26px)); }
+  .vsim-stage .vsim-viewport { border-radius: 0; }
+  .vsim-stage .vsim-disclaimer { margin-inline: clamp(12px, 2.2vw, 26px); }
 }
 .vsim-canvas-host, .vsim-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .vsim-tag {
@@ -147,8 +153,8 @@
   background: var(--vsim-surface); border: 1px solid var(--vsim-border);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));
 }
-.vsim-seg-lens { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-@media (max-width: 560px) { .vsim-seg-lens { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.vsim-seg-lens { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+@media (max-width: 760px) { .vsim-seg-lens { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 360px) { .vsim-seg-lens { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .vsim-seg-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vsim-seg-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -207,7 +213,8 @@
 .vsim-model dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
 .vsim-model-tag { font-weight: 700; margin-top: 6px; }
 
-.vsim-how { border-top: 1px solid var(--vsim-border); padding-top: 4px; }
+.vsim-how { border: 1px solid var(--vsim-border); border-radius: 12px; padding: 0 12px; }
+.vsim-how[open] { padding-bottom: 12px; }
 .vsim-how [data-ref="how"] { display: grid; gap: 10px; font-size: 0.92rem; }
 .vsim-figure { margin: 0; display: grid; gap: 6px; }
 .vsim-chart { width: 100%; height: auto; max-height: 320px; }
@@ -226,3 +233,75 @@
 }
 .vsim[data-reduced-motion="true"] *, .vsim[data-reduced-motion="true"] *::before, .vsim[data-reduced-motion="true"] *::after { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) { .vsim *, .vsim *::before, .vsim *::after { transition: none !important; animation: none !important; } }
+
+/* ---------- patient-first flow (2026-11) ---------- */
+.vsim-legend-step { display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; color: var(--vsim-text); }
+.vsim[lang="ar"] .vsim-legend-step { font-size: 1rem; }
+.vsim-step {
+  flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--vsim-primary); color: var(--vsim-on-primary); font-size: 0.85rem; font-weight: 700; letter-spacing: 0;
+}
+.vsim-seg-scn { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.vsim-seg-scn .vsim-seg-btn { min-height: 56px; }
+@media (max-width: 760px) { .vsim-seg-scn { grid-template-columns: repeat(2, minmax(0, 1fr)); } .vsim-seg-scn .vsim-seg-btn:last-of-type { grid-column: 1 / -1; } }
+.vsim-custom { font-size: 0.86rem; color: var(--vsim-muted); }
+.vsim-explore { display: grid; gap: 12px 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.vsim-field-explore, .vsim-field-compare { grid-column: 1 / -1; display: grid; gap: 8px; min-width: 0; }
+.vsim-switch .vsim-step { margin-inline-end: 2px; }
+.vsim-seeing { font-size: 0.98rem; line-height: 1.6; }
+.vsim-explain { display: grid; gap: 10px; align-content: start; min-width: 0; }
+/* limitations · questions · advanced · how it works: one row of clearly labelled disclosures on wide screens */
+.vsim-help { display: grid; gap: 10px 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); align-items: start; min-width: 0; }
+.vsim-help > details[open] { grid-column: 1 / -1; }
+.vsim-help .vsim-limits, .vsim-help .vsim-questions { padding: 0 14px; border-radius: 12px; border: 1px solid var(--vsim-border); background: var(--vsim-raised); min-width: 0; }
+.vsim-help .vsim-limits[open], .vsim-help .vsim-questions[open] { padding-bottom: 12px; }
+.vsim-help ul { margin: 0; padding-inline-start: 1.2em; display: grid; gap: 6px; font-size: 0.93rem; }
+.vsim-questions { border-color: var(--vsim-primary) !important; }
+.vsim-adv { border: 1px solid var(--vsim-border); border-radius: 12px; padding: 0 12px; }
+.vsim-adv[open] { padding-bottom: 14px; }
+.vsim-adv-body { display: grid; gap: 14px; margin-top: 6px; }
+.vsim-meter-bars.is-pair { grid-template-columns: minmax(0, 1fr) auto; }
+.vsim-bar-val:empty { display: none; }
+.vsim-meter-bars:not(.is-pair) { grid-template-columns: minmax(0, 1fr); }
+
+/* enlarge button + enlarged (full-screen) view */
+.vsim-expand {
+  position: absolute; z-index: 4; bottom: 10px; right: 10px; width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff; background: rgba(9, 18, 26, 0.72);
+}
+.vsim-expand:focus-visible { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim--fallback .vsim-expand { display: none; }
+.vsim-rotate { display: none; }
+.vsim--expanded .vsim-stage {
+  position: fixed; inset: 0; z-index: 2147483000; margin: 0; padding: 0; display: grid; place-items: center;
+  background: #000; border-radius: 0;
+}
+.vsim--expanded .vsim-stage .vsim-viewport {
+  width: min(100vw, calc(100dvh * 16 / 10)); max-height: 100dvh; aspect-ratio: 16 / 10; border-radius: 0;
+}
+.vsim--expanded .vsim-stage .vsim-disclaimer {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; margin: 0; z-index: 5; font-size: 0.85rem; padding: 6px 10px;
+}
+.vsim--expanded .vsim-expand { top: 10px; bottom: auto; }
+@media (orientation: portrait) {
+  .vsim--expanded .vsim-stage .vsim-viewport { width: 100vw; aspect-ratio: 7 / 6; }
+  .vsim--expanded .vsim-rotate {
+    display: block; position: absolute; left: 0; right: 0; bottom: calc(100% + 12px); margin: 0; text-align: center; color: #fff; font-size: 0.95rem;
+  }
+}
+
+/* viewer-only mode (embedded in the Vision & Lens Lab, which supplies its own controls) */
+.vsim--viewer { padding: 0; border: 0; background: transparent; gap: 0; max-width: none; }
+.vsim--viewer .vsim-stage { margin: 0; }
+.vsim--viewer .vsim-viewport { border-radius: var(--vsim-radius); }
+
+/* compact clarity rows: label and bar(s) share a line when there is room */
+.vsim-meters ul { gap: 4px; }
+.vsim-meters li { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 4px 12px; padding: 6px 10px; }
+@media (max-width: 360px) { .vsim-meters li { grid-template-columns: minmax(0, 1fr); } }
+.vsim-meter-label { font-size: 0.84rem; }
+.vsim-explain .vsim-card { padding: 12px; gap: 4px; }
+
+/* tablets: slightly tighter rhythm keeps the mounted simulator inside the host page's reserved height (1420 px) */
+@media (max-width: 1023px) { .vsim { gap: 12px; } }

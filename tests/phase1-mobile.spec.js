@@ -118,7 +118,8 @@ for (const [w, h] of MOBILE) {
             .filter(l => !l.closest('[hidden], details:not([open])'))
             .filter(l => { const b = l.getBoundingClientRect(); return b.height < 44 || b.right > innerWidth + 1 || b.x < -1; }).length);
           expect(bad).toBe(0);
-          // distance slider via keyboard
+          // distance slider via keyboard (it lives in the simulator's "Advanced" disclosure since the 2026-11 simplification)
+          await page.locator('#simulator-host .vsim-adv > summary').click();
           const range = page.locator('#simulator-host .vsim-range');
           await range.focus();
           await page.keyboard.press('Home');

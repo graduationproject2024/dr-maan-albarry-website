@@ -244,9 +244,11 @@ export function createPipeline({ canvas, debug = false }) {
         const peak = (layer.loss.fraction * E * 1.3) / (d * d * 0.25);
         put('gauss', Lt.x, Lt.y, d, d, 0, Lt.color[0] * peak, Lt.color[1] * peak, Lt.color[2] * peak);
       }
-      // straylight glare: wide 1/θ²-like skirt (Stiles–Holladay shape), relative strength × straylight
+      // straylight glare: wide 1/θ²-like skirt (Stiles–Holladay shape). Veiling luminance is PROPORTIONAL to the
+      // straylight parameter s (van den Berg), so the skirt scales with s, not s² (audit 2026-11: the earlier s²
+      // drew the cataract glare 6.25× instead of 2.5× and the multifocal glare 1.69× instead of 1.3×).
       const gd = ((9 * Math.PI) / 180) * f;
-      const gp = 0.018 * Lt.intensity * glareGain * glareGain;
+      const gp = 0.018 * Lt.intensity * glareGain;
       put('glare', Lt.x, Lt.y, gd, gd, 0, Lt.color[0] * gp, Lt.color[1] * gp, Lt.color[2] * gp);
     }
     for (const k of Object.keys(sprites)) { sprites[k].count = n[k]; sprites[k].instanceMatrix.needsUpdate = true; sprites[k].instanceColor.needsUpdate = true; }

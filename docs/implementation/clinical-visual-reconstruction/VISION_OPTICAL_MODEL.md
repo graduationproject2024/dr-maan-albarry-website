@@ -148,3 +148,13 @@ Each of these values should be checked against the primary sources by Dr. Maan b
 
 See `CLINICAL_SOURCES.md` → "Vision simulator" for the list and what each one is used for. Sources are cited for the
 *type* of evidence. Exact table values were not transcribed from them.
+
+## 8. Update 2026-11 (Phase 1 audit)
+
+See [docs/phase-1/VISION_SIMULATOR_AUDIT.md](../../phase-1/VISION_SIMULATOR_AUDIT.md) for the full audit. Changes to this specification:
+
+- **New lens profile `multifocal` (two-focus).** Foci 0 : 0.41 and 2.5 D : 0.41; lost light 0.18 (1.5° veil); straylight ×1.3.
+- **Halo-index normaliser.** Now the strongest lens at 8 mm (the two-focus multifocal) instead of the trifocal.
+- **Glare rendering.** The glare skirt now scales linearly with the straylight factor *s*. It was previously *s*², which drew the cataract comparator's glare 6.25× instead of 2.5×.
+- **Everyday situations (`SCENARIOS`).** Distance signs (6 m, day), laptop (66 cm, day), phone (35 cm, day), book (40 cm, day) and night driving (6 m, night). Each is a distance plus a lighting level only.
+- **Scene layout.** On narrow frames the laptop and phone are fitted to the horizontal field, so they do not overlap down to 7:6. Desktop (16:10) placement is unchanged.

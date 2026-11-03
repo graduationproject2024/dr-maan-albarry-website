@@ -1,99 +1,184 @@
 // Vision simulator — DOM / accessibility layer. Native radio groups (keyboard + screen-reader semantics for
 // free), a native range input for distance, a role="slider" divider for the lens comparison, and a polite
 // live region. All listeners are delegated to the persistent root so a language re-render keeps them.
+//
+// Primary flow (patient-first, 2026-11 simplification): 1 everyday situation → viewer → 2 lens → 3 explore
+// (distance presets, lighting) → 4 compare → what you are seeing → what the picture cannot show → questions for
+// your doctor. The raw distance slider, astigmatism / axis / sphere and the model numbers live in "Advanced".
+// mode 'viewer' renders only the picture (+ disclaimer, comparison divider): used when another module (the
+// Vision & Lens Lab) provides its own controls.
 import { STRINGS, LENS_INFO, fmt, formatDistance } from './i18n.js';
 import { curveChart, fallbackHTML } from './fallback.js';
-import { DISTANCES, LENS_IDS, LIGHTING_IDS } from './optics/params.js';
-import { distanceToSlider, sliderToDistance } from './optics/model.js';
+import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIO_IDS } from './optics/params.js';
+import { distanceToSlider, sliderToDistance, scenarioFor } from './optics/model.js';
+import { CONTENT as LAB } from '../lens-lab/content.js';
 
 let instance = 0;
 const BANDS = ['distance', 'intermediate', 'near'];
+const LAB_LENSES = ['monofocal', 'toric', 'edof', 'multifocal', 'trifocal'];
+const SCENARIO_ROW = { signs: 'distance', laptop: 'intermediate', phone: 'near', book: 'near', 'night-driving': 'halos' };
 
-export function createUI(host, { lang, theme, listen, handlers }) {
+export function createUI(host, { lang, theme, listen, handlers, mode = 'full' }) {
   const n = ++instance;
+  const viewerOnly = mode === 'viewer';
   const root = document.createElement('section');
-  root.className = 'vsim';
+  root.className = `vsim${viewerOnly ? ' vsim--viewer' : ''}`;
   root.dataset.vsimInstance = String(n);
   host.appendChild(root);
-  let L = lang, canvas = null, fallbackShown = false, noteKey = null;
+  let L = lang, canvas = null, fallbackShown = false, noteKey = null, expanded = false;
   const ref = {};
 
   const radios = (name, values, labelFn, checked, cls = '') => values.map((v) => {
     const id = `vsim${n}-${name}-${String(v).replace(/[^a-z0-9-]/gi, '_')}`;
     return `<input class="vsim-radio" type="radio" name="vsim${n}-${name}" id="${id}" value="${v}" data-group="${name}" ${String(v) === String(checked) ? 'checked' : ''}><label for="${id}" class="vsim-seg-btn ${cls}">${labelFn(v)}</label>`;
   }).join('');
+  const step = (k) => `<span class="vsim-step" aria-hidden="true">${fmt(L, k)}</span>`;
 
-  function build(state) {
-    const s = STRINGS[L];
-    root.lang = L;
-    root.dir = L === 'ar' ? 'rtl' : 'ltr';
-    root.dataset.theme = theme;
-    root.setAttribute('aria-label', s.region);
-    const presetLabel = (k) => `<span class="vsim-seg-main">${s.presets[k]}</span><span class="vsim-seg-sub">${s.presetDist[k]}</span>`;
-    const lensLabel = (k) => `<span class="vsim-seg-main">${s.lenses[k].short}</span>`;
-    root.innerHTML = `
-  <div class="vsim-stage">
+  function stageHTML(s) {
+    return `
+  <div class="vsim-stage" data-ref="stage">
     <div class="vsim-viewport" dir="ltr" data-ref="viewport">
       <div class="vsim-canvas-host" data-ref="canvasHost"></div>
       <span class="vsim-tag vsim-tag-a" data-ref="tagA" dir="${root.dir}"></span>
       <span class="vsim-tag vsim-tag-b" data-ref="tagB" dir="${root.dir}" hidden></span>
       <div class="vsim-divider" data-ref="divider" role="slider" tabindex="0" aria-label="${s.divider}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="horizontal" hidden><span class="vsim-divider-line"></span><span class="vsim-divider-knob" aria-hidden="true"></span></div>
+      <button type="button" class="vsim-expand" data-ref="expand" aria-pressed="false" aria-label="${s.enlarge}" title="${s.enlarge}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path data-ref="expandIcon" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <p class="vsim-note" data-ref="note" role="status" hidden></p>
+      <p class="vsim-rotate" dir="${root.dir}">${s.rotateHint}</p>
       <div class="vsim-fallback" data-ref="fallback" dir="${root.dir}" hidden></div>
     </div>
     <p class="vsim-disclaimer" data-ref="disclaimer"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>${s.disclaimer}</span></p>
-  </div>
+  </div>`;
+  }
+
+  function build(state) {
+    const s = STRINGS[L];
+    const lab = LAB[L];
+    root.lang = L;
+    root.dir = L === 'ar' ? 'rtl' : 'ltr';
+    root.dataset.theme = theme;
+    root.setAttribute('aria-label', s.region);
+    if (viewerOnly) {
+      root.innerHTML = `${stageHTML(s)}<p class="vsim-sr" data-ref="live" aria-live="polite" aria-atomic="true"></p>`;
+    } else {
+      const presetLabel = (k) => `<span class="vsim-seg-main">${s.presets[k]}</span><span class="vsim-seg-sub">${s.presetDist[k]}</span>`;
+      const scnLabel = (k) => `<span class="vsim-seg-main">${lab.scenarios[k].label}</span><span class="vsim-seg-sub">${lab.scenarios[k].sub}</span>`;
+      const lensLabel = (k) => `<span class="vsim-seg-main">${s.lenses[k].short}</span>`;
+      root.innerHTML = `
+  <fieldset class="vsim-field vsim-field-scenario">
+    <legend class="vsim-legend-title vsim-legend-step">${step(1)}${s.scenario}</legend>
+    <div class="vsim-seg vsim-seg-scn">${radios('scenario', SCENARIO_IDS, scnLabel, scenarioFor(state.distanceM, state.lighting) || '')}</div>
+    <p class="vsim-custom" data-ref="custom" hidden>${s.customView}</p>
+  </fieldset>
+  ${stageHTML(s)}
   <div class="vsim-controls">
     <fieldset class="vsim-field vsim-field-lens">
-      <legend class="vsim-legend-title">${s.lens}</legend>
+      <legend class="vsim-legend-title vsim-legend-step">${step(2)}${s.lens}</legend>
       <div class="vsim-seg vsim-seg-lens" data-ref="lensA">${radios('lensA', LENS_IDS, lensLabel, state.lens)}</div>
-      <label class="vsim-switch"><input type="checkbox" data-ref="compare" ${state.compare ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.compare}</span></label>
     </fieldset>
-    <fieldset class="vsim-field vsim-field-lens" data-ref="lensBField" ${state.compare ? '' : 'hidden'}>
-      <legend class="vsim-legend-title">${s.compareWith}</legend>
-      <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS, lensLabel, state.lensB)}</div>
-    </fieldset>
-    <div class="vsim-field vsim-field-distance">
-      <fieldset class="vsim-field-sub">
-        <legend class="vsim-legend-title">${s.distance}</legend>
-        <div class="vsim-seg vsim-seg-3">${radios('preset', ['near', 'intermediate', 'distance'], presetLabel, '')}</div>
-      </fieldset>
-      <div class="vsim-range-row">
-        <input type="range" class="vsim-range" data-ref="range" min="0" max="1000" step="1" value="${distanceToSlider(state.distanceM)}" aria-label="${s.distance}">
-        <output class="vsim-range-out" data-ref="rangeOut" aria-hidden="true"></output>
+    <div class="vsim-field vsim-field-explore" role="group" aria-labelledby="vsim${n}-explore">
+      <p class="vsim-legend-title vsim-legend-step" id="vsim${n}-explore">${step(3)}${s.explore}</p>
+      <div class="vsim-explore">
+        <fieldset class="vsim-field-sub">
+          <legend class="vsim-legend-title">${s.distance}</legend>
+          <div class="vsim-seg vsim-seg-3">${radios('preset', ['near', 'intermediate', 'distance'], presetLabel, '')}</div>
+        </fieldset>
+        <fieldset class="vsim-field-sub">
+          <legend class="vsim-legend-title">${s.lighting}</legend>
+          <div class="vsim-seg vsim-seg-3">${radios('lighting', LIGHTING_IDS, (k) => `<span class="vsim-seg-main">${s.lights[k]}</span>`, state.lighting)}</div>
+        </fieldset>
       </div>
     </div>
-    <fieldset class="vsim-field vsim-field-light">
-      <legend class="vsim-legend-title">${s.lighting}</legend>
-      <div class="vsim-seg vsim-seg-3">${radios('lighting', LIGHTING_IDS, (k) => `<span class="vsim-seg-main">${s.lights[k]}</span>`, state.lighting)}</div>
-    </fieldset>
-    <details class="vsim-eye" data-ref="eye">
-      <summary>${s.eye}</summary>
+    <div class="vsim-field vsim-field-compare">
+      <label class="vsim-switch">${step(4)}<input type="checkbox" data-ref="compare" ${state.compare ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.compare}</span></label>
+      <fieldset class="vsim-field" data-ref="lensBField" ${state.compare ? '' : 'hidden'}>
+        <legend class="vsim-legend-title">${s.compareWith}</legend>
+        <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS, lensLabel, state.lensB)}</div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="vsim-info">
+    <section class="vsim-explain" aria-labelledby="vsim${n}-seeing">
+      <h3 id="vsim${n}-seeing">${s.seeing}</h3>
+      <p class="vsim-seeing" data-ref="seeing"></p>
+      <div class="vsim-lensinfo" data-ref="lensInfo"></div>
+    </section>
+    <section class="vsim-meters" data-ref="meters" aria-labelledby="vsim${n}-clarity"></section>
+  </div>
+  <div class="vsim-help">
+    <details class="vsim-limits" data-ref="limits">
+      <summary>${s.limitsTitle}</summary>
+      <ul>${lab.limits.map((x) => `<li>${x}</li>`).join('')}</ul>
+    </details>
+    <details class="vsim-questions" data-ref="qbox">
+      <summary>${s.questionsTitle}</summary>
+      <ul data-ref="questions"></ul>
+    </details>
+  <details class="vsim-adv" data-ref="adv">
+    <summary>${s.advanced}</summary>
+    <div class="vsim-adv-body">
+      <div class="vsim-field-sub vsim-range-field">
+        <p class="vsim-legend-title">${s.exactDistance}</p>
+        <div class="vsim-range-row">
+          <input type="range" class="vsim-range" data-ref="range" min="0" max="1000" step="1" value="${distanceToSlider(state.distanceM)}" aria-label="${s.distance}">
+          <output class="vsim-range-out" data-ref="rangeOut" aria-hidden="true"></output>
+        </div>
+      </div>
+      <p class="vsim-fine">${s.eye}</p>
       <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.astig}</legend>
         <div class="vsim-seg vsim-seg-3">${radios('cyl', [0, 1, 2], (v) => (v ? `${fmt(L, v, 1)} ${s.D}` : s.none), Math.abs(state.refraction.cylD))}</div></fieldset>
       <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.axis}</legend>
         <div class="vsim-seg vsim-seg-2">${radios('axis', [180, 90], (v) => `${fmt(L, v)}°`, state.refraction.axisDeg)}</div></fieldset>
       <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.sphere}</legend>
         <div class="vsim-seg vsim-seg-3">${radios('sphere', [-1, 0, 1], (v) => (v ? `<bdi dir="ltr">${v > 0 ? '+' : '−'}${fmt(L, Math.abs(v), 2)}</bdi> ${s.D}` : s.none), state.refraction.sphereD)}</div></fieldset>
-    </details>
-  </div>
-  <div class="vsim-info">
-    <div class="vsim-lensinfo" data-ref="lensInfo"></div>
-    <div class="vsim-meters" data-ref="meters"></div>
-  </div>
+      <div class="vsim-modelbox" data-ref="model"></div>
+    </div>
+  </details>
   <details class="vsim-how"><summary>${s.how}</summary><div data-ref="how"></div></details>
+  </div>
   <p class="vsim-sr" data-ref="live" aria-live="polite" aria-atomic="true"></p>`;
+    }
+    for (const k of Object.keys(ref)) delete ref[k];
     root.querySelectorAll('[data-ref]').forEach((el) => { ref[el.dataset.ref] = el; });
     if (canvas) ref.canvasHost.appendChild(canvas);
     if (fallbackShown) showFallback(true);
     if (noteKey) showNote(noteKey);
+    applyExpanded();
   }
+
+  // ---------- expanded (large) view ----------
+  function applyExpanded() {
+    root.classList.toggle('vsim--expanded', expanded);
+    if (!ref.expand) return;
+    const s = STRINGS[L];
+    ref.expand.setAttribute('aria-pressed', expanded ? 'true' : 'false');
+    ref.expand.setAttribute('aria-label', expanded ? s.shrink : s.enlarge);
+    ref.expand.title = expanded ? s.shrink : s.enlarge;
+    if (ref.expandIcon) ref.expandIcon.setAttribute('d', expanded ? 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5' : 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5');
+  }
+  // Real full screen where the browser allows it (escapes any transformed host ancestor); otherwise a fixed overlay.
+  function setExpanded(on) {
+    if (expanded === on) return;
+    expanded = on;
+    applyExpanded();
+    const fsEl = document.fullscreenElement;
+    if (on && ref.stage && ref.stage.requestFullscreen && !fsEl) {
+      try { const p = ref.stage.requestFullscreen({ navigationUI: 'hide' }); if (p && p.catch) p.catch(() => {}); } catch { /* overlay only */ }
+    } else if (!on && fsEl && root.contains(fsEl) && document.exitFullscreen) {
+      try { const p = document.exitFullscreen(); if (p && p.catch) p.catch(() => {}); } catch { /* ignore */ }
+    }
+    if (ref.expand) ref.expand.focus({ preventScroll: true });
+    if (handlers.expand) handlers.expand(on);
+  }
+  // leaving browser full screen (Esc / back gesture) also closes the enlarged view
+  listen(document, 'fullscreenchange', () => { if (expanded && !document.fullscreenElement) setExpanded(false); });
 
   // ---------- delegated listeners ----------
   listen(root, 'change', (e) => {
     const t = e.target;
     if (t.dataset.group === 'lensA') handlers.lens(t.value);
     else if (t.dataset.group === 'lensB') handlers.lensB(t.value);
+    else if (t.dataset.group === 'scenario') handlers.scenario(t.value);
     else if (t.dataset.group === 'preset') handlers.distance(DISTANCES[t.value], 'preset');
     else if (t.dataset.group === 'lighting') handlers.lighting(t.value);
     else if (t.dataset.group === 'cyl') handlers.refraction({ cylD: -Number(t.value) });
@@ -103,6 +188,7 @@ export function createUI(host, { lang, theme, listen, handlers }) {
     else if (t === ref.range) handlers.distance(sliderToDistance(Number(t.value)), 'slider-commit');
   });
   listen(root, 'input', (e) => { if (e.target === ref.range) handlers.distance(sliderToDistance(Number(e.target.value)), 'slider'); });
+  listen(root, 'click', (e) => { if (ref.expand && e.target.closest('.vsim-expand')) setExpanded(!expanded); });
   // divider: pointer + keyboard
   let drag = null;
   const splitFrom = (e) => { const r = ref.viewport.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
@@ -118,6 +204,7 @@ export function createUI(host, { lang, theme, listen, handlers }) {
   listen(root, 'pointerup', end);
   listen(root, 'pointercancel', end);
   listen(root, 'keydown', (e) => {
+    if (e.key === 'Escape' && expanded) { e.preventDefault(); setExpanded(false); return; }
     if (e.target !== ref.divider) return;
     const cur = Number(ref.divider.getAttribute('aria-valuenow')) / 100;
     const step = { ArrowLeft: -0.05, ArrowDown: -0.05, ArrowRight: 0.05, ArrowUp: 0.05, PageDown: -0.2, PageUp: 0.2 }[e.key];
@@ -130,9 +217,43 @@ export function createUI(host, { lang, theme, listen, handlers }) {
     handlers.split(Math.min(1, Math.max(0, v)));
   });
 
+  const seeingText = (state, s) => {
+    const lab = LAB[L];
+    const scn = scenarioFor(state.distanceM, state.lighting);
+    const parts = [];
+    if (scn) parts.push(lab.scenarios[scn].detail);
+    const words = (lens) => {
+      if (lens === 'cataract') return s.catSeeing;
+      if (!LAB_LENSES.includes(lens)) return '';
+      const row = scn ? SCENARIO_ROW[scn] : (state.distanceM < 0.52 ? 'near' : state.distanceM < 1.6 ? 'intermediate' : 'distance');
+      return `${s.lenses[lens].short}: ${lab.dims[row].label} — ${lab.lenses[lens].levels[row]}.`;
+    };
+    parts.push(words(state.lens));
+    if (state.compare && state.lensB !== state.lens) parts.push(words(state.lensB));
+    return parts.filter(Boolean).join(' ');
+  };
+
   function update(state, view, viewB) {
     const s = STRINGS[L];
     const set = (group, value) => root.querySelectorAll(`input[data-group="${group}"]`).forEach((r) => { r.checked = String(r.value) === String(value); });
+    const distText = formatDistance(L, state.distanceM);
+    const obj = s.objects[view.subject];
+    ref.tagA.textContent = s.lenses[state.lens].short;
+    ref.tagB.textContent = s.lenses[state.lensB].short;
+    ref.tagB.hidden = !state.compare;
+    ref.divider.hidden = !state.compare;
+    ref.divider.style.left = `${state.split * 100}%`;
+    ref.divider.setAttribute('aria-valuenow', String(Math.round(state.split * 100)));
+    ref.divider.setAttribute('aria-valuetext', `${s.lenses[state.lens].short} ${fmt(L, Math.round(state.split * 100))}% · ${s.lenses[state.lensB].short} ${fmt(L, 100 - Math.round(state.split * 100))}%`);
+    // role="img" sits on the picture layer, not on the viewport: the viewport also holds the comparison divider and
+    // the enlarge button, and interactive controls must not be nested inside an image (axe nested-interactive).
+    ref.canvasHost.setAttribute('role', 'img');
+    ref.canvasHost.setAttribute('aria-label', `${s.viewerLabel(s.lenses[state.lens].name, state.compare ? s.lenses[state.lensB].name : null)}. ${distText} · ${obj}. ${s.lights[state.lighting]}.`);
+    if (viewerOnly) return;
+
+    const scn = scenarioFor(state.distanceM, state.lighting);
+    set('scenario', scn || '');
+    ref.custom.hidden = !!scn;
     set('lensA', state.lens); set('lensB', state.lensB); set('lighting', state.lighting);
     set('cyl', Math.abs(state.refraction.cylD)); set('axis', state.refraction.axisDeg); set('sphere', state.refraction.sphereD);
     const preset = ['near', 'intermediate', 'distance'].find((k) => Math.abs(DISTANCES[k] - state.distanceM) < 0.005) || '';
@@ -141,38 +262,34 @@ export function createUI(host, { lang, theme, listen, handlers }) {
     ref.lensBField.hidden = !state.compare;
     const sv = distanceToSlider(state.distanceM);
     if (Number(ref.range.value) !== sv && document.activeElement !== ref.range) ref.range.value = String(sv);
-    const distText = formatDistance(L, state.distanceM);
-    const obj = s.objects[view.subject];
     ref.range.setAttribute('aria-valuetext', `${distText} — ${obj}`);
     ref.rangeOut.textContent = `${distText} · ${obj}`;
-    ref.tagA.textContent = s.lenses[state.lens].short;
-    ref.tagB.textContent = s.lenses[state.lensB].short;
-    ref.tagB.hidden = !state.compare;
-    ref.divider.hidden = !state.compare;
-    ref.divider.style.left = `${state.split * 100}%`;
-    ref.divider.setAttribute('aria-valuenow', String(Math.round(state.split * 100)));
-    ref.divider.setAttribute('aria-valuetext', `${s.lenses[state.lens].short} ${fmt(L, Math.round(state.split * 100))}% · ${s.lenses[state.lensB].short} ${fmt(L, 100 - Math.round(state.split * 100))}%`);
-    ref.viewport.setAttribute('role', 'img');
-    ref.viewport.setAttribute('aria-label', s.viewerLabel(s.lenses[state.lens].name, state.compare ? s.lenses[state.lensB].name : null));
+    ref.seeing.textContent = seeingText(state, s);
     // lens info cards (neutral)
     const card = (lens, tag) => `<article class="vsim-card"><h3>${tag ? `<span class="vsim-card-tag">${tag}</span>` : ''}${s.lenses[lens].name}</h3>
       <p><b>${s.intended}:</b> ${LENS_INFO[L][lens].intended}</p><p><b>${s.tradeoffs}:</b> ${LENS_INFO[L][lens].tradeoffs}</p></article>`;
     ref.lensInfo.innerHTML = card(state.lens, state.compare ? 'A' : '') + (state.compare ? card(state.lensB, 'B') : '');
-    // per-layer sharpness meters + model values
+    // relative clarity bars per distance (no numbers on screen; the value is in the bar's accessible name)
     const row = (band) => {
       const a = view.layers[band], b = viewB ? viewB.layers[band] : null;
-      const bar = (layer, tag) => `<span class="vsim-bar" role="img" aria-label="${tag ? `${tag} ` : ''}${s.sharpness} ${fmt(L, layer.sharpness, 2)}"><span style="width:${Math.round(Math.min(1, layer.sharpness) * 100)}%"></span></span><span class="vsim-bar-val" aria-hidden="true">${tag ? `${tag} ` : ''}${fmt(L, layer.sharpness, 2)}</span>`;
+      const bar = (layer, tag) => `<span class="vsim-bar" role="img" aria-label="${tag ? `${tag} ` : ''}${s.sharpness} ${fmt(L, layer.sharpness, 2)}"><span style="width:${Math.round(Math.min(1, layer.sharpness) * 100)}%"></span></span><span class="vsim-bar-val" aria-hidden="true">${tag}</span>`;
       return `<li class="${band === view.subject ? 'is-subject' : ''}"><span class="vsim-meter-label">${s.presets[band]} · ${s.objects[band]} · ${formatDistance(L, a.distanceM)}</span>
-        <span class="vsim-meter-bars">${bar(a, b ? 'A' : '')}${b ? bar(b, 'B') : ''}</span></li>`;
+        <span class="vsim-meter-bars${b ? ' is-pair' : ''}">${bar(a, b ? 'A' : '')}${b ? bar(b, 'B') : ''}</span></li>`;
     };
+    ref.meters.innerHTML = `<h3 class="vsim-meters-title" id="vsim${n}-clarity">${s.clarity}</h3><ul>${BANDS.map(row).join('')}</ul><p class="vsim-fine">${s.clarityNote}</p>`;
+    // questions for your doctor (from the lens-lab content: one source of truth)
+    const lab = LAB[L];
+    const qs = [...new Set([state.lens, ...(state.compare ? [state.lensB] : [])].flatMap((l) => (LAB_LENSES.includes(l) ? lab.lenses[l].ask : [])).concat(lab.generalQuestions.slice(0, 2)))];
+    ref.questions.innerHTML = qs.map((q) => `<li>${q}</li>`).join('');
+    // model values (Advanced)
     const dl = (v, tag) => `<dl class="vsim-model">${tag ? `<div class="vsim-model-tag">${tag}</div>` : ''}
       <div><dt>${s.pupil}</dt><dd><bdi>${fmt(L, v.pupilMm, 1)} ${s.mm}</bdi></dd></div>
       <div><dt>${s.defocus}</dt><dd><bdi dir="ltr">${fmt(L, v.layers[v.subject].defocusD, 2)} ${s.D}</bdi></dd></div>
       <div><dt>${s.blur}</dt><dd><bdi>${fmt(L, v.layers[v.subject].blurArcmin, 0)} ${s.arcmin}</bdi></dd></div>
+      <div><dt>${s.sharpness}</dt><dd>${fmt(L, v.layers[v.subject].sharpness, 2)}</dd></div>
       <div><dt>${s.halo}</dt><dd>${fmt(L, v.halo.haloIndex, 2)}</dd></div>
       <div><dt>${s.contrast}</dt><dd>${fmt(L, v.contrast.contrastIndex, 2)}</dd></div></dl>`;
-    ref.meters.innerHTML = `<h3 class="vsim-meters-title">${s.sharpness}</h3><ul>${BANDS.map(row).join('')}</ul><p class="vsim-fine">${s.sharpnessNote}</p>
-      <details class="vsim-modelbox"><summary>${s.model}</summary>${dl(view, viewB ? 'A' : '')}${viewB ? dl(viewB, 'B') : ''}</details>`;
+    ref.model.innerHTML = `<p class="vsim-legend-title">${s.model}</p>${dl(view, viewB ? 'A' : '')}${viewB ? dl(viewB, 'B') : ''}<p class="vsim-fine">${s.sharpnessNote}</p>`;
     const lensesForChart = [...new Set([state.lens, ...(state.compare ? [state.lensB] : []), 'monofocal', 'edof', 'trifocal'])].filter((l) => l !== 'toric');
     const howKey = `${L}|${lensesForChart.join()}|${view.pupilMm}|${state.lens}|${state.lensB}`;
     if (ref.how.dataset.key !== howKey) {
@@ -199,6 +316,7 @@ export function createUI(host, { lang, theme, listen, handlers }) {
     ref.fallback.hidden = !on;
     ref.fallback.innerHTML = on ? fallbackHTML(L) : '';
     root.classList.toggle('vsim--fallback', on);
+    if (on && expanded) setExpanded(false);
   }
 
   return {
@@ -208,12 +326,16 @@ export function createUI(host, { lang, theme, listen, handlers }) {
     announce,
     showNote,
     showFallback,
+    setExpanded,
+    get expanded() { return expanded; },
     attachCanvas(c) { canvas = c; if (ref.canvasHost) ref.canvasHost.appendChild(c); },
     detachCanvas() { if (canvas) canvas.remove(); canvas = null; },
     setLang(l, state) {
       const active = document.activeElement;
       const key = active && root.contains(active) ? (active.id || active.dataset.ref) : null;
+      const open = ['adv', 'limits', 'qbox'].filter((k) => ref[k] && ref[k].open);
       L = l; build(state);
+      for (const k of open) if (ref[k]) ref[k].open = true;
       if (key) { const el = root.querySelector(`#${CSS.escape(key)}`) || ref[key]; if (el) el.focus({ preventScroll: true }); }
     },
     setTheme(t) { theme = t; root.dataset.theme = t; },
