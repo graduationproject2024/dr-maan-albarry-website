@@ -277,3 +277,13 @@
 .csim-review-issues li { margin: 4px 0; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .csim-review-msg { color: var(--csim-muted); }
 .csim-review-version code { font-size: 0.85em; }
+/* Review gates (shared .srv controls) take the simulator's own tokens, so light and dark themes both work. */
+.csim .csim-review.srv {
+  --srv-text: var(--csim-text); --srv-muted: var(--csim-muted); --srv-raised: var(--csim-raised); --srv-border: var(--csim-border-strong);
+  --srv-primary: var(--csim-primary); --srv-on-primary: var(--csim-on-primary); --srv-focus: var(--csim-focus);
+}
+.csim-review h4.csim-review-label { margin: 14px 0 2px; font-size: 0.95rem; }
+.csim-review-row > label { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 44px; }
+.csim-review select { min-height: 44px; max-width: 100%; }
+.csim-review input[type="text"] { min-height: 44px; min-width: 0; }
+.csim-review-import { position: relative; }

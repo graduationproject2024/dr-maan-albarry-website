@@ -1,0 +1,82 @@
+/* Shared clinical-review controls (review mode only). Colours come from the host panel through --srv-*
+   tokens with safe fallbacks; every target is at least 44 px; everything wraps at 390 px. */
+.srv {
+  --srv-text: inherit;
+  --srv-muted: #44525c;
+  --srv-raised: #ffffff;
+  --srv-border: #9aa5aa;
+  --srv-primary: #15323d;
+  --srv-on-primary: #ffffff;
+  --srv-focus: #b8955a;
+  --srv-warn-bg: #fff4dc;
+  --srv-warn-text: #5b4013;
+  --srv-warn-border: #d9b46a;
+  --srv-bad-bg: #fde8e6;
+  --srv-bad-text: #7a1f16;
+  --srv-ok-bg: #e3f2ea;
+  --srv-ok-text: #134d2f;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.srv *, .srv *::before, .srv *::after { box-sizing: border-box; }
+.srv-gates { display: grid; gap: 10px; margin: 10px 0; }
+.srv-gate { margin: 0; padding: 8px 10px 10px; border: 1px solid var(--srv-border); border-radius: 10px; min-width: 0; }
+.srv-gate legend { font-weight: 600; padding: 0 4px; }
+.srv-opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.srv-radio { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.srv-opt {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 6px 12px;
+  border: 1px solid var(--srv-border); border-radius: 10px; background: var(--srv-raised); color: var(--srv-text); cursor: pointer;
+  font: inherit; line-height: 1.25; text-align: center;
+}
+.srv-radio:checked + .srv-opt { background: var(--srv-primary); color: var(--srv-on-primary); border-color: var(--srv-primary); font-weight: 600; }
+.srv-radio:checked + .srv-opt--rejected, .srv-radio:checked + .srv-opt--failed { background: var(--srv-bad-text); border-color: var(--srv-bad-text); }
+.srv-radio:focus-visible + .srv-opt { outline: 3px solid var(--srv-focus); outline-offset: 2px; }
+.srv-radio:disabled + .srv-opt { cursor: not-allowed; opacity: 0.55; text-decoration: line-through; }
+.srv-why { margin: 4px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--srv-warn-bg); color: var(--srv-warn-text); border: 1px solid var(--srv-warn-border); }
+.srv-why ul { margin: 4px 0 0; padding-inline-start: 20px; }
+.srv-flag {
+  display: inline-block; margin-inline-start: 8px; padding: 2px 8px; border-radius: 999px; font-size: 0.82em; font-weight: 600;
+  background: var(--srv-warn-bg); color: var(--srv-warn-text); border: 1px solid var(--srv-warn-border);
+}
+.srv-rereview { margin: 10px 0; padding: 10px 12px; border-radius: 10px; background: var(--srv-warn-bg); color: var(--srv-warn-text); border: 2px solid var(--srv-warn-border); }
+.srv-rereview strong { display: block; }
+.srv-legacy { margin: 10px 0; padding: 8px 10px; border-radius: 8px; border: 1px dashed var(--srv-border); }
+.srv-notice { margin: 8px 0; padding: 8px 10px; border-radius: 8px; background: var(--srv-bad-bg); color: var(--srv-bad-text); font-weight: 600; }
+.srv-meta { color: var(--srv-muted); font-size: 0.86em; }
+.srv-meta code, .srv code { font-size: 0.92em; overflow-wrap: anywhere; }
+.srv-scroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.srv-table { border-collapse: collapse; font-size: 0.86rem; min-width: 100%; }
+.srv-table th, .srv-table td { border: 1px solid var(--srv-border); padding: 4px 8px; text-align: start; vertical-align: top; }
+.srv-table th { font-weight: 600; }
+.srv details { margin: 8px 0; border: 1px solid var(--srv-border); border-radius: 10px; padding: 0 10px; }
+.srv details > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.srv details > summary:focus-visible { outline: 3px solid var(--srv-focus); outline-offset: 2px; }
+.srv details[open] { padding-bottom: 10px; }
+.srv-bilingual { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.srv-bilingual > div { min-width: 0; }
+.srv-list { margin: 6px 0; padding-inline-start: 20px; }
+.srv-list li { margin: 4px 0; }
+.srv-item { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.srv-item > span { flex: 1 1 200px; min-width: 0; }
+.srv-title { margin: 0 0 4px; font-size: 1.15rem; }
+.srv h3 { margin: 14px 0 2px; font-size: 1rem; }
+.srv h4 { margin: 12px 0 4px; font-size: 0.92rem; }
+.srv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0; }
+.srv-field { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: 1 1 260px; min-width: 0; }
+.srv-field select { flex: 1 1 220px; min-width: 0; max-width: 100%; }
+.srv select, .srv input[type="text"], .srv textarea {
+  min-height: 44px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--srv-border);
+  background: var(--srv-raised); color: var(--srv-text); font: inherit;
+}
+.srv input[type="text"] { flex: 1 1 220px; min-width: 0; }
+.srv-block { display: block; margin: 10px 0; }
+.srv-block textarea { display: block; width: 100%; margin-top: 6px; resize: vertical; }
+.srv-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 12px;
+  border-radius: 10px; border: 1px solid var(--srv-border); background: var(--srv-raised); color: var(--srv-text);
+  font: inherit; cursor: pointer; text-align: center;
+}
+.srv-btn:focus-visible, .srv select:focus-visible, .srv textarea:focus-visible, .srv input:focus-visible { outline: 3px solid var(--srv-focus); outline-offset: 2px; }
+.srv-msg { color: var(--srv-muted); }
+.srv-diff { font-weight: 700; background: var(--srv-warn-bg); color: var(--srv-warn-text); }

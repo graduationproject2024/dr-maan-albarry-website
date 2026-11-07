@@ -6,6 +6,13 @@
 // any particular product and must not be read as a prediction for an individual eye.
 // Review status: pending review by Dr. Maan Albarry.
 
+/**
+ * Version of the optical model (equations + every value in this file + the rendering calibration in
+ * pipeline.js). Bump it whenever any of them changes: clinical review records made for an older version are
+ * then flagged "needs re-review" (src/vision-sim/review.js). It labels the model; it changes no value.
+ */
+export const VISION_MODEL_VERSION = 'vsim-optics-2026.11-r1';
+
 /** Hard bounds. Every public model function clamps its inputs to these ranges. */
 export const BOUNDS = Object.freeze({
   distanceM: [0.25, 100],      // viewing distance (m). 0.25 m = 4 D; 100 m ≈ optical infinity (0.01 D)

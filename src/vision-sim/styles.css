@@ -305,3 +305,12 @@
 
 /* tablets: slightly tighter rhythm keeps the mounted simulator inside the host page's reserved height (1420 px) */
 @media (max-width: 1023px) { .vsim { gap: 12px; } }
+
+/* Clinical review panel (review mode only; vision-sim-preview.html?review=1). Shared .srv controls take the
+   simulator's own tokens, so light and dark themes both work. */
+.vsim.vsim-review {
+  display: block; margin-top: 16px; border-style: dashed; font-size: 0.92rem;
+  --srv-text: var(--vsim-text); --srv-muted: var(--vsim-muted); --srv-raised: var(--vsim-raised); --srv-border: var(--vsim-border-strong);
+  --srv-primary: var(--vsim-primary); --srv-on-primary: var(--vsim-on-primary); --srv-focus: var(--vsim-focus);
+  --srv-warn-bg: var(--vsim-warn-bg); --srv-warn-text: var(--vsim-warn-text); --srv-warn-border: var(--vsim-warn-border);
+}

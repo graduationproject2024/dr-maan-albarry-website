@@ -30,7 +30,7 @@
     </div>
     <script type="module">
       const q = new URLSearchParams(location.search);
-      const opts = { lang: q.get('lang') === 'en' ? 'en' : 'ar', theme: q.get('theme') === 'dark' ? 'dark' : 'light', debug: true };
+      const opts = { lang: q.get('lang') === 'en' ? 'en' : 'ar', theme: q.get('theme') === 'dark' ? 'dark' : 'light', debug: true, review: q.get('review') === '1' };
       if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
       for (const k of ['lens', 'lensB', 'lighting']) if (q.has(k)) opts[k] = q.get(k);
       if (q.has('d')) opts.distanceM = Number(q.get('d'));
