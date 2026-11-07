@@ -1,0 +1,34 @@
+{
+  "assetId": "keratoconus-cxl-l1-card",
+  "frame": {
+    "width": 1200,
+    "height": 1500
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cone",
+      "structure": "cone",
+      "x": 0.3854,
+      "y": 0.3136
+    },
+    {
+      "id": "normal-dome",
+      "structure": "normal-dome",
+      "x": 0.267,
+      "y": 0.5753
+    },
+    {
+      "id": "riboflavin",
+      "structure": "riboflavin",
+      "x": 0.298,
+      "y": 0.4865
+    },
+    {
+      "id": "uv-light",
+      "structure": "uv-light",
+      "x": 0.1003,
+      "y": 0.2261
+    }
+  ]
+}

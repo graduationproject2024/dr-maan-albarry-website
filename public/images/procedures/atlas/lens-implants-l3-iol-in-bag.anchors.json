@@ -1,0 +1,40 @@
+{
+  "assetId": "lens-implants-l3-iol-in-bag",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "iol-optic",
+      "structure": "iol-optic",
+      "x": 0.5155,
+      "y": 0.4741
+    },
+    {
+      "id": "iol-haptic",
+      "structure": "iol-haptic",
+      "x": 0.3386,
+      "y": 0.4878
+    },
+    {
+      "id": "capsular-bag",
+      "structure": "capsular-bag",
+      "x": 0.597,
+      "y": 0.7968
+    },
+    {
+      "id": "zonules",
+      "structure": "zonules",
+      "x": 0.6426,
+      "y": 0.2755
+    },
+    {
+      "id": "ciliary-body",
+      "structure": "ciliary-body",
+      "x": 0.7328,
+      "y": 0.5223
+    }
+  ]
+}

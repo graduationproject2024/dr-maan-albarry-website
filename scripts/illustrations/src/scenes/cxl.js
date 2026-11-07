@@ -61,14 +61,15 @@ export default function cxl(ctx) {
   const caps = eye.caps({ r1: 11.6, z1: 4.6, ppm: 320, tones: [1, 0.86, 0.95] });
   scene.add(eye.group, ...caps);
   // UV-A field (illustrative violet; 365 nm light is barely visible) with faint parallel rays
-  scene.add(lightColumn({ radius: 4.5, zFar: 26, zEnd: (x, y) => F(x, y) + 0.02, opacity: 0.2 }));
+  const uv = ctx.opts?.uv ?? 1; // 1 = series default; the UV field was toned down after review (it washed the upper left)
+  scene.add(lightColumn({ radius: 4.5, zFar: 17, zEnd: (x, y) => F(x, y) + 0.02, opacity: 0.12 * uv }));
   const rays = [];
   for (let i = 0; i < 46; i++) {
     const r = 4.3 * Math.sqrt((i + 0.5) / 46), t = i * 2.39996, x = r * Math.cos(t), y = r * Math.sin(t);
-    rays.push(x, y, 26, x, y, F(x, y) + 0.03);
+    rays.push(x, y, 15, x, y, F(x, y) + 0.03);
   }
   const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(rays, 3));
-  const rl = new THREE.LineSegments(rg, new THREE.LineBasicMaterial({ color: '#8C7BE0', transparent: true, opacity: 0.22, depthWrite: false }));
+  const rl = new THREE.LineSegments(rg, new THREE.LineBasicMaterial({ color: '#8C7BE0', transparent: true, opacity: 0.13 * uv, depthWrite: false }));
   rl.renderOrder = 21; scene.add(rl);
 
   const W = ctx.W, H = ctx.H;
@@ -78,7 +79,7 @@ export default function cxl(ctx) {
   const L = { x: W * 0.8, y: H * 0.33, r: H * 0.2 };
   return {
     passes: [{ scene, camera: cam, fade: { cx: W * 0.42, cy: H * 0.52, rx: W * 0.5, ry: H * 0.62, inner: 0.6 } }],
-    over(g, theme) { drawLoupe(g, theme, L, focus); }
+    over(g, theme) { if (ctx.opts?.loupe !== false) drawLoupe(g, theme, L, focus); }
   };
 }
 
@@ -150,3 +151,5 @@ function drawLoupe(g, theme, L, focus) {
 }
 
 void C;
+
+export { F as coneSurface, T as coneThickness, CX as CONE_X };

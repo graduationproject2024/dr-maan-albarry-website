@@ -4,15 +4,15 @@
 import { buildGlobe } from '../globe.js';
 import { DEG } from '../anatomy.js';
 
-const CUT = { mode: 'half', zc: -4.0 };
+const CUT = { mode: 'half', zc: -4.0, floorAlpha: 0.6 }; // translucent gel floor: no bright slab behind the lens
 const EL = 50 * DEG;
 
 export default function cataract(ctx) {
   const cam = ctx.camera({ target: [0, -0.2, -0.9], shift: [0, -0.75], dir: [0, Math.sin(EL), Math.cos(EL)], up: [0, 1, 0], H: 9.0, fov: 16 });
   const make = (lens) => {
-    const eye = buildGlobe(ctx.mats, { lens, pupilR: 3.15, cut: CUT, iolOpts: { phi0: 205 * DEG }, fundusTint: '#6E5652' });
+    const eye = buildGlobe(ctx.mats, { lens, pupilR: 3.15, cut: CUT, iolOpts: { phi0: 205 * DEG }, fundusTint: '#6E5652', gelAlpha: 0.66 }); // gel kept translucent: it was the brightest patch on dark
     const s = ctx.scene(cam);
-    s.add(eye.group, ...eye.caps({ r1: 11.6, z1: 4.3, ppm: 230, tones: [1, 1, 0.93] }));
+    s.add(eye.group, ...eye.caps({ r1: 11.6, z1: 4.3, ppm: 230, tones: [1, 1, 0.8] }));
     return s;
   };
   const W = ctx.W, H = ctx.H;

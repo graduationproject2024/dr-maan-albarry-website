@@ -1,0 +1,58 @@
+{
+  "assetId": "laser-vision-correction-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "flap",
+      "structure": "flap",
+      "x": 0.4916,
+      "y": 0.2687
+    },
+    {
+      "id": "flap-hinge",
+      "structure": "flap-hinge",
+      "x": 0.688,
+      "y": 0.5499
+    },
+    {
+      "id": "stromal-bed",
+      "structure": "stromal-bed",
+      "x": 0.3499,
+      "y": 0.4985
+    },
+    {
+      "id": "ablation-zone",
+      "structure": "ablation-zone",
+      "x": 0.4738,
+      "y": 0.5527
+    },
+    {
+      "id": "laser-beam",
+      "structure": "laser-beam",
+      "x": 0.4102,
+      "y": 0.1804
+    },
+    {
+      "id": "corneal-epithelium",
+      "structure": "corneal-epithelium",
+      "x": 0.1486,
+      "y": 0.6263
+    },
+    {
+      "id": "stroma",
+      "structure": "stroma",
+      "x": 0.3158,
+      "y": 0.5966
+    },
+    {
+      "id": "endothelium",
+      "structure": "endothelium",
+      "x": 0.5618,
+      "y": 0.7297
+    }
+  ]
+}

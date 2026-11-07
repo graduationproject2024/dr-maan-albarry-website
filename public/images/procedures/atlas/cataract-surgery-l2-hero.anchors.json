@@ -1,0 +1,46 @@
+{
+  "assetId": "cataract-surgery-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cataract-nucleus",
+      "structure": "cataract-nucleus",
+      "x": 0.4023,
+      "y": 0.3138
+    },
+    {
+      "id": "lens-cortex",
+      "structure": "lens-cortex",
+      "x": 0.2265,
+      "y": 0.3321
+    },
+    {
+      "id": "iol-optic",
+      "structure": "iol-optic",
+      "x": 0.5983,
+      "y": 0.3367
+    },
+    {
+      "id": "capsular-bag",
+      "structure": "capsular-bag",
+      "x": 0.8087,
+      "y": 0.333
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.1806,
+      "y": 0.4745
+    },
+    {
+      "id": "ciliary-body",
+      "structure": "ciliary-body",
+      "x": 0.9016,
+      "y": 0.3657
+    }
+  ]
+}

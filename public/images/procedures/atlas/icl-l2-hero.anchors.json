@@ -1,0 +1,52 @@
+{
+  "assetId": "icl-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "icl",
+      "structure": "icl",
+      "x": 0.5046,
+      "y": 0.6516
+    },
+    {
+      "id": "vault",
+      "structure": "vault",
+      "x": 0.5209,
+      "y": 0.7388
+    },
+    {
+      "id": "natural-lens",
+      "structure": "natural-lens",
+      "x": 0.6357,
+      "y": 0.6265
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.5309,
+      "y": 0.2668
+    },
+    {
+      "id": "cornea",
+      "structure": "cornea",
+      "x": 0.3263,
+      "y": 0.5234
+    },
+    {
+      "id": "icl-footplate",
+      "structure": "icl-footplate",
+      "x": 0.5973,
+      "y": 0.0885
+    },
+    {
+      "id": "anterior-chamber",
+      "structure": "anterior-chamber",
+      "x": 0.4,
+      "y": 0.6491
+    }
+  ]
+}

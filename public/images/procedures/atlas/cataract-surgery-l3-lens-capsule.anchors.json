@@ -1,0 +1,64 @@
+{
+  "assetId": "cataract-surgery-l3-lens-capsule",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cataract-nucleus",
+      "structure": "cataract-nucleus",
+      "x": 0.558,
+      "y": 0.7454
+    },
+    {
+      "id": "lens-cortex",
+      "structure": "lens-cortex",
+      "x": 0.5682,
+      "y": 0.3545
+    },
+    {
+      "id": "anterior-capsule",
+      "structure": "anterior-capsule",
+      "x": 0.4072,
+      "y": 0.5414
+    },
+    {
+      "id": "posterior-capsule",
+      "structure": "posterior-capsule",
+      "x": 0.73,
+      "y": 0.5338
+    },
+    {
+      "id": "zonules",
+      "structure": "zonules",
+      "x": 0.5216,
+      "y": 0.1637
+    },
+    {
+      "id": "ciliary-body",
+      "structure": "ciliary-body",
+      "x": 0.4987,
+      "y": 0.0535
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.3821,
+      "y": 0.3574
+    },
+    {
+      "id": "cornea",
+      "structure": "cornea",
+      "x": 0.0816,
+      "y": 0.5757
+    },
+    {
+      "id": "anterior-chamber",
+      "structure": "anterior-chamber",
+      "x": 0.2545,
+      "y": 0.6505
+    }
+  ]
+}

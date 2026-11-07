@@ -1,0 +1,46 @@
+{
+  "assetId": "lens-implants-l3-optic-types",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "iol-monofocal",
+      "structure": "iol-monofocal",
+      "x": 0.3299,
+      "y": 0.3126
+    },
+    {
+      "id": "iol-toric",
+      "structure": "iol-toric",
+      "x": 0.6701,
+      "y": 0.3126
+    },
+    {
+      "id": "toric-marks",
+      "structure": "toric-marks",
+      "x": 0.7401,
+      "y": 0.2713
+    },
+    {
+      "id": "iol-multifocal",
+      "structure": "iol-multifocal",
+      "x": 0.316,
+      "y": 0.6671
+    },
+    {
+      "id": "iol-edof",
+      "structure": "iol-edof",
+      "x": 0.684,
+      "y": 0.6671
+    },
+    {
+      "id": "iol-haptic",
+      "structure": "iol-haptic",
+      "x": 0.5423,
+      "y": 0.6175
+    }
+  ]
+}

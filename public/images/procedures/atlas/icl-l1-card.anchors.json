@@ -1,0 +1,34 @@
+{
+  "assetId": "icl-l1-card",
+  "frame": {
+    "width": 1200,
+    "height": 1500
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "icl",
+      "structure": "icl",
+      "x": 0.4825,
+      "y": 0.6504
+    },
+    {
+      "id": "vault",
+      "structure": "vault",
+      "x": 0.5149,
+      "y": 0.7275
+    },
+    {
+      "id": "natural-lens",
+      "structure": "natural-lens",
+      "x": 0.7419,
+      "y": 0.6282
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.5336,
+      "y": 0.3112
+    }
+  ]
+}

@@ -4,6 +4,11 @@ export const OUT_W = 1600;
 export const OUT_H = 1000;
 export const SS = 2; // supersampling factor of the WebGL render (3200 x 2000, downsampled to 1600 x 1000)
 
+// Resolution controls for the atlas renderer (scripts/illustrations/atlas.mjs). The legacy 1600 x 1000 render keeps
+// both at 1. `ppm` scales every painted cut-face canvas (and the fundus map) so a zoomed or larger frame keeps
+// one canvas pixel per render pixel; `ink` scales painted line widths so ink stays 2.1 px per 1600 px of output.
+export const RES = { ppm: 1, ink: 1, tex: 1 };
+
 // One light rig for the whole series, in camera space ([right, up, towards-viewer]): a warm key light from the
 // upper left, a cool fill from the right, a rim light from behind and a soft warm/grey hemisphere.
 export const LIGHT_RIG = {

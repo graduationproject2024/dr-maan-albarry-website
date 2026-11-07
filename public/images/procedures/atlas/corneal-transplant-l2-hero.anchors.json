@@ -1,0 +1,46 @@
+{
+  "assetId": "corneal-transplant-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "donor-graft",
+      "structure": "donor-graft",
+      "x": 0.4823,
+      "y": 0.3789
+    },
+    {
+      "id": "graft-junction",
+      "structure": "graft-junction",
+      "x": 0.426,
+      "y": 0.5183
+    },
+    {
+      "id": "sutures",
+      "structure": "sutures",
+      "x": 0.6009,
+      "y": 0.5452
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.5337,
+      "y": 0.6104
+    },
+    {
+      "id": "pupil",
+      "structure": "pupil",
+      "x": 0.4977,
+      "y": 0.5057
+    },
+    {
+      "id": "sclera",
+      "structure": "sclera",
+      "x": 0.6391,
+      "y": 0.6811
+    }
+  ]
+}

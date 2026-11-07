@@ -1,0 +1,46 @@
+{
+  "assetId": "cataract-surgery-l1-card",
+  "frame": {
+    "width": 1200,
+    "height": 1500
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cataract-nucleus",
+      "structure": "cataract-nucleus",
+      "x": 0.4457,
+      "y": 0.4933
+    },
+    {
+      "id": "cornea",
+      "structure": "cornea",
+      "x": 0.1851,
+      "y": 0.4974
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.3477,
+      "y": 0.3384
+    },
+    {
+      "id": "sclera",
+      "structure": "sclera",
+      "x": 0.5545,
+      "y": 0.0479
+    },
+    {
+      "id": "vitreous",
+      "structure": "vitreous",
+      "x": 0.668,
+      "y": 0.3204
+    },
+    {
+      "id": "ciliary-body",
+      "structure": "ciliary-body",
+      "x": 0.412,
+      "y": 0.2633
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import { EYE, DEG, lensProfile, lensAntZ, lensPostZ, scleraProfile, ciliaryProfi
 import { lathe, corneaSpec, corneaMesh, irisTexture, irisUV, rng, colorize, clipAll, wedgePlanes, capPlane, paintedQuad, makeSection, offsetLine } from './kit.js';
 import { paintSclera, paintChoroid, paintRetina, paintCiliary, paintIris, paintCornea, paintLens, paintBag, paintZonules, paintOpticNerve, bagLines, NERVE_A, nerveW } from './eye.js';
 import { iol } from './instruments.js';
-import { C } from './style.js';
+import { C, RES } from './style.js';
 
 export const FULL = Math.PI * 2;
 
@@ -56,7 +56,7 @@ export function buildGlobe(mats, opt = {}) {
   let planes = null;
   const cut = o.cut;
   if (cut) {
-    planes = cut.mode === 'wedge' ? wedgePlanes(cut.phi0, cut.phi1) : [new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)];
+    planes = cut.mode === 'wedge' ? wedgePlanes(cut.phi0, cut.phi1) : [new THREE.Plane(new THREE.Vector3(0, cut.keep === '+y' ? 1 : -1, 0), 0)]; // half: keep y <= 0 (default) or y >= 0
     if (cut.zc != null) planes.push(new THREE.Plane(new THREE.Vector3(0, 0, -1), cut.zc));
     if (cut.zb != null) planes.push(new THREE.Plane(new THREE.Vector3(0, 0, 1), -cut.zb)); // remove z < zb only
     clipAll(group, planes);
@@ -79,9 +79,9 @@ export function buildGlobe(mats, opt = {}) {
   };
 
   // Painted caps for the cut faces. r1 = radial extent, z1 = front limit (mm), ppm = canvas px per mm.
-  const caps = ({ r1 = 11.6, z1: zFront = 4.3, ppm = 160, tones = [1, 0.9, 0.96], floorPpm = 120 }) => {
+  const caps = ({ r1 = 11.6, z1: zFront = 4.3, ppm = 160, tones = [1, 0.9, 0.96], floorPpm = 120, zMin = -Infinity }) => {
     const back = -EYE.axialLength + EYE.corneaApexZ - 0.4;
-    const z0 = cut.zb != null ? back : (cut.zc ?? back);
+    const z0 = Math.max(zMin, cut.zb != null ? back : (cut.zc ?? back)); // zMin: paint only what a close-up frames
     const z1 = cut.zb != null ? cut.zb : zFront;
     const out = [];
     if (cut.mode === 'wedge') {
@@ -130,7 +130,8 @@ function sectionPlane(k, tone = 1) {
 }
 
 // Coronal face at z = zc inside the removed region: sclera, choroid and retina rings around the vitreous gel.
-function coronalFloor(cut, ppm, tone) {
+function coronalFloor(cut, ppm0, tone) {
+  const ppm = Math.min(ppm0 * RES.ppm, 7000 / 23), lw = RES.ink * (ppm / ppm0) / RES.ppm;
   const zc = cut.zc ?? cut.zb, dz = zc - EYE.cz;
   const rad = (R) => Math.sqrt(Math.max(0, R * R - dz * dz));
   const a = Math.atan2(rad(EYE.Ri), dz);
@@ -143,13 +144,13 @@ function coronalFloor(cut, ppm, tone) {
   g.save();
   g.beginPath(); // removed region in the xy plane
   if (cut.mode === 'wedge') { g.moveTo(...P(0, 0)); g.arc(...P(0, 0), S * ppm, -cut.phi0, -cut.phi1, true); g.closePath(); }
-  else g.rect(0, 0, N, N / 2);
+  else if (cut.keep === '+y') g.rect(0, N / 2, N, N / 2); else g.rect(0, 0, N, N / 2);
   g.clip();
   const ring = (r0, r1, fill) => { g.beginPath(); g.arc(...P(0, 0), r1 * ppm, 0, FULL); g.arc(...P(0, 0), r0 * ppm, 0, FULL, true); g.fillStyle = fill; g.fill(); };
   if (cut.floor === 'aqueous') { // just behind the limbus: scleral ring around clear aqueous
     g.beginPath(); g.arc(...P(0, 0), rIn * ppm, 0, FULL); g.fillStyle = 'rgba(232,240,242,0.35)'; g.fill();
     ring(rIn, rOut, C.sclera);
-    g.lineWidth = 4.2; g.strokeStyle = C.ink;
+    g.lineWidth = 4.2 * lw; g.strokeStyle = C.ink;
     for (const r of [rOut, rIn]) { g.beginPath(); g.arc(...P(0, 0), r * ppm, 0, FULL); g.stroke(); }
     g.restore();
     return paintedQuad(c, [-S, S, zc], [S, S, zc], [-S, -S, zc], { tone });
@@ -160,7 +161,7 @@ function coronalFloor(cut, ppm, tone) {
   vg.addColorStop(0, `rgba(236,241,242,${ga * 0.97})`); vg.addColorStop(1, `rgba(222,231,233,${ga})`);
   g.beginPath(); g.arc(...P(0, 0), rRet * ppm, 0, FULL); g.fillStyle = vg; g.fill();
   const R = rng(4);
-  g.lineWidth = 1.2;
+  g.lineWidth = 1.2 * lw;
   for (let i = 0; i < 26; i++) {
     const r0 = R() * rRet * 0.9, a0 = R() * FULL;
     g.strokeStyle = `rgba(190,206,212,${0.12 + R() * 0.12})`;
@@ -171,9 +172,9 @@ function coronalFloor(cut, ppm, tone) {
   ring(rRet, rCh, C.retina);
   ring(rCh, rIn, C.choroid);
   ring(rIn, rOut, C.sclera);
-  g.lineWidth = 2.1 * 2; g.strokeStyle = C.ink;
+  g.lineWidth = 2.1 * 2 * lw; g.strokeStyle = C.ink;
   for (const r of [rOut, rIn]) { g.beginPath(); g.arc(...P(0, 0), r * ppm, 0, FULL); g.stroke(); }
-  g.lineWidth = 2; g.strokeStyle = C.inkSoft;
+  g.lineWidth = 2 * lw; g.strokeStyle = C.inkSoft;
   for (const r of [rCh, rRet]) { g.beginPath(); g.arc(...P(0, 0), r * ppm, 0, FULL); g.stroke(); }
   g.restore();
   return paintedQuad(c, [-S, S, zc], [S, S, zc], [-S, -S, zc], { tone });
@@ -220,7 +221,7 @@ export function paintIOLSection(k, zc = -1.25) {
   k.stroke(poly, 'rgba(40,96,106,0.9)', 2.0);
 }
 
-function zonules(lens) {
+export function zonules(lens) {
   const pos = [];
   const anchorsDeg = [33.8, 35.4, 37.2, 39.2];
   const targets = lens === 'iol'
@@ -266,10 +267,11 @@ function fundusUV(g) {
   }
   uv.needsUpdate = true;
 }
-let fundusCache = null;
+let fundusCache = null, fundusN = 0;
 export function fundusTexture() {
-  if (fundusCache) return fundusCache.clone();
-  const N = 2048, c = document.createElement('canvas'); c.width = c.height = N;
+  const N = Math.min(8192, Math.round(2048 * RES.tex));
+  if (fundusCache && fundusN === N) return fundusCache.clone();
+  const px = N / 2048, c = document.createElement('canvas'); c.width = c.height = N;
   const g = c.getContext('2d');
   const s = N / (2 * D_MAX); // px per mm
   const P = (dx, dy) => [N / 2 + dx * s, N / 2 - dy * s]; // dx along +x (canvas right), dy along +y (canvas up)
@@ -279,11 +281,13 @@ export function fundusTexture() {
   g.fillStyle = base; g.fillRect(0, 0, N, N);
   const R = rng(17);
   // subtle choroidal mottling
+  g.filter = `blur(${Math.round(5 * px)}px)`; // soft mottling (hard-edged discs showed in close-ups)
   for (let i = 0; i < 2600; i++) {
     const [x, y] = [R() * N, R() * N];
     g.fillStyle = R() < 0.5 ? 'rgba(170,80,58,0.06)' : 'rgba(250,200,170,0.06)';
-    g.beginPath(); g.arc(x, y, 6 + R() * 20, 0, FULL); g.fill();
+    g.beginPath(); g.arc(x, y, (6 + R() * 20) * px, 0, FULL); g.fill();
   }
+  g.filter = 'none';
   // macula and fovea
   const [mx, my] = P(0, 0);
   let gr = g.createRadialGradient(mx, my, 0, mx, my, 3.0 * s);
@@ -300,9 +304,11 @@ export function fundusTexture() {
   const Rv = rng(23);
   const draw = (pts, w0, col) => {
     g.strokeStyle = col; g.lineCap = 'round'; g.lineJoin = 'round';
-    for (let i = 1; i < pts.length; i++) {
-      g.lineWidth = Math.max(1.4, w0 * (1 - 0.7 * i / pts.length) * s);
-      g.beginPath(); g.moveTo(...P(...pts[i - 1])); g.lineTo(...P(...pts[i])); g.stroke();
+    const steps = 6; // taper in a few opaque runs; each run is one path, so joints do not double up
+    for (let k = 0; k < steps; k++) {
+      const a = Math.floor((k * (pts.length - 1)) / steps), b = Math.floor(((k + 1) * (pts.length - 1)) / steps);
+      g.lineWidth = Math.max(1.4 * px, w0 * (1 - 0.7 * (a + b) / 2 / pts.length) * s);
+      g.beginPath(); g.moveTo(...P(...pts[a])); for (let i = a + 1; i <= b; i++) g.lineTo(...P(...pts[i])); g.stroke();
     }
   };
   const grow = (x, y, ang, len, w, col, depth) => {
@@ -322,14 +328,14 @@ export function fundusTexture() {
       grow(...pts[i], a + (Rv() < 0.5 ? 1 : -1) * (0.5 + Rv() * 0.5), len * 0.5, w * 0.6, col, depth + 1);
     }
   };
-  for (const [col, w, off] of [['rgba(128,24,26,0.8)', 0.17, 0.12], ['rgba(186,58,50,0.78)', 0.13, -0.12]]) {
+  for (const [col, w, off] of [['#9A3A33', 0.15, 0.12], ['#C2584A', 0.115, -0.12]]) {
     for (const sg of [1, -1]) {
       grow(-dd, sg * (0.25 + off * sg), sg * 1.05, 9.5, w, col, 0); // temporal arcade
       grow(-dd, sg * (0.2 + off * sg), Math.PI - sg * 0.6, 6, w * 0.8, col, 1); // nasal
     }
   }
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16;
-  fundusCache = t;
+  fundusCache = t; fundusN = N;
   return t;
 }
 
