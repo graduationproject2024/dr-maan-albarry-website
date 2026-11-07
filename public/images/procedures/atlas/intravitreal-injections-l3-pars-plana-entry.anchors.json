@@ -1,0 +1,64 @@
+{
+  "assetId": "intravitreal-injections-l3-pars-plana-entry",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "injection-site",
+      "structure": "injection-site",
+      "x": 0.3584,
+      "y": 0.2852
+    },
+    {
+      "id": "pars-plana",
+      "structure": "pars-plana",
+      "x": 0.4117,
+      "y": 0.3323
+    },
+    {
+      "id": "ciliary-body",
+      "structure": "ciliary-body",
+      "x": 0.3363,
+      "y": 0.547
+    },
+    {
+      "id": "ora-serrata",
+      "structure": "ora-serrata",
+      "x": 0.5684,
+      "y": 0.216
+    },
+    {
+      "id": "retina",
+      "structure": "retina",
+      "x": 0.7318,
+      "y": 0.1601
+    },
+    {
+      "id": "natural-lens",
+      "structure": "natural-lens",
+      "x": 0.364,
+      "y": 0.8479
+    },
+    {
+      "id": "vitreous",
+      "structure": "vitreous",
+      "x": 0.719,
+      "y": 0.4979
+    },
+    {
+      "id": "medication",
+      "structure": "medication",
+      "x": 0.7196,
+      "y": 0.8001
+    },
+    {
+      "id": "limbus",
+      "structure": "limbus",
+      "x": 0.2148,
+      "y": 0.5247
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "assetId": "corneal-transplant-l1-card",
+  "frame": {
+    "width": 1200,
+    "height": 1500
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "donor-graft",
+      "structure": "donor-graft",
+      "x": 0.4509,
+      "y": 0.4276
+    },
+    {
+      "id": "sutures",
+      "structure": "sutures",
+      "x": 0.6901,
+      "y": 0.5383
+    },
+    {
+      "id": "graft-junction",
+      "structure": "graft-junction",
+      "x": 0.361,
+      "y": 0.5155
+    }
+  ]
+}

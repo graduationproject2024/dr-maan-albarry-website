@@ -1,0 +1,40 @@
+{
+  "assetId": "intravitreal-injections-l3-macula",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "fovea",
+      "structure": "fovea",
+      "x": 0.6355,
+      "y": 0.5
+    },
+    {
+      "id": "macula",
+      "structure": "macula",
+      "x": 0.7372,
+      "y": 0.4179
+    },
+    {
+      "id": "optic-disc",
+      "structure": "optic-disc",
+      "x": 0.3499,
+      "y": 0.5
+    },
+    {
+      "id": "retinal-vessels",
+      "structure": "retinal-vessels",
+      "x": 0.3804,
+      "y": 0.3881
+    },
+    {
+      "id": "retina",
+      "structure": "retina",
+      "x": 0.8838,
+      "y": 0.7855
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "assetId": "laser-vision-correction-l3-corneal-layers",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "corneal-epithelium",
+      "structure": "corneal-epithelium",
+      "x": 0.1285,
+      "y": 0.1866
+    },
+    {
+      "id": "bowman",
+      "structure": "bowman",
+      "x": 0.2479,
+      "y": 0.2071
+    },
+    {
+      "id": "stroma",
+      "structure": "stroma",
+      "x": 0.3066,
+      "y": 0.505
+    },
+    {
+      "id": "descemet",
+      "structure": "descemet",
+      "x": 0.2449,
+      "y": 0.8892
+    },
+    {
+      "id": "endothelium",
+      "structure": "endothelium",
+      "x": 0.3892,
+      "y": 0.8579
+    },
+    {
+      "id": "stromal-bed",
+      "structure": "stromal-bed",
+      "x": 0.6815,
+      "y": 0.273
+    },
+    {
+      "id": "flap-edge",
+      "structure": "flap",
+      "x": 0.5173,
+      "y": 0.1869
+    }
+  ]
+}

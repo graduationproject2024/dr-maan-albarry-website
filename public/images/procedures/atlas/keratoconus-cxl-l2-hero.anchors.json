@@ -1,0 +1,46 @@
+{
+  "assetId": "keratoconus-cxl-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cone",
+      "structure": "cone",
+      "x": 0.3869,
+      "y": 0.3463
+    },
+    {
+      "id": "normal-dome",
+      "structure": "normal-dome",
+      "x": 0.3496,
+      "y": 0.528
+    },
+    {
+      "id": "riboflavin",
+      "structure": "riboflavin",
+      "x": 0.3593,
+      "y": 0.4664
+    },
+    {
+      "id": "uv-light",
+      "structure": "uv-light",
+      "x": 0.2965,
+      "y": 0.2887
+    },
+    {
+      "id": "iris",
+      "structure": "iris",
+      "x": 0.4108,
+      "y": 0.8191
+    },
+    {
+      "id": "anterior-chamber",
+      "structure": "anterior-chamber",
+      "x": 0.4608,
+      "y": 0.5023
+    }
+  ]
+}
