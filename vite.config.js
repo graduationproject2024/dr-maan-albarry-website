@@ -23,6 +23,11 @@ const PROC_IMAGES = Object.fromEntries(PROCEDURES.map(p => {
   return [p.slug, { light: has(`${p.slug}.webp`), dark: has(`${p.slug}-dark.webp`) }];
 }));
 
+// The anatomical image library's manifest (L1/L2/L3 assets, captions, normalised label anchors), when it exists.
+// main.js renders plate labels only from this data; without it, plates show their caption and no labels.
+const MANIFEST_FILE = resolve(import.meta.dirname, 'public/images/procedures/manifest.json');
+const PROC_MANIFEST = fs.existsSync(MANIFEST_FILE) ? JSON.parse(fs.readFileSync(MANIFEST_FILE, 'utf8')) : null;
+
 // Publishes JSON-LD and /llms.txt from the single doctor data source (doctor-data.js),
 // so structured data and AI-facing text can never drift from what the page shows.
 function doctorDataPublisher() {
@@ -80,7 +85,8 @@ export default defineConfig({
   // Build-time constants for client-side routing/SEO (canonical origin, available illustrations).
   define: {
     __SITE_URL__: JSON.stringify(SITE_URL),
-    __PROC_IMAGES__: JSON.stringify(PROC_IMAGES)
+    __PROC_IMAGES__: JSON.stringify(PROC_IMAGES),
+    __PROC_MANIFEST__: JSON.stringify(PROC_MANIFEST)
   },
   build: {
     outDir: 'dist',

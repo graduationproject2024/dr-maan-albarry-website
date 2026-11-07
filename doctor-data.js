@@ -307,21 +307,9 @@ export const FAQ = [
       ar: 'كلا، محاكي الرؤية أداة تعليمية وتوضيحية عامة لشرح الفروقات المفاهيمية بين العدسات. النتيجة الفعلية تعتمد على فحص تضاريس القرنية، صحة الشبكية، وقياسات العين الدقيقة التي يجريها الاستشاري.',
       en: 'No. The simulator is strictly an educational tool illustrating optical principles. Real-world postoperative vision depends on clinical biometry, corneal shape, retinal health, and individual healing.'
     }
-  },
-  {
-    q: { ar: 'هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟', en: 'Can I stop wearing glasses completely after cataract surgery?' },
-    a: {
-      ar: 'قد تقلل بعض العدسات الحديثة مثل ثلاثية البؤرة (Trifocal) وممتدة المدى (EDOF) الاعتماد على النظارات في كثير من الأنشطة، لكن لا يمكن ضمان الاستغناء التام عن النظارة لكل مريض، ويختلف ذلك بحسب حالة العين ونوع العدسة والإضاءة.',
-      en: 'Some modern lenses, such as trifocal and extended depth of focus (EDOF) designs, can reduce dependence on glasses for many tasks, but complete spectacle independence cannot be guaranteed for every patient; it varies with the eye, the lens type and lighting.'
-    }
-  },
-  {
-    q: { ar: 'ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟', en: 'What are the main criteria for laser vision correction (LASIK)?' },
-    a: {
-      ar: 'من المعايير الشائعة: ألا يقل العمر عن 18 عاماً، وثبات درجة النظر لمدة عام تقريباً، وسماكة قرنية كافية، وخلو القرنية من علامات القرنية المخروطية أو الجفاف الشديد غير المعالج. ويُحسم القرار بعد تصوير القرنية الطبقي والفحص الشامل.',
-      en: 'Common criteria include being at least 18 years old, a stable prescription for about a year, adequate corneal thickness, and no signs of keratoconus or untreated severe dry eye. The decision is made after corneal tomography and a full examination.'
-    }
   }
+  // Procedure-specific questions live on their procedure pages (and in those pages' FAQPage JSON-LD):
+  // "glasses after cataract surgery" → /procedures/cataract-surgery/, "LASIK criteria" → /procedures/laser-vision-correction/.
 ];
 
 // ------------------------------------------------------------
