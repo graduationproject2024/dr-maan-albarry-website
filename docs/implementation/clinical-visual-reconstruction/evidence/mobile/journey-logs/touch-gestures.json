@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\touch-gestures.spec.js › Touch and gesture checks",
-  "startedAt": "2026-11-03T21:49:57.712Z",
-  "finishedAt": "2026-11-03T21:50:28.927Z",
+  "startedAt": "2026-11-03T22:09:19.083Z",
+  "finishedAt": "2026-11-03T22:09:46.355Z",
   "totals": {
     "steps": 15,
     "pass": 15,
@@ -38,21 +38,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4575,
+      "ms": 3160,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 2,
       "action": "One-finger vertical swipe starting on the 3D canvas",
       "expected": "The page scrolls; the canvas does not trap the gesture",
-      "actual": "scrollY 6189 → 6394",
+      "actual": "scrollY 6188 → 6387",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2007,
+      "ms": 919,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4505,
+      "ms": 4099,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 738,
+      "ms": 679,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3174,
+      "ms": 2894,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2203,
+      "ms": 1969,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4097,
+      "ms": 3960,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1084,
+      "ms": 1105,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 187,
+      "ms": 224,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2543,
+      "ms": 2583,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 823,
+      "ms": 827,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 88,
+      "ms": 110,
       "url": "/en/procedures/lens-implants/"
     },
     {
@@ -206,7 +206,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3633,
+      "ms": 3166,
       "url": "/en/lens-lab/"
     },
     {
@@ -220,7 +220,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1390,
+      "ms": 1394,
       "url": "/en/lens-lab/"
     },
     {
@@ -234,7 +234,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 53,
+      "ms": 68,
       "url": "/en/lens-lab/"
     }
   ]

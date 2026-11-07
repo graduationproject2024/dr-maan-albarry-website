@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\persona-a.spec.js › Persona A — older Arabic-speaking patient",
-  "startedAt": "2026-11-03T21:49:20.931Z",
-  "finishedAt": "2026-11-03T21:49:39.959Z",
+  "startedAt": "2026-11-03T22:08:44.249Z",
+  "finishedAt": "2026-11-03T22:09:02.471Z",
   "totals": {
     "steps": 13,
     "pass": 13,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1978,
+      "ms": 1641,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 29,
+      "ms": 44,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 11115,
+      "ms": 11042,
       "url": "/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 129,
+      "ms": 123,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 32,
+      "ms": 28,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1051,
+      "ms": 962,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1569,
+      "ms": 1583,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1697,
+      "ms": 1681,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 18,
+      "ms": 12,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 18,
+      "ms": 11,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 431,
+      "ms": 385,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 88,
+      "ms": 39,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -206,7 +206,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 24,
+      "ms": 9,
       "url": "/procedures/cataract-surgery/"
     }
   ]

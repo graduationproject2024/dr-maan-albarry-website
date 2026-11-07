@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\stress.spec.js › Stress — seeded rapid interaction",
-  "startedAt": "2026-11-03T21:49:54.020Z",
-  "finishedAt": "2026-11-03T21:50:58.466Z",
+  "startedAt": "2026-11-03T22:09:14.765Z",
+  "finishedAt": "2026-11-03T22:10:12.475Z",
   "totals": {
     "steps": 13,
     "pass": 13,
@@ -33,62 +33,62 @@
   "pageErrors": [],
   "failedRequests": [
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     }
@@ -106,7 +106,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4576,
+      "ms": 3095,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -120,7 +120,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3618,
+      "ms": 3397,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -134,7 +134,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5712,
+      "ms": 2884,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -148,7 +148,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4329,
+      "ms": 2660,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -162,7 +162,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 771,
+      "ms": 316,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -176,7 +176,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3838,
+      "ms": 3498,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -190,7 +190,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 11331,
+      "ms": 10732,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -204,7 +204,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6383,
+      "ms": 6285,
       "url": "/en/"
     },
     {
@@ -218,7 +218,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6892,
+      "ms": 7366,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -232,7 +232,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6998,
+      "ms": 7033,
       "url": "/procedures/laser-vision-correction/"
     },
     {
@@ -246,7 +246,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6072,
+      "ms": 5363,
       "url": "/en/lens-lab/"
     },
     {
@@ -260,7 +260,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1611,
+      "ms": 2876,
       "url": "/en/lens-lab/"
     },
     {
@@ -282,67 +282,67 @@
       "pageErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/index-DT-Fgoai.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/modulepreload-polyfill-P2Xu9kJm.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-DT-Fgoai.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/modulepreload-polyfill-P2Xu9kJm.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4973/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/preload-helper-CRzLMJPS.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         }
       ],
-      "ms": 2311,
+      "ms": 2200,
       "url": "/en/?q=%3Cscript%3Ewindow.__xss=1%3C/script%3E#p-risks"
     }
   ]

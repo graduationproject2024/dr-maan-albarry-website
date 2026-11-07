@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "320×658",
   "test": "journeys\\core-journeys.spec.js › J02 › J02 — corneal care",
-  "startedAt": "2026-11-03T21:49:01.810Z",
-  "finishedAt": "2026-11-03T21:49:05.650Z",
+  "startedAt": "2026-11-03T22:08:25.419Z",
+  "finishedAt": "2026-11-03T22:08:29.320Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1369,
+      "ms": 1570,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1109,
+      "ms": 963,
       "url": "/en/procedures/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 263,
+      "ms": 266,
       "url": "/en/procedures/keratoconus-cxl/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 299,
+      "ms": 298,
       "url": "/en/procedures/corneal-transplant/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 254,
+      "ms": 246,
       "url": "/en/procedures/corneal-transplant/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 58,
+      "ms": 65,
       "url": "/en/procedures/corneal-transplant/"
     }
   ]

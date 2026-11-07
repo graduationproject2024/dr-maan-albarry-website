@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J13 › J13 — prerendered page without JavaScript",
-  "startedAt": "2026-11-03T21:49:18.739Z",
-  "finishedAt": "2026-11-03T21:49:20.794Z",
+  "startedAt": "2026-11-03T22:08:42.480Z",
+  "finishedAt": "2026-11-03T22:08:44.096Z",
   "totals": {
     "steps": 4,
     "pass": 4,
@@ -27,32 +27,32 @@
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "url": "http://localhost:4173/assets/modulepreload-polyfill-P2Xu9kJm.js",
       "reason": "csp",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/assets/preload-helper-CRzLMJPS.js",
       "reason": "csp",
       "expected": true
     }
@@ -69,7 +69,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 705,
+      "ms": 745,
       "url": "/"
     },
     {
@@ -83,7 +83,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5,
+      "ms": 4,
       "url": "/"
     },
     {
@@ -97,7 +97,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1150,
+      "ms": 98,
       "url": "/lens-lab/"
     },
     {
@@ -111,7 +111,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 113,
+      "ms": 107,
       "url": "/procedures/keratoconus-cxl/"
     }
   ]

@@ -14,7 +14,7 @@ Journeys and steps are counted separately; one step can contain several assertio
 | Steps passed | 217 |
 | Steps failed | 0 |
 | Steps blocked | 0 |
-| Steps repaired (non-PASS in the baseline run → PASS now) | 33 |
+| Steps repaired (non-PASS in the baseline run → PASS now) | 31 |
 | Journeys re-run after fixes (retested) | 24 (the whole journey suite was re-run, not just the failing steps) |
 | Journeys PASS — Verified | 24 |
 | Journeys PARTIAL / FAIL / BLOCKED | none |
@@ -25,7 +25,7 @@ Journeys and steps are counted separately; one step can contain several assertio
 Remaining non-PASS steps (latest run):
 - none
 
-Repaired steps: j05-loading-failure#5, j07-repeated-3d#3, j07-repeated-3d#4, j07-repeated-3d#5, j07-repeated-3d#6, j07-repeated-3d#7, j07-repeated-3d#8, j07-repeated-3d#9, j13-no-js-prerender#2, persona-a#5, persona-a#9, persona-a#11, persona-a#12, persona-a#13, persona-c#5, persona-d#2, persona-d#5, persona-d#6, persona-d#7, persona-d#9, persona-d#10, persona-e#8, persona-f#5, persona-f#6, persona-f#7, persona-f#8, persona-f#9, persona-g#3, persona-g#4, persona-g#5, persona-g#6, persona-g#7, stress#7
+Repaired steps: j07-repeated-3d#3, j07-repeated-3d#4, j07-repeated-3d#5, j07-repeated-3d#6, j07-repeated-3d#7, j07-repeated-3d#8, j07-repeated-3d#9, persona-a#5, persona-a#9, persona-a#11, persona-a#12, persona-a#13, persona-c#5, persona-d#2, persona-d#5, persona-d#6, persona-d#7, persona-d#9, persona-d#10, persona-e#8, persona-f#5, persona-f#6, persona-f#7, persona-f#8, persona-f#9, persona-g#3, persona-g#4, persona-g#5, persona-g#6, persona-g#7, stress#7
 
 ## Most frequently failing pages (baseline run, FAIL steps by the URL at the end of the step; BLOCKED steps excluded)
 

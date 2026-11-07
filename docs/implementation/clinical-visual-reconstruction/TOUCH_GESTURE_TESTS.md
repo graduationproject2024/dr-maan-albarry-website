@@ -7,10 +7,10 @@ Verdict: **PASS — Verified** (15/15 steps pass)
 | Step | User action | Expected | Actual | Status | Evidence |
 |---|---|---|---|---|---|
 | 1 | Open the cataract page; tap Start; wait for ready | Viewer ready | ready | PASS | — |
-| 2 | One-finger vertical swipe starting on the 3D canvas | The page scrolls; the canvas does not trap the gesture | scrollY 5443 → 5675 | PASS | — |
+| 2 | One-finger vertical swipe starting on the 3D canvas | The page scrolls; the canvas does not trap the gesture | scrollY 6188 → 6387 | PASS | — |
 | 3 | One-finger horizontal swipe on the canvas (Explore 3D off) | Camera does not move (view unchanged) and the page does not scroll sideways | view unchanged; scrollX=0 | PASS | — |
 | 4 | Double tap on the canvas | No page zoom (visual viewport scale stays 1) and no playback change | visualViewport.scale=1; play mode play → play | PASS | — |
-| 5 | Tap "Explore 3D", then drag horizontally on the canvas | Explore mode on (aria-pressed=true); the drag rotates the model; the page does not scroll | aria-pressed=true; view rotated; scrollY 5447 → 5447 | PASS | [jpg](../evidence/mobile/touch-gestures/05-tap-explore-3d-then-drag-horizontally-on.jpg) |
+| 5 | Tap "Explore 3D", then drag horizontally on the canvas | Explore mode on (aria-pressed=true); the drag rotates the model; the page does not scroll | aria-pressed=true; view rotated; scrollY 6137 → 6137 | PASS | [jpg](../evidence/mobile/touch-gestures/05-tap-explore-3d-then-drag-horizontally-on.jpg) |
 | 6 | Pinch out with two fingers in Explore mode | The model zooms (view changes); the page itself does not zoom | view zoomed; page scale=1 | PASS | — |
 | 7 | Explore mode: start a drag on the "Labels" tool button and slide across the canvas | Starting on a control does not rotate the camera | view unchanged | PASS | — |
 | 8 | Tap "Done exploring"; tap Play / Next / Previous | Playback buttons work and none of them rotates the camera by itself (only stage fly-to) | explore aria-pressed=false; play→pause, pause→play | PASS | — |
@@ -18,7 +18,7 @@ Verdict: **PASS — Verified** (15/15 steps pass)
 | 10 | Long press (700 ms) on a related-procedure link, then lift | The site does not hijack long press: the browser’s own contextmenu is not cancelled and no script handles the press (what follows — menu or tap — is browser-defined; headless Chromium has no context menu) | contextmenu events=0 (cancelled by page: 0); then headless Chromium treated the release as a tap and navigated (emulation behaviour; went Back) | PASS | — |
 | 11 | Touch start on a link, then the touch is cancelled (e.g. incoming call) | No navigation, no click | url unchanged | PASS | — |
 | 12 | Tap a related-procedure link normally | Navigates (sanity check that taps still work after the cancelled touch) | /en/procedures/lens-implants/ | PASS | — |
-| 13 | Vision simulator: horizontal swipe on the viewer (no compare) | Nothing happens to the page (no sideways scroll); vertical swipe still scrolls | scrollX=0; vertical swipe scrollY 5402 → 5587 | PASS | — |
+| 13 | Vision simulator: horizontal swipe on the viewer (no compare) | Nothing happens to the page (no sideways scroll); vertical swipe still scrolls | scrollX=0; vertical swipe scrollY 10778 → 10963 | PASS | — |
 | 14 | Vision simulator: tap the "Compare" switch label and drag the divider; vertical swipe on the divider | Divider follows a horizontal drag; a vertical swipe on it does not move it a lot | divider 50 → 21; compare=true | PASS | — |
 | 15 | Bottom bar: tap "WhatsApp" | wa.me link with a prefilled message, opened in a new tab (intercepted, nothing sent) | → https://wa.me/966554946433?text=Hello%2C%20I%20would%20like%… target=_blank | PASS | — |
 

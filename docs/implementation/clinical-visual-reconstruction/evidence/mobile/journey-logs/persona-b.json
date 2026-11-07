@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "412×839",
   "test": "journeys\\persona-b.spec.js › Persona B — first-time visitor",
-  "startedAt": "2026-11-03T21:49:22.939Z",
-  "finishedAt": "2026-11-03T21:49:32.130Z",
+  "startedAt": "2026-11-03T22:08:45.315Z",
+  "finishedAt": "2026-11-03T22:08:54.086Z",
   "totals": {
     "steps": 12,
     "pass": 12,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2053,
+      "ms": 1953,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 485,
+      "ms": 480,
       "url": "/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 746,
+      "ms": 741,
       "url": "/procedures/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 315,
+      "ms": 257,
       "url": "/procedures/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 223,
+      "ms": 170,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 128,
+      "ms": 134,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 314,
+      "ms": 319,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1310,
+      "ms": 1263,
       "url": "/about/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2668,
+      "ms": 2604,
       "url": "/clinic/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4,
+      "ms": 3,
       "url": "/clinic/"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 94,
+      "ms": 93,
       "url": "/clinic/"
     },
     {

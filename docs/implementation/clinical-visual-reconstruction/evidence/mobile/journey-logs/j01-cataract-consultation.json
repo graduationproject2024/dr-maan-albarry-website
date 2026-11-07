@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J01 › J01 — cataract consultation",
-  "startedAt": "2026-11-03T21:48:59.593Z",
-  "finishedAt": "2026-11-03T21:49:08.348Z",
+  "startedAt": "2026-11-03T22:08:24.057Z",
+  "finishedAt": "2026-11-03T22:08:32.701Z",
   "totals": {
     "steps": 7,
     "pass": 7,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1949,
+      "ms": 1907,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1426,
+      "ms": 1459,
       "url": "/education/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 36,
+      "ms": 73,
       "url": "/education/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 384,
+      "ms": 333,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 245,
+      "ms": 255,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4203,
+      "ms": 4114,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 205,
+      "ms": 213,
       "url": "/procedures/cataract-surgery/"
     }
   ]

@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J05 › J05 — 3D loading failure and retry",
-  "startedAt": "2026-11-03T21:49:04.468Z",
-  "finishedAt": "2026-11-03T21:49:14.775Z",
+  "startedAt": "2026-11-03T22:08:27.694Z",
+  "finishedAt": "2026-11-03T22:08:37.350Z",
   "totals": {
     "steps": 5,
     "pass": 5,
@@ -29,34 +29,34 @@
     "Failed to load resource: net::ERR_CONNECTION_FAILED"
   ],
   "consoleWarnings": [
-    "3D cataract module unavailable: TypeError: Failed to fetch dynamically imported module: http://localhost:4973/assets/cataract-sim-WPsBARml.js",
-    "Vision simulator failed to load TypeError: Failed to fetch dynamically imported module: http://localhost:4973/assets/vision-sim-DomGNAhN.js"
+    "3D cataract module unavailable: TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/cataract-sim-WPsBARml.js",
+    "Vision simulator failed to load TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/vision-sim-DomGNAhN.js"
   ],
   "pageErrors": [],
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4973/assets/cataract-sim-WPsBARml.js",
+      "url": "http://localhost:4173/assets/cataract-sim-WPsBARml.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/three.module-DzC5FhdE.js",
+      "url": "http://localhost:4173/assets/three.module-DzC5FhdE.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/cataract-sim-WPsBARml.js",
+      "url": "http://localhost:4173/assets/cataract-sim-WPsBARml.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/vision-sim-DomGNAhN.js",
+      "url": "http://localhost:4173/assets/vision-sim-DomGNAhN.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/assets/vision-sim-DomGNAhN.js",
+      "url": "http://localhost:4173/assets/vision-sim-DomGNAhN.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     }
@@ -73,7 +73,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2074,
+      "ms": 1480,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -91,7 +91,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1682,
+      "ms": 1691,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -105,7 +105,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1140,
+      "ms": 1114,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -119,7 +119,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1188,
+      "ms": 1160,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3809,
+      "ms": 3877,
       "url": "/en/lens-lab/#simulator"
     }
   ]

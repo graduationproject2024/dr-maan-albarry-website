@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×664",
   "test": "journeys\\persona-c.spec.js › Persona C — English mobile user",
-  "startedAt": "2026-11-03T21:49:28.478Z",
-  "finishedAt": "2026-11-03T21:49:47.576Z",
+  "startedAt": "2026-11-03T22:08:50.832Z",
+  "finishedAt": "2026-11-03T22:09:08.729Z",
   "totals": {
     "steps": 11,
     "pass": 11,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1911,
+      "ms": 1813,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 149,
+      "ms": 141,
       "url": "/en/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8534,
+      "ms": 8297,
       "url": "/en/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 268,
+      "ms": 153,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 20,
+      "ms": 7,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3895,
+      "ms": 3356,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -122,21 +122,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1087,
+      "ms": 1050,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
       "step": 8,
       "action": "Tap Play, wait, then drag the timeline scrubber to the middle",
       "expected": "Playback runs; scrubbing jumps to a later stage",
-      "actual": "playing mode=pause scrubber=139; after tap at 60% scrubber=605, Stage 5 of 7",
+      "actual": "playing mode=pause scrubber=138; after tap at 60% scrubber=605, Stage 5 of 7",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1820,
+      "ms": 1822,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 303,
+      "ms": 331,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 21,
+      "ms": 20,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 429,
+      "ms": 409,
       "url": "/en/"
     }
   ]

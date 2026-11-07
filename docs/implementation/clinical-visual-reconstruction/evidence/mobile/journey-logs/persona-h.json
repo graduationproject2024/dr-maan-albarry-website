@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "768×1024",
   "test": "journeys\\persona-h.spec.js › Persona H — comparing lens options",
-  "startedAt": "2026-11-03T21:49:47.729Z",
-  "finishedAt": "2026-11-03T21:49:59.109Z",
+  "startedAt": "2026-11-03T22:09:08.975Z",
+  "finishedAt": "2026-11-03T22:09:19.888Z",
   "totals": {
     "steps": 11,
     "pass": 11,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4772,
+      "ms": 4587,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 9,
+      "ms": 8,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1052,
+      "ms": 1168,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1012,
+      "ms": 1028,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1220,
+      "ms": 1169,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 364,
+      "ms": 376,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 10,
+      "ms": 9,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1841,
+      "ms": 1606,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 41,
+      "ms": 36,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8,
+      "ms": 6,
       "url": "/lens-lab/#simulator"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 267,
+      "ms": 212,
       "url": "/procedures/lens-implants/"
     }
   ]

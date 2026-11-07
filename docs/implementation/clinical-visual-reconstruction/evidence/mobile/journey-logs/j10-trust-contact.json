@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\core-journeys.spec.js › J10 › J10 — trust and contact",
-  "startedAt": "2026-11-03T21:49:11.090Z",
-  "finishedAt": "2026-11-03T21:49:18.601Z",
+  "startedAt": "2026-11-03T22:08:33.955Z",
+  "finishedAt": "2026-11-03T22:08:42.348Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3108,
+      "ms": 3071,
       "url": "/about/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8,
+      "ms": 6,
       "url": "/about/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1145,
+      "ms": 1130,
       "url": "/procedures/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2085,
+      "ms": 3062,
       "url": "/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 193,
+      "ms": 165,
       "url": "/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 579,
+      "ms": 663,
       "url": "/"
     }
   ]

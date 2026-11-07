@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "430×739",
   "test": "journeys\\persona-g.spec.js › Persona G — returning patient",
-  "startedAt": "2026-11-03T21:49:45.432Z",
-  "finishedAt": "2026-11-03T21:49:53.823Z",
+  "startedAt": "2026-11-03T22:09:06.587Z",
+  "finishedAt": "2026-11-03T22:09:13.363Z",
   "totals": {
     "steps": 7,
     "pass": 7,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3224,
+      "ms": 1992,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1331,
+      "ms": 1116,
       "url": "/en/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1990,
+      "ms": 1867,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 102,
+      "ms": 101,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 159,
+      "ms": 132,
       "url": "/en/procedures/corneal-transplant/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 524,
+      "ms": 514,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 526,
+      "ms": 581,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     }
   ]

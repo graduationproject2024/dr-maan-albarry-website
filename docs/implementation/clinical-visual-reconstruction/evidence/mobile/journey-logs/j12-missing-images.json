@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J12 › J12 — procedure images missing",
-  "startedAt": "2026-11-03T21:49:17.970Z",
-  "finishedAt": "2026-11-03T21:49:45.168Z",
+  "startedAt": "2026-11-03T22:08:40.863Z",
+  "finishedAt": "2026-11-03T22:09:06.437Z",
   "totals": {
     "steps": 2,
     "pass": 2,
@@ -33,6 +33,9 @@
     "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
     "Failed to load resource: net::ERR_FAILED"
   ],
   "consoleWarnings": [],
@@ -40,62 +43,77 @@
   "failedRequests": [],
   "expectedFailedRequests": [
     {
-      "url": "http://localhost:4973/images/procedures/cataract-surgery-800.webp",
+      "url": "http://localhost:4173/images/procedures/cataract-surgery-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/laser-vision-correction-800.webp",
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/keratoconus-cxl-800.webp",
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/cataract-surgery-800.webp",
+      "url": "http://localhost:4173/images/procedures/cataract-surgery-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/lens-implants-800.webp",
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/laser-vision-correction-800.webp",
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/icl-800.webp",
+      "url": "http://localhost:4173/images/procedures/cataract-surgery-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/keratoconus-cxl-800.webp",
+      "url": "http://localhost:4173/images/procedures/lens-implants-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/corneal-transplant-800.webp",
+      "url": "http://localhost:4173/images/procedures/laser-vision-correction-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/intravitreal-injections-800.webp",
+      "url": "http://localhost:4173/images/procedures/icl-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/icl-800.webp",
+      "url": "http://localhost:4173/images/procedures/keratoconus-cxl-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4973/images/procedures/icl-800.webp",
+      "url": "http://localhost:4173/images/procedures/corneal-transplant-800.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/intravitreal-injections-800.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl-800.webp",
+      "reason": "net::ERR_FAILED",
+      "expected": true
+    },
+    {
+      "url": "http://localhost:4173/images/procedures/icl-800.webp",
       "reason": "net::ERR_FAILED",
       "expected": true
     }
@@ -119,11 +137,14 @@
         "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
         "Failed to load resource: net::ERR_FAILED"
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 24790,
+      "ms": 23375,
       "url": "/procedures/"
     },
     {
@@ -140,7 +161,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2172,
+      "ms": 1986,
       "url": "/procedures/icl/"
     }
   ]

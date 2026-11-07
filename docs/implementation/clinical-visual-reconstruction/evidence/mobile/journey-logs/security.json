@@ -44,7 +44,7 @@
     },
     {
       "page": "/how-vision-works/",
-      "newTabLinks": 19,
+      "newTabLinks": 20,
       "withoutNoopener": [],
       "insecureHttp": [],
       "iframes": []
@@ -151,7 +151,7 @@
     },
     {
       "page": "/en/how-vision-works/",
-      "newTabLinks": 19,
+      "newTabLinks": 20,
       "withoutNoopener": [],
       "insecureHttp": [],
       "iframes": []
@@ -225,8 +225,8 @@
     "wa.me": 94,
     "www.magrabihealth.com": 32,
     "www.taibahu.edu.sa": 32,
+    "www.nei.nih.gov": 8,
     "www.aao.org": 35,
-    "www.nei.nih.gov": 6,
     "www.nhs.uk": 13,
     "www.fda.gov": 2,
     "eyewiki.org": 3,

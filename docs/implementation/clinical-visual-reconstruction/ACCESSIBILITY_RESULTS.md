@@ -8,13 +8,30 @@ Rule tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice. The home
 
 | Page | Theme | Violations | Passed rules | Needs review (incomplete) |
 |---|---|---|---|---|
-| `/` | dark | 0 | 53 | 2 |
-| `/en/` | dark | 0 | 52 | 3 |
-| `/en/` | light | 0 | 52 | 3 |
+| `/about/` | dark | 0 | 42 | 0 |
+| `/about/` | light | 0 | 42 | 0 |
+| `/clinic/` | dark | 0 | 47 | 0 |
+| `/clinic/` | light | 0 | 47 | 0 |
+| `/` | dark | 0 | 44 | 0 |
+| `/education/` | dark | 0 | 40 | 0 |
+| `/education/` | light | 0 | 40 | 0 |
+| `/en/about/` | dark | 0 | 42 | 1 |
+| `/en/about/` | light | 0 | 42 | 1 |
+| `/en/clinic/` | dark | 0 | 47 | 1 |
+| `/en/clinic/` | light | 0 | 47 | 1 |
+| `/en/` | dark | 0 | 43 | 1 |
+| `/en/education/` | dark | 0 | 40 | 1 |
+| `/en/education/` | light | 0 | 40 | 1 |
+| `/en/how-vision-works/` | dark | 0 | 42 | 2 |
+| `/en/how-vision-works/` | light | 0 | 42 | 2 |
+| `/en/lens-lab/` | dark | 0 | 47 | 3 |
+| `/en/lens-lab/` | light | 0 | 47 | 3 |
+| `/en/` | light | 0 | 43 | 1 |
 | `/en/procedures/cataract-surgery/` | dark | 0 | 44 | 1 |
 | `/en/procedures/cataract-surgery/` | light | 0 | 44 | 1 |
 | `/en/procedures/corneal-transplant/` | dark | 0 | 44 | 1 |
 | `/en/procedures/corneal-transplant/` | light | 0 | 44 | 1 |
+| `/en/procedures/` | dark | 0 | 43 | 2 |
 | `/en/procedures/icl/` | dark | 0 | 44 | 1 |
 | `/en/procedures/icl/` | light | 0 | 44 | 1 |
 | `/en/procedures/intravitreal-injections/` | dark | 0 | 44 | 1 |
@@ -25,11 +42,19 @@ Rule tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice. The home
 | `/en/procedures/laser-vision-correction/` | light | 0 | 44 | 1 |
 | `/en/procedures/lens-implants/` | dark | 0 | 44 | 1 |
 | `/en/procedures/lens-implants/` | light | 0 | 44 | 1 |
-| `/` | light | 0 | 53 | 2 |
+| `/en/procedures/` | light | 0 | 43 | 2 |
+| `/en/surgical-education/` | dark | 0 | 40 | 1 |
+| `/en/surgical-education/` | light | 0 | 40 | 1 |
+| `/how-vision-works/` | dark | 0 | 42 | 1 |
+| `/how-vision-works/` | light | 0 | 42 | 1 |
+| `/lens-lab/` | dark | 0 | 47 | 2 |
+| `/lens-lab/` | light | 0 | 47 | 2 |
+| `/` | light | 0 | 44 | 0 |
 | `/procedures/cataract-surgery/` | dark | 0 | 44 | 0 |
 | `/procedures/cataract-surgery/` | light | 0 | 44 | 0 |
 | `/procedures/corneal-transplant/` | dark | 0 | 44 | 0 |
 | `/procedures/corneal-transplant/` | light | 0 | 44 | 0 |
+| `/procedures/` | dark | 0 | 43 | 0 |
 | `/procedures/icl/` | dark | 0 | 44 | 0 |
 | `/procedures/icl/` | light | 0 | 44 | 0 |
 | `/procedures/intravitreal-injections/` | dark | 0 | 44 | 0 |
@@ -40,8 +65,11 @@ Rule tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice. The home
 | `/procedures/laser-vision-correction/` | light | 0 | 44 | 0 |
 | `/procedures/lens-implants/` | dark | 0 | 44 | 0 |
 | `/procedures/lens-implants/` | light | 0 | 44 | 0 |
+| `/procedures/` | light | 0 | 43 | 0 |
+| `/surgical-education/` | dark | 0 | 40 | 0 |
+| `/surgical-education/` | light | 0 | 40 | 0 |
 
-Total scans: 32; total violations: 0. "Needs review" items are mostly colour-contrast checks axe cannot decide over gradients/canvases; they were not reviewed manually.
+Total scans: 60; total violations: 0. "Needs review" items are mostly colour-contrast checks axe cannot decide over gradients/canvases; they were not reviewed manually.
 
 ## Baseline (before fixes)
 

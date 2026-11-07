@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\persona-e.spec.js › Persona E — keyboard and reduced motion",
-  "startedAt": "2026-11-03T21:49:40.283Z",
-  "finishedAt": "2026-11-03T21:49:52.484Z",
+  "startedAt": "2026-11-03T22:09:02.615Z",
+  "finishedAt": "2026-11-03T22:09:14.513Z",
   "totals": {
     "steps": 14,
     "pass": 14,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1496,
+      "ms": 1626,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 213,
+      "ms": 221,
       "url": "/en/#main"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 69,
+      "ms": 72,
       "url": "/en/#main"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1150,
+      "ms": 1009,
       "url": "/en/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 931,
+      "ms": 664,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 464,
+      "ms": 479,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1341,
+      "ms": 1468,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 785,
+      "ms": 813,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 830,
+      "ms": 839,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 917,
+      "ms": 896,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1487,
+      "ms": 1287,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -220,7 +220,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2026,
+      "ms": 2032,
       "url": "/"
     }
   ]

@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J03 › J03 — vision comparison",
-  "startedAt": "2026-11-03T21:49:02.859Z",
-  "finishedAt": "2026-11-03T21:49:10.954Z",
+  "startedAt": "2026-11-03T22:08:25.507Z",
+  "finishedAt": "2026-11-03T22:08:33.569Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 4712,
+      "ms": 4607,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 14,
+      "ms": 17,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 530,
+      "ms": 570,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 413,
+      "ms": 408,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1172,
+      "ms": 1117,
       "url": "/en/lens-lab/#simulator"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 913,
+      "ms": 943,
       "url": "/en/lens-lab/#simulator"
     }
   ]
