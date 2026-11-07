@@ -8,8 +8,8 @@ import { DEG, EYE, lensAntZ } from '../anatomy.js';
 import { phakicLens } from '../instruments.js';
 import { C } from '../style.js';
 
-const PHI_LONG = 58 * DEG; // the implant's long axis lies in this cut face
-const CUT = { mode: 'wedge', phi0: -52 * DEG, phi1: PHI_LONG, zc: -3.95 };
+export const PHI_LONG = 58 * DEG; // the implant's long axis lies in this cut face
+const CUT = { mode: 'wedge', phi0: -52 * DEG, phi1: PHI_LONG, zc: -3.95, floorAlpha: 0.5 }; // translucent gel floor (was a pale slab)
 
 // Plate geometry, matching instruments.phakicLens (L = 5.75, Rb = 17, zApex = 0.84).
 const L = 5.75, Rb = 17, zApex = 0.84;
@@ -25,8 +25,8 @@ const th = (x, y) => { const r = Math.hypot(x, y); return r < 2.9 ? 0.09 + 0.17 
 const base = (x, y) => zApex - (x * x + y * y) / (2 * Rb);
 
 // Section of the plate along the half-line at polar angle phi: [r, z] polygon (bottom out, top back).
-function plateSection(phi) {
-  const a = phi - PHI_LONG, bottom = [], top = [];
+export function plateSection(phi, phiLong = PHI_LONG) {
+  const a = phi - phiLong, bottom = [], top = [];
   for (let r = 0; r <= L + 0.001; r += 0.02) {
     const x = r * Math.cos(a), y = r * Math.sin(a);
     if (Math.abs(x) > L || Math.abs(y) > hw(x)) break;
@@ -44,22 +44,26 @@ export default function icl(ctx) {
   lens.rotation.z = PHI_LONG;
   const eye = buildGlobe(ctx.mats, {
     lens: 'clear', pupilR: 2.3, irisLift: 0.72, cut: CUT, fundusTint: '#6E5652', irisSeed: 7,
-    paintExtra: (k, phi) => {
-      const sec = plateSection(phi);
-      if (sec.bottom.length < 2) return;
-      // the vault: aqueous between the implant and the natural lens, tinted so the gap reads
-      const n = sec.bottom.length, rEnd = sec.bottom[n - 1][0];
-      const over = sec.bottom.filter(([r]) => r < Math.min(rEnd, 4.2)).map(([r]) => [r, lensAntZ(Math.min(r, EYE.lensEqR - 0.01)) + 0.004]);
-      const gap = [...sec.bottom.slice(0, over.length).map(([r, z]) => [r, z - 0.004]), ...over.reverse()];
-      k.ctx.save(); k.ctx.filter = `blur(${k.mm(0.04)}px)`; k.fill(gap, 'rgba(118,202,220,0.62)'); k.ctx.restore();
-      k.fill(sec.poly, C.implantSection);
-      k.shade(sec.poly, 'rgba(40,110,120,0.35)', 3, 3);
-      k.stroke(sec.poly, 'rgba(40,96,106,0.95)', 2.2);
-    }
+    paintExtra: (k, phi) => paintPlate(k, phi)
   });
   lens.traverse((o) => { if (o.material) { o.material.clippingPlanes = eye.planes; o.material.clipIntersection = true; } });
   const m = lens.children[0].material; m.color = new THREE.Color('#9FD9DC'); m.opacity = 0.62;
   scene.add(eye.group, lens, ...eye.caps({ r1: 11.6, z1: 4.3, ppm: 330, tones: [0.88, 1, 0.92] }));
   const W = ctx.W, H = ctx.H;
   return { passes: [{ scene, camera: cam, fade: { cx: W * 0.42, cy: H * 0.5, rx: W * 0.56, ry: H * 0.74, inner: 0.56 } }] };
+}
+
+// The plate's section on the cut face at polar angle phi, with the vault (aqueous between the implant and the natural
+// lens) tinted so the gap reads.
+export function paintPlate(k, phi, phiLong = PHI_LONG, mirror = false) {
+  const sec = plateSection(phi, phiLong);
+  if (sec.bottom.length < 2) return;
+  const m = mirror ? (poly) => poly.map(([r, z]) => [-r, z]) : (poly) => poly;
+  const n = sec.bottom.length, rEnd = sec.bottom[n - 1][0];
+  const over = sec.bottom.filter(([r]) => r < Math.min(rEnd, 4.2)).map(([r]) => [r, lensAntZ(Math.min(r, EYE.lensEqR - 0.01)) + 0.004]);
+  const gap = [...sec.bottom.slice(0, over.length).map(([r, z]) => [r, z - 0.004]), ...over.reverse()];
+  k.ctx.save(); k.ctx.filter = `blur(${k.mm(0.04)}px)`; k.fill(m(gap), 'rgba(118,202,220,0.62)'); k.ctx.restore();
+  k.fill(m(sec.poly), C.implantSection);
+  k.shade(m(sec.poly), 'rgba(40,110,120,0.35)', 3, 3);
+  k.stroke(m(sec.poly), 'rgba(40,96,106,0.95)', 2.2);
 }

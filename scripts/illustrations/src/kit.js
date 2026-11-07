@@ -2,7 +2,7 @@
 // the canvas "section painter" helpers. Everything here is procedural; no external models or textures.
 import * as THREE from 'three';
 import { EYE, corneaAntZ, corneaThickness } from './anatomy.js';
-import { C, M, INK_PX, SS } from './style.js';
+import { C, M, INK_PX, SS as SS0, RES } from './style.js';
 
 // ---------------------------------------------------------------------------------------------
 // Lathe around the optical (Z) axis, adapted from src/cataract-sim/lathe.js (copied, not imported).
@@ -189,8 +189,11 @@ export function retinaColors(g) {
 
 // ---------------------------------------------------------------------------------------------
 // Section painter: a canvas mapped onto the y = 0 cut plane. Canvas left = anterior (+z), top = +x.
-export function makeSection(bounds, ppm) {
+export function makeSection(bounds, ppm0) {
   const { x0, x1, z0, z1 } = bounds;
+  // atlas renders scale the canvas with the frame; keep each side under the GPU texture limit
+  const ppm = Math.min(ppm0 * RES.ppm, 15800 / Math.max(z1 - z0, x1 - x0), Math.sqrt(4.8e7 / ((z1 - z0) * (x1 - x0))));
+  const SS = SS0 * RES.ink * (ppm / (ppm0 * RES.ppm));
   const W = Math.round((z1 - z0) * ppm), H = Math.round((x1 - x0) * ppm);
   const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
