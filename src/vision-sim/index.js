@@ -1,9 +1,11 @@
 // Vision simulator — public entry point (lazy-loaded chunk).
 // API: mount(host, { lang, theme, reducedMotion, debug, lens, lensB, compare, distanceM, lighting, refraction,
-//                     scenario, ui: 'full' | 'viewer' }) → controller
+//                     scenario, ui: 'full' | 'viewer', review }) → controller
 //   { destroy, setLang, setTheme, getState, setLens, setDistance, setLighting, setCompare, setRefraction, setSplit,
 //     setScenario, on }
 // ui 'viewer' renders only the picture (+ disclaimer and comparison divider) for hosts with their own controls.
+// review: true adds the clinical review panel (internal harness only: vision-sim-preview.html?review=1). It is a
+// separate lazy chunk and is never shown on public pages.
 // Educational illustration — not a prediction of anyone's vision. See
 // docs/implementation/clinical-visual-reconstruction/VISION_SIMULATOR_REBUILD.md
 import './styles.css';
@@ -36,6 +38,7 @@ class VisionSimulator {
     this.theme = o.theme === 'dark' ? 'dark' : 'light';
     this.debug = !!o.debug;
     this.mode = o.ui === 'viewer' ? 'viewer' : 'full';
+    this.reviewMode = o.review === true;
     const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.reduced = typeof o.reducedMotion === 'boolean' ? o.reducedMotion : !!(mq && mq.matches);
     this.state = {
@@ -133,6 +136,8 @@ class VisionSimulator {
     this.ui.root.dataset.reducedMotion = this.reduced ? 'true' : 'false';
     this.refreshUI();
     if (this.debug) window.__visionSimCounters = counters;
+    if (this.reviewMode) await this.setupReview();
+    if (this.destroyed) return;
     this.status = 'loading';
     let pipelineMod, scenesMod;
     try {
@@ -192,6 +197,46 @@ class VisionSimulator {
     this.emit('ready', this.getState());
   }
 
+  // ---------- clinical review mode ----------
+  async setupReview() {
+    let mod;
+    try { mod = await import('./review.js'); } catch (err) { console.warn('[vision-sim] could not load the review panel', err); return; }
+    if (this.destroyed) return;
+    this.review = mod.createVisionReviewPanel(this.host, {
+      getLang: () => this.lang,
+      getTheme: () => this.theme,
+      getState: () => this.getState(),
+      applyParams: (p) => this.applyParams(p),
+      screenshot: () => this.screenshot(),
+      listen: (t, e, f, o) => this.listen(t, e, f, o),
+    });
+  }
+  /** Review presets: set every viewing parameter exactly (lens A/B, comparison, distance, lighting, refraction, split). */
+  applyParams(p = {}) {
+    if (this.destroyed) return false;
+    if (!LENS_IDS.includes(p.lens) || !LENS_IDS.includes(p.lensB) || !LIGHTING_IDS.includes(p.lighting)) return false;
+    const rebuild = p.lighting !== this.state.lighting;
+    Object.assign(this.state, {
+      lens: p.lens,
+      lensB: p.lensB,
+      compare: !!p.compare,
+      distanceM: clamp(Number(p.distanceM), DISTANCES.sliderMin, DISTANCES.sliderMax, DISTANCES.distance),
+      lighting: p.lighting,
+      refraction: normalizeRefraction(p.refraction),
+      split: clamp(Number(p.split), 0, 1, 0.5),
+    });
+    if (rebuild) this.rebuildScenes();
+    this.changed('preset', true);
+    return true;
+  }
+  /** PNG of the current view (rendered now, read in the same task, so the drawing buffer is intact). */
+  screenshot() {
+    if (!this.pipe || this.status !== 'ready') return null;
+    this.dirty = true;
+    this.renderNow();
+    try { return this.pipe.renderer.domElement.toDataURL('image/png'); } catch { return null; }
+  }
+
   updateVisibility() {
     this.visible = this.inView !== false && document.visibilityState !== 'hidden';
     if (this.visible) this.startLoop(); else this.stopLoop();
@@ -222,6 +267,7 @@ class VisionSimulator {
       this.pipe = null;
       counters.renderers--;
     }
+    if (this.review) { this.review.destroy(); this.review = null; }
     if (this.ui) { this.ui.detachCanvas(); this.ui.destroy(); this.ui = null; }
     this.events.clear();
     if (instances.get(this.host) === this.controller) instances.delete(this.host);
@@ -324,6 +370,7 @@ class VisionSimulator {
     this.refreshUI();
     this.dirty = true;
     this.emit('change', { what, state: this.getState() });
+    if (this.review) this.review.onViewChange();
     if (announce) this.announce(announce === 'debounce');
   }
   announce(debounce) {
@@ -385,6 +432,7 @@ class VisionSimulator {
     this.state.split = clamp(Number(x), 0, 1, 0.5);
     this.ui.update(this.state, this.lastView.A, this.lastView.B);
     this.dirty = true;
+    if (this.review) this.review.onViewChange();
   }
 
   // ---------- i18n / theme ----------
@@ -398,12 +446,14 @@ class VisionSimulator {
     if (this.status === 'fallback') this.ui.showFallback(true);
     this.refreshUI();
     this.rebuildScenes(); // canvas text (road sign, screens) is localised
+    if (this.review) this.review.refresh();
     this.emit('langchange', { lang: l });
   }
   setTheme(theme) {
     if (this.destroyed) return;
     this.theme = theme === 'dark' ? 'dark' : 'light';
     this.ui.setTheme(this.theme);
+    if (this.review) this.review.setTheme(this.theme);
     this.emit('themechange', { theme: this.theme });
   }
 
@@ -464,6 +514,7 @@ class VisionSimulator {
       reducedMotion: this.reduced,
       webgl: !!this.pipe,
       fallbackReason: this.fallbackReason || null,
+      review: this.reviewMode,
       quality: this.pipe ? { level: this.quality, ...QUALITY[this.quality], internal: this.pipe.size, halfFloat: this.pipe.halfFloat } : null,
       frames: this.frames,
       reblurs: this.reblurs,
@@ -479,6 +530,9 @@ class VisionSimulator {
       get renderer() { return self.pipe && self.pipe.renderer; },
       get frames() { return self.frames; },
       renderNow() { self.dirty = true; return self.renderNow(); },
+      screenshot: () => self.screenshot(),
+      get review() { return self.review ? self.review.data : null; },
+      get reviewPanel() { return self.review || null; },
       // Render now and summarise the frame buffer (proves the canvas is not blank).
       sample(region) {
         if (!self.pipe) return null;
