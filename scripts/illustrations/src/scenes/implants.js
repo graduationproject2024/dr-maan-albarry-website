@@ -17,12 +17,15 @@ export default function implants(ctx) {
   const el = 47 * DEG;
   const cam = ctx.camera({ target: [0, -0.9, 0.9], dir: [0, -Math.cos(el), Math.sin(el)], up: [0, 0, 1], H: 24.5, fov: 20 });
   const scene = ctx.scene(cam);
-  TYPES.forEach((t, i) => { const m = productIOL(ctx, t); m.position.set(XS[i], 0, H0); scene.add(m); });
+  const resting = !!ctx.opts?.resting; // atlas close-up: optics rest on the surface (no levitation, no caustics)
+  const grid = !!ctx.opts?.grid; // atlas close-up: a 2 x 2 arrangement
+  const POS = TYPES.map((t, i) => (grid ? [[-5.4, 4.7], [5.4, 4.7], [-5.4, -4.9], [5.4, -4.9]][i] : [XS[i], 0]));
+  TYPES.forEach((t, i) => { const m = productIOL(ctx, t); m.position.set(POS[i][0], POS[i][1], resting ? 0.41 : H0); scene.add(m); });
 
   return {
     passes: [{ scene, camera: cam }],
     under(g, theme) {
-      TYPES.forEach((t, i) => floorLight(g, theme, ctx, cam, XS[i], t));
+      TYPES.forEach((t, i) => (resting ? contactShadow(g, theme, ctx, cam, POS[i][0], POS[i][1]) : floorLight(g, theme, ctx, cam, XS[i], t)));
     }
   };
 }
@@ -81,7 +84,7 @@ function opticSurface(type) {
     const r0 = i ? zones[i - 1] : 0, r1 = zones[i], amp = type === 'trifocal' ? 1 - 0.55 * (r1 / 2.5) : 1.2;
     return amp * ((r - r0) / (r1 - r0)) * 0.012; // sawtooth step
   };
-  const normal = zones.length ? normalMapFrom(h, 1024, 260) : null;
+  const normal = zones.length && type !== 'edof' ? normalMapFrom(h, 1024, 260) : null; // EDOF: rings only (its relief read as a spiral)
   const c = document.createElement('canvas'); c.width = c.height = 1024;
   const g = c.getContext('2d');
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, 1024, 1024);
@@ -116,4 +119,16 @@ function floorLight(g, theme, ctx, cam, x, type) {
   if (type === 'trifocal') { glow(0.62, 0.95); ring(1.35, 0.16, 0.55); ring(2.2, 0.14, 0.32); }
   if (type === 'edof') { g.scale(1, 1.9); glow(1.0, 0.85); }
   g.restore();
+}
+
+// Contact shadow of an optic resting on the surface (atlas close-up).
+function contactShadow(g, theme, ctx, cam, x, y = 0) {
+  const o = ctx.project(cam, [x + 0.25, y - 0.35, 0]), ex = ctx.project(cam, [x + 1.25, y - 0.35, 0]), ey = ctx.project(cam, [x + 0.25, y + 0.65, 0]);
+  g.save();
+  g.setTransform(ex[0] - o[0], ex[1] - o[1], ey[0] - o[0], ey[1] - o[1], o[0], o[1]);
+  const sh = g.createRadialGradient(0, 0, 0, 0, 0, 3.6);
+  sh.addColorStop(0, 'rgba(40,52,56,0.34)'); sh.addColorStop(0.62, 'rgba(40,52,56,0.16)'); sh.addColorStop(1, 'rgba(40,52,56,0)');
+  g.fillStyle = sh; g.fillRect(-4, -4, 8, 8);
+  g.restore();
+  void theme;
 }

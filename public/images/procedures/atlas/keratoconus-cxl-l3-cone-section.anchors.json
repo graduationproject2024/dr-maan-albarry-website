@@ -1,0 +1,40 @@
+{
+  "assetId": "keratoconus-cxl-l3-cone-section",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "cone",
+      "structure": "cone",
+      "x": 0.3565,
+      "y": 0.4559
+    },
+    {
+      "id": "normal-dome",
+      "structure": "normal-dome",
+      "x": 0.4559,
+      "y": 0.6884
+    },
+    {
+      "id": "riboflavin",
+      "structure": "riboflavin",
+      "x": 0.3867,
+      "y": 0.5812
+    },
+    {
+      "id": "stroma",
+      "structure": "stroma",
+      "x": 0.4867,
+      "y": 0.7338
+    },
+    {
+      "id": "endothelium",
+      "structure": "endothelium",
+      "x": 0.3719,
+      "y": 0.3767
+    }
+  ]
+}

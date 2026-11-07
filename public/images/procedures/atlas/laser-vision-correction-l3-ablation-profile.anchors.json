@@ -1,0 +1,40 @@
+{
+  "assetId": "laser-vision-correction-l3-ablation-profile",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "original-profile",
+      "structure": "original-profile",
+      "x": 0.1931,
+      "y": 0.4695
+    },
+    {
+      "id": "ablation-zone",
+      "structure": "ablation-zone",
+      "x": 0.5583,
+      "y": 0.4857
+    },
+    {
+      "id": "stromal-bed",
+      "structure": "stromal-bed",
+      "x": 0.356,
+      "y": 0.4182
+    },
+    {
+      "id": "laser-beam",
+      "structure": "laser-beam",
+      "x": 0.4401,
+      "y": 0.075
+    },
+    {
+      "id": "stroma",
+      "structure": "stroma",
+      "x": 0.3801,
+      "y": 0.668
+    }
+  ]
+}

@@ -46,7 +46,7 @@ export default function transplant(ctx) {
   const panel = { x: 1056, y: 92, w: 470, h: 816 };
   return {
     passes: [{ scene, camera: cam, fade: { cx: ex, cy: ey, rx: W * 0.33, ry: W * 0.33, inner: 0.6 } }],
-    over(g, theme) { drawVariants(g, theme, panel); }
+    over(g, theme) { if (ctx.opts?.inset !== false) drawVariants(g, theme, panel); }
   };
 }
 

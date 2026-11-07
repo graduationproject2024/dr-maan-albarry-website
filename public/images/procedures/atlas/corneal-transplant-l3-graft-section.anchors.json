@@ -1,0 +1,46 @@
+{
+  "assetId": "corneal-transplant-l3-graft-section",
+  "frame": {
+    "width": 1600,
+    "height": 1200
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "donor-graft",
+      "structure": "donor-graft",
+      "x": 0.7735,
+      "y": 0.4169
+    },
+    {
+      "id": "graft-junction",
+      "structure": "graft-junction",
+      "x": 0.4956,
+      "y": 0.4715
+    },
+    {
+      "id": "sutures",
+      "structure": "sutures",
+      "x": 0.4483,
+      "y": 0.3319
+    },
+    {
+      "id": "corneal-epithelium",
+      "structure": "corneal-epithelium",
+      "x": 0.2544,
+      "y": 0.5519
+    },
+    {
+      "id": "stroma",
+      "structure": "stroma",
+      "x": 0.3997,
+      "y": 0.6673
+    },
+    {
+      "id": "endothelium",
+      "structure": "endothelium",
+      "x": 0.8835,
+      "y": 0.5546
+    }
+  ]
+}

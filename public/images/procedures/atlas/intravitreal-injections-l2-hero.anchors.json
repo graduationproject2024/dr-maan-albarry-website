@@ -1,0 +1,58 @@
+{
+  "assetId": "intravitreal-injections-l2-hero",
+  "frame": {
+    "width": 2400,
+    "height": 1350
+  },
+  "coordinates": "normalised x (0 = left, 1 = right), y (0 = top, 1 = bottom) in the image frame; identical for every size and background",
+  "anchors": [
+    {
+      "id": "needle",
+      "structure": "needle",
+      "x": 0.4265,
+      "y": 0.128
+    },
+    {
+      "id": "injection-site",
+      "structure": "injection-site",
+      "x": 0.4468,
+      "y": 0.2126
+    },
+    {
+      "id": "medication",
+      "structure": "medication",
+      "x": 0.4973,
+      "y": 0.4229
+    },
+    {
+      "id": "macula",
+      "structure": "macula",
+      "x": 0.6807,
+      "y": 0.5859
+    },
+    {
+      "id": "optic-disc",
+      "structure": "optic-disc",
+      "x": 0.6759,
+      "y": 0.4422
+    },
+    {
+      "id": "retina",
+      "structure": "retina",
+      "x": 0.5973,
+      "y": 0.3284
+    },
+    {
+      "id": "vitreous",
+      "structure": "vitreous",
+      "x": 0.5754,
+      "y": 0.5057
+    },
+    {
+      "id": "optic-nerve",
+      "structure": "optic-nerve",
+      "x": 0.7407,
+      "y": 0.4245
+    }
+  ]
+}
