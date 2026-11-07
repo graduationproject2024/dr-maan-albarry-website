@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\core-journeys.spec.js › J10 › J10 — trust and contact",
-  "startedAt": "2026-11-02T17:36:46.123Z",
-  "finishedAt": "2026-11-02T17:36:54.629Z",
+  "startedAt": "2026-11-03T22:08:33.955Z",
+  "finishedAt": "2026-11-03T22:08:42.348Z",
   "totals": {
     "steps": 6,
     "pass": 6,
@@ -30,16 +30,16 @@
     {
       "step": 1,
       "action": "Open / and tap \"عن الدكتور\" in the menu",
-      "expected": "Profile section",
-      "actual": "#profile top 73",
+      "expected": "Physician profile page, at the top",
+      "actual": "/about/; page header top 65",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2866,
-      "url": "/#profile"
+      "ms": 3071,
+      "url": "/about/"
     },
     {
       "step": 2,
@@ -52,13 +52,13 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 7,
-      "url": "/#profile"
+      "ms": 6,
+      "url": "/about/"
     },
     {
       "step": 3,
       "action": "Open the menu and tap \"الإجراءات\"",
-      "expected": "Procedures with 7 cards",
+      "expected": "Procedure library with 7 cards",
       "actual": "7 cards",
       "status": "PASS",
       "knownBug": null,
@@ -66,40 +66,40 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1144,
-      "url": "/#procedures"
+      "ms": 1130,
+      "url": "/procedures/"
     },
     {
       "step": 4,
-      "action": "Open the menu, tap \"الأسئلة الشائعة\", tap the first question",
+      "action": "Open the menu, tap \"الرئيسية\", go to the questions and tap the first one",
       "expected": "Answer opens",
       "actual": "aria-expanded=true",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j10-trust-contact/04-open-the-menu-tap-tap-the-first-question.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j10-trust-contact/04-open-the-menu-tap-go-to-the-questions-an.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2289,
-      "url": "/#faq"
+      "ms": 3062,
+      "url": "/"
     },
     {
       "step": 5,
       "action": "Find the address",
       "expected": "Clinic name and street address shown in the clinic section",
-      "actual": "العنوان مغربي الصحية للعيون والأذن – المدينة المنورة طريق المطار، المدينة المنورة، المملكة العربية السعودية",
+      "actual": "المستشفى والعنوان مغربي الصحية للعيون والأذن – المدينة المنورة طريق المطار، المدينة المنورة، المملكة العربية السعودية الاتجاهات عبر خرائط جوجل",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j10-trust-contact/05-find-the-address.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 178,
-      "url": "/#faq"
+      "ms": 165,
+      "url": "/"
     },
     {
       "step": 6,
-      "action": "Tap \"موقع المستشفى\" in the closing band, then \"احجز موعداً\"",
+      "action": "Tap the directions link in the clinic section, then \"الحجز عبر بوابة مغربي\"",
       "expected": "Maps then booking portal (both intercepted)",
       "actual": "https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA , https://ob.magrabi.com.sa/OnlineBooking/",
       "status": "PASS",
@@ -108,8 +108,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1665,
-      "url": "/#faq"
+      "ms": 663,
+      "url": "/"
     }
   ]
 }

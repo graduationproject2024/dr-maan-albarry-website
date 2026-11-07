@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\stress.spec.js › Stress — seeded rapid interaction",
-  "startedAt": "2026-11-02T17:37:24.985Z",
-  "finishedAt": "2026-11-02T17:38:12.470Z",
+  "startedAt": "2026-11-03T22:09:14.765Z",
+  "finishedAt": "2026-11-03T22:10:12.475Z",
   "totals": {
     "steps": 13,
     "pass": 13,
@@ -33,22 +33,12 @@
   "pageErrors": [],
   "failedRequests": [
     {
-      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
-      "reason": "net::ERR_ABORTED",
-      "expected": false
-    },
-    {
-      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
-      "reason": "HTTP 404",
-      "expected": false
-    },
-    {
-      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
@@ -63,12 +53,22 @@
       "expected": false
     },
     {
-      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
       "reason": "HTTP 404",
       "expected": false
     },
     {
-      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+      "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+      "reason": "net::ERR_ABORTED",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
+      "reason": "HTTP 404",
+      "expected": false
+    },
+    {
+      "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
       "reason": "net::ERR_ABORTED",
       "expected": false
     },
@@ -106,7 +106,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2674,
+      "ms": 3095,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -120,7 +120,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3414,
+      "ms": 3397,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -134,7 +134,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2508,
+      "ms": 2884,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -148,7 +148,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1527,
+      "ms": 2660,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -162,7 +162,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 225,
+      "ms": 316,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -176,7 +176,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3313,
+      "ms": 3498,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -190,21 +190,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 8905,
+      "ms": 10732,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 8,
       "action": "Back during animation: play, then browser Back",
       "expected": "Previous page renders; the viewer is torn down; no errors",
-      "actual": "path=/en/; 3D instances=1 section=active; canvases=1",
+      "actual": "path=/en/; 3D instances=0 section=null; canvases=0",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5147,
+      "ms": 6285,
       "url": "/en/"
     },
     {
@@ -218,12 +218,12 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6912,
+      "ms": 7366,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 10,
-      "action": "Navigation cycle: visit all 14 procedure pages through the footer links (seeded order)",
+      "action": "Navigation cycle: visit all 14 procedure pages through the procedure links in the menu drawer (seeded order)",
       "expected": "Every page renders its own h1; no errors; no overflow",
       "actual": "order=lens-implants,cataract-surgery,keratoconus-cxl,keratoconus-cxl,lens-implants,lens-implants,icl,intravitreal-injections,icl,cataract-surgery,icl,corneal-transplant,lens-implants,laser-vision-correction; mismatches=none; overflow 0px",
       "status": "PASS",
@@ -232,12 +232,12 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2544,
+      "ms": 7033,
       "url": "/procedures/laser-vision-correction/"
     },
     {
       "step": 11,
-      "action": "Repeated theme (10×) and language (6×) toggles on the home page with the simulator mounted",
+      "action": "Repeated theme (10×) and language (6×) toggles on the Lens Lab page with the simulator mounted",
       "expected": "Ends in the expected theme/language; exactly one vision simulator; its dir/theme follow",
       "actual": "theme light → light; lang en; vsim instances=1 dir=ltr theme=light",
       "status": "PASS",
@@ -246,8 +246,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5977,
-      "url": "/en/"
+      "ms": 5363,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 12,
@@ -260,8 +260,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1974,
-      "url": "/en/"
+      "ms": 2876,
+      "url": "/en/lens-lab/"
     },
     {
       "step": 13,
@@ -282,22 +282,12 @@
       "pageErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-BhwdCW7W.js",
-          "reason": "net::ERR_ABORTED",
-          "expected": false
-        },
-        {
-          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
-          "reason": "HTTP 404",
-          "expected": false
-        },
-        {
-          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/index-Ck2LKrsW.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
@@ -312,12 +302,22 @@
           "expected": false
         },
         {
-          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
           "reason": "HTTP 404",
           "expected": false
         },
         {
-          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-BhwdCW7W.js",
+          "url": "http://localhost:4173/procedures/not-a-procedure/assets/preload-helper-CRzLMJPS.js",
+          "reason": "net::ERR_ABORTED",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
+          "reason": "HTTP 404",
+          "expected": false
+        },
+        {
+          "url": "http://localhost:4173/procedures/%3Cimg%20src=x%20onerror=window.__xss=1%3E/assets/index-Ck2LKrsW.js",
           "reason": "net::ERR_ABORTED",
           "expected": false
         },
@@ -342,7 +342,7 @@
           "expected": false
         }
       ],
-      "ms": 2363,
+      "ms": 2200,
       "url": "/en/?q=%3Cscript%3Ewindow.__xss=1%3C/script%3E#p-risks"
     }
   ]

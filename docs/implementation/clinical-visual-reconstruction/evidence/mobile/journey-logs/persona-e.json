@@ -12,8 +12,8 @@
   "startUrl": "/en/",
   "viewport": "390×844",
   "test": "journeys\\persona-e.spec.js › Persona E — keyboard and reduced motion",
-  "startedAt": "2026-11-02T17:37:10.837Z",
-  "finishedAt": "2026-11-02T17:37:21.306Z",
+  "startedAt": "2026-11-03T22:09:02.615Z",
+  "finishedAt": "2026-11-03T22:09:14.513Z",
   "totals": {
     "steps": 14,
     "pass": 14,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1013,
+      "ms": 1626,
       "url": "/en/"
     },
     {
@@ -52,63 +52,63 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 232,
+      "ms": 221,
       "url": "/en/#main"
     },
     {
       "step": 3,
       "action": "Read headings and names from the accessibility tree",
       "expected": "One h1; heading levels never skip; every button/link has a name",
-      "actual": "h1 count=1; 48 headings; level skips=0; unnamed buttons/links in snapshot=0; snapshot saved (17565 chars)",
+      "actual": "h1 count=1; 32 headings; level skips=0; unnamed buttons/links in snapshot=0; snapshot saved (16090 chars)",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 60,
+      "ms": 72,
       "url": "/en/#main"
     },
     {
       "step": 4,
       "action": "Tab through the header",
       "expected": "Focus visits wordmark → nav links → language → theme → Book, each with a visible ring, in visual order",
-      "actual": "skip-link:Skip to content → wordmark:Dr. Maan Al Barry Consultant Ophthalmolo → a:About → a:Procedures → a:Vision simulator → a:3D surgery → a:Patient education → a:Clinic & booking → icon-btn:التحويل إلى العربية → icon-btn:Light mode on. Switch to dark mode → btn:Book appointment; without visible ring: 0",
+      "actual": "skip-link:Skip to content → wordmark:Dr. Maan Al Barry Consultant Ophthalmolo → a:About → a:Procedures → a:Lens Lab → a:3D surgery → a:Education → a:Clinic & booking → icon-btn:التحويل إلى العربية → icon-btn:Light mode on. Switch to dark mode → btn:Book appointment; without visible ring: 0",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-e/04-tab-through-the-header.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 756,
+      "ms": 1009,
       "url": "/en/"
     },
     {
       "step": 5,
       "action": "Keep tabbing to the cataract card's \"Procedure details\" link and press Enter",
       "expected": "Cataract page opens; focus lands on the main heading area",
-      "actual": "reached after 8 tabs (0 stops without ring: ); now /en/procedures/cataract-surgery/ h1=\"Cataract surgery\", focus main#main",
+      "actual": "reached after 11 tabs (0 stops without ring: ); now /en/procedures/cataract-surgery/ h1=\"Cataract surgery\", focus main#main",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 565,
+      "ms": 664,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 6,
       "action": "Tab to \"Risks and possible complications\" in the page contents and press Enter",
       "expected": "Jumps instantly (reduced motion) to the risks section; text readable without the 3D",
-      "actual": "#p-risks top 81px after 60 ms (instant scroll); 4 risk items",
+      "actual": "#p-risks top 85px after 60 ms (instant scroll); 4 risk items",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-e/06-tab-to-risks-and-possible-complications-.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 459,
+      "ms": 479,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1173,
+      "ms": 1468,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 30,
+      "ms": 24,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 780,
+      "ms": 813,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -178,7 +178,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 898,
+      "ms": 896,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -192,7 +192,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1285,
+      "ms": 1287,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -206,7 +206,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 134,
+      "ms": 166,
       "url": "/en/procedures/cataract-surgery/#p-risks"
     },
     {
@@ -220,7 +220,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1999,
+      "ms": 2032,
       "url": "/"
     }
   ]

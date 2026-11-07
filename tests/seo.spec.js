@@ -2,6 +2,7 @@
 // across canonical / hreflang / sitemap / robots.
 import { test, expect } from '@playwright/test';
 import { DOCTOR, PROCEDURES } from '../doctor-data.js';
+import { PAGES, SECTION_PAGES } from '../site-routes.js';
 
 test.describe('SEO — prerendered routes', () => {
   for (const [route, lang, dir] of [['/', 'ar', 'rtl'], ['/en/', 'en', 'ltr']]) {
@@ -42,12 +43,17 @@ test.describe('SEO — prerendered routes', () => {
     expect(enHtml).toContain(`<link rel="canonical" href="${alts.en}">`);
     const sitemap = await (await request.get('/sitemap.xml')).text();
     const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-    // 16 real pages: both homes + 7 procedure pages per language (procedure pages added in the
-    // clinical visual reconstruction); every one must exist, see the loop below.
+    // 30 real pages: per language the home, the 7 Phase 1 section pages and the 7 procedure pages
+    // (site-routes.js PAGES); every one must exist, see the loop below.
     expect(locs).toEqual(expect.arrayContaining([alts.ar, alts.en]));
     expect(locs[0]).toBe(alts.ar);
-    expect(locs).toHaveLength(16);
-    expect(new Set(locs).size).toBe(16);
+    expect(locs).toHaveLength(PAGES.length);
+    expect(PAGES.length).toBe(30);
+    expect(new Set(locs).size).toBe(30);
+    for (const s of SECTION_PAGES) {
+      expect(locs).toContain(new URL(`${s.key}/`, alts.ar).href);
+      expect(locs).toContain(new URL(`en/${s.key}/`, alts.ar).href);
+    }
     for (const slug of PROCEDURES.map(p => p.slug)) {
       expect(locs).toContain(new URL(`procedures/${slug}/`, alts.ar).href);
       expect(locs).toContain(new URL(`en/procedures/${slug}/`, alts.ar).href);

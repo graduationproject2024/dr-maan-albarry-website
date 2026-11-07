@@ -12,8 +12,8 @@
   "startUrl": "/en/procedures/cataract-surgery/",
   "viewport": "390×844",
   "test": "journeys\\core-journeys.spec.js › J05 › J05 — 3D loading failure and retry",
-  "startedAt": "2026-11-02T17:36:41.396Z",
-  "finishedAt": "2026-11-02T17:36:49.391Z",
+  "startedAt": "2026-11-03T22:08:27.694Z",
+  "finishedAt": "2026-11-03T22:08:37.350Z",
   "totals": {
     "steps": 5,
     "pass": 5,
@@ -30,7 +30,7 @@
   ],
   "consoleWarnings": [
     "3D cataract module unavailable: TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/cataract-sim-WPsBARml.js",
-    "Vision simulator failed to load TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/vision-sim-CcIsNhyF.js"
+    "Vision simulator failed to load TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/vision-sim-DomGNAhN.js"
   ],
   "pageErrors": [],
   "failedRequests": [],
@@ -51,12 +51,12 @@
       "expected": true
     },
     {
-      "url": "http://localhost:4173/assets/vision-sim-CcIsNhyF.js",
+      "url": "http://localhost:4173/assets/vision-sim-DomGNAhN.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     },
     {
-      "url": "http://localhost:4173/assets/vision-sim-CcIsNhyF.js",
+      "url": "http://localhost:4173/assets/vision-sim-DomGNAhN.js",
       "reason": "net::ERR_CONNECTION_FAILED",
       "expected": true
     }
@@ -73,7 +73,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1064,
+      "ms": 1480,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -91,7 +91,7 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 643,
+      "ms": 1691,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -105,7 +105,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1016,
+      "ms": 1114,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -119,14 +119,14 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1141,
+      "ms": 1160,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 5,
-      "action": "Abort the vision-simulator chunk, open the home simulator section",
+      "action": "Abort the vision-simulator chunk, open the simulator section (Lens Lab page)",
       "expected": "The section shows the simulator or a clear fallback — never an empty reserved gap",
-      "actual": "host 189px tall, children=1, text=\"The vision simulator could not load on this device or connection. You can try ag\"",
+      "actual": "host 232px tall, children=1, text=\"The vision simulator could not load on this device or connection. You can try ag\"",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/j05-loading-failure/05-abort-the-vision-simulator-chunk-open-th.jpg",
@@ -136,8 +136,8 @@
       ],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3904,
-      "url": "/en/#simulator"
+      "ms": 3877,
+      "url": "/en/lens-lab/#simulator"
     }
   ]
 }

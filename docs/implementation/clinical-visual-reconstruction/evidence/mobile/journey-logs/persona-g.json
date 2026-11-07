@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "430×739",
   "test": "journeys\\persona-g.spec.js › Persona G — returning patient",
-  "startedAt": "2026-11-02T17:37:19.118Z",
-  "finishedAt": "2026-11-02T17:37:25.051Z",
+  "startedAt": "2026-11-03T22:09:06.587Z",
+  "finishedAt": "2026-11-03T22:09:13.363Z",
   "totals": {
     "steps": 7,
     "pass": 7,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1600,
+      "ms": 1992,
       "url": "/en/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 926,
+      "ms": 1116,
       "url": "/en/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1715,
+      "ms": 1867,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 135,
+      "ms": 101,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -94,21 +94,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 181,
+      "ms": 132,
       "url": "/en/procedures/corneal-transplant/"
     },
     {
       "step": 6,
       "action": "Press Back",
       "expected": "Returns to the keratoconus page near where the reader left it",
-      "actual": "h1=\"Keratoconus & corneal cross-linking (CXL)\" y=4605 (left at 4605)",
+      "actual": "h1=\"Keratoconus & corneal cross-linking (CXL)\" y=4952 (left at 4952)",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 515,
+      "ms": 514,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 382,
+      "ms": 581,
       "url": "/en/procedures/keratoconus-cxl/#p-risks"
     }
   ]

@@ -29,13 +29,16 @@ test('Persona A — older Arabic-speaking patient', async ({ page }, testInfo) =
   });
 
   await j.step('Swipe up with one finger until the cataract procedure card is on screen', 'The page scrolls under the finger; the cataract card becomes visible', async () => {
-    const card = page.locator('#procedures .proc-card').filter({ hasText: NAME['cataract-surgery'].ar }).first();
+    const card = page.locator('#procedures :is(.proc-card, .spec-card)').filter({ hasText: NAME['cataract-surgery'].ar }).first();
     const y0 = await page.evaluate(() => scrollY);
     let cdp = null;
     for (let i = 0; i < 20; i++) {
       const r = await rect(card);
-      if (r.y > 60 && r.bottom < 740) break;
-      cdp = await swipe(page, { x: 180, y: 600, dy: -380, cdp });
+      // Phase 1: the cataract card is the large lead specialty card (~500 px at 360 px), so "on screen" means its
+      // top and its details link are in view; the finger swipes back if it overshoots
+      const l = await rect(card.locator('.proc-card-link'));
+      if (r.y > 60 && r.y < 500 && l.bottom < 740) break;
+      cdp = await swipe(page, { x: 180, y: 600, dy: r.y > 60 ? -380 : 300, cdp });
       await page.waitForTimeout(250);
     }
     const r = await rect(card);
@@ -44,7 +47,7 @@ test('Persona A — older Arabic-speaking patient', async ({ page }, testInfo) =
   }, { shot: true });
 
   await j.step('Tap "تفاصيل الإجراء" on the cataract card', 'The cataract surgery page opens at the top with its title', async () => {
-    const card = page.locator('#procedures .proc-card').filter({ hasText: NAME['cataract-surgery'].ar }).first();
+    const card = page.locator('#procedures :is(.proc-card, .spec-card)').filter({ hasText: NAME['cataract-surgery'].ar }).first();
     await card.locator('.proc-card-link').tap();
     await page.waitForURL(/\/procedures\/cataract-surgery\/$/);
     await page.locator('#p-anatomy').waitFor();

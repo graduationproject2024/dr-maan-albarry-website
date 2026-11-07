@@ -10,9 +10,9 @@ import { PAGES, pathFor } from './site-routes.js';
 const SITE_URL = (process.env.SITE_URL || SITE.url).replace(/\/+$/, '');
 // Routes that genuinely exist after `npm run build` (scripts/prerender.mjs writes every page).
 export const ROUTES = { ar: `${SITE_URL}/`, en: `${SITE_URL}/en/` };
-// Absolute URL of every prerendered page (16: 2 homes + 7 procedures × 2 languages).
-export const pageUrl = (lang, slug = null) => `${SITE_URL}/${pathFor(lang, slug)}`;
-export const PAGE_URLS = PAGES.map(p => ({ ...p, url: pageUrl(p.lang, p.slug) }));
+// Absolute URL of every prerendered page (30: per language 1 home + 7 section pages + 7 procedures).
+export const pageUrl = (lang, slug = null, page = null) => `${SITE_URL}/${pathFor(lang, slug, page)}`;
+export const PAGE_URLS = PAGES.map(p => ({ ...p, url: pageUrl(p.lang, p.slug, p.page) }));
 export { SITE_URL };
 
 // Procedure illustrations are rendered by another workstream into public/images/procedures/.
@@ -62,9 +62,9 @@ function seoPublisher() {
     generateBundle() {
       const today = new Date().toISOString().slice(0, 10);
       // Each page lists its AR/EN pair (+ x-default = Arabic) so every language version is discoverable.
-      const links = slug => ['ar', 'en'].map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${pageUrl(l, slug)}"/>`)
-        .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl('ar', slug)}"/>`).join('\n');
-      const url = p => `  <url>\n    <loc>${p.url}</loc>\n    <lastmod>${today}</lastmod>\n${links(p.slug)}\n  </url>`;
+      const links = (slug, page) => ['ar', 'en'].map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${pageUrl(l, slug, page)}"/>`)
+        .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl('ar', slug, page)}"/>`).join('\n');
+      const url = p => `  <url>\n    <loc>${p.url}</loc>\n    <lastmod>${today}</lastmod>\n${links(p.slug, p.page)}\n  </url>`;
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source:
         `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${PAGE_URLS.map(url).join('\n')}\n</urlset>\n` });
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n` });
@@ -92,7 +92,9 @@ export default defineConfig({
       input: {
         index: resolve(import.meta.dirname, 'index.html'),
         ...(process.env.CSIM_HARNESS ? { cataractSimPreview: resolve(import.meta.dirname, 'cataract-sim-preview.html') } : {}),
-        ...(process.env.CSIM_HARNESS ? { visionSimPreview: resolve(import.meta.dirname, 'vision-sim-preview.html') } : {})
+        ...(process.env.CSIM_HARNESS ? { lensLabPreview: resolve(import.meta.dirname, 'lens-lab-preview.html') } : {}),
+        ...(process.env.CSIM_HARNESS ? { visionSimPreview: resolve(import.meta.dirname, 'vision-sim-preview.html') } : {}),
+        ...(process.env.CSIM_HARNESS ? { lightJourneyPreview: resolve(import.meta.dirname, 'light-journey-preview.html') } : {})
       }
     }
   }

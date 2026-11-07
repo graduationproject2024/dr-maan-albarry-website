@@ -1,4 +1,4 @@
-// axe-core scan of all 16 pages × light/dark at a phone width (390×844) — automated rule checks only; this is
+// axe-core scan of all pages (site-routes.js PAGES: 30 since Phase 1) × light/dark at a phone width (390×844) — automated rule checks only; this is
 // not a screen-reader or manual accessibility audit. Results: test-results/journeys/axe.json (+ evidence mirror).
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -16,15 +16,21 @@ for (const theme of ['light', 'dark']) {
       await page.addInitScript((t) => { try { localStorage.setItem('theme', t); } catch { /* ignore */ } }, theme);
       await page.goto(`/${p.path}`);
       await page.locator('#app main h1').waitFor();
-      if (!p.slug) { // let the lazy vision simulator mount so its controls are scanned too
+      if (p.page === 'lens-lab') { // let the lazy Lens Lab and vision simulator mount so their controls are scanned too
+        await page.locator('#lens-lab-host').scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => document.querySelector('.feature-lens-lab.is-mounted, .feature-lens-lab.is-failed'), null, { timeout: 30000 });
         await page.locator('#simulator-host').scrollIntoViewIfNeeded();
         await page.waitForFunction(() => document.querySelector('#simulator-host .vsim'), null, { timeout: 30000 });
-      } else await page.locator('#p-faq').waitFor();
+      } else if (p.slug) await page.locator('#p-faq').waitFor();
+      else await page.locator(`main[data-page="${p.page}"]`).waitFor();
       await page.evaluate(() => scrollTo(0, 0));
       await page.waitForTimeout(400);
       // BUG-18: let running transitions (section fade-ins, theme colours) settle so colour-contrast never samples a
       // half-faded frame on a loaded machine; a finished frame is what visitors see.
-      await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+      // Infinite loops (the Light Journey's illustrative ray flow) never finish, so only finite ones are awaited.
+      await page.evaluate(() => Promise.all(document.getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => {}))));
       const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']).analyze();
       const v = r.violations.map((x) => ({ id: x.id, impact: x.impact, help: x.help, nodes: x.nodes.length, targets: x.nodes.slice(0, 4).map((n) => n.target.join(' ')) }));
       results.push({ page: `/${p.path}`, theme, violations: v, passes: r.passes.length, incomplete: r.incomplete.length });

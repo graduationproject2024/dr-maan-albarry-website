@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "412×839",
   "test": "journeys\\persona-b.spec.js › Persona B — first-time visitor",
-  "startedAt": "2026-11-02T17:37:03.178Z",
-  "finishedAt": "2026-11-02T17:37:26.632Z",
+  "startedAt": "2026-11-03T22:08:45.315Z",
+  "finishedAt": "2026-11-03T22:08:54.086Z",
   "totals": {
     "steps": 12,
     "pass": 12,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1103,
+      "ms": 1953,
       "url": "/"
     },
     {
@@ -52,22 +52,22 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 496,
+      "ms": 480,
       "url": "/"
     },
     {
       "step": 3,
       "action": "Tap \"الإجراءات\" (services) in the menu",
-      "expected": "Menu closes; the procedures section is scrolled to just under the header",
-      "actual": "drawer open=false; #procedures top=73px, header bottom=65px; url=/#procedures",
+      "expected": "Menu closes; the procedure library page opens just under the header (Phase 1: its own page)",
+      "actual": "drawer open=false; library header top=65px, header bottom=65px; url=/procedures/",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/03-tap-services-in-the-menu.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 868,
-      "url": "/#procedures"
+      "ms": 741,
+      "url": "/procedures/"
     },
     {
       "step": 4,
@@ -80,8 +80,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 353,
-      "url": "/#procedures"
+      "ms": 257,
+      "url": "/procedures/"
     },
     {
       "step": 5,
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 180,
+      "ms": 170,
       "url": "/procedures/lens-implants/"
     },
     {
@@ -108,50 +108,50 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 169,
+      "ms": 134,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 7,
       "action": "Press the browser back button",
       "expected": "Returns to the lens implants page",
-      "actual": "/procedures/lens-implants/ h1=\"العدسات المزروعة داخل العين\" y=5293",
+      "actual": "/procedures/lens-implants/ h1=\"العدسات المزروعة داخل العين\" y=5857",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 312,
+      "ms": 319,
       "url": "/procedures/lens-implants/"
     },
     {
       "step": 8,
       "action": "Open the menu and tap \"عن الدكتور\" (qualifications)",
-      "expected": "Home page opens at the qualifications section; FRCS and the current role are listed",
-      "actual": "#profile top=73px; FRCS listed=true; ledger rows=8",
+      "expected": "The physician profile opens at the top; FRCS and the current role are listed in the qualifications ledger",
+      "actual": "page header top=65px; FRCS listed=true; current role listed=true; ledger rows=8",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/08-open-the-menu-and-tap-qualifications.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1447,
-      "url": "/#profile"
+      "ms": 1263,
+      "url": "/about/"
     },
     {
       "step": 9,
-      "action": "Swipe down to the clinic section and tap \"الاتجاهات عبر خرائط جوجل\"",
+      "action": "Open the menu, tap \"العيادة والحجز\", swipe to the directions and tap \"الاتجاهات عبر خرائط جوجل\"",
       "expected": "Google Maps link with the hospital location opens in a new tab (intercepted)",
-      "actual": "tapped → https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA (_blank); address shown: \"العنوان مغربي الصحية للعيون والأذن – المدينة المنورة طريق المطار، المدينة المنور\"",
+      "actual": "tapped → https://maps.app.goo.gl/Hx6M1eKNEnGbe7AbA (_blank); address shown: \"المستشفى والعنوان مغربي الصحية للعيون والأذن – المدينة المنورة طريق المطار، المد\"",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/09-swipe-down-to-the-clinic-section-and-tap.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-b/09-open-the-menu-tap-swipe-to-the-direction.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 17688,
-      "url": "/#profile"
+      "ms": 2604,
+      "url": "/clinic/"
     },
     {
       "step": 10,
@@ -165,7 +165,7 @@
       "pageErrors": [],
       "failedRequests": [],
       "ms": 3,
-      "url": "/#profile"
+      "url": "/clinic/"
     },
     {
       "step": 11,
@@ -178,8 +178,8 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 82,
-      "url": "/#profile"
+      "ms": 93,
+      "url": "/clinic/"
     },
     {
       "step": 12,
@@ -193,7 +193,7 @@
       "pageErrors": [],
       "failedRequests": [],
       "ms": 2,
-      "url": "/#profile"
+      "url": "/clinic/"
     }
   ]
 }

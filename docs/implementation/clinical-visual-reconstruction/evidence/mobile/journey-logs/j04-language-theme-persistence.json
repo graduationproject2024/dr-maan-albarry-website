@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "412×839",
   "test": "journeys\\core-journeys.spec.js › J04 › J04 — language and theme across reloads and back",
-  "startedAt": "2026-11-02T17:36:41.047Z",
-  "finishedAt": "2026-11-02T17:36:46.002Z",
+  "startedAt": "2026-11-03T22:08:27.403Z",
+  "finishedAt": "2026-11-03T22:08:33.828Z",
   "totals": {
     "steps": 9,
     "pass": 9,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1356,
+      "ms": 2064,
       "url": "/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 217,
+      "ms": 202,
       "url": "/en/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 486,
+      "ms": 613,
       "url": "/en/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 722,
+      "ms": 891,
       "url": "/en/procedures/icl/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 322,
+      "ms": 405,
       "url": "/procedures/icl/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 315,
+      "ms": 319,
       "url": "/en/procedures/icl/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 316,
+      "ms": 314,
       "url": "/procedures/icl/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 439,
+      "ms": 599,
       "url": "/procedures/icl/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 609,
+      "ms": 834,
       "url": "/"
     }
   ]

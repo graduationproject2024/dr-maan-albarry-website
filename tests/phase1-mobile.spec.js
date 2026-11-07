@@ -98,6 +98,7 @@ for (const [w, h] of MOBILE) {
 
         test('simulator: lens tag stays in frame, controls fit and still work', async ({ page }) => {
           await open(page, { lang, theme });
+          await page.goto(lang === 'en' ? '/en/lens-lab/' : '/lens-lab/'); // the full simulator lives on the Lens Lab page (Phase 1)
           await page.locator('#simulator-host').scrollIntoViewIfNeeded();
           await expect(page.locator('#simulator-host .vsim-viewport')).toBeVisible({ timeout: 20_000 });
           for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
@@ -118,7 +119,8 @@ for (const [w, h] of MOBILE) {
             .filter(l => !l.closest('[hidden], details:not([open])'))
             .filter(l => { const b = l.getBoundingClientRect(); return b.height < 44 || b.right > innerWidth + 1 || b.x < -1; }).length);
           expect(bad).toBe(0);
-          // distance slider via keyboard
+          // distance slider via keyboard (it lives in the simulator's "Advanced" disclosure since the 2026-11 simplification)
+          await page.locator('#simulator-host .vsim-adv > summary').click();
           const range = page.locator('#simulator-host .vsim-range');
           await range.focus();
           await page.keyboard.press('Home');
@@ -216,23 +218,30 @@ test.describe('Regression — existing features', () => {
     expect(broken).toEqual([]);
   });
 
-  test('mobile drawer, navigation and scroll-spy', async ({ page }) => {
+  test('mobile drawer, navigation and current-page indicator', async ({ page }) => {
+    // Phase 1: drawer items are pages (the homepage scroll-spy was replaced by a current-page marker)
     await open(page);
     await page.locator('.mobile-menu-btn').click();
     await expect(page.locator('#mobile-nav')).toHaveClass(/open/);
-    await page.locator('#mobile-nav a[href="#clinic"]').first().click();
+    await page.locator('#mobile-nav a[href="clinic/"]').first().click();
     await expect(page.locator('#mobile-nav')).not.toHaveClass(/open/);
+    await expect(page).toHaveURL(/\/clinic\/$/);
+    await expect.poll(async () => (await box(page, 'main h1')).y, { timeout: 4000 }).toBeLessThan(200);
+    await expect.poll(() => page.locator('#mobile-nav a[href="clinic/"]').first().getAttribute('class'), { timeout: 4000 }).toContain('active');
+    await expect(page.locator('#mobile-nav a[href="clinic/"]').first()).toHaveAttribute('aria-current', 'page');
+    // the homepage clinic section is still one anchor away
+    await page.goto('/#clinic');
     await expect.poll(async () => (await box(page, '#clinic')).y, { timeout: 4000 }).toBeLessThan(200);
-    await expect.poll(() => page.locator('#mobile-nav a[href="#clinic"]').first().getAttribute('class'), { timeout: 4000 }).toContain('active');
   });
 
-  test('FAQ, education accordion and questionnaire still work', async ({ page }) => {
+  test('FAQ, education guides and questionnaire still work', async ({ page }) => {
     await open(page);
     await page.locator('#faq-0 .faq-question').click();
     await expect(page.locator('#faq-0')).toHaveClass(/open/);
-    const art = page.locator('.article-item').first();
-    await art.locator('[onclick^="toggleArticle"]').first().click();
-    await expect(art).toHaveClass(/open/);
+    // Phase 1: the short answers became full guides on /education/; a homepage guide link opens its article
+    await page.locator('#education .guide-row a').first().click();
+    await expect(page).toHaveURL(/\/education\/#cataract-guide$/);
+    await expect(page.locator('#cataract-guide h4').first()).toBeVisible();
     for (let i = 0; i < 4; i++) {
       await page.locator('.q-option').first().click();
       await page.locator('.q-nav .btn-primary').click();

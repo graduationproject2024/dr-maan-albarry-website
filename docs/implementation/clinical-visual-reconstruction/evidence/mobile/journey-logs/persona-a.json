@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "360×740",
   "test": "journeys\\persona-a.spec.js › Persona A — older Arabic-speaking patient",
-  "startedAt": "2026-11-02T17:36:56.232Z",
-  "finishedAt": "2026-11-02T17:37:06.114Z",
+  "startedAt": "2026-11-03T22:08:44.249Z",
+  "finishedAt": "2026-11-03T22:09:02.471Z",
   "totals": {
     "steps": 13,
     "pass": 13,
@@ -38,35 +38,35 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1109,
+      "ms": 1641,
       "url": "/"
     },
     {
       "step": 2,
       "action": "Look at the first screen to identify the doctor",
       "expected": "Portrait loaded, specialty and current role visible above the fold; body text ≥16px",
-      "actual": "portrait loaded=true; role=\"كبير موظفي مركز مغربي المدينة المنورة\"; subtitle 17.08px, bottom at 269px of 740px",
+      "actual": "portrait loaded=true; role=\"كبير موظفي مركز مغربي المدينة المنورة\"; subtitle 18.88px, bottom at 388px of 740px",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 32,
+      "ms": 44,
       "url": "/"
     },
     {
       "step": 3,
       "action": "Swipe up with one finger until the cataract procedure card is on screen",
       "expected": "The page scrolls under the finger; the cataract card becomes visible",
-      "actual": "scrollY 0 → 1095; card top 139px, height 488px",
+      "actual": "scrollY 0 → 2350; card top 198px, height 502px",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-a/03-swipe-up-with-one-finger-until-the-catar.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3372,
+      "ms": 11042,
       "url": "/"
     },
     {
@@ -80,21 +80,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 130,
+      "ms": 123,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 5,
       "action": "Read the explanation text",
       "expected": "Body paragraphs ≥16px with line-height ≥1.5; no horizontal scrolling",
-      "actual": "first paragraph 17px, line-height ×1.85; 0 text elements <16px; overflow 0px",
+      "actual": "first paragraph 18px, line-height ×1.90; 0 text elements <16px; overflow 0px",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 27,
+      "ms": 28,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 853,
+      "ms": 962,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -122,7 +122,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1567,
+      "ms": 1583,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -136,7 +136,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1684,
+      "ms": 1681,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 10,
+      "ms": 12,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -164,7 +164,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 9,
+      "ms": 11,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -178,21 +178,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 365,
+      "ms": 385,
       "url": "/procedures/cataract-surgery/"
     },
     {
       "step": 12,
       "action": "Find how to book: tap \"احجز موعداً\" in the bottom bar",
       "expected": "Bottom bar visible; tapping it targets the Magrabi booking portal in a new tab",
-      "actual": "bar 104×54 at y=678; tapped → https://ob.magrabi.com.sa/OnlineBooking/ target=_blank rel=noopener noreferrer",
+      "actual": "bar 101×54 at y=678; tapped → https://ob.magrabi.com.sa/OnlineBooking/ target=_blank rel=noopener noreferrer",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-a/12-find-how-to-book-tap-in-the-bottom-bar.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 66,
+      "ms": 39,
       "url": "/procedures/cataract-surgery/"
     },
     {

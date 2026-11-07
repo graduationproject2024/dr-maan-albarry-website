@@ -402,6 +402,57 @@
           "change": "owner confirmed Dr. Maan performs this procedure; procedure page and homepage card added"
         }
       ]
+    },
+    {
+      "id": "role-redsea-scientific-council",
+      "ar": "عضو المجلس العلمي لمؤتمر البحر الأحمر لطب وجراحة العيون",
+      "en": "Scientific Council Member – Red Sea Ophthalmology Conference",
+      "source": "magrabi",
+      "evidence": "Listed on the Magrabi Health profile and in R0 (93465a6) DOCTOR.roles / llms.txt; dropped when the owner replaced the role list at R2 (2fbf261). docs/phase-1/CONTENT_PRESERVATION_MATRIX.md row E4.",
+      "status": "pending",
+      "display": "pending",
+      "note": "Not shown publicly until Dr. Maan confirms it; overlaps the owner-supplied 'co-founder' role.",
+      "history": [
+        {
+          "date": "2026-11-04",
+          "commit": null,
+          "change": "recorded as pending (Phase 1 profile review)"
+        }
+      ]
+    },
+    {
+      "id": "role-sos-former-secretary",
+      "ar": "أمين سر الجمعية السعودية لطب العيون سابقاً",
+      "en": "Former Secretary – Saudi Ophthalmological Society",
+      "source": "magrabi",
+      "evidence": "Listed on the Magrabi Health profile and in R0 (93465a6) DOCTOR.roles; dropped at R2 (2fbf261). Matrix row E4.",
+      "status": "pending",
+      "display": "pending",
+      "note": "Not shown publicly until Dr. Maan confirms it.",
+      "history": [
+        {
+          "date": "2026-11-04",
+          "commit": null,
+          "change": "recorded as pending (Phase 1 profile review)"
+        }
+      ]
+    },
+    {
+      "id": "hospital-src-excellence",
+      "ar": "مركز تميز في طب العيون (SRC) بحسب مغربي الصحية",
+      "en": "SRC Center of Excellence in Ophthalmology, as published by Magrabi Health",
+      "source": "magrabi",
+      "evidence": "R0 FAQ / llms.txt; visible on the Magrabi eye page on 2026-11-02 ('SRC Network of Excellence'). Matrix row D5.",
+      "status": "pending",
+      "display": "pending",
+      "note": "Restore with attribution only after the owner confirms the wording.",
+      "history": [
+        {
+          "date": "2026-11-04",
+          "commit": null,
+          "change": "recorded as pending (Phase 1)"
+        }
+      ]
     }
   ]
 }

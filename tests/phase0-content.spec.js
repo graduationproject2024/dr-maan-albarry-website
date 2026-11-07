@@ -22,9 +22,21 @@ async function open(page, lang) {
   await expect(page.locator('html')).toHaveAttribute('lang', lang);
 }
 
-/** Visible page text plus text that only appears after interaction (every simulator lens, questionnaire result). */
-async function fullText(page) {
+/** Visible page text plus text that only appears after interaction (every simulator lens, questionnaire result).
+ *  Since Phase 1 the simulator lives on /lens-lab/ and the questionnaire on /education/: both are visited, so the
+ *  same claims are checked on the same content as before, plus every new page. */
+async function fullText(page, lang) {
   const chunks = [await page.locator('body').innerText()];
+  const pre = lang === 'en' ? '/en/' : '/';
+  for (const key of ['about/', 'procedures/', 'surgical-education/', 'how-vision-works/', 'clinic/']) {
+    await page.goto(pre + key);
+    await page.locator('main h1').waitFor();
+    chunks.push(await page.locator('body').innerText());
+  }
+  await page.goto(pre + 'lens-lab/');
+  await page.locator('#lens-lab-host').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('.feature-lens-lab.is-mounted'), null, { timeout: 20_000 });
+  chunks.push(await page.locator('main').innerText());
   await page.locator('#simulator-host').scrollIntoViewIfNeeded();
   await page.locator('#simulator-host .vsim').waitFor({ timeout: 20_000 });
   for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
@@ -32,10 +44,14 @@ async function fullText(page) {
     await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
     chunks.push(await page.locator('#simulator-host .vsim').innerText());
   }
-  await page.evaluate(() => {
-    for (let i = 0; i < 4; i++) { window.selectQOption(0); window.nextQStep(); }
-  });
-  chunks.push(await page.locator('#questionnaire').innerText());
+  await page.goto(pre + 'education/');
+  await page.locator('#questionnaire').waitFor();
+  chunks.push(await page.locator('main').innerText());
+  // every summary variant (the result is answer-driven again since Phase 1)
+  for (const answers of [[0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 1, 3]]) {
+    await page.evaluate(a => { window.restartQ(); for (const i of a) { window.selectQOption(i); window.nextQStep(); } }, answers);
+    chunks.push(await page.locator('#questionnaire').innerText());
+  }
   return chunks.join('\n');
 }
 
@@ -62,7 +78,7 @@ for (const lang of ['ar', 'en']) {
 
     test('no unsupported claims: stats, licence, testimonials, lens preference, incision size', async ({ page }) => {
       await open(page, lang);
-      const text = await fullText(page);
+      const text = await fullText(page, lang);
       expect(text).not.toMatch(UNSUPPORTED_STATS);
       expect(text).not.toMatch(LICENCE);
       expect(text).not.toMatch(TESTIMONIAL_PLACEHOLDER);
@@ -72,11 +88,17 @@ for (const lang of ['ar', 'en']) {
     });
 
     test('professional roles render exactly as the central data states', async ({ page }) => {
-      await open(page, lang);
+      // full role wording on the physician profile (Phase 1); the homepage ledger uses the registry's short forms
+      await page.goto(lang === 'en' ? '/en/about/' : '/about/');
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
       const timeline = await page.$$eval('#profile .timeline-item h4', els => els.map(e => e.textContent.trim()));
       expect(timeline).toEqual(DOCTOR.professional.roles.map(r => r[lang]));
       const text = await page.locator('body').innerText();
       expect(text).not.toMatch(/Chief Medical Officer|Senior Consultant|المدير الطبي التنفيذي/);
+      await open(page, lang);
+      const homeTimeline = await page.$$eval('#profile .timeline-item h4', els => els.map(e => e.textContent.trim()));
+      expect(homeTimeline).toEqual(DOCTOR.professional.roles.map(r => (lang === 'ar' ? (r.shortAr || r.ar) : (r.shortEn || r.en))));
+      expect(await page.locator('body').innerText()).not.toMatch(/Chief Medical Officer|Senior Consultant|المدير الطبي التنفيذي/);
       await expect(page.locator('.hero-specialty-subtitle')).toHaveText(DOCTOR.identity.title[lang]);
     });
 

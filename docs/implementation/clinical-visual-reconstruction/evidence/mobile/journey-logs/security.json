@@ -2,7 +2,56 @@
   "pages": [
     {
       "page": "/",
-      "newTabLinks": 28,
+      "newTabLinks": 21,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/about/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/procedures/",
+      "newTabLinks": 20,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/lens-lab/",
+      "newTabLinks": 19,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/surgical-education/",
+      "newTabLinks": 19,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/education/",
+      "newTabLinks": 19,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/how-vision-works/",
+      "newTabLinks": 20,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/clinic/",
+      "newTabLinks": 22,
       "withoutNoopener": [],
       "insecureHttp": [],
       "iframes": [
@@ -60,7 +109,56 @@
     },
     {
       "page": "/en/",
-      "newTabLinks": 28,
+      "newTabLinks": 21,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/about/",
+      "newTabLinks": 25,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/procedures/",
+      "newTabLinks": 20,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/lens-lab/",
+      "newTabLinks": 27,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/surgical-education/",
+      "newTabLinks": 19,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/education/",
+      "newTabLinks": 19,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/how-vision-works/",
+      "newTabLinks": 20,
+      "withoutNoopener": [],
+      "insecureHttp": [],
+      "iframes": []
+    },
+    {
+      "page": "/en/clinic/",
+      "newTabLinks": 22,
       "withoutNoopener": [],
       "insecureHttp": [],
       "iframes": [
@@ -118,19 +216,23 @@
     }
   ],
   "externalHosts": {
-    "ob.magrabi.com.sa": 84,
-    "maps.app.goo.gl": 66,
-    "www.instagram.com": 34,
-    "x.com": 34,
-    "www.youtube.com": 34,
-    "tel:": 70,
-    "wa.me": 52,
-    "www.magrabihealth.com": 16,
-    "www.taibahu.edu.sa": 16,
-    "www.aao.org": 34,
-    "www.nei.nih.gov": 6,
-    "www.nhs.uk": 12,
-    "www.fda.gov": 2
+    "ob.magrabi.com.sa": 142,
+    "maps.app.goo.gl": 122,
+    "www.instagram.com": 62,
+    "x.com": 62,
+    "www.youtube.com": 62,
+    "tel:": 118,
+    "wa.me": 94,
+    "www.magrabihealth.com": 32,
+    "www.taibahu.edu.sa": 32,
+    "www.nei.nih.gov": 8,
+    "www.aao.org": 35,
+    "www.nhs.uk": 13,
+    "www.fda.gov": 2,
+    "eyewiki.org": 3,
+    "www.cochrane.org": 1,
+    "pmc.ncbi.nlm.nih.gov": 1,
+    "doi.org": 1
   },
   "storageKeys": [
     "lang=en",

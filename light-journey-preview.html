@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Light journey preview (internal)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- @doctor-json-ld -->
+    <style>
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #f4f6f5; color: #0f1e1c; }
+      body[data-theme="dark"] { background: #0a1112; color: #e8efed; }
+      main { padding: 16px; }
+      .pv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; font-size: 14px; }
+      .pv-bar button { min-height: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid #7c8b87; background: #fff; color: #0f1e1c; cursor: pointer; }
+      @media (max-width: 400px) { main { padding: 8px; } }
+    </style>
+  </head>
+  <body>
+    <div class="pv-bar" role="region" aria-label="Preview harness controls">
+      <strong>Internal preview: light journey</strong>
+      <button type="button" id="pv-lang">Toggle language</button>
+      <button type="button" id="pv-theme">Toggle theme</button>
+    </div>
+    <main><div id="lj-host" data-light-journey-host></div></main>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const opts = { lang: q.get('lang') === 'en' ? 'en' : 'ar', theme: q.get('theme') === 'dark' ? 'dark' : 'light' };
+      if (q.has('reduced')) opts.reducedMotion = q.get('reduced') === '1';
+      if (q.has('step')) opts.step = Number(q.get('step'));
+      if (q.has('light')) opts.light = q.get('light');
+      if (q.has('focus')) opts.focus = q.get('focus');
+      // Integration contract: the host page supplies the href builder (site-routes pathFor in production).
+      opts.linkFor = (slug) => `./${opts.lang === 'en' ? 'en/' : ''}procedures/${slug}/`;
+      document.body.dataset.theme = opts.theme;
+      document.documentElement.lang = opts.lang;
+      const host = document.getElementById('lj-host');
+      const mod = await import('./src/light-journey/index.js');
+      window.__ljModule = mod;
+      window.__ljEvents = [];
+      window.__ljWire = (c) => { ['step', 'change', 'langchange', 'themechange', 'destroy'].forEach((ev) => c.on(ev, (p) => window.__ljEvents.push({ ev, p }))); return c; };
+      window.__ljMount = (o = {}) => window.__ljWire(mod.mount(host, { ...opts, ...o }));
+      window.__lj = window.__ljMount();
+      document.getElementById('pv-lang').addEventListener('click', () => { const c = window.__lj; const l = c.getState().lang === 'ar' ? 'en' : 'ar'; c.setLang(l); document.documentElement.lang = l; });
+      document.getElementById('pv-theme').addEventListener('click', () => {
+        const c = window.__lj; const t = c.getState().theme === 'dark' ? 'light' : 'dark'; c.setTheme(t); document.body.dataset.theme = t;
+      });
+      document.body.dataset.ready = '1';
+    </script>
+  </body>
+</html>

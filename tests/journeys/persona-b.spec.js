@@ -27,13 +27,14 @@ test('Persona B — first-time visitor', async ({ page }, testInfo) => {
     return { actual: `drawer open=${open}, aria-expanded=${exp}`, ok: open && exp === 'true' };
   }, { shot: true });
 
-  await j.step('Tap "الإجراءات" (services) in the menu', 'Menu closes; the procedures section is scrolled to just under the header', async () => {
+  await j.step('Tap "الإجراءات" (services) in the menu', 'Menu closes; the procedure library page opens just under the header (Phase 1: its own page)', async () => {
     await page.locator('#mobile-nav .drawer-links a[data-section="procedures"]').tap();
+    await page.waitForURL(/\/procedures\/$/);
     await page.waitForTimeout(300); await settleScroll(page);
     const open = await page.locator('#mobile-nav').evaluate((n) => n.classList.contains('open'));
-    const top = (await rect(page.locator('#procedures'))).y;
+    const top = (await rect(page.locator('main .page-hero'))).y;
     const hdr = (await rect(page.locator('#site-header'))).bottom;
-    return { actual: `drawer open=${open}; #procedures top=${Math.round(top)}px, header bottom=${Math.round(hdr)}px; url=${(await docState(page)).path}`, ok: !open && top >= hdr - 20 && top < hdr + 60 };
+    return { actual: `drawer open=${open}; library header top=${Math.round(top)}px, header bottom=${Math.round(hdr)}px; url=${(await docState(page)).path}`, ok: !open && top >= hdr - 20 && top < hdr + 60 };
   }, { shot: true });
 
   await j.step('Tap the group filter chips one by one, then "جميع الإجراءات"', 'Each chip shows only its group and reports pressed; "all" restores 7 cards', async () => {
@@ -79,18 +80,21 @@ test('Persona B — first-time visitor', async ({ page }, testInfo) => {
     return { actual: `${s.path} h1="${s.h1}" y=${s.scrollY}`, ok: s.h1 === NAME['lens-implants'].ar };
   });
 
-  await j.step('Open the menu and tap "عن الدكتور" (qualifications)', 'Home page opens at the qualifications section; FRCS and the current role are listed', async () => {
+  await j.step('Open the menu and tap "عن الدكتور" (qualifications)', 'The physician profile opens at the top; FRCS and the current role are listed in the qualifications ledger', async () => {
     await page.locator('.mobile-menu-btn').tap();
     await page.waitForTimeout(300);
-    await page.locator('#mobile-nav .drawer-links a[data-section="profile"]').tap();
-    await page.waitForURL(/\/#profile$/);
+    await page.locator('#mobile-nav .drawer-links a[data-section="about"]').tap();
+    await page.waitForURL(/\/about\/$/);
     await page.waitForTimeout(500); await settleScroll(page);
-    const top = (await rect(page.locator('#profile'))).y;
+    const top = (await rect(page.locator('main .page-hero'))).y;
     const text = await page.locator('#qualifications').innerText();
-    return { actual: `#profile top=${Math.round(top)}px; FRCS listed=${/FRCS/.test(text)}; ledger rows=${await page.locator('#qualifications .ledger-row').count()}`, ok: top < 150 && top > -10 && /FRCS/.test(text) };
+    return { actual: `page header top=${Math.round(top)}px; FRCS listed=${/FRCS/.test(text)}; current role listed=${/كبير موظفي/.test(text)}; ledger rows=${await page.locator('#qualifications .ledger-row').count()}`, ok: top < 150 && top > -10 && /FRCS/.test(text) && /كبير موظفي/.test(text) };
   }, { shot: true });
 
-  await j.step('Swipe down to the clinic section and tap "الاتجاهات عبر خرائط جوجل"', 'Google Maps link with the hospital location opens in a new tab (intercepted)', async () => {
+  await j.step('Open the menu, tap "العيادة والحجز", swipe to the directions and tap "الاتجاهات عبر خرائط جوجل"', 'Google Maps link with the hospital location opens in a new tab (intercepted)', async () => {
+    await page.locator('.mobile-menu-btn').tap(); await page.waitForTimeout(300);
+    await page.locator('#mobile-nav .drawer-links a[data-section="clinic"]').tap();
+    await page.waitForURL(/\/clinic\/$/); await page.waitForTimeout(400);
     const link = page.locator('#clinic .visit a.text-link');
     let cdp = null;
     for (let i = 0; i < 40; i++) {

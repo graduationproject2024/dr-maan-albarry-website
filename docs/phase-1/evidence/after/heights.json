@@ -1,0 +1,210 @@
+{
+  "home-ar-1440-light": {
+    "height": 5363,
+    "overflowX": 0
+  },
+  "home-ar-1440-dark": {
+    "height": 5363,
+    "overflowX": 0
+  },
+  "home-ar-390-light": {
+    "height": 8015,
+    "overflowX": 0
+  },
+  "home-ar-390-dark": {
+    "height": 8015,
+    "overflowX": 0
+  },
+  "home-en-1440-light": {
+    "height": 5585,
+    "overflowX": 0
+  },
+  "home-en-1440-dark": {
+    "height": 5585,
+    "overflowX": 0
+  },
+  "home-en-390-light": {
+    "height": 8272,
+    "overflowX": 0
+  },
+  "home-en-390-dark": {
+    "height": 8272,
+    "overflowX": 0
+  },
+  "about-ar-1440-light": {
+    "height": 4931,
+    "overflowX": 0
+  },
+  "about-ar-1440-dark": {
+    "height": 4931,
+    "overflowX": 0
+  },
+  "about-ar-390-light": {
+    "height": 10068,
+    "overflowX": 0
+  },
+  "about-ar-390-dark": {
+    "height": 10068,
+    "overflowX": 0
+  },
+  "about-en-1440-light": {
+    "height": 5137,
+    "overflowX": 0
+  },
+  "about-en-1440-dark": {
+    "height": 5137,
+    "overflowX": 0
+  },
+  "about-en-390-light": {
+    "height": 10933,
+    "overflowX": 0
+  },
+  "about-en-390-dark": {
+    "height": 10933,
+    "overflowX": 0
+  },
+  "procedures-ar-1440-light": {
+    "height": 3203,
+    "overflowX": 0
+  },
+  "procedures-ar-390-light": {
+    "height": 4783,
+    "overflowX": 0
+  },
+  "procedures-en-1440-light": {
+    "height": 3271,
+    "overflowX": 0
+  },
+  "procedures-en-390-light": {
+    "height": 4735,
+    "overflowX": 0
+  },
+  "lens-lab-ar-1440-light": {
+    "height": 9462,
+    "overflowX": 0
+  },
+  "lens-lab-ar-1440-dark": {
+    "height": 9462,
+    "overflowX": 0
+  },
+  "lens-lab-ar-390-light": {
+    "height": 13447,
+    "overflowX": 0
+  },
+  "lens-lab-ar-390-dark": {
+    "height": 13447,
+    "overflowX": 0
+  },
+  "lens-lab-en-1440-light": {
+    "height": 9998,
+    "overflowX": 0
+  },
+  "lens-lab-en-1440-dark": {
+    "height": 9998,
+    "overflowX": 0
+  },
+  "lens-lab-en-390-light": {
+    "height": 14578,
+    "overflowX": 0
+  },
+  "lens-lab-en-390-dark": {
+    "height": 14578,
+    "overflowX": 0
+  },
+  "surgical-education-ar-1440-light": {
+    "height": 2423,
+    "overflowX": 0
+  },
+  "surgical-education-ar-390-light": {
+    "height": 4117,
+    "overflowX": 0
+  },
+  "surgical-education-en-1440-light": {
+    "height": 2425,
+    "overflowX": 0
+  },
+  "surgical-education-en-390-light": {
+    "height": 4122,
+    "overflowX": 0
+  },
+  "education-ar-1440-light": {
+    "height": 5310,
+    "overflowX": 0
+  },
+  "education-ar-1440-dark": {
+    "height": 5310,
+    "overflowX": 0
+  },
+  "education-ar-390-light": {
+    "height": 8188,
+    "overflowX": 0
+  },
+  "education-ar-390-dark": {
+    "height": 8188,
+    "overflowX": 0
+  },
+  "education-en-1440-light": {
+    "height": 5301,
+    "overflowX": 0
+  },
+  "education-en-1440-dark": {
+    "height": 5301,
+    "overflowX": 0
+  },
+  "education-en-390-light": {
+    "height": 8508,
+    "overflowX": 0
+  },
+  "education-en-390-dark": {
+    "height": 8508,
+    "overflowX": 0
+  },
+  "how-vision-works-ar-1440-light": {
+    "height": 1909,
+    "overflowX": 0
+  },
+  "how-vision-works-ar-390-light": {
+    "height": 3493,
+    "overflowX": 0
+  },
+  "how-vision-works-en-1440-light": {
+    "height": 1984,
+    "overflowX": 0
+  },
+  "how-vision-works-en-390-light": {
+    "height": 3601,
+    "overflowX": 0
+  },
+  "clinic-ar-1440-light": {
+    "height": 2960,
+    "overflowX": 0
+  },
+  "clinic-ar-390-light": {
+    "height": 5357,
+    "overflowX": 0
+  },
+  "clinic-en-1440-light": {
+    "height": 3086,
+    "overflowX": 0
+  },
+  "clinic-en-390-light": {
+    "height": 5668,
+    "overflowX": 0
+  },
+  "procedures-cataract-surgery-ar-1440-light": {
+    "height": 6802,
+    "overflowX": 0
+  },
+  "procedures-cataract-surgery-ar-390-light": {
+    "height": 9541,
+    "overflowX": 0
+  },
+  "procedures-cataract-surgery-en-1440-light": {
+    "height": 6881,
+    "overflowX": 0
+  },
+  "procedures-cataract-surgery-en-390-light": {
+    "height": 9690,
+    "overflowX": 0
+  }
+}

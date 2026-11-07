@@ -4,8 +4,8 @@ import { throughFocus } from './optics/model.js';
 import { PUPIL_BY_LIGHTING } from './optics/params.js';
 import { STRINGS, LENS_INFO, fmt } from './i18n.js';
 
-const COLORS = { monofocal: 'var(--vsim-c-mono)', edof: 'var(--vsim-c-edof)', trifocal: 'var(--vsim-c-tri)', toric: 'var(--vsim-c-toric)', cataract: 'var(--vsim-c-cat)' };
-const DASH = { monofocal: '', edof: '7 4', trifocal: '2 3', toric: '', cataract: '10 3 2 3' };
+const COLORS = { monofocal: 'var(--vsim-c-mono)', edof: 'var(--vsim-c-edof)', multifocal: 'var(--vsim-c-multi)', trifocal: 'var(--vsim-c-tri)', toric: 'var(--vsim-c-toric)', cataract: 'var(--vsim-c-cat)' };
+const DASH = { monofocal: '', edof: '7 4', multifocal: '12 4 2 4', trifocal: '2 3', toric: '', cataract: '10 3 2 3' };
 let uid = 0;
 
 /** SVG through-focus chart for the given lenses. Lines are labelled in a legend; the chart has a text title. */
@@ -37,7 +37,7 @@ export function curveChart(lang, lenses = ['monofocal', 'edof', 'trifocal'], { p
 export function fallbackHTML(lang) {
   const s = STRINGS[lang];
   const info = LENS_INFO[lang];
-  const items = ['monofocal', 'edof', 'trifocal', 'toric', 'cataract'].map((k) => `
+  const items = ['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'].map((k) => `
     <li><strong>${s.lenses[k].name}</strong>
       <span><b>${s.intended}:</b> ${info[k].intended}</span>
       <span><b>${s.tradeoffs}:</b> ${info[k].tradeoffs}</span></li>`).join('');

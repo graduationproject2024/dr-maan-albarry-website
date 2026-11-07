@@ -12,8 +12,8 @@
   "startUrl": "/",
   "viewport": "390×664",
   "test": "journeys\\persona-c.spec.js › Persona C — English mobile user",
-  "startedAt": "2026-11-02T17:37:06.266Z",
-  "finishedAt": "2026-11-02T17:37:21.783Z",
+  "startedAt": "2026-11-03T22:08:50.832Z",
+  "finishedAt": "2026-11-03T22:09:08.729Z",
   "totals": {
     "steps": 11,
     "pass": 11,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1228,
+      "ms": 1813,
       "url": "/"
     },
     {
@@ -52,21 +52,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 154,
+      "ms": 141,
       "url": "/en/"
     },
     {
       "step": 3,
-      "action": "Swipe through the procedure cards",
-      "expected": "Seven English cards scroll past; each has a title and a details link ≥44px tall",
-      "actual": "7 cards seen: Cataract surgery, Lens implants (IOLs), Laser vision correction, Implantable contact lens (ICL), Keratoconus & corneal cross-linking (CXL), Corneal transplant (keratoplasty), Intravitreal injections; smallest link 44px",
+      "action": "Swipe through the specialties",
+      "expected": "All seven procedures scroll past in English (three featured cards + the index); each link ≥44px tall",
+      "actual": "7 cards seen: Cataract surgery, Laser vision correction, Keratoconus & corneal cross-linking (CXL), Lens implants (IOLs), Implantable contact lens (ICL), Corneal transplant (keratoplasty), Intravitreal injections; smallest link 44px",
       "status": "PASS",
       "knownBug": null,
-      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-c/03-swipe-through-the-procedure-cards.jpg",
+      "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-c/03-swipe-through-the-specialties.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 6637,
+      "ms": 8297,
       "url": "/en/"
     },
     {
@@ -80,21 +80,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 164,
+      "ms": 153,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 5,
       "action": "Look for a way to jump to the 3D walkthrough near the top of the page",
       "expected": "A visible \"3D walkthrough\" link within the first two screens",
-      "actual": "2 in-page links to #cataract-3d; visible within 2 screens: [{\"y\":679,\"visible\":true,\"h\":44}]",
+      "actual": "2 in-page links to #cataract-3d; visible within 2 screens: [{\"y\":737,\"visible\":true,\"h\":44}]",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 5,
+      "ms": 7,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
@@ -108,7 +108,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3184,
+      "ms": 3356,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -122,21 +122,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1098,
+      "ms": 1050,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
       "step": 8,
       "action": "Tap Play, wait, then drag the timeline scrubber to the middle",
       "expected": "Playback runs; scrubbing jumps to a later stage",
-      "actual": "playing mode=pause scrubber=139; after tap at 60% scrubber=605, Stage 5 of 7",
+      "actual": "playing mode=pause scrubber=138; after tap at 60% scrubber=605, Stage 5 of 7",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1821,
+      "ms": 1822,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -150,7 +150,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 318,
+      "ms": 331,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
@@ -164,21 +164,21 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 18,
+      "ms": 20,
       "url": "/en/procedures/cataract-surgery/#cataract-3d"
     },
     {
       "step": 11,
       "action": "Scroll up and tap the \"Dr. Maan Al Barry\" wordmark",
       "expected": "Back on the English home at the top, still dark; at most one 3D instance alive (the home page also hosts the 3D section, so the open viewer is carried over by design)",
-      "actual": "/en/ lang=en theme=dark y=0; 3D instances=1; live WebGL contexts=1",
+      "actual": "/en/ lang=en theme=dark y=0; 3D instances=0; live WebGL contexts=0",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-c/11-scroll-up-and-tap-the-dr-maan-al-barry-w.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 418,
+      "ms": 409,
       "url": "/en/"
     }
   ]

@@ -25,7 +25,7 @@ test.describe('Deep links', () => {
 test.describe('History and navigation', () => {
   test('home → procedure → related procedure → back → back → forward', async ({ page }) => {
     await page.goto('/en/');
-    await page.locator('#procedures a.proc-card-link[href="en/procedures/lens-implants/"]').click();
+    await page.locator('#procedures a[href="en/procedures/lens-implants/"]').click(); // featured card or the "Also" index
     await expect(page).toHaveURL(/\/en\/procedures\/lens-implants\/$/);
     await page.locator('.proc-related a.proc-card-link').first().click();
     const firstRelated = PROCEDURES.find(p => p.slug === 'lens-implants').related[0];
@@ -39,12 +39,17 @@ test.describe('History and navigation', () => {
     await expect(page.locator('main h1')).toHaveText(name('lens-implants').en);
   });
 
-  test('header section links work from a procedure page (lands on the homepage section)', async ({ page }) => {
+  test('header links work from a procedure page (land on the dedicated page, at the top)', async ({ page }) => {
+    // Phase 1: header items are pages (/clinic/, /about/, …) instead of homepage anchors
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/procedures/icl/');
     await page.locator('#site-header .nav-links a[data-section="clinic"]').click();
-    await expect(page).toHaveURL(/\/#clinic$/);
-    await expect(page.locator('h1.hero-title')).toBeVisible();
+    await expect(page).toHaveURL(/\/clinic\/$/);
+    await expect(page.locator('main')).toHaveAttribute('data-page', 'clinic');
+    await expect.poll(() => page.locator('main h1').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
+    await expect(page.locator('#site-header .nav-links a[data-section="clinic"]')).toHaveAttribute('aria-current', 'page');
+    // homepage anchors still work across pages
+    await page.goto('/#clinic');
     await expect.poll(() => page.locator('#clinic').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
   });
 
@@ -55,8 +60,11 @@ test.describe('History and navigation', () => {
     await expect(page).toHaveURL(/\/en\/procedures\/keratoconus-cxl\/#p-risks$/);
     await expect.poll(() => page.locator('#p-risks').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
     await page.locator('.crumbs a').nth(1).click();
-    await expect(page).toHaveURL(/\/en\/#procedures$/);
-    await expect.poll(() => page.locator('#procedures').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
+    // Phase 1: the "Procedures" crumb opens the procedure library page
+    await expect(page).toHaveURL(/\/en\/procedures\/$/);
+    await expect(page.locator('main')).toHaveAttribute('data-page', 'procedures');
+    await expect(page.locator('#procedures .proc-card')).toHaveCount(PROCEDURES.length);
+    await expect.poll(() => page.locator('main h1').evaluate(e => e.getBoundingClientRect().top), { timeout: 4000 }).toBeLessThan(200);
   });
 
   test('skip link targets main on the current page', async ({ page }) => {

@@ -12,8 +12,8 @@
   "startUrl": "/procedures/cataract-surgery/",
   "viewport": "320×568",
   "test": "journeys\\persona-f.spec.js › Persona F — impatient user",
-  "startedAt": "2026-11-02T17:37:18.966Z",
-  "finishedAt": "2026-11-02T17:37:34.102Z",
+  "startedAt": "2026-11-03T22:09:05.229Z",
+  "finishedAt": "2026-11-03T22:09:21.078Z",
   "totals": {
     "steps": 9,
     "pass": 9,
@@ -38,7 +38,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1119,
+      "ms": 1522,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -52,7 +52,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1701,
+      "ms": 1877,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -66,7 +66,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1758,
+      "ms": 1628,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -80,7 +80,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 2137,
+      "ms": 1883,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -94,7 +94,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 3507,
+      "ms": 4045,
       "url": "/procedures/cataract-surgery/"
     },
     {
@@ -108,49 +108,49 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 576,
+      "ms": 607,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 7,
       "action": "Rotate to landscape (568×320) and back to portrait (320×568)",
       "expected": "Viewer canvas follows the new size, nothing overflows, still one viewer",
-      "actual": "landscape canvas 499/499px overflow 0; portrait canvas 264/264px overflow 0; instances=1",
+      "actual": "landscape canvas 493/493px overflow 0; portrait canvas 256/256px overflow 0; instances=1",
       "status": "PASS",
       "knownBug": null,
       "screenshot": "docs/implementation/clinical-visual-reconstruction/evidence/mobile/persona-f/07-rotate-to-landscape-568-320-and-back-to-.jpg",
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1745,
+      "ms": 1764,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 8,
       "action": "Tap \"Home\" in the breadcrumb, then press browser Back",
       "expected": "Home renders; back on the cataract page the viewer is closed (idle) and resources are released",
-      "actual": "path=/en/procedures/cataract-surgery/; 3D section=active mounted=true instances=1; canvases=1 live=1 created=10",
+      "actual": "path=/en/procedures/cataract-surgery/; 3D section=idle mounted=false instances=0; canvases=0 live=0 created=10",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 1786,
+      "ms": 1785,
       "url": "/en/procedures/cataract-surgery/"
     },
     {
       "step": 9,
       "action": "Check the GPU bookkeeping after all of this",
       "expected": "At most 1 live WebGL context per open simulator; no \"too many WebGL contexts\" warnings",
-      "actual": "open simulators=1; live WebGL contexts=1; contexts created in total=10; canvases=1; \"too many contexts\" warnings=0",
+      "actual": "open simulators=0; live WebGL contexts=0; contexts created in total=10; canvases=0; \"too many contexts\" warnings=0",
       "status": "PASS",
       "knownBug": null,
       "screenshot": null,
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "ms": 514,
+      "ms": 509,
       "url": "/en/procedures/cataract-surgery/"
     }
   ]
