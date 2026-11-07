@@ -30,8 +30,10 @@ Model version under review: `csim-anatomy-2026.11-r2`
 3. Record your findings:
    - add notes for the stage;
    - add issue annotations, each of which stores the current p and camera;
-   - set the status: **Pending review**, **Approved**, **Approved with corrections** or **Rejected**.
-4. Click **Export JSON**. The file includes the model version, and it is the review record to hand back. **Import JSON** restores a review. If a file was made for a different model version, a warning appears, and any unknown status is read as Pending.
+   - set each of the stage's separate gates: engineering verification (Pending / Verified / Failed), anatomical review, motion review, medical text review and final physician approval (each **Pending review**, **Approved**, **Approved with corrections** or **Rejected**). Final approval cannot be chosen until the anatomical, motion and text gates are approved for the current version.
+4. Click **Export JSON**. The file includes the model version and each stage's content version, and it is supporting evidence to hand back, not an approval. **Import JSON** restores a review. If a file was made for a different model version, the changed stages are flagged for re-review. Any unknown status is read as Pending. An old single-status file is kept as a "legacy" note only.
+
+Full workflow: `docs/implementation/premium-experience-reconstruction/CATARACT_REVIEW_WORKFLOW.md` (vision simulator: `VISION_REVIEW_WORKFLOW.md`, opened with `vision-sim-preview.html?review=1`).
 
 ### Rules
 
