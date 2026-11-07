@@ -1,0 +1,1045 @@
+{
+  "home-ar-390-light": {
+    "url": "/",
+    "height": 8015,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1185
+      },
+      {
+        "id": "profile",
+        "h": 1019
+      },
+      {
+        "id": "procedures",
+        "h": 1258
+      },
+      {
+        "id": "section.section-stage",
+        "h": 987
+      },
+      {
+        "id": "education",
+        "h": 1172
+      },
+      {
+        "id": "clinic",
+        "h": 1162
+      }
+    ]
+  },
+  "home-ar-320-light": {
+    "url": "/",
+    "height": 9045,
+    "scrollWidth": 320,
+    "innerWidth": 320,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-320-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1329
+      },
+      {
+        "id": "profile",
+        "h": 1126
+      },
+      {
+        "id": "procedures",
+        "h": 1351
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1156
+      },
+      {
+        "id": "education",
+        "h": 1361
+      },
+      {
+        "id": "clinic",
+        "h": 1339
+      }
+    ]
+  },
+  "home-ar-360-light": {
+    "url": "/",
+    "height": 8328,
+    "scrollWidth": 360,
+    "innerWidth": 360,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-360-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1289
+      },
+      {
+        "id": "profile",
+        "h": 1043
+      },
+      {
+        "id": "procedures",
+        "h": 1274
+      },
+      {
+        "id": "section.section-stage",
+        "h": 985
+      },
+      {
+        "id": "education",
+        "h": 1202
+      },
+      {
+        "id": "clinic",
+        "h": 1220
+      }
+    ]
+  },
+  "home-ar-375-light": {
+    "url": "/",
+    "height": 8140,
+    "scrollWidth": 375,
+    "innerWidth": 375,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-375-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1209
+      },
+      {
+        "id": "profile",
+        "h": 1019
+      },
+      {
+        "id": "procedures",
+        "h": 1249
+      },
+      {
+        "id": "section.section-stage",
+        "h": 986
+      },
+      {
+        "id": "education",
+        "h": 1171
+      },
+      {
+        "id": "clinic",
+        "h": 1220
+      }
+    ]
+  },
+  "home-ar-430-light": {
+    "url": "/",
+    "height": 7782,
+    "scrollWidth": 430,
+    "innerWidth": 430,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-430-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1112
+      },
+      {
+        "id": "profile",
+        "h": 976
+      },
+      {
+        "id": "procedures",
+        "h": 1281
+      },
+      {
+        "id": "section.section-stage",
+        "h": 949
+      },
+      {
+        "id": "education",
+        "h": 1175
+      },
+      {
+        "id": "clinic",
+        "h": 1100
+      }
+    ]
+  },
+  "home-ar-768-light": {
+    "url": "/",
+    "height": 9003,
+    "scrollWidth": 768,
+    "innerWidth": 768,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-768-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1459
+      },
+      {
+        "id": "profile",
+        "h": 869
+      },
+      {
+        "id": "procedures",
+        "h": 1747
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1273
+      },
+      {
+        "id": "education",
+        "h": 1216
+      },
+      {
+        "id": "clinic",
+        "h": 1218
+      }
+    ]
+  },
+  "home-ar-1440-light": {
+    "url": "/",
+    "height": 5363,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 838
+      },
+      {
+        "id": "profile",
+        "h": 627
+      },
+      {
+        "id": "procedures",
+        "h": 961
+      },
+      {
+        "id": "section.section-stage",
+        "h": 741
+      },
+      {
+        "id": "education",
+        "h": 798
+      },
+      {
+        "id": "clinic",
+        "h": 757
+      }
+    ]
+  },
+  "home-en-320-light": {
+    "url": "/en/",
+    "height": 9221,
+    "scrollWidth": 320,
+    "innerWidth": 320,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-320-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1326
+      },
+      {
+        "id": "profile",
+        "h": 1223
+      },
+      {
+        "id": "procedures",
+        "h": 1379
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1121
+      },
+      {
+        "id": "education",
+        "h": 1374
+      },
+      {
+        "id": "clinic",
+        "h": 1366
+      }
+    ]
+  },
+  "home-en-360-light": {
+    "url": "/en/",
+    "height": 8589,
+    "scrollWidth": 360,
+    "innerWidth": 360,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-360-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1308
+      },
+      {
+        "id": "profile",
+        "h": 1124
+      },
+      {
+        "id": "procedures",
+        "h": 1266
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1032
+      },
+      {
+        "id": "education",
+        "h": 1288
+      },
+      {
+        "id": "clinic",
+        "h": 1229
+      }
+    ]
+  },
+  "home-en-375-light": {
+    "url": "/en/",
+    "height": 8377,
+    "scrollWidth": 375,
+    "innerWidth": 375,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-375-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1242
+      },
+      {
+        "id": "profile",
+        "h": 1070
+      },
+      {
+        "id": "procedures",
+        "h": 1253
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1003
+      },
+      {
+        "id": "education",
+        "h": 1262
+      },
+      {
+        "id": "clinic",
+        "h": 1229
+      }
+    ]
+  },
+  "home-en-390-light": {
+    "url": "/en/",
+    "height": 8272,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-390-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1252
+      },
+      {
+        "id": "profile",
+        "h": 1043
+      },
+      {
+        "id": "procedures",
+        "h": 1214
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1004
+      },
+      {
+        "id": "education",
+        "h": 1237
+      },
+      {
+        "id": "clinic",
+        "h": 1230
+      }
+    ]
+  },
+  "home-en-430-light": {
+    "url": "/en/",
+    "height": 7869,
+    "scrollWidth": 430,
+    "innerWidth": 430,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-430-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1187
+      },
+      {
+        "id": "profile",
+        "h": 994
+      },
+      {
+        "id": "procedures",
+        "h": 1207
+      },
+      {
+        "id": "section.section-stage",
+        "h": 978
+      },
+      {
+        "id": "education",
+        "h": 1170
+      },
+      {
+        "id": "clinic",
+        "h": 1130
+      }
+    ]
+  },
+  "home-en-768-light": {
+    "url": "/en/",
+    "height": 8959,
+    "scrollWidth": 768,
+    "innerWidth": 768,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-768-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1396
+      },
+      {
+        "id": "profile",
+        "h": 884
+      },
+      {
+        "id": "procedures",
+        "h": 1675
+      },
+      {
+        "id": "section.section-stage",
+        "h": 1327
+      },
+      {
+        "id": "education",
+        "h": 1274
+      },
+      {
+        "id": "clinic",
+        "h": 1186
+      }
+    ]
+  },
+  "home-en-1440-light": {
+    "url": "/en/",
+    "height": 5585,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-en-1440-light.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 880
+      },
+      {
+        "id": "profile",
+        "h": 608
+      },
+      {
+        "id": "procedures",
+        "h": 997
+      },
+      {
+        "id": "section.section-stage",
+        "h": 805
+      },
+      {
+        "id": "education",
+        "h": 819
+      },
+      {
+        "id": "clinic",
+        "h": 798
+      }
+    ]
+  },
+  "home-ar-390-dark": {
+    "url": "/",
+    "height": 8015,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-390-dark.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 1185
+      },
+      {
+        "id": "profile",
+        "h": 1019
+      },
+      {
+        "id": "procedures",
+        "h": 1258
+      },
+      {
+        "id": "section.section-stage",
+        "h": 987
+      },
+      {
+        "id": "education",
+        "h": 1172
+      },
+      {
+        "id": "clinic",
+        "h": 1162
+      }
+    ]
+  },
+  "home-ar-1440-dark": {
+    "url": "/",
+    "height": 5363,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "home-ar-1440-dark.jpg",
+    "sections": [
+      {
+        "id": "home",
+        "h": 838
+      },
+      {
+        "id": "profile",
+        "h": 627
+      },
+      {
+        "id": "procedures",
+        "h": 961
+      },
+      {
+        "id": "section.section-stage",
+        "h": 741
+      },
+      {
+        "id": "education",
+        "h": 798
+      },
+      {
+        "id": "clinic",
+        "h": 757
+      }
+    ]
+  },
+  "about-ar-390-light": {
+    "url": "/about/",
+    "height": 10068,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "about-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.about-hero",
+        "h": 863
+      },
+      {
+        "id": "section.about-bio",
+        "h": 1155
+      },
+      {
+        "id": "expertise",
+        "h": 1923
+      },
+      {
+        "id": "profile",
+        "h": 3007
+      },
+      {
+        "id": "record",
+        "h": 1449
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "about-ar-1440-light": {
+    "url": "/about/",
+    "height": 4931,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "about-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.about-hero",
+        "h": 674
+      },
+      {
+        "id": "section.about-bio",
+        "h": 578
+      },
+      {
+        "id": "expertise",
+        "h": 872
+      },
+      {
+        "id": "profile",
+        "h": 1272
+      },
+      {
+        "id": "record",
+        "h": 632
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "procedures-ar-390-light": {
+    "url": "/procedures/",
+    "height": 4783,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "procedures-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 404
+      },
+      {
+        "id": "procedures",
+        "h": 2708
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "procedures-ar-1440-light": {
+    "url": "/procedures/",
+    "height": 3203,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "procedures-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 350
+      },
+      {
+        "id": "procedures",
+        "h": 1949
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "cataract-ar-390-light": {
+    "url": "/procedures/cataract-surgery/",
+    "height": 9541,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "cataract-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "proc-hero",
+        "h": 1088
+      },
+      {
+        "id": "cataract-3d",
+        "h": 980
+      },
+      {
+        "id": "section.section-band",
+        "h": 992
+      },
+      {
+        "id": "closing.proc-book",
+        "h": 480
+      }
+    ]
+  },
+  "cataract-ar-1440-light": {
+    "url": "/procedures/cataract-surgery/",
+    "height": 6802,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "cataract-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "proc-hero",
+        "h": 637
+      },
+      {
+        "id": "cataract-3d",
+        "h": 555
+      },
+      {
+        "id": "section.section-band",
+        "h": 853
+      },
+      {
+        "id": "closing.proc-book",
+        "h": 369
+      }
+    ]
+  },
+  "lens-lab-ar-390-light": {
+    "url": "/lens-lab/",
+    "height": 13447,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "lens-lab-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 528
+      },
+      {
+        "id": "lab",
+        "h": 8850
+      },
+      {
+        "id": "simulator",
+        "h": 2398
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "lens-lab-ar-1440-light": {
+    "url": "/lens-lab/",
+    "height": 9462,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "lens-lab-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 472
+      },
+      {
+        "id": "lab",
+        "h": 6079
+      },
+      {
+        "id": "simulator",
+        "h": 2007
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "surgical-education-ar-390-light": {
+    "url": "/surgical-education/",
+    "height": 4117,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "surgical-education-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 369
+      },
+      {
+        "id": "cataract-3d",
+        "h": 1040
+      },
+      {
+        "id": "stages",
+        "h": 1037
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "surgical-education-ar-1440-light": {
+    "url": "/surgical-education/",
+    "height": 2423,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "surgical-education-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 431
+      },
+      {
+        "id": "cataract-3d",
+        "h": 555
+      },
+      {
+        "id": "stages",
+        "h": 533
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "how-vision-works-ar-390-light": {
+    "url": "/how-vision-works/",
+    "height": 3546,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "how-vision-works-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 516
+      },
+      {
+        "id": "journey",
+        "h": 1359
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "how-vision-works-ar-1440-light": {
+    "url": "/how-vision-works/",
+    "height": 2745,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "how-vision-works-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 350
+      },
+      {
+        "id": "journey",
+        "h": 1491
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "clinic-ar-390-light": {
+    "url": "/clinic/",
+    "height": 5357,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [
+      "requestfailed: https://maps.google.com/maps?q=Magrabi+Eye+Hospital+Madinah&t=&z=15&ie=UTF8&iwloc=&output=embed net::ERR_ABORTED"
+    ],
+    "file": "clinic-ar-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 352
+      },
+      {
+        "id": "clinic",
+        "h": 1356
+      },
+      {
+        "id": "visit",
+        "h": 1977
+      },
+      {
+        "id": "closing",
+        "h": 438
+      }
+    ]
+  },
+  "clinic-ar-1440-light": {
+    "url": "/clinic/",
+    "height": 2960,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [
+      "requestfailed: https://maps.google.com/maps?q=Magrabi+Eye+Hospital+Madinah&t=&z=15&ie=UTF8&iwloc=&output=embed net::ERR_ABORTED",
+      "requestfailed: https://www.google.com/maps/vt?pb=!1m5!1m4!1i14!2i9997!3i7040!4i256!2m1!1e1!3m12!2sen-US!3sUS!5e289!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy5lOmx8cC52Om9mZg!4e0!5m1!1e3!23i47083502&key=AIzaSyCmL18misQw9KdwqGaw3zHkitj8vG6QF2Y&token=32545 net::ERR_ABORTED"
+    ],
+    "file": "clinic-ar-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 350
+      },
+      {
+        "id": "clinic",
+        "h": 854
+      },
+      {
+        "id": "visit",
+        "h": 853
+      },
+      {
+        "id": "closing",
+        "h": 262
+      }
+    ]
+  },
+  "procedures-en-390-light": {
+    "url": "/en/procedures/",
+    "height": 4735,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "procedures-en-390-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 392
+      },
+      {
+        "id": "procedures",
+        "h": 2631
+      },
+      {
+        "id": "closing",
+        "h": 419
+      }
+    ]
+  },
+  "procedures-en-1440-light": {
+    "url": "/en/procedures/",
+    "height": 3271,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "procedures-en-1440-light.jpg",
+    "sections": [
+      {
+        "id": "page-hero.",
+        "h": 384
+      },
+      {
+        "id": "procedures",
+        "h": 1909
+      },
+      {
+        "id": "closing",
+        "h": 300
+      }
+    ]
+  },
+  "cataract-en-390-light": {
+    "url": "/en/procedures/cataract-surgery/",
+    "height": 9690,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "cataract-en-390-light.jpg",
+    "sections": [
+      {
+        "id": "proc-hero",
+        "h": 1057
+      },
+      {
+        "id": "cataract-3d",
+        "h": 947
+      },
+      {
+        "id": "section.section-band",
+        "h": 959
+      },
+      {
+        "id": "closing.proc-book",
+        "h": 487
+      }
+    ]
+  },
+  "cataract-en-1440-light": {
+    "url": "/en/procedures/cataract-surgery/",
+    "height": 6881,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "overflow": false,
+    "consoleErrors": [],
+    "file": "cataract-en-1440-light.jpg",
+    "sections": [
+      {
+        "id": "proc-hero",
+        "h": 631
+      },
+      {
+        "id": "cataract-3d",
+        "h": 573
+      },
+      {
+        "id": "section.section-band",
+        "h": 818
+      },
+      {
+        "id": "closing.proc-book",
+        "h": 367
+      }
+    ]
+  }
+}

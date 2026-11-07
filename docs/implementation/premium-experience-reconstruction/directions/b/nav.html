@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B · Navigation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>(function(){var q=new URLSearchParams(location.search),r=document.documentElement;var t=q.get('theme');if(t)r.setAttribute('data-theme',t);if(q.get('menu')==='open')r.classList.add('menu-open');if(q.get('nav')==='open')r.classList.add('nav-open');
+document.addEventListener('DOMContentLoaded',function(){var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);document.querySelectorAll('img[data-dark]').forEach(function(i){var p=i.parentElement;if(p.tagName==='PICTURE'){p.querySelectorAll('source').forEach(function(s){s.remove()})}var n=dark?i.dataset.dark:i.dataset.light;if(i.getAttribute('src')!==n)i.src=n;});});})();</script>
+</head>
+<body class="board">
+
+<main class="board-wrap">
+  <p class="board-cap">Desktop header · 1440 · AR (procedures menu open)</p>
+  <iframe class="frame-desk" src="home-ar.html?nav=open" width="1440" height="470" title="desktop header"></iframe>
+  <p class="board-cap">Desktop header · 1440 · EN</p>
+  <iframe class="frame-desk" src="home-en.html" width="1440" height="120" title="desktop header EN"></iframe>
+  <div class="board-row">
+    <figure><iframe src="home-ar.html" width="390" height="844" title="mobile closed"></iframe><figcaption>Mobile 390 · menu closed</figcaption></figure>
+    <figure><iframe src="home-ar.html?menu=open" width="390" height="844" title="mobile open"></iframe><figcaption>Mobile 390 · menu open</figcaption></figure>
+    <div class="board-note"><h2>Navigation — B</h2><p>Navigation is image-led. “Procedures” opens a plate index: seven illustration thumbnails with plate codes. On the homepage the same index runs under the hero plate. On mobile the menu opens on the plate grid first (2 columns, all 7 visible), then the page links, then booking.</p></div>
+  </div>
+</main>
+</body>
+</html>

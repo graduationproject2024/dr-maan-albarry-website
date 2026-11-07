@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C · Navigation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>(function(){var q=new URLSearchParams(location.search),r=document.documentElement;var t=q.get('theme');if(t)r.setAttribute('data-theme',t);if(q.get('menu')==='open')r.classList.add('menu-open');if(q.get('nav')==='open')r.classList.add('nav-open');
+document.addEventListener('DOMContentLoaded',function(){var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);document.querySelectorAll('img[data-dark]').forEach(function(i){var p=i.parentElement;if(p.tagName==='PICTURE'){p.querySelectorAll('source').forEach(function(s){s.remove()})}var n=dark?i.dataset.dark:i.dataset.light;if(i.getAttribute('src')!==n)i.src=n;});});})();</script>
+</head>
+<body class="board">
+
+<main class="board-wrap">
+  <p class="board-cap">Desktop header · 1440 · AR (procedures menu open)</p>
+  <iframe class="frame-desk" src="home-ar.html?nav=open" width="1440" height="470" title="desktop header"></iframe>
+  <p class="board-cap">Desktop header · 1440 · EN</p>
+  <iframe class="frame-desk" src="home-en.html" width="1440" height="120" title="desktop header EN"></iframe>
+  <div class="board-row">
+    <figure><iframe src="home-ar.html" width="390" height="844" title="mobile closed"></iframe><figcaption>Mobile 390 · menu closed</figcaption></figure>
+    <figure><iframe src="home-ar.html?menu=open" width="390" height="844" title="mobile open"></iframe><figcaption>Mobile 390 · menu open</figcaption></figure>
+    <div class="board-note"><h2>Navigation — C</h2><p>Task-first chrome: the clinic line and a filled booking button sit in the header. “Procedures” opens a grouped menu (3 groups with thumbnails) plus a “Not sure? Start with an examination” card. On mobile a persistent bottom bar holds Book · Call · WhatsApp, and the menu is a bottom sheet: three booking actions first, then the seven procedures with thumbnails, then the pages.</p></div>
+  </div>
+</main>
+</body>
+</html>
