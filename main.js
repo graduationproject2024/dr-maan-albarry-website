@@ -1214,6 +1214,8 @@ function c3dSync() {
   const stage = document.getElementById('cataract-3d-stage');
   const btn = document.getElementById('cataract-3d-start');
   const status = sec.querySelector('.c3d-status');
+  // the header holds still while the viewer runs (headerScrollShadow), so it must also come back when the viewer starts
+  if (c3d.state === 'active' || c3d.state === 'loading') document.getElementById('site-header')?.classList.remove('is-hidden');
   if (stage) {
     stage.hidden = !(c3d.state === 'active' || c3d.state === 'loading');
     if (c3d.host && c3d.host.parentNode !== stage) stage.appendChild(c3d.host);
