@@ -22,6 +22,21 @@ test.describe('premium regressions — phone 390', () => {
     await expect.poll(() => page.locator('#site-header').evaluate((h) => h.classList.contains('is-hidden'))).toBe(true);
   });
 
+  test('BUG-19 the header comes back when the 3D viewer starts', async ({ page }) => {
+    await page.goto('/procedures/cataract-surgery/'); await page.locator('#p-faq').waitFor();
+    const start = page.locator('#cataract-3d-start');
+    await start.scrollIntoViewIfNeeded();
+    for (let i = 0; i < 4; i++) { await page.mouse.wheel(0, 500); await page.waitForTimeout(100); }
+    for (let i = 0; i < 2; i++) { await page.mouse.wheel(0, -400); await page.waitForTimeout(100); }
+    await expect.poll(async () => { await page.mouse.wheel(0, 300); await page.waitForTimeout(150); return page.locator('#site-header').evaluate((h) => h.classList.contains('is-hidden')); }, { timeout: 6000 }).toBe(true);
+    await start.scrollIntoViewIfNeeded();
+    await page.locator('#site-header').evaluate((h) => h.classList.add('is-hidden')); // reading down: the header is away
+    await start.tap();
+    await page.waitForFunction(() => document.querySelector('#cataract-3d-stage .csim')?.dataset.state === 'ready', null, { timeout: 45000 });
+    await expect(page.locator('#site-header')).not.toHaveClass(/is-hidden/);
+    await page.locator('#cataract-3d-stage [data-ref="close"]').tap();
+  });
+
   test('BUG-20 / BUG-21 the contents list marks the section just reached, visibly', async ({ page }) => {
     await page.goto('/procedures/lens-implants/'); await page.locator('#p-risks').waitFor();
     await page.locator('#p-risks').evaluate((e) => window.scrollTo(0, e.getBoundingClientRect().top + scrollY - innerHeight * 0.24));

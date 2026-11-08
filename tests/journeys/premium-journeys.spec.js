@@ -403,7 +403,8 @@ for (const key of ['ar-light-390', 'en-dark-390', 'ar-dark-320']) {
         await b.tap();
         await page.waitForTimeout(30);
         if (await page.locator('.site-header #theme-toggle-btn').isVisible()) await page.locator('.site-header #theme-toggle-btn').tap({ force: true });
-        await page.waitForTimeout(30);
+        // the header slides back in when the viewer starts; a person taps it once it is on screen
+        await page.waitForFunction(() => document.getElementById('site-header').getBoundingClientRect().top >= -1, null, { timeout: 3000 });
         await page.locator('.site-header .lang-switch').tap({ force: true });
         await page.waitForFunction(() => document.querySelector('#cataract-3d-stage .csim')?.dataset.state === 'ready', null, { timeout: 60000 });
         const s = await csim(page); const st = await docState(page);
