@@ -314,8 +314,13 @@ test('keyboard: gate radios work with arrows, focus is kept, blocked options are
   await radio(page, 'finalPhysicianApproval', 'pending').focus();
   await page.keyboard.press('ArrowDown');
   await expect(radio(page, 'finalPhysicianApproval', 'rejected')).toBeChecked();
-  await panel(page).locator('[data-r="importBtn"]').focus();
-  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.keyboard.press('Enter')]);
+  const importBtn = panel(page).locator('[data-r="importBtn"]');
+  await importBtn.focus();
+  await expect(importBtn).toBeFocused(); // a re-render after the radio change can move focus; press Enter only once the button holds it
+  const chooserEvent = page.waitForEvent('filechooser'); // starts the browser's file-chooser interception, which takes a moment to become active
+  await page.waitForTimeout(150); // pressing Enter sooner races that setup and the chooser opens unintercepted
+  await page.keyboard.press('Enter');
+  const chooser = await chooserEvent;
   expect(chooser).toBeTruthy();
   const small = await panel(page).locator('.csim-rbtn, .srv-opt, select, input[type="text"], .csim-review-layers label').evaluateAll((els) =>
     els.filter((e) => e.offsetParent !== null).map((e) => [e.textContent.trim().slice(0, 30), e.getBoundingClientRect().height]).filter(([, h]) => h < 43.5));
