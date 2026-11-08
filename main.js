@@ -399,7 +399,6 @@ function renderHeader() {
       <div class="drawer-inner">
         <div class="drawer-head">
           <span class="drawer-title">${tr('المحتويات', 'Contents')}</span>
-          <button type="button" class="icon-btn drawer-close" onclick="closeMobileMenu();document.querySelector('.mobile-menu-btn').focus();" aria-label="${tr('إغلاق القائمة', 'Close menu')}">${icon('close', 22)}</button>
         </div>
         <div class="drawer-links">${DRAWER_NAV.map((n, i) => link(n, i, true)).join('')}</div>
         <div class="drawer-procs">
@@ -1299,7 +1298,7 @@ function renderSurgicalEducationPage() {
       <div class="container">
         <aside class="library-note">
           ${icon('book', 22)}
-          <p>${tr('التحضير والتعافي والمخاطر بالتفصيل: ', 'Preparation, recovery and risks in detail: ')}<a href="${pageHref(currentLang, 'cataract-surgery')}" data-nav class="text-link">${L(procedureBySlug('cataract-surgery').name)}</a> · <a href="${P('education')}#surgery-journey" data-nav class="text-link">${L(guideBy('surgery-journey').title)}</a> · <a href="${P('lens-lab')}" data-nav class="text-link">${tr('مختبر العدسات', 'The Lens Lab')}</a></p>
+          <p>${tr('التحضير والتعافي والمخاطر بالتفصيل: ', 'Preparation, recovery and risks in detail: ')}<a href="${pageHref(currentLang, 'cataract-surgery')}" data-nav class="text-link">${L(procedureBySlug('cataract-surgery').name)}</a>&nbsp;· <a href="${P('education')}#surgery-journey" data-nav class="text-link">${L(guideBy('surgery-journey').title)}</a>&nbsp;· <a href="${P('lens-lab')}" data-nav class="text-link">${tr('مختبر العدسات', 'The Lens Lab')}</a></p>
         </aside>
       </div>
     </section>
@@ -1874,6 +1873,37 @@ window.toggleFaq = function (idx, prefix = 'faq') {
 
 // --- REVEAL ON SCROLL ---
 let fadeObserver = null;
+/** Separates overlapping anatomy pins so every number stays readable. The anchors come from the 3D render and are never
+ *  edited: a pin that collides moves the minimum distance (at most 75% of its own size) and only on that device width. */
+function declusterPins() {
+  document.querySelectorAll('.pins').forEach(layer => {
+    const pins = [...layer.children].filter(p => p.offsetWidth);
+    if (pins.length < 2) return;
+    const box = layer.getBoundingClientRect();
+    if (!box.width) return;
+    const size = pins[0].offsetWidth;
+    const cap = size * 0.75;
+    const pts = pins.map(p => { const x = (parseFloat(p.style.left) / 100) * box.width, y = (parseFloat(p.style.top) / 100) * box.height; return { p, ax: x, ay: y, x, y }; });
+    for (let round = 0; round < 12; round++) {
+      let moved = false;
+      for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+        const a = pts[i], b = pts[j];
+        let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+        if (d >= size + 1) continue;
+        if (!d) { dx = 1; dy = 0; d = 1; }
+        const push = (size + 1 - d) / 2, ux = dx / d, uy = dy / d;
+        a.x -= ux * push; a.y -= uy * push; b.x += ux * push; b.y += uy * push;
+        moved = true;
+      }
+      pts.forEach(q => { const ox = q.x - q.ax, oy = q.y - q.ay, o = Math.hypot(ox, oy); if (o > cap) { q.x = q.ax + (ox / o) * cap; q.y = q.ay + (oy / o) * cap; } });
+      if (!moved) break;
+    }
+    pts.forEach(q => { const ox = q.x - q.ax, oy = q.y - q.ay; q.p.style.translate = Math.abs(ox) < 0.5 && Math.abs(oy) < 0.5 ? '' : `${ox.toFixed(1)}px ${oy.toFixed(1)}px`; });
+  });
+}
+let declusterTimer = 0;
+window.addEventListener('resize', () => { clearTimeout(declusterTimer); declusterTimer = setTimeout(declusterPins, 150); });
+
 function observeIntersection() {
   if (fadeObserver) fadeObserver.disconnect();
   const observer = fadeObserver = new IntersectionObserver(entries => {
@@ -1900,7 +1930,9 @@ function headerScrollShadow() {
     const dy = y - lastY;
     // Stays put while the menu is open, while focus is inside it, and while the 3D viewer runs (its language and
     // theme controls must stay one tap away).
-    const locked = document.documentElement.classList.contains('drawer-open') || header.contains(document.activeElement)
+    // Only keyboard focus pins it: after a tap the menu button keeps focus, and a phone reader must still get the page back (BUG-19).
+    const active = document.activeElement;
+    const locked = document.documentElement.classList.contains('drawer-open') || (header.contains(active) && active.matches(':focus-visible'))
       || c3d.state === 'active' || c3d.state === 'loading';
     // A route change restores a scroll position programmatically; that is not the reader scrolling down.
     if (performance.now() < (window.__headerHoldUntil || 0)) { lastY = y; return; }
@@ -1925,7 +1957,8 @@ function bindScrollSpy() {
   const seen = new Map();
   spyObserver = new IntersectionObserver(entries => {
     entries.forEach(e => seen.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : null));
-    const current = ids.find(id => seen.get(id) != null);
+    // the last section inside the reading band is the one just reached (two can overlap the band at a boundary) — BUG-20
+    const current = [...ids].reverse().find(id => seen.get(id) != null);
     links.forEach(a => {
       const on = a.dataset.spy === current;
       a.classList.toggle('is-current', on);
@@ -1978,6 +2011,7 @@ function renderApp(navigated = false) {
   observeIntersection();
   headerScrollShadow();
   bindScrollSpy();
+  declusterPins();
   if (route.page === 'procedures') window.filterProcedures(procFilter);
 
   // 3D: survives re-renders on pages that host it; torn down when the visitor leaves them.

@@ -132,7 +132,9 @@ export class Journey {
     this.failedRequests = [];
     this.expectedFailures = [];
     this.blocked = false;
-    this.shotDir = path.join(EVIDENCE_ROOT, meta.id);
+    // A journey may keep its evidence elsewhere (premium journeys: docs/.../premium-experience-reconstruction/evidence/journeys).
+    this.shotDir = path.join(meta.evidenceRoot || EVIDENCE_ROOT, meta.id);
+    this.logDirs = meta.evidenceRoot ? [LOG_DIR, path.join(meta.evidenceRoot, 'logs')] : [LOG_DIR, LOG_MIRROR];
     this.startedAt = new Date().toISOString();
   }
 
@@ -223,7 +225,7 @@ export class Journey {
       steps,
     };
     const json = JSON.stringify(log, null, 2);
-    for (const dir of [LOG_DIR, LOG_MIRROR]) {
+    for (const dir of this.logDirs) {
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(path.join(dir, `${this.meta.id}.json`), json);
     }

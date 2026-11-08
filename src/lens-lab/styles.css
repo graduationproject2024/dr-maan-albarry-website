@@ -103,7 +103,7 @@
 .llab-intro { color: var(--llab-text-2); max-width: 75ch; }
 .llab-toric { font-size: 0.95rem; color: var(--llab-text-2); padding-inline-start: 12px; border-inline-start: 3px solid var(--llab-accent); max-width: 75ch; }
 .llab-fine { font-size: 0.88rem; color: var(--llab-muted); }
-.llab-subhead { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px !important; }
+.llab-subhead { font-weight: 700; font-size: 1rem; margin-bottom: 4px !important; }
 .llab-list { padding-inline-start: 1.15em; display: grid; gap: 6px; }
 .llab-list li::marker { color: var(--llab-line-strong); }
 .llab-badge {

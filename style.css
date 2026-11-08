@@ -85,7 +85,7 @@
   --gutter: clamp(20px, 4.4vw, 64px);
   --max: 1312px;
   --col-gap: clamp(16px, 2.2vw, 32px);
-  --chapter-y: clamp(44px, 1.5rem + 2.8vw, 72px);
+  --chapter-y: clamp(44px, 1.25rem + 2.7vw, 68px);
   --section-y: clamp(48px, 2.2rem + 2.6vw, 88px);
   --header-h: 64px;
 
@@ -502,6 +502,8 @@ main:focus, main h1:focus { outline: none; }
 .ap-drop { fill: var(--accent); }
 .ap-needle { fill: none; stroke: var(--ink); stroke-width: 2; }
 
+/* the render's own bottom edge shows as a flat cut on the dark ground (BUG-24): a short fade, the image only, never the pins */
+:root[data-theme="dark"] .plate-frame .atlas-illus img { -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent); mask-image: linear-gradient(to bottom, #000 90%, transparent); }
 /* pins at the projected anchors + their key */
 .pins { position: absolute; inset: 0; pointer-events: none; }
 .pin {
@@ -509,6 +511,7 @@ main:focus, main h1:focus { outline: none; }
   background: var(--cta-bg); color: var(--cta-fg); font-size: .8125rem; font-style: italic; line-height: 1;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--paper) 70%, transparent), 0 2px 6px rgba(0, 0, 0, .18);
 }
+@media (max-width: 639px) { .pin { width: 20px; height: 20px; margin: -10px 0 0 -10px; font-size: .6875rem; box-shadow: 0 0 0 2px color-mix(in srgb, var(--paper) 70%, transparent), 0 1px 3px rgba(0, 0, 0, .18); } }
 .pin-key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--fs-caption); line-height: 1.6; color: var(--ink-2); }
 .pin-key li { display: inline-flex; align-items: baseline; gap: 6px; }
 .pk-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--rule-strong); font-style: italic; font-size: .75rem; color: var(--accent); line-height: 1; transform: translateY(2px); }
@@ -856,8 +859,8 @@ main:focus, main h1:focus { outline: none; }
 .proc-toc a, .edu-toc a, .toc-m a { display: flex; align-items: baseline; gap: 12px; min-height: 44px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: .9375rem; line-height: 1.45; color: var(--ink-2); transition: color .2s; }
 .proc-toc a:hover, .edu-toc a:hover { color: var(--ink); }
 .toc-n { font-style: italic; color: var(--accent); font-size: .875rem; min-width: 22px; }
-.proc-toc a.is-current, .edu-toc a.is-current { color: var(--ink); font-weight: 600; }
-.proc-toc a.is-current .toc-n, .edu-toc a.is-current .toc-n { color: var(--ink); }
+.proc-toc a.is-current, .edu-toc a.is-current, .toc-m a.is-current { color: var(--ink); font-weight: 600; }
+.proc-toc a.is-current .toc-n, .edu-toc a.is-current .toc-n, .toc-m a.is-current .toc-n { color: var(--ink); }
 .toc-3d a { color: var(--ink); font-weight: 600; }
 .toc-m { border-block: 1px solid var(--rule-ink); }
 .toc-m summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; cursor: pointer; list-style: none; font-weight: 600; color: var(--ink); }
@@ -978,6 +981,8 @@ main:focus, main h1:focus { outline: none; }
 #cataract-3d[data-state="active"] .c3d-poster, #cataract-3d[data-state="loading"] .c3d-poster { display: none; }
 #cataract-3d[data-state="active"] .c3d-actions { display: none; }
 #cataract-3d[data-state="active"] .c3d-text .lede, #cataract-3d[data-state="active"] .c3d-notes { display: none; }
+/* phones: the running viewer repeats this heading in its own panel, so the section heading steps aside (still read by screen readers) */
+@media (max-width: 1023px) { #cataract-3d[data-state="active"] .c3d-text :is(h2, .kicker) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
 @media (min-width: 900px) {
   .c3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
   .c3d-text { grid-column: 1 / span 5; }
@@ -1129,7 +1134,8 @@ main:focus, main h1:focus { outline: none; }
 .footer-place { font-size: var(--fs-caption); color: var(--ink-3); line-height: 1.6; }
 .footer-col { display: grid; align-content: start; gap: 0; min-width: 0; }
 .footer-col h3 { margin-bottom: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--rule-ink); font-family: var(--f-text); font-size: var(--fs-caption); font-weight: 600; letter-spacing: 0; color: var(--ink); }
-.footer-col a { display: flex; align-items: center; min-height: 44px; padding-block: 4px; color: var(--ink-2); font-size: .875rem; line-height: 1.45; }
+.footer-col a { display: flex; flex-wrap: wrap; align-items: center; column-gap: .35em; min-height: 44px; padding-block: 4px; color: var(--ink-2); font-size: .875rem; line-height: 1.45; }
+.footer-col a bdi { white-space: nowrap; }
 .footer-col a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
 .footer-hours { margin-top: 8px; font-size: var(--fs-caption); line-height: 1.6; color: var(--ink-2); }
 .footer-procs { grid-column: 1 / -1; }
@@ -1151,7 +1157,7 @@ main:focus, main h1:focus { outline: none; }
    ------------------------------------------------------------ */
 .booking-bar { display: none; position: fixed; inset-inline: 0; bottom: 0; z-index: 70; padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); border-top: 1px solid var(--rule); }
 @media (prefers-reduced-transparency: reduce) { .booking-bar { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; } }
-.booking-bar-inner { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; max-width: 720px; margin-inline: auto; }
+.booking-bar-inner { display: grid; grid-template-columns: minmax(max-content, 1.3fr) 1fr 1fr; gap: 8px; max-width: 720px; margin-inline: auto; }
 .booking-action {
   display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 52px; padding: 0 12px;
   border-radius: var(--r-pill); border: 1px solid var(--rule-strong); color: var(--ink); background: var(--paper);
@@ -1224,6 +1230,38 @@ main:focus, main h1:focus { outline: none; }
   .hero-plate-illus { aspect-ratio: 1 / 1 !important; }
   .hero-portrait { padding: 5px; }
   .hero-portrait .portrait-caption { display: none; } /* repeats the h1 and the intro directly below */
+}
+/* Phone homepage height: owner decision 2026-11-08 ("Trim, new limit"). Nothing is hidden; rhythm and rows tighten, targets stay 44 px. */
+@media (max-width: 639px) {
+  :root { --chapter-y: 36px; }
+  .chap-head { margin-bottom: 18px; }
+  .explore-grid { gap: 40px; }
+  .disc-art { max-height: 104px; }
+  .stage-list li { padding-block: 9px; }
+  .cred-grid { gap: 22px; }
+  .cred-list .cred, .timeline-item { padding-block: 7px; }
+  .ledger-title { padding-bottom: 7px; }
+  .duo { gap: 34px; }
+  .guide-row { padding-block: 10px; gap: 10px; }
+  .guide-foot { margin-top: 4px; }
+  .faq-question { min-height: 52px; padding-block: 9px; }
+  .clinic-grid { gap: 22px; }
+  .way { padding-block: 11px; }
+  .way-body { gap: 6px; }
+  .visit-row { padding-block: 9px; }
+  .accreditation { padding-top: 10px; }
+  /* footer: labelled link groups flow across the width instead of a long column; every link keeps a 44 px row */
+  .site-footer { padding-top: 32px; }
+  .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .footer-brand { gap: 2px; }
+  .footer-col h3 { margin-bottom: 2px; padding-bottom: 6px; }
+  .footer-col:not(.footer-procs) { display: flex; flex-wrap: wrap; column-gap: 18px; }
+  .footer-col:not(.footer-procs) h3 { flex: 0 0 100%; }
+  .footer-col a { min-height: 44px; min-width: 44px; padding-block: 0; }
+  .footer-hours { flex: 0 0 100%; margin-top: 2px; }
+  .footer-procs { column-gap: 14px; }
+  .footer-notices { margin-top: 18px; padding-top: 14px; gap: 8px; }
+  .footer-bottom { margin-top: 12px; padding-top: 10px; gap: 2px 18px; }
 }
 /* desktop density: the pathways chapter is a slim band (head beside the four tiles); index plates crop to a square */
 @media (min-width: 1024px) {
@@ -1307,7 +1345,7 @@ main:focus, main h1:focus { outline: none; }
 }
 /* booking bar on narrow phones: icon above the label, three equal columns, so "WhatsApp" is never clipped */
 @media (max-width: 440px) {
-  .booking-bar-inner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .booking-bar-inner { grid-template-columns: minmax(max-content, 1.2fr) repeat(2, minmax(0, 1fr)); }
   .booking-action { flex-direction: column; gap: 2px; min-height: 54px; padding: 4px 6px; border-radius: 16px; font-size: .8125rem; }
 }
 /* procedure pages: all reading text, including lists, definitions and the pin keys, is at least 16 px (BUG-01) */
