@@ -119,8 +119,14 @@ test.describe('Internal links', () => {
 
 test.describe('Homepage height budget (owner complaint 1)', () => {
   // Baseline before Phase 1 (docs/phase-1/evidence/baseline): about 10,700 px at 1440 and 15,000 px at 390.
-  for (const [w, max] of [[1440, 5750], [390, 8350]]) {
+  // 390 px budget: owner decision on 2026-11-08 ("Trim, new limit"). The phone page shows all seven procedures with their summaries, both
+  // vision previews, the 3D poster and full credentials, so the old 8,350 px limit no longer fits. The page was first trimmed without hiding
+  // anything (from 9,846 AR / 10,614 EN to 9,271 AR / 10,078 EN); the limits below are those measured heights plus about 100 px.
+  // The 1440 px budget (5,750) is unchanged; English gained room by trimming the spacing, not by raising it.
+  const budgets = { 1440: { ar: 5750, en: 5750 }, 390: { ar: 9370, en: 10180 } };
+  for (const w of [1440, 390]) {
     for (const lang of ['ar', 'en']) {
+      const max = budgets[w][lang];
       test(`home is at most ${max}px tall at ${w}px (${lang})`, async ({ page }) => {
         await page.setViewportSize({ width: w, height: 900 });
         await page.goto(lang === 'en' ? '/en/' : '/');
@@ -128,7 +134,7 @@ test.describe('Homepage height budget (owner complaint 1)', () => {
         await page.evaluate(() => document.fonts.ready);
         const h = await page.evaluate(() => document.documentElement.scrollHeight);
         expect(h).toBeLessThanOrEqual(max);
-        expect(h).toBeLessThan(w > 800 ? 10700 * 0.55 : 15000 * 0.56);
+        if (w > 800) expect(h).toBeLessThan(10700 * 0.55);
       });
     }
   }
