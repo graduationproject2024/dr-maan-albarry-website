@@ -35,7 +35,7 @@ The environment was checked at the start of the work. Everything below was found
 
 ## 3. Agents
 
-The table is filled in as each agent finishes.
+All agents were general-purpose subagents started in this session. The lead reviewed their results, chose how to combine the work, and did the hero fix (`a0d55d8`) directly.
 
 | Agent | Type | Task | Output |
 |---|---|---|---|
@@ -43,3 +43,9 @@ The table is filled in as each agent finishes.
 | 21st.dev research | general-purpose | Category browsing and a component shortlist | `21ST_COMPONENT_RESEARCH.md` |
 | Baseline | general-purpose | Before screenshots at 7 widths, mobile-hiding audit, content inventory | `evidence/before/`, `BEFORE_AFTER.md`, `HOMEPAGE_CONTENT_MATRIX.md`, `MOBILE_DESIGN.md` |
 | Simulator review modes | general-purpose (own worktree) | Cataract review gates and versioning; new vision-simulator review mode; tests | `CATARACT_REVIEW_WORKFLOW.md`, `VISION_REVIEW_WORKFLOW.md`, `SIMULATOR_CLINICAL_REVIEW.md` |
+| Design directions | general-purpose | Three local HTML prototypes from real content, rendered in Chromium, 11 screenshots each, scored | `THREE_DESIGN_DIRECTIONS.md`, `directions/` |
+| Anatomical atlas | general-purpose | Extended the three.js render pipeline: 27 images at L1, L2 and L3, projected label anchors, manifest | `public/images/procedures/atlas/`, `manifest.json`, `ANATOMICAL_VISUAL_LIBRARY.md` |
+| Site build | general-purpose | Implemented the selected direction across the homepage, procedure pages and secondary pages | `DESIGN_SYSTEM.md`, `TYPOGRAPHY_SYSTEM.md`, `ORIGINAL_DESIGN_DIRECTION.md`, `INFORMATION_ARCHITECTURE.md`, `evidence/after/` |
+| Journeys and QA | general-purpose | Journeys A–G, BUG-19 to BUG-28 with regression tests, four visual passes, performance, the owner-approved phone trim | `USER_JOURNEYS.md`, `BUG_REGISTER.md`, `FIX_VERIFICATION.md`, `VISUAL_ACCEPTANCE.md`, `PERFORMANCE_RESULTS.md`, `IMAGE_ART_DIRECTION.md` |
+
+No agent performed physician review, and no agent's output counts as clinical approval.
