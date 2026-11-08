@@ -31,7 +31,7 @@ Command: `PW_PORT=4671 PRERENDER_PORT=4676 npx playwright test`, default workers
 
 | Test | Reproduced alone? | Finding |
 |---|---|---|
-| `tests/routing.spec.js` subpath test | No (3/3 pass alone; 9/9 in a 6-worker repeat of routing + review + stress) | `route.fulfill` reports "Fetch response has been disposed": the test's own request stub races page teardown under load. Not a site failure. Flaky under full-suite load. |
-| Persona C step 8 (tap the 3D scrubber at 60%) | No (3/3 alone) | The step reads the scrubber rectangle and then taps raw coordinates; under load the tap lands off the control (scrubber 160, not ~600). Flaky under full-suite load; the site behaves in the other 500+ runs of the 3D controls. |
+| `tests/routing.spec.js` subpath test | No (3/3 pass alone; 3/3 in a 6-worker repeat of routing, review and stress) | `route.fulfill` reports "Fetch response has been disposed": the test's own request stub races page teardown under load. Not a site failure. Flaky under full-suite load. |
+| Persona C step 8 (tap the 3D scrubber at 60%) | No (3/3 alone) | The step reads the scrubber rectangle and then taps raw coordinates; under load the tap lands off the control (scrubber 160, not ~600). Flaky under full-suite load: it passed in the other full-suite runs and alone. |
 | `cataract-review` keyboard test | Yes, under load: 4 of 14 failed at 4 workers | The test pressed Enter before Playwright's file-chooser interception was active. Fixed in the test (20e1eae): 14 of 14 pass at 4 workers; the assertion is unchanged. |
 | `cataract-stress` | No failure in 3 repeats at 6 workers | Earlier one-off not reproduced. |
