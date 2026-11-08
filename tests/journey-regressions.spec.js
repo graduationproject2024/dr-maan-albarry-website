@@ -164,7 +164,11 @@ test.describe('journey regressions — phone', () => {
 
   test('BUG-17 header controls have names that contain their visible text', async ({ page }) => {
     await page.goto('/'); await page.locator('main h1').waitFor();
-    await expect(page.locator('.site-header .lang-switch')).toHaveAccessibleName(/^EN/);
+    // the switch shows the other language's own name ("English"); its accessible name must start with that visible text
+    const lang = page.locator('.site-header .lang-switch');
+    const visible = (await lang.innerText()).trim();
+    expect(visible).toBe('English');
+    await expect(lang).toHaveAccessibleName(new RegExp(`^${visible}`));
     await expect(page.locator('.site-header .wordmark')).toHaveAccessibleName(/^د\. معن البري/);
   });
 });

@@ -74,4 +74,114 @@ Capture script: kept outside the repo (session scratchpad, `baseline/capture.mjs
 
 ## After
 
-_To be filled after implementation._
+**Build:** this branch, `npm run build`, served with `npx vite preview --port 4573 --strictPort --host 127.0.0.1`. Captured with `node scripts/qa-premium.mjs <url> evidence/after all` (Chromium, DPR 1, reduced motion, each page walked once so lazy images load). Raw numbers and per-chapter heights: `evidence/after/metrics.json`.
+
+### Homepage height against the budget in `tests/phase1-pages.spec.js`
+
+| Width | Language | Before | After | Budget | Result |
+|---|---|---|---|---|---|
+| 1440 | Arabic | 5,363 | 5,606 | 5,750 | Passes |
+| 1440 | English | 5,585 | 5,747 | 5,750 | Passes |
+| 390 | Arabic | 8,015 | 9,899 | 8,350 | **Over by 1,549** |
+| 390 | English | 8,272 | 10,667 | 8,350 | **Over by 2,317** |
+
+**Why the phone budget does not fit.** The old homepage reached 8,015 px while hiding eleven kinds of content on phones and showing only three of seven procedures. The brief now requires, on every width: all seven plates with full summaries, both vision previews, the 3D poster, the pathways chapter, the credentials with the 15,000+ scope line, and the full clinic details. Those additions alone are larger than the 335 px of headroom the budget had. At 390 px (Arabic) the chapters measure: hero 1,073, pathways 456, procedures 1,881, credentials 1,000, the night chapter 1,708, guides and questions 1,157, clinic 1,117, footer 1,240. Reaching the budget would mean hiding content again or dropping chapters. As instructed, the budget was not changed, so these two tests fail and the decision is left to the owner.
+
+### Other results
+
+- **Horizontal overflow:** none on any page at any width (AR and EN, light and dark).
+- **Hidden sideways scrollers:** none remain.
+- **Console errors in the capture:** 0. The first screen no longer requests Google Fonts.
+- **Images:** none is displayed larger than its source file at DPR 1. The portrait is capped at its native 295 px.
+
+### Full table
+
+| Page | Lang | Width | Theme | Before (px) | After (px) | Horizontal overflow | Console errors | Screenshot |
+|---|---|---|---|---|---|---|---|---|
+| about | AR | 1440 | dark | — | 5,171 | no | 0 | `evidence/after/about-ar-1440-dark.jpg` |
+| about | AR | 1440 | light | 4,931 | 5,171 | no | 0 | `evidence/after/about-ar-1440-light.jpg` |
+| about | AR | 390 | dark | — | 9,739 | no | 0 | `evidence/after/about-ar-390-dark.jpg` |
+| about | AR | 390 | light | 10,068 | 9,739 | no | 0 | `evidence/after/about-ar-390-light.jpg` |
+| about | EN | 1440 | dark | — | 5,388 | no | 0 | `evidence/after/about-en-1440-dark.jpg` |
+| about | EN | 1440 | light | — | 5,388 | no | 0 | `evidence/after/about-en-1440-light.jpg` |
+| about | EN | 390 | dark | — | 10,309 | no | 0 | `evidence/after/about-en-390-dark.jpg` |
+| about | EN | 390 | light | — | 10,309 | no | 0 | `evidence/after/about-en-390-light.jpg` |
+| cataract-surgery | AR | 1440 | dark | — | 8,919 | no | 0 | `evidence/after/cataract-surgery-ar-1440-dark.jpg` |
+| cataract-surgery | AR | 1440 | light | 6,802 | 8,919 | no | 0 | `evidence/after/cataract-surgery-ar-1440-light.jpg` |
+| cataract-surgery | AR | 390 | dark | — | 10,163 | no | 0 | `evidence/after/cataract-surgery-ar-390-dark.jpg` |
+| cataract-surgery | AR | 390 | light | 9,541 | 10,163 | no | 0 | `evidence/after/cataract-surgery-ar-390-light.jpg` |
+| cataract-surgery | EN | 1440 | dark | — | 8,970 | no | 0 | `evidence/after/cataract-surgery-en-1440-dark.jpg` |
+| cataract-surgery | EN | 1440 | light | 6,881 | 8,970 | no | 0 | `evidence/after/cataract-surgery-en-1440-light.jpg` |
+| cataract-surgery | EN | 390 | dark | — | 10,618 | no | 0 | `evidence/after/cataract-surgery-en-390-dark.jpg` |
+| cataract-surgery | EN | 390 | light | 9,690 | 10,618 | no | 0 | `evidence/after/cataract-surgery-en-390-light.jpg` |
+| clinic | AR | 1440 | light | 2,960 | 3,009 | no | 0 | `evidence/after/clinic-ar-1440-light.jpg` |
+| clinic | AR | 390 | light | 5,357 | 4,757 | no | 0 | `evidence/after/clinic-ar-390-light.jpg` |
+| clinic | EN | 1440 | light | — | 3,098 | no | 0 | `evidence/after/clinic-en-1440-light.jpg` |
+| clinic | EN | 390 | light | — | 5,096 | no | 0 | `evidence/after/clinic-en-390-light.jpg` |
+| education | AR | 1440 | light | — | 5,051 | no | 0 | `evidence/after/education-ar-1440-light.jpg` |
+| education | AR | 390 | light | — | 7,144 | no | 0 | `evidence/after/education-ar-390-light.jpg` |
+| education | EN | 1440 | light | — | 5,154 | no | 0 | `evidence/after/education-en-1440-light.jpg` |
+| education | EN | 390 | light | — | 7,566 | no | 0 | `evidence/after/education-en-390-light.jpg` |
+| home | AR | 1440 | dark | 5,363 | 5,606 | no | 0 | `evidence/after/home-ar-1440-dark.jpg` |
+| home | AR | 1440 | light | 5,363 | 5,606 | no | 0 | `evidence/after/home-ar-1440-light.jpg` |
+| home | AR | 320 | dark | — | 11,032 | no | 0 | `evidence/after/home-ar-320-dark.jpg` |
+| home | AR | 320 | light | 9,045 | 11,032 | no | 0 | `evidence/after/home-ar-320-light.jpg` |
+| home | AR | 360 | dark | — | 10,144 | no | 0 | `evidence/after/home-ar-360-dark.jpg` |
+| home | AR | 360 | light | 8,328 | 10,144 | no | 0 | `evidence/after/home-ar-360-light.jpg` |
+| home | AR | 375 | dark | — | 10,035 | no | 0 | `evidence/after/home-ar-375-dark.jpg` |
+| home | AR | 375 | light | 8,140 | 10,035 | no | 0 | `evidence/after/home-ar-375-light.jpg` |
+| home | AR | 390 | dark | 8,015 | 9,899 | no | 0 | `evidence/after/home-ar-390-dark.jpg` |
+| home | AR | 390 | light | 8,015 | 9,899 | no | 0 | `evidence/after/home-ar-390-light.jpg` |
+| home | AR | 430 | dark | — | 9,802 | no | 0 | `evidence/after/home-ar-430-dark.jpg` |
+| home | AR | 430 | light | 7,782 | 9,802 | no | 0 | `evidence/after/home-ar-430-light.jpg` |
+| home | AR | 768 | dark | — | 9,111 | no | 0 | `evidence/after/home-ar-768-dark.jpg` |
+| home | AR | 768 | light | 9,003 | 9,111 | no | 0 | `evidence/after/home-ar-768-light.jpg` |
+| home | EN | 1440 | dark | — | 5,747 | no | 0 | `evidence/after/home-en-1440-dark.jpg` |
+| home | EN | 1440 | light | 5,585 | 5,747 | no | 0 | `evidence/after/home-en-1440-light.jpg` |
+| home | EN | 320 | dark | — | 12,065 | no | 0 | `evidence/after/home-en-320-dark.jpg` |
+| home | EN | 320 | light | 9,221 | 12,065 | no | 0 | `evidence/after/home-en-320-light.jpg` |
+| home | EN | 360 | dark | — | 11,135 | no | 0 | `evidence/after/home-en-360-dark.jpg` |
+| home | EN | 360 | light | 8,589 | 11,135 | no | 0 | `evidence/after/home-en-360-light.jpg` |
+| home | EN | 375 | dark | — | 10,877 | no | 0 | `evidence/after/home-en-375-dark.jpg` |
+| home | EN | 375 | light | 8,377 | 10,877 | no | 0 | `evidence/after/home-en-375-light.jpg` |
+| home | EN | 390 | dark | — | 10,667 | no | 0 | `evidence/after/home-en-390-dark.jpg` |
+| home | EN | 390 | light | 8,272 | 10,667 | no | 0 | `evidence/after/home-en-390-light.jpg` |
+| home | EN | 430 | dark | — | 10,254 | no | 0 | `evidence/after/home-en-430-dark.jpg` |
+| home | EN | 430 | light | 7,869 | 10,254 | no | 0 | `evidence/after/home-en-430-light.jpg` |
+| home | EN | 768 | dark | — | 9,585 | no | 0 | `evidence/after/home-en-768-dark.jpg` |
+| home | EN | 768 | light | 8,959 | 9,585 | no | 0 | `evidence/after/home-en-768-light.jpg` |
+| how-vision-works | AR | 1440 | light | 2,745 | 2,919 | no | 0 | `evidence/after/how-vision-works-ar-1440-light.jpg` |
+| how-vision-works | AR | 390 | light | 3,546 | 3,779 | no | 0 | `evidence/after/how-vision-works-ar-390-light.jpg` |
+| how-vision-works | EN | 1440 | light | — | 2,879 | no | 0 | `evidence/after/how-vision-works-en-1440-light.jpg` |
+| how-vision-works | EN | 390 | light | — | 3,939 | no | 0 | `evidence/after/how-vision-works-en-390-light.jpg` |
+| icl | AR | 1440 | light | — | 7,900 | no | 0 | `evidence/after/icl-ar-1440-light.jpg` |
+| icl | AR | 390 | light | — | 8,057 | no | 0 | `evidence/after/icl-ar-390-light.jpg` |
+| icl | EN | 1440 | light | — | 7,933 | no | 0 | `evidence/after/icl-en-1440-light.jpg` |
+| icl | EN | 390 | light | — | 8,397 | no | 0 | `evidence/after/icl-en-390-light.jpg` |
+| lens-lab | AR | 1440 | light | 9,462 | 9,522 | no | 0 | `evidence/after/lens-lab-ar-1440-light.jpg` |
+| lens-lab | AR | 390 | light | 13,447 | 13,196 | no | 0 | `evidence/after/lens-lab-ar-390-light.jpg` |
+| lens-lab | EN | 1440 | light | — | 10,048 | no | 0 | `evidence/after/lens-lab-en-1440-light.jpg` |
+| lens-lab | EN | 390 | light | — | 14,537 | no | 0 | `evidence/after/lens-lab-en-390-light.jpg` |
+| procedures | AR | 1440 | dark | — | 4,123 | no | 0 | `evidence/after/procedures-ar-1440-dark.jpg` |
+| procedures | AR | 1440 | light | 3,203 | 4,123 | no | 0 | `evidence/after/procedures-ar-1440-light.jpg` |
+| procedures | AR | 390 | dark | — | 4,411 | no | 0 | `evidence/after/procedures-ar-390-dark.jpg` |
+| procedures | AR | 390 | light | 4,783 | 4,411 | no | 0 | `evidence/after/procedures-ar-390-light.jpg` |
+| procedures | EN | 1440 | dark | — | 4,133 | no | 0 | `evidence/after/procedures-en-1440-dark.jpg` |
+| procedures | EN | 1440 | light | 3,271 | 4,133 | no | 0 | `evidence/after/procedures-en-1440-light.jpg` |
+| procedures | EN | 390 | dark | — | 4,690 | no | 0 | `evidence/after/procedures-en-390-dark.jpg` |
+| procedures | EN | 390 | light | 4,735 | 4,690 | no | 0 | `evidence/after/procedures-en-390-light.jpg` |
+| surgical-education | AR | 1440 | light | 2,423 | 2,550 | no | 0 | `evidence/after/surgical-education-ar-1440-light.jpg` |
+| surgical-education | AR | 390 | light | 4,117 | 4,007 | no | 0 | `evidence/after/surgical-education-ar-390-light.jpg` |
+| surgical-education | EN | 1440 | light | — | 2,574 | no | 0 | `evidence/after/surgical-education-en-1440-light.jpg` |
+| surgical-education | EN | 390 | light | — | 4,129 | no | 0 | `evidence/after/surgical-education-en-390-light.jpg` |
+
+### Before and after pairs
+
+The same page, width and theme can be compared directly, because the file names match:
+
+- `evidence/before/home-ar-1440-light.jpg` and `evidence/after/home-ar-1440-light.jpg`
+- `evidence/before/home-ar-390-light.jpg` and `evidence/after/home-ar-390-light.jpg`
+- `evidence/before/home-en-1440-light.jpg` and `evidence/after/home-en-1440-light.jpg`
+- `evidence/before/procedures-ar-1440-light.jpg` and `evidence/after/procedures-ar-1440-light.jpg`
+- `evidence/before/cataract-ar-1440-light.jpg` and `evidence/after/cataract-surgery-ar-1440-light.jpg`
+- `evidence/before/about-ar-390-light.jpg` and `evidence/after/about-ar-390-light.jpg`

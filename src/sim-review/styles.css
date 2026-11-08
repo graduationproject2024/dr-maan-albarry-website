@@ -2,12 +2,12 @@
    tokens with safe fallbacks; every target is at least 44 px; everything wraps at 390 px. */
 .srv {
   --srv-text: inherit;
-  --srv-muted: #44525c;
-  --srv-raised: #ffffff;
-  --srv-border: #9aa5aa;
-  --srv-primary: #15323d;
-  --srv-on-primary: #ffffff;
-  --srv-focus: #b8955a;
+  --srv-muted: #544c42;
+  --srv-raised: #fbf8f3;
+  --srv-border: #82776a;
+  --srv-primary: #1b1915;
+  --srv-on-primary: #f3eee7;
+  --srv-focus: #8a4b22;
   --srv-warn-bg: #fff4dc;
   --srv-warn-text: #5b4013;
   --srv-warn-border: #d9b46a;

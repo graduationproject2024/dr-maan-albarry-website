@@ -1,23 +1,23 @@
 /* How Vision Works: Interactive Light Journey. Every rule is scoped under .lj and every colour is a local token,
-   so the module never inherits or leaks styles. The palette follows the site (porcelain, deep lagoon, terracotta)
+   so the module never inherits or leaks styles. The palette follows the site (Direction A: ivory, ink, oxide bronze)
    and the procedure illustrations (tissue colours). */
 .lj {
-  --lj-bg: #fbfaf7;
-  --lj-surface: #ffffff;
-  --lj-stage-a: #fbf8f2;
-  --lj-stage-b: #eef1ef;
-  --lj-ink: #13201e;
-  --lj-ink-2: #34433f;
-  --lj-muted: #56655f;
-  --lj-line: #dfe5e2;
-  --lj-line-strong: #7c8b87;
-  --lj-primary: #0b5a52;
-  --lj-primary-hover: #08473f;
+  --lj-bg: #f3eee7;
+  --lj-surface: #fbf8f3;
+  --lj-stage-a: #f6f1ea;
+  --lj-stage-b: #ece5da;
+  --lj-ink: #1b1915;
+  --lj-ink-2: #453e35;
+  --lj-muted: #544c42;
+  --lj-line: #d6ccbe;
+  --lj-line-strong: #82776a;
+  --lj-primary: #8a4b22;
+  --lj-primary-hover: #6e3a18;
   --lj-on-primary: #ffffff;
-  --lj-primary-soft: #dcebe7;
-  --lj-accent: #9e4322;
-  --lj-accent-soft: rgba(158, 67, 34, 0.08);
-  --lj-focus: #0b5a52;
+  --lj-primary-soft: #eadfd0;
+  --lj-accent: #8a4b22;
+  --lj-accent-soft: rgba(138, 75, 34, 0.08);
+  --lj-focus: #8a4b22;
   --lj-ray: #d38a22;
   --lj-ray-flow: rgba(255, 251, 238, 0.95);
   --lj-shadow: 0 1px 2px rgba(19, 32, 30, 0.06), 0 12px 32px -18px rgba(19, 32, 30, 0.28);
@@ -57,8 +57,8 @@
   --lj-cone: #c96f3e;
   --lj-rod: #8d6f9a;
 
-  --lj-f-display: "Source Serif 4", "Source Serif 4 Fallback", "Iowan Old Style", Georgia, serif;
-  --lj-f-text: "Public Sans", "Public Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lj-f-display: "Newsreader", "Newsreader Fallback", "Iowan Old Style", Georgia, serif;
+  --lj-f-text: "IBM Plex Sans", "IBM Plex Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   container-type: inline-size;
   position: relative;
@@ -80,27 +80,27 @@
   -webkit-tap-highlight-color: transparent;
 }
 .lj[lang="ar"] {
-  --lj-f-display: "Readex Pro", "Readex Pro Fallback", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
-  --lj-f-text: "Noto Sans Arabic", "Noto Sans Arabic Fallback", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --lj-f-display: "Noto Naskh Arabic", "Newsreader", "Noto Naskh Arabic Fallback", serif;
+  --lj-f-text: "IBM Plex Sans Arabic", "IBM Plex Sans", "IBM Plex Sans Arabic Fallback", "Segoe UI", Tahoma, sans-serif;
   line-height: 1.85;
 }
 .lj[data-theme="dark"] {
-  --lj-bg: #0d1618;
-  --lj-surface: #13201f;
-  --lj-stage-a: #13201f;
-  --lj-stage-b: #0a1213;
-  --lj-ink: #e8efed;
-  --lj-ink-2: #c9d5d2;
-  --lj-muted: #a3b4b0;
-  --lj-line: #25373a;
-  --lj-line-strong: #6f8783;
-  --lj-primary: #7fcfc3;
-  --lj-primary-hover: #a0e0d6;
-  --lj-on-primary: #062522;
-  --lj-primary-soft: rgba(127, 207, 195, 0.12);
-  --lj-accent: #e9a183;
-  --lj-accent-soft: rgba(233, 161, 131, 0.09);
-  --lj-focus: #9fe3d8;
+  --lj-bg: #181a1e;
+  --lj-surface: #1f2227;
+  --lj-stage-a: #1f2227;
+  --lj-stage-b: #15171a;
+  --lj-ink: #efe9e0;
+  --lj-ink-2: #cfc8bd;
+  --lj-muted: #ada59a;
+  --lj-line: #353840;
+  --lj-line-strong: #767982;
+  --lj-primary: #d99c6c;
+  --lj-primary-hover: #e6b48b;
+  --lj-on-primary: #181a1e;
+  --lj-primary-soft: rgba(217, 156, 108, 0.14);
+  --lj-accent: #d99c6c;
+  --lj-accent-soft: rgba(217, 156, 108, 0.1);
+  --lj-focus: #d99c6c;
   --lj-ray: #f2bf5e;
   --lj-ray-flow: rgba(255, 246, 214, 0.95);
   --lj-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 36px -20px rgba(0, 0, 0, 0.8);
@@ -330,9 +330,12 @@
   .lj-panel { order: 2; }
   .lj-controls { order: 3; }
 }
-/* small containers: the drawing keeps only the essentials */
+/* small containers: the anatomical labels stay (larger in SVG units, so about 12 px on a phone); only the
+   "illustrative" tag moves to the note below the drawing */
 @container (max-width: 560px) {
-  .lj-labels, .lj-illus { display: none; }
+  .lj-illus { display: none; }
+  .lj-svg .lj-label text { font-size: 38px; stroke-width: 8px; }
+  .lj-svg .lj-label circle { r: 9px; }
   .lj { border-radius: 22px; }
   .lj-figure { border-radius: 16px; margin-inline: -4px; }
 }

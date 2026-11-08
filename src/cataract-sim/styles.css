@@ -1,25 +1,25 @@
 /* Cataract surgery simulator — every rule is scoped under .csim. Colour tokens are self-contained
    (not inherited from the host page), so a host section that redefines its own tokens cannot
-   make the simulator card unreadable. Values match the site's navy/gold/ivory palette. */
+   make the simulator card unreadable. Values follow the site's Direction A palette (ivory, ink, oxide bronze). */
 .csim {
-  --csim-bg: #fbfaf7;
-  --csim-surface: #f2efe8;
-  --csim-raised: #ffffff;
-  --csim-text: #13212b;
-  --csim-muted: #44525c;
-  --csim-subtle: #5f6d76;
-  --csim-border: #e1ddd3;
-  --csim-border-strong: #c9c3b6;
-  --csim-navy: #0b1f3a;
-  --csim-primary: #15323d;
-  --csim-on-primary: #ffffff;
-  --csim-accent: #8a6a3a;
-  --csim-accent-soft: rgba(184, 149, 90, 0.14);
-  --csim-view: #dfe5e7;
-  --csim-overlay: rgba(251, 250, 247, 0.9);
-  --csim-focus: #b8955a;
+  --csim-bg: #f3eee7;
+  --csim-surface: #ece5da;
+  --csim-raised: #fbf8f3;
+  --csim-text: #1b1915;
+  --csim-muted: #544c42;
+  --csim-subtle: #655b4f;
+  --csim-border: #d6ccbe;
+  --csim-border-strong: #82776a;
+  --csim-navy: #1b1915;
+  --csim-primary: #1b1915;
+  --csim-on-primary: #f3eee7;
+  --csim-accent: #8a4b22;
+  --csim-accent-soft: rgba(138, 75, 34, 0.12);
+  --csim-view: #e4dacb;
+  --csim-overlay: rgba(243, 238, 231, 0.9);
+  --csim-focus: #8a4b22;
   --csim-radius: var(--radius-xl, 1rem);
-  --csim-shadow: 0 1px 2px rgba(11, 31, 58, 0.06), 0 12px 32px -12px rgba(11, 31, 58, 0.18);
+  --csim-shadow: 0 7px 28px rgba(27, 25, 21, 0.05);
   position: relative;
   box-sizing: border-box;
   width: 100%;
@@ -37,21 +37,21 @@
 }
 .csim[lang="ar"] { font-family: var(--font-ar, "Alexandria", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif); line-height: 1.7; }
 .csim[data-theme="dark"] {
-  --csim-bg: #0f1b22;
-  --csim-surface: #15242c;
-  --csim-raised: #1a2c35;
-  --csim-text: #e7edf0;
-  --csim-muted: #a9bac3;
-  --csim-subtle: #8297a2;
-  --csim-border: #22363f;
-  --csim-border-strong: #31505c;
-  --csim-primary: #c9ad80;
-  --csim-on-primary: #0f1b22;
-  --csim-accent: #d4b98d;
-  --csim-accent-soft: rgba(212, 185, 141, 0.14);
-  --csim-view: #0c171d;
-  --csim-overlay: rgba(12, 23, 29, 0.88);
-  --csim-focus: #e0c79c;
+  --csim-bg: #181a1e;
+  --csim-surface: #1f2227;
+  --csim-raised: #272a30;
+  --csim-text: #efe9e0;
+  --csim-muted: #ada59a;
+  --csim-subtle: #a19a8e;
+  --csim-border: #353840;
+  --csim-border-strong: #767982;
+  --csim-primary: #efe9e0;
+  --csim-on-primary: #181a1e;
+  --csim-accent: #d99c6c;
+  --csim-accent-soft: rgba(217, 156, 108, 0.14);
+  --csim-view: #111316;
+  --csim-overlay: rgba(17, 19, 22, 0.88);
+  --csim-focus: #d99c6c;
   --csim-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.6);
 }
 .csim *, .csim *::before, .csim *::after { box-sizing: border-box; }

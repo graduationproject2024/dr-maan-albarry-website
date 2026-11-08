@@ -1,0 +1,7510 @@
+{
+ "home-ar-320-light": {
+  "height": 11032,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1248
+   },
+   {
+    "id": "pathways",
+    "top": 1312,
+    "h": 476
+   },
+   {
+    "id": "procedures",
+    "top": 1788,
+    "h": 2053
+   },
+   {
+    "id": "pc-fig",
+    "top": 2072,
+    "h": 181
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2517,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2517,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 2722,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2722,
+    "h": 169
+   },
+   {
+    "id": "pc-fig",
+    "top": 2919,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2919,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 3124,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3124,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 3328,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3328,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3501,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3501,
+    "h": 176
+   },
+   {
+    "id": "profile",
+    "top": 3841,
+    "h": 1117
+   },
+   {
+    "id": "chapter",
+    "top": 4958,
+    "h": 1761
+   },
+   {
+    "id": "disc-visual",
+    "top": 5219,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5349,
+    "h": 198
+   },
+   {
+    "id": "disc-visual",
+    "top": 5588,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5718,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6763,
+    "h": 902
+   },
+   {
+    "id": "",
+    "top": 6981,
+    "h": 155
+   },
+   {
+    "id": "",
+    "top": 7169,
+    "h": 184
+   },
+   {
+    "id": "",
+    "top": 7385,
+    "h": 159
+   },
+   {
+    "id": "faq",
+    "top": 7709,
+    "h": 545
+   },
+   {
+    "id": "clinic",
+    "top": 8298,
+    "h": 1302
+   },
+   {
+    "id": "site-footer",
+    "top": 9600,
+    "h": 1362
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-320-dark": {
+  "height": 11032,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1248
+   },
+   {
+    "id": "pathways",
+    "top": 1312,
+    "h": 476
+   },
+   {
+    "id": "procedures",
+    "top": 1788,
+    "h": 2053
+   },
+   {
+    "id": "pc-fig",
+    "top": 2072,
+    "h": 181
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2517,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2517,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 2722,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2722,
+    "h": 169
+   },
+   {
+    "id": "pc-fig",
+    "top": 2919,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2919,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 3124,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3124,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 3328,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3328,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3501,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3501,
+    "h": 176
+   },
+   {
+    "id": "profile",
+    "top": 3841,
+    "h": 1117
+   },
+   {
+    "id": "chapter",
+    "top": 4958,
+    "h": 1761
+   },
+   {
+    "id": "disc-visual",
+    "top": 5219,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5349,
+    "h": 198
+   },
+   {
+    "id": "disc-visual",
+    "top": 5588,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5718,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6763,
+    "h": 902
+   },
+   {
+    "id": "",
+    "top": 6981,
+    "h": 155
+   },
+   {
+    "id": "",
+    "top": 7169,
+    "h": 184
+   },
+   {
+    "id": "",
+    "top": 7385,
+    "h": 159
+   },
+   {
+    "id": "faq",
+    "top": 7709,
+    "h": 545
+   },
+   {
+    "id": "clinic",
+    "top": 8298,
+    "h": 1302
+   },
+   {
+    "id": "site-footer",
+    "top": 9600,
+    "h": 1362
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-320-light": {
+  "height": 12065,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1305
+   },
+   {
+    "id": "pathways",
+    "top": 1369,
+    "h": 568
+   },
+   {
+    "id": "procedures",
+    "top": 1937,
+    "h": 2242
+   },
+   {
+    "id": "pc-fig",
+    "top": 2283,
+    "h": 181
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2714,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2714,
+    "h": 226
+   },
+   {
+    "id": "pc-fig",
+    "top": 2969,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2969,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3177,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3177,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3385,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3385,
+    "h": 203
+   },
+   {
+    "id": "pc-fig",
+    "top": 3617,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3617,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3825,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3825,
+    "h": 200
+   },
+   {
+    "id": "profile",
+    "top": 4179,
+    "h": 1362
+   },
+   {
+    "id": "chapter",
+    "top": 5541,
+    "h": 1928
+   },
+   {
+    "id": "disc-visual",
+    "top": 5840,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5970,
+    "h": 230
+   },
+   {
+    "id": "disc-visual",
+    "top": 6240,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 6370,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 7514,
+    "h": 959
+   },
+   {
+    "id": "",
+    "top": 7733,
+    "h": 187
+   },
+   {
+    "id": "",
+    "top": 7954,
+    "h": 187
+   },
+   {
+    "id": "",
+    "top": 8174,
+    "h": 166
+   },
+   {
+    "id": "faq",
+    "top": 8517,
+    "h": 542
+   },
+   {
+    "id": "clinic",
+    "top": 9103,
+    "h": 1417
+   },
+   {
+    "id": "site-footer",
+    "top": 10520,
+    "h": 1475
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-320-dark": {
+  "height": 12065,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1305
+   },
+   {
+    "id": "pathways",
+    "top": 1369,
+    "h": 568
+   },
+   {
+    "id": "procedures",
+    "top": 1937,
+    "h": 2242
+   },
+   {
+    "id": "pc-fig",
+    "top": 2283,
+    "h": 181
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2714,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2714,
+    "h": 226
+   },
+   {
+    "id": "pc-fig",
+    "top": 2969,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2969,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3177,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3177,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3385,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3385,
+    "h": 203
+   },
+   {
+    "id": "pc-fig",
+    "top": 3617,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3617,
+    "h": 179
+   },
+   {
+    "id": "pc-fig",
+    "top": 3825,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3825,
+    "h": 200
+   },
+   {
+    "id": "profile",
+    "top": 4179,
+    "h": 1362
+   },
+   {
+    "id": "chapter",
+    "top": 5541,
+    "h": 1928
+   },
+   {
+    "id": "disc-visual",
+    "top": 5840,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5970,
+    "h": 230
+   },
+   {
+    "id": "disc-visual",
+    "top": 6240,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 6370,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 7514,
+    "h": 959
+   },
+   {
+    "id": "",
+    "top": 7733,
+    "h": 187
+   },
+   {
+    "id": "",
+    "top": 7954,
+    "h": 187
+   },
+   {
+    "id": "",
+    "top": 8174,
+    "h": 166
+   },
+   {
+    "id": "faq",
+    "top": 8517,
+    "h": 542
+   },
+   {
+    "id": "clinic",
+    "top": 9103,
+    "h": 1417
+   },
+   {
+    "id": "site-footer",
+    "top": 10520,
+    "h": 1475
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-360-light": {
+  "height": 10144,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1133
+   },
+   {
+    "id": "pathways",
+    "top": 1197,
+    "h": 476
+   },
+   {
+    "id": "procedures",
+    "top": 1674,
+    "h": 1892
+   },
+   {
+    "id": "pc-fig",
+    "top": 1957,
+    "h": 209
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2403,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2403,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2576,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2576,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2749,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2749,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2929,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2929,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3109,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3109,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3282,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3282,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3565,
+    "h": 1023
+   },
+   {
+    "id": "chapter",
+    "top": 4588,
+    "h": 1734
+   },
+   {
+    "id": "disc-visual",
+    "top": 4850,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4980,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5191,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5321,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6366,
+    "h": 730
+   },
+   {
+    "id": "",
+    "top": 6542,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6706,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6869,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 7140,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7635,
+    "h": 1145
+   },
+   {
+    "id": "site-footer",
+    "top": 8780,
+    "h": 1294
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-360-dark": {
+  "height": 10144,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1133
+   },
+   {
+    "id": "pathways",
+    "top": 1197,
+    "h": 476
+   },
+   {
+    "id": "procedures",
+    "top": 1674,
+    "h": 1892
+   },
+   {
+    "id": "pc-fig",
+    "top": 1957,
+    "h": 209
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2403,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2403,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2576,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2576,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2749,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2749,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2929,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2929,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3109,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3109,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3282,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3282,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3565,
+    "h": 1023
+   },
+   {
+    "id": "chapter",
+    "top": 4588,
+    "h": 1734
+   },
+   {
+    "id": "disc-visual",
+    "top": 4850,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4980,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5191,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5321,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6366,
+    "h": 730
+   },
+   {
+    "id": "",
+    "top": 6542,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6706,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6869,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 7140,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7635,
+    "h": 1145
+   },
+   {
+    "id": "site-footer",
+    "top": 8780,
+    "h": 1294
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-360-light": {
+  "height": 11135,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1259
+   },
+   {
+    "id": "pathways",
+    "top": 1323,
+    "h": 547
+   },
+   {
+    "id": "procedures",
+    "top": 1870,
+    "h": 2006
+   },
+   {
+    "id": "pc-fig",
+    "top": 2160,
+    "h": 209
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2618,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2618,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2802,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2802,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2985,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2985,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3172,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3172,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3359,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3359,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3546,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3546,
+    "h": 176
+   },
+   {
+    "id": "profile",
+    "top": 3876,
+    "h": 1186
+   },
+   {
+    "id": "chapter",
+    "top": 5062,
+    "h": 1808
+   },
+   {
+    "id": "disc-visual",
+    "top": 5339,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5469,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5716,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5846,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 6914,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 7112,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 7285,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7483,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7792,
+    "h": 520
+   },
+   {
+    "id": "clinic",
+    "top": 8356,
+    "h": 1304
+   },
+   {
+    "id": "site-footer",
+    "top": 9660,
+    "h": 1405
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-360-dark": {
+  "height": 11135,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1259
+   },
+   {
+    "id": "pathways",
+    "top": 1323,
+    "h": 547
+   },
+   {
+    "id": "procedures",
+    "top": 1870,
+    "h": 2006
+   },
+   {
+    "id": "pc-fig",
+    "top": 2160,
+    "h": 209
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2618,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2618,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2802,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2802,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2985,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2985,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3172,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3172,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3359,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3359,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3546,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3546,
+    "h": 176
+   },
+   {
+    "id": "profile",
+    "top": 3876,
+    "h": 1186
+   },
+   {
+    "id": "chapter",
+    "top": 5062,
+    "h": 1808
+   },
+   {
+    "id": "disc-visual",
+    "top": 5339,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5469,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5716,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5846,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 6914,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 7112,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 7285,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7483,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7792,
+    "h": 520
+   },
+   {
+    "id": "clinic",
+    "top": 8356,
+    "h": 1304
+   },
+   {
+    "id": "site-footer",
+    "top": 9660,
+    "h": 1405
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-375-light": {
+  "height": 10035,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1090
+   },
+   {
+    "id": "pathways",
+    "top": 1154,
+    "h": 456
+   },
+   {
+    "id": "procedures",
+    "top": 1610,
+    "h": 1895
+   },
+   {
+    "id": "pc-fig",
+    "top": 1893,
+    "h": 219
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2349,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2349,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2522,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2522,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2695,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2695,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2868,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2868,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3048,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3048,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3221,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3221,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3505,
+    "h": 1023
+   },
+   {
+    "id": "chapter",
+    "top": 4528,
+    "h": 1743
+   },
+   {
+    "id": "disc-visual",
+    "top": 4789,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4919,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5131,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5261,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6315,
+    "h": 705
+   },
+   {
+    "id": "",
+    "top": 6466,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6630,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6793,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 7064,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7559,
+    "h": 1117
+   },
+   {
+    "id": "site-footer",
+    "top": 8676,
+    "h": 1289
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-375-dark": {
+  "height": 10035,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1090
+   },
+   {
+    "id": "pathways",
+    "top": 1154,
+    "h": 456
+   },
+   {
+    "id": "procedures",
+    "top": 1610,
+    "h": 1895
+   },
+   {
+    "id": "pc-fig",
+    "top": 1893,
+    "h": 219
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2349,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2349,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2522,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2522,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2695,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2695,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2868,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2868,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3048,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3048,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 3221,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3221,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3505,
+    "h": 1023
+   },
+   {
+    "id": "chapter",
+    "top": 4528,
+    "h": 1743
+   },
+   {
+    "id": "disc-visual",
+    "top": 4789,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4919,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5131,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5261,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6315,
+    "h": 705
+   },
+   {
+    "id": "",
+    "top": 6466,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6630,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6793,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 7064,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7559,
+    "h": 1117
+   },
+   {
+    "id": "site-footer",
+    "top": 8676,
+    "h": 1289
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-375-light": {
+  "height": 10877,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1106
+   },
+   {
+    "id": "pathways",
+    "top": 1170,
+    "h": 522
+   },
+   {
+    "id": "procedures",
+    "top": 1692,
+    "h": 1995
+   },
+   {
+    "id": "pc-fig",
+    "top": 1982,
+    "h": 219
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2450,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2450,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2634,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2634,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2817,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2817,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3004,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3004,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3191,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3191,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3378,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3378,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3687,
+    "h": 1186
+   },
+   {
+    "id": "chapter",
+    "top": 4873,
+    "h": 1790
+   },
+   {
+    "id": "disc-visual",
+    "top": 5150,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5280,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5528,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5658,
+    "h": 179
+   },
+   {
+    "id": "education",
+    "top": 6708,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 6905,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 7078,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7276,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7585,
+    "h": 503
+   },
+   {
+    "id": "clinic",
+    "top": 8132,
+    "h": 1270
+   },
+   {
+    "id": "site-footer",
+    "top": 9402,
+    "h": 1405
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-375-dark": {
+  "height": 10877,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1106
+   },
+   {
+    "id": "pathways",
+    "top": 1170,
+    "h": 522
+   },
+   {
+    "id": "procedures",
+    "top": 1692,
+    "h": 1995
+   },
+   {
+    "id": "pc-fig",
+    "top": 1982,
+    "h": 219
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2450,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2450,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2634,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2634,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2817,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2817,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3004,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3004,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3191,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3191,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3378,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3378,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3687,
+    "h": 1186
+   },
+   {
+    "id": "chapter",
+    "top": 4873,
+    "h": 1790
+   },
+   {
+    "id": "disc-visual",
+    "top": 5150,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5280,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5528,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5658,
+    "h": 179
+   },
+   {
+    "id": "education",
+    "top": 6708,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 6905,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 7078,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7276,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7585,
+    "h": 503
+   },
+   {
+    "id": "clinic",
+    "top": 8132,
+    "h": 1270
+   },
+   {
+    "id": "site-footer",
+    "top": 9402,
+    "h": 1405
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-390-light": {
+  "height": 9899,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1073
+   },
+   {
+    "id": "pathways",
+    "top": 1137,
+    "h": 456
+   },
+   {
+    "id": "procedures",
+    "top": 1593,
+    "h": 1881
+   },
+   {
+    "id": "pc-fig",
+    "top": 1877,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2343,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2343,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2516,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2516,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2689,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2689,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2862,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2862,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3042,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3042,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 3191,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3191,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3474,
+    "h": 1000
+   },
+   {
+    "id": "chapter",
+    "top": 4474,
+    "h": 1708
+   },
+   {
+    "id": "disc-visual",
+    "top": 4712,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4842,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5053,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5183,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6227,
+    "h": 706
+   },
+   {
+    "id": "",
+    "top": 6378,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6542,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6705,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 6976,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7471,
+    "h": 1117
+   },
+   {
+    "id": "site-footer",
+    "top": 8589,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-390-dark": {
+  "height": 9899,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1073
+   },
+   {
+    "id": "pathways",
+    "top": 1137,
+    "h": 456
+   },
+   {
+    "id": "procedures",
+    "top": 1593,
+    "h": 1881
+   },
+   {
+    "id": "pc-fig",
+    "top": 1877,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2343,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2343,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2516,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2516,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2689,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2689,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2862,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2862,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 3042,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3042,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 3191,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3191,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3474,
+    "h": 1000
+   },
+   {
+    "id": "chapter",
+    "top": 4474,
+    "h": 1708
+   },
+   {
+    "id": "disc-visual",
+    "top": 4712,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4842,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 5053,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5183,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6227,
+    "h": 706
+   },
+   {
+    "id": "",
+    "top": 6378,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6542,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6705,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 6976,
+    "h": 451
+   },
+   {
+    "id": "clinic",
+    "top": 7471,
+    "h": 1117
+   },
+   {
+    "id": "site-footer",
+    "top": 8589,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-390-light": {
+  "height": 10667,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1115
+   },
+   {
+    "id": "pathways",
+    "top": 1179,
+    "h": 523
+   },
+   {
+    "id": "procedures",
+    "top": 1702,
+    "h": 1985
+   },
+   {
+    "id": "pc-fig",
+    "top": 1992,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2471,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2471,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2654,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2654,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2838,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2838,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3025,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3025,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3212,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3212,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 3378,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3378,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3687,
+    "h": 1115
+   },
+   {
+    "id": "chapter",
+    "top": 4802,
+    "h": 1777
+   },
+   {
+    "id": "disc-visual",
+    "top": 5079,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5209,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5457,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5587,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 6623,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 6822,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 6994,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7192,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7501,
+    "h": 503
+   },
+   {
+    "id": "clinic",
+    "top": 8048,
+    "h": 1209
+   },
+   {
+    "id": "site-footer",
+    "top": 9257,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-390-dark": {
+  "height": 10667,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1115
+   },
+   {
+    "id": "pathways",
+    "top": 1179,
+    "h": 523
+   },
+   {
+    "id": "procedures",
+    "top": 1702,
+    "h": 1985
+   },
+   {
+    "id": "pc-fig",
+    "top": 1992,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2471,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2471,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2654,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2654,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2838,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2838,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3025,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3025,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 3212,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3212,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 3378,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3378,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3687,
+    "h": 1115
+   },
+   {
+    "id": "chapter",
+    "top": 4802,
+    "h": 1777
+   },
+   {
+    "id": "disc-visual",
+    "top": 5079,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5209,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5457,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5587,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 6623,
+    "h": 834
+   },
+   {
+    "id": "",
+    "top": 6822,
+    "h": 139
+   },
+   {
+    "id": "",
+    "top": 6994,
+    "h": 166
+   },
+   {
+    "id": "",
+    "top": 7192,
+    "h": 144
+   },
+   {
+    "id": "faq",
+    "top": 7501,
+    "h": 503
+   },
+   {
+    "id": "clinic",
+    "top": 8048,
+    "h": 1209
+   },
+   {
+    "id": "site-footer",
+    "top": 9257,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-430-light": {
+  "height": 9802,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1042
+   },
+   {
+    "id": "pathways",
+    "top": 1106,
+    "h": 457
+   },
+   {
+    "id": "procedures",
+    "top": 1562,
+    "h": 1854
+   },
+   {
+    "id": "pc-fig",
+    "top": 1823,
+    "h": 257
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2317,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2317,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2490,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2490,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2663,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2663,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 2811,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2811,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2984,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2984,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 3133,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3133,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3416,
+    "h": 977
+   },
+   {
+    "id": "chapter",
+    "top": 4393,
+    "h": 1694
+   },
+   {
+    "id": "disc-visual",
+    "top": 4633,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4763,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 4974,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5104,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6132,
+    "h": 707
+   },
+   {
+    "id": "",
+    "top": 6284,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6448,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6611,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 6882,
+    "h": 452
+   },
+   {
+    "id": "clinic",
+    "top": 7378,
+    "h": 1118
+   },
+   {
+    "id": "site-footer",
+    "top": 8496,
+    "h": 1236
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-430-dark": {
+  "height": 9802,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1042
+   },
+   {
+    "id": "pathways",
+    "top": 1106,
+    "h": 457
+   },
+   {
+    "id": "procedures",
+    "top": 1562,
+    "h": 1854
+   },
+   {
+    "id": "pc-fig",
+    "top": 1823,
+    "h": 257
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2317,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2317,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2490,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2490,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2663,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2663,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 2811,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2811,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2984,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2984,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 3133,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3133,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 3416,
+    "h": 977
+   },
+   {
+    "id": "chapter",
+    "top": 4393,
+    "h": 1694
+   },
+   {
+    "id": "disc-visual",
+    "top": 4633,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 4763,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 4974,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5104,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 6132,
+    "h": 707
+   },
+   {
+    "id": "",
+    "top": 6284,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6448,
+    "h": 131
+   },
+   {
+    "id": "",
+    "top": 6611,
+    "h": 106
+   },
+   {
+    "id": "faq",
+    "top": 6882,
+    "h": 452
+   },
+   {
+    "id": "clinic",
+    "top": 7378,
+    "h": 1118
+   },
+   {
+    "id": "site-footer",
+    "top": 8496,
+    "h": 1236
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-430-light": {
+  "height": 10254,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1121
+   },
+   {
+    "id": "pathways",
+    "top": 1185,
+    "h": 503
+   },
+   {
+    "id": "procedures",
+    "top": 1688,
+    "h": 1922
+   },
+   {
+    "id": "pc-fig",
+    "top": 1979,
+    "h": 257
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2486,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2486,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2669,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2669,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 2832,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2832,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 2994,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2994,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 3160,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3160,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 3323,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3323,
+    "h": 134
+   },
+   {
+    "id": "profile",
+    "top": 3611,
+    "h": 1050
+   },
+   {
+    "id": "chapter",
+    "top": 4661,
+    "h": 1763
+   },
+   {
+    "id": "disc-visual",
+    "top": 4941,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5071,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5318,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5448,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 6468,
+    "h": 740
+   },
+   {
+    "id": "",
+    "top": 6668,
+    "h": 118
+   },
+   {
+    "id": "",
+    "top": 6819,
+    "h": 118
+   },
+   {
+    "id": "",
+    "top": 6969,
+    "h": 118
+   },
+   {
+    "id": "faq",
+    "top": 7252,
+    "h": 480
+   },
+   {
+    "id": "clinic",
+    "top": 7776,
+    "h": 1139
+   },
+   {
+    "id": "site-footer",
+    "top": 8915,
+    "h": 1268
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-430-dark": {
+  "height": 10254,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1121
+   },
+   {
+    "id": "pathways",
+    "top": 1185,
+    "h": 503
+   },
+   {
+    "id": "procedures",
+    "top": 1688,
+    "h": 1922
+   },
+   {
+    "id": "pc-fig",
+    "top": 1979,
+    "h": 257
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 2486,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2486,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2669,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2669,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 2832,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2832,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 2994,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2994,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 3160,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3160,
+    "h": 134
+   },
+   {
+    "id": "pc-fig",
+    "top": 3323,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 3323,
+    "h": 134
+   },
+   {
+    "id": "profile",
+    "top": 3611,
+    "h": 1050
+   },
+   {
+    "id": "chapter",
+    "top": 4661,
+    "h": 1763
+   },
+   {
+    "id": "disc-visual",
+    "top": 4941,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5071,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 5318,
+    "h": 116
+   },
+   {
+    "id": "disc-body",
+    "top": 5448,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 6468,
+    "h": 740
+   },
+   {
+    "id": "",
+    "top": 6668,
+    "h": 118
+   },
+   {
+    "id": "",
+    "top": 6819,
+    "h": 118
+   },
+   {
+    "id": "",
+    "top": 6969,
+    "h": 118
+   },
+   {
+    "id": "faq",
+    "top": 7252,
+    "h": 480
+   },
+   {
+    "id": "clinic",
+    "top": 7776,
+    "h": 1139
+   },
+   {
+    "id": "site-footer",
+    "top": 8915,
+    "h": 1268
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-768-light": {
+  "height": 9111,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 991
+   },
+   {
+    "id": "pathways",
+    "top": 1055,
+    "h": 437
+   },
+   {
+    "id": "procedures",
+    "top": 1492,
+    "h": 1347
+   },
+   {
+    "id": "pc-fig",
+    "top": 1774,
+    "h": 388
+   },
+   {
+    "id": "pc-body",
+    "top": 1850,
+    "h": 237
+   },
+   {
+    "id": "pc-fig",
+    "top": 2205,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2205,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2205,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2205,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2386,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2386,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2386,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2386,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2574,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2574,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2574,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2574,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 2839,
+    "h": 954
+   },
+   {
+    "id": "chapter",
+    "top": 3793,
+    "h": 1617
+   },
+   {
+    "id": "disc-visual",
+    "top": 4076,
+    "h": 137
+   },
+   {
+    "id": "disc-body",
+    "top": 4059,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 4281,
+    "h": 150
+   },
+   {
+    "id": "disc-body",
+    "top": 4271,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 5455,
+    "h": 564
+   },
+   {
+    "id": "",
+    "top": 5626,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 5752,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 5878,
+    "h": 69
+   },
+   {
+    "id": "faq",
+    "top": 6065,
+    "h": 399
+   },
+   {
+    "id": "clinic",
+    "top": 6509,
+    "h": 1130
+   },
+   {
+    "id": "site-footer",
+    "top": 7639,
+    "h": 1402
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-768-dark": {
+  "height": 9111,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 991
+   },
+   {
+    "id": "pathways",
+    "top": 1055,
+    "h": 437
+   },
+   {
+    "id": "procedures",
+    "top": 1492,
+    "h": 1347
+   },
+   {
+    "id": "pc-fig",
+    "top": 1774,
+    "h": 388
+   },
+   {
+    "id": "pc-body",
+    "top": 1850,
+    "h": 237
+   },
+   {
+    "id": "pc-fig",
+    "top": 2205,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2205,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2205,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2205,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2386,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2386,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2386,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2386,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2574,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2574,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 2574,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2574,
+    "h": 144
+   },
+   {
+    "id": "profile",
+    "top": 2839,
+    "h": 954
+   },
+   {
+    "id": "chapter",
+    "top": 3793,
+    "h": 1617
+   },
+   {
+    "id": "disc-visual",
+    "top": 4076,
+    "h": 137
+   },
+   {
+    "id": "disc-body",
+    "top": 4059,
+    "h": 171
+   },
+   {
+    "id": "disc-visual",
+    "top": 4281,
+    "h": 150
+   },
+   {
+    "id": "disc-body",
+    "top": 4271,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 5455,
+    "h": 564
+   },
+   {
+    "id": "",
+    "top": 5626,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 5752,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 5878,
+    "h": 69
+   },
+   {
+    "id": "faq",
+    "top": 6065,
+    "h": 399
+   },
+   {
+    "id": "clinic",
+    "top": 6509,
+    "h": 1130
+   },
+   {
+    "id": "site-footer",
+    "top": 7639,
+    "h": 1402
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-768-light": {
+  "height": 9585,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1066
+   },
+   {
+    "id": "pathways",
+    "top": 1130,
+    "h": 490
+   },
+   {
+    "id": "procedures",
+    "top": 1620,
+    "h": 1428
+   },
+   {
+    "id": "pc-fig",
+    "top": 1933,
+    "h": 388
+   },
+   {
+    "id": "pc-body",
+    "top": 2003,
+    "h": 249
+   },
+   {
+    "id": "pc-fig",
+    "top": 2365,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2365,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2365,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2365,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2556,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2556,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2556,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2556,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2751,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2751,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2751,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2751,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3048,
+    "h": 950
+   },
+   {
+    "id": "chapter",
+    "top": 3998,
+    "h": 1692
+   },
+   {
+    "id": "disc-visual",
+    "top": 4346,
+    "h": 137
+   },
+   {
+    "id": "disc-body",
+    "top": 4311,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 4562,
+    "h": 150
+   },
+   {
+    "id": "disc-body",
+    "top": 4559,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 5735,
+    "h": 626
+   },
+   {
+    "id": "",
+    "top": 5960,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 6081,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 6201,
+    "h": 87
+   },
+   {
+    "id": "faq",
+    "top": 6407,
+    "h": 453
+   },
+   {
+    "id": "clinic",
+    "top": 6906,
+    "h": 1139
+   },
+   {
+    "id": "site-footer",
+    "top": 8045,
+    "h": 1470
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-768-dark": {
+  "height": 9585,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 64,
+    "h": 1066
+   },
+   {
+    "id": "pathways",
+    "top": 1130,
+    "h": 490
+   },
+   {
+    "id": "procedures",
+    "top": 1620,
+    "h": 1428
+   },
+   {
+    "id": "pc-fig",
+    "top": 1933,
+    "h": 388
+   },
+   {
+    "id": "pc-body",
+    "top": 2003,
+    "h": 249
+   },
+   {
+    "id": "pc-fig",
+    "top": 2365,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2365,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2365,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2365,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 2556,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2556,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2556,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2556,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2751,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2751,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2751,
+    "h": 130
+   },
+   {
+    "id": "pc-body",
+    "top": 2751,
+    "h": 155
+   },
+   {
+    "id": "profile",
+    "top": 3048,
+    "h": 950
+   },
+   {
+    "id": "chapter",
+    "top": 3998,
+    "h": 1692
+   },
+   {
+    "id": "disc-visual",
+    "top": 4346,
+    "h": 137
+   },
+   {
+    "id": "disc-body",
+    "top": 4311,
+    "h": 207
+   },
+   {
+    "id": "disc-visual",
+    "top": 4562,
+    "h": 150
+   },
+   {
+    "id": "disc-body",
+    "top": 4559,
+    "h": 156
+   },
+   {
+    "id": "education",
+    "top": 5735,
+    "h": 626
+   },
+   {
+    "id": "",
+    "top": 5960,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 6081,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 6201,
+    "h": 87
+   },
+   {
+    "id": "faq",
+    "top": 6407,
+    "h": 453
+   },
+   {
+    "id": "clinic",
+    "top": 6906,
+    "h": 1139
+   },
+   {
+    "id": "site-footer",
+    "top": 8045,
+    "h": 1470
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-1440-light": {
+  "height": 5606,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 80,
+    "h": 804
+   },
+   {
+    "id": "pathways",
+    "top": 884,
+    "h": 234
+   },
+   {
+    "id": "procedures",
+    "top": 1118,
+    "h": 1312
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 614
+   },
+   {
+    "id": "pc-body",
+    "top": 1961,
+    "h": 234
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 168
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 161
+   },
+   {
+    "id": "profile",
+    "top": 2430,
+    "h": 495
+   },
+   {
+    "id": "chapter",
+    "top": 2925,
+    "h": 853
+   },
+   {
+    "id": "disc-visual",
+    "top": 3271,
+    "h": 97
+   },
+   {
+    "id": "disc-body",
+    "top": 3221,
+    "h": 198
+   },
+   {
+    "id": "disc-visual",
+    "top": 3473,
+    "h": 127
+   },
+   {
+    "id": "disc-body",
+    "top": 3451,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 3834,
+    "h": 545
+   },
+   {
+    "id": "",
+    "top": 4006,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 4124,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 4242,
+    "h": 69
+   },
+   {
+    "id": "faq",
+    "top": 3834,
+    "h": 545
+   },
+   {
+    "id": "clinic",
+    "top": 4436,
+    "h": 560
+   },
+   {
+    "id": "site-footer",
+    "top": 4996,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-ar-1440-dark": {
+  "height": 5606,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 80,
+    "h": 804
+   },
+   {
+    "id": "pathways",
+    "top": 884,
+    "h": 234
+   },
+   {
+    "id": "procedures",
+    "top": 1118,
+    "h": 1312
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 614
+   },
+   {
+    "id": "pc-body",
+    "top": 1961,
+    "h": 234
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1329,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1636,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 168
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 1841,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2149,
+    "h": 161
+   },
+   {
+    "id": "profile",
+    "top": 2430,
+    "h": 495
+   },
+   {
+    "id": "chapter",
+    "top": 2925,
+    "h": 853
+   },
+   {
+    "id": "disc-visual",
+    "top": 3271,
+    "h": 97
+   },
+   {
+    "id": "disc-body",
+    "top": 3221,
+    "h": 198
+   },
+   {
+    "id": "disc-visual",
+    "top": 3473,
+    "h": 127
+   },
+   {
+    "id": "disc-body",
+    "top": 3451,
+    "h": 171
+   },
+   {
+    "id": "education",
+    "top": 3834,
+    "h": 545
+   },
+   {
+    "id": "",
+    "top": 4006,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 4124,
+    "h": 93
+   },
+   {
+    "id": "",
+    "top": 4242,
+    "h": 69
+   },
+   {
+    "id": "faq",
+    "top": 3834,
+    "h": 545
+   },
+   {
+    "id": "clinic",
+    "top": 4436,
+    "h": 560
+   },
+   {
+    "id": "site-footer",
+    "top": 4996,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-1440-light": {
+  "height": 5747,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 80,
+    "h": 801
+   },
+   {
+    "id": "pathways",
+    "top": 881,
+    "h": 256
+   },
+   {
+    "id": "procedures",
+    "top": 1138,
+    "h": 1371
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 614
+   },
+   {
+    "id": "pc-body",
+    "top": 2019,
+    "h": 223
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 172
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 172
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 172
+   },
+   {
+    "id": "profile",
+    "top": 2509,
+    "h": 494
+   },
+   {
+    "id": "chapter",
+    "top": 3003,
+    "h": 855
+   },
+   {
+    "id": "disc-visual",
+    "top": 3360,
+    "h": 97
+   },
+   {
+    "id": "disc-body",
+    "top": 3294,
+    "h": 230
+   },
+   {
+    "id": "disc-visual",
+    "top": 3597,
+    "h": 127
+   },
+   {
+    "id": "disc-body",
+    "top": 3557,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 3915,
+    "h": 577
+   },
+   {
+    "id": "",
+    "top": 4094,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 4206,
+    "h": 96
+   },
+   {
+    "id": "",
+    "top": 4327,
+    "h": 96
+   },
+   {
+    "id": "faq",
+    "top": 3915,
+    "h": 577
+   },
+   {
+    "id": "clinic",
+    "top": 4548,
+    "h": 579
+   },
+   {
+    "id": "site-footer",
+    "top": 5127,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "home-en-1440-dark": {
+  "height": 5747,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "home",
+    "top": 80,
+    "h": 801
+   },
+   {
+    "id": "pathways",
+    "top": 881,
+    "h": 256
+   },
+   {
+    "id": "procedures",
+    "top": 1138,
+    "h": 1371
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 614
+   },
+   {
+    "id": "pc-body",
+    "top": 2019,
+    "h": 223
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 172
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 172
+   },
+   {
+    "id": "pc-fig",
+    "top": 1387,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 1695,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 176
+   },
+   {
+    "id": "pc-fig",
+    "top": 1915,
+    "h": 296
+   },
+   {
+    "id": "pc-body",
+    "top": 2223,
+    "h": 172
+   },
+   {
+    "id": "profile",
+    "top": 2509,
+    "h": 494
+   },
+   {
+    "id": "chapter",
+    "top": 3003,
+    "h": 855
+   },
+   {
+    "id": "disc-visual",
+    "top": 3360,
+    "h": 97
+   },
+   {
+    "id": "disc-body",
+    "top": 3294,
+    "h": 230
+   },
+   {
+    "id": "disc-visual",
+    "top": 3597,
+    "h": 127
+   },
+   {
+    "id": "disc-body",
+    "top": 3557,
+    "h": 207
+   },
+   {
+    "id": "education",
+    "top": 3915,
+    "h": 577
+   },
+   {
+    "id": "",
+    "top": 4094,
+    "h": 87
+   },
+   {
+    "id": "",
+    "top": 4206,
+    "h": 96
+   },
+   {
+    "id": "",
+    "top": 4327,
+    "h": 96
+   },
+   {
+    "id": "faq",
+    "top": 3915,
+    "h": 577
+   },
+   {
+    "id": "clinic",
+    "top": 4548,
+    "h": 579
+   },
+   {
+    "id": "site-footer",
+    "top": 5127,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-ar-390-light": {
+  "height": 9739,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 1331,
+    "h": 654
+   },
+   {
+    "id": "expertise",
+    "top": 1984,
+    "h": 2097
+   },
+   {
+    "id": "area-fig",
+    "top": 2159,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 2483,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 2797,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3121,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 3435,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3759,
+    "h": 274
+   },
+   {
+    "id": "profile",
+    "top": 4081,
+    "h": 2527
+   },
+   {
+    "id": "record",
+    "top": 6608,
+    "h": 1367
+   },
+   {
+    "id": "closing",
+    "top": 7974,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 8428,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-ar-390-dark": {
+  "height": 9739,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 1331,
+    "h": 654
+   },
+   {
+    "id": "expertise",
+    "top": 1984,
+    "h": 2097
+   },
+   {
+    "id": "area-fig",
+    "top": 2159,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 2483,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 2797,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3121,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 3435,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3759,
+    "h": 274
+   },
+   {
+    "id": "profile",
+    "top": 4081,
+    "h": 2527
+   },
+   {
+    "id": "record",
+    "top": 6608,
+    "h": 1367
+   },
+   {
+    "id": "closing",
+    "top": 7974,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 8428,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-ar-1440-light": {
+  "height": 5171,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 785,
+    "h": 489
+   },
+   {
+    "id": "expertise",
+    "top": 1274,
+    "h": 1107
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "profile",
+    "top": 2381,
+    "h": 1157
+   },
+   {
+    "id": "record",
+    "top": 3538,
+    "h": 682
+   },
+   {
+    "id": "closing",
+    "top": 4220,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 4561,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-ar-1440-dark": {
+  "height": 5171,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 785,
+    "h": 489
+   },
+   {
+    "id": "expertise",
+    "top": 1274,
+    "h": 1107
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "area-fig",
+    "top": 1518,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2062,
+    "h": 247
+   },
+   {
+    "id": "profile",
+    "top": 2381,
+    "h": 1157
+   },
+   {
+    "id": "record",
+    "top": 3538,
+    "h": 682
+   },
+   {
+    "id": "closing",
+    "top": 4220,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 4561,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-en-390-light": {
+  "height": 10309,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 1370,
+    "h": 682
+   },
+   {
+    "id": "expertise",
+    "top": 2052,
+    "h": 2197
+   },
+   {
+    "id": "area-fig",
+    "top": 2255,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 2579,
+    "h": 280
+   },
+   {
+    "id": "area-fig",
+    "top": 2926,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3250,
+    "h": 280
+   },
+   {
+    "id": "area-fig",
+    "top": 3597,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3921,
+    "h": 280
+   },
+   {
+    "id": "profile",
+    "top": 4250,
+    "h": 2769
+   },
+   {
+    "id": "record",
+    "top": 7019,
+    "h": 1441
+   },
+   {
+    "id": "closing",
+    "top": 8460,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 8900,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-en-390-dark": {
+  "height": 10309,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 1370,
+    "h": 682
+   },
+   {
+    "id": "expertise",
+    "top": 2052,
+    "h": 2197
+   },
+   {
+    "id": "area-fig",
+    "top": 2255,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 2579,
+    "h": 280
+   },
+   {
+    "id": "area-fig",
+    "top": 2926,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3250,
+    "h": 280
+   },
+   {
+    "id": "area-fig",
+    "top": 3597,
+    "h": 300
+   },
+   {
+    "id": "area-body",
+    "top": 3921,
+    "h": 280
+   },
+   {
+    "id": "profile",
+    "top": 4250,
+    "h": 2769
+   },
+   {
+    "id": "record",
+    "top": 7019,
+    "h": 1441
+   },
+   {
+    "id": "closing",
+    "top": 8460,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 8900,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-en-1440-light": {
+  "height": 5388,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 784,
+    "h": 517
+   },
+   {
+    "id": "expertise",
+    "top": 1301,
+    "h": 1107
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "profile",
+    "top": 2408,
+    "h": 1294
+   },
+   {
+    "id": "record",
+    "top": 3703,
+    "h": 741
+   },
+   {
+    "id": "closing",
+    "top": 4444,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 4768,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "about-en-1440-dark": {
+  "height": 5388,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "section",
+    "top": 784,
+    "h": 517
+   },
+   {
+    "id": "expertise",
+    "top": 1301,
+    "h": 1107
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "area-fig",
+    "top": 1535,
+    "h": 520
+   },
+   {
+    "id": "area-body",
+    "top": 2080,
+    "h": 256
+   },
+   {
+    "id": "profile",
+    "top": 2408,
+    "h": 1294
+   },
+   {
+    "id": "record",
+    "top": 3703,
+    "h": 741
+   },
+   {
+    "id": "closing",
+    "top": 4444,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 4768,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-ar-390-light": {
+  "height": 4411,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 451,
+    "h": 2195
+   },
+   {
+    "id": "pc-fig",
+    "top": 680,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 1177,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1177,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1350,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1350,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1523,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1523,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1696,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1696,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1876,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1876,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 2024,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2024,
+    "h": 144
+   },
+   {
+    "id": "closing",
+    "top": 2647,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 3101,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-ar-390-dark": {
+  "height": 4411,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 451,
+    "h": 2195
+   },
+   {
+    "id": "pc-fig",
+    "top": 680,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 1177,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1177,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1350,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1350,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1523,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1523,
+    "h": 144
+   },
+   {
+    "id": "pc-fig",
+    "top": 1696,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1696,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1876,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1876,
+    "h": 120
+   },
+   {
+    "id": "pc-fig",
+    "top": 2024,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2024,
+    "h": 144
+   },
+   {
+    "id": "closing",
+    "top": 2647,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 3101,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-ar-1440-light": {
+  "height": 4123,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 438,
+    "h": 2734
+   },
+   {
+    "id": "pc-fig",
+    "top": 586,
+    "h": 640
+   },
+   {
+    "id": "pc-body",
+    "top": 773,
+    "h": 266
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "closing",
+    "top": 3172,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 3513,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-ar-1440-dark": {
+  "height": 4123,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 438,
+    "h": 2734
+   },
+   {
+    "id": "pc-fig",
+    "top": 586,
+    "h": 640
+   },
+   {
+    "id": "pc-body",
+    "top": 773,
+    "h": 266
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 1274,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1809,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2552,
+    "h": 161
+   },
+   {
+    "id": "closing",
+    "top": 3172,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 3513,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-en-390-light": {
+  "height": 4690,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 450,
+    "h": 2390
+   },
+   {
+    "id": "pc-fig",
+    "top": 771,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 1277,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1277,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 1460,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1460,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 1644,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1644,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 1831,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1831,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2018,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 2184,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2184,
+    "h": 155
+   },
+   {
+    "id": "closing",
+    "top": 2841,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 3281,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-en-390-dark": {
+  "height": 4690,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 450,
+    "h": 2390
+   },
+   {
+    "id": "pc-fig",
+    "top": 771,
+    "h": 230
+   },
+   {
+    "id": "pc-body",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "pc-fig",
+    "top": 1277,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1277,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 1460,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1460,
+    "h": 155
+   },
+   {
+    "id": "pc-fig",
+    "top": 1644,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1644,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 1831,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 1831,
+    "h": 158
+   },
+   {
+    "id": "pc-fig",
+    "top": 2018,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2018,
+    "h": 137
+   },
+   {
+    "id": "pc-fig",
+    "top": 2184,
+    "h": 115
+   },
+   {
+    "id": "pc-body",
+    "top": 2184,
+    "h": 155
+   },
+   {
+    "id": "closing",
+    "top": 2841,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 3281,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-en-1440-light": {
+  "height": 4133,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 448,
+    "h": 2741
+   },
+   {
+    "id": "pc-fig",
+    "top": 592,
+    "h": 640
+   },
+   {
+    "id": "pc-body",
+    "top": 776,
+    "h": 272
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 172
+   },
+   {
+    "id": "closing",
+    "top": 3189,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 3513,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "procedures-en-1440-dark": {
+  "height": 4133,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "procedures",
+    "top": 448,
+    "h": 2741
+   },
+   {
+    "id": "pc-fig",
+    "top": 592,
+    "h": 640
+   },
+   {
+    "id": "pc-body",
+    "top": 776,
+    "h": 272
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 1280,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 1815,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 151
+   },
+   {
+    "id": "pc-fig",
+    "top": 2013,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 2547,
+    "h": 172
+   },
+   {
+    "id": "closing",
+    "top": 3189,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 3513,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-ar-390-light": {
+  "height": 10163,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1104
+   },
+   {
+    "id": "container",
+    "top": 1168,
+    "h": 5620
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6788,
+    "h": 759
+   },
+   {
+    "id": "section",
+    "top": 7547,
+    "h": 811
+   },
+   {
+    "id": "pc-fig",
+    "top": 7724,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 7724,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 7899,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 7899,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 8074,
+    "h": 152
+   },
+   {
+    "id": "pc-body",
+    "top": 8074,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 8358,
+    "h": 494
+   },
+   {
+    "id": "site-footer",
+    "top": 8852,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-ar-390-dark": {
+  "height": 10163,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1104
+   },
+   {
+    "id": "container",
+    "top": 1168,
+    "h": 5620
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6788,
+    "h": 759
+   },
+   {
+    "id": "section",
+    "top": 7547,
+    "h": 811
+   },
+   {
+    "id": "pc-fig",
+    "top": 7724,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 7724,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 7899,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 7899,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 8074,
+    "h": 152
+   },
+   {
+    "id": "pc-body",
+    "top": 8074,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 8358,
+    "h": 494
+   },
+   {
+    "id": "site-footer",
+    "top": 8852,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-ar-1440-light": {
+  "height": 8919,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1377
+   },
+   {
+    "id": "container",
+    "top": 1457,
+    "h": 4888
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6345,
+    "h": 542
+   },
+   {
+    "id": "section",
+    "top": 6887,
+    "h": 1041
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "closing",
+    "top": 7927,
+    "h": 382
+   },
+   {
+    "id": "site-footer",
+    "top": 8309,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-ar-1440-dark": {
+  "height": 8919,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1377
+   },
+   {
+    "id": "container",
+    "top": 1457,
+    "h": 4888
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6345,
+    "h": 542
+   },
+   {
+    "id": "section",
+    "top": 6887,
+    "h": 1041
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 7095,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7627,
+    "h": 160
+   },
+   {
+    "id": "closing",
+    "top": 7927,
+    "h": 382
+   },
+   {
+    "id": "site-footer",
+    "top": 8309,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-en-390-light": {
+  "height": 10618,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1117
+   },
+   {
+    "id": "container",
+    "top": 1181,
+    "h": 5902
+   },
+   {
+    "id": "cataract-3d",
+    "top": 7084,
+    "h": 775
+   },
+   {
+    "id": "section",
+    "top": 7858,
+    "h": 849
+   },
+   {
+    "id": "pc-fig",
+    "top": 8029,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 8029,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 8219,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 8219,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 8409,
+    "h": 166
+   },
+   {
+    "id": "pc-body",
+    "top": 8409,
+    "h": 166
+   },
+   {
+    "id": "closing",
+    "top": 8707,
+    "h": 502
+   },
+   {
+    "id": "site-footer",
+    "top": 9209,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-en-390-dark": {
+  "height": 10618,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1117
+   },
+   {
+    "id": "container",
+    "top": 1181,
+    "h": 5902
+   },
+   {
+    "id": "cataract-3d",
+    "top": 7084,
+    "h": 775
+   },
+   {
+    "id": "section",
+    "top": 7858,
+    "h": 849
+   },
+   {
+    "id": "pc-fig",
+    "top": 8029,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 8029,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 8219,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 8219,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 8409,
+    "h": 166
+   },
+   {
+    "id": "pc-body",
+    "top": 8409,
+    "h": 166
+   },
+   {
+    "id": "closing",
+    "top": 8707,
+    "h": 502
+   },
+   {
+    "id": "site-footer",
+    "top": 9209,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-en-1440-light": {
+  "height": 8970,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1362
+   },
+   {
+    "id": "container",
+    "top": 1442,
+    "h": 4962
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6404,
+    "h": 560
+   },
+   {
+    "id": "section",
+    "top": 6965,
+    "h": 1024
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 7989,
+    "h": 361
+   },
+   {
+    "id": "site-footer",
+    "top": 8350,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "cataract-surgery-en-1440-dark": {
+  "height": 8970,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1362
+   },
+   {
+    "id": "container",
+    "top": 1442,
+    "h": 4962
+   },
+   {
+    "id": "cataract-3d",
+    "top": 6404,
+    "h": 560
+   },
+   {
+    "id": "section",
+    "top": 6965,
+    "h": 1024
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 7164,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 7697,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 7989,
+    "h": 361
+   },
+   {
+    "id": "site-footer",
+    "top": 8350,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "icl-ar-390-light": {
+  "height": 8057,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1041
+   },
+   {
+    "id": "container",
+    "top": 1105,
+    "h": 4337
+   },
+   {
+    "id": "section",
+    "top": 5442,
+    "h": 811
+   },
+   {
+    "id": "pc-fig",
+    "top": 5619,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 5619,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 5794,
+    "h": 142
+   },
+   {
+    "id": "pc-body",
+    "top": 5794,
+    "h": 142
+   },
+   {
+    "id": "pc-fig",
+    "top": 5969,
+    "h": 152
+   },
+   {
+    "id": "pc-body",
+    "top": 5969,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 6253,
+    "h": 494
+   },
+   {
+    "id": "site-footer",
+    "top": 6747,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "icl-ar-1440-light": {
+  "height": 7900,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1321
+   },
+   {
+    "id": "container",
+    "top": 1401,
+    "h": 4466
+   },
+   {
+    "id": "section",
+    "top": 5868,
+    "h": 1041
+   },
+   {
+    "id": "pc-fig",
+    "top": 6076,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6608,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 6076,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6608,
+    "h": 160
+   },
+   {
+    "id": "pc-fig",
+    "top": 6076,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6608,
+    "h": 160
+   },
+   {
+    "id": "closing",
+    "top": 6908,
+    "h": 382
+   },
+   {
+    "id": "site-footer",
+    "top": 7290,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "icl-en-390-light": {
+  "height": 8397,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 64,
+    "h": 1053
+   },
+   {
+    "id": "container",
+    "top": 1117,
+    "h": 4485
+   },
+   {
+    "id": "section",
+    "top": 5603,
+    "h": 849
+   },
+   {
+    "id": "pc-fig",
+    "top": 5773,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 5773,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 5963,
+    "h": 157
+   },
+   {
+    "id": "pc-body",
+    "top": 5963,
+    "h": 157
+   },
+   {
+    "id": "pc-fig",
+    "top": 6153,
+    "h": 166
+   },
+   {
+    "id": "pc-body",
+    "top": 6153,
+    "h": 166
+   },
+   {
+    "id": "closing",
+    "top": 6451,
+    "h": 536
+   },
+   {
+    "id": "site-footer",
+    "top": 6988,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "icl-en-1440-light": {
+  "height": 7933,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "proc-hero",
+    "top": 80,
+    "h": 1306
+   },
+   {
+    "id": "container",
+    "top": 1386,
+    "h": 4485
+   },
+   {
+    "id": "section",
+    "top": 5871,
+    "h": 1024
+   },
+   {
+    "id": "pc-fig",
+    "top": 6071,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6603,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 6071,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6603,
+    "h": 152
+   },
+   {
+    "id": "pc-fig",
+    "top": 6071,
+    "h": 520
+   },
+   {
+    "id": "pc-body",
+    "top": 6603,
+    "h": 152
+   },
+   {
+    "id": "closing",
+    "top": 6896,
+    "h": 417
+   },
+   {
+    "id": "site-footer",
+    "top": 7313,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "lens-lab-ar-390-light": {
+  "height": 13196,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "lab",
+    "top": 636,
+    "h": 8502
+   },
+   {
+    "id": "llab-procon",
+    "top": 2190,
+    "h": 315
+   },
+   {
+    "id": "llab-ask",
+    "top": 2517,
+    "h": 235
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 6196,
+    "h": 315
+   },
+   {
+    "id": "llab-ask",
+    "top": 6523,
+    "h": 235
+   },
+   {
+    "id": "llab-procon",
+    "top": 7578,
+    "h": 343
+   },
+   {
+    "id": "llab-ask",
+    "top": 7933,
+    "h": 235
+   },
+   {
+    "id": "simulator",
+    "top": 9138,
+    "h": 2294
+   },
+   {
+    "id": "closing",
+    "top": 11432,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 11886,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "lens-lab-ar-1440-light": {
+  "height": 9522,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "lab",
+    "top": 524,
+    "h": 6007
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 5392,
+    "h": 221
+   },
+   {
+    "id": "llab-ask",
+    "top": 5625,
+    "h": 156
+   },
+   {
+    "id": "llab-procon",
+    "top": 5392,
+    "h": 221
+   },
+   {
+    "id": "llab-ask",
+    "top": 5625,
+    "h": 156
+   },
+   {
+    "id": "simulator",
+    "top": 6531,
+    "h": 2040
+   },
+   {
+    "id": "closing",
+    "top": 8571,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 8912,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "lens-lab-en-390-light": {
+  "height": 14537,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "lab",
+    "top": 673,
+    "h": 9595
+   },
+   {
+    "id": "llab-procon",
+    "top": 2425,
+    "h": 368
+   },
+   {
+    "id": "llab-ask",
+    "top": 2805,
+    "h": 268
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 6832,
+    "h": 368
+   },
+   {
+    "id": "llab-ask",
+    "top": 7212,
+    "h": 268
+   },
+   {
+    "id": "llab-procon",
+    "top": 8386,
+    "h": 394
+   },
+   {
+    "id": "llab-ask",
+    "top": 8792,
+    "h": 319
+   },
+   {
+    "id": "simulator",
+    "top": 10268,
+    "h": 2419
+   },
+   {
+    "id": "closing",
+    "top": 12687,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 13127,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "lens-lab-en-1440-light": {
+  "height": 10048,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "lab",
+    "top": 522,
+    "h": 6498
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-ask",
+    "top": 0,
+    "h": 0
+   },
+   {
+    "id": "llab-procon",
+    "top": 5748,
+    "h": 258
+   },
+   {
+    "id": "llab-ask",
+    "top": 6018,
+    "h": 173
+   },
+   {
+    "id": "llab-procon",
+    "top": 5797,
+    "h": 258
+   },
+   {
+    "id": "llab-ask",
+    "top": 6067,
+    "h": 227
+   },
+   {
+    "id": "simulator",
+    "top": 7020,
+    "h": 2084
+   },
+   {
+    "id": "closing",
+    "top": 9104,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 9428,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "how-vision-works-ar-390-light": {
+  "height": 3779,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "journey",
+    "top": 653,
+    "h": 1362
+   },
+   {
+    "id": "closing",
+    "top": 2015,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 2469,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "how-vision-works-ar-1440-light": {
+  "height": 2919,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "journey",
+    "top": 458,
+    "h": 1510
+   },
+   {
+    "id": "closing",
+    "top": 1968,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 2309,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "how-vision-works-en-390-light": {
+  "height": 3939,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "journey",
+    "top": 703,
+    "h": 1387
+   },
+   {
+    "id": "closing",
+    "top": 2089,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 2529,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "how-vision-works-en-1440-light": {
+  "height": 2879,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "journey",
+    "top": 458,
+    "h": 1477
+   },
+   {
+    "id": "closing",
+    "top": 1935,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 2259,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "surgical-education-ar-390-light": {
+  "height": 4007,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "cataract-3d",
+    "top": 451,
+    "h": 819
+   },
+   {
+    "id": "stages",
+    "top": 1270,
+    "h": 973
+   },
+   {
+    "id": "closing",
+    "top": 2243,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 2697,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "surgical-education-ar-1440-light": {
+  "height": 2550,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "cataract-3d",
+    "top": 438,
+    "h": 542
+   },
+   {
+    "id": "stages",
+    "top": 979,
+    "h": 619
+   },
+   {
+    "id": "closing",
+    "top": 1599,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 1940,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "surgical-education-en-390-light": {
+  "height": 4129,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "cataract-3d",
+    "top": 493,
+    "h": 835
+   },
+   {
+    "id": "stages",
+    "top": 1328,
+    "h": 952
+   },
+   {
+    "id": "closing",
+    "top": 2280,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 2720,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "surgical-education-en-1440-light": {
+  "height": 2574,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "cataract-3d",
+    "top": 490,
+    "h": 560
+   },
+   {
+    "id": "stages",
+    "top": 1050,
+    "h": 579
+   },
+   {
+    "id": "closing",
+    "top": 1629,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 1953,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "education-ar-390-light": {
+  "height": 7144,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "guides",
+    "top": 401,
+    "h": 3163
+   },
+   {
+    "id": "guide-head",
+    "top": 606,
+    "h": 154
+   },
+   {
+    "id": "guide-body",
+    "top": 784,
+    "h": 556
+   },
+   {
+    "id": "guide-head",
+    "top": 1405,
+    "h": 154
+   },
+   {
+    "id": "guide-body",
+    "top": 1583,
+    "h": 539
+   },
+   {
+    "id": "guide-head",
+    "top": 2187,
+    "h": 160
+   },
+   {
+    "id": "guide-body",
+    "top": 2372,
+    "h": 449
+   },
+   {
+    "id": "guide-head",
+    "top": 2885,
+    "h": 127
+   },
+   {
+    "id": "guide-body",
+    "top": 3036,
+    "h": 448
+   },
+   {
+    "id": "education",
+    "top": 3564,
+    "h": 868
+   },
+   {
+    "id": "safety",
+    "top": 4433,
+    "h": 947
+   },
+   {
+    "id": "closing",
+    "top": 5380,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 5834,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "education-ar-1440-light": {
+  "height": 5051,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "guides",
+    "top": 438,
+    "h": 2331
+   },
+   {
+    "id": "guide-head",
+    "top": 592,
+    "h": 78
+   },
+   {
+    "id": "guide-body",
+    "top": 694,
+    "h": 394
+   },
+   {
+    "id": "guide-head",
+    "top": 1153,
+    "h": 78
+   },
+   {
+    "id": "guide-body",
+    "top": 1255,
+    "h": 367
+   },
+   {
+    "id": "guide-head",
+    "top": 1687,
+    "h": 78
+   },
+   {
+    "id": "guide-body",
+    "top": 1789,
+    "h": 341
+   },
+   {
+    "id": "guide-head",
+    "top": 2195,
+    "h": 78
+   },
+   {
+    "id": "guide-body",
+    "top": 2297,
+    "h": 367
+   },
+   {
+    "id": "education",
+    "top": 2769,
+    "h": 721
+   },
+   {
+    "id": "safety",
+    "top": 3489,
+    "h": 611
+   },
+   {
+    "id": "closing",
+    "top": 4100,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 4441,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "education-en-390-light": {
+  "height": 7566,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "guides",
+    "top": 505,
+    "h": 3271
+   },
+   {
+    "id": "guide-head",
+    "top": 706,
+    "h": 156
+   },
+   {
+    "id": "guide-body",
+    "top": 886,
+    "h": 544
+   },
+   {
+    "id": "guide-head",
+    "top": 1496,
+    "h": 184
+   },
+   {
+    "id": "guide-body",
+    "top": 1703,
+    "h": 547
+   },
+   {
+    "id": "guide-head",
+    "top": 2315,
+    "h": 160
+   },
+   {
+    "id": "guide-body",
+    "top": 2499,
+    "h": 475
+   },
+   {
+    "id": "guide-head",
+    "top": 3038,
+    "h": 160
+   },
+   {
+    "id": "guide-body",
+    "top": 3222,
+    "h": 475
+   },
+   {
+    "id": "education",
+    "top": 3777,
+    "h": 921
+   },
+   {
+    "id": "safety",
+    "top": 4697,
+    "h": 1019
+   },
+   {
+    "id": "closing",
+    "top": 5716,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 6156,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "education-en-1440-light": {
+  "height": 5154,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "guides",
+    "top": 448,
+    "h": 2448
+   },
+   {
+    "id": "guide-head",
+    "top": 596,
+    "h": 91
+   },
+   {
+    "id": "guide-body",
+    "top": 711,
+    "h": 405
+   },
+   {
+    "id": "guide-head",
+    "top": 1181,
+    "h": 127
+   },
+   {
+    "id": "guide-body",
+    "top": 1332,
+    "h": 405
+   },
+   {
+    "id": "guide-head",
+    "top": 1802,
+    "h": 103
+   },
+   {
+    "id": "guide-body",
+    "top": 1929,
+    "h": 335
+   },
+   {
+    "id": "guide-head",
+    "top": 2329,
+    "h": 103
+   },
+   {
+    "id": "guide-body",
+    "top": 2456,
+    "h": 335
+   },
+   {
+    "id": "education",
+    "top": 2896,
+    "h": 709
+   },
+   {
+    "id": "safety",
+    "top": 3605,
+    "h": 605
+   },
+   {
+    "id": "closing",
+    "top": 4210,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 4534,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "clinic-ar-390-light": {
+  "height": 4757,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "clinic",
+    "top": 401,
+    "h": 1185
+   },
+   {
+    "id": "visit",
+    "top": 1586,
+    "h": 1407
+   },
+   {
+    "id": "closing",
+    "top": 2993,
+    "h": 454
+   },
+   {
+    "id": "site-footer",
+    "top": 3447,
+    "h": 1240
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "clinic-ar-1440-light": {
+  "height": 3009,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "clinic",
+    "top": 438,
+    "h": 797
+   },
+   {
+    "id": "visit",
+    "top": 1235,
+    "h": 823
+   },
+   {
+    "id": "closing",
+    "top": 2058,
+    "h": 341
+   },
+   {
+    "id": "site-footer",
+    "top": 2399,
+    "h": 610
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "clinic-en-390-light": {
+  "height": 5096,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "clinic",
+    "top": 493,
+    "h": 1252
+   },
+   {
+    "id": "visit",
+    "top": 1745,
+    "h": 1502
+   },
+   {
+    "id": "closing",
+    "top": 3246,
+    "h": 440
+   },
+   {
+    "id": "site-footer",
+    "top": 3686,
+    "h": 1339
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ },
+ "clinic-en-1440-light": {
+  "height": 3098,
+  "overflowX": 0,
+  "chapters": [
+   {
+    "id": "clinic",
+    "top": 490,
+    "h": 801
+   },
+   {
+    "id": "visit",
+    "top": 1291,
+    "h": 863
+   },
+   {
+    "id": "closing",
+    "top": 2153,
+    "h": 324
+   },
+   {
+    "id": "site-footer",
+    "top": 2477,
+    "h": 620
+   }
+  ],
+  "upscaled": [],
+  "errors": []
+ }
+}

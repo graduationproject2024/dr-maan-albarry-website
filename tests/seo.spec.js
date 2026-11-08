@@ -1,7 +1,7 @@
 // SEO: prerendered localized HTML, routes that really exist, and metadata that agrees
 // across canonical / hreflang / sitemap / robots.
 import { test, expect } from '@playwright/test';
-import { DOCTOR, PROCEDURES } from '../doctor-data.js';
+import { DOCTOR, FAQ, PROCEDURES } from '../doctor-data.js';
 import { PAGES, SECTION_PAGES } from '../site-routes.js';
 
 test.describe('SEO — prerendered routes', () => {
@@ -16,7 +16,15 @@ test.describe('SEO — prerendered routes', () => {
       await expect(page.locator('h1')).toHaveText(DOCTOR.identity.name[lang]);
       const text = await page.locator('body').innerText();
       for (const s of [DOCTOR.credibility.statistics[0].label[lang], DOCTOR.clinic.workingHours[lang], DOCTOR.contact.clinicDirect.display]) expect(text).toContain(s);
-      expect(await page.locator('#faq .faq-question').count()).toBeGreaterThanOrEqual(6);
+      // Home carries the general questions only (exactly the FAQ data, which the FAQPage JSON-LD mirrors); the two
+      // procedure-specific ones moved to their procedure pages and must be there, prerendered, in both languages.
+      expect(FAQ.length).toBeGreaterThanOrEqual(4);
+      expect(await page.locator('#faq .faq-question').count()).toBe(FAQ.length);
+      const prefix = lang === 'en' ? '/en' : '';
+      for (const [slug, re] of [['cataract-surgery', lang === 'en' ? /stop wearing glasses completely/ : /الاستغناء التام عن النظارات/], ['laser-vision-correction', lang === 'en' ? /main criteria for laser vision correction/ : /معايير ترشيح المريض/]]) {
+        await page.goto(`${prefix}/procedures/${slug}/`);
+        await expect(page.locator('#p-faq')).toContainText(re);
+      }
       await ctx.close();
     });
   }

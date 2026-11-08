@@ -1,8 +1,11 @@
 // Procedure library: 7 procedures × AR/EN real pages, prerendered SEO, gallery → page → back,
 // and no horizontal overflow at phone, tablet and desktop widths.
 import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
 import { DOCTOR, PROCEDURES } from '../doctor-data.js';
 import { CONTENT } from '../src/procedures/content.js';
+
+const MANIFEST = JSON.parse(fs.readFileSync('public/images/procedures/manifest.json', 'utf8'));
 
 const LANGS = [['ar', 'rtl'], ['en', 'ltr']];
 const path = (lang, slug) => `/${lang === 'en' ? 'en/' : ''}procedures/${slug}/`;
@@ -38,7 +41,14 @@ test.describe('Procedure pages render in both languages', () => {
           const img = el.querySelector('img');
           return img ? img.alt : el.querySelector('.anat-plate').getAttribute('aria-label');
         });
-        expect(label).toBe(p.alt[lang]);
+        // the hero is the atlas L2 plate, whose alt text is recorded per asset in the image library's manifest
+        const l2 = MANIFEST.assets.find(a => a.procedure === p.slug && a.level === 'L2');
+        expect(label).toBe(l2.alt[lang]);
+        expect(label.length).toBeGreaterThan(20);
+        // the pins on the plate match its anchors, and the key names every one of them in this language
+        await expect(page.locator('.proc-figure .pin')).toHaveCount(l2.labelAnchors.length);
+        await expect(page.locator('.proc-figure .pin-key li')).toHaveCount(l2.labelAnchors.length);
+        await expect(page.locator('.proc-figure .fig-pending')).toBeVisible();
         // only the cataract page hosts the 3D simulator (lazy, poster first)
         await expect(page.locator('#cataract-3d')).toHaveCount(p.simulator ? 1 : 0);
         await expect(page.locator('canvas')).toHaveCount(0);

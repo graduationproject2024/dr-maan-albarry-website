@@ -86,6 +86,11 @@ function documentFor(page, appHtml) {
   if (lang === 'en') {
     doc = doc.replace(/<meta property="og:locale" content="ar_SA">\s*<meta property="og:locale:alternate" content="en_US">/,
       '<meta property="og:locale" content="en_US">\n  <meta property="og:locale:alternate" content="ar_SA">');
+    // English first screen: Newsreader (display) + IBM Plex Sans (text) instead of the Arabic pair.
+    doc = doc.replace(/(<!-- @font-preload -->)[\s\S]*?(<!-- \/@font-preload -->)/, (m, a, b) => `${a}
+  <link rel="preload" href="./fonts/newsreader-roman.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+  ${b}`);
   }
   if (slug || key !== 'home' || lang === 'en') {
     doc = doc

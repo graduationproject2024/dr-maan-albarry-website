@@ -1,29 +1,29 @@
 /* Vision & Lens Lab — every rule is scoped under .llab. Colour tokens are self-contained (never inherited from the
-   host page) and follow the site's "clinical atlas" palette. RTL-first: only logical properties are used. */
+   host page) and follow the site's Direction A palette. RTL-first: only logical properties are used. */
 .llab {
-  --llab-bg: #f4f6f5;
-  --llab-surface: #ffffff;
-  --llab-band: #e9efed;
-  --llab-text: #0f1e1c;
-  --llab-text-2: #33433f;
-  --llab-muted: #4e5d58;
-  --llab-line: #d6dfdc;
-  --llab-line-strong: #7c8b87;
-  --llab-primary: #0b5a52;
-  --llab-on-primary: #ffffff;
-  --llab-link: #0b5a52;
-  --llab-accent: #9e4322;
-  --llab-diff-bg: #fbf1df;
-  --llab-diff-line: #c98a2b;
-  --llab-note-bg: #fbf1df;
+  --llab-bg: #f3eee7;
+  --llab-surface: #fbf8f3;
+  --llab-band: #ece5da;
+  --llab-text: #1b1915;
+  --llab-text-2: #453e35;
+  --llab-muted: #544c42;
+  --llab-line: #d6ccbe;
+  --llab-line-strong: #82776a;
+  --llab-primary: #1b1915;
+  --llab-on-primary: #f3eee7;
+  --llab-link: #8a4b22;
+  --llab-accent: #8a4b22;
+  --llab-diff-bg: #f7eedc;
+  --llab-diff-line: #b27a2c;
+  --llab-note-bg: #f7eedc;
   --llab-note-text: #5c3a08;
-  --llab-note-line: #e2bf85;
-  --llab-lvl-on: #0b5a52;
-  --llab-lvl-off: #d6dfdc;
-  --llab-focus: #9e4322;
+  --llab-note-line: #e0c9a0;
+  --llab-lvl-on: #1b1915;
+  --llab-lvl-off: #d6ccbe;
+  --llab-focus: #8a4b22;
   --llab-radius: 14px;
-  --llab-font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --llab-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --llab-font: "IBM Plex Sans", "IBM Plex Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --llab-display: "Newsreader", "Newsreader Fallback", Georgia, "Times New Roman", serif;
   container-type: inline-size;
   container-name: llab;
   box-sizing: border-box;
@@ -44,31 +44,31 @@
   -webkit-text-size-adjust: 100%;
 }
 .llab[lang="ar"] {
-  --llab-font: "Noto Sans Arabic", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
-  --llab-display: "Readex Pro", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --llab-font: "IBM Plex Sans Arabic", "IBM Plex Sans", "IBM Plex Sans Arabic Fallback", "Segoe UI", Tahoma, sans-serif;
+  --llab-display: "Noto Naskh Arabic", "Newsreader", "Noto Naskh Arabic Fallback", serif;
   line-height: 1.75;
 }
 .llab[data-theme="dark"] {
-  --llab-bg: #0e1716;
-  --llab-surface: #14201f;
-  --llab-band: #111c1b;
-  --llab-text: #e7efec;
-  --llab-text-2: #c4d2ce;
-  --llab-muted: #a9bab6;
-  --llab-line: #223230;
-  --llab-line-strong: #5e716d;
-  --llab-primary: #6ccbbe;
-  --llab-on-primary: #06201d;
-  --llab-link: #7dd3c7;
-  --llab-accent: #eba27f;
-  --llab-diff-bg: #2a2112;
+  --llab-bg: #181a1e;
+  --llab-surface: #1f2227;
+  --llab-band: #1b1d22;
+  --llab-text: #efe9e0;
+  --llab-text-2: #cfc8bd;
+  --llab-muted: #ada59a;
+  --llab-line: #353840;
+  --llab-line-strong: #767982;
+  --llab-primary: #efe9e0;
+  --llab-on-primary: #181a1e;
+  --llab-link: #d99c6c;
+  --llab-accent: #d99c6c;
+  --llab-diff-bg: #2b2418;
   --llab-diff-line: #b8862f;
-  --llab-note-bg: #2a2112;
+  --llab-note-bg: #2b2418;
   --llab-note-text: #f0cb8c;
   --llab-note-line: #6b5428;
-  --llab-lvl-on: #6ccbbe;
-  --llab-lvl-off: #2c403d;
-  --llab-focus: #eba27f;
+  --llab-lvl-on: #d99c6c;
+  --llab-lvl-off: #353840;
+  --llab-focus: #d99c6c;
 }
 .llab *, .llab *::before, .llab *::after { box-sizing: border-box; }
 .llab [hidden] { display: none !important; }

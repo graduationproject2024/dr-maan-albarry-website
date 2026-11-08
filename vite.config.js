@@ -23,6 +23,26 @@ const PROC_IMAGES = Object.fromEntries(PROCEDURES.map(p => {
   return [p.slug, { light: has(`${p.slug}.webp`), dark: has(`${p.slug}-dark.webp`) }];
 }));
 
+// The anatomical image library's manifest (L1/L2/L3 assets, captions, normalised label anchors), when it exists.
+// main.js renders plate labels only from this data; without it, plates show their caption and no labels.
+const MANIFEST_FILE = resolve(import.meta.dirname, 'public/images/procedures/manifest.json');
+// Only what the pages need is bundled (the full manifest, with cameras and references, stays a public file):
+// per asset its id, procedure, level, size, the widths available per background, label anchors, alt and caption.
+// File names follow images/procedures/atlas/<id>-<alpha|neutral>-<width>.<webp|jpg>.
+const PROC_MANIFEST = fs.existsSync(MANIFEST_FILE) ? (() => {
+  const m = JSON.parse(fs.readFileSync(MANIFEST_FILE, 'utf8'));
+  const widths = (a, bg, fmt) => a.files.filter(f => f.background === bg && f.format === fmt).map(f => f.width).sort((x, y) => x - y);
+  return {
+    version: m.version,
+    assets: m.assets.map(a => ({
+      id: a.assetId, procedure: a.procedure, level: a.level, w: a.master.width, h: a.master.height,
+      alpha: widths(a, 'transparent', 'webp'), neutral: widths(a, 'neutral', 'webp'), jpg: widths(a, 'neutral', 'jpeg'),
+      labels: (a.labelAnchors || []).map(l => ({ x: l.x, y: l.y, en: l.en, ar: l.ar })),
+      alt: a.alt, caption: a.caption, review: a.reviewStatus
+    }))
+  };
+})() : null;
+
 // Publishes JSON-LD and /llms.txt from the single doctor data source (doctor-data.js),
 // so structured data and AI-facing text can never drift from what the page shows.
 function doctorDataPublisher() {
@@ -80,7 +100,8 @@ export default defineConfig({
   // Build-time constants for client-side routing/SEO (canonical origin, available illustrations).
   define: {
     __SITE_URL__: JSON.stringify(SITE_URL),
-    __PROC_IMAGES__: JSON.stringify(PROC_IMAGES)
+    __PROC_IMAGES__: JSON.stringify(PROC_IMAGES),
+    __PROC_MANIFEST__: JSON.stringify(PROC_MANIFEST)
   },
   build: {
     outDir: 'dist',

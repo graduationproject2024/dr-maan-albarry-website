@@ -43,7 +43,9 @@ export const CONTENT = {
       faq: [
         { q: 'هل يجب أن "ينضج" الماء الأبيض قبل الجراحة؟', a: 'لا. مع الجراحة الحديثة لا حاجة للانتظار حتى ينضج الساد. يُتخذ القرار حين يبدأ ضعف الرؤية بالتأثير في أنشطتك اليومية.' },
         { q: 'هل يمكن أن يعود الماء الأبيض بعد الجراحة؟', a: 'العدسة الصناعية لا تُعتم، لكن قد تُعتم المحفظة التي تحملها بعد مدة فتعود الضبابية. يُعالج ذلك عادةً بإجراء ليزر سريع في العيادة.' },
-        { q: 'هل تُجرى الجراحة للعينين في اليوم نفسه؟', a: 'تُجرى عادةً لعين واحدة ثم للعين الأخرى بعد فترة يحددها الطبيب، حتى تتعافى الأولى وتُراجَع النتيجة.' }
+        { q: 'هل تُجرى الجراحة للعينين في اليوم نفسه؟', a: 'تُجرى عادةً لعين واحدة ثم للعين الأخرى بعد فترة يحددها الطبيب، حتى تتعافى الأولى وتُراجَع النتيجة.' },
+        // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).
+        { q: 'هل يمكن الاستغناء التام عن النظارات بعد عملية المياه البيضاء؟', a: 'قد تقلل بعض العدسات الحديثة مثل ثلاثية البؤرة (Trifocal) وممتدة المدى (EDOF) الاعتماد على النظارات في كثير من الأنشطة، لكن لا يمكن ضمان الاستغناء التام عن النظارة لكل مريض، ويختلف ذلك بحسب حالة العين ونوع العدسة والإضاءة.' }
       ]
     },
     en: {
@@ -62,7 +64,9 @@ export const CONTENT = {
       faq: [
         { q: 'Does a cataract need to be “ripe” before surgery?', a: 'No. With modern surgery there is no need to wait. The decision is made when reduced vision starts to affect your daily activities.' },
         { q: 'Can a cataract come back?', a: 'The artificial lens does not cloud, but the capsule holding it can become hazy over time. This is usually treated with a quick laser procedure in clinic.' },
-        { q: 'Are both eyes operated on the same day?', a: 'Usually one eye is treated first and the second after an interval set by your surgeon, so the first can heal and be reviewed.' }
+        { q: 'Are both eyes operated on the same day?', a: 'Usually one eye is treated first and the second after an interval set by your surgeon, so the first can heal and be reviewed.' },
+        // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).
+        { q: 'Can I stop wearing glasses completely after cataract surgery?', a: 'Some modern lenses, such as trifocal and extended depth of focus (EDOF) designs, can reduce dependence on glasses for many tasks, but complete spectacle independence cannot be guaranteed for every patient; it varies with the eye, the lens type and lighting.' }
       ]
     }
   },
@@ -142,7 +146,9 @@ export const CONTENT = {
       faq: [
         { q: 'أيها أنسب لي: الليزك أم الليزر السطحي أم سمايل؟', a: 'يعتمد ذلك على سماكة قرنيتك وشكلها ودرجة النظر وطبيعة عملك ورياضتك. يُتخذ القرار بعد الفحص والتصوير، لا قبله.' },
         { q: 'هل نتيجة الليزر دائمة؟', a: 'التغيير في شكل القرنية دائم، لكن العين قد تتغير مع العمر، مثل الحاجة لنظارة القراءة بعد الأربعين أو ظهور الماء الأبيض لاحقاً.' },
-        { q: 'ماذا لو لم يكن الليزر مناسباً لي؟', a: 'قد تكون العدسة اللاصقة الداخلية (ICL) أو استبدال العدسة خياراً آخر بحسب العمر وحالة العين.' }
+        { q: 'ماذا لو لم يكن الليزر مناسباً لي؟', a: 'قد تكون العدسة اللاصقة الداخلية (ICL) أو استبدال العدسة خياراً آخر بحسب العمر وحالة العين.' },
+        // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).
+        { q: 'ما هي معايير ترشيح المريض لعمليات تصحيح النظر بالليزك؟', a: 'من المعايير الشائعة: ألا يقل العمر عن 18 عاماً، وثبات درجة النظر لمدة عام تقريباً، وسماكة قرنية كافية، وخلو القرنية من علامات القرنية المخروطية أو الجفاف الشديد غير المعالج. ويُحسم القرار بعد تصوير القرنية الطبقي والفحص الشامل.' }
       ]
     },
     en: {
@@ -166,7 +172,9 @@ export const CONTENT = {
       faq: [
         { q: 'Which suits me: LASIK, surface laser or SMILE?', a: 'It depends on your corneal thickness and shape, your prescription, your work and your sport. The decision is made after the examination and imaging, not before.' },
         { q: 'Is the result permanent?', a: 'The change in corneal shape is permanent, but eyes still change with age — for example needing reading glasses after 40, or a cataract later in life.' },
-        { q: 'What if laser is not suitable for me?', a: 'An implantable contact lens (ICL) or lens replacement may be an alternative, depending on your age and eye health.' }
+        { q: 'What if laser is not suitable for me?', a: 'An implantable contact lens (ICL) or lens replacement may be an alternative, depending on your age and eye health.' },
+        // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).
+        { q: 'What are the main criteria for laser vision correction (LASIK)?', a: 'Common criteria include being at least 18 years old, a stable prescription for about a year, adequate corneal thickness, and no signs of keratoconus or untreated severe dry eye. The decision is made after corneal tomography and a full examination.' }
       ]
     }
   },
