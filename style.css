@@ -1231,6 +1231,19 @@ main:focus, main h1:focus { outline: none; }
   .hero-portrait { padding: 5px; }
   .hero-portrait .portrait-caption { display: none; } /* repeats the h1 and the intro directly below */
 }
+/* narrow phones: the plate caption runs under both images, spacing tightens, so the hero booking button stays on the first screen (360 x 800) */
+@media (max-width: 400px) {
+  .hero { padding-top: 8px; }
+  .hero-grid { gap: 10px; }
+  .hero-visual { row-gap: 2px; }
+  .hero-plate { display: contents; }
+  .hero-plate-illus { grid-column: 1; grid-row: 1; }
+  .hero-plate .fig-cap { grid-column: 1 / -1; grid-row: 2; display: flex; margin-top: 0; padding-top: 4px; line-height: 1.5; }
+  .hero-portrait { grid-row: 1; }
+  .hero-kicker { font-size: .8125rem; margin-bottom: 4px; }
+  .hero-intro { margin-top: 10px; padding-top: 10px; }
+  .hero-cta { margin-top: 12px; row-gap: 6px; }
+}
 /* Phone homepage height: owner decision 2026-11-08 ("Trim, new limit"). Nothing is hidden; rhythm and rows tighten, targets stay 44 px. */
 @media (max-width: 639px) {
   :root { --chapter-y: 36px; }
