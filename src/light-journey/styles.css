@@ -334,7 +334,7 @@
    "illustrative" tag moves to the note below the drawing */
 @container (max-width: 560px) {
   .lj-illus { display: none; }
-  .lj-svg .lj-label text { font-size: 44px; stroke-width: 9px; }
+  .lj-svg .lj-label text { font-size: 38px; stroke-width: 8px; }
   .lj-svg .lj-label circle { r: 9px; }
   .lj { border-radius: 22px; }
   .lj-figure { border-radius: 16px; margin-inline: -4px; }

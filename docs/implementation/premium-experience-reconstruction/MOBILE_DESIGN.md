@@ -90,11 +90,55 @@ before mount; `.vsim-launch` loses its frame ≤639px (`style.css:557`).
 
 ## Mobile design principles
 
-_To be filled after implementation._
+Implemented in `style.css` (the phone rules sit with each component, and §28 holds the density rules).
+
+1. **Nothing is hidden because the screen is small.** Text and images may get smaller or be rearranged, but they stay on the page. The only content still hidden at phone width is listed in the table below, with the reason.
+2. **No sideways scrolling inside the page.** Both hidden scrollers are gone: pathways are a 2×2 grid and the filter chips wrap.
+3. **One thumb, three actions.** The booking bar (book, call, WhatsApp) stays at the bottom below 1024 px. On phones of 440 px and narrower the icon sits above the label, so "WhatsApp" is never clipped.
+4. **The header gets out of the way.** It hides while reading down and returns on the first scroll up.
+5. **Targets stay at least 44 px.** Whole plates are links. Footer links are 40 px tall with no neighbouring target closer than that.
 
 ## Section-by-section mobile layout
 
-_To be filled after implementation._
+| Chapter | At 390 px |
+|---|---|
+| 01 Doctor | Name, specialty, intro, full-width booking pill, secondary link; then plate and portrait side by side (the portrait is never shown above 295 px); ledger as three rows with every scope line visible |
+| 02 Pathways | 2×2 grid, each with a description |
+| 03 Procedures | Lead plate beside its numbered key; the other six as rows with a 92 px thumbnail and the full summary |
+| 04 Credentials | Two-column ledger rows; all five roles and the memberships are visible |
+| 05 Vision education | Both previews with their drawing, description and link |
+| 06 Cataract 3D | Poster image with caption, four stages in a 2×2 grid, CTA and guide link |
+| 07 Guides | Three guides with full summaries, library link, emergency link |
+| 08 Questions | Four general questions as an accordion |
+| 09 Clinic | Three booking methods with descriptions, hours with the confirm caveat, address, one-line accreditation |
+| Footer | Identity, site and contact side by side, seven procedures in two columns, hours, disclaimers |
+| Menu | Full-height sheet: numbered pages, seven procedures in two columns, filled booking row, maps, theme, channels |
+
+### Status of each audited rule
+
+| # | Status now |
+|---|---|
+| M1 hero sub-lines | Visible |
+| M2 hero scroller | Removed (replaced by the 2×2 pathways) |
+| M3 home roles 4–5 | Visible (more than the audit required) |
+| M4 procedure summaries | Visible and not clamped, for all seven |
+| M5 source tags | Not shown on Home at any width; shown on `/about/` |
+| M6 section ledes | Visible, including the education disclaimer |
+| M7 memberships | Visible |
+| M8 preview descriptions | Visible |
+| M9 hours caveat, accreditation | Visible |
+| M10, M11 footer hours and title | Visible |
+| M12 poster caption | Visible; the poster is now a real image with alt text |
+| M13 previews and poster | Visible |
+| M14 guide summaries | Visible and not clamped |
+| M15 booking descriptions | Visible |
+| M16, M20 thumbnails | Replaced by atlas L1 cards at every width |
+| M17 library summaries | Visible and not clamped |
+| M18, M19 contents lists | Collapsible "On this page" at the top of the page below 1024 px |
+| M21 footer procedures | Visible, in two columns |
+| M22 Lens Lab cards | Kept: one card at a time, chosen by chips (a compact version exists; unchanged module logic) |
+| M23 Light Journey labels | Visible, enlarged for small containers; the "illustrative" tag moves to the note below |
+| M24, M25, M26 | Kept hidden, as the audit recommended |
 
 ## Verification
 

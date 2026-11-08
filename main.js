@@ -982,7 +982,7 @@ function renderAboutPage() {
 function procCard(p, { featured = false, compact = false } = {}) {
   return plateCard(p, PROCEDURES.indexOf(p), {
     cls: `proc-card${featured ? ' is-featured' : ''}${compact ? ' is-compact' : ''}`,
-    sizes: featured ? '(min-width: 1024px) 760px, 100vw' : compact ? '(min-width: 900px) 420px, 104px' : '(min-width: 1024px) 380px, (min-width: 640px) 45vw, 120px',
+    sizes: featured ? '(min-width: 1024px) 760px, 100vw' : compact ? '(min-width: 900px) 420px, 104px' : '(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92px',
     more: tr('تفاصيل الإجراء', 'Procedure details'), badge: true, pins: featured
   });
 }
@@ -1515,7 +1515,7 @@ function renderProcedurePage(p) {
   const list = (items, cls = '') => `<ul class="bullets ${cls}">${items.map(t => `<li>${t}</li>`).join('')}</ul>`;
   const sec = (id, inner, cls = '') => {
     const s = PROC_SECTIONS.find(x => x[0] === id);
-    return `<section class="proc-sec ${cls}" id="p-${id}" aria-labelledby="p-${id}-h"><p class="sec-n" aria-hidden="true">${num(id)}</p><h2 id="p-${id}-h">${tr(s[1], s[2])}</h2>${inner}</section>`;
+    return `<section class="proc-sec ${cls}" id="p-${id}" aria-labelledby="p-${id}-h"><span class="sec-n" aria-hidden="true">${num(id)}</span><h2 id="p-${id}-h">${tr(s[1], s[2])}</h2>${inner}</section>`;
   };
   const tocLinks = () => `${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav data-spy="p-${id}"><span class="toc-n" aria-hidden="true">${num(id)}</span><span>${tr(ar, en)}</span></a></li>`).join('')}${p.simulator ? `<li class="toc-3d"><a href="${hereHref('cataract-3d')}" data-nav data-spy="cataract-3d"><span class="toc-n" aria-hidden="true"><bdi dir="ltr">3D</bdi></span><span>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</span></a></li>` : ''}`;
   // Cataract recovery: the post-operative photograph restored from R5 (matrix I8; origin to be confirmed by the owner).
@@ -1897,7 +1897,12 @@ function headerScrollShadow() {
     const y = Math.max(window.scrollY, 0);
     header.classList.toggle('is-scrolled', y > 8);
     const dy = y - lastY;
-    const locked = document.documentElement.classList.contains('drawer-open') || header.contains(document.activeElement);
+    // Stays put while the menu is open, while focus is inside it, and while the 3D viewer runs (its language and
+    // theme controls must stay one tap away).
+    const locked = document.documentElement.classList.contains('drawer-open') || header.contains(document.activeElement)
+      || c3d.state === 'active' || c3d.state === 'loading';
+    // A route change restores a scroll position programmatically; that is not the reader scrolling down.
+    if (performance.now() < (window.__headerHoldUntil || 0)) { lastY = y; return; }
     if (y < 240 || locked) header.classList.remove('is-hidden');
     else if (dy > 6) header.classList.add('is-hidden');
     else if (dy < -6) header.classList.remove('is-hidden');
@@ -1943,6 +1948,7 @@ const PAGE_RENDERERS = {
   clinic: renderClinicPage
 };
 function renderApp(navigated = false) {
+  window.__headerHoldUntil = performance.now() + 900; // see headerScrollShadow
   document.documentElement.lang = currentLang;
   document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
   const key = route.slug ? 'procedure' : route.page;

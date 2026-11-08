@@ -62,7 +62,7 @@ test.describe('J02', () => {
     const j = await startJourney(page, testInfo, { id: 'j02-corneal-care', persona: 'Core journey', objective: 'Find keratoconus care, read about corneal transplant, and reach the clinic phone line — checking the call link without calling.', device: 'Galaxy S9+ (320×658, Android UA, touch)', language: 'en', theme: 'light', startUrl: '/en/' });
     await j.step('Open /en/', 'English home', async () => { const s = await openUrl(page, '/en/'); return { actual: `lang=${s.lang}`, ok: s.lang === 'en' }; });
     await j.step('Scroll to the specialties, open the full procedure library and tap the "Cornea & retina care" chip', 'Three cornea/retina procedures shown', async () => {
-      const lib = page.locator('#procedures .spec-index a.btn'); await revealInFreeArea(page, lib); await lib.tap(); await page.waitForURL(/\/en\/procedures\/$/);
+      const lib = page.locator('#procedures .chap-lede a[href="en/procedures/"]'); await revealInFreeArea(page, lib); await lib.tap(); await page.waitForURL(/\/en\/procedures\/$/);
       const chip = page.locator('.proc-filter .chip[data-filter="cornea-retina"]'); await revealInFreeArea(page, chip); await chip.tap();
       const titles = await page.locator('.proc-grid .proc-card:not([hidden]) .proc-card-title').allInnerTexts();
       return { actual: titles.join(', '), ok: titles.length === 3 && titles.includes(NAME['keratoconus-cxl'].en) };
