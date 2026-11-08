@@ -240,67 +240,93 @@ function illustration(p, { eager = false, priority = false, night = false, cls =
 }
 
 // --- PLATES (B's image presentation, drawn in A's tokens) ---
-// A plate = an anatomical image + optional HTML labels + a numbered caption. The component is data-driven: labels
-// come only from the image library's manifest (public/images/procedures/manifest.json → __PROC_MANIFEST__), as
-// normalised anchor points (x, y in 0…1 of the image) with an Arabic and an English term. No label is ever placed by
-// eye: without a manifest entry the plate renders with its caption only. Images are never mirrored in RTL; label
-// positions are physical (left/top), only the label text follows the reading direction.
+// The anatomical atlas (public/images/procedures/manifest.json, bundled in compact form as __PROC_MANIFEST__ by
+// vite.config.js) gives every procedure an L1 card (4:5), an L2 hero (16:9) and one or two L3 close-ups (4:3), each
+// with label anchors projected from the 3D scene (normalised x, y + EN/AR term), alt text and a caption.
+// A plate = an atlas image + numbered pins placed exactly at those anchors + a numbered key with the terms. No pin is
+// ever placed by eye, and text never sits on the image (anchors are close together, so terms live in the key).
+// Images are never mirrored in RTL: pin positions are physical (left/top); only the key follows the reading direction.
+// Every clinical image carries the visible "Educational illustration — pending physician review" note.
+// Without an atlas asset (or if its file fails), the legacy render / line-drawing fallback of illustration() is used.
 const PROC_MANIFEST = typeof __PROC_MANIFEST__ !== 'undefined' ? __PROC_MANIFEST__ : null;
+const ATLAS = (PROC_MANIFEST && PROC_MANIFEST.assets) || [];
+const atlasOf = (slug, level) => ATLAS.filter(a => a.procedure === slug && a.level === level);
 const plateCode = i => `PL.${String(i + 1).padStart(2, '0')}`;
-/** Labels for a procedure at a plate level ('L1' | 'L2' | 'L3'), normalised; [] when the manifest has none. */
-function plateLabels(slug, level) {
-  const entry = PROC_MANIFEST && ((PROC_MANIFEST.procedures && PROC_MANIFEST.procedures[slug]) || PROC_MANIFEST[slug]);
-  const lv = entry && ((entry.levels && entry.levels[level]) || entry[level]);
-  const raw = lv && Array.isArray(lv.labels) ? lv.labels : [];
-  return raw.map(l => {
-    const a = l.anchor || l;
-    const term = (l.term && (l.term[currentLang] || l.term.en)) || l[currentLang] || l.label || '';
-    return { x: Number(a.x), y: Number(a.y), term };
-  }).filter(l => l.term && l.x >= 0 && l.x <= 1 && l.y >= 0 && l.y <= 1);
+const pendingNote = () => tr('رسم توضيحي تثقيفي — بانتظار مراجعة الطبيب', 'Educational illustration — pending physician review');
+const atlasLabels = a => (a && a.labels ? a.labels : []).filter(l => l.x >= 0 && l.x <= 1 && l.y >= 0 && l.y <= 1).map(l => ({ x: l.x, y: l.y, term: l[currentLang] || l.en }));
+
+/** An atlas image in its .illus frame. bg 'alpha' = transparent master (L1/L2 on paper or night surfaces);
+ *  'neutral' = on the series off-white (L3 close-ups fill their frame). WebP srcset + JPEG fallback when available. */
+function atlasIllus(a, { bg = 'alpha', sizes = '100vw', priority = false, eager = false, cls = '', alt = null, pins = true } = {}) {
+  const kind = a[bg] && a[bg].length ? bg : 'neutral';
+  const ws = a[kind];
+  const url = (k, w, ext = 'webp') => `images/procedures/atlas/${a.id}-${k}-${w}.${ext}`;
+  const jpg = a.jpg && a.jpg.length ? url('neutral', a.jpg[a.jpg.length - 1], 'jpg') : url(kind, ws[ws.length - 1]);
+  const load = priority ? 'loading="eager" fetchpriority="high"' : eager ? 'loading="eager"' : 'loading="lazy"';
+  const label = alt !== null ? alt : L(a.alt);
+  const p = procedureBySlug(a.procedure);
+  return `<div class="illus atlas-illus is-${kind} ${cls}" style="aspect-ratio:${a.w} / ${a.h}">
+      <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" onerror="var d=this.closest('.illus');d.classList.add('is-plate');this.parentNode.remove()"></picture>
+      ${pins ? pinLayer(atlasLabels(a)) : ''}
+      ${anatomyPlate(a.procedure, p ? L(p.alt) : label)}
+    </div>`;
 }
-/** HTML label layer over a plate image (empty string when there are no labels). */
-function plateLabelLayer(labels) {
+/** Numbered pins at the projected anchors (decorative duplicates of the key, which carries the text). */
+function pinLayer(labels) {
   if (!labels.length) return '';
-  return `<ol class="plate-labels" aria-label="${tr('تسميات الرسم', 'Labels on the illustration')}">${labels.map((l, i) =>
-    `<li class="plate-label ${l.x > 0.5 ? 'to-left' : 'to-right'}" style="--x:${(l.x * 100).toFixed(2)}%;--y:${(l.y * 100).toFixed(2)}%"><span class="pl-dot" aria-hidden="true"></span><span class="pl-text"><bdi>${l.term}</bdi></span><span class="sr-only"> (${i + 1})</span></li>`).join('')}</ol>`;
+  return `<ol class="pins" aria-hidden="true" dir="ltr">${labels.map((l, i) => `<li class="pin" style="left:${(l.x * 100).toFixed(2)}%;top:${(l.y * 100).toFixed(2)}%">${i + 1}</li>`).join('')}</ol>`;
 }
-/** A large labelled plate (procedure-page hero, Fig. 1). */
-function plateFigure(p, i, { level = 'L2', priority = false, sizes = '100vw', cls = '' } = {}) {
-  const labels = plateLabels(p.slug, level);
+/** The key to the pins: number + term, in reading order. */
+function pinKey(labels, cls = '') {
+  if (!labels.length) return '';
+  return `<ol class="pin-key ${cls}" aria-label="${tr('مفتاح الأرقام على الرسم', 'Key to the numbers on the illustration')}">${labels.map((l, i) => `<li><span class="pk-n" aria-hidden="true">${i + 1}</span><bdi>${l.term}</bdi></li>`).join('')}</ol>`;
+}
+/** The large labelled plate on a procedure page (L2 hero, Fig. 1). */
+function plateFigure(p, i, { priority = false, sizes = '100vw', cls = '' } = {}) {
+  const a = atlasOf(p.slug, 'L2')[0];
+  if (!a) {
+    return `
+        <figure class="plate proc-figure ${cls}">
+          <div class="plate-frame">${illustration(p, { priority, cls: 'plate-illus', sizes })}</div>
+          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">${plateCode(i)}</bdi> · ${tr('شكل ١', 'Fig. 1')}</span><span>${L(p.alt)}.</span><span class="fig-pending">${pendingNote()}</span></figcaption>
+        </figure>`;
+  }
+  const labels = atlasLabels(a);
   return `
         <figure class="plate proc-figure ${cls}">
-          <div class="plate-frame">
-            ${illustration(p, { priority, cls: 'plate-illus', sizes })}
-            ${plateLabelLayer(labels)}
-          </div>
-          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">${plateCode(i)}</bdi> · ${tr('شكل ١', 'Fig. 1')}</span><span>${L(p.alt)}. ${tr('رسم توضيحي تثقيفي بانتظار مراجعة الطبيب.', 'Educational illustration, pending physician review.')}</span></figcaption>
+          <div class="plate-frame">${atlasIllus(a, { priority, sizes, cls: 'plate-illus' })}</div>
+          <figcaption class="fig-cap plate-cap">
+            <span class="fig-n"><bdi dir="ltr">${plateCode(i)}</bdi> · ${tr('شكل ١', 'Fig. 1')}</span>
+            <span class="fig-text">${L(a.caption)}</span>
+            ${pinKey(labels, 'plate-key')}
+            <span class="fig-pending">${pendingNote()}</span>
+          </figcaption>
         </figure>`;
 }
-/** Close-up "magnifier" (Fig. 2): a loupe on the plate around a focal point, with a small source view that frames
- *  the enlarged area. Uses the manifest's L3 close-up when it exists; otherwise a ×zoom crop of the same render
- *  around its centre (the subject of every render is centred). */
-function magnifier(p, { zoom = 1.9, focus = null } = {}) {
-  const img = PROC_IMAGES[p.slug] || {};
-  if (!img.light) return '';
-  const entry = PROC_MANIFEST && ((PROC_MANIFEST.procedures && PROC_MANIFEST.procedures[p.slug]) || PROC_MANIFEST[p.slug]);
-  const l3 = entry && ((entry.levels && entry.levels.L3) || entry.L3);
-  const f = focus || (l3 && l3.focus) || { x: 0.5, y: 0.5 };
-  const z = (l3 && l3.zoom) || zoom;
-  const fw = 100 / z, fh = 100 / z;
-  const fx = Math.min(Math.max(f.x * 100 - fw / 2, 0), 100 - fw), fy = Math.min(Math.max(f.y * 100 - fh / 2, 0), 100 - fh);
-  const labels = plateLabels(p.slug, 'L3');
-  return `
-        <figure class="loupe" style="--zx:${f.x * 100}%;--zy:${f.y * 100}%;--z:${z}">
-          <div class="loupe-lens">
-            ${illustration(p, { cls: 'loupe-illus', sizes: '(min-width: 1024px) 40vw, 90vw', alt: tr(`تفصيل مكبّر: ${L(p.alt)}`, `Close-up: ${L(p.alt)}`) })}
-            ${plateLabelLayer(labels)}
+/** Close-up "magnifier" figures (L3, Fig. 2 and Fig. 3): each close-up in a loupe frame with its pins and key. */
+function magnifier(p) {
+  const l3 = atlasOf(p.slug, 'L3');
+  if (!l3.length) return '';
+  return `<div class="loupes${l3.length > 1 ? ' is-pair' : ''}">${l3.map((a, k) => {
+    const labels = atlasLabels(a);
+    return `
+        <figure class="loupe">
+          <div class="loupe-lens">${atlasIllus(a, { bg: 'neutral', sizes: l3.length > 1 ? '(min-width: 1024px) 520px, 100vw' : '(min-width: 1024px) 880px, 100vw', cls: 'loupe-illus' })}
+            <span class="loupe-tag" aria-hidden="true">${icon('eye', 16)}<bdi dir="ltr">L3</bdi></span>
           </div>
-          <div class="loupe-src" aria-hidden="true">
-            ${illustration(p, { cls: 'loupe-src-illus', sizes: '200px', alt: tr('الشكل ١ مصغّراً، مع إطار حول المنطقة المكبّرة', 'Fig. 1 in miniature, with the enlarged area framed') })}
-            <span class="loupe-frame" style="inset-inline-start:auto;left:${fx.toFixed(2)}%;top:${fy.toFixed(2)}%;width:${fw.toFixed(2)}%;height:${fh.toFixed(2)}%"></span>
-          </div>
-          <figcaption class="fig-cap"><span class="fig-n">${tr('شكل ٢', 'Fig. 2')} · <bdi dir="ltr">×${z}</bdi></span><span>${tr('تفصيل مكبّر من الشكل ١ حول منطقة الإجراء. رسم توضيحي تثقيفي بانتظار مراجعة الطبيب.', 'A close-up of Fig. 1 around where the procedure takes place. Educational illustration, pending physician review.')}</span></figcaption>
+          <figcaption class="fig-cap">
+            <span class="fig-n">${tr(['شكل ٢', 'شكل ٣'][k] || 'شكل', ['Fig. 2', 'Fig. 3'][k] || 'Fig.')} · ${tr('تفصيل مقرّب', 'Close-up')}</span>
+            <span class="fig-text">${L(a.caption)}</span>
+            ${pinKey(labels)}
+            <span class="fig-pending">${pendingNote()}</span>
+          </figcaption>
         </figure>`;
+  }).join('')}</div>`;
+}
+/** Card image for a procedure: the L1 atlas card when it exists, otherwise the legacy render. */
+function cardIllus(p, { sizes, priority = false, cls = 'pc-illus', pins = false } = {}) {
+  const a = atlasOf(p.slug, 'L1')[0];
+  return a ? atlasIllus(a, { sizes, priority, cls, pins }) : illustration(p, { cls, sizes, priority });
 }
 
 // --- NAVIGATION MODEL ---
@@ -433,8 +459,8 @@ function renderHero() {
 
       <div class="hero-visual">
         <figure class="hero-plate">
-          ${illustration(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 560px, 100vw' })}
-          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span>${L(cataract.alt)}. ${tr('رسم توضيحي تثقيفي.', 'Educational illustration.')}</span></figcaption>
+          ${cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 440px, 45vw' })}
+          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
         </figure>
         <figure class="hero-portrait">
           <div class="portrait-frame">
@@ -488,15 +514,17 @@ function renderPathways() {
 
 // 03 — the seven procedures as numbered anatomical plates (PL.01–07). The whole plate is one link (its title), so
 // every target is large; the summary stays visible at every width.
-function plateCard(p, i, { cls = 'spec-card', sizes = '(min-width: 1024px) 30vw, 50vw', heading = 'h3', more = tr('اقرأ الدليل', 'Read the guide'), badge = false } = {}) {
+function plateCard(p, i, { cls = 'spec-card', sizes = '(min-width: 1024px) 30vw, 50vw', heading = 'h3', more = tr('اقرأ الدليل', 'Read the guide'), badge = false, pins = false } = {}) {
   const g = groupOf(p.group);
+  const a = pins ? atlasOf(p.slug, 'L1')[0] : null;
   return `
         <article class="plate-card ${cls}" data-group="${p.group}" data-slug="${p.slug}">
-          <div class="pc-fig">${illustration(p, { cls: 'pc-illus', sizes })}</div>
+          <div class="pc-fig">${cardIllus(p, { sizes, pins })}</div>
           <div class="pc-body">
             <p class="pc-code"><bdi dir="ltr" class="pc-pl">${plateCode(PROCEDURES.indexOf(p))}</bdi><span class="pc-group proc-card-group">${L(g)}</span></p>
             <${heading} class="proc-card-title"><a class="proc-card-link" href="${pageHref(currentLang, p.slug)}" data-nav>${L(p.name)}</a></${heading}>
             <p class="pc-sum proc-card-text">${L(p.summary)}</p>
+            ${a ? pinKey(atlasLabels(a), 'pc-key') : ''}
             ${badge && p.simulator ? `<p class="proc-card-badge">${icon('cube', 16)}<span>${tr('مع تجربة ثلاثية الأبعاد', 'With a 3D walkthrough')}</span></p>` : ''}
             <p class="pc-more" aria-hidden="true">${more}${icon('arrow', 16)}</p>
           </div>
@@ -512,8 +540,9 @@ function renderSpecialties() {
         aside: quietLink(P('procedures'), tr('مكتبة الإجراءات الكاملة', 'The full procedure library'))
       })}
       <div class="atlas atlas-home fade-in">
-        ${PROCEDURES.map((p, i) => plateCard(p, i, { cls: `spec-card${i === 0 ? ' is-lead' : ''}`, sizes: i === 0 ? '(min-width: 1024px) 640px, 100vw' : '(min-width: 1024px) 320px, (min-width: 640px) 45vw, 120px' })).join('')}
+        ${PROCEDURES.map((p, i) => plateCard(p, i, { cls: `spec-card${i === 0 ? ' is-lead' : ''}`, pins: i === 0, sizes: i === 0 ? '(min-width: 1024px) 560px, 100vw' : '(min-width: 1024px) 300px, (min-width: 640px) 45vw, 120px' })).join('')}
       </div>
+      <p class="atlas-note">${pendingNote()}. ${tr('الأرقام على اللوحة الأولى مواضع محسوبة من النموذج ثلاثي الأبعاد.', 'The numbers on the first plate are positions computed from the 3D model.')}</p>
     </div>
   </section>`;
 }
@@ -872,7 +901,7 @@ function renderAboutPage() {
           ${AREAS.map(a => {
             const p = procedureBySlug(a.slug);
             return `<article class="area fade-in">
-            <div class="area-fig">${illustration(p, { cls: 'area-illus', sizes: '(min-width: 1024px) 400px, 100vw' })}</div>
+            <div class="area-fig">${cardIllus(p, { cls: 'area-illus', sizes: '(min-width: 1024px) 420px, (min-width: 480px) 40vw, 240px' })}</div>
             <div class="area-body">
               <p class="pc-code"><bdi dir="ltr" class="pc-pl">${plateCode(PROCEDURES.indexOf(p))}</bdi></p>
               <h3>${L(a.title)}</h3>
@@ -953,8 +982,8 @@ function renderAboutPage() {
 function procCard(p, { featured = false, compact = false } = {}) {
   return plateCard(p, PROCEDURES.indexOf(p), {
     cls: `proc-card${featured ? ' is-featured' : ''}${compact ? ' is-compact' : ''}`,
-    sizes: featured ? '(min-width: 1024px) 760px, 100vw' : compact ? '(min-width: 1024px) 380px, (min-width: 640px) 45vw, 120px' : '(min-width: 1024px) 380px, (min-width: 640px) 45vw, 120px',
-    more: tr('تفاصيل الإجراء', 'Procedure details'), badge: true
+    sizes: featured ? '(min-width: 1024px) 760px, 100vw' : compact ? '(min-width: 900px) 420px, 104px' : '(min-width: 1024px) 380px, (min-width: 640px) 45vw, 120px',
+    more: tr('تفاصيل الإجراء', 'Procedure details'), badge: true, pins: featured
   });
 }
 function renderProceduresPage() {
