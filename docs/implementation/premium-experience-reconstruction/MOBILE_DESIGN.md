@@ -142,4 +142,8 @@ Implemented in `style.css` (the phone rules sit with each component, and §28 ho
 
 ## Verification
 
-_To be filled after implementation._
+- Captured at 320, 360, 375, 390, 430 and 768 px in Arabic and English, in both themes. The screenshots are in `evidence/after/`.
+- No horizontal overflow on any page or width; the test suite checks 320, 390, 768, 1024, 1366 and 1440 px.
+- Booking bar: three actions, at least 44 px tall, labels not clipped, at 360 and 390 px in both languages and themes.
+- Axe (automated rules only) passes on all 30 pages in both themes at 390 × 844. This is not a screen-reader or manual accessibility audit.
+- **Open:** the phone homepage height exceeds the test budget (9,899 px Arabic and 10,667 px English at 390 px, against 8,350 px). See `BEFORE_AFTER.md`.

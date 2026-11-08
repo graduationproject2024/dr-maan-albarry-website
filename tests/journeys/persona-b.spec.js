@@ -95,7 +95,7 @@ test('Persona B — first-time visitor', async ({ page }, testInfo) => {
     await page.locator('.mobile-menu-btn').tap(); await page.waitForTimeout(300);
     await page.locator('#mobile-nav .drawer-links a[data-section="clinic"]').tap();
     await page.waitForURL(/\/clinic\/$/); await page.waitForTimeout(400);
-    const link = page.locator('#clinic .visit a.text-link');
+    const link = page.locator('#clinic .visit a.link-quiet');
     let cdp = null;
     for (let i = 0; i < 40; i++) {
       const r = await rect(link);
