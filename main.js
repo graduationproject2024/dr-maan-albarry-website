@@ -459,7 +459,7 @@ function renderHero() {
 
       <div class="hero-visual">
         <figure class="hero-plate">
-          ${cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 440px, 45vw' })}
+          ${cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 400px, 45vw' })}
           <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
         </figure>
         <figure class="hero-portrait">

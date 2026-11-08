@@ -809,11 +809,11 @@ main:focus, main h1:focus { outline: none; }
   .atlas-library .is-featured .proc-card-title { font-size: 2.25rem; line-height: 1.4; }
   :root[lang="en"] .atlas-library .is-featured .proc-card-title { font-size: 2.5rem; line-height: 1.1; }
   .atlas-library .is-featured .pc-sum { font-size: var(--fs-lede); line-height: var(--lh-lede); max-width: 46ch; }
-  .atlas-library .plate-card:not(.is-featured) { grid-template-columns: 1fr; padding: 0; border-top: 0; gap: 14px; }
-  .atlas-library .plate-card:not(.is-featured) .pc-body { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .atlas-library .plate-card:not(.is-featured) .pc-more { display: inline-flex; }
-  .atlas-library .plate-card:not(.is-featured) .pc-fig .illus { aspect-ratio: 1 / 1; }
-  .atlas-library .plate-card:not(.is-featured) .pc-fig .illus img { object-fit: cover; }
+  .atlas.atlas-library .plate-card:not(.is-lead):not(.is-featured) { grid-template-columns: 1fr; padding: 0; border-top: 0; gap: 14px; }
+  .atlas.atlas-library .plate-card:not(.is-lead):not(.is-featured) .pc-body { border-top: 1px solid var(--rule); padding-top: 12px; }
+  .atlas.atlas-library .plate-card:not(.is-lead):not(.is-featured) .pc-more { display: inline-flex; }
+  .atlas.atlas-library .plate-card:not(.is-lead):not(.is-featured) .pc-fig .illus { aspect-ratio: 1 / 1; }
+  .atlas.atlas-library .plate-card:not(.is-lead):not(.is-featured) .pc-fig .illus img { object-fit: cover; }
   .proc-help { margin-top: 0; }
 }
 .library-note { display: flex; gap: 14px; align-items: flex-start; margin-top: var(--s-7); padding-top: var(--s-5); border-top: 1px solid var(--rule); font-size: var(--fs-small); line-height: var(--lh-small); color: var(--ink-2); }
@@ -1224,4 +1224,65 @@ main:focus, main h1:focus { outline: none; }
   .footer-col a { min-height: 34px; padding-block: 2px; }
   .way { padding-block: 16px; }
   .timeline-item, .cred-list .cred { padding-block: 10px; }
+}
+/* desktop: procedure hero (title across, lede beside the actions); side-headed chapters for credentials and clinic */
+@media (min-width: 1024px) {
+  .proc-hero-text { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); column-gap: calc(var(--col-gap) * 3); align-items: start; }
+  .proc-hero-text .eyebrow, .proc-hero-text .proc-title { grid-column: 1 / -1; }
+  .proc-hero-text .proc-title { max-width: none; }
+  .proc-hero-text .proc-lede { grid-column: 1; grid-row: 3 / span 3; }
+  .proc-hero-text .review-status { grid-column: 2; grid-row: 3; margin-top: var(--s-5); justify-self: start; }
+  .proc-hero-text .proc-cta { grid-column: 2; grid-row: 4; flex-direction: column; margin-top: var(--s-4); }
+  .proc-hero-text .proc-cta .btn { width: 100%; }
+  .proc-hero-text .proc-3d-jump { grid-column: 2; grid-row: 5; }
+
+  .credentials .container, .clinic-home .container { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); align-items: start; }
+  .credentials .chap-head, .clinic-home .chap-head { display: block; grid-column: 1 / span 4; margin: 0; }
+  .clinic-home .chap-head { grid-column: 1 / span 3; }
+  .credentials .chap-num, .clinic-home .chap-num { font-size: clamp(4rem, 2rem + 3.4vw, 5.25rem); margin-bottom: 14px; transform: none; }
+  .credentials .chap-head h2, .clinic-home .chap-head h2 { font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.5rem); max-width: none; }
+  .credentials .chap-lede, .clinic-home .chap-lede { margin-top: 14px; padding: 0; }
+  .credentials .cred-grid { grid-column: 5 / span 8; }
+  .clinic-home .clinic-grid { grid-column: 4 / span 9; }
+  .credentials .cred-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--col-gap); }
+  .credentials .cred-grid > :first-child, .credentials .cred-grid > :last-child { grid-column: auto; }
+  .clinic-home .clinic-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .clinic-home .booking-ways, .clinic-home .clinic-side { grid-column: auto; }
+  .credentials .cred-list .cred, .credentials .timeline-item { grid-template-columns: minmax(0, 5em) minmax(0, 1fr); column-gap: 12px; }
+  .hero-plate { width: min(100%, 400px); }
+  .hero-portrait { bottom: 64px; }
+  .c3d-poster .illus { aspect-ratio: 2 / 1; }
+  .atlas-note { margin-top: var(--s-5); }
+  .footer-notices { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px var(--col-gap); margin-top: var(--s-6); }
+  .guide-row { padding-block: 12px; }
+  .faq-question { min-height: 54px; padding-block: 10px; }
+  .pc-more { margin-top: 0; }
+}
+@media (min-width: 1024px) {
+  /* index plates: the whole plate is the link; the cue shrinks to its arrow at the end of the code line */
+  .atlas.atlas-home .plate-card:not(.is-lead):not(.is-featured) .pc-body { position: relative; }
+  .atlas.atlas-home .plate-card:not(.is-lead):not(.is-featured) .pc-more { position: absolute; top: 12px; inset-inline-end: 0; margin: 0; font-size: 0; gap: 0; }
+  :root[lang="en"] .atlas.atlas-home .plate-card:not(.is-lead):not(.is-featured) .proc-card-title { font-size: 1.25rem; line-height: 1.22; }
+  .atlas.atlas-home .plate-card:not(.is-lead):not(.is-featured) .proc-card-link { min-height: 44px; }
+  .duo > #education { grid-column: 1 / span 6; }
+  .duo > #faq { grid-column: 7 / span 6; padding-inline-start: calc(var(--col-gap) * .5); }
+  .chap-head-stack { margin-bottom: 28px; gap: 10px; }
+  .stage-list li { padding-block: 8px; }
+  .c3d-actions { margin-top: var(--s-4); }
+  .explore-grid { gap: 56px; }
+  .discover-list { gap: var(--s-4); }
+}
+/* English small text is set tighter than Arabic (Latin needs less leading): every fixed Arabic line-height gets its Latin value */
+:root[lang="en"] :is(.pc-sum, .guide-row p, .disc-body p, .chap-lede p, .visit-small, .visit-strong, .way-body > p, .cred-val, .timeline-item h4, .hero-intro, .faq-answer > p, .anat-parts dd, .type p, .proc-note, .library-note, .why, .tech-item p, .path-step p, .accreditation, .footer-title, .footer-disclaimer, .guide-body p, .guide-body li, .lens-summary p, .light-path p, .bullets li, .contrib li, .q-desc) { line-height: 1.55; }
+:root[lang="en"] .atlas .plate-card:not(.is-lead):not(.is-featured) .pc-sum { line-height: 1.5; }
+:root[lang="en"] .chap-head h2 { max-width: 18ch; }
+@media (min-width: 1024px) {
+  .chap-head-stack h2 { font-size: clamp(1.75rem, 1.25rem + 1.4vw, 2.625rem); max-width: none; }
+  :root[lang="en"] .chap-head-stack h2 { max-width: none; }
+  .gallery .chap-head { margin-bottom: 36px; }
+  .gallery .chap-lede { gap: 6px; }
+  .footer-col h3 { margin-bottom: 4px; }
+}
+@media (min-width: 1024px) {
+  .duo { padding-block: 56px; }
 }
