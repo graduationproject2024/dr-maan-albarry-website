@@ -395,8 +395,11 @@ main:focus, main h1:focus { outline: none; }
 [dir="rtl"] .hero-visual > * { direction: rtl; }
 .hero-plate { width: min(100%, 440px); margin: 0; justify-self: start; }
 .hero-plate .illus { background: transparent; }
+/* the wide L2 lens render, cropped to a soft-edged porthole */
+.hero-plate-illus { aspect-ratio: 1 / 1 !important; -webkit-mask-image: radial-gradient(ellipse 72% 74% at 50% 50%, #000 66%, transparent 100%); mask-image: radial-gradient(ellipse 72% 74% at 50% 50%, #000 66%, transparent 100%); }
+.hero-plate-illus picture, .hero-plate-illus img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .hero-plate .fig-cap { margin-top: 8px; }
-.hero-portrait { position: absolute; right: 0; bottom: 72px; width: 317px; max-width: 60%; margin: 0; background: var(--paper); padding: 10px; box-shadow: var(--shadow-quiet); border: 1px solid var(--rule); }
+.hero-portrait { position: absolute; right: 0; bottom: 72px; width: 252px; max-width: 52%; margin: 0; background: var(--paper); padding: 10px; box-shadow: var(--shadow-quiet); border: 1px solid var(--rule); }
 .portrait-frame { background: var(--portrait-field); aspect-ratio: 295 / 225; overflow: hidden; }
 .portrait-frame img { width: 100%; height: 100%; object-fit: cover; }
 .portrait-caption { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 10px; }
@@ -1214,6 +1217,14 @@ main:focus, main h1:focus { outline: none; }
   .way { padding-block: 14px; }
   .visit-row { padding-block: 12px; }
 }
+/* phone hero: the doctor comes first (portrait + lens plate above the name), compact so the booking button stays on the first screen */
+@media (max-width: 639px) {
+  .hero-grid { gap: var(--s-4); }
+  .hero-visual { order: -1; align-items: center; gap: 12px; }
+  .hero-plate-illus { aspect-ratio: 1 / 1 !important; }
+  .hero-portrait { padding: 5px; }
+  .hero-portrait .portrait-caption { display: none; } /* repeats the h1 and the intro directly below */
+}
 /* desktop density: the pathways chapter is a slim band (head beside the four tiles); index plates crop to a square */
 @media (min-width: 1024px) {
   .pathways .container { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); align-items: stretch; }
@@ -1257,8 +1268,8 @@ main:focus, main h1:focus { outline: none; }
   .clinic-home .clinic-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .clinic-home .booking-ways, .clinic-home .clinic-side { grid-column: auto; }
   .credentials .cred-list .cred, .credentials .timeline-item { grid-template-columns: minmax(0, 5em) minmax(0, 1fr); column-gap: 12px; }
-  .hero-plate { width: min(100%, 400px); }
-  .hero-portrait { bottom: 64px; }
+  .hero-plate { width: min(100%, 448px); }
+  .hero-portrait { bottom: 52px; }
   .c3d-poster .illus { aspect-ratio: 2 / 1; }
   .atlas-note { margin-top: var(--s-5); }
   .footer-notices { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px var(--col-gap); margin-top: var(--s-6); }

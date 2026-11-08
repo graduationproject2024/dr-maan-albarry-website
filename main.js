@@ -435,12 +435,13 @@ function renderHeader() {
 // Placement of every block: docs/implementation/premium-experience-reconstruction/HOMEPAGE_CONTENT_MATRIX.md
 // ============================================================
 
-// 01 — the doctor. The 295×225 portrait is shown at (never above) its own pixel size and composed with the L1
+// 01 — the doctor. The 295×225 portrait is shown at (never above) its own pixel size and composed with the L2
 // anatomical plate, so the first screen is full without enlarging a soft photograph.
 function renderHero() {
   const chief = role('magrabi-chief');
   const years = yearsOfExperience();
   const cataract = procedureBySlug('cataract-surgery');
+  const heroArt = atlasOf('cataract-surgery', 'L2')[0]; // the wide natural-lens / implant render: the strongest single image
   return `
   <section class="hero" id="home" aria-labelledby="hero-title">
     <div class="container hero-grid">
@@ -459,7 +460,7 @@ function renderHero() {
 
       <div class="hero-visual">
         <figure class="hero-plate">
-          ${cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 400px, 45vw' })}
+          ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 900px, 90vw' }) : cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 400px, 45vw' })}
           <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
         </figure>
         <figure class="hero-portrait">
