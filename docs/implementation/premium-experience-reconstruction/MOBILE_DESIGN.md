@@ -96,7 +96,7 @@ Implemented in `style.css` (the phone rules sit with each component, and §28 ho
 2. **No sideways scrolling inside the page.** Both hidden scrollers are gone: pathways are a 2×2 grid and the filter chips wrap.
 3. **One thumb, three actions.** The booking bar (book, call, WhatsApp) stays at the bottom below 1024 px. On phones of 440 px and narrower the icon sits above the label, so "WhatsApp" is never clipped.
 4. **The header gets out of the way.** It hides while reading down and returns on the first scroll up.
-5. **Targets stay at least 44 px.** Whole plates are links. Footer links are 40 px tall with no neighbouring target closer than that.
+5. **Targets stay at least 44 px.** Whole plates are links. Footer links are 44 px tall.
 
 ## Section-by-section mobile layout
 
@@ -111,7 +111,7 @@ Implemented in `style.css` (the phone rules sit with each component, and §28 ho
 | 07 Guides | Three guides with full summaries, library link, emergency link |
 | 08 Questions | Four general questions as an accordion |
 | 09 Clinic | Three booking methods with descriptions, hours with the confirm caveat, address, one-line accreditation |
-| Footer | Identity, site and contact side by side, seven procedures in two columns, hours, disclaimers |
+| Footer | Identity, then site and contact link groups flowing across the width (44 px rows), seven procedures in two columns, hours, disclaimers |
 | Menu | Full-height sheet: numbered pages, seven procedures in two columns, filled booking row, maps, theme, channels |
 
 ### Status of each audited rule
@@ -146,4 +146,4 @@ Implemented in `style.css` (the phone rules sit with each component, and §28 ho
 - No horizontal overflow on any page or width; the test suite checks 320, 390, 768, 1024, 1366 and 1440 px.
 - Booking bar: three actions, at least 44 px tall, labels not clipped, at 360 and 390 px in both languages and themes.
 - Axe (automated rules only) passes on all 30 pages in both themes at 390 × 844. This is not a screen-reader or manual accessibility audit.
-- **Open:** the phone homepage height exceeds the test budget (9,899 px Arabic and 10,667 px English at 390 px, against 8,350 px). See `BEFORE_AFTER.md`.
+- **Height decision.** The owner decided on 2026-11-08 ("Trim, new limit"): tighten the phone homepage without hiding anything, then set the 390 px budget from the result. Trimmed from 9,846 to 9,153 px (Arabic) and from 10,614 to 9,943 px (English) at 390 px, a saving of 693 / 671 px. The budget in `tests/phase1-pages.spec.js` is now 9,250 (Arabic) and 10,040 (English): the measured heights plus about 100 px. The credentials, footer, chapter spacing, guides and FAQ, and clinic were tightened; all seven procedures, images, summaries, the credentials, and the 15,000+ scope line stay on the page. The 1440 px budget (5,750) is unchanged; English at 1440 went from 5,695 to 5,647 px by tightening chapter spacing. The hero booking button stays on the first screen (checked at 360×800 and 390×844).
