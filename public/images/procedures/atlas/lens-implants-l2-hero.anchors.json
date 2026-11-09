@@ -9,44 +9,44 @@
     {
       "id": "iol-optic",
       "structure": "iol-optic",
-      "x": 0.4321,
-      "y": 0.3346
+      "x": 0.4157,
+      "y": 0.3367
     },
     {
       "id": "capsular-bag",
       "structure": "capsular-bag",
-      "x": 0.2575,
-      "y": 0.2218
+      "x": 0.1808,
+      "y": 0.333
     },
     {
       "id": "posterior-capsule",
       "structure": "posterior-capsule",
-      "x": 0.6489,
-      "y": 0.4497
+      "x": 0.6675,
+      "y": 0.3129
     },
     {
       "id": "iris",
       "structure": "iris",
-      "x": 0.7193,
-      "y": 0.6434
+      "x": 0.8194,
+      "y": 0.4745
     },
     {
       "id": "cornea",
       "structure": "cornea",
-      "x": 0.1793,
-      "y": 0.5449
+      "x": 0.2977,
+      "y": 0.7778
     },
     {
       "id": "ciliary-body",
       "structure": "ciliary-body",
-      "x": 0.1878,
-      "y": 0.2044
+      "x": 0.0984,
+      "y": 0.3657
     },
     {
       "id": "zonules",
       "structure": "zonules",
-      "x": 0.8058,
-      "y": 0.5766
+      "x": 0.8552,
+      "y": 0.344
     }
   ]
 }

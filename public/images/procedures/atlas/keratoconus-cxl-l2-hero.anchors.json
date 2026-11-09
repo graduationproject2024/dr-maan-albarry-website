@@ -9,38 +9,38 @@
     {
       "id": "cone",
       "structure": "cone",
-      "x": 0.3869,
-      "y": 0.3463
+      "x": 0.4895,
+      "y": 0.2194
     },
     {
       "id": "normal-dome",
       "structure": "normal-dome",
-      "x": 0.3496,
-      "y": 0.528
+      "x": 0.5253,
+      "y": 0.2867
     },
     {
       "id": "riboflavin",
       "structure": "riboflavin",
-      "x": 0.3593,
-      "y": 0.4664
+      "x": 0.3911,
+      "y": 0.3194
     },
     {
       "id": "uv-light",
       "structure": "uv-light",
-      "x": 0.2965,
-      "y": 0.2887
+      "x": 0.4156,
+      "y": 0.0911
     },
     {
       "id": "iris",
       "structure": "iris",
-      "x": 0.4108,
-      "y": 0.8191
+      "x": 0.2718,
+      "y": 0.822
     },
     {
       "id": "anterior-chamber",
       "structure": "anterior-chamber",
-      "x": 0.4608,
-      "y": 0.5023
+      "x": 0.4985,
+      "y": 0.5327
     }
   ]
 }
