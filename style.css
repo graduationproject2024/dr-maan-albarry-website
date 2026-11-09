@@ -389,19 +389,18 @@ main:focus, main h1:focus { outline: none; }
 :root[lang="en"] .hero-specialty-subtitle { line-height: 1.5; }
 .hero-intro { margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px solid var(--rule); font-size: var(--fs-small); line-height: var(--lh-small); color: var(--ink-2); max-width: 40em; }
 .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4) var(--s-6); margin-top: var(--s-6); }
-/* The composition is physical (never mirrored): plate on the left, portrait card on the right, where the plate's
-   ground is empty — the same in Arabic and English. The portrait is shown at its native 295 px, never larger. */
-.hero-visual { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); direction: ltr; }
-[dir="rtl"] .hero-visual > * { direction: rtl; }
-.hero-plate { width: min(100%, 440px); margin: 0; justify-self: start; }
+/* The doctor leads the hero: portrait, then name and booking; the lens plate is a small supporting figure and never
+   overlaps him. The studio photograph is only 295 x 225 px, so its figure crop is held to about twice its pixel size
+   (documented in premium-ux-refinement/HERO_PORTRAIT_IMPROVEMENT.md; a new high-resolution photograph is the real fix). */
+.hero-plate { margin: 0; display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: var(--s-4); }
 .hero-plate .illus { background: transparent; }
 /* the wide L2 lens render, cropped to a soft-edged porthole */
 .hero-plate-illus { aspect-ratio: 1 / 1 !important; -webkit-mask-image: radial-gradient(ellipse 72% 74% at 50% 50%, #000 66%, transparent 100%); mask-image: radial-gradient(ellipse 72% 74% at 50% 50%, #000 66%, transparent 100%); }
 .hero-plate-illus picture, .hero-plate-illus img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
-.hero-plate .fig-cap { margin-top: 8px; }
-.hero-portrait { position: absolute; right: 0; bottom: 72px; width: 252px; max-width: 52%; margin: 0; background: var(--paper); padding: 10px; box-shadow: var(--shadow-quiet); border: 1px solid var(--rule); }
-.portrait-frame { background: var(--portrait-field); aspect-ratio: 295 / 225; overflow: hidden; }
-.portrait-frame img { width: 100%; height: 100%; object-fit: cover; }
+.hero-plate .fig-cap { margin-top: 0; }
+.hero-portrait { margin: 0; width: min(100%, 400px); justify-self: end; background: var(--paper); padding: 10px; box-shadow: var(--shadow-quiet); border: 1px solid var(--rule); }
+.portrait-frame { background: var(--portrait-field); aspect-ratio: 5 / 6; overflow: hidden; }
+.portrait-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .portrait-caption { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 10px; }
 .portrait-name { font-family: var(--f-display); font-weight: 600; font-size: 1rem; color: var(--ink); white-space: nowrap; }
 :root[lang="en"] .portrait-name { font-weight: 500; }
@@ -421,16 +420,22 @@ main:focus, main h1:focus { outline: none; }
 }
 @media (min-width: 1024px) {
   .hero-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
-  .hero-text { grid-column: 1 / span 7; }
-  .hero-visual { grid-column: 8 / span 5; }
+  .hero-text { grid-column: 1 / span 7; grid-row: 1; }
+  .hero-plate { grid-column: 1 / span 7; grid-row: 2; }
+  .hero-portrait { grid-column: 8 / span 5; grid-row: 1 / span 2; align-self: center; }
 }
-@media (max-width: 1023px) {
-  .hero-grid { gap: var(--s-6); }
-  .hero-visual { grid-template-columns: minmax(0, 9fr) minmax(0, 11fr); align-items: end; gap: 14px; max-width: 620px; }
-  .hero-plate { grid-column: 1; width: 100%; }
-  .hero-plate .fig-cap { padding-top: 6px; }
-  .hero-plate .fig-n { display: none; }
-  .hero-portrait { position: relative; inset: auto; grid-column: 2; grid-row: 1; width: 100%; max-width: 311px; margin-bottom: 0; padding: 7px; align-self: center; }
+@media (min-width: 1320px) {
+  .hero-text { grid-column: 1 / span 6; }
+  .hero-plate { grid-column: 7 / span 2; grid-row: 1; align-self: end; display: block; padding-bottom: var(--s-2); }
+  .hero-plate .fig-cap { margin-top: 8px; }
+  .hero-portrait { grid-column: 9 / span 4; grid-row: 1; }
+}
+/* tablets: text beside the portrait, plate under the text */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(220px, 300px); column-gap: var(--s-6); row-gap: var(--s-5); }
+  .hero-text { grid-column: 1; grid-row: 1; }
+  .hero-plate { grid-column: 1; grid-row: 2; }
+  .hero-portrait { grid-column: 2; grid-row: 1 / span 2; align-self: center; width: 100%; }
   .portrait-caption { flex-direction: column; gap: 0; padding-top: 6px; }
   .portrait-role { text-align: start; }
 }
@@ -1223,23 +1228,23 @@ main:focus, main h1:focus { outline: none; }
   .way { padding-block: 14px; }
   .visit-row { padding-block: 12px; }
 }
-/* phone hero: the doctor comes first (portrait + lens plate above the name), compact so the booking button stays on the first screen */
+/* phone hero: the doctor first, in a full-width studio panel (the field is the photograph's own grey), then name, specialty
+   and booking on the first screen; the short biography and the plate follow */
 @media (max-width: 639px) {
-  .hero-grid { gap: var(--s-4); }
-  .hero-visual { order: -1; align-items: center; gap: 12px; }
-  .hero-plate-illus { aspect-ratio: 1 / 1 !important; }
-  .hero-portrait { padding: 5px; }
-  .hero-portrait .portrait-caption { display: none; } /* repeats the h1 and the intro directly below */
-}
-/* narrow phones: the plate caption runs under both images, spacing tightens, so the hero booking button stays on the first screen (360 x 800) */
-@media (max-width: 400px) {
   .hero { padding-top: 8px; }
+  .hero-grid { gap: var(--s-4); }
+  .hero-portrait { width: 100%; padding: 0; border: 0; box-shadow: none; background: transparent; }
+  .hero-portrait .portrait-caption { display: none; } /* repeats the h1 directly below */
+  .portrait-frame { aspect-ratio: auto; height: clamp(196px, 30dvh, 270px); display: flex; justify-content: center; align-items: flex-start; }
+  .portrait-frame img { width: auto; height: 128%; max-width: none; flex: none; object-fit: contain; }
+  .hero-text { display: flex; flex-direction: column; }
+  .hero-text > .hero-cta { order: 1; }
+  .hero-text > .hero-intro { order: 2; }
+  .hero-plate { display: none; } /* the same cataract plate is PL.01 in the gallery directly below */
+}
+/* narrow phones: spacing tightens, so the hero booking button stays on the first screen (360 x 800) */
+@media (max-width: 400px) {
   .hero-grid { gap: 10px; }
-  .hero-visual { row-gap: 2px; }
-  .hero-plate { display: contents; }
-  .hero-plate-illus { grid-column: 1; grid-row: 1; }
-  .hero-plate .fig-cap { grid-column: 1 / -1; grid-row: 2; display: flex; margin-top: 0; padding-top: 4px; line-height: 1.5; }
-  .hero-portrait { grid-row: 1; }
   .hero-kicker { font-size: .8125rem; margin-bottom: 4px; }
   .hero-intro { margin-top: 10px; padding-top: 10px; }
   .hero-cta { margin-top: 12px; row-gap: 6px; }
@@ -1319,8 +1324,6 @@ main:focus, main h1:focus { outline: none; }
   .clinic-home .clinic-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .clinic-home .booking-ways, .clinic-home .clinic-side { grid-column: auto; }
   .credentials .cred-list .cred, .credentials .timeline-item { grid-template-columns: minmax(0, 5em) minmax(0, 1fr); column-gap: 12px; }
-  .hero-plate { width: min(100%, 448px); }
-  .hero-portrait { bottom: 52px; }
   .c3d-poster .illus { aspect-ratio: 2 / 1; }
   .atlas-note { margin-top: var(--s-5); }
   .footer-notices { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px var(--col-gap); margin-top: var(--s-6); }

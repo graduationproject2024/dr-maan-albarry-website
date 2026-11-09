@@ -213,8 +213,9 @@ test.describe('Regression — existing features', () => {
     await page.evaluate(async () => {
       for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); }
     });
-    await page.waitForFunction(() => [...document.images].every(i => i.complete), null, { timeout: 15000 });
-    const broken = await page.$$eval('img', imgs => imgs.filter(i => i.naturalWidth === 0).map(i => i.getAttribute('src')));
+    // A lazy image inside display:none is never fetched by design (the hero plate on phones), so only rendered images count.
+    await page.waitForFunction(() => [...document.images].filter(i => i.getClientRects().length).every(i => i.complete), null, { timeout: 15000 });
+    const broken = await page.$$eval('img', imgs => imgs.filter(i => i.getClientRects().length && i.naturalWidth === 0).map(i => i.getAttribute('src')));
     expect(broken).toEqual([]);
   });
 

@@ -444,6 +444,12 @@ function renderHero() {
   return `
   <section class="hero" id="home" aria-labelledby="hero-title">
     <div class="container hero-grid">
+      <figure class="hero-portrait">
+        <div class="portrait-frame">
+          <img src="images/dr-maan-portrait-hero.webp" width="374" height="450" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
+        </div>
+        <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
+      </figure>
       <div class="hero-text">
         <p class="eyebrow hero-kicker"><span class="eyebrow-n" aria-hidden="true">01</span><span>${tr('استشاري طب وجراحة العيون', 'Consultant ophthalmologist')}</span><span class="eyebrow-sep" aria-hidden="true"></span><span>${tr('المدينة المنورة', 'Madinah')}</span></p>
         <h1 class="hero-title" id="hero-title">${L(D.identity.name)}</h1>
@@ -457,18 +463,10 @@ function renderHero() {
         </div>
       </div>
 
-      <div class="hero-visual">
-        <figure class="hero-plate">
-          ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 900px, 90vw' }) : cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 400px, 45vw' })}
-          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
-        </figure>
-        <figure class="hero-portrait">
-          <div class="portrait-frame">
-            <img src="images/dr-maan-portrait.png" width="295" height="225" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" decoding="async">
-          </div>
-          <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
-        </figure>
-      </div>
+      <figure class="hero-plate">
+        ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' }) : cardIllus(cataract, { cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' })}
+        <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
+      </figure>
     </div>
 
     <div class="container">
