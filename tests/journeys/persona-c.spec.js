@@ -2,7 +2,7 @@
 // Arabic home → switch to English → browse cards → open a procedure → launch the 3D simulator → use its controls
 // → change theme → return home
 import { test } from '@playwright/test';
-import { startJourney, prepare, device, rect, swipe, hOverflow, smallTargets } from './harness.js';
+import { startJourney, prepare, device, rect, swipe, hOverflow, smallTargets, revealInFreeArea } from './harness.js';
 import { openUrl, docState, csim, waitCsim, NAME, DOCTOR_NAME } from './site.js';
 
 test.use({ ...device('iPhone 13') });
@@ -84,15 +84,19 @@ test('Persona C — English mobile user', async ({ page }, testInfo) => {
   });
 
   await j.step('Tap Play, wait, then drag the timeline scrubber to the middle', 'Playback runs; scrubbing jumps to a later stage', async () => {
-    await page.locator('#cataract-3d-stage [data-ref="playPause"]').tap();
-    await page.waitForTimeout(1200);
-    const a = await csim(page);
     const sc = page.locator('#cataract-3d-stage [data-ref="scrubber"]');
-    const r = await rect(sc);
-    await page.touchscreen.tap(r.x + r.w * 0.6, r.y + r.h / 2);
-    await page.waitForTimeout(500);
+    const start = (await csim(page)).scrubber;
+    await page.locator('#cataract-3d-stage [data-ref="playPause"]').tap();
+    await page.waitForFunction((v) => Number(document.querySelector('#cataract-3d-stage [data-ref="scrubber"]').value) > v + 5, start, { timeout: 20000 }); // playback really running
+    const a = await csim(page);
+    // A person drags what they can see: bring the timeline clear of the fixed header and booking bar, and tap it only there.
+    const r = await revealInFreeArea(page, sc);
+    const x = r.x + r.w * 0.6, y = r.y + r.h / 2;
+    const hit = await page.evaluate(([px, py]) => { const e = document.elementFromPoint(px, py); return e ? e.className : 'nothing'; }, [x, y]);
+    await page.touchscreen.tap(x, y);
+    await page.waitForFunction(() => document.querySelector('#cataract-3d-stage .csim').dataset.state === 'paused', null, { timeout: 15000 }).catch(() => {}); // the scrub pauses playback; a miss is reported below
     const b = await csim(page);
-    return { actual: `playing mode=${a.mode} scrubber=${a.scrubber}; after tap at 60% scrubber=${b.scrubber}, ${b.stageNum}`, ok: a.mode === 'pause' && b.scrubber > 450 };
+    return { actual: `playing mode=${a.mode} scrubber=${a.scrubber}; tap at 60% hit "${hit}"; scrubber=${b.scrubber}, ${b.stageNum}`, ok: a.mode === 'pause' && hit.includes('csim-scrubber') && b.scrubber > 450 };
   });
 
   await j.step('Tap the theme switch in the header', 'Site and 3D viewer switch to dark; choice saved', async () => {

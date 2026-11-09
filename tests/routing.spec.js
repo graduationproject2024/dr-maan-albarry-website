@@ -136,5 +136,7 @@ test.describe('Served from a subpath (GitHub Pages)', () => {
     await expect(page).toHaveURL(`${origin}${sub}/`);
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
     expect(errors).toEqual([]);
+    // Late lazy-image requests may still be in the handler above: let them finish, so none is cut off when the context closes.
+    await page.unrouteAll({ behavior: 'wait' });
   });
 });

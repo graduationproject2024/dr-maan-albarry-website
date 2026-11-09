@@ -2,7 +2,12 @@ import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 import fs from 'node:fs';
 import { buildJsonLd, buildLlmsTxt, SITE, PROCEDURES } from './doctor-data.js';
-import { PAGES, pathFor } from './site-routes.js';
+import { PAGES, pathFor, ROUTE_PATTERN } from './site-routes.js';
+import { validateSections, llmsPageLines } from './section-registry.js';
+
+// A malformed section entry stops the build instead of shipping.
+const registryProblems = validateSections();
+if (registryProblems.length) throw new Error(`section-registry.js:\n${registryProblems.join('\n')}`);
 
 // Public origin used for canonical/hreflang/sitemap. drmaanalbarry.com is the owner's chosen
 // domain but did not resolve on 2026-11-01 (B-6); set SITE_URL at build time to publish under
@@ -10,7 +15,7 @@ import { PAGES, pathFor } from './site-routes.js';
 const SITE_URL = (process.env.SITE_URL || SITE.url).replace(/\/+$/, '');
 // Routes that genuinely exist after `npm run build` (scripts/prerender.mjs writes every page).
 export const ROUTES = { ar: `${SITE_URL}/`, en: `${SITE_URL}/en/` };
-// Absolute URL of every prerendered page (30: per language 1 home + 7 section pages + 7 procedures).
+// Absolute URL of every prerendered page: per language the home page, each published section and each procedure.
 export const pageUrl = (lang, slug = null, page = null) => `${SITE_URL}/${pathFor(lang, slug, page)}`;
 export const PAGE_URLS = PAGES.map(p => ({ ...p, url: pageUrl(p.lang, p.slug, p.page) }));
 export { SITE_URL };
@@ -57,11 +62,25 @@ function doctorDataPublisher() {
     configureServer(server) {
       server.middlewares.use('/llms.txt', (_req, res) => {
         res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-        res.end(buildLlmsTxt());
+        res.end(buildLlmsTxt(llmsPageLines()));
       });
     },
     generateBundle() {
-      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: buildLlmsTxt() });
+      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: buildLlmsTxt(llmsPageLines()) });
+    }
+  };
+}
+
+// The inline <base> script of index.html recognises the site's routes before any bundle loads, so the list of routes
+// is written into it here, from the same ROUTE_PATTERN the app uses.
+function routePatternPublisher() {
+  const SLOT = '__ROUTE_PATTERN__';
+  return {
+    name: 'route-pattern-publisher',
+    order: 'pre',
+    transformIndexHtml(html, ctx) {
+      if (ctx.filename.endsWith('index.html') && !html.includes(SLOT)) throw new Error(`index.html is missing ${SLOT}`);
+      return html.replace(SLOT, () => ROUTE_PATTERN);
     }
   };
 }
@@ -96,7 +115,7 @@ function seoPublisher() {
 export default defineConfig({
   // Use relative base path so assets work seamlessly on GitHub Pages, custom domains, and local preview
   base: './',
-  plugins: [doctorDataPublisher(), seoPublisher()],
+  plugins: [routePatternPublisher(), doctorDataPublisher(), seoPublisher()],
   // Build-time constants for client-side routing/SEO (canonical origin, available illustrations).
   define: {
     __SITE_URL__: JSON.stringify(SITE_URL),

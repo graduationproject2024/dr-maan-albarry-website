@@ -1146,6 +1146,7 @@ main:focus, main h1:focus { outline: none; }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--rule); font-size: var(--fs-caption); color: var(--ink-3); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 18px; }
 .footer-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-2); }
+.footer-reset { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; color: var(--ink-2); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 @media (min-width: 1024px) {
   .footer-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 3fr) minmax(0, 3fr); gap: var(--col-gap); }
   .footer-brand { grid-column: auto; }

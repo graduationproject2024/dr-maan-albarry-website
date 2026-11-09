@@ -11,7 +11,7 @@
     // site-routes.js (tests/phase1-pages.spec.js checks they agree).
     (function () {
       var b = document.querySelector('base');
-      var m = location.pathname.match(/^(.*?\/)((?:en\/)?(?:(?:procedures\/[a-z0-9-]+|about|procedures|lens\-lab|surgical\-education|education|how\-vision\-works|clinic)\/?)?(?:index\.html)?)$/);
+      var m = location.pathname.match(/^(.*?\/)(__ROUTE_PATTERN__)$/);
       if (b) {
         // A prerendered page names the route it was rendered for. Served at that URL, its relative <base> is right.
         // A host's SPA fallback may serve it at another depth (an unknown or mistyped URL): then derive the root
