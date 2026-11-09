@@ -1649,7 +1649,7 @@ function renderFooter() {
       </div>
 
       <div class="footer-bottom">
-        <p>© ${new Date().getFullYear()} ${L(D.identity.name)} — ${tr('جميع الحقوق محفوظة', 'All rights reserved')}</p>
+        <p>© <span data-current-year>${new Date().getFullYear()}</span> ${L(D.identity.name)} — ${tr('جميع الحقوق محفوظة', 'All rights reserved')}</p>
         <p class="footer-links">
           <a href="${D.social.magrabiProfile}" ${EXT}>${tr('الملف الطبي في مغربي', 'Magrabi profile')}</a>
           <a href="${D.social.taibahProfile}" ${EXT}>${tr('ملف جامعة طيبة', 'Taibah University profile')}</a>
@@ -1983,7 +1983,41 @@ const PAGE_RENDERERS = {
   'how-vision-works': renderLightJourneyPage,
   clinic: renderClinicPage
 };
+// First load: the HTML from the server is already this exact page. Replacing it with an identical copy costs a second
+// layout and paint, and made the browser report a later LCP. So the first render keeps the prerendered markup and only
+// wires it up. Every later render (navigation, language switch) goes through innerHTML as before.
+let firstRender = true;
+let adoptedFirstLoad = false;
+/** True when #app holds the prerendered markup of the page this URL should show, in this language. */
+function canAdoptPrerender() {
+  const main = document.querySelector('#app > main[data-page]');
+  const site = document.querySelector('meta[name="site-route"]');
+  return Boolean(main && site)
+    && site.getAttribute('content') === pathFor(currentLang, route.slug, route.page) // not a fallback page served at another URL
+    && document.documentElement.lang === currentLang // not the saved-English redirect from the Arabic root
+    && main.dataset.page === (route.slug ? 'procedure' : route.page)
+    && (!route.slug || Boolean(main.querySelector(`.proc-page[data-slug="${route.slug}"]`)));
+}
+/** Undo what scripts/prerender.mjs changed for no-JS readers. Writes only: nothing here may force a layout. */
+function adoptPrerender() {
+  document.querySelectorAll('[data-vision-host], [data-lens-lab-host], [data-light-journey-host]').forEach(n => n.setAttribute('data-reserve', ''));
+  document.querySelectorAll('[data-current-year]').forEach(el => { el.textContent = String(new Date().getFullYear()); });
+}
+/** After the first frame: lift the first-load containment (style.css, html.first-load), so every height is real from
+ *  here on, then do the work that has to read the layout. */
+function finishFirstLoad() {
+  document.documentElement.classList.remove('first-load');
+  if (adoptedFirstLoad) {
+    const belowFold = [...document.querySelectorAll('.fade-in.visible')].filter(el => el.getBoundingClientRect().top >= window.innerHeight);
+    belowFold.forEach(el => el.classList.remove('visible')); // they fade in on scroll, as on a client render
+    declusterPins();
+  }
+  applyInitialHash();
+}
 function renderApp(navigated = false) {
+  const adopt = firstRender && !navigated && canAdoptPrerender(); // before the lang attribute below is rewritten
+  firstRender = false;
+  if (adopt) adoptedFirstLoad = true;
   window.__headerHoldUntil = performance.now() + 900; // see headerScrollShadow
   document.documentElement.lang = currentLang;
   document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
@@ -1999,7 +2033,8 @@ function renderApp(navigated = false) {
   setMobileMenu(false);
 
   const proc = route.slug ? procedureBySlug(route.slug) : null;
-  app.innerHTML = `
+  if (adopt) adoptPrerender();
+  else app.innerHTML = `
     <a class="skip-link" href="${hereHref('main')}">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
     ${renderHeader()}
     <main id="main" tabindex="-1" data-page="${key}">
@@ -2013,7 +2048,7 @@ function renderApp(navigated = false) {
   observeIntersection();
   headerScrollShadow();
   bindScrollSpy();
-  declusterPins();
+  if (!adopt) declusterPins(); // an adopted page does this in finishFirstLoad, after the first paint
   if (route.page === 'procedures') window.filterProcedures(procFilter);
 
   // 3D: survives re-renders on pages that host it; torn down when the visitor leaves them.
@@ -2027,11 +2062,11 @@ function renderApp(navigated = false) {
   lensLab.sync();
   lightJourney.sync();
 
-  if (proc && !PROC) loadProcedureContent().then(() => { if (route.slug === proc.slug) renderApp(navigated); }, () => {});
+  if (proc && !PROC) loadProcedureContent().then(() => { if (!adopt && route.slug === proc.slug) renderApp(navigated); }, () => {});
 }
 
-// Initialize: on a procedure URL, wait for its content so the prerendered page is replaced only
-// by an equally complete one (no flash of a loading state).
+// Initialize: a prerendered page is kept and starts at once. Without one (a fallback page at a procedure URL), wait
+// for the procedure content first, so the page is replaced only by an equally complete one (no flash of a loading state).
 // A deep link such as /en/procedures/icl/#p-risks: the browser scrolled to the anchor in the prerendered markup,
 // but replacing #app collapses the document for a moment and that position is lost. Re-apply it once the app
 // has rendered (instantly — this is a page load, not a click) — BUG-12.
@@ -2043,6 +2078,6 @@ function applyInitialHash() {
   const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
   window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - headerOffset - 8);
 }
-const boot = () => { renderApp(false); requestAnimationFrame(applyInitialHash); };
-if (route.slug) loadProcedureContent().then(boot, boot);
+const boot = () => { renderApp(false); requestAnimationFrame(() => setTimeout(finishFirstLoad)); };
+if (route.slug && !canAdoptPrerender()) loadProcedureContent().then(boot, boot);
 else boot();

@@ -1377,3 +1377,11 @@ main:focus, main h1:focus { outline: none; }
   .crumbs a { min-height: 32px; }
   .crumbs li[aria-current] { min-height: 32px; }
 }
+
+
+/* First load of a prerendered page only: the browser skips laying out what is below the first screen, which is most of
+   the cost before the first paint on a slow phone. main.js removes html.first-load right after the first frame, so
+   scrolling, anchors and heights always work on the real layout. Sections on the first screen are rendered as usual. */
+html.first-load main > section:not(:first-child),
+html.first-load .proc-page > :not(:first-child),
+html.first-load .site-footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }

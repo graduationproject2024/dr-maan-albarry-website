@@ -73,6 +73,9 @@
       try { t = localStorage.getItem('theme'); } catch(e) {}
       if (t !== 'dark' && t !== 'light') t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', t);
+      // Prerendered page with JS on: main.js lifts this after the first frame (style.css, html.first-load). Set here, not in
+      // the HTML, so a visitor or crawler without JS always gets the plain, fully rendered page.
+      if (document.querySelector('meta[name="site-route"]')) document.documentElement.classList.add('first-load');
     })();
   </script>
 
