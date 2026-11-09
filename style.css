@@ -517,16 +517,43 @@ main:focus, main h1:focus { outline: none; }
 .pk-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--rule-strong); font-style: italic; font-size: .75rem; color: var(--accent); line-height: 1; transform: translateY(2px); }
 .fig-cap .pin-key { flex-basis: 100%; }
 /* highlight a pin while its key entry is hovered */
-.plate:has(.pin-key li:nth-child(1):hover) .pin:nth-child(1), .plate:has(.pin-key li:nth-child(2):hover) .pin:nth-child(2),
-.plate:has(.pin-key li:nth-child(3):hover) .pin:nth-child(3), .plate:has(.pin-key li:nth-child(4):hover) .pin:nth-child(4),
-.plate:has(.pin-key li:nth-child(5):hover) .pin:nth-child(5), .plate:has(.pin-key li:nth-child(6):hover) .pin:nth-child(6),
-.plate:has(.pin-key li:nth-child(7):hover) .pin:nth-child(7), .plate:has(.pin-key li:nth-child(8):hover) .pin:nth-child(8),
-.plate:has(.pin-key li:nth-child(9):hover) .pin:nth-child(9), .loupe:has(.pin-key li:nth-child(1):hover) .pin:nth-child(1),
-.loupe:has(.pin-key li:nth-child(2):hover) .pin:nth-child(2), .loupe:has(.pin-key li:nth-child(3):hover) .pin:nth-child(3),
-.loupe:has(.pin-key li:nth-child(4):hover) .pin:nth-child(4), .loupe:has(.pin-key li:nth-child(5):hover) .pin:nth-child(5),
-.loupe:has(.pin-key li:nth-child(6):hover) .pin:nth-child(6), .loupe:has(.pin-key li:nth-child(7):hover) .pin:nth-child(7),
-.loupe:has(.pin-key li:nth-child(8):hover) .pin:nth-child(8), .loupe:has(.pin-key li:nth-child(9):hover) .pin:nth-child(9) { background: var(--accent); transform: scale(1.18); }
+:is(.plate, .loupe):has(.pin-key li[data-n="1"]:hover) .pin[data-n="1"], :is(.plate, .loupe):has(.pin-key li[data-n="2"]:hover) .pin[data-n="2"],
+:is(.plate, .loupe):has(.pin-key li[data-n="3"]:hover) .pin[data-n="3"], :is(.plate, .loupe):has(.pin-key li[data-n="4"]:hover) .pin[data-n="4"],
+:is(.plate, .loupe):has(.pin-key li[data-n="5"]:hover) .pin[data-n="5"], :is(.plate, .loupe):has(.pin-key li[data-n="6"]:hover) .pin[data-n="6"],
+:is(.plate, .loupe):has(.pin-key li[data-n="7"]:hover) .pin[data-n="7"], :is(.plate, .loupe):has(.pin-key li[data-n="8"]:hover) .pin[data-n="8"],
+:is(.plate, .loupe):has(.pin-key li[data-n="9"]:hover) .pin[data-n="9"] { background: var(--accent); transform: scale(1.18); }
 .pin { transition: transform .2s var(--ease-out), background-color .2s; }
+/* L2: only the essential pins and key entries by default; the rest with "Show all labels" (a native <details>) */
+.pin.is-extra { display: none; }
+.plate:has(.labels-more[open]) .pin.is-extra { display: grid; }
+.labels-more { flex-basis: 100%; }
+.labels-toggle, .anat-detail-sum { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding-inline: 0; cursor: pointer; color: var(--ink); font-size: var(--fs-small); font-weight: 600; list-style: none; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--rule-strong); }
+.labels-toggle::-webkit-details-marker, .anat-detail-sum::-webkit-details-marker { display: none; }
+.labels-toggle:hover, .anat-detail-sum:hover { text-decoration-color: var(--accent); }
+:is(.labels-toggle, .anat-detail-sum):focus-visible { outline: 2px solid var(--focus, var(--accent)); outline-offset: 2px; border-radius: 4px; }
+.lm-icon { display: inline-grid; place-items: center; color: var(--accent); }
+.lm-open { display: none; }
+details[open] > summary .lm-closed { display: none; }
+details[open] > summary .lm-open { display: inline; }
+details[open] > summary .lm-icon .ic { transform: rotate(45deg); }
+.labels-more .pin-key { margin-top: 2px; }
+/* enlarge control and dialog (no pointer-only behaviour: the control is a real button) */
+.plate-zoom { position: absolute; inset-block-end: 6px; inset-inline-end: 6px; z-index: 3; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--rule); border-radius: 50%; background: color-mix(in srgb, var(--paper) 86%, transparent); color: var(--ink); cursor: pointer; }
+.plate-zoom:hover { color: var(--accent); }
+.plate-zoom:focus-visible { outline: 2px solid var(--focus, var(--accent)); outline-offset: 2px; }
+html.dialog-open { overflow: hidden; }
+.plate-dialog { width: min(1160px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); margin: auto; padding: 0; border: 1px solid var(--rule); border-radius: var(--r-3, 12px); background: var(--paper); color: var(--ink); overflow-y: auto; }
+.plate-dialog::backdrop { background: rgba(17, 15, 12, .72); }
+.pd-head { position: sticky; top: 0; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 12px; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.pd-title { margin: 0; font-size: var(--fs-caption); color: var(--ink-3); }
+.pd-close { width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
+.pd-close:focus-visible { outline: 2px solid var(--focus, var(--accent)); outline-offset: 2px; }
+.pd-figure { margin: 0; }
+.pd-figure figcaption { padding: 0 16px 16px; }
+.pd-figure .fig-n { display: none; } /* already the dialog's title */
+.pd-scroll { overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+.pd-scroll .illus { width: 100%; }
+@media (max-width: 639px) and (orientation: portrait) { .pd-scroll .illus { width: 170%; max-width: none; } }
 
 /* plate card: image, PL code + group, title (the link), summary, quiet cue */
 .plate-card { position: relative; display: grid; align-content: start; gap: 14px; min-width: 0; }
@@ -881,6 +908,9 @@ main:focus, main h1:focus { outline: none; }
 .proc-sec > h2 { font-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.375rem); margin-bottom: var(--s-5); }
 .sec-n { display: block; font-style: italic; color: var(--accent); font-size: 1.125rem; line-height: 1; margin-bottom: 10px; }
 .proc-sec > p, .proc-sec .anat-text > p { max-width: 68ch; }
+/* the optional level: close-up illustrations (L3) behind one control */
+.anat-detail { border-top: 1px solid var(--rule); padding-top: 4px; }
+.anat-detail > .loupes { margin-top: var(--s-4, 16px); }
 .proc-p-lg { font-size: var(--fs-lede); line-height: var(--lh-lede); color: var(--ink); }
 /* anatomy: close-ups + parts */
 .anat { display: grid; gap: var(--s-6); }
