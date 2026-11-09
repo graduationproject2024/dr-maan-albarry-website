@@ -24,7 +24,9 @@ Command: `PW_PORT=4671 PRERENDER_PORT=4676 npx playwright test`, default workers
 | 1 | before 8417f13 | 494 passed, 24 skipped, 2 failed | Persona F and premium journey F (320 px). **Real**: the BUG-19 fix left the header hidden when the 3D viewer started. Fixed in 8417f13. |
 | 2 | 8417f13 | 497 passed, 24 skipped, 0 failed | none |
 | 3 | 20e1eae | 495 passed, 24 skipped, 2 failed | Persona C step 8 and the routing subpath test. **Flaky**: each passes 3/3 when run on its own (below). |
-| 4 | 0210e89 (final; only docs changed since 20e1eae) | 497 passed, 24 skipped, 0 failed | none. Run independently by the lead on 2026-11-08. |
+| 4 | 0210e89 (only docs changed since 20e1eae) | 497 passed, 24 skipped, 0 failed | none. Run independently by the lead on 2026-11-08. |
+| 5 | first-load fix, first version | 519 passed, 24 skipped, 3 failed | **Real (2):** `seo.spec.js` no-JS tests. The containment was in the static HTML, so skipped sections were missing from `innerText` without JavaScript. Fixed: an inline script sets the class only when JavaScript runs. **Load (1):** Persona H timed out mounting the simulator; passed 3/3 alone. |
+| 6 | first-load fix, final | 521 passed, 24 skipped, 1 failed | Persona C step 8: the known scrubber-tap flake under full-suite load (below). |
 
 24 skipped by flag: 12 in `perf.spec.js` and 8 in `premium-perf.spec.js` (JOURNEY_PERF=1 only), 4 in `cataract-sim.spec.js` (CSIM_EVIDENCE=1 / CSIM_PERF=1 only).
 

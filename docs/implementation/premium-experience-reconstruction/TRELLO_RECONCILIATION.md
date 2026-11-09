@@ -13,7 +13,7 @@ All are in the list "software".
 | [21](https://trello.com/c/okVpWtNG) | Premium experience reconstruction — engineering tracker (branch only, not live) | Open | No existing card tracked this work. It holds a 17-item checklist, one item per track in the brief. 16 are ticked on their engineering criteria. "External clinical approvals" is not ticked. It stays open until the branch is merged on the owner's instruction. |
 | [22](https://trello.com/c/ITG2Msu0) | PENDING PHYSICIAN REVIEW — anatomical plates and both simulators | Open | Keeps clinical work apart from engineering defects. 8 checklist items, none ticked. Card #13 covers doctor data decisions D-1 to D-14, which is a different subject. |
 | [23](https://trello.com/c/0XIKRgqA) | Bug register — premium journeys (BUG-19 to BUG-28, all fixed on the branch) | Complete | Its own criteria passed: each bug has a named regression test, and the full suite passed. This does not imply that the redesign is accepted. |
-| [24](https://trello.com/c/KaxZd1wg) | Throttled LCP got worse — app replaces the prerendered page on first load | Open | Open engineering item. |
+| [24](https://trello.com/c/KaxZd1wg) | Throttled LCP got worse — app replaces the prerendered page on first load | Fixed on 2026-11-09 | Engineering item; numbers in a comment on the card. |
 
 ## Existing cards updated (comment only)
 

@@ -1,24 +1,24 @@
 # Final release gate
 
-Date: 2026-11-08. Branch: `feat/premium-experience-reconstruction`, built on `main` at `9322dd9`. The branch is local: **not pushed, merged or deployed.** The live site is unchanged.
+Date: 2026-11-09. Branch: `feat/premium-experience-reconstruction`, built on `main` at `9322dd9`. Merged to `main` and deployed on the owner's instruction of 2026-11-09, to send this version to a customer.
 
 ## Summary
 
 | Gate | State | Decided by |
 |---|---|---|
-| Engineering readiness | **Ready, with one open performance item** | Tests below |
+| Engineering readiness | **Ready** (one known flaky test, below) | Tests below |
 | Visual acceptance | **Pending** | Owner |
 | Clinical approval | **Pending. Nothing has been approved.** | Dr. Maan Albarry |
-| Production authorization | **Not given** | Owner |
+| Production authorization | **Given by the owner on 2026-11-09** | Owner |
 
-The four gates are separate. A pass in one does not count toward another. No test result, screenshot or render is clinical approval.
+The four gates are separate. A pass in one does not count toward another. No test result, screenshot or render is clinical approval. The owner's instruction to deploy is not owner visual acceptance and not physician approval: the site went live with every plate labelled "pending physician review".
 
 ## Engineering readiness
 
 | Check | Command or method | Result |
 |---|---|---|
-| Full browser suite | `PW_PORT=4671 PRERENDER_PORT=4676 npx playwright test` at `0210e89` | 497 passed, 0 failed, 24 skipped (flag-gated perf and evidence runs) |
-| Earlier full runs | See `FIX_VERIFICATION.md` | One real failure pair, fixed in `8417f13`. Two flaky failures under load on `20e1eae`, each passing 3/3 alone. The suite can still fail one of these under load. |
+| Full browser suite | `PW_PORT=4671 PRERENDER_PORT=4676 npx playwright test` on the code that was deployed | 521 passed, 1 failed, 24 skipped (flag-gated perf and evidence runs). The failure is Persona C step 8, a scrubber tap that lands off the control under full-suite load; it passed 3/3 alone. |
+| Earlier full runs | See `FIX_VERIFICATION.md` | Real failures found on the way were fixed. Persona C, the routing subpath test and Persona H have each failed under load and passed alone. The suite can still fail one of these under load. |
 | Patient journeys | `tests/journeys/premium-journeys.spec.js` | 38/38, 257/257 steps |
 | Defects | `BUG_REGISTER.md` | BUG-19 to BUG-28 Fixed, each with a named regression test. No P0 or P1. |
 | Production build | `npm run build` | 30 prerendered pages, 30 sitemap entries |
@@ -29,7 +29,7 @@ The four gates are separate. A pass in one does not count toward another. No tes
 | Review tools on the public site | Production build inspected | The harness pages are absent (`dist/` has only the prerendered pages). Review mode needs `review: true`, which only the harness pages pass. A `review-*.js` code chunk is emitted but nothing on the public site loads it. It holds no reviewer data. |
 | Secrets in `dist/` | Pattern search for common key formats | None found. Limited to those patterns. |
 
-**Open engineering item:** on an emulated phone (390 px, Fast 3G + CPU 4x), LCP is worse than the earlier design: home 3,044 → 4,272 ms, cataract page 4,080 → 5,796 ms. Cause and fix direction are in `PERFORMANCE_RESULTS.md` and on Trello card #24. Desktop LCP is 248–264 ms.
+**LCP (fixed 2026-11-09):** on an emulated phone (390 px, Fast 3G + CPU 4x), home went 4,272 → 2,696 ms and the cataract page 5,796 → 2,660 ms. Both are faster than the earlier design (3,044 and 4,080 ms). Desktop LCP is 124–180 ms. Lab numbers; see `PERFORMANCE_RESULTS.md`.
 
 **Not tested:** physical phones and tablets, a real screen reader, field performance data. Everything above is Chromium or WebKit emulation on one Windows machine. Frame rates depend on its desktop GPU and do not predict phones. Fallback font metrics were measured on Windows only.
 
@@ -56,14 +56,11 @@ Plates carry a visible "pending physician review" label on the site. Doctor data
 
 ## Production authorization
 
-Not given. Pushing, opening a pull request, merging and deploying each need the owner's explicit instruction.
+Given by the owner in chat on 2026-11-09 ("START DEPLOYING BECAUSE I WANT TO SEND THIS VERGION FOR CUSTOMER"). The deploy workflow runs from `main`, so the branch was merged to `main`.
 
 ## Blockers
 
 | Blocker | Blocks | Owner of the decision |
 |---|---|---|
-| Owner has not accepted the visual result | Closing card #18; the go-live decision | Owner |
+| Owner has not formally accepted the visual result | Closing card #18 | Owner |
 | Physician review not done | Presenting any plate or simulator as physician-endorsed | Dr. Maan Albarry |
-| No instruction to push, merge or deploy | Going live | Owner |
-
-The throttled LCP is not a blocker by itself, but it should be decided before production.

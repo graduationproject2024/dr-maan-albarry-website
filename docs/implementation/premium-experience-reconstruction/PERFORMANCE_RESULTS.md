@@ -8,15 +8,22 @@ Commands: `JOURNEY_PERF=1 PW_REUSE=1 PW_PORT=4671 PRERENDER_PORT=4676 npx playwr
 
 | Page | Viewport | Throttling | LCP | CLS | INP (FAQ taps) | Transfer |
 |---|---|---|---|---|---|---|
-| Home (Arabic) | 390 | Fast 3G + CPU 4x | 4,272 ms | 0.0033 | 48 ms | 773 KiB |
-| Home (English) | 390 | Fast 3G + CPU 4x | 3,588 ms | 0.0000 | 40 ms | 671 KiB |
-| Cataract page (Arabic) | 390 | Fast 3G + CPU 4x | 5,796 ms | 0.0022 | 56 ms | 648 KiB |
-| Home (Arabic) | 1440 | none | 264 ms | 0.0030 | 16 ms | 773 KiB |
-| Cataract page (English) | 1440 | none | 248 ms | 0.0001 | 16 ms | 580 KiB |
+| Home (Arabic) | 390 | Fast 3G + CPU 4x | 2,696 ms (was 4,272) | 0.0033 | 40 ms | 773 KiB |
+| Home (English) | 390 | Fast 3G + CPU 4x | 2,340 ms (was 3,588) | 0.0000 | 40 ms | 672 KiB |
+| Cataract page (Arabic) | 390 | Fast 3G + CPU 4x | 2,660 ms (was 5,796) | 0.0020 | 40 ms | 648 KiB |
+| Home (Arabic) | 1440 | none | 180 ms (was 264) | 0.0028 | 32 ms | 773 KiB |
+| Cataract page (English) | 1440 | none | 124 ms (was 248) | 0.0001 | 24 ms | 581 KiB |
+
+LCP was re-measured on 2026-11-09 after the first-load fix below, with the same spec and setup; "was" is the 2026-11-08 result.
 
 INP here is the slowest of two scripted FAQ taps (`PerformanceEventTiming`), not a full interaction history. Real INP needs field data.
 
-**What the LCP numbers mean.** On the throttled phone runs the LCP element is text (`.hero-intro`, `.proc-lede`). The prerendered text first paints at about 3.2 s; LCP then fires again at 3.9–5.7 s when the app replaces the prerendered markup with its own render and the fonts have arrived. The patient sees the content from the first paint, but the metric records the later candidate. The earlier design measured 3,044 ms (home) and 4,080 ms (cataract page) in the same setup (2026-11-02), before the self-hosted web fonts and larger plates. This is a real increase in the metric and is the main open performance item: avoiding the DOM replacement on first render would close most of it. It was not changed in this pass because it touches the routing and re-render path of every page.
+**The first-load fix (2026-11-09).** Before the fix, the prerendered text painted at about 3.2 s and LCP fired again at 3.9–5.7 s, when the app replaced the prerendered markup with an identical copy. The earlier design measured 3,044 ms (home) and 4,080 ms (cataract page) in the same setup (2026-11-02). A main-thread trace also showed the first layout of the whole page costing 1.3–1.7 s at CPU 4x. Two changes:
+
+1. **The first render keeps the prerendered page** and only wires it up (`canAdoptPrerender` and `adoptPrerender` in `main.js`). Later renders are unchanged. If the markup does not match the URL or language, the page renders in full as before.
+2. **The first layout skips what is below the first screen** (`html.first-load` in `style.css`, set by an inline script only when JavaScript is on, lifted right after the first frame). Scrolling, anchors and heights work on the real layout, and readers without JavaScript get the plain page.
+
+LCP is now the first paint. Home and the cataract page are both faster than the earlier design. `tests/first-render.spec.js` checks that the server's markup is kept and that it matches a client render for text, links, images and ids, in light and dark.
 
 ## The 3D code does not load on the homepage
 
@@ -80,5 +87,4 @@ The spec's vision-frames step had to be repointed from `/en/` to `/en/lens-lab/`
 
 ## Open items
 
-- Throttled LCP as described above (first-render DOM replacement).
 - Field data: none. Numbers from real phones on real networks are still needed.
