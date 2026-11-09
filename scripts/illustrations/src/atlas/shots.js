@@ -43,8 +43,9 @@ const laserHit = [-1.05, 0.9, A(Math.hypot(-1.05, 0.9)) - LX.tf - abl(Math.hypot
 // ICL plate section along its long axis (PHI_LONG), from instruments.phakicLens.
 const iclBase = (r) => 0.84 - (r * r) / 34;
 
+const ENTRY_KEPT = 148; // atlas r2: entry through the kept wall, just outside the opened sector (18 to 138 degrees)
 // Intravitreal: entry meridian of the legacy hero (112 degrees) and the pars plana geometry
-const injE = entryGeometry(112 * DEG), injS = entryGeometry(0);
+const injE = entryGeometry(112 * DEG), injS = entryGeometry(0), injK = entryGeometry(ENTRY_KEPT * DEG);
 const fovea = [0, 0, EYE.cz - EYE.Ri + EYE.choroidT + 0.16];
 // A point of the fundus map (globe.js fundusTexture): dx, dy in mm of arc from the fovea (dx along +x, dy along +y).
 const fundusPoint = (dx, dy) => {
@@ -59,7 +60,7 @@ export const SHOTS = [
   // =================================================================== cataract surgery
   {
     ...L2, id: 'cataract-surgery-l2-hero', slug: 'cataract-surgery', camera: 'oblique',
-    build: cataract, cam: { H: 8.0, shift: [0, -0.95] }, ppm: 1.5,
+    build: cataract, cam: { H: 8.0, shift: [0, -0.95] }, ppm: 1.5, fade: { cx: 0.5, cy: 0.56, rx: 0.56, ry: 0.64, inner: 0.64 }, // r2: wider fade so the ciliary body is visible where it is labelled
     anchors: [
       { id: 'cataract-nucleus', p: onHalf(-1.4, -1.45) },
       { id: 'lens-cortex', p: onHalf(-3.9, -1.25) },
@@ -98,7 +99,7 @@ export const SHOTS = [
   },
   {
     ...L3, id: 'cataract-surgery-l3-iol-in-bag', slug: 'cataract-surgery', camera: 'sagittal',
-    build: (ctx) => sagittal(ctx, { globe: { lens: 'iol', pupilR: 2.4, gelAlpha: 0.84, iolOpts: { phi0: 100 * DEG } }, focus: [2.5, -0.9], H: 7.6, tilt: 9, lift: 6, caps: { zMin: -7.5 } }),
+    build: (ctx) => sagittal(ctx, { globe: { lens: 'iol', pupilR: 2.4, gelAlpha: 0.84, iolOpts: { phi0: 100 * DEG } }, focus: [3.2, 0.3], H: 6.0, tilt: 9, lift: 6, caps: { zMin: -7.5 } }), // r2: closer on the implant, less empty gel
     anchors: [
       { id: 'iol-optic', p: onHalf(1.2, -1.25) },
       { id: 'capsular-bag', p: onHalf(4.55, -1.24) },
@@ -113,7 +114,8 @@ export const SHOTS = [
   // =================================================================== lens implants
   {
     ...L2, id: 'lens-implants-l2-hero', slug: 'lens-implants', camera: 'oblique',
-    build: (ctx) => cutaway(ctx, { globe: { lens: 'iol', pupilR: 3.4, iolOpts: { phi0: 205 * DEG } }, dir: [0.42, 0.6, 0.68], up: [0, 1, 0], target: [0.2, -0.4, -0.9], H: 8.4, shift: [0, -0.5], caps: { zMin: -4.1 }, fade: { cx: 0.5, cy: 0.54, rx: 0.5, ry: 0.64, inner: 0.62 } }),
+    // r2: the same frontal view as the cataract hero (the old tilted cut read as a diagonal slab)
+    build: (ctx) => cutaway(ctx, { globe: { lens: 'iol', pupilR: 3.15, iolOpts: { phi0: 205 * DEG }, gelAlpha: 0.66 }, cut: { mode: 'half', zc: -4.0, floorAlpha: 0.6 }, dir: [0, Math.sin(50 * DEG), Math.cos(50 * DEG)], up: [0, 1, 0], target: [0, -0.2, -0.9], H: 8.0, shift: [0, -0.95], caps: { tones: [1, 1, 0.8] }, fade: { cx: 0.5, cy: 0.56, rx: 0.56, ry: 0.64, inner: 0.64 } }),
     anchors: [
       { id: 'iol-optic', p: onHalf(-1.2, -1.2) },
       { id: 'capsular-bag', p: onHalf(-4.55, -1.24) },
@@ -126,7 +128,7 @@ export const SHOTS = [
   },
   {
     ...L1, id: 'lens-implants-l1-card', slug: 'lens-implants', camera: 'frontal',
-    build: (ctx) => bagSpecimen(ctx, { polar: 30, az: -60, H: 15.5 }),
+    build: (ctx) => bagSpecimen(ctx, { polar: 30, az: -60, H: 13.4, ringTint: '#CDB4A6', fade: { cx: 0.5, cy: 0.5, rx: 0.5, ry: 0.4, inner: 0.86 } }), // r2: calm ring, implant fills the card
     anchors: [
       { id: 'iol-optic', p: [0.6, -0.6, -0.9] },
       { id: 'iol-haptic', p: [4.2 * Math.cos(100 * DEG), 4.2 * Math.sin(100 * DEG), -1.27] },
@@ -136,7 +138,7 @@ export const SHOTS = [
   },
   {
     ...L3, id: 'lens-implants-l3-iol-in-bag', slug: 'lens-implants', camera: 'oblique',
-    build: (ctx) => bagSpecimen(ctx, { polar: 42, az: -60, H: 14.2 }),
+    build: (ctx) => bagSpecimen(ctx, { polar: 42, az: -60, H: 14.2, ringTint: '#CDB4A6' }), // r2: calm ring
     anchors: [
       { id: 'iol-optic', p: [0.6, -0.6, -0.9] },
       { id: 'iol-haptic', p: [4.2 * Math.cos(100 * DEG), 4.2 * Math.sin(100 * DEG), -1.27] },
@@ -211,7 +213,7 @@ export const SHOTS = [
   // =================================================================== ICL
   {
     ...L2, id: 'icl-l2-hero', slug: 'icl', camera: 'oblique',
-    build: icl, cam: { H: 6.7 }, ppm: 1.5,
+    build: icl, cam: { H: 6.3, up: [0, 0, 1], target: [1.59, 2.54, 0.7], shift: [0, 0] }, ppm: 1.7, // r2: the section runs across the 16:9 frame, anterior up
     anchors: [
       { id: 'icl', p: onFace(PHI_LONG, 1.6, iclBase(1.6) + 0.06) },
       { id: 'vault', p: onFace(PHI_LONG, 1.0, (iclBase(1.0) + lensAntZ(1.0)) / 2) },
@@ -251,32 +253,32 @@ export const SHOTS = [
   // =================================================================== keratoconus / CXL
   {
     ...L2, id: 'keratoconus-cxl-l2-hero', slug: 'keratoconus-cxl', camera: 'oblique',
-    build: cxl, opts: { loupe: false }, cam: { H: 9.6, target: [-1.0, -0.8, 1.9] }, ppm: 1.55,
+    build: cxl, opts: { loupe: false, calm: true, uv: 1.2 }, cam: { H: 6.2, target: [-1.4, -0.5, 2.5], up: [0, 0, 1], shift: [0, 0], dir: dirFrom(80, 268), }, ppm: 1.9, fade: { cx: 0.46, cy: 0.5, rx: 0.56, ry: 0.72, inner: 0.7 }, // r2: profile view, anterior up
     anchors: [
       { id: 'cone', p: [-1.5, 0, F(-1.5, 0) - 0.12] },
-      { id: 'normal-dome', p: [-3.1, 0, corneaAntZ(3.1)] },
+      { id: 'normal-dome', p: [-1.1, 0, corneaAntZ(1.1)] },
       { id: 'riboflavin', p: [-2.6, 0, F(-2.6, 0) - 0.2] },
-      { id: 'uv-light', p: [-2.6, -1.2, 5.6] },
+      { id: 'uv-light', p: [-2.3, -1.2, 5.05] },
       { id: 'iris', p: [-4.0, 0, 0.32] },
       { id: 'anterior-chamber', p: [-1.4, 0, 2.2] }
     ]
   },
   {
     ...L1, id: 'keratoconus-cxl-l1-card', slug: 'keratoconus-cxl', camera: 'oblique',
-    build: cxl, opts: { loupe: false, uv: 0.6 }, cam: { H: 6.6, target: [-1.9, -0.6, 2.9] }, ppm: 2.0, fade: { cx: 0.5, cy: 0.5, rx: 0.62, ry: 0.56, inner: 0.62 },
+    build: cxl, opts: { loupe: false, calm: true, uv: 1 }, cam: { H: 6.0, target: [-1.6, -0.5, 3.0], up: [0, 0, 1], dir: dirFrom(80, 268), }, ppm: 2.0, fade: { cx: 0.5, cy: 0.5, rx: 0.64, ry: 0.56, inner: 0.7 }, // r2: profile view, anterior up
     anchors: [
       { id: 'cone', p: [-1.5, 0, F(-1.5, 0) - 0.12] },
-      { id: 'normal-dome', p: [-3.1, 0, corneaAntZ(3.1)] },
+      { id: 'normal-dome', p: [-1.1, 0, corneaAntZ(1.1)] },
       { id: 'riboflavin', p: [-2.6, 0, F(-2.6, 0) - 0.2] },
       { id: 'uv-light', p: [-2.6, -1.2, 5.6] }
     ]
   },
   {
     ...L3, id: 'keratoconus-cxl-l3-cone-section', slug: 'keratoconus-cxl', camera: 'sagittal',
-    build: cxl, opts: { loupe: false, uv: 0.6 }, cam: { H: 6.4, fov: 12, target: [-1.7, 0, 2.9], dir: [0.06, -0.96, 0.27], up: [1, 0, 0] }, ppm: 1.9, fade: null,
+    build: cxl, opts: { loupe: false, calm: true, uv: 0.5 }, cam: { H: 4.1, fov: 12, target: [-1.8, 0, 3.75], dir: [0.06, -0.96, 0.27], up: [1, 0, 0] }, ppm: 2.8, fade: null, // r2: closer on the cone, iris out of frame
     anchors: [
       { id: 'cone', p: [-1.4, 0, F(-1.4, 0) - TC(-1.4, 0) * 0.5] },
-      { id: 'normal-dome', p: [-2.9, 0, corneaAntZ(2.9)] },
+      { id: 'normal-dome', p: [-1.0, 0, corneaAntZ(1.0)] },
       { id: 'riboflavin', p: [-2.2, 0, F(-2.2, 0) - 0.12] },
       { id: 'stroma', p: [-3.2, 0, F(-3.2, 0) - TC(-3.2, 0) * 0.65] },
       { id: 'endothelium', p: [-0.9, 0, F(-0.9, 0) - TC(-0.9, 0) + 0.01] }
@@ -296,7 +298,7 @@ export const SHOTS = [
   // =================================================================== corneal transplant
   {
     ...L2, id: 'corneal-transplant-l2-hero', slug: 'corneal-transplant', camera: 'frontal',
-    build: transplant, opts: { inset: false }, cam: { H: 25.5, shift: [0, 0] }, ppm: 0.95, fade: null,
+    build: transplant, opts: { inset: false }, cam: { H: 14.5, shift: [0, 0] }, ppm: 1.5, fade: { cx: 0.5, cy: 0.5, rx: 0.52, ry: 0.56, inner: 0.74 }, // r2: closer, the graft fills the frame; the fade ends inside the frame
     anchors: [
       { id: 'donor-graft', p: [-1.4, 2.2, corneaAntZ(2.6)] },
       { id: 'graft-junction', p: [4.0 * Math.cos(200 * DEG), 4.0 * Math.sin(200 * DEG), corneaAntZ(4.0)] },
@@ -308,7 +310,7 @@ export const SHOTS = [
   },
   {
     ...L1, id: 'corneal-transplant-l1-card', slug: 'corneal-transplant', camera: 'frontal',
-    build: transplant, opts: { inset: false }, cam: { H: 30, shift: [0, 0] }, ppm: 0.8, fade: null,
+    build: transplant, opts: { inset: false }, cam: { H: 15.0, shift: [0, 0] }, ppm: 1.4, fade: { cx: 0.5, cy: 0.5, rx: 0.58, ry: 0.464, inner: 0.78 }, // r2: closer, the graft fills the card
     anchors: [
       { id: 'donor-graft', p: [-1.8, 1.2, corneaAntZ(2.2)] },
       { id: 'sutures', p: [4.45 * Math.cos(-19.5 * DEG), 4.45 * Math.sin(-19.5 * DEG), corneaAntZ(4.45) + 0.03] },
@@ -341,11 +343,11 @@ export const SHOTS = [
   // =================================================================== intravitreal injections
   {
     ...L2, id: 'intravitreal-injections-l2-hero', slug: 'intravitreal-injections', camera: 'oblique',
-    build: injection, cam: { H: 26, dir: dirFrom(66, 72), shift: [0.6, -0.4] }, ppm: 1.5, tex: 1.6,
+    build: injection, opts: { openFrom: null, entryPhi: ENTRY_KEPT * DEG }, cam: { H: 25, dir: dirFrom(52, 78), up: [0, 0, 1], shift: [0, -0.6] }, ppm: 1.5, tex: 1.6, fade: { cx: 0.5, cy: 0.5, rx: 0.56, ry: 0.72, inner: 0.78 }, // r2: the opening shows the needle tip, the medicine and the macula
     anchors: [
-      { id: 'needle', p: injE.entry.clone().addScaledVector(injE.d, -3).toArray() },
-      { id: 'injection-site', p: injE.entry.toArray() },
-      { id: 'medication', p: injE.tip.clone().addScaledVector(injE.d, 1.0).toArray() },
+      { id: 'needle', p: injK.entry.clone().addScaledVector(injK.d, -3).toArray() },
+      { id: 'injection-site', p: injK.entry.toArray() },
+      { id: 'medication', p: injK.tip.clone().addScaledVector(injK.d, 1.0).toArray() },
       { id: 'macula', p: fovea },
       { id: 'optic-disc', p: disc },
       { id: 'retina', p: onFace(205 * DEG, ...shell(EYE.Ri - EYE.choroidT - 0.12, 128)) },
@@ -355,10 +357,10 @@ export const SHOTS = [
   },
   {
     ...L1, id: 'intravitreal-injections-l1-card', slug: 'intravitreal-injections', camera: 'oblique',
-    build: injection, cam: { H: 33, dir: dirFrom(66, 72), shift: [0.2, -0.3] }, ppm: 1.0, tex: 1.2,
+    build: injection, opts: { openFrom: null, entryPhi: ENTRY_KEPT * DEG }, cam: { H: 30, dir: dirFrom(52, 78), up: [0, 0, 1], shift: [0, -0.6] }, ppm: 1.0, tex: 1.2, // r2: the opening shows the needle tip, the medicine and the macula
     anchors: [
-      { id: 'needle', p: injE.entry.clone().addScaledVector(injE.d, -3).toArray() },
-      { id: 'medication', p: injE.tip.clone().addScaledVector(injE.d, 1.0).toArray() },
+      { id: 'needle', p: injK.entry.clone().addScaledVector(injK.d, -3).toArray() },
+      { id: 'medication', p: injK.tip.clone().addScaledVector(injK.d, 1.0).toArray() },
       { id: 'macula', p: fovea },
       { id: 'retina', p: onFace(205 * DEG, ...shell(EYE.Ri - EYE.choroidT - 0.12, 128)) }
     ]

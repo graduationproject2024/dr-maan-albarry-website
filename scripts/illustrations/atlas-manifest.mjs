@@ -1,6 +1,6 @@
 // Builds public/images/procedures/manifest.json from the render results (atlas.mjs) and the editorial metadata
 // (atlas-meta.mjs). Results from earlier runs are kept for shots not re-rendered in this run.
-import { META, REFS, VERSION } from './atlas-meta.mjs';
+import { META, REFS, VERSION, VERSION_R1, CHANGED, ESSENTIAL } from './atlas-meta.mjs';
 import { STRUCTURES } from './src/atlas/structures.js';
 import { CAMERAS } from './src/atlas/cameras.js';
 
@@ -13,7 +13,10 @@ export function buildManifest(shots, results, prev) {
     for (const lang of ['en', 'ar']) if ([...m.alt[lang]].length > 160) throw new Error(`${s.id} alt.${lang} is ${[...m.alt[lang]].length} chars`);
     const r = results[s.id] || prevById[s.id];
     if (!r) return null;
-    const anchors = (r.anchors || r.labelAnchors).map((a) => ({ ...a, en: STRUCTURES[a.structure || a.id]?.en, ar: STRUCTURES[a.structure || a.id]?.ar }));
+    const ess = ESSENTIAL[s.id] || [];
+    if (s.level === 'L2' && ess.length > 4) throw new Error(`${s.id}: at most 4 essential labels on an L2 hero`);
+    const anchors = (r.anchors || r.labelAnchors).map((a) => { const st = STRUCTURES[a.structure || a.id]; return { ...a, en: st?.en, ar: st?.ar, plain: st?.plain || null, essential: ess.includes(a.id) }; });
+    for (const id of ess) if (!anchors.some((a) => a.id === id)) throw new Error(`${s.id}: essential label ${id} has no anchor`);
     return {
       assetId: s.id,
       procedure: s.slug,
@@ -30,7 +33,10 @@ export function buildManifest(shots, results, prev) {
       alt: m.alt,
       caption: m.caption,
       questionsForDrMaan: m.questions,
-      version: VERSION,
+      version: CHANGED[s.id] ? VERSION : VERSION_R1,
+      changeNote: CHANGED[s.id] || null,
+      reApprovalNeeded: Boolean(CHANGED[s.id]),
+      essentialLabelsReview: 'pending physician review',
       reviewStatus: 'pending',
       reviewer: null,
       reviewedOn: null,
@@ -45,6 +51,7 @@ export function buildManifest(shots, results, prev) {
     generated: new Date().toISOString().slice(0, 10),
     generator: 'node scripts/illustrations/atlas.mjs',
     medicalReview: 'NONE. No physician has reviewed these images. Every asset is reviewStatus "pending" and approval "not approved" until Dr. Maan Albarry reviews it.',
+    labelLevels: 'labelAnchors[].essential marks the labels shown by default (at most 4 on L2, 1 or 2 on L1); the rest are one tap away under "Show all labels". labelAnchors[].plain is the patient wording shown in the key. Both are proposals pending physician review.',
     levels: {
       L1: 'Homepage / card preview, 4:5, 480/800/1200 px wide, ≤120 KB',
       L2: 'Procedure-page hero, 16:9, 640/1024/1600/2400 px wide (1600 ≤250 KB), JPEG fallback 1024/1600',

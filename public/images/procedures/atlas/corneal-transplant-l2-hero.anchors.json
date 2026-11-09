@@ -9,38 +9,38 @@
     {
       "id": "donor-graft",
       "structure": "donor-graft",
-      "x": 0.4823,
-      "y": 0.3789
+      "x": 0.4682,
+      "y": 0.2823
     },
     {
       "id": "graft-junction",
       "structure": "graft-junction",
-      "x": 0.426,
-      "y": 0.5183
+      "x": 0.3656,
+      "y": 0.5332
     },
     {
       "id": "sutures",
       "structure": "sutures",
-      "x": 0.6009,
-      "y": 0.5452
+      "x": 0.6798,
+      "y": 0.5805
     },
     {
       "id": "iris",
       "structure": "iris",
-      "x": 0.5337,
-      "y": 0.6104
+      "x": 0.5595,
+      "y": 0.6947
     },
     {
       "id": "pupil",
       "structure": "pupil",
-      "x": 0.4977,
-      "y": 0.5057
+      "x": 0.496,
+      "y": 0.5099
     },
     {
       "id": "sclera",
       "structure": "sclera",
-      "x": 0.6391,
-      "y": 0.6811
+      "x": 0.7408,
+      "y": 0.8136
     }
   ]
 }
