@@ -86,3 +86,9 @@ Checked in browser emulation: crop, focal point, subject size, label overlap, ca
 - The choice of essential labels and all plain wording are proposals awaiting Dr. Maan's review.
 - The ICL hero and keratoconus images now read anterior up, while the section close-ups stay anterior left. This was chosen for the wide frame and is listed for review.
 - The cataract L3 implant image was only reframed. The implant is thin in a true section, so it stays a slim shape.
+
+## Test results (Chromium emulation; the machine was heavily loaded by other work during these runs)
+
+- Full related run (`plates-clarity`, `procedures`, `seo`, `premium-regressions`, `phase1-pages`, `first-render`, `core-journeys`, `premium-journeys`): 192 passed, 4 failed. The four failures were J03, one premium journey E at 360 px and 125% text, `/lens-lab/` (ar) in `phase1-pages` and the FAQ accordion in `procedures`.
+- Those four tests plus `plates-clarity`, re-run with two workers and a 240 s test timeout: 66 of 66 passed. The failures changed from run to run (and at the default 60 s some were plain test timeouts), so they are load-related, not defects of this work.
+- No existing test was changed. `tests/plates-clarity.spec.js` is new (46 tests).

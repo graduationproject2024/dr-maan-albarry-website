@@ -87,17 +87,16 @@ for (const [lang, dir] of [['ar', 'rtl'], ['en', 'ltr']]) {
         await toggle.focus();
         await page.keyboard.press('Enter');
         await expect(fig.locator('.labels-more')).toHaveAttribute('open', '');
-        await page.waitForTimeout(60); // toggle event -> declustering
+        await expect.poll(async () => (await visiblePins(pinLoc)).length).toBe(labels.length);
         const after = await visiblePins(pinLoc);
-        expect(after.length).toBe(labels.length);
         expect(after.map(x => x.n).sort((m, n) => m - n)).toEqual(labels.map((_, i) => i + 1));
         expect((await keyNumbers(key)).sort((m, n) => m - n)).toEqual(labels.map((_, i) => i + 1));
         // the medical terms are not lost: every label is named once in the open key
         const allTerms = await key.evaluateAll(els => els.map(e => e.querySelector('bdi').textContent));
         expect(allTerms.sort()).toEqual(labels.map(l => termOf(l, lang)).sort());
         await page.keyboard.press('Enter');
-        await page.waitForTimeout(60);
-        expect((await visiblePins(pinLoc)).length).toBe(essential);
+        await expect(fig.locator('.labels-more')).not.toHaveAttribute('open', '');
+        await expect.poll(async () => (await visiblePins(pinLoc)).length).toBe(essential);
       });
     }
   });
@@ -114,8 +113,8 @@ for (const width of [320, 390, 430]) {
         const box = await fig.locator('.atlas-illus').boundingBox();
         expect(box.width).toBeGreaterThanOrEqual(width - 40);
         const check = async (state) => {
+          await expect.poll(async () => overlaps(await visiblePins(pinLoc)), { message: `${p.slug} ${state}` }).toEqual([]); // separation runs after the first frame and after a toggle
           const pins = await visiblePins(pinLoc);
-          expect(overlaps(pins), `${p.slug} ${state}`).toEqual([]);
           for (const q of pins) { expect(q.x, `${p.slug} ${state} pin ${q.n} inside`).toBeGreaterThanOrEqual(box.x - 1); expect(q.x).toBeLessThanOrEqual(box.x + box.width + 1); }
           // the enlarge control does not sit on a pin
           const z = await fig.locator('.plate-zoom').boundingBox();
@@ -127,7 +126,7 @@ for (const width of [320, 390, 430]) {
         expect(caption.lines, 'caption lines').toBeLessThanOrEqual(5);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
         await fig.locator('.labels-toggle').tap();
-        await page.waitForTimeout(80);
+        await expect.poll(async () => (await visiblePins(pinLoc)).length).toBe(l2Of(p.slug).labelAnchors.length);
         await check('all labels');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
       });
@@ -153,10 +152,9 @@ test.describe('L3 close-ups are the optional level', () => {
           await page.keyboard.press('Enter');
           await expect(detail).toHaveAttribute('open', '');
           await expect(detail.locator('figure.loupe').first()).toBeVisible();
-          await page.waitForTimeout(60);
           for (const fig of await detail.locator('figure.loupe').all()) {
+            await expect.poll(async () => (await visiblePins(fig.locator('.pin'))).length).toBeGreaterThan(0);
             const pins = await visiblePins(fig.locator('.pin'));
-            expect(pins.length).toBeGreaterThan(0);
             expect(await keyNumbers(fig.locator('.pin-key li'))).toEqual(pins.map(x => x.n));
             await expect(fig.locator('.fig-pending')).toBeVisible();
           }
@@ -225,12 +223,11 @@ test.describe('enlarge dialog keeps the "all labels" state', () => {
     await open(page, 'en', 'icl');
     const fig = page.locator('.proc-figure');
     await fig.locator('.labels-toggle').click();
-    await page.waitForTimeout(60);
+    await expect(fig.locator('.labels-more')).toHaveAttribute('open', '');
     await fig.locator('.plate-zoom').click();
     const dlg = page.locator('#plate-dialog');
     await expect(dlg).toHaveJSProperty('open', true);
-    const inDialog = await visiblePins(dlg.locator('.pin'));
-    expect(inDialog.length).toBe(l2Of('icl').labelAnchors.length);
+    await expect.poll(async () => (await visiblePins(dlg.locator('.pin'))).length).toBe(l2Of('icl').labelAnchors.length);
     await page.keyboard.press('Escape');
     await expect(dlg).not.toBeVisible();
   });
