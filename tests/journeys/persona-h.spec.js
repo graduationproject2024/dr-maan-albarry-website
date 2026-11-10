@@ -72,6 +72,7 @@ test('Persona H — comparing lens options', async ({ page }, testInfo) => {
   }, { shot: true });
 
   await j.step('Check the sharpness bars fill from the reading direction (RTL → from the right)', 'In Arabic every bar fill starts at the bar\'s right edge', async () => {
+    const clarity = page.locator('#simulator-host details.vsim-clarity summary'); await clarity.scrollIntoViewIfNeeded(); await clarity.tap(); await page.waitForTimeout(250); // expandable since the workbench rebuild
     const bars = await page.locator('#simulator-host .vsim-bar').evaluateAll((els) => els.filter((b) => b.getClientRects().length).map((b) => {
       const r = b.getBoundingClientRect(), f = b.firstElementChild.getBoundingClientRect();
       return { fillW: Math.round(f.width), barW: Math.round(r.width), gapRight: Math.round(r.right - f.right), gapLeft: Math.round(f.left - r.left) };
@@ -82,6 +83,7 @@ test('Persona H — comparing lens options', async ({ page }, testInfo) => {
   }, { critical: false });
 
   await j.step('Turn on "قارن بين عدستين" and drag the divider with a finger', 'Second lens shown (two cards, B field); divider moves with the finger', async () => {
+    const moreBtn = page.locator('#simulator-host .vsim-more'); await moreBtn.scrollIntoViewIfNeeded(); await moreBtn.tap(); // compare lives in More settings since the workbench rebuild
     await page.locator('#simulator-host .vsim-switch').scrollIntoViewIfNeeded();
     await page.locator('#simulator-host .vsim-switch').tap(); await page.waitForTimeout(300);
     const s = await vsimState(page);

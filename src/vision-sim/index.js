@@ -2,7 +2,7 @@
 // API: mount(host, { lang, theme, reducedMotion, debug, lens, lensB, compare, distanceM, lighting, refraction,
 //                     scenario, ui: 'full' | 'viewer', review }) → controller
 //   { destroy, setLang, setTheme, getState, setLens, setDistance, setLighting, setCompare, setRefraction, setSplit,
-//     setScenario, on }
+//     setScenario, reset, on }
 // ui 'viewer' renders only the picture (+ disclaimer and comparison divider) for hosts with their own controls.
 // review: true adds the clinical review panel (internal harness only: vision-sim-preview.html?review=1). It is a
 // separate lazy chunk and is never shown on public pages.
@@ -79,6 +79,7 @@ class VisionSimulator {
       setRefraction: (r) => self.setRefraction(r),
       setSplit: (x) => self.setSplit(x),
       setScenario: (id) => self.setScenario(id),
+      reset: () => self.reset(),
       on: (ev, cb) => self.on(ev, cb),
     };
   }
@@ -130,22 +131,32 @@ class VisionSimulator {
         split: (x) => this.setSplit(x),
         scenario: (id) => this.setScenario(id, true),
         expand: (on) => this.onExpand(on),
+        more: () => this.emit('change', { what: 'more', state: this.getState() }),
+        reset: () => this.reset(true),
+        retry: () => this.retryPipeline(),
       },
     });
     this.ui.build(this.state);
     this.ui.root.dataset.reducedMotion = this.reduced ? 'true' : 'false';
     this.refreshUI();
+    this.watchBench();
     if (this.debug) window.__visionSimCounters = counters;
     if (this.reviewMode) await this.setupReview();
     if (this.destroyed) return;
+    await this.startPipeline();
+  }
+
+  // The picture code is a separate download: a failure here offers a retry instead of a dead end.
+  async startPipeline() {
     this.status = 'loading';
+    this.ui.showLoading(true);
     let pipelineMod, scenesMod;
     try {
       [pipelineMod, scenesMod] = await Promise.all([import('./pipeline.js'), import('./scenes.js')]);
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[vision-sim] could not load the 3D modules', err);
-      this.enterFallback('load-error');
+      this.enterFallback('load-error', true);
       return;
     }
     if (this.destroyed) return;
@@ -192,9 +203,37 @@ class VisionSimulator {
       document.fonts.ready.then(() => { if (!this.destroyed && this.pipe) { this.rebuildScenes(); this.dirty = true; } });
     }
     this.status = 'ready';
+    this.ui.showLoading(false);
     this.startLoop();
     if (this.debug) this.exposeDebug();
     this.emit('ready', this.getState());
+  }
+
+  async retryPipeline() {
+    if (this.destroyed || this.status !== 'fallback' || this.fallbackReason !== 'load-error') return;
+    this.fallbackReason = null;
+    this.ui.showFallback(false);
+    this.ui.measureBench();
+    await this.startPipeline();
+    if (this.status === 'ready') this.ui.announce(STRINGS[this.lang].restored);
+  }
+
+  // Keeps the workbench sized to the screen: the labels' real heights feed the viewer's height (see measureBench).
+  watchBench() {
+    if (this.mode !== 'full') return;
+    this.ui.measureBench();
+    this.listen(window, 'resize', () => this.ui && this.ui.measureBench());
+    if (!('ResizeObserver' in window)) return;
+    this.benchRO = new ResizeObserver(() => { if (this.ui) this.ui.measureBench(); });
+    counters.observers++;
+    this.disposers.push(() => { this.benchRO.disconnect(); this.benchRO = null; counters.observers--; });
+    this.observeBench();
+  }
+  observeBench() {
+    if (!this.benchRO) return;
+    this.benchRO.disconnect();
+    const r = this.ui.ref;
+    for (const el of [r.disclaimer, r.presets, r.benchControls, r.stage]) if (el) this.benchRO.observe(el);
   }
 
   // ---------- clinical review mode ----------
@@ -275,9 +314,10 @@ class VisionSimulator {
     counters.live--; counters.destroys++;
   }
 
-  enterFallback(reason) {
+  enterFallback(reason, retry = false) {
     this.fallbackReason = reason;
     this.stopLoop();
+    this.ui.showLoading(false);
     if (this.scenes) { this.scenes.dispose(); this.scenes = null; }
     if (this.pipe) {
       counters.renderTargets -= this.lastRT || 0; this.lastRT = 0;
@@ -287,7 +327,7 @@ class VisionSimulator {
     }
     this.status = 'fallback';
     this.ui.showNote(null);
-    this.ui.showFallback(true);
+    this.ui.showFallback(true, retry);
     this.emit('error', { type: 'fallback', reason });
     if (this.debug) this.exposeDebug();
   }
@@ -346,6 +386,7 @@ class VisionSimulator {
     if (!this.scenes || Math.abs((this.sceneK ?? -1) - k) > 0.02) this.rebuildScenes();
     else if (changed || force) this.sourceVersion++;
     this.dirty = true;
+    this.placeTarget();
   }
   rebuildScenes() {
     if (!this.scenesMod || !this.pipe) return;
@@ -357,6 +398,7 @@ class VisionSimulator {
     if (!this.camera) this.camera = this.scenesMod.createCamera(aspect);
     this.sourceVersion++;
     this.dirty = true;
+    this.placeTarget();
   }
 
   // ---------- state changes ----------
@@ -365,6 +407,35 @@ class VisionSimulator {
     const v = this.views();
     this.ui.update(this.state, v.A, v.B);
     this.lastView = v;
+    this.placeTarget();
+  }
+  /** Frame around the object the chosen distance looks at (full mode), in percent of the viewer. */
+  placeTarget() {
+    if (this.mode !== 'full' || !this.ui) return;
+    const box = this.targetBox();
+    this.ui.setTarget(box);
+  }
+  targetBox() {
+    if (!this.scenes || !this.camera || !this.lastView) return null;
+    const { near, intermediate, distance } = this.scenes.scenes;
+    const band = this.lastView.A.subject;
+    // first child of each object group: the phone case, the laptop lid, the road-sign panel (scenes.js)
+    const group = band === 'near' ? near.children[0] : band === 'intermediate' ? intermediate.children.at(-1) : distance.children.at(-1);
+    const mesh = group && group.children[0];
+    const size = mesh && mesh.geometry && mesh.geometry.parameters;
+    if (!size || !size.width) return null;
+    this.camera.updateMatrixWorld();
+    mesh.updateWorldMatrix(true, false);
+    const v = mesh.position.clone();
+    const xs = [], ys = [];
+    for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      v.set(sx * size.width / 2, sy * size.height / 2, 0).applyMatrix4(mesh.matrixWorld).project(this.camera);
+      xs.push((v.x + 1) * 50); ys.push((1 - v.y) * 50);
+    }
+    const pad = 1.5;
+    const left = Math.max(1, Math.min(...xs) - pad), right = Math.min(99, Math.max(...xs) + pad);
+    const top = Math.max(1, Math.min(...ys) - pad), bottom = Math.min(99, Math.max(...ys) + pad);
+    return { left, top, width: Math.max(4, right - left), height: Math.max(4, bottom - top) };
   }
   changed(what, announce) {
     this.refreshUI();
@@ -422,6 +493,14 @@ class VisionSimulator {
     if (rebuild) this.rebuildScenes();
     this.changed('scenario', true);
   }
+  /** Back to the starting view: monofocal, far, daylight, no comparison, no eye settings. */
+  reset(fromUI = false) {
+    if (this.destroyed) return;
+    const rebuild = this.state.lighting !== 'day';
+    Object.assign(this.state, { lens: 'monofocal', lensB: 'trifocal', compare: false, distanceM: DISTANCES.distance, lighting: 'day', refraction: normalizeRefraction(), split: 0.5 });
+    if (rebuild) this.rebuildScenes();
+    this.changed('reset', fromUI);
+  }
   setRefraction(r = {}, fromUI = false) {
     if (this.destroyed) return;
     this.state.refraction = normalizeRefraction({ ...this.state.refraction, ...r });
@@ -443,6 +522,8 @@ class VisionSimulator {
     this.lang = l;
     this.ui.setLang(l, this.state);
     this.ui.root.dataset.reducedMotion = this.reduced ? 'true' : 'false';
+    this.observeBench();
+    this.ui.measureBench();
     if (this.status === 'fallback') this.ui.showFallback(true);
     this.refreshUI();
     this.rebuildScenes(); // canvas text (road sign, screens) is localised

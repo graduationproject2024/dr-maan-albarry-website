@@ -955,9 +955,27 @@ main:focus, main h1:focus { outline: none; }
 .vsim-launch { border-radius: var(--r-3); padding: clamp(12px, 2vw, 24px); background: var(--paper-2); border: 1px solid var(--rule); }
 /* Reserve the mounted simulator's height (measured at 320-1920px, AR/EN) so the lazy mount never shifts the sections
    below it — only while a mount is expected (data-reserve); no-JS / prerendered pages and a failed load keep no gap. */
-.vsim-host[data-reserve] { min-height: 1560px; }
-@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1440px; } }
-@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1930px; } }
+/* The simulator now sits directly under the hero, so its slot is the first thing below the fold: heights measured after the
+   2026-11 workbench rebuild (320-1440 px, AR/EN); data-reserve is only present while a mount is expected. */
+.vsim-host[data-reserve] { min-height: 860px; position: relative; }
+@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1090px; } }
+@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1180px; } }
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { .vsim-host[data-reserve] { min-height: 590px; } }
+.vsim-host[data-reserve]::before { content: attr(data-loading-text); position: absolute; inset-inline: 0; top: 24px; text-align: center; font-size: var(--fs-small); color: var(--ink-2); }
+/* Workbench geometry (read by src/vision-sim/styles.css). main.js overwrites the two chrome values with the measured
+   heights of the header and the booking bar; these are the same values for the very first layout. */
+#simulator-host { --vsim-chrome-top: calc(var(--header-h) + 1px); --vsim-chrome-bottom: 0px; --vsim-sticky-top: var(--vsim-chrome-top); }
+@media (max-width: 1023px) { #simulator-host { --vsim-chrome-bottom: calc(71px + env(safe-area-inset-bottom)); } }
+/* the header slides away while reading down and returns on scroll up: the stuck picture follows it, so it is never covered */
+@supports selector(:has(*)) { html:has(.site-header.is-hidden) #simulator-host { --vsim-sticky-top: env(safe-area-inset-top, 0px); } }
+/* phones: the workbench goes edge to edge and sits close under a compact hero */
+@media (max-width: 639px), (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { #simulator .vsim-launch { margin-inline: calc(-1 * var(--gutter)); padding: 0; border: 0; background: none; } }
+@media (max-width: 1023px) {
+  main[data-page="lens-lab"] .page-hero { padding-block: 12px 18px; }
+  #simulator { padding-block: 16px 24px; }
+  #simulator .section-head { margin-bottom: 12px; }
+  #simulator .disclaimers { margin-top: 14px; }
+}
 .vsim-load-error { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); }
 @media (max-width: 639px) { .vsim-launch { padding: 0; border: 0; background: none; } }
 .disclaimers { display: grid; gap: var(--s-3); margin-top: var(--s-5); }
@@ -998,7 +1016,7 @@ main:focus, main h1:focus { outline: none; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--r-3); background: linear-gradient(90deg, var(--paper-2), var(--paper), var(--paper-2)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
 .feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
 .feature-light-journey .feature-slot[data-reserve] { min-height: 640px; }
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1600px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 900px; } }
+@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 900px; } }
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--alert-line); background: var(--alert-bg); color: var(--alert-ink); }

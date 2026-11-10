@@ -67,7 +67,8 @@ test.describe('premium regressions — phone 390', () => {
   });
 
   test('BUG-26 the Lens Lab situation heading is at least 16 px', async ({ page }) => {
-    await page.goto('/en/lens-lab/'); await page.locator('#lens-lab-host .llab-chip').first().waitFor({ timeout: 30000 });
+    await page.goto('/en/lens-lab/'); await page.locator('#lens-lab-host').scrollIntoViewIfNeeded(); // lazy, and below the simulator since the workbench rebuild
+    await page.locator('#lens-lab-host .llab-chip').first().waitFor({ timeout: 30000 });
     const size = await page.locator('#lens-lab-host .llab-subhead').first().evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
     expect(size).toBeGreaterThanOrEqual(16);
   });
