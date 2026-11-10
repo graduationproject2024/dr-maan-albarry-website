@@ -9,6 +9,7 @@ import { glowSprite } from '../kit.js';
 import { injectionNeedle, orient } from '../instruments.js';
 
 const CUT = { mode: 'wedge', phi0: 18 * DEG, phi1: 138 * DEG, zb: -4.4, floorAlpha: 0.6 };
+const cutFor = (o) => (o.openFrom === undefined ? CUT : { ...CUT, zb: o.openFrom }); // atlas r2: null = the sector is open from front to back (cornea and lens in section)
 const PHI_E = 112 * DEG; // entry meridian (inside the opened sector, so the tip is visible)
 
 export default function injection(ctx) {
@@ -17,14 +18,16 @@ export default function injection(ctx) {
   const up = [-Math.sin(az) - 0.15 * Math.cos(az), Math.cos(az) - 0.15 * Math.sin(az), 0.32];
   const cam = ctx.camera({ target: [0, 0, EYE.cz + 0.6], shift: [0.9, -0.6], dir, up, H: 27.5, fov: 18 });
   const scene = ctx.scene(cam);
-  const eye = buildGlobe(ctx.mats, { lens: 'clear', opticNerve: true, cut: CUT, irisSeed: 5, gelAlpha: 0.1 });
+  if (ctx.opts?.openFrom !== undefined) ctx.mats.choroid.color.set('#A06A5A'); // atlas r2: the band ahead of the retina is softened so it does not compete with the retina
+  const eye = buildGlobe(ctx.mats, { lens: 'clear', opticNerve: true, cut: cutFor(ctx.opts || {}), irisSeed: 5, gelAlpha: 0.1 });
   scene.add(eye.group, ...eye.caps({ r1: 12.4, z1: 4.4, ppm: 150, tones: [1, 0.86, 0.94], floorPpm: 110 }));
 
   // pars plana entry, 3.75 mm behind the limbus (arc on the outer scleral surface), aimed at the mid-vitreous
   const aE = EYE.aLimbus + 3.75 / EYE.scleraR;
   const [er, ez] = shellPoint(EYE.scleraR, aE);
-  const entry = new THREE.Vector3(er * Math.cos(PHI_E), er * Math.sin(PHI_E), ez);
-  const aim = new THREE.Vector3(1.2 * Math.cos(PHI_E), 1.2 * Math.sin(PHI_E), EYE.cz + 0.2);
+  const phiE = ctx.opts?.entryPhi ?? PHI_E;
+  const entry = new THREE.Vector3(er * Math.cos(phiE), er * Math.sin(phiE), ez);
+  const aim = new THREE.Vector3(1.2 * Math.cos(phiE), 1.2 * Math.sin(phiE), EYE.cz + 0.2);
   const d = aim.clone().sub(entry).normalize();
   const tip = entry.clone().addScaledVector(d, 7.4);
   scene.add(orient(injectionNeedle(ctx.mats, 13), tip.toArray(), d.clone().negate().toArray()));

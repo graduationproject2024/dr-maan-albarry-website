@@ -103,7 +103,8 @@ const IC = {
   cube: '<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
   book: '<path d="M4.5 5.5A2 2 0 0 1 6.5 3.5h13v15h-13a2 2 0 0 0-2 2z"/><path d="M4.5 20.5a2 2 0 0 1 2-2h13v2z"/>',
   lens: '<ellipse cx="12" cy="12" rx="5" ry="8.5"/><path d="M12 3.5v17M2.5 12h4.5M17 12h4.5"/>',
-  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>'
+  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
+  zoom: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.7-4.7M10.5 7.5v6M7.5 10.5h6"/>'
 };
 const icon = (name, size = 20) =>
   `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${IC[name]}</svg>`;
@@ -242,7 +243,16 @@ const ATLAS = (PROC_MANIFEST && PROC_MANIFEST.assets) || [];
 const atlasOf = (slug, level) => ATLAS.filter(a => a.procedure === slug && a.level === level);
 const plateCode = i => `PL.${String(i + 1).padStart(2, '0')}`;
 const pendingNote = () => tr('رسم توضيحي تثقيفي — بانتظار مراجعة الطبيب', 'Educational illustration — pending physician review');
-const atlasLabels = a => (a && a.labels ? a.labels : []).filter(l => l.x >= 0 && l.x <= 1 && l.y >= 0 && l.y <= 1).map(l => ({ x: l.x, y: l.y, term: l[currentLang] || l.en }));
+/** The labels of an atlas image in plain words, essential ones first (the numbering on the pins follows this order).
+ *  Three levels: L1 cards keep only their essential label(s); L2 heroes show the essential ones and offer the rest behind
+ *  "Show all labels"; L3 close-ups live behind "More detail" and show everything. Which labels are essential is recorded
+ *  per image in the manifest (labelAnchors[].essential), pending physician review. */
+const atlasLabels = a => {
+  const all = (a && a.labels ? a.labels : []).filter(l => l.x >= 0 && l.x <= 1 && l.y >= 0 && l.y <= 1)
+    .map(l => ({ x: l.x, y: l.y, essential: !!l.essential, term: (l.plain && l.plain[currentLang]) || l[currentLang] || l.en }));
+  const sorted = [...all.filter(l => l.essential), ...all.filter(l => !l.essential)];
+  return a && a.level === 'L1' ? sorted.filter(l => l.essential) : sorted;
+};
 
 /** An atlas image in its .illus frame. bg 'alpha' = transparent master (L1/L2 on paper or night surfaces);
  *  'neutral' = on the series off-white (L3 close-ups fill their frame). WebP srcset + JPEG fallback when available. */
@@ -256,20 +266,30 @@ function atlasIllus(a, { bg = 'alpha', sizes = '100vw', priority = false, eager 
   const p = procedureBySlug(a.procedure);
   return `<div class="illus atlas-illus is-${kind} ${cls}" style="aspect-ratio:${a.w} / ${a.h}">
       <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" onerror="var d=this.closest('.illus');d.classList.add('is-plate');this.parentNode.remove()"></picture>
-      ${pins ? pinLayer(atlasLabels(a)) : ''}
+      ${pins ? pinLayer(atlasLabels(a), { progressive: a.level === 'L2' }) : ''}
       ${anatomyPlate(a.procedure, p ? L(p.alt) : label)}
     </div>`;
 }
-/** Numbered pins at the projected anchors (decorative duplicates of the key, which carries the text). */
-function pinLayer(labels) {
+/** Numbered pins at the projected anchors (decorative duplicates of the key, which carries the text).
+ *  progressive: pins that are not essential stay hidden until the figure's "Show all labels" is open. */
+function pinLayer(labels, { progressive = false } = {}) {
   if (!labels.length) return '';
-  return `<ol class="pins" aria-hidden="true" dir="ltr">${labels.map((l, i) => `<li class="pin" style="left:${(l.x * 100).toFixed(2)}%;top:${(l.y * 100).toFixed(2)}%">${i + 1}</li>`).join('')}</ol>`;
+  return `<ol class="pins" aria-hidden="true" dir="ltr">${labels.map((l, i) => `<li class="pin${progressive && !l.essential ? ' is-extra' : ''}" data-n="${i + 1}" style="left:${(l.x * 100).toFixed(2)}%;top:${(l.y * 100).toFixed(2)}%">${i + 1}</li>`).join('')}</ol>`;
 }
-/** The key to the pins: number + term, in reading order. */
-function pinKey(labels, cls = '') {
+/** The key to the pins: number + term, in reading order. `from` is the number of the first entry (the labels behind
+ *  "Show all labels" continue the numbering of the essential ones). */
+function pinKey(labels, cls = '', from = 1) {
   if (!labels.length) return '';
-  return `<ol class="pin-key ${cls}" aria-label="${tr('مفتاح الأرقام على الرسم', 'Key to the numbers on the illustration')}">${labels.map((l, i) => `<li><span class="pk-n" aria-hidden="true">${i + 1}</span><bdi>${l.term}</bdi></li>`).join('')}</ol>`;
+  return `<ol class="pin-key ${cls}" start="${from}" aria-label="${tr('مفتاح الأرقام على الرسم', 'Key to the numbers on the illustration')}">${labels.map((l, i) => `<li data-n="${from + i}"><span class="pk-n" aria-hidden="true">${from + i}</span><bdi>${l.term}</bdi></li>`).join('')}</ol>`;
 }
+/** "Show all labels": the remaining labels, one tap away. Native <details>, so it also works before and without the script. */
+function labelsMore(more, shown) {
+  if (!more.length) return '';
+  const total = more.length + shown;
+  return `<details class="labels-more"><summary class="labels-toggle"><span class="lm-closed">${tr(`عرض كل التسميات (${total})`, `Show all labels (${total})`)}</span><span class="lm-open">${tr('عرض التسميات الأساسية فقط', 'Show essential labels only')}</span><span class="lm-icon" aria-hidden="true">${icon('plus', 16)}</span></summary>${pinKey(more, 'plate-key', shown + 1)}</details>`;
+}
+/** The enlarge control on a figure (opens the dialog built by openPlateZoom). */
+const zoomButton = () => `<button type="button" class="plate-zoom" aria-haspopup="dialog" aria-label="${tr('تكبير الرسم', 'Enlarge illustration')}" onclick="openPlateZoom(this)">${icon('zoom', 20)}</button>`;
 /** The large labelled plate on a procedure page (L2 hero, Fig. 1). */
 function plateFigure(p, i, { priority = false, sizes = '100vw', cls = '' } = {}) {
   const a = atlasOf(p.slug, 'L2')[0];
@@ -280,28 +300,32 @@ function plateFigure(p, i, { priority = false, sizes = '100vw', cls = '' } = {})
           <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">${plateCode(i)}</bdi> · ${tr('شكل ١', 'Fig. 1')}</span><span>${L(p.alt)}.</span><span class="fig-pending">${pendingNote()}</span></figcaption>
         </figure>`;
   }
-  const labels = atlasLabels(a);
+  const labels = atlasLabels(a), core = labels.filter(l => l.essential), rest = labels.filter(l => !l.essential);
   return `
         <figure class="plate proc-figure ${cls}">
-          <div class="plate-frame">${atlasIllus(a, { priority, sizes, cls: 'plate-illus' })}</div>
+          <div class="plate-frame">${atlasIllus(a, { priority, sizes, cls: 'plate-illus' })}${zoomButton()}</div>
           <figcaption class="fig-cap plate-cap">
             <span class="fig-n"><bdi dir="ltr">${plateCode(i)}</bdi> · ${tr('شكل ١', 'Fig. 1')}</span>
             <span class="fig-text">${L(a.caption)}</span>
-            ${pinKey(labels, 'plate-key')}
+            ${pinKey(core, 'plate-key')}
+            ${labelsMore(rest, core.length)}
             <span class="fig-pending">${pendingNote()}</span>
           </figcaption>
         </figure>`;
 }
-/** Close-up "magnifier" figures (L3, Fig. 2 and Fig. 3): each close-up in a loupe frame with its pins and key. */
+/** Close-up "magnifier" figures (L3, Fig. 2 and Fig. 3): the optional level, behind "More detail". Everything a patient needs
+ *  to understand the page is in the text and the L2 figure; the close-ups and their full labels are one tap away. */
 function magnifier(p) {
   const l3 = atlasOf(p.slug, 'L3');
   if (!l3.length) return '';
-  return `<div class="loupes${l3.length > 1 ? ' is-pair' : ''}">${l3.map((a, k) => {
+  return `<details class="anat-detail"><summary class="anat-detail-sum"><span class="lm-closed">${tr(`مزيد من التفاصيل: رسوم مقرّبة (${l3.length})`, `More detail: close-up illustrations (${l3.length})`)}</span><span class="lm-open">${tr('إخفاء الرسوم المقرّبة', 'Hide the close-up illustrations')}</span><span class="lm-icon" aria-hidden="true">${icon('plus', 18)}</span></summary>
+      <div class="loupes${l3.length > 1 ? ' is-pair' : ''}">${l3.map((a, k) => {
     const labels = atlasLabels(a);
     return `
         <figure class="loupe">
           <div class="loupe-lens">${atlasIllus(a, { bg: 'neutral', sizes: l3.length > 1 ? '(min-width: 1024px) 520px, 100vw' : '(min-width: 1024px) 880px, 100vw', cls: 'loupe-illus' })}
             <span class="loupe-tag" aria-hidden="true">${icon('eye', 16)}<bdi dir="ltr">L3</bdi></span>
+            ${zoomButton()}
           </div>
           <figcaption class="fig-cap">
             <span class="fig-n">${tr(['شكل ٢', 'شكل ٣'][k] || 'شكل', ['Fig. 2', 'Fig. 3'][k] || 'Fig.')} · ${tr('تفصيل مقرّب', 'Close-up')}</span>
@@ -310,7 +334,7 @@ function magnifier(p) {
             <span class="fig-pending">${pendingNote()}</span>
           </figcaption>
         </figure>`;
-  }).join('')}</div>`;
+  }).join('')}</div></details>`;
 }
 /** Card image for a procedure: the L1 atlas card when it exists, otherwise the legacy render. */
 function cardIllus(p, { sizes, priority = false, cls = 'pc-illus', pins = false } = {}) {
@@ -423,6 +447,12 @@ function renderHero() {
   return `
   <section class="hero" id="home" aria-labelledby="hero-title">
     <div class="container hero-grid">
+      <figure class="hero-portrait">
+        <div class="portrait-frame">
+          <img src="images/dr-maan-portrait-hero.webp" width="374" height="450" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
+        </div>
+        <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
+      </figure>
       <div class="hero-text">
         <p class="eyebrow hero-kicker"><span class="eyebrow-n" aria-hidden="true">01</span><span>${tr('استشاري طب وجراحة العيون', 'Consultant ophthalmologist')}</span><span class="eyebrow-sep" aria-hidden="true"></span><span>${tr('المدينة المنورة', 'Madinah')}</span></p>
         <h1 class="hero-title" id="hero-title">${L(D.identity.name)}</h1>
@@ -436,18 +466,10 @@ function renderHero() {
         </div>
       </div>
 
-      <div class="hero-visual">
-        <figure class="hero-plate">
-          ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 900px, 90vw' }) : cardIllus(cataract, { priority: true, cls: 'hero-plate-illus', sizes: '(min-width: 1024px) 400px, 45vw' })}
-          <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
-        </figure>
-        <figure class="hero-portrait">
-          <div class="portrait-frame">
-            <img src="images/dr-maan-portrait.png" width="295" height="225" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" decoding="async">
-          </div>
-          <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
-        </figure>
-      </div>
+      <figure class="hero-plate">
+        ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' }) : cardIllus(cataract, { cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' })}
+        <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
+      </figure>
     </div>
 
     <div class="container">
@@ -1478,7 +1500,7 @@ function renderProcedurePage(p) {
   const phaco = p.slug === 'cataract-surgery' ? `<figure class="proc-photo"><img src="images/surgery-phaco.jpg" width="512" height="279" loading="lazy" decoding="async" alt="${tr('قطرات العين ونظارة واقية ونشرة إرشادات على طاولة معقمة: أدوات شائعة بعد جراحة الماء الأبيض', 'Eye drops, protective glasses and an instruction leaflet on a sterile drape: common items after cataract surgery')}"><figcaption class="fig-cap"><span>${tr('أدوات شائعة بعد العملية: القطرات الموصوفة، ونظارة واقية، وتعليمات مكتوبة.', 'Common items after surgery: the prescribed drops, protective glasses and written instructions.')}</span></figcaption></figure>` : '';
   const loupe = c ? magnifier(p) : '';
   const body = !c ? `<p class="proc-loading" role="status">${tr('جارٍ تحميل المحتوى…', 'Loading content…')}</p>` : `
-        ${sec('anatomy', `<div class="anat${loupe ? ' has-loupe' : ''}">${loupe}<div class="anat-text"><p>${c.anatomy.text}</p><dl class="anat-parts">${c.anatomy.parts.map(([t, d], i) => `<div><dt><span class="anat-n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>${t}</dt><dd>${d}</dd></div>`).join('')}</dl></div></div>`, 'proc-sec-wide')}
+        ${sec('anatomy', `<div class="anat${loupe ? ' has-loupe' : ''}"><div class="anat-text"><p>${c.anatomy.text}</p><dl class="anat-parts">${c.anatomy.parts.map(([t, d], i) => `<div><dt><span class="anat-n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>${t}</dt><dd>${d}</dd></div>`).join('')}</dl></div>${loupe}</div>`, 'proc-sec-wide')}
         ${sec('purpose', `<p class="proc-p-lg">${c.purpose}</p>`)}
         ${c.types ? sec('types', `<ul class="types">${c.types.map(([n, code, d]) => `<li class="type"><p class="type-code"><bdi dir="ltr">${code}</bdi></p><h3>${n}</h3><p>${d}</p></li>`).join('')}</ul>${p.slug === 'lens-implants' || p.slug === 'cataract-surgery' ? `<p class="proc-note">${icon('lens', 18)}<span>${tr('قارن العدسات مسافةً بمسافة في ', 'Compare lenses distance by distance in the ')}<a href="${P('lens-lab')}" data-nav class="text-link">${tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab')}</a></span></p>` : ''}`) : ''}
         ${sec('candidates', `${list(c.candidates, 'bullets-check')}<p class="proc-note">${icon('info', 18)}<span>${tr('اعتبارات عامة فقط؛ يحدد الطبيب الملاءمة بعد فحص عينك.', 'General considerations only; suitability is decided by your doctor after examining your eye.')}</span></p>`)}
@@ -1926,6 +1948,50 @@ function declusterPins() {
 }
 let declusterTimer = 0;
 window.addEventListener('resize', () => { clearTimeout(declusterTimer); declusterTimer = setTimeout(declusterPins, 150); });
+// A disclosure changes which pins are visible; the layout is known once it has opened ("toggle" does not bubble).
+document.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.labels-more, .anat-detail')) declusterPins(); }, true);
+
+// Enlarge view: an accessible dialog with a copy of the figure (the labels state follows the figure's). Native <dialog>:
+// Escape and the close button close it, focus goes to the close button and back to the figure's control. On a phone the
+// image is 1.7x wider and pans with one finger; nothing on the page needs this view to be understood.
+window.openPlateZoom = btn => {
+  const fig = btn.closest('figure');
+  if (!fig) return;
+  let dlg = document.getElementById('plate-dialog');
+  if (dlg && dlg.open) return;
+  if (!dlg) {
+    dlg = document.createElement('dialog');
+    dlg.id = 'plate-dialog';
+    dlg.className = 'plate-dialog';
+    dlg.setAttribute('aria-labelledby', 'plate-dialog-title');
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => {
+      document.documentElement.classList.remove('dialog-open');
+      dlg.innerHTML = '';
+      if (dlg._from && dlg._from.isConnected) dlg._from.focus();
+      dlg._from = null;
+    });
+    window.addEventListener('popstate', () => { if (dlg.open) dlg.close(); });
+    document.body.appendChild(dlg);
+  }
+  dlg._from = btn;
+  const n = fig.querySelector('.fig-n');
+  const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
+  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="this.closest('dialog').close()">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
+  const figure = dlg.querySelector('.pd-figure'), scroller = dlg.querySelector('.pd-scroll');
+  const illus = fig.querySelector('.atlas-illus').cloneNode(true);
+  illus.querySelectorAll('.pin').forEach(p => { p.style.translate = ''; });
+  illus.querySelectorAll('img').forEach(i => { i.loading = 'eager'; i.removeAttribute('fetchpriority'); });
+  illus.querySelectorAll('source').forEach(s => s.setAttribute('sizes', '(min-width: 1024px) 1160px, (orientation: landscape) 100vw, 170vw'));
+  scroller.appendChild(illus);
+  const cap = fig.querySelector('figcaption').cloneNode(true);
+  if (open) cap.querySelector('.labels-more').open = true;
+  figure.appendChild(cap);
+  document.documentElement.classList.add('dialog-open');
+  dlg.showModal();
+  scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
+  declusterPins();
+};
 
 function observeIntersection() {
   if (fadeObserver) fadeObserver.disconnect();

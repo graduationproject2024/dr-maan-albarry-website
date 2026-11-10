@@ -9,32 +9,32 @@
     {
       "id": "cone",
       "structure": "cone",
-      "x": 0.3565,
-      "y": 0.4559
+      "x": 0.4279,
+      "y": 0.4036
     },
     {
       "id": "normal-dome",
       "structure": "normal-dome",
-      "x": 0.4559,
-      "y": 0.6884
+      "x": 0.4937,
+      "y": 0.3048
     },
     {
       "id": "riboflavin",
       "structure": "riboflavin",
-      "x": 0.3867,
-      "y": 0.5812
+      "x": 0.4742,
+      "y": 0.598
     },
     {
       "id": "stroma",
       "structure": "stroma",
-      "x": 0.4867,
-      "y": 0.7338
+      "x": 0.627,
+      "y": 0.8331
     },
     {
       "id": "endothelium",
       "structure": "endothelium",
-      "x": 0.3719,
-      "y": 0.3767
+      "x": 0.4517,
+      "y": 0.2805
     }
   ]
 }

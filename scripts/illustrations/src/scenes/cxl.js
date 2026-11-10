@@ -29,9 +29,10 @@ export default function cxl(ctx) {
   const cam = ctx.camera({ target: [-1.0, -0.8, 1.9], dir, up, H: 11.2, fov: 18 });
   const scene = ctx.scene(cam);
   const spec = corneaSpec({ F, T });
-  const corneaMat = ctx.mats.cornea.clone(); corneaMat.color = new THREE.Color('#ECE58C'); corneaMat.opacity = 0.42;
+  const calm = !!ctx.opts?.calm; // atlas r2: only the cut stroma is yellow; no yellow wash over the whole anterior chamber
+  const corneaMat = ctx.mats.cornea.clone(); corneaMat.color = new THREE.Color(calm ? '#F4F1E2' : '#ECE58C'); corneaMat.opacity = calm ? 0.12 : 0.42;
   const eye = buildGlobe(ctx.mats, {
-    lens: 'clear', pupilR: 2.4, cut: CUT, cornea: spec, corneaMaterial: corneaMat, fundusTint: '#6E5652',
+    lens: 'clear', pupilR: 2.4, cut: ctx.opts?.calm ? { ...CUT, phi1: 360 * DEG } : CUT, cornea: spec, corneaMaterial: corneaMat, fundusTint: '#6E5652',
     corneaAt: (phi) => corneaSpec({ F: rot(F, phi), T: rot(T, phi) }),
     paintCornea: (k, sp) => { paintCornea(k, sp, {
       epiFrom: 4.4, // epithelium removed centrally (epi-off)
@@ -54,8 +55,8 @@ export default function cxl(ctx) {
     });
       // the normal corneal dome, dashed, for comparison with the cone
       const sec = corneaSpec().section(260);
-      k.stroke(sec.ant.filter(([x]) => x >= 0), 'rgba(36,66,80,0.95)', 2.2, false, [7, 6]);
-      k.stroke(sec.post.filter(([x]) => x >= 0), 'rgba(36,66,80,0.75)', 1.8, false, [7, 6]);
+      k.stroke(sec.ant.filter(([x]) => x >= 0), 'rgba(36,66,80,0.95)', calm ? 3.2 : 2.2, false, calm ? [11, 8] : [7, 6]);
+      if (!calm) k.stroke(sec.post.filter(([x]) => x >= 0), 'rgba(36,66,80,0.75)', 1.8, false, [7, 6]);
     }
   });
   const caps = eye.caps({ r1: 11.6, z1: 4.6, ppm: 320, tones: [1, 0.86, 0.95] });

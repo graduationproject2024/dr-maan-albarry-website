@@ -218,11 +218,12 @@ export function graftSection(ctx) {
 // The posterior-chamber contents seen from the front with the cornea, iris and outer coats removed: the ring of
 // ciliary processes, the zonules and the emptied capsular bag holding a one-piece IOL whose haptics rest in the bag
 // equator.
-export function bagSpecimen(ctx, { polar = 34, az = -62, H = 15, target = [0, 0, -1.2], fov = 16, iolPhi = -20 } = {}) {
+export function bagSpecimen(ctx, { polar = 34, az = -62, H = 15, target = [0, 0, -1.2], fov = 16, iolPhi = -20, ringTint = null, fade = null } = {}) {
   const cam = ctx.camera({ target, dir: dirFrom(polar, az), up: [1, 0, 0], H, fov });
   const scene = ctx.scene(cam);
   const g = new THREE.Group();
   const cm = ctx.mats.ciliary.clone(); // pars plicata only: the thin pars plana behind it is trimmed away
+  if (ringTint) cm.color.set(ringTint); // atlas r2: a calm ring, so the implant (not the ring) is what the eye goes to
   cm.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0, 0, 1), 0.9)];
   g.add(new THREE.Mesh(lathe(ciliaryProfile(), { segments: 256, phiLength: Math.PI * 2, closed: true }), cm));
   g.add(zonules('iol'));
@@ -232,7 +233,7 @@ export function bagSpecimen(ctx, { polar = 34, az = -62, H = 15, target = [0, 0,
   scene.add(g);
   const W = ctx.W, Hh = ctx.H;
   return {
-    passes: [{ scene, camera: cam, fade: null }],
+    passes: [{ scene, camera: cam, fade: fade && { cx: fade.cx * W, cy: fade.cy * Hh, rx: fade.rx * W, ry: fade.ry * Hh, inner: fade.inner } }],
     under(gg) {
       const [cx, cy] = ctx.project(cam, [-4.5, 0, -3.5]);
       gg.translate(cx, cy + Hh * 0.04); gg.scale(1, 0.22);

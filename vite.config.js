@@ -42,7 +42,7 @@ const PROC_MANIFEST = fs.existsSync(MANIFEST_FILE) ? (() => {
     assets: m.assets.map(a => ({
       id: a.assetId, procedure: a.procedure, level: a.level, w: a.master.width, h: a.master.height,
       alpha: widths(a, 'transparent', 'webp'), neutral: widths(a, 'neutral', 'webp'), jpg: widths(a, 'neutral', 'jpeg'),
-      labels: (a.labelAnchors || []).map(l => ({ x: l.x, y: l.y, en: l.en, ar: l.ar })),
+      labels: (a.labelAnchors || []).map(l => ({ x: l.x, y: l.y, en: l.en, ar: l.ar, ...(l.plain ? { plain: l.plain } : {}), ...(l.essential ? { essential: true } : {}) })),
       alt: a.alt, caption: a.caption, review: a.reviewStatus
     }))
   };

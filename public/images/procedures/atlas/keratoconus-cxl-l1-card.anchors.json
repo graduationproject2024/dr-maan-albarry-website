@@ -9,26 +9,26 @@
     {
       "id": "cone",
       "structure": "cone",
-      "x": 0.3854,
-      "y": 0.3136
+      "x": 0.5169,
+      "y": 0.2922
     },
     {
       "id": "normal-dome",
       "structure": "normal-dome",
-      "x": 0.267,
-      "y": 0.5753
+      "x": 0.5985,
+      "y": 0.3611
     },
     {
       "id": "riboflavin",
       "structure": "riboflavin",
-      "x": 0.298,
-      "y": 0.4865
+      "x": 0.2921,
+      "y": 0.3947
     },
     {
       "id": "uv-light",
       "structure": "uv-light",
-      "x": 0.1003,
-      "y": 0.2261
+      "x": 0.2835,
+      "y": 0.0677
     }
   ]
 }
