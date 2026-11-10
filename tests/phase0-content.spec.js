@@ -39,6 +39,7 @@ async function fullText(page, lang) {
   chunks.push(await page.locator('main').innerText());
   await page.locator('#simulator-host').scrollIntoViewIfNeeded();
   await page.locator('#simulator-host .vsim').waitFor({ timeout: 20_000 });
+  await page.locator('#simulator-host .vsim-more').click(); // toric and cataract live in More settings since the workbench rebuild
   for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
     await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
     await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();

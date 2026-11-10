@@ -107,6 +107,7 @@ test.describe('J03', () => {
       return { actual: `viewer ${w.toFixed(1)} px`, ok: w >= 390 - 56 };
     }, { critical: false });
     await j.step('Tap "Compare two lenses", choose EDOF as A and trifocal as B', 'Two labelled halves A/B and two info cards', async () => {
+      await page.locator('#simulator-host .vsim-more').tap(); // compare lives in More settings since the workbench rebuild
       await page.locator('#simulator-host .vsim-switch').tap();
       await lbl(page, 'lensA', 'edof').tap(); await lbl(page, 'lensB', 'trifocal').tap(); await page.waitForTimeout(300);
       const s = await vsimState(page);

@@ -252,6 +252,16 @@
 .llab[dir="rtl"] .llab-sim-mount .vsim-tag-a::before { content: "B · "; }
 .llab[dir="rtl"] .llab-sim-mount .vsim-tag-b::before { content: "A · "; }
 
+/* phones and tablets on the public page: one picture on the page (the simulator above) and short, foldable sections.
+   The kicker repeats the page hero; the lede and the label already say what matters. */
+.llab[data-compact="true"] .llab-kicker { display: none; }
+.llab[data-compact="true"] .llab-review { font-size: 0.82rem; }
+.llab-fold > summary { list-style: none; }
+.llab-fold > summary .llab-h { font-size: 1.2rem; }
+.llab-fold-body { display: grid; gap: 14px; padding-block: 8px 14px; }
+.llab-fold { border-block-start: 1px solid var(--llab-line); }
+.llab[data-compact="true"] .llab-limits { padding: 0; border: 0; border-radius: 0; background: none; }
+
 @media (max-width: 400px) { .llab { font-size: 16px; } }
 .llab[data-reduced-motion="true"] *, .llab[data-reduced-motion="true"] *::before, .llab[data-reduced-motion="true"] *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { .llab *, .llab *::before, .llab *::after { transition: none !important; animation: none !important; } }

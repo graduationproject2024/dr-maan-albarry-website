@@ -1052,7 +1052,7 @@ const featureMsgs = name => () => ({
 });
 const lensLab = createFeatureMount({
   key: 'lens-lab', slotId: 'lens-lab-host',
-  options: () => ({ lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() }),
+  options: () => ({ lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), simulator: 'auto' }),
   messages: featureMsgs({ ar: 'مختبر العدسات', en: 'The Lens Lab' })
 });
 const lightJourney = createFeatureMount({
@@ -1080,13 +1080,12 @@ function renderSimulator() {
   <section class="section section-stage vs-section" id="simulator" aria-labelledby="simulator-title">
     <div class="container">
       ${sectionHead('', tr('أداة تثقيفية تفاعلية', 'Interactive education'), tr('محاكي الرؤية: كيف قد تبدو الرؤية بعد زراعة العدسة؟', 'Vision simulator: how might vision look after a lens implant?'),
-        tr('قارن بين أنواع العدسات على مسافات النظر المختلفة وفي ظروف إضاءة مختلفة. نموذج تقريبي تثقيفي، وليس توقعاً لرؤيتك.', 'Compare lens types at different viewing distances and in different lighting. An educational approximation, not a prediction of your vision.'), { cls: 'section-head-split', id: 'simulator-title' })}
+        '', { cls: 'section-head-split', id: 'simulator-title' })}
       <div class="vsim-launch fade-in">
-        <div class="vsim-host" id="simulator-host" data-vision-host ${vsim.failed ? '' : 'data-reserve'}></div>
+        <div class="vsim-host" id="simulator-host" data-vision-host ${vsim.failed ? '' : 'data-reserve'} data-loading-text="${tr('جارٍ تحميل المحاكي…', 'Loading the simulator…')}"></div>
       </div>
       <ul class="disclaimers fade-in">
         <li>${icon('info', 18)}<span>${tr('أداة تعليمية توضح الفروق العامة بين العدسات، ولا تتنبأ بنتيجة عينك.', 'An educational tool showing general differences between lenses. It does not predict your own result.')}</span></li>
-        <li>${icon('eye', 18)}<span>${tr('يُختار نوع العدسة بعد الفحص والقياسات ومناقشة أولوياتك مع الطبيب.', 'The lens type is chosen after examination, measurements and a conversation about your priorities.')}</span></li>
         <li>${icon('arrow', 18)}<span><a href="${pageHref(currentLang, 'lens-implants')}" data-nav class="text-link">${tr('اقرأ عن أنواع العدسات المزروعة', 'Read about lens implant types')}</a></span></li>
       </ul>
     </div>
@@ -1103,15 +1102,15 @@ function renderLensLabPage() {
       kicker: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab'),
       title: tr('قارن العدسات المزروعة، مسافةً بمسافة', 'Compare lens implants, distance by distance'),
       lede: tr('أداة تثقيفية لمن يستعد لجراحة الماء الأبيض أو يسأل عن العدسات: ماذا تقدم كل عدسة على المسافة البعيدة والمتوسطة والقريبة، وماذا يحدث للأضواء ليلاً. لا تتنبأ بنتيجة عينك.', 'An educational tool for anyone preparing for cataract surgery or asking about lenses: what each lens offers at far, intermediate and near distances, and what happens to lights at night. It does not predict your own result.'),
-      aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a></nav>`
+      aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a></nav>`
     })}
+    ${renderSimulator()}
     <section class="section" id="lab" aria-labelledby="lab-title">
       <div class="container">
         <h2 class="sr-only" id="lab-title">${tr('المقارنة', 'The comparison')}</h2>
         ${featureBlock({ key: 'lens-lab', hostAttr: 'data-lens-lab-host', slotId: 'lens-lab-host', staticHtml: summary, name: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab') })}
       </div>
     </section>
-    ${renderSimulator()}
     ${renderClosing('lens-lab')}`;
 }
 
@@ -1138,7 +1137,82 @@ function renderLightJourneyPage() {
 }
 
 // Vision simulator: one host node and controller for the page's lifetime; mounted lazily near the viewport.
-const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false };
+const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, chromeRO: null };
+
+// A returning visitor finds the last simple choice again (one localStorage key: lens, distance preset, lighting; never
+// anything about their eyes) and a link such as ?lens=edof&dist=near&light=night shows that view. Values are checked
+// against known ones; a valid URL value beats the stored one. Changing a control only rewrites the current history
+// entry (replaceState), so Back still leaves the page. Keep in step with src/vision-sim/optics/params.js.
+const VSIM_STORE = 'lens-lab-choice';
+const VSIM_LENSES = ['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'];
+const VSIM_SIMPLE_LENSES = ['monofocal', 'edof', 'trifocal'];
+const VSIM_DIST = { near: 0.4, intermediate: 0.66, far: 6 };
+const VSIM_LIGHT = { day: 'day', dim: 'dusk', night: 'night' };
+const VSIM_DEFAULT = { lens: 'monofocal', dist: 'far', light: 'day' };
+/** Only values the simulator knows survive. */
+function vsimClean(raw) {
+  const c = {};
+  if (VSIM_LENSES.includes(raw.lens)) c.lens = raw.lens;
+  if (Object.hasOwn(VSIM_DIST, raw.dist || '')) c.dist = raw.dist;
+  if (Object.hasOwn(VSIM_LIGHT, raw.light || '')) c.light = raw.light;
+  return c;
+}
+function vsimStored() {
+  try { const c = vsimClean(JSON.parse(localStorage.getItem(VSIM_STORE)) || {}); return VSIM_SIMPLE_LENSES.includes(c.lens) ? c : (delete c.lens, c); } catch (e) { return {}; }
+}
+function vsimFromUrl() {
+  const q = new URLSearchParams(location.search);
+  return vsimClean({ lens: q.get('lens'), dist: q.get('dist'), light: q.get('light') });
+}
+function vsimOptions(c) {
+  const o = {};
+  if (c.lens) o.lens = c.lens;
+  if (c.dist) o.distanceM = VSIM_DIST[c.dist];
+  if (c.light) o.lighting = VSIM_LIGHT[c.light];
+  return o;
+}
+/** Current view in URL words; the exact-distance slider has no preset word, so it stays out. */
+function vsimWords(st) {
+  const dist = Object.keys(VSIM_DIST).find(k => Math.abs(VSIM_DIST[k] - st.distanceM) < 0.005);
+  const light = Object.keys(VSIM_LIGHT).find(k => VSIM_LIGHT[k] === st.lighting);
+  return { lens: st.lens, dist, light };
+}
+function vsimWriteUrl(words) {
+  const u = new URL(location.href);
+  const isDefault = words.lens === VSIM_DEFAULT.lens && words.dist === VSIM_DEFAULT.dist && words.light === VSIM_DEFAULT.light;
+  for (const k of ['lens', 'dist', 'light']) {
+    if (!isDefault && words[k]) u.searchParams.set(k, words[k]); else u.searchParams.delete(k);
+  }
+  if (u.href !== location.href) history.replaceState(history.state, '', u);
+}
+function vsimRemember({ what, state }) {
+  if (what === 'reset') {
+    try { localStorage.removeItem(VSIM_STORE); } catch (e) { /* storage unavailable */ }
+    vsimWriteUrl(VSIM_DEFAULT);
+    return;
+  }
+  if (!['lens', 'distance', 'lighting', 'scenario'].includes(what)) return;
+  const words = vsimWords(state);
+  vsimWriteUrl(words);
+  const keep = { ...vsimStored() };
+  if (VSIM_SIMPLE_LENSES.includes(words.lens)) keep.lens = words.lens;
+  if (words.dist) keep.dist = words.dist;
+  keep.light = words.light;
+  try { localStorage.setItem(VSIM_STORE, JSON.stringify(keep)); } catch (e) { /* storage unavailable: session-only */ }
+}
+// The workbench is sized against the bars that are really on screen (they change with enlarged text and rotation).
+function vsimWatchChrome() {
+  if (vsim.chromeRO) { vsim.chromeRO.disconnect(); vsim.chromeRO = null; }
+  const slot = document.getElementById('simulator-host');
+  if (!slot || !('ResizeObserver' in window)) return;
+  const header = document.getElementById('site-header'), bar = document.querySelector('.booking-bar');
+  vsim.chromeRO = new ResizeObserver(() => {
+    if (header) slot.style.setProperty('--vsim-chrome-top', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    slot.style.setProperty('--vsim-chrome-bottom', `${bar ? Math.ceil(bar.getBoundingClientRect().height) : 0}px`);
+  });
+  if (header) vsim.chromeRO.observe(header);
+  if (bar) vsim.chromeRO.observe(bar);
+}
 async function loadVisionSim() {
   if (vsim.loading || vsim.ctrl) return;
   vsim.loading = true;
@@ -1146,7 +1220,8 @@ async function loadVisionSim() {
     const mod = await import('./src/vision-sim/index.js');
     if (!vsim.host || !vsim.host.isConnected) return; // visitor left the page while it loaded
     vsim.host.innerHTML = ''; // drop a previous load-error message
-    vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
+    vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), ...vsimOptions({ ...vsimStored(), ...vsimFromUrl() }) });
+    vsim.ctrl.on('change', vsimRemember);
     vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
     vsim.failed = false;
     document.getElementById('simulator-host')?.removeAttribute('data-reserve'); // mounted: it sizes itself now
@@ -1178,7 +1253,18 @@ function mountVisionSim() {
   if (!slot) { destroyVisionSim(); return; }
   if (!vsim.host) vsim.host = document.createElement('div');
   if (vsim.host.parentNode !== slot) slot.appendChild(vsim.host); // survive renderApp() re-renders
-  if (vsim.ctrl) { slot.removeAttribute('data-reserve'); vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); return; }
+  vsimWatchChrome();
+  if (vsim.ctrl) {
+    slot.removeAttribute('data-reserve');
+    vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme());
+    // a language switch drops the query (write it back); Back to an entry that has one shows that view
+    const u = vsimFromUrl();
+    if (u.lens) vsim.ctrl.setLens(u.lens);
+    if (u.dist) vsim.ctrl.setDistance(VSIM_DIST[u.dist]);
+    if (u.light) vsim.ctrl.setLighting(VSIM_LIGHT[u.light]);
+    vsimWriteUrl(vsimWords(vsim.ctrl.getState()));
+    return;
+  }
   if (vsim.loading) return;
   if (vsim.failed) { showVisionSimError(); return; } // re-render in the new language; retry stays one tap away
   if (vsim.io) vsim.io.disconnect();
@@ -1190,6 +1276,7 @@ function mountVisionSim() {
   vsim.io.observe(slot);
 }
 function destroyVisionSim() {
+  if (vsim.chromeRO) { vsim.chromeRO.disconnect(); vsim.chromeRO = null; }
   if (vsim.io) { vsim.io.disconnect(); vsim.io = null; }
   if (vsim.ctrl) { try { vsim.ctrl.destroy(); } catch (e) { /* module handles its own errors */ } vsim.ctrl = null; }
   if (vsim.host) { vsim.host.remove(); vsim.host = null; }

@@ -159,6 +159,7 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
   }, { critical: false });
 
   await j.step('Vision simulator: tap the "Compare" switch label and drag the divider; vertical swipe on the divider', 'Divider follows a horizontal drag; a vertical swipe on it does not move it a lot', async () => {
+    const moreBtn = page.locator('#simulator-host .vsim-more'); await revealInFreeArea(page, moreBtn); await moreBtn.tap(); // compare lives in More settings since the workbench rebuild
     const sw = page.locator('#simulator-host .vsim-switch'); await revealInFreeArea(page, sw); await sw.tap();
     const d = page.locator('#simulator-host [data-ref="divider"]'); const r = await revealInFreeArea(page, d);
     const v0 = Number(await d.getAttribute('aria-valuenow'));

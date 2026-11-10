@@ -101,6 +101,7 @@ for (const [w, h] of MOBILE) {
           await page.goto(lang === 'en' ? '/en/lens-lab/' : '/lens-lab/'); // the full simulator lives on the Lens Lab page (Phase 1)
           await page.locator('#simulator-host').scrollIntoViewIfNeeded();
           await expect(page.locator('#simulator-host .vsim-viewport')).toBeVisible({ timeout: 20_000 });
+          await page.locator('#simulator-host .vsim-more').click(); // toric and cataract live in More settings since the workbench rebuild
           for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
             await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
             await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
@@ -119,8 +120,7 @@ for (const [w, h] of MOBILE) {
             .filter(l => !l.closest('[hidden], details:not([open])'))
             .filter(l => { const b = l.getBoundingClientRect(); return b.height < 44 || b.right > innerWidth + 1 || b.x < -1; }).length);
           expect(bad).toBe(0);
-          // distance slider via keyboard (it lives in the simulator's "Advanced" disclosure since the 2026-11 simplification)
-          await page.locator('#simulator-host .vsim-adv > summary').click();
+          // distance slider via keyboard (it lives in More settings, opened above)
           const range = page.locator('#simulator-host .vsim-range');
           await range.focus();
           await page.keyboard.press('Home');

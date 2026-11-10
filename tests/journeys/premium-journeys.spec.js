@@ -246,12 +246,16 @@ for (const key of ['ar-light-390', 'en-dark-390', 'en-light-360', 'ar-dark-375',
       await j.step('Open home, open the menu and tap Lens Lab', 'The Lens Lab page opens and the comparison module mounts', async () => {
         await openUrl(page, home(p.lang));
         await tapMenuLink(page, 'lens-lab', /\/lens-lab\/$/);
+        await page.locator('#lens-lab-host').scrollIntoViewIfNeeded(); // lazy, and below the simulator since the workbench rebuild
         await page.locator('#lens-lab-host .llab-chip').first().waitFor({ timeout: 30000 });
         const ov = await hOverflow(page);
         return { actual: `${(await docState(page)).path}; chips ${await page.locator('#lens-lab-host .llab-chip').count()}; overflow ${ov}px`, ok: ov <= 0 };
       }, { shot: true });
       let sit0 = '';
       await j.step('Tap a different lens for slot A', 'The radio selects it and the explanation text updates', async () => {
+        // on phones the long comparison folds behind its title since the workbench rebuild
+        const fold = page.locator('#lens-lab-host details[data-fold="compare"] > summary');
+        if (await fold.count()) { await revealInFreeArea(page, fold); await fold.tap(); await page.waitForTimeout(250); }
         const sit = page.locator('#lens-lab-host [data-ref="situation"]');
         sit0 = await sit.innerText();
         const label = page.locator('#lens-lab-host .llab-pick[data-slot="A"] label').nth(4);

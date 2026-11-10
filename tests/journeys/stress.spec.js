@@ -144,7 +144,11 @@ test('Stress — seeded rapid interaction', async ({ page }, testInfo) => {
   await j.step('Rapid lens switching: 30 seeded taps across the 5 lens buttons', 'Selected lens equals the last tap; explanation card follows; one canvas', async () => {
     const ids = ['monofocal', 'edof', 'trifocal', 'toric', 'cataract']; const seq = [];
     const first = page.locator('#simulator-host label[for$="-lensA-monofocal"]'); await revealInFreeArea(page, first);
-    for (let i = 0; i < 30; i++) { const id = pick(rnd, ids); seq.push(id); await tapAt(await rect(page.locator(`#simulator-host label[for$="-lensA-${id}"]`))); }
+    await page.locator('#simulator-host .vsim-more').tap(); // toric and cataract live in More settings since the workbench rebuild
+    await revealInFreeArea(page, page.locator('#simulator-host label[for$="-lensA-toric"]'));
+    // the five lens types now sit in two groups (Simple row, More settings) with a sticky picture between them, so each
+    // tap uses Playwright's own scrolling and hit-target check (raw coordinates could land on the stuck picture)
+    for (let i = 0; i < 30; i++) { const id = pick(rnd, ids); seq.push(id); await page.locator(`#simulator-host label[for$="-lensA-${id}"]`).tap(); }
     await page.waitForTimeout(600);
     const v = await vsimState(page);
     return { actual: `seq=${seq.join(',')}; final lens=${v.lens}; canvases=${v.canvases}`, ok: v.lens === seq.at(-1) && v.canvases === 1 };

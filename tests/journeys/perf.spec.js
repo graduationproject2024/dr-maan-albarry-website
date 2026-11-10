@@ -77,6 +77,7 @@ for (const cpu of [1, 4]) {
     test.setTimeout(120_000);
     await page.goto('/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host canvas'));
+    await page.locator('#simulator-host .vsim-more').click(); // the slider lives in More settings since the workbench rebuild
     const range = page.locator('#simulator-host [data-ref="range"]'); await revealInFreeArea(page, page.locator('#simulator-host .vsim-viewport'));
     if (cpu > 1) await throttle(page, null, cpu);
     await range.focus();

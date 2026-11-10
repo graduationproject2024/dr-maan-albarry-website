@@ -32,6 +32,7 @@ test('WebKit — English iPhone journey with both simulators', async ({ page }, 
     await page.goto('/en/lens-lab/#simulator'); await page.locator('main h1').waitFor(); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     const s0 = await waitVsim(page, 60000);
     await revealInFreeArea(page, lbl('lensA', 'trifocal')); await lbl('lensA', 'trifocal').click();
+    const moreBtn = page.locator('#simulator-host .vsim-more'); await revealInFreeArea(page, moreBtn); await moreBtn.click(); // compare lives in More settings since the workbench rebuild
     const sw = page.locator('#simulator-host .vsim-switch'); await revealInFreeArea(page, sw); await sw.click(); await page.waitForTimeout(300);
     const s = await vsimState(page);
     return { actual: `canvases=${s0.canvases} fallback=${s0.fallback}; lens=${s.lens} compare=${s.compare}`, ok: s.lens === 'trifocal' && s.compare };

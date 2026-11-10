@@ -114,6 +114,8 @@ test.describe('journey regressions — phone', () => {
       return { partial: f.width > 2 && f.width < r.width - 4, gapRight: r.right - f.right };
     }));
     await page.locator('#simulator-host label[for$="-preset-near"]').tap();
+    await page.locator('#simulator-host .vsim-clarity > summary').tap(); // expandable since the workbench rebuild
+    await page.locator('#simulator-host .vsim-more').tap(); // compare lives in More settings since the workbench rebuild
     await page.locator('#simulator-host .vsim-switch').tap();
     const bars = await check();
     expect(bars.filter((b) => b.partial).length).toBeGreaterThan(0);
@@ -150,7 +152,7 @@ test.describe('journey regressions — phone', () => {
     await page.addInitScript(() => localStorage.setItem('theme', 'light'));
     await page.goto('/en/lens-lab/'); await page.locator('#simulator-host').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('#simulator-host .vsim-card h3'));
-    const ratios = await page.locator('#simulator-host .vsim-card h3, #simulator-host .vsim-meters-title').evaluateAll((els) => els.map((e) => {
+    const ratios = await page.locator('#simulator-host .vsim-card h3, #simulator-host .vsim-clarity > summary').evaluateAll((els) => els.map((e) => {
       const rgb = (c) => c.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number);
       const lum = ([r, g, b]) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
       let bgEl = e; let bg = 'rgba(0, 0, 0, 0)';
