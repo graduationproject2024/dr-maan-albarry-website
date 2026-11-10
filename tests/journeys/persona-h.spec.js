@@ -25,7 +25,7 @@ test('Persona H — comparing lens options', async ({ page }, testInfo) => {
     await page.waitForURL(/\/lens-lab\/$/);
     await page.locator('#sim-jump').tap();
     const s = await waitVsim(page, 40000);
-    await page.waitForTimeout(900);
+    await page.waitForFunction(() => { const t = document.getElementById('simulator').getBoundingClientRect().top; return t > -20 && t < 140; }, null, { timeout: 10000 }).catch(() => {}); // the jump is a smooth scroll: wait for it to arrive; a miss is reported below
     const top = (await rect(page.locator('#simulator'))).y;
     return { actual: `mounted=${s.mounted} dir=${s.dir} canvases=${s.canvases}; #simulator top=${Math.round(top)}px`, ok: s.mounted && s.dir === 'rtl' && s.canvases === 1 && top > -20 && top < 140 };
   }, { shot: true });

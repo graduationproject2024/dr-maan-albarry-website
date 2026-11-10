@@ -378,7 +378,7 @@ export function buildJsonLd() {
 // ------------------------------------------------------------
 // /llms.txt — generated from the same data at build time.
 // ------------------------------------------------------------
-export function buildLlmsTxt() {
+export function buildLlmsTxt(pageLines = []) {
   const d = DOCTOR;
   const roles = d.professional.roles.map((r, i) => `${i + 1}. ${r.ar} — ${r.en}`).join('\n');
   const quals = d.professional.qualifications.map(q => `- ${q.ar} — ${q.en}`).join('\n');
@@ -419,14 +419,7 @@ ${PROCEDURES.map(p => `- ${p.name.en} (${p.name.ar}) — ${p.source === 'magrabi
 - Vision simulator: an educational illustration of relative differences across viewing distances. Individual results depend on a full clinical evaluation.
 
 ## Pages (Arabic at the site root, English under /en/)
-- / — home: the physician, expertise, core specialties, booking
-- /about/ — professional profile: qualifications, appointments, dated record
-- /procedures/ — procedure library; /procedures/<slug>/ — one guide per procedure
-- /lens-lab/ — Vision & Lens Lab (educational lens comparison and vision simulator)
-- /surgical-education/ — 3D cataract surgery walkthrough
-- /education/ — patient education guides, visual lifestyle questionnaire, warning signs
-- /how-vision-works/ — the light journey through the eye
-- /clinic/ — booking routes, clinic hours, visit pathway, map
+${pageLines.join('\n')}
 
 ## Sources
 - ${SOURCES.magrabi.label}: ${SOURCES.magrabi.url}
@@ -468,24 +461,24 @@ function hospitalNode() {
 /**
  * Structured data for the Phase 1 section pages (/about/, /procedures/, /lens-lab/, /surgical-education/,
  * /education/, /how-vision-works/, /clinic/). Built only from facts in this module; no ratings, no outcomes.
- *   page      section key (site-routes.js SECTION_PAGES)
+ *   schema    the section's page type (section-registry.js seo.schema)
  *   meta      { title, description } of the page
  *   trail     breadcrumb trail (site-routes.js breadcrumbFor)
  *   extra     { procedureUrls: [{ name, url }] } for the procedure library
  */
-export function buildSectionJsonLd(page, lang, pageUrl, siteUrl, meta, trail, extra = {}) {
+export function buildSectionJsonLd(schema, lang, pageUrl, siteUrl, meta, trail, extra = {}) {
   const d = DOCTOR;
   const physicianRef = { '@id': `${SITE.url}/#physician` };
   const site = { '@type': 'WebSite', url: `${siteUrl}/`, name: d.identity.name[lang] };
   const base = { '@id': `${pageUrl}#webpage`, url: pageUrl, name: meta.title, description: meta.description, inLanguage: lang, isPartOf: site, breadcrumb: { '@id': `${pageUrl}#breadcrumb` } };
   const graph = [];
-  if (page === 'about') {
+  if (schema === 'ProfilePage') {
     const physician = buildJsonLd()['@graph'].find(n => n['@type'] === 'Physician');
     graph.push({ '@type': 'ProfilePage', ...base, mainEntity: physician });
-  } else if (page === 'procedures') {
+  } else if (schema === 'CollectionPage') {
     graph.push({ '@type': 'CollectionPage', ...base, about: physicianRef,
       mainEntity: { '@type': 'ItemList', itemListElement: (extra.procedureUrls || []).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: p.url })) } });
-  } else if (page === 'clinic') {
+  } else if (schema === 'ContactPage') {
     graph.push({ '@type': 'ContactPage', ...base, about: { '@id': `${pageUrl}#clinic` } });
     graph.push({
       '@type': 'MedicalClinic',

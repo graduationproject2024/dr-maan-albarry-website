@@ -92,8 +92,9 @@ test.describe('Section pages — prerendered, no JavaScript', () => {
   });
 
   test('the inline <base> script and site-routes.js use the same route pattern', () => {
-    const html = fs.readFileSync('index.html', 'utf8');
-    expect(html).toContain(`(${ROUTE_PATTERN})$/`);
+    // The pattern is generated into the page at build time (vite.config.js), so the built pages are what is checked.
+    expect(fs.readFileSync('index.html', 'utf8')).toContain('(__ROUTE_PATTERN__)$/');
+    for (const p of PAGES) expect(fs.readFileSync(`dist/${p.path}index.html`, 'utf8'), p.path).toContain(`(${ROUTE_PATTERN})$/`);
   });
 });
 

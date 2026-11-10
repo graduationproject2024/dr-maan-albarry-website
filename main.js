@@ -8,9 +8,11 @@
 // ============================================================
 
 import { DOCTOR, FAQ, PROCEDURES, PROCEDURE_GROUPS, procedureBySlug, whatsappUrl, publishableTestimonials, yearsOfExperience, buildJsonLd, buildProcedureJsonLd, buildSectionJsonLd } from './doctor-data.js';
-import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage, SECTION_PAGES } from './site-routes.js';
+import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } from './site-routes.js';
+import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
 import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES } from './src/site/content.js';
 import { createFeatureMount, hasFeature } from './src/feature-loaders.js';
+import { createSectionPatterns } from './src/site/section-patterns.js';
 
 // Pick the current-language value from an { ar, en } pair.
 const L = (pair) => pair[currentLang];
@@ -117,6 +119,8 @@ const GLYPH = {
 const glyph = (name, size = 18) =>
   `<svg class="ic ic-${name}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="currentColor" aria-hidden="true" focusable="false">${GLYPH[name]}</svg>`;
 
+const { editorialIntro, imageTextSplit, procedureGallery, educationalGuide, faqList, appointmentsTimeline, toolPreview, contactCta } = createSectionPatterns({ icon, tr });
+
 const EXT = 'target="_blank" rel="noopener noreferrer"';
 const D = DOCTOR;
 const C = DOCTOR.contact;
@@ -177,23 +181,8 @@ function crumbs(trail) {
 }
 
 /** Hero band shared by the section pages. */
-function pageHero({ kicker, title, lede, aside = '', after = '', cls = '' }) {
-  const trail = breadcrumbFor(currentLang, null, route.page);
-  return `
-  <header class="page-hero ${cls}">
-    <div class="container">
-      ${crumbs(trail)}
-      <div class="page-hero-grid${aside ? ' has-aside' : ''}">
-        <div class="page-hero-text">
-          <p class="kicker"><span>${kicker}</span></p>
-          <h1 class="page-title">${title}</h1>
-          ${lede ? `<p class="page-lede">${lede}</p>` : ''}
-          ${after}
-        </div>
-        ${aside}
-      </div>
-    </div>
-  </header>`;
+function pageHero(intro) {
+  return editorialIntro({ ...intro, breadcrumb: crumbs(breadcrumbFor(currentLang, null, route.page)) });
 }
 
 // --- ANATOMICAL ILLUSTRATIONS ---
@@ -355,20 +344,10 @@ function cardIllus(p, { sizes, priority = false, cls = 'pc-illus', pins = false 
 
 // --- NAVIGATION MODEL ---
 // Header: the dedicated pages. Drawer and footer add the remaining pages and every procedure.
-const NAV = [
-  ['about', 'عن الدكتور', 'About'],
-  ['procedures', 'الإجراءات', 'Procedures'],
-  ['lens-lab', 'مختبر العدسات', 'Lens Lab'],
-  ['surgical-education', 'الجراحة ثلاثية الأبعاد', '3D surgery'],
-  ['education', 'التثقيف الصحي', 'Education'],
-  ['clinic', 'العيادة والحجز', 'Clinic & booking']
-];
-const DRAWER_NAV = [
-  ['home', 'الرئيسية', 'Home'],
-  ...NAV.slice(0, 4),
-  ['how-vision-works', 'رحلة الضوء في العين', 'How vision works'],
-  ...NAV.slice(4)
-];
+// Both menus are generated from section-registry.js.
+const navItem = s => [s.id, s.nav.label.ar, s.nav.label.en];
+const NAV = headerNav().map(navItem);
+const DRAWER_NAV = drawerNav().map(navItem);
 /** The header item that represents the current page. */
 const activeKey = () => (route.slug ? 'procedures' : route.page);
 
@@ -561,9 +540,7 @@ function renderSpecialties() {
         lede: tr('سبعة إجراءات، لكل منها دليل مبسّط للتشريح والخطوات والتعافي والمخاطر. معلومات توعوية عامة بانتظار مراجعة د. معن، ولا تغني عن الفحص.', 'Seven procedures, each with a plain-language guide to the anatomy, steps, recovery and risks. General education pending Dr. Maan’s review; it does not replace an examination.'),
         aside: quietLink(P('procedures'), tr('مكتبة الإجراءات الكاملة', 'The full procedure library'))
       })}
-      <div class="atlas atlas-home fade-in">
-        ${PROCEDURES.map((p, i) => plateCard(p, i, { cls: `spec-card${i === 0 ? ' is-lead' : ''}`, pins: i === 0, sizes: i === 0 ? '(min-width: 1024px) 560px, 100vw' : '(min-width: 1024px) 300px, (min-width: 640px) 45vw, 120px' })).join('')}
-      </div>
+      ${procedureGallery({ cls: 'atlas atlas-home fade-in', cards: PROCEDURES.map((p, i) => plateCard(p, i, { cls: `spec-card${i === 0 ? ' is-lead' : ''}`, pins: i === 0, sizes: i === 0 ? '(min-width: 1024px) 560px, 100vw' : '(min-width: 1024px) 300px, (min-width: 640px) 45vw, 120px' })) })}
       <p class="atlas-note">${pendingNote()}. ${tr('الأرقام على اللوحة الأولى مواضع محسوبة من النموذج ثلاثي الأبعاد.', 'The numbers on the first plate are positions computed from the 3D model.')}</p>
     </div>
   </section>`;
@@ -591,13 +568,7 @@ function renderExpertise() {
         </div>
         <div class="ledger-block">
           <h3 class="ledger-title">${tr('القيادة والمناصب', 'Leadership & appointments')}</h3>
-          <ol class="timeline">
-            ${P_.roles.map(r => `
-            <li class="timeline-item${r.current ? ' is-current' : ''}">
-              <span class="timeline-when">${r.current ? tr('حالياً', 'Current') : tr('سابقاً', 'Previously')}</span>
-              <h4>${short(r)}</h4>
-            </li>`).join('')}
-          </ol>
+          ${appointmentsTimeline(P_.roles, { title: short })}
         </div>
       </div>
     </div>
@@ -660,24 +631,18 @@ function renderDiscovery() {
           lede: tr('أداتان تثقيفيتان لمن يستعد لموعده، ولكل من يحب أن يفهم العين.', 'Two educational tools for anyone preparing for a visit, and for anyone curious about the eye.')
         })}
         <div class="discover-list fade-in">
-          <article class="disc-card disc-lab">
-            <div class="disc-visual">${LENS_LAB_ART()}</div>
-            <div class="disc-body">
-              <p class="disc-k">${tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab')}</p>
-              <h3>${tr('قارن العدسات كما تعيش يومك', 'Compare lenses the way you live your day')}</h3>
-              <p>${tr('ماذا تقدم كل عدسة مزروعة للرؤية البعيدة والمتوسطة والقريبة، وللأضواء ليلاً؟ مع محاكي رؤية تقريبي.', 'What does each lens implant give at far, intermediate and near distances, and to lights at night? With an approximate vision simulator.')}</p>
-              ${quietLink(P('lens-lab'), tr('افتح مختبر العدسات', 'Open the Lens Lab'))}
-            </div>
-          </article>
-          <article class="disc-card disc-light">
-            <div class="disc-visual">${LIGHT_ART()}</div>
-            <div class="disc-body">
-              <p class="disc-k">${tr('رحلة الضوء', 'The light journey')}</p>
-              <h3>${tr('كيف تتحول الأشعة إلى صورة؟', 'How does light become an image?')}</h3>
-              <p>${tr('تتبّع الضوء عبر القرنية والعدسة حتى الشبكية، واعرف أين يحدث كل إجراء.', 'Follow light through the cornea and lens to the retina, and see where each procedure takes place.')}</p>
-              ${quietLink(P('how-vision-works'), tr('ابدأ رحلة الضوء', 'Start the light journey'))}
-            </div>
-          </article>
+          ${toolPreview({
+            cls: 'disc-lab', art: LENS_LAB_ART(), kicker: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab'),
+            title: tr('قارن العدسات كما تعيش يومك', 'Compare lenses the way you live your day'),
+            text: tr('ماذا تقدم كل عدسة مزروعة للرؤية البعيدة والمتوسطة والقريبة، وللأضواء ليلاً؟ مع محاكي رؤية تقريبي.', 'What does each lens implant give at far, intermediate and near distances, and to lights at night? With an approximate vision simulator.'),
+            link: quietLink(P('lens-lab'), tr('افتح مختبر العدسات', 'Open the Lens Lab'))
+          })}
+          ${toolPreview({
+            cls: 'disc-light', art: LIGHT_ART(), kicker: tr('رحلة الضوء', 'The light journey'),
+            title: tr('كيف تتحول الأشعة إلى صورة؟', 'How does light become an image?'),
+            text: tr('تتبّع الضوء عبر القرنية والعدسة حتى الشبكية، واعرف أين يحدث كل إجراء.', 'Follow light through the cornea and lens to the retina, and see where each procedure takes place.'),
+            link: quietLink(P('how-vision-works'), tr('ابدأ رحلة الضوء', 'Start the light journey'))
+          })}
         </div>
       </div>`;
 }
@@ -713,15 +678,7 @@ function renderExplore() {
 // 07 + 08 — three curated guides and the general FAQ (mirrored in the FAQPage JSON-LD; procedure-specific questions
 // live on their procedure pages).
 function renderFaqList(prefix = 'faq') {
-  return `<div class="faq-list">
-        ${FAQ.map((f, idx) => `
-        <div class="faq-item" id="${prefix}-${idx}">
-          <h3 class="faq-heading">
-            <button type="button" class="faq-question" onclick="toggleFaq(${idx},'${prefix}')" aria-expanded="false" aria-controls="${prefix}-answer-${idx}"><span>${L(f.q)}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
-          </h3>
-          <div class="faq-answer" id="${prefix}-answer-${idx}" role="region"><p>${L(f.a)}</p></div>
-        </div>`).join('')}
-      </div>`;
+  return faqList(FAQ.map(f => ({ q: L(f.q), a: L(f.a) })), prefix);
 }
 function renderEducationPreview() {
   const items = FEATURED_GUIDES.map(guideBy);
@@ -922,15 +879,11 @@ function renderAboutPage() {
         <div class="areas">
           ${AREAS.map(a => {
             const p = procedureBySlug(a.slug);
-            return `<article class="area fade-in">
-            <div class="area-fig">${cardIllus(p, { cls: 'area-illus', sizes: '(min-width: 1024px) 420px, (min-width: 480px) 40vw, 240px' })}</div>
-            <div class="area-body">
-              <p class="pc-code"><bdi dir="ltr" class="pc-pl">${plateCode(PROCEDURES.indexOf(p))}</bdi></p>
-              <h3>${L(a.title)}</h3>
-              <p>${L(a.text)}</p>
-              <ul class="area-links">${[a.slug, ...a.more].map(s => `<li>${quietLink(pageHref(currentLang, s), L(procedureBySlug(s).name))}</li>`).join('')}</ul>
-            </div>
-          </article>`;
+            return imageTextSplit({
+              figure: cardIllus(p, { cls: 'area-illus', sizes: '(min-width: 1024px) 420px, (min-width: 480px) 40vw, 240px' }),
+              code: plateCode(PROCEDURES.indexOf(p)), title: L(a.title), text: L(a.text),
+              links: [a.slug, ...a.more].map(s => quietLink(pageHref(currentLang, s), L(procedureBySlug(s).name)))
+            });
           }).join('')}
         </div>
       </div>
@@ -952,14 +905,7 @@ function renderAboutPage() {
           </div>
           <div class="appointments fade-in">
             <h3 class="ledger-title">${tr('المناصب والمسيرة', 'Appointments')}</h3>
-            <ol class="timeline">
-              ${P_.roles.map((r, i) => `
-              <li class="timeline-item${r.current ? ' is-current' : ''}">
-                <span class="timeline-when"><span class="timeline-n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>${r.current ? tr('حالياً', 'Current') : tr('سابقاً', 'Previously')}</span>
-                <h4>${r[currentLang]}</h4>
-                ${WHY_IT_MATTERS[r.id] ? `<p class="why">${L(WHY_IT_MATTERS[r.id])}</p>` : ''}
-              </li>`).join('')}
-            </ol>
+            ${appointmentsTimeline(P_.roles, { title: r => r[currentLang], numbered: true, note: r => (WHY_IT_MATTERS[r.id] ? `<p class="why">${L(WHY_IT_MATTERS[r.id])}</p>` : '') })}
           </div>
         </div>
       </div>
@@ -1025,15 +971,13 @@ function renderProceduresPage() {
             ${chips.map(([id, label, n]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" onclick="filterProcedures('${id}')"><span>${label}</span><span class="chip-n" aria-hidden="true">${n}</span></button>`).join('')}
           </div>
         </div>
-        <div class="proc-grid atlas atlas-library" data-filter="${procFilter}">
-          ${PROCEDURES.map((p, i) => procCard(p, { featured: i === 0 })).join('')}
+        ${procedureGallery({ cls: 'proc-grid atlas atlas-library', attrs: `data-filter="${procFilter}"`, cards: PROCEDURES.map((p, i) => procCard(p, { featured: i === 0 })), after: `
           <aside class="proc-help">
             <p class="pc-code"><span class="proc-card-group">${tr('غير متأكد؟', 'Not sure?')}</span></p>
             <h3>${tr('ابدأ بفحص شامل', 'Start with an examination')}</h3>
             <p>${tr('لا تحتاج إلى معرفة اسم الإجراء مسبقاً. يحدد الفحص سبب المشكلة والخيارات المناسبة لعينك.', 'You do not need to know the procedure name. An examination finds the cause and the options that suit your eye.')}</p>
             <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعد فحص', 'Book an examination')}</span></a>
-          </aside>
-        </div>
+          </aside>` })}
         <aside class="library-note">
           ${icon('lens', 22)}
           <p>${tr('تقارن بين أنواع العدسات المزروعة؟ ', 'Comparing lens implants? ')}<a href="${P('lens-lab')}" data-nav class="text-link">${tr('افتح مختبر الرؤية والعدسات', 'Open the Vision & Lens Lab')}</a>${tr(' — أين يحدث كل إجراء في العين؟ ', ' — Where in the eye does each procedure happen? ')}<a href="${P('how-vision-works')}" data-nav class="text-link">${tr('رحلة الضوء', 'The light journey')}</a></p>
@@ -1051,19 +995,19 @@ const featureMsgs = name => () => ({
   retry: tr('إعادة المحاولة', 'Try again')
 });
 const lensLab = createFeatureMount({
-  key: 'lens-lab', slotId: 'lens-lab-host',
+  key: 'lens-lab', slotId: 'lens-lab-host', enabled: () => sectionHasFeature(route.page, 'lens-lab'),
   options: () => ({ lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), simulator: 'auto' }),
   messages: featureMsgs({ ar: 'مختبر العدسات', en: 'The Lens Lab' })
 });
 const lightJourney = createFeatureMount({
-  key: 'light-journey', slotId: 'light-journey-host',
+  key: 'light-journey', slotId: 'light-journey-host', enabled: () => sectionHasFeature(route.page, 'light-journey'),
   options: () => ({ lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), linkFor: slug => pathFor(currentLang, slug) }),
   messages: featureMsgs({ ar: 'رحلة الضوء', en: 'The light journey' })
 });
 
 /** Feature wrapper: module slot (reserved while a mount is expected) + static text summary for no-JS/fallback. */
 function featureBlock({ key, hostAttr, slotId, staticHtml, name }) {
-  const available = hasFeature(key);
+  const available = hasFeature(key) && sectionHasFeature(route.page, key);
   return `
       <div class="feature feature-${key}" data-feature="${key}">
         <div class="feature-slot" id="${slotId}" ${hostAttr} ${available ? 'data-reserve' : ''} aria-label="${name}"></div>
@@ -1216,19 +1160,25 @@ function vsimWatchChrome() {
 async function loadVisionSim() {
   if (vsim.loading || vsim.ctrl) return;
   vsim.loading = true;
+  const host = vsim.host;
   try {
     const mod = await import('./src/vision-sim/index.js');
-    if (!vsim.host || !vsim.host.isConnected) return; // visitor left the page while it loaded
-    vsim.host.innerHTML = ''; // drop a previous load-error message
-    vsim.ctrl = await mod.mount(vsim.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), ...vsimOptions({ ...vsimStored(), ...vsimFromUrl() }) });
+    if (vsim.host !== host || !host.isConnected) return; // visitor left the page while it loaded
+    host.innerHTML = ''; // drop a previous load-error message
+    const ctrl = await mod.mount(host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), ...vsimOptions({ ...vsimStored(), ...vsimFromUrl() }) });
+    if (vsim.host !== host) { ctrl.destroy(); return; } // left during the mount: its WebGL context must not outlive the page
+    vsim.ctrl = ctrl;
     vsim.ctrl.on('change', vsimRemember);
     vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
     vsim.failed = false;
     document.getElementById('simulator-host')?.removeAttribute('data-reserve'); // mounted: it sizes itself now
   } catch (err) {
     console.warn('Vision simulator failed to load', err);
-    showVisionSimError();
-  } finally { vsim.loading = false; }
+    if (vsim.host === host) showVisionSimError();
+  } finally {
+    vsim.loading = false;
+    if (vsim.host && vsim.host !== host && !vsim.ctrl) mountVisionSim(); // came back while the old load was finishing
+  }
 }
 // A failed download used to leave an empty 1,500 px reserved box with no explanation (BUG-09): say what happened,
 // release the reserved height and offer a retry.
@@ -1353,14 +1303,15 @@ function closeCataract3D(refocus = true) {
 window.startCataract3D = async function () {
   if (c3d.state === 'loading' || c3d.state === 'active') return;
   c3d.state = 'loading';
-  c3d.host = document.createElement('div');
-  c3d.host.className = 'c3d-host';
+  const host = c3d.host = document.createElement('div');
+  host.className = 'c3d-host';
   c3dSync();
   try {
     // Static specifier so Vite code-splits the module (and three.js) out of the main chunk.
     const mod = await import('./src/cataract-sim/index.js');
-    const ctrl = await mod.mount(c3d.host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
-    if (c3d.state !== 'loading') { ctrl && ctrl.destroy && ctrl.destroy(); return; }
+    if (c3d.host !== host) return; // the visitor left while it loaded; a later start owns the module now
+    const ctrl = await mod.mount(host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
+    if (c3d.host !== host) { ctrl && ctrl.destroy && ctrl.destroy(); return; }
     c3d.controller = ctrl;
     c3d.state = 'active';
     // the visitor may have switched language or theme while the module was loading
@@ -1375,9 +1326,10 @@ window.startCataract3D = async function () {
       const target = [...c3d.host.querySelectorAll('[data-ref="start"], [data-ref="playPause"], [data-ref="viewport"]')].find(el => el.offsetParent !== null);
       if (target) target.focus({ preventScroll: true });
     }
-    document.getElementById('cataract-3d-stage')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    revealViewer();
   } catch (e) {
     console.warn('3D cataract module unavailable:', e);
+    if (c3d.host !== host) return;
     if (c3d.host) c3d.host.remove();
     c3d.host = null;
     c3d.controller = null;
@@ -1386,6 +1338,23 @@ window.startCataract3D = async function () {
   }
 };
 window.closeCataract3D = closeCataract3D;
+
+// On a short phone the viewer is taller than the screen, and the fixed booking bar covers the bottom of it. Bring the
+// viewer in as before (nearest edge, below the header), then make sure its playback controls end above the bar: otherwise
+// the timeline sits under the bar and a tap meant for it lands on the "Call" link.
+function revealViewer() {
+  const stage = document.getElementById('cataract-3d-stage');
+  const controls = c3d.host && c3d.host.querySelector('.csim-playbar');
+  if (!stage || !controls) return;
+  const top = (document.getElementById('site-header')?.offsetHeight || 68) + 16;
+  const bar = document.getElementById('booking-bar');
+  const floor = window.innerHeight - (bar && getComputedStyle(bar).display !== 'none' ? bar.offsetHeight : 0) - 8;
+  const s = stage.getBoundingClientRect();
+  let dy = s.top < top ? s.top - top : s.bottom > window.innerHeight ? Math.min(s.top - top, s.bottom - window.innerHeight) : 0;
+  const overhang = controls.getBoundingClientRect().bottom - dy - floor;
+  if (overhang > 0) dy += overhang;
+  window.scrollBy({ top: dy, behavior: reducedMotion() ? 'auto' : 'smooth' });
+}
 
 // /surgical-education/
 function renderSurgicalEducationPage() {
@@ -1462,21 +1431,10 @@ function renderQuestionnaireCard() {
 }
 
 function guideArticle(g, i) {
-  const secs = g.sections[currentLang];
-  return `
-          <article class="guide" id="${g.id}" aria-labelledby="${g.id}-h">
-            <header class="guide-head">
-              <span class="guide-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
-              <div>
-                <h3 id="${g.id}-h">${L(g.title)}</h3>
-                <p class="guide-summary">${L(g.summary)}</p>
-              </div>
-            </header>
-            <div class="guide-body">
-              ${secs.map(([h, text, list]) => `<h4>${h}</h4>${text ? `<p>${text}</p>` : ''}${list ? `<ul class="bullets">${list.map(([k, v]) => `<li><strong>${k}:</strong> ${v}</li>`).join('')}</ul>` : ''}`).join('')}
-              <p class="guide-more"><a href="${pageHref(currentLang, g.slug)}" data-nav class="text-link">${tr('الدليل الكامل للإجراء', 'Full procedure guide')}: ${L(procedureBySlug(g.slug).name)}${icon('arrow', 16)}</a></p>
-            </div>
-          </article>`;
+  return educationalGuide({
+    id: g.id, number: i + 1, title: L(g.title), summary: L(g.summary), sections: g.sections[currentLang],
+    moreHref: pageHref(currentLang, g.slug), moreLabel: `${tr('الدليل الكامل للإجراء', 'Full procedure guide')}: ${L(procedureBySlug(g.slug).name)}`
+  });
 }
 
 function redFlagsCard() {
@@ -1582,20 +1540,16 @@ function renderClinicPage() {
 
 // Closing booking band (section pages and procedure pages).
 function renderClosing(key) {
-  return `
-    <section class="closing" aria-labelledby="closing-title-${key}">
-      <div class="container closing-inner">
-        <div>
-          <p class="kicker"><span>${tr('مغربي المدينة المنورة · طريق المطار', 'Magrabi Madinah · Airport Road')}</span></p>
-          <h2 id="closing-title-${key}">${tr('موعدك مع د. معن البري يبدأ بخطوة', 'Your appointment with Dr. Maan starts here')}</h2>
-        </div>
-        <div class="closing-actions">
-          <a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
-          <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب العيادة', 'Clinic WhatsApp')}</span></a>
-          <a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>
-        </div>
-      </div>
-    </section>`;
+  return contactCta({
+    titleId: `closing-title-${key}`,
+    kicker: tr('مغربي المدينة المنورة · طريق المطار', 'Magrabi Madinah · Airport Road'),
+    title: tr('موعدك مع د. معن البري يبدأ بخطوة', 'Your appointment with Dr. Maan starts here'),
+    actions: [
+      `<a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>`,
+      `<a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب العيادة', 'Clinic WhatsApp')}</span></a>`,
+      `<a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>`
+    ]
+  });
 }
 
 // ============================================================
@@ -1641,11 +1595,7 @@ function renderProcedurePage(p) {
         ${sec('benefits', `<div class="two-col"><div class="pane pane-pos"><h3>${icon('check', 18)}${tr('الفوائد المحتملة', 'Possible benefits')}</h3>${list(c.benefits)}</div><div class="pane"><h3>${icon('minus', 18)}${tr('الحدود', 'Limitations')}</h3>${list(c.limitations)}</div></div>`)}
         ${sec('risks', `${list(c.risks)}<p class="proc-note proc-note-alert">${icon('alert', 18)}<span>${tr('تواصل مع العيادة فوراً عند ألم متزايد، أو احمرار شديد، أو تراجع مفاجئ في الرؤية.', 'Contact the clinic at once for increasing pain, marked redness or a sudden drop in vision.')}</span></p>`)}
         ${sec('recovery', `${list(c.recovery)}${phaco}`)}
-        ${sec('faq', `<div class="faq-list">${c.faq.map((f, i) => `
-          <div class="faq-item" id="pfaq-${i}">
-            <h3 class="faq-heading"><button type="button" class="faq-question" onclick="toggleFaq(${i},'pfaq')" aria-expanded="false" aria-controls="pfaq-answer-${i}"><span>${f.q}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button></h3>
-            <div class="faq-answer" id="pfaq-answer-${i}" role="region"><p>${f.a}</p></div>
-          </div>`).join('')}</div>`)}
+        ${sec('faq', faqList(c.faq, 'pfaq'))}
         <aside class="proc-sources">
           <h2 class="sub-title">${tr('المصادر والمراجعة', 'Sources and review')}</h2>
           <p>${tr('معلومات توعوية عامة أُعدت من مصادر طبية للمرضى، ولا تغني عن الفحص والاستشارة:', 'General patient education prepared from these patient-information sources; it does not replace an examination:')}</p>
@@ -1694,25 +1644,22 @@ function renderProcedurePage(p) {
     <section class="section section-band proc-related" aria-labelledby="related-title">
       <div class="container">
         <header class="section-head section-head-split"><p class="kicker"><span>${tr('تابع القراءة', 'Keep reading')}</span></p><h2 id="related-title">${tr('إجراءات ذات صلة', 'Related procedures')}</h2></header>
-        <div class="related-grid">${related.map(r => procCard(r, { compact: true })).join('')}</div>
+        ${procedureGallery({ cls: 'related-grid', cards: related.map(r => procCard(r, { compact: true })) })}
         <p class="related-more">${quietLink(P('procedures'), tr('جميع الإجراءات', 'All procedures'))}</p>
       </div>
     </section>
 
-    <section class="closing proc-book" aria-labelledby="proc-book-title">
-      <div class="container closing-inner">
-        <div>
-          <p class="kicker"><span>${tr('الخطوة التالية', 'Next step')}</span></p>
-          <h2 id="proc-book-title">${tr(`ناقش ${p.name.ar} مع د. معن البري`, `Discuss ${p.name.en.toLowerCase().startsWith('icl') ? p.name.en : p.name.en.charAt(0).toLowerCase() + p.name.en.slice(1)} with Dr. Maan Al Barry`)}</h2>
-          <p class="closing-sub">${tr('يبدأ كل قرار علاجي بفحص شامل لعينك.', 'Every treatment decision starts with a full examination of your eye.')}</p>
-        </div>
-        <div class="closing-actions">
-          <a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>
-          <a href="tel:${C.clinicDirect.tel}" class="btn btn-ghost-light btn-lg" data-cta="call">${icon('phone', 18)}<span><bdi dir="ltr">${C.clinicDirect.display}</bdi></span></a>
-          <a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>
-        </div>
-      </div>
-    </section>
+    ${contactCta({
+      cls: 'proc-book', titleId: 'proc-book-title',
+      kicker: tr('الخطوة التالية', 'Next step'),
+      title: tr(`ناقش ${p.name.ar} مع د. معن البري`, `Discuss ${p.name.en.toLowerCase().startsWith('icl') ? p.name.en : p.name.en.charAt(0).toLowerCase() + p.name.en.slice(1)} with Dr. Maan Al Barry`),
+      sub: tr('يبدأ كل قرار علاجي بفحص شامل لعينك.', 'Every treatment decision starts with a full examination of your eye.'),
+      actions: [
+        `<a href="${C.bookingUrl}" ${EXT} class="btn btn-light btn-lg" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>${icon('arrow', 18)}</a>`,
+        `<a href="tel:${C.clinicDirect.tel}" class="btn btn-ghost-light btn-lg" data-cta="call">${icon('phone', 18)}<span><bdi dir="ltr">${C.clinicDirect.display}</bdi></span></a>`,
+        `<a href="${D.clinic.mapUrl}" ${EXT} class="btn btn-ghost-light btn-lg">${icon('pin', 18)}<span>${tr('موقع المستشفى', 'Hospital location')}</span></a>`
+      ]
+    })}
   </article>`;
 }
 
@@ -1736,7 +1683,7 @@ function renderFooter() {
         <nav class="footer-col" aria-label="${tr('صفحات الموقع', 'Site pages')}">
           <h3>${tr('الموقع', 'Site')}</h3>
           <a href="${pageHref()}" data-nav>${tr('الرئيسية', 'Home')}</a>
-          ${SECTION_PAGES.map(s => `<a href="${P(s.key)}" data-nav>${L(s.crumb)}</a>`).join('')}
+          ${footerNav().map(s => `<a href="${P(s.id)}" data-nav>${L(s.title)}</a>`).join('')}
         </nav>
         <nav class="footer-col footer-procs" aria-label="${tr('الإجراءات', 'Procedures')}">
           <h3>${tr('الإجراءات', 'Procedures')}</h3>
@@ -1807,7 +1754,7 @@ function updateHead(full) {
     const trail = breadcrumbFor(currentLang, route.slug, route.page);
     let graph;
     if (route.slug) graph = buildProcedureJsonLd(route.slug, currentLang, url(currentLang), SITE_URL, PROC ? PROC.CONTENT[route.slug][currentLang].faq : [], trail);
-    else if (route.page !== 'home') graph = buildSectionJsonLd(route.page, currentLang, url(currentLang), SITE_URL, meta, trail, { procedureUrls: PROCEDURES.map(p => ({ name: L(p.name), url: `${SITE_URL}/${pathFor(currentLang, p.slug)}` })) });
+    else if (route.page !== 'home') graph = buildSectionJsonLd(sectionPage(route.page).schema, currentLang, url(currentLang), SITE_URL, meta, trail, { procedureUrls: PROCEDURES.map(p => ({ name: L(p.name), url: `${SITE_URL}/${pathFor(currentLang, p.slug)}` })) });
     else graph = buildJsonLd();
     ld.textContent = JSON.stringify(graph, null, 2);
   }
@@ -1840,7 +1787,30 @@ function applyTheme() {
   if (c3d.controller && typeof c3d.controller.setTheme === 'function') {
     try { c3d.controller.setTheme(theme); } catch (e) { /* module handles its own errors */ }
   }
+  syncPrefsReset();
 }
+
+// --- SAVED PREFERENCES ---
+// Only two choices are ever stored: the language and the theme the visitor picked. Once one is saved, the footer offers a
+// way back to the defaults (the page's language and the device's theme). The control exists only for those visitors, so
+// the prerendered pages are unchanged.
+const PREF_KEYS = ['lang', 'theme'];
+const hasSavedPrefs = () => { try { return PREF_KEYS.some(k => localStorage.getItem(k) !== null); } catch (e) { return false; } };
+function syncPrefsReset() {
+  const links = document.querySelector('.footer-links');
+  if (!links) return;
+  const btn = document.getElementById('prefs-reset');
+  if (!hasSavedPrefs()) { if (btn) btn.remove(); return; }
+  if (btn) return;
+  links.insertAdjacentHTML('beforeend', `<button type="button" class="footer-reset" id="prefs-reset" onclick="resetPreferences()">${tr('إعادة ضبط اللغة والمظهر', 'Reset language and theme')}</button>`);
+}
+window.resetPreferences = function () {
+  const hadFocus = document.activeElement === document.getElementById('prefs-reset');
+  try { PREF_KEYS.forEach(k => localStorage.removeItem(k)); } catch (e) { /* storage unavailable: nothing was saved */ }
+  savedTheme = null;
+  applyTheme();
+  if (hadFocus) document.querySelector('.footer-links a')?.focus({ preventScroll: true }); // the control has gone; keep keyboard users in place
+};
 
 darkQuery.addEventListener('change', () => { if (!savedTheme) applyTheme(); });
 
@@ -1855,10 +1825,7 @@ window.cycleTheme = window.toggleTheme;
 window.toggleLang = function () {
   const lang = currentLang === 'ar' ? 'en' : 'ar';
   try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable: session-only */ }
-  currentQStep = 0;
-  qAnswers = [];
-  qCompleted = false;
-  go({ lang, slug: route.slug, page: route.page }, { scrollTo: 0 });
+  go({ lang, slug: route.slug, page: route.page }, { scrollTo: 0 }); // questionnaire answers are language-independent and stay in memory
 };
 
 // --- CLIENT-SIDE NAVIGATION ---
@@ -1867,6 +1834,7 @@ const samePage = (a, b) => a.lang === b.lang && a.slug === b.slug && a.page === 
 function go(next, { push = true, hash = '', scrollTo = null } = {}) {
   const commit = () => {
     const changed = !samePage(next, route);
+    if (releaseScrollHold) releaseScrollHold();
     if (changed) {
       if (push) {
         history.replaceState({ ...(history.state || {}), y: window.scrollY }, '');
@@ -1911,15 +1879,68 @@ window.addEventListener('popstate', e => {
   }
   go(next, { push: false, scrollTo: y });
   // restore the reading position once the page has rendered
-  requestAnimationFrame(() => window.scrollTo(0, y));
+  requestAnimationFrame(() => { window.scrollTo(0, y); if (y > 0) holdScrollTarget(() => y); });
 });
 
-window.scrollToSection = function (id) {
+// A section can move after the visitor has asked for it: a simulator further up the page replaces its reserved height
+// when its module arrives, which on a busy device is long after the jump has started. So a jump keeps its target until
+// the visitor takes over (any scroll, touch, click or key) or the page has had time to finish loading.
+let releaseScrollHold = null;
+function holdScrollTarget(targetTop, behavior = 'auto') {
+  if (releaseScrollHold) releaseScrollHold();
+  const main = document.getElementById('main');
+  if (!main || !('ResizeObserver' in window)) return;
+  let last = targetTop();
+  const ro = new ResizeObserver(() => {
+    const top = targetTop();
+    if (Math.abs(top - last) < 2) return;
+    last = top;
+    window.__headerHoldUntil = performance.now() + 900; // this is not the reader scrolling (headerScrollShadow)
+    window.scrollTo({ top, behavior });
+  });
+  ro.observe(main);
+  const inputs = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+  const stop = () => {
+    ro.disconnect();
+    inputs.forEach(t => window.removeEventListener(t, stop, true));
+    clearTimeout(timer);
+    releaseScrollHold = null;
+  };
+  inputs.forEach(t => window.addEventListener(t, stop, { capture: true, passive: true }));
+  const timer = setTimeout(stop, 20000);
+  releaseScrollHold = stop;
+}
+/** Where the page must be scrolled to show a section just below the fixed header. */
+function sectionTop(id) {
   const el = document.getElementById(id);
-  if (!el) return;
   const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
-  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset - 8;
-  window.scrollTo({ top, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  return el ? el.getBoundingClientRect().top + window.scrollY - headerOffset - 8 : window.scrollY;
+}
+
+// The reading position is kept on the history entry (never in storage), so Back, Forward and a reload can return to it.
+// It is written when scrolling stops and when the page is left: the browser's own restoration is off (scrollRestoration
+// is 'manual') because re-rendering #app would defeat it.
+function saveReadingPosition() {
+  history.replaceState({ ...(history.state || {}), y: Math.round(window.scrollY) }, '');
+}
+let readingPositionTimer = 0;
+window.addEventListener('scroll', () => { clearTimeout(readingPositionTimer); readingPositionTimer = setTimeout(saveReadingPosition, 200); }, { passive: true });
+window.addEventListener('pagehide', saveReadingPosition);
+/** After a reload or a return from another site: go back to where the visitor was. False when there is nothing to restore. */
+function restoreReadingPosition() {
+  const type = performance.getEntriesByType('navigation')[0]?.type;
+  const y = history.state && history.state.y;
+  if ((type !== 'reload' && type !== 'back_forward') || !(y > 0)) return false;
+  window.scrollTo(0, y);
+  holdScrollTarget(() => y);
+  return true;
+}
+
+window.scrollToSection = function (id) {
+  if (!document.getElementById(id)) return;
+  const behavior = reducedMotion() ? 'auto' : 'smooth';
+  window.scrollTo({ top: sectionTop(id), behavior });
+  holdScrollTarget(() => sectionTop(id), behavior);
 };
 
 // --- MOBILE DRAWER ---
@@ -2126,7 +2147,8 @@ function bindScrollSpy() {
 // --- MASTER APPLICATION RENDERER ---
 // `navigated` = true after a client-side route change (head metadata is rewritten then; on the
 // first render the prerendered head is already correct for this URL).
-const PAGE_RENDERERS = {
+// Named by each section's `content` in section-registry.js.
+const PAGE_CONTENT = {
   home: renderHome,
   about: renderAboutPage,
   procedures: renderProceduresPage,
@@ -2136,6 +2158,13 @@ const PAGE_RENDERERS = {
   'how-vision-works': renderLightJourneyPage,
   clinic: renderClinicPage
 };
+/** The current page's renderer. A published section without one stops the prerender (a page error fails the build). */
+function pageContent() {
+  const section = publishedSections().find(s => s.id === route.page);
+  const render = PAGE_CONTENT[section.content];
+  if (!render) throw new Error(`section "${section.id}" names the renderer "${section.content}", which main.js does not define`);
+  return render();
+}
 // First load: the HTML from the server is already this exact page. Replacing it with an identical copy costs a second
 // layout and paint, and made the browser report a later LCP. So the first render keeps the prerendered markup and only
 // wires it up. Every later render (navigation, language switch) goes through innerHTML as before.
@@ -2153,7 +2182,7 @@ function canAdoptPrerender() {
 }
 /** Undo what scripts/prerender.mjs changed for no-JS readers. Writes only: nothing here may force a layout. */
 function adoptPrerender() {
-  document.querySelectorAll('[data-vision-host], [data-lens-lab-host], [data-light-journey-host]').forEach(n => n.setAttribute('data-reserve', ''));
+  document.querySelectorAll(FEATURE_HOST_SELECTOR).forEach(n => n.setAttribute('data-reserve', ''));
   document.querySelectorAll('[data-current-year]').forEach(el => { el.textContent = String(new Date().getFullYear()); });
 }
 /** After the first frame: lift the first-load containment (style.css, html.first-load), so every height is real from
@@ -2165,7 +2194,7 @@ function finishFirstLoad() {
     belowFold.forEach(el => el.classList.remove('visible')); // they fade in on scroll, as on a client render
     declusterPins();
   }
-  applyInitialHash();
+  if (!restoreReadingPosition()) applyInitialHash();
 }
 function renderApp(navigated = false) {
   const adopt = firstRender && !navigated && canAdoptPrerender(); // before the lang attribute below is rewritten
@@ -2191,7 +2220,7 @@ function renderApp(navigated = false) {
     <a class="skip-link" href="${hereHref('main')}">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
     ${renderHeader()}
     <main id="main" tabindex="-1" data-page="${key}">
-      ${proc ? renderProcedurePage(proc) : (PAGE_RENDERERS[route.page] || renderHome)()}
+      ${proc ? renderProcedurePage(proc) : pageContent()}
     </main>
     ${renderFooter()}
     ${renderBookingBar()}
@@ -2226,10 +2255,9 @@ function renderApp(navigated = false) {
 function applyInitialHash() {
   let id = '';
   try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
-  const el = id && document.getElementById(id);
-  if (!el) return;
-  const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
-  window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - headerOffset - 8);
+  if (!id || !document.getElementById(id)) return;
+  window.scrollTo(0, sectionTop(id));
+  holdScrollTarget(() => sectionTop(id));
 }
 const boot = () => { renderApp(false); requestAnimationFrame(() => setTimeout(finishFirstLoad)); };
 if (route.slug && !canAdoptPrerender()) loadProcedureContent().then(boot, boot);

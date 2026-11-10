@@ -40,8 +40,9 @@ export function loadFeature(key) {
  *   slotId     id of the element in the page markup that receives the host (carries data-*-host + data-reserve)
  *   options    () => mount options (lang, theme, reducedMotion, linkFor, …) read at mount time
  *   messages   () => { error, retry } in the current language
+ *   enabled    () => may this page start the module (section-registry.js `features`)? When false nothing is downloaded
  */
-export function createFeatureMount({ key, slotId, options, messages, load = loadFeature }) {
+export function createFeatureMount({ key, slotId, options, messages, load = loadFeature, enabled = () => true }) {
   const st = { host: null, ctrl: null, loading: false, io: null, failed: false, token: 0 };
   const slot = () => document.getElementById(slotId);
   const wrap = () => slot()?.closest('.feature') || null;
@@ -98,7 +99,7 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
     sync() {
       const s = slot();
       if (!s) { this.destroy(); return; }
-      if (!hasFeature(key) && load === loadFeature) { s.removeAttribute('data-reserve'); return; }
+      if (!enabled() || (!hasFeature(key) && load === loadFeature)) { s.removeAttribute('data-reserve'); return; }
       if (!st.host) { st.host = document.createElement('div'); st.host.className = 'feature-host-inner'; }
       if (st.host.parentNode !== s) s.appendChild(st.host); // survive #app re-renders
       if (st.ctrl) {

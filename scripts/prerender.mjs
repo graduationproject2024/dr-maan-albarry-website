@@ -20,7 +20,8 @@ import { preview } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 import { PAGE_URLS, SITE_URL, pageUrl } from '../vite.config.js';
-import { pageMeta, breadcrumbFor, pathFor } from '../site-routes.js';
+import { pageMeta, breadcrumbFor, sectionPage } from '../site-routes.js';
+import { FEATURE_HOST_SELECTOR } from '../section-registry.js';
 import { buildProcedureJsonLd, buildSectionJsonLd, PROCEDURES } from '../doctor-data.js';
 import { CONTENT } from '../src/procedures/content.js';
 
@@ -48,15 +49,15 @@ async function render(page) {
     && document.querySelector('#app main h1')
     && (slug ? document.querySelector(`.proc-page[data-slug="${slug}"] #p-faq`) : document.querySelector(`#app main[data-page="${key}"]`)), { lang: page.lang, slug: page.slug, key: page.page });
   // Static markup only: drop live canvases / injected runtime nodes that make no sense without JS.
-  const html = await tab.evaluate(() => {
+  const html = await tab.evaluate((hosts) => {
     const app = document.querySelector('#app').cloneNode(true);
     app.querySelectorAll('canvas, script').forEach(n => n.remove());
     // no simulator can mount without JS: drop the reserved height so no-JS readers get no blank gap (BUG-10)
-    app.querySelectorAll('[data-vision-host], [data-lens-lab-host], [data-light-journey-host]').forEach(n => { n.innerHTML = ''; n.removeAttribute('data-reserve'); });
+    app.querySelectorAll(hosts).forEach(n => { n.innerHTML = ''; n.removeAttribute('data-reserve'); });
     app.querySelectorAll('.feature').forEach(n => { n.classList.remove('is-mounted', 'is-loading', 'is-failed'); n.querySelectorAll('.feature-status').forEach(s => s.remove()); });
     app.querySelectorAll('.fade-in, .reveal').forEach(n => n.classList.add('visible'));
     return app.innerHTML;
-  });
+  }, FEATURE_HOST_SELECTOR);
   await ctx.close();
   if (errors.length) throw new Error(`prerender ${page.path || '/'}: ${errors.join('\n')}`);
   return html;
@@ -104,11 +105,11 @@ function documentFor(page, appHtml) {
   if (slug) graph = buildProcedureJsonLd(slug, lang, url, SITE_URL, CONTENT[slug][lang].faq, trail);
   else if (key !== 'home') {
     const procedureUrls = PROCEDURES.map(p => ({ name: p.name[lang], url: pageUrl(lang, p.slug) }));
-    graph = buildSectionJsonLd(key, lang, url, SITE_URL, meta, trail, { procedureUrls });
+    graph = buildSectionJsonLd(sectionPage(key).schema, lang, url, SITE_URL, meta, trail, { procedureUrls });
   }
   if (graph) {
     const ld = JSON.stringify(graph, null, 2).replace(/</g, '\\u003c');
-    if (key !== 'about') doc = doc.replace(/<meta property="og:type" content="profile">/, '<meta property="og:type" content="article">');
+    if (slug || sectionPage(key).ogType !== 'profile') doc = doc.replace(/<meta property="og:type" content="profile">/, '<meta property="og:type" content="article">');
     doc = doc.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, () => `<script type="application/ld+json">\n${ld}\n</script>`);
   }
   for (const must of [`<html lang="${lang}"`, `<link rel="canonical" href="${url}">`, `<base href="${base}">`]) {
