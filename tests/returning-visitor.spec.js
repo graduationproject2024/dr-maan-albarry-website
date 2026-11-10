@@ -6,6 +6,7 @@ import { PROCEDURES } from '../doctor-data.js';
 const scrollYOf = (page) => page.evaluate(() => Math.round(window.scrollY));
 /** Scrolls until `selector` sits below the fixed header, and waits until the position has been recorded. */
 async function readTo(page, selector) {
+  await expect(page.locator('html')).not.toHaveClass(/first-load/); // heights are real only once the first-load containment is lifted
   await page.locator(selector).first().evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 200));
   await page.waitForFunction(() => history.state && Math.abs(history.state.y - window.scrollY) < 2);
   return scrollYOf(page);
