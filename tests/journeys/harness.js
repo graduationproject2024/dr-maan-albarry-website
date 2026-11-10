@@ -133,8 +133,9 @@ export class Journey {
     this.expectedFailures = [];
     this.blocked = false;
     // A journey may keep its evidence elsewhere (premium journeys: docs/.../premium-experience-reconstruction/evidence/journeys).
-    // `--repeat-each` runs one journey several times at once; each copy keeps its own screenshots so one cannot delete another's.
-    this.shotDir = path.join(meta.evidenceRoot || EVIDENCE_ROOT, testInfo.repeatEachIndex ? `${meta.id}-repeat-${testInfo.repeatEachIndex}` : meta.id);
+    // `--repeat-each` runs one journey several times at once. The first copy owns the evidence folder; the others keep their
+    // screenshots under test-results, so one copy cannot delete another's and the evidence folder is not filled with repeats.
+    this.shotDir = testInfo.repeatEachIndex ? path.join(LOG_DIR, 'repeats', `${meta.id}-${testInfo.repeatEachIndex}`) : path.join(meta.evidenceRoot || EVIDENCE_ROOT, meta.id);
     this.logDirs = meta.evidenceRoot ? [LOG_DIR, path.join(meta.evidenceRoot, 'logs')] : [LOG_DIR, LOG_MIRROR];
     this.startedAt = new Date().toISOString();
   }
