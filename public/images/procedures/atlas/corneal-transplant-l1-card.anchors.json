@@ -9,20 +9,20 @@
     {
       "id": "donor-graft",
       "structure": "donor-graft",
-      "x": 0.4509,
-      "y": 0.4276
+      "x": 0.3988,
+      "y": 0.3507
     },
     {
       "id": "sutures",
       "structure": "sutures",
-      "x": 0.6901,
-      "y": 0.5383
+      "x": 0.8859,
+      "y": 0.5777
     },
     {
       "id": "graft-junction",
       "structure": "graft-junction",
-      "x": 0.361,
-      "y": 0.5155
+      "x": 0.212,
+      "y": 0.532
     }
   ]
 }

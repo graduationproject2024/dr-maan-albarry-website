@@ -9,50 +9,50 @@
     {
       "id": "needle",
       "structure": "needle",
-      "x": 0.4265,
-      "y": 0.128
+      "x": 0.7565,
+      "y": 0.2723
     },
     {
       "id": "injection-site",
       "structure": "injection-site",
-      "x": 0.4468,
-      "y": 0.2126
+      "x": 0.6995,
+      "y": 0.3282
     },
     {
       "id": "medication",
       "structure": "medication",
-      "x": 0.4973,
-      "y": 0.4229
+      "x": 0.5543,
+      "y": 0.4704
     },
     {
       "id": "macula",
       "structure": "macula",
-      "x": 0.6807,
-      "y": 0.5859
+      "x": 0.5,
+      "y": 0.7897
     },
     {
       "id": "optic-disc",
       "structure": "optic-disc",
-      "x": 0.6759,
-      "y": 0.4422
+      "x": 0.5799,
+      "y": 0.7462
     },
     {
       "id": "retina",
       "structure": "retina",
-      "x": 0.5973,
-      "y": 0.3284
+      "x": 0.6306,
+      "y": 0.5666
     },
     {
       "id": "vitreous",
       "structure": "vitreous",
-      "x": 0.5754,
-      "y": 0.5057
+      "x": 0.5093,
+      "y": 0.6365
     },
     {
       "id": "optic-nerve",
       "structure": "optic-nerve",
-      "x": 0.7407,
-      "y": 0.4245
+      "x": 0.6083,
+      "y": 0.8355
     }
   ]
 }

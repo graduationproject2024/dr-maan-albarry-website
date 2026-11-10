@@ -75,7 +75,11 @@
       document.documentElement.setAttribute('data-theme', t);
       // Prerendered page with JS on: main.js lifts this after the first frame (style.css, html.first-load). Set here, not in
       // the HTML, so a visitor or crawler without JS always gets the plain, fully rendered page.
-      if (document.querySelector('meta[name="site-route"]')) document.documentElement.classList.add('first-load');
+      if (document.querySelector('meta[name="site-route"]')) {
+        var h = document.documentElement;
+        h.classList.add('first-load');
+        addEventListener('load', function () { h.classList.remove('first-load'); }); // at the latest; main.js lifts it after the first frame
+      }
     })();
   </script>
 

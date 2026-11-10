@@ -2,7 +2,9 @@
 // (only from docs/implementation/clinical-visual-reconstruction/CLINICAL_SOURCES.md), known simplifications and the
 // questions for Dr. Maan. Nothing here has been reviewed by a physician; every asset is `reviewStatus: "pending"`.
 
-export const VERSION = 'atlas-2026.11-r1';
+export const VERSION = 'atlas-2026.11-r2';
+export const VERSION_R1 = 'atlas-2026.11-r1'; // assets not re-rendered in r2 keep this
+
 
 // Reference keys -> citations, copied from CLINICAL_SOURCES.md (keys as used there).
 export const REFS = {
@@ -40,13 +42,193 @@ const GEN = [
 ];
 const CORNEA_X3 = 'Corneal thickness and its layers are drawn three times thicker than life (lateral sizes to scale) so the layers read; Bowman’s layer and the endothelium are drawn at a minimum visible width.';
 
+// r2 (patient-clarity pass): what changed in every re-rendered asset. Everything else stays r1 and is not re-approved.
+export const CHANGED = {
+  "cataract-surgery-l2-hero": [
+    "Edge fade widened only, so the ciliary body is visible where it is labelled; camera, anatomy and colours unchanged."
+  ],
+  "cataract-surgery-l3-iol-in-bag": [
+    "Reframed closer on the implant and capsule (less empty gel); anatomy unchanged, cornea kept in frame."
+  ],
+  "lens-implants-l2-hero": [
+    "Replaced the tilted cut-away (it read as a diagonal slab) with the same frontal cut-away as the cataract hero, showing the implant in the capsule on both sides; ciliary body and zonules visible at the edges."
+  ],
+  "lens-implants-l1-card": [
+    "Ciliary ring recoloured from heavy maroon to a pale tint and faded out at its outer edge, so the implant is the focal point; closer framing."
+  ],
+  "lens-implants-l3-iol-in-bag": [
+    "Ciliary ring recoloured from heavy maroon to a pale tint so the implant is the focal point; camera and anatomy unchanged."
+  ],
+  "icl-l2-hero": [
+    "Reframed with anterior up so the section runs across the 16:9 frame (the subject filled only the centre on phones); anatomy unchanged."
+  ],
+  "keratoconus-cxl-l2-hero": [
+    "Profile view with anterior up through a straight half cut (the cornea previously read at an angle); yellow is now only on the cut stroma, not over the whole chamber; only the front normal curve is dashed; UV kept as a soft field."
+  ],
+  "keratoconus-cxl-l1-card": [
+    "Same calmer profile as the hero: yellow only on the cut stroma, one dashed normal curve, closer framing."
+  ],
+  "keratoconus-cxl-l3-cone-section": [
+    "Closer on the cone with the iris mostly out of frame; yellow only on the cut stroma; one dashed normal curve; straight half cut."
+  ],
+  "corneal-transplant-l2-hero": [
+    "Closer frontal framing so the graft, junction ring and stitches fill the frame (the eye was a small ball); soft edge fade added; anatomy unchanged."
+  ],
+  "corneal-transplant-l1-card": [
+    "Closer frontal framing so the graft and stitches read at card size; soft edge fade added; anatomy unchanged."
+  ],
+  "intravitreal-injections-l2-hero": [
+    "Eye opened from front to back and seen from the front so the needle tip, the medicine and the macula are all in view (the medicine was hidden and the macula sat at the cut edge); the needle enters through the wall next to the opening."
+  ],
+  "intravitreal-injections-l1-card": [
+    "Same view as the hero: the opening shows the needle tip, the medicine and the macula."
+  ]
+};
+
+// Labels shown by default on the plate (at most 4 on L2, 1 or 2 on L1). A proposal: pending physician review.
+export const ESSENTIAL = {
+  "cataract-surgery-l2-hero": [
+    "cataract-nucleus",
+    "iol-optic",
+    "capsular-bag",
+    "iris"
+  ],
+  "cataract-surgery-l1-card": [
+    "cataract-nucleus"
+  ],
+  "cataract-surgery-l3-lens-capsule": [
+    "cataract-nucleus",
+    "anterior-capsule",
+    "zonules"
+  ],
+  "cataract-surgery-l3-iol-in-bag": [
+    "iol-optic",
+    "capsular-bag",
+    "zonules"
+  ],
+  "lens-implants-l2-hero": [
+    "iol-optic",
+    "capsular-bag",
+    "iris",
+    "cornea"
+  ],
+  "lens-implants-l1-card": [
+    "iol-optic"
+  ],
+  "lens-implants-l3-iol-in-bag": [
+    "iol-optic",
+    "iol-haptic",
+    "capsular-bag"
+  ],
+  "lens-implants-l3-optic-types": [
+    "iol-monofocal",
+    "iol-toric",
+    "iol-multifocal",
+    "iol-edof"
+  ],
+  "laser-vision-correction-l2-hero": [
+    "flap",
+    "laser-beam",
+    "ablation-zone",
+    "stroma"
+  ],
+  "laser-vision-correction-l1-card": [
+    "laser-beam",
+    "flap"
+  ],
+  "laser-vision-correction-l3-corneal-layers": [
+    "corneal-epithelium",
+    "stroma",
+    "endothelium"
+  ],
+  "laser-vision-correction-l3-ablation-profile": [
+    "original-profile",
+    "ablation-zone",
+    "stromal-bed"
+  ],
+  "icl-l2-hero": [
+    "icl",
+    "vault",
+    "natural-lens",
+    "iris"
+  ],
+  "icl-l1-card": [
+    "icl",
+    "natural-lens"
+  ],
+  "icl-l3-vault-section": [
+    "icl",
+    "vault",
+    "natural-lens",
+    "icl-footplate"
+  ],
+  "keratoconus-cxl-l2-hero": [
+    "cone",
+    "normal-dome",
+    "riboflavin",
+    "uv-light"
+  ],
+  "keratoconus-cxl-l1-card": [
+    "cone",
+    "normal-dome"
+  ],
+  "keratoconus-cxl-l3-cone-section": [
+    "cone",
+    "normal-dome",
+    "riboflavin"
+  ],
+  "keratoconus-cxl-l3-collagen-crosslinks": [
+    "collagen-fibrils",
+    "cross-links"
+  ],
+  "corneal-transplant-l2-hero": [
+    "donor-graft",
+    "graft-junction",
+    "sutures"
+  ],
+  "corneal-transplant-l1-card": [
+    "donor-graft",
+    "sutures"
+  ],
+  "corneal-transplant-l3-graft-section": [
+    "donor-graft",
+    "graft-junction",
+    "sutures"
+  ],
+  "corneal-transplant-l3-sutured-junction": [
+    "sutures",
+    "graft-junction",
+    "donor-graft"
+  ],
+  "intravitreal-injections-l2-hero": [
+    "needle",
+    "medication",
+    "retina",
+    "macula"
+  ],
+  "intravitreal-injections-l1-card": [
+    "needle",
+    "medication"
+  ],
+  "intravitreal-injections-l3-pars-plana-entry": [
+    "injection-site",
+    "medication",
+    "retina"
+  ],
+  "intravitreal-injections-l3-macula": [
+    "macula",
+    "fovea",
+    "optic-disc"
+  ]
+};
+
 // Per-asset metadata. `structures` = what the image shows (anchor ids are a subset).
 export const META = {
   // ------------------------------------------------------------- cataract
   'cataract-surgery-l2-hero': {
     structures: ['cataract-nucleus', 'lens-cortex', 'lens-capsule', 'iol-optic', 'capsular-bag', 'iris', 'ciliary-body', 'zonules', 'cornea'],
     refs: [...EYE_DIMS, 'DUB-S', 'ROS', 'VASS', 'EYEWIKI', 'AAO-cataract', 'NEI'],
-    simplifications: [...GEN, 'Split view: left half before surgery, right half the same eye after; the capsulorhexis opening is not drawn on the “after” side.', 'IOL haptics are generic C-loops; the vitreous floor behind the lens is translucent gel (it was a bright slab in the previous version).'],
+    simplifications: ['r2: edge fade widened so the ciliary body shows; no anatomical change.', ...GEN, 'Split view: left half before surgery, right half the same eye after; the capsulorhexis opening is not drawn on the “after” side.', 'IOL haptics are generic C-loops; the vitreous floor behind the lens is translucent gel (it was a bright slab in the previous version).'],
     alt: { en: 'Cut-away of the front of the eye: on the left a cloudy amber natural lens in its capsule; on the right a clear artificial lens in the same capsule.', ar: 'مقطع لمقدمة العين: على اليسار عدسة طبيعية معتمة بلون كهرماني داخل محفظتها، وعلى اليمين عدسة صناعية شفافة في المحفظة نفسها.' },
     caption: { en: 'Before and after: the cloudy lens is removed and a clear implant sits in the same capsule.', ar: 'قبل وبعد: تُزال العدسة المعتمة وتستقر عدسة مزروعة شفافة في المحفظة نفسها.' },
     questions: ['Is the degree of brunescence (amber nucleus with milky cortex) a fair “typical” cataract for patients, or should a milder grade be shown?', 'Should the “after” half show the capsulorhexis edge resting on the optic?']
@@ -79,15 +261,15 @@ export const META = {
   'lens-implants-l2-hero': {
     structures: ['iol-optic', 'capsular-bag', 'zonules', 'ciliary-body', 'iris', 'cornea'],
     refs: [...EYE_DIMS, 'VASS', 'BCSC', 'EYEWIKI', 'AAO-IOL'],
-    simplifications: [...GEN, 'Generic monofocal one-piece IOL; no brand or product geometry.', 'A quarter of the globe is removed; the vitreous is a translucent gel.'],
-    alt: { en: 'Eye with a quarter cut away showing a clear lens implant inside the capsule behind the iris, held by fine fibres from the ciliary body.', ar: 'عين نُزع ربعها تُظهر عدسة مزروعة شفافة داخل المحفظة خلف القزحية، تثبّتها ألياف دقيقة من الجسم الهدبي.' },
+    simplifications: ['r2: half cut seen from the front, the same composition as the cataract hero.', ...GEN, 'Generic monofocal one-piece IOL; no brand or product geometry.', 'A quarter of the globe is removed; the vitreous is a translucent gel.'],
+    alt: { en: 'Cut-away of the front of the eye: a clear lens implant sits in the capsule behind the iris, with fine fibres and the ciliary body at each side.', ar: 'مقطع لمقدمة العين: عدسة مزروعة شفافة داخل المحفظة خلف القزحية، وعلى جانبيها ألياف دقيقة والجسم الهدبي.' },
     caption: { en: 'A lens implant replaces the natural lens inside its capsule.', ar: 'تحل العدسة المزروعة محل العدسة الطبيعية داخل محفظتها.' },
     questions: ['Should the hero show a premium (toric or multifocal) optic instead of a plain monofocal?']
   },
   'lens-implants-l1-card': {
     structures: ['iol-optic', 'iol-haptic', 'capsular-bag', 'zonules', 'ciliary-body'],
     refs: ['BCSC', 'EYEWIKI', 'VASS', 'AAO-IOL'],
-    simplifications: ['Specimen view: cornea, iris and the outer coats are omitted to show the capsule; only the pleated ciliary ring (pars plicata) is kept.', 'Generic C-loop one-piece IOL; zonules drawn as a sparse fan.'],
+    simplifications: ['r2: the ciliary ring is drawn in a pale tint (not a tissue colour) and fades at its outer edge so the implant is the focal point.', 'Specimen view: cornea, iris and the outer coats are omitted to show the capsule; only the pleated ciliary ring (pars plicata) is kept.', 'Generic C-loop one-piece IOL; zonules drawn as a sparse fan.'],
     alt: { en: 'Front view of a clear lens implant with two curved support arms resting inside the transparent lens capsule, ringed by fine fibres.', ar: 'منظر أمامي لعدسة مزروعة شفافة بذراعَي تثبيت منحنيتين داخل محفظة العدسة الشفافة، تحيط بها ألياف دقيقة.' },
     caption: { en: 'Lens implants: a clear optic held in the capsule by two soft arms.', ar: 'العدسات المزروعة: جزء بصري شفاف تثبّته ذراعان مرنتان داخل المحفظة.' },
     questions: ['Is a specimen view (iris and cornea removed) acceptable for patients, or is it too abstract?']
@@ -95,7 +277,7 @@ export const META = {
   'lens-implants-l3-iol-in-bag': {
     structures: ['iol-optic', 'iol-haptic', 'capsular-bag', 'zonules', 'ciliary-body'],
     refs: ['BCSC', 'EYEWIKI', 'VASS', 'STR'],
-    simplifications: ['Specimen view: cornea, iris and outer coats omitted; the ciliary ring is trimmed behind the pars plicata.', 'Bag diameter 9.4 mm (model) vs ~10–10.5 mm in vivo; haptic shape generic.'],
+    simplifications: ['r2: the ciliary ring is drawn in a pale tint (not a tissue colour) so the implant is the focal point.', 'Specimen view: cornea, iris and outer coats omitted; the ciliary ring is trimmed behind the pars plicata.', 'Bag diameter 9.4 mm (model) vs ~10–10.5 mm in vivo; haptic shape generic.'],
     alt: { en: 'Oblique view of a lens implant in the capsular bag: the optic centred, both haptics curving into the capsule edge, zonules running to the ciliary ring.', ar: 'منظر مائل لعدسة مزروعة في كيس المحفظة: الجزء البصري في المركز وذراعا التثبيت تنحنيان نحو حافة المحفظة والألياف تمتد إلى الجسم الهدبي.' },
     caption: { en: 'The haptics hold the implant centred in the capsule’s outer rim.', ar: 'تُبقي ذراعا التثبيت العدسة في مركز المحفظة عند حافتها الخارجية.' },
     questions: ['Is the haptic angulation and contact with the bag equator realistic for the IOLs you use?']
@@ -114,7 +296,7 @@ export const META = {
     refs: ['DZ', 'NAV', 'BCSC', 'AAO-LASIK', 'AAO-PRK', 'FDA-LASIK'],
     simplifications: [CORNEA_X3, 'Shows LASIK (flap) only; PRK and SMILE are not illustrated.', 'Myopic ablation profile and depth are illustrative; the excimer beam colour is illustrative (193 nm light is invisible).'],
     alt: { en: 'Diagram of a corneal slice: a thin flap folded back, a fine laser beam reshaping the layer beneath, a dashed line marking the original curve.', ar: 'رسم لشريحة من القرنية: سديلة رقيقة مطوية للخلف وشعاع ليزر دقيق يعيد تشكيل الطبقة تحتها، وخط متقطع يُظهر الانحناء الأصلي.' },
-    caption: { en: 'In LASIK a thin flap is lifted and the laser reshapes the stroma beneath it.', ar: 'في الليزك تُرفع شريحة رقيقة ويعيد الليزر تشكيل اللحمة تحتها.' },
+    caption: { en: 'In LASIK a thin flap is lifted and the laser reshapes the layer beneath it.', ar: 'في الليزك تُرفع شريحة رقيقة ويعيد الليزر تشكيل الطبقة تحتها.' },
     questions: ['Do you also want PRK (surface) and SMILE (lenticule) versions of this diagram?', 'Is the flap thickness relative to the cornea acceptable given the ×3 exaggeration?']
   },
   'laser-vision-correction-l1-card': {
@@ -147,7 +329,7 @@ export const META = {
     refs: [...EYE_DIMS, 'STR', 'AAO-phakic'],
     simplifications: [...GEN, 'Generic, brand-free plate (central port omitted); vault ≈0.5 mm centrally is illustrative.', 'The vault is tinted aqua so it reads; aqueous is clear. The vitreous floor is now translucent (it was a pale slab).'],
     alt: { en: 'Cut-away of the front of the eye: a thin implantable lens rests behind the iris and arches over the clear natural lens with a small fluid gap.', ar: 'مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية تتقوّس فوق العدسة الطبيعية الشفافة مع فراغ صغير مملوء بالسائل.' },
-    caption: { en: 'An ICL sits behind the iris and vaults over the natural lens.', ar: 'تستقر العدسة اللاصقة الداخلية خلف القزحية وتتقوّس فوق العدسة الطبيعية.' },
+    caption: { en: 'An ICL sits behind the iris and arches over the natural lens, which stays in place.', ar: 'تستقر العدسة اللاصقة الداخلية خلف القزحية وتتقوّس فوق العدسة الطبيعية التي تبقى في مكانها.' },
     questions: ['Is a ~0.5 mm central vault the right “ideal” to depict?', 'Should the central port be drawn?']
   },
   'icl-l1-card': {
@@ -170,15 +352,15 @@ export const META = {
   'keratoconus-cxl-l2-hero': {
     structures: ['cone', 'normal-dome', 'riboflavin', 'uv-light', 'stroma', 'iris', 'anterior-chamber'],
     refs: ['DZ', 'NAV', 'BCSC', 'AAO-KC', 'AAO-CXL'],
-    simplifications: ['The cone is a smooth inferior-paracentral bulge (0.62 mm) thinning to ≈0.36 mm; real cones vary.', 'Epithelium-off protocol shown; riboflavin depth schematic; UV-A colour illustrative (365 nm is barely visible). The UV field was toned down after review.'],
+    simplifications: ['r2: straight half cut through the cone; riboflavin tint on the cut stroma only; only the front normal curve is dashed.', 'The cone is a smooth inferior-paracentral bulge (0.62 mm) thinning to ≈0.36 mm; real cones vary.', 'Epithelium-off protocol shown; riboflavin depth schematic; UV-A colour illustrative (365 nm is barely visible). The UV field was toned down after review.'],
     alt: { en: 'Side view of a thinned, cone-shaped cornea next to a dashed normal curve, soaked in yellow riboflavin under a soft band of ultraviolet light.', ar: 'منظر جانبي لقرنية رقيقة مخروطية بجانب خط متقطع للانحناء الطبيعي، مشبعة بالريبوفلافين الأصفر تحت حزمة ناعمة من الأشعة فوق البنفسجية.' },
-    caption: { en: 'Cross-linking uses riboflavin and UV light to stiffen a weakened cornea.', ar: 'يستخدم التثبيت الريبوفلافين والأشعة فوق البنفسجية لتقوية القرنية الضعيفة.' },
+    caption: { en: 'Cross-linking uses riboflavin (vitamin B2) drops and UV light to strengthen a weakened cornea.', ar: 'يستخدم التثبيت قطرات الريبوفلافين (فيتامين ب٢) والأشعة فوق البنفسجية لتقوية القرنية الضعيفة.' },
     questions: ['Should the epithelium-on (trans-epithelial) protocol be shown too?']
   },
   'keratoconus-cxl-l1-card': {
     structures: ['cone', 'normal-dome', 'riboflavin', 'uv-light'],
     refs: ['AAO-KC', 'AAO-CXL', 'BCSC'],
-    simplifications: ['Smooth schematic cone; illustrative UV colour.'],
+    simplifications: ['r2: straight half cut through the cone; riboflavin tint on the cut stroma only; only the front normal curve is dashed.', 'Smooth schematic cone; illustrative UV colour.'],
     alt: { en: 'A cone-shaped, thinned cornea compared with its normal dome, tinted yellow by riboflavin under soft ultraviolet light.', ar: 'قرنية رقيقة مخروطية مقارنةً بقبتها الطبيعية، مصبوغة بالأصفر بالريبوفلافين تحت أشعة فوق بنفسجية ناعمة.' },
     caption: { en: 'Keratoconus: the cornea thins and bulges into a cone.', ar: 'القرنية المخروطية: تترقق القرنية وتبرز على شكل مخروط.' },
     questions: ['Is the cone’s steepness exaggerated too much for patients?']
@@ -186,7 +368,7 @@ export const META = {
   'keratoconus-cxl-l3-cone-section': {
     structures: ['cone', 'normal-dome', 'riboflavin', 'stroma', 'endothelium'],
     refs: ['DZ', 'BCSC', 'AAO-KC', 'AAO-CXL'],
-    simplifications: ['Gaussian cone deformation and thinning (≈0.36 mm minimum) are schematic; layers are not exaggerated here.', 'Riboflavin is shown strongest anteriorly, fading with depth (schematic).'],
+    simplifications: ['r2: straight half cut through the cone; riboflavin tint on the cut stroma only; only the front normal curve is dashed.', 'Gaussian cone deformation and thinning (≈0.36 mm minimum) are schematic; layers are not exaggerated here.', 'Riboflavin is shown strongest anteriorly, fading with depth (schematic).'],
     alt: { en: 'Cross-section of a keratoconic cornea: the thinned cone bulges ahead of a dashed normal curve, its front layers stained yellow by riboflavin.', ar: 'مقطع لقرنية مخروطية: يبرز المخروط المترقق أمام خط متقطع للانحناء الطبيعي، وطبقاته الأمامية مصبوغة بالريبوفلافين الأصفر.' },
     caption: { en: 'Where the cone forms, the cornea is thinner and steeper.', ar: 'حيث يتكوّن المخروط تكون القرنية أرق وأشد انحناءً.' },
     questions: ['Is the minimum thickness (≈360 µm) a sensible “moderate” example?']
@@ -203,15 +385,15 @@ export const META = {
   'corneal-transplant-l2-hero': {
     structures: ['donor-graft', 'graft-junction', 'sutures', 'iris', 'pupil', 'sclera'],
     refs: [...EYE_DIMS, 'AAO-KP', 'NHS-KP'],
-    simplifications: ['8 mm full-thickness graft with 16 interrupted stitches (buried knots); suture thickness slightly exaggerated.', 'Donor tissue is drawn barely cooler than the host; the eye is quiet (no redness, no blood).'],
+    simplifications: ['r2: closer framing with a soft edge fade; the eye is cropped by the frame.', '8 mm full-thickness graft with 16 interrupted stitches (buried knots); suture thickness slightly exaggerated.', 'Donor tissue is drawn barely cooler than the host; the eye is quiet (no redness, no blood).'],
     alt: { en: 'Front view of an eye after a corneal transplant: a clear round donor cornea held by sixteen fine, evenly spaced stitches.', ar: 'منظر أمامي لعين بعد زراعة القرنية: قرنية دائرية شفافة من متبرع مثبتة بست عشرة غرزة دقيقة متساوية التباعد.' },
-    caption: { en: 'A full-thickness graft is stitched into place; stitches are removed in stages.', ar: 'تُثبَّت الزراعة كاملة السماكة بالغرز، وتُزال الغرز على مراحل.' },
+    caption: { en: 'Shown here: a full-thickness graft held by stitches, which are removed in stages. Lamellar grafts replace only some layers.', ar: 'الزراعة المعروضة كاملة السماكة تثبّتها غرز تُزال على مراحل، أما الزراعات الجزئية فتستبدل بعض الطبقات فقط.' },
     questions: ['Interrupted, running or combined sutures — which pattern should patients see?', 'Is 8 mm a representative graft size?']
   },
   'corneal-transplant-l1-card': {
     structures: ['donor-graft', 'sutures', 'graft-junction'],
     refs: ['AAO-KP', 'NHS-KP'],
-    simplifications: ['Interrupted sutures only; slightly exaggerated thickness.'],
+    simplifications: ['r2: closer framing with a soft edge fade; the eye is cropped by the frame.', 'Interrupted sutures only; slightly exaggerated thickness.'],
     alt: { en: 'An eye with a clear circular corneal graft held by fine stitches around its edge.', ar: 'عين بطُعم قرنية دائري شفاف تثبّته غرز دقيقة حول حافته.' },
     caption: { en: 'Corneal transplant replaces damaged cornea with donor tissue.', ar: 'تستبدل زراعة القرنية النسيج المتضرر بنسيج من متبرع.' },
     questions: ['Is a sutured PK the right representative image, given DMEK/DALK are also offered?']
@@ -236,16 +418,16 @@ export const META = {
   'intravitreal-injections-l2-hero': {
     structures: ['needle', 'injection-site', 'medication', 'vitreous', 'retina', 'macula', 'optic-disc', 'optic-nerve', 'sclera'],
     refs: [...EYE_DIMS, 'AAO-IVT', 'AAO-inj', 'NEI-AMD'],
-    simplifications: [...GEN, 'Entry drawn 3.75 mm behind the limbus (standard anatomy texts give ~3.5–4 mm); this distance is NOT in CLINICAL_SOURCES and is marked for review.', 'Needle shown without a gauge label; medication colour illustrative (most are clear); vessel pattern procedural.'],
-    alt: { en: 'Cut-away eye: a fine needle enters the white of the eye behind the coloured part and releases medicine into the clear gel, in front of the retina.', ar: 'عين مقطوعة: إبرة دقيقة تدخل بياض العين خلف الجزء الملوّن وتُطلق الدواء في الهلام الشفاف أمام الشبكية.' },
+    simplifications: ['r2: the sector is opened from front to back and the needle enters through the wall beside the opening (meridian 148 degrees, an illustrative choice).', ...GEN, 'Entry drawn 3.75 mm behind the limbus (standard anatomy texts give ~3.5–4 mm); this distance is NOT in CLINICAL_SOURCES and is marked for review.', 'Needle shown without a gauge label; medication colour illustrative (most are clear); vessel pattern procedural.'],
+    alt: { en: 'Cut-away eye seen from the front: a fine needle enters the white of the eye and releases medicine into the clear gel, with the retina and macula behind.', ar: 'عين مقطوعة تُرى من الأمام: إبرة دقيقة تدخل بياض العين وتُطلق الدواء في الهلام الشفاف، وخلفه الشبكية والبقعة.' },
     caption: { en: 'The medicine is placed in the vitreous gel and reaches the retina and macula.', ar: 'يُوضع الدواء في الجسم الزجاجي ويصل إلى الشبكية والبقعة.' },
     questions: ['Confirm the entry distance behind the limbus to depict (phakic vs pseudophakic).', 'Should the needle angle be shown (e.g. aimed at the mid-vitreous)?']
   },
   'intravitreal-injections-l1-card': {
     structures: ['needle', 'medication', 'vitreous', 'retina', 'macula'],
     refs: ['AAO-IVT', 'AAO-inj', 'NEI-AMD'],
-    simplifications: ['Illustrative entry position and medication colour (see hero).'],
-    alt: { en: 'An eye opened at the back with a fine needle releasing a small cloud of medicine into the clear gel in front of the retina.', ar: 'عين مفتوحة من الخلف مع إبرة دقيقة تُطلق سحابة صغيرة من الدواء في الهلام الشفاف أمام الشبكية.' },
+    simplifications: ['r2: the sector is opened from front to back and the needle enters through the wall beside the opening (illustrative).', 'Illustrative entry position and medication colour (see hero).'],
+    alt: { en: 'An opened eye seen from the front: a fine needle releases a small cloud of medicine into the clear gel in front of the retina.', ar: 'عين مفتوحة تُرى من الأمام: إبرة دقيقة تُطلق سحابة صغيرة من الدواء في الهلام الشفاف أمام الشبكية.' },
     caption: { en: 'Eye injections deliver medicine inside the eye.', ar: 'حقن العين توصل الدواء إلى داخل العين.' },
     questions: ['Is a visible needle acceptable on the homepage, or should a calmer image be used for anxious patients?']
   },

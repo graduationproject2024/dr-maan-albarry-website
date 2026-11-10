@@ -9,44 +9,44 @@
     {
       "id": "icl",
       "structure": "icl",
-      "x": 0.5046,
-      "y": 0.6516
+      "x": 0.3773,
+      "y": 0.468
     },
     {
       "id": "vault",
       "structure": "vault",
-      "x": 0.5209,
-      "y": 0.7388
+      "x": 0.3264,
+      "y": 0.5029
     },
     {
       "id": "natural-lens",
       "structure": "natural-lens",
-      "x": 0.6357,
-      "y": 0.6265
+      "x": 0.399,
+      "y": 0.7154
     },
     {
       "id": "iris",
       "structure": "iris",
-      "x": 0.5309,
-      "y": 0.2668
+      "x": 0.6074,
+      "y": 0.5011
     },
     {
       "id": "cornea",
       "structure": "cornea",
-      "x": 0.3263,
-      "y": 0.5234
+      "x": 0.4442,
+      "y": 0.1226
     },
     {
       "id": "icl-footplate",
       "structure": "icl-footplate",
-      "x": 0.5973,
-      "y": 0.0885
+      "x": 0.7168,
+      "y": 0.6196
     },
     {
       "id": "anterior-chamber",
       "structure": "anterior-chamber",
-      "x": 0.4,
-      "y": 0.6491
+      "x": 0.3732,
+      "y": 0.2689
     }
   ]
 }
