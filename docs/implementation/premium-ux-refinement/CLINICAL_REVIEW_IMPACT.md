@@ -123,4 +123,17 @@ No medical claim was added. "Riboflavin (vitamin B2)" and "which stays in place"
 
 ## Simulators
 
-(Another agent adds this section.)
+**Nothing in the optical model changed.** `src/vision-sim/optics/` and `VISION_MODEL_VERSION` (`vsim-optics-2026.11-r1`) are untouched, so the 51 review presets and their content hashes stay valid and no gate became stale because of this work. The review modes (`vision-sim-preview.html?review=1`, `cataract-sim-preview.html?review=1`) pass their specs unchanged. Every gate is still **Pending review**; nothing was approved.
+
+What changed around the model, and what Dr. Maan should look at:
+
+| Change | Why it matters for review |
+|---|---|
+| The controls were regrouped: three lens types, three distances and three lighting levels first; the other lens types, everyday situations, compare, exact distance, astigmatism, axis, sphere and model numbers under "More settings" | The default view now shows fewer options. The same options exist as before. |
+| A white frame marks the object being looked at (phone, laptop or road sign) | It is a page element over the picture, not part of the rendered image, the model or the review screenshots. Choosing Near, Intermediate or Far does not change the rendered image itself, as before: the model draws all three distances at once. The owner and the physician should decide whether that is the right behaviour. |
+| One paragraph per lens under the workbench | Composed from the existing "intended" and "trade-offs" texts, with no new claim. |
+| New labels: More settings, Reset, Other lens types, Extended range (English, for EDOF), Dim (replacing Dusk for the same model condition), Far (replacing Distance in English) | Wording only; listed in `LENS_LAB_UX_RECONSTRUCTION.md`. |
+| The "educational illustration, not a prediction of your vision" notice | Now attached to the top of the picture and stays with it when the picture sticks. |
+| Cataract 3D viewer | No change to anatomy, motion or text. After Start, the page now scrolls so the playback controls are clear of the booking bar. |
+
+The simulator still does not predict a patient's vision and says so beside the picture.

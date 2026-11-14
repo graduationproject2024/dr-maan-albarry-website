@@ -14,8 +14,8 @@ Load was added with busy threads alongside the test run, on the production build
 | Test | Before, procedure A | Before, procedure B | After, procedure A | After, procedure B |
 |---|---|---|---|---|
 | Persona C step 8 | 3 of 20 failed | not run | 0 of 20 failed | not run |
-| Persona H step 1 | 0 of 20 failed | 4 of 30 failed | 0 of 20 failed | @@H_AFTER@@ |
-| Routing subpath | 0 of 20 failed | 1 of 30 failed, plus 6 "route.fetch: Test ended" errors outside any test | 0 of 20 failed | @@RT_AFTER@@ |
+| Persona H step 1 | 0 of 20 failed | 4 of 30 failed | 0 of 20 failed | not completed (the run was interrupted) |
+| Routing subpath | 0 of 20 failed | 1 of 30 failed, plus 6 "route.fetch: Test ended" errors outside any test | 0 of 20 failed | not completed (the run was interrupted) |
 
 A separate instrumented run of the persona C sequence (24 repeats, procedure A load) failed 4 of 24, and its event log gave the cause below.
 
@@ -168,8 +168,8 @@ Unless noted, the browser is Chromium through Playwright, and language and theme
 - **Lens Lab reservation.** It reserves 1,200 to 1,600 px for a module about 6,500 to 9,500 px tall. Jumps are now safe, but the page still grows when the module arrives. Left alone because the Lens Lab UI is being changed by another workstream; the number should be set once that settles.
 - **Unknown URLs on hosts with an SPA fallback.** At a URL such as `/some-unknown/`, the `<base>` script cannot tell the site root, so scripts 404 and the static Arabic home shows without its app. Seen on `vite preview`. GitHub Pages serves its own 404 instead, so production is not affected while it deploys there. This behaviour predates this work.
 - **Unpublished entries** are in the JavaScript bundle (see the architecture guide).
-- **Not merged with `c15699a`.** This branch stays on `ea3e44d` as instructed. @@MERGE_NOTE@@
+- **Merged.** This work was merged into `feat/premium-ux-refinement` together with the hero, image and Lens Lab work. The Lens Lab now sits below the simulator, so the jump tests in `tests/technical-fixes.spec.js` were moved to the new order (same assertions, target `#lab`), and on phones a jump to the simulator lands on the workbench (`JUMP_TARGET` in `main.js`, `tests/lens-lab-jump.spec.js`).
 
 ## 8. Full suite
 
-@@SUITE@@
+On the merged branch `feat/premium-ux-refinement`, final code (`c13c474`): **713 passed, 0 failed, 24 skipped** (flag-gated performance and evidence runs). The runs before it and what each failure was are in `REGRESSION_RESULTS.md`.
