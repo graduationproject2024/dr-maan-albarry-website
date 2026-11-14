@@ -52,39 +52,56 @@ test.describe('The 3D viewer controls are not left under the booking bar', () =>
 });
 
 test.describe('A jump keeps its target when a module arrives late', () => {
-  // The Lens Lab module sits above the simulator. Holding its download back reproduces a slow device exactly.
-  const holdLensLab = async (page) => {
+  // Page order since the Lens Lab reconstruction: hero, vision simulator (#simulator), Lens Lab comparison (#lab).
+  // The simulator reserves a height and then sizes itself, so it is the module that moves what is below it when it
+  // arrives late. Holding its download back reproduces a slow device exactly.
+  const holdSimulator = async (page) => {
     let release;
     const held = new Promise((r) => { release = r; });
-    await page.route(/assets\/lens-lab-[^/]+\.js$/, async (route) => { await held; await route.continue(); });
+    await page.route(/assets\/vision-sim-[^/]+\.js$/, async (route) => { await held; await route.continue(); });
     return release;
   };
   const inPlace = (page, id) => page.evaluate((i) => { const t = document.getElementById(i).getBoundingClientRect().top; return t > -20 && t < 140; }, id);
+  const simulatorUp = (page) => expect(page.locator('#simulator-host .vsim canvas, #simulator-host .vsim--fallback').first()).toBeAttached({ timeout: 40_000 });
 
   for (const profile of [viewportProfile(768, 1024, { touch: true }), viewportProfile(1280, 800)]) {
     test.describe(`${profile.viewport.width}px`, () => {
       test.use({ ...profile, reducedMotion: 'reduce' });
 
-      test('the "full vision simulator" link lands on the simulator', async ({ page }) => {
-        const release = await holdLensLab(page);
+      test('the "comparison" link lands on the Lens Lab and stays there while the simulator above it arrives', async ({ page }) => {
+        const release = await holdSimulator(page);
+        await page.goto('/en/lens-lab/');
+        await expect(page.locator('html')).not.toHaveClass(/first-load/);
+        await page.locator('.page-hero-links a[href$="#lab"]').click();
+        await expect.poll(() => inPlace(page, 'lab')).toBe(true);
+        release();
+        await simulatorUp(page);
+        await expect.poll(() => inPlace(page, 'lab')).toBe(true);
+        await expect(page.locator('.feature-lens-lab')).toHaveClass(/is-mounted/, { timeout: 40_000 });
+        await expect.poll(() => inPlace(page, 'lab')).toBe(true);
+      });
+
+      test('a bookmark to the Lens Lab stays on the Lens Lab', async ({ page }) => {
+        const release = await holdSimulator(page);
+        await page.goto('/en/lens-lab/#lab');
+        await expect(page.locator('html')).not.toHaveClass(/first-load/);
+        await expect.poll(() => inPlace(page, 'lab')).toBe(true);
+        release();
+        await simulatorUp(page);
+        await expect.poll(() => inPlace(page, 'lab')).toBe(true);
+      });
+
+      test('the "full vision simulator" link and bookmark land on the simulator and stay there while it mounts', async ({ page }) => {
+        const release = await holdSimulator(page);
         await page.goto('/en/lens-lab/');
         await expect(page.locator('html')).not.toHaveClass(/first-load/);
         await page.locator('#sim-jump').click();
         await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
         release();
-        await expect(page.locator('.feature-lens-lab')).toHaveClass(/is-mounted/, { timeout: 40_000 });
+        await simulatorUp(page);
         await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
-        await expect(page.locator('#simulator-host .vsim canvas, #simulator-host .vsim--fallback').first()).toBeAttached({ timeout: 40_000 });
-        await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
-      });
-
-      test('a bookmark to the simulator stays on the simulator', async ({ page }) => {
-        const release = await holdLensLab(page);
         await page.goto('/en/lens-lab/#simulator');
-        await expect(page.locator('html')).not.toHaveClass(/first-load/);
-        await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
-        release();
-        await expect(page.locator('.feature-lens-lab')).toHaveClass(/is-mounted/, { timeout: 40_000 });
+        await simulatorUp(page);
         await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
       });
     });
@@ -92,17 +109,17 @@ test.describe('A jump keeps its target when a module arrives late', () => {
 
   test('the jump lets go as soon as the visitor scrolls', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    const release = await holdLensLab(page);
+    const release = await holdSimulator(page);
     await page.goto('/en/lens-lab/');
     await expect(page.locator('html')).not.toHaveClass(/first-load/);
-    await page.locator('#sim-jump').click();
-    await expect.poll(() => inPlace(page, 'simulator')).toBe(true);
+    await page.locator('.page-hero-links a[href$="#lab"]').click();
+    await expect.poll(() => inPlace(page, 'lab')).toBe(true);
     await page.mouse.move(640, 400);
     await page.mouse.wheel(0, -300);
-    await expect.poll(() => inPlace(page, 'simulator')).toBe(false);
+    await expect.poll(() => inPlace(page, 'lab')).toBe(false);
     release();
-    await expect(page.locator('.feature-lens-lab')).toHaveClass(/is-mounted/, { timeout: 40_000 });
-    // the page does not pull the reader back to the simulator: at most the browser's own anchoring moves it
-    expect(await inPlace(page, 'simulator')).toBe(false);
+    await simulatorUp(page);
+    // the page does not pull the reader back to the Lens Lab: at most the browser's own anchoring moves it
+    expect(await inPlace(page, 'lab')).toBe(false);
   });
 });
