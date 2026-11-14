@@ -334,6 +334,11 @@
 .vsim-bench[data-sticky] .vsim-bench-side :is(input, button), .vsim-bench[data-sticky] .vsim-field-presets input {
   scroll-margin-block-start: calc(var(--vsim-stage-h, 0px) - 24px);
 }
+/* Short landscape screens: the workbench sits flush under the header with 1 px to spare above the booking bar, so the
+   top correction is larger there. A tap on the first control row must not nudge the page and push the last row under the bar. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .vsim-bench-side :is(input, button), .vsim-field-presets input { scroll-margin-block-start: -36px; }
+}
 .vsim-seg { position: relative; }
 
 .vsim-bench-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }

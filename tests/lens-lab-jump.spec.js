@@ -36,11 +36,12 @@ for (const [w, h] of SIZES) {
         const box = await label.boundingBox();
         expect(box.y).toBeGreaterThanOrEqual(0);
         expect(box.y + box.height).toBeLessThanOrEqual(s0.bar.top + 1); // reachable without scrolling, not under the bar
-        await label.tap();
+        // A raw touch at the control, as a finger does it. (locator.tap() first scrolls its target clear of the root's
+        // scroll-padding, which moves the page by itself and would hide what this test is measuring.)
+        await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+        await expect(page.locator(`#${await label.getAttribute('for')}`)).toBeChecked();
         const s = await state(page);
-        // Portrait: the page stays put. Short landscape screens (390 px tall) have 256 px between the bars, and the first
-        // tap may nudge the page by about 20 px (focus scroll margin); the picture and the controls must still be on screen.
-        expect(Math.abs(s.y - s0.y)).toBeLessThanOrEqual(h <= 520 ? 24 : 12);
+        expect(Math.abs(s.y - s0.y)).toBeLessThanOrEqual(1);
         expect(s.canvas.top).toBeGreaterThanOrEqual(0);
         expect(s.canvas.bottom).toBeLessThanOrEqual(s.bar.top);
       }
