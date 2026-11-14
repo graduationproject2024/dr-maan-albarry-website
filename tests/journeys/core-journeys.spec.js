@@ -99,8 +99,8 @@ test.describe('J03', () => {
       await page.locator('#mobile-nav a[data-section="lens-lab"]').tap(); await page.waitForURL(/\/en\/lens-lab\/$/);
       await page.locator('#sim-jump').tap();
       const s = await waitVsim(page, 40000); await page.waitForTimeout(800); await settleScroll(page);
-      const top = (await rect(page.locator('#simulator'))).y;
-      return { actual: `mounted=${s.mounted} canvases=${s.canvases}; #simulator top=${Math.round(top)}`, ok: s.canvases === 1 && top > -20 && top < 140 };
+      const top = (await rect(page.locator('#simulator-host'))).y; // on a phone the jump lands on the workbench itself, flush under the header
+      return { actual: `mounted=${s.mounted} canvases=${s.canvases}; workbench top=${Math.round(top)}`, ok: s.canvases === 1 && top > -20 && top < 140 };
     }, { shot: true });
     await j.step('Measure the viewer width (FIXED-2: ≥ viewport − 56 px)', 'Viewer ≥ 334 px wide at 390 px', async () => {
       const w = (await rect(page.locator('#simulator-host .vsim-viewport'))).w;

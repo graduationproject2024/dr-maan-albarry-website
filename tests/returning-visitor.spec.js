@@ -96,12 +96,17 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
     expect(y).toBeGreaterThan(600);
     const card = page.locator('#procedures .plate-card').nth(3);
     const slug = await card.getAttribute('data-slug');
+    // "Where the visitor was" is the position at the moment of the click: if late content above the card (a font, an image)
+    // changed the layout after `y` was read, the browser's scroll anchoring has already moved the page with it.
+    await page.evaluate(() => addEventListener('click', () => { window.__yAtClick = Math.round(window.scrollY); }, { capture: true, once: true }));
     await card.locator('a.proc-card-link').click();
     await expect(page).toHaveURL(new RegExp(`/en/procedures/${slug}/$`));
     await expect(page.locator('main h1')).toHaveText(PROCEDURES.find((p) => p.slug === slug).name.en);
+    const yAtClick = await page.evaluate(() => window.__yAtClick);
+    expect(yAtClick).toBeGreaterThan(600);
     await page.goBack();
     await expect(page.locator('main')).toHaveAttribute('data-page', 'home');
-    await near(page, y);
+    await near(page, yAtClick);
     await expect(page.locator(`#procedures .plate-card[data-slug="${slug}"]`)).toBeInViewport();
   });
 
