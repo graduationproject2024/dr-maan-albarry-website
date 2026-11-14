@@ -2,7 +2,7 @@
 
 Date: 2026-11-14. Branch `feat/premium-ux-refinement`. Final code `c13c474` plus documentation commits.
 
-**Deployment state.** The hero and image-clarity work (`23c158c`) has been live since 2026-11-10 on the owner's instruction. Everything after it (mobile Lens Lab, stability fixes, returning-visitor behaviour, section registry, portrait preload) is on the branch and **not deployed**; deploying it needs the owner's instruction.
+**Deployment state.** Everything on this branch is live. The hero and image-clarity work went live on 2026-11-10, and the rest (mobile Lens Lab, stability fixes, returning-visitor behaviour, section registry, portrait preload) was deployed on the owner's instruction ("Yes, deploy") with `main` at `c7cdbed`. Live check after the deploy, in browser emulation: 22 pages at 390 and 1440 px with no errors, broken images or sideways scroll; Lens Lab at 390×844, 320×640 and 844×390 shows the picture and every essential control on one screen with one WebGL context; the review harness pages return 404.
 
 **Testing basis.** Full suite on the final code: 713 passed, 0 failed, 24 skipped (flag-gated). Chromium through Playwright plus one WebKit journey, emulated devices. No physical phone, no screen reader, no physician review.
 
@@ -44,7 +44,6 @@ Date: 2026-11-14. Branch `feat/premium-ux-refinement`. Final code `c13c474` plus
 
 | Item | Whose | Note |
 |---|---|---|
-| Deploy the rest of the branch | Owner | Needs an explicit instruction |
 | New high-resolution portrait | Owner | The single most visible remaining weakness |
 | Review of 13 re-rendered images, 35 patient-friendly terms, essential-label choices, captions, and simulator wording | Dr. Maan | Nothing is approved; the site says "pending physician review" |
 | Should Near, Intermediate and Far change the rendered picture itself? | Owner and Dr. Maan | Today the model draws all three distances at once; changing that touches the optical model, which was out of scope |
