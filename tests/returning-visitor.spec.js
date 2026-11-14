@@ -153,7 +153,7 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
 });
 
 test.describe('Bookmarks and deep links', () => {
-  for (const [url, id] of [['/en/education/#red-flags', 'red-flags'], ['/procedures/cataract-surgery/#p-faq', 'p-faq'], ['/en/lens-lab/#simulator', 'simulator'], ['/en/clinic/#visit', 'visit']]) {
+  for (const [url, id] of [['/en/education/#red-flags', 'red-flags'], ['/procedures/cataract-surgery/#p-faq', 'p-faq'], ['/en/lens-lab/#simulator', 'simulator-host'], ['/en/clinic/#visit', 'visit']]) {
     test(`${url} lands on its section and stays there`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(url);

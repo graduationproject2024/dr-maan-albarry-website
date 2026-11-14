@@ -1911,10 +1911,15 @@ function holdScrollTarget(targetTop, behavior = 'auto') {
   releaseScrollHold = stop;
 }
 /** Where the page must be scrolled to show a section just below the fixed header. */
+// On phones (and short landscape screens) a jump to the simulator lands on the workbench itself, not on the section title
+// above it: the picture and every essential control then sit between the header and the booking bar at once.
+const JUMP_TARGET = { simulator: 'simulator-host' };
 function sectionTop(id) {
-  const el = document.getElementById(id);
+  const compact = window.matchMedia('(max-width: 639px), (max-height: 520px)').matches;
+  const bench = compact && JUMP_TARGET[id] ? document.getElementById(JUMP_TARGET[id]) : null;
+  const el = bench || document.getElementById(id);
   const headerOffset = document.getElementById('site-header')?.offsetHeight || 68;
-  return el ? el.getBoundingClientRect().top + window.scrollY - headerOffset - 8 : window.scrollY;
+  return el ? el.getBoundingClientRect().top + window.scrollY - headerOffset - (bench ? 0 : 8) : window.scrollY; // the workbench sits flush under the header: every pixel counts on a 640 px screen
 }
 
 // The reading position is kept on the history entry (never in storage), so Back, Forward and a reload can return to it.
