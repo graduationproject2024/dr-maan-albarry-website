@@ -84,6 +84,9 @@ function documentFor(page, appHtml) {
     .replace(/<link rel="alternate" hreflang="en" href="[^"]*">/, `<link rel="alternate" hreflang="en" href="${pageUrl('en', slug, key)}">`)
     .replace(/<link rel="alternate" hreflang="x-default" href="[^"]*">/, `<link rel="alternate" hreflang="x-default" href="${pageUrl('ar', slug, key)}">`)
     .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${url}">`);
+  // Home: the doctor's portrait is the largest element of the first screen (the LCP element), so it is fetched ahead of the fonts.
+  if (!slug && key === 'home') doc = doc.replace('<!-- @font-preload -->', () => `<link rel="preload" as="image" href="./images/dr-maan-portrait-hero.webp" type="image/webp" fetchpriority="high">
+  <!-- @font-preload -->`);
   if (lang === 'en') {
     doc = doc.replace(/<meta property="og:locale" content="ar_SA">\s*<meta property="og:locale:alternate" content="en_US">/,
       '<meta property="og:locale" content="en_US">\n  <meta property="og:locale:alternate" content="ar_SA">');
