@@ -29,7 +29,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   root.className = `vsim${viewerOnly ? ' vsim--viewer' : ''}`;
   root.dataset.vsimInstance = String(n);
   host.appendChild(root);
-  let L = lang, canvas = null, fallbackShown = false, fallbackRetry = false, noteKey = null, expanded = false, more = false, loading = false, targetBox = null;
+  let L = lang, canvas = null, fallbackShown = false, fallbackRetry = false, noteKey = null, expanded = false, more = false, loading = false, targetBox = null, closeUp = false, lastPreset = '';
   const ref = {};
 
   const radios = (name, values, labelFn, checked, cls = '') => values.map((v) => {
@@ -50,6 +50,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <span class="vsim-tag vsim-tag-b" data-ref="tagB" dir="${root.dir}" hidden></span>
       ${viewerOnly ? '' : `<span class="vsim-caption" data-ref="caption" dir="${root.dir}"></span><p class="vsim-loading" data-ref="loading" role="status" dir="${root.dir}" hidden></p>`}
       <div class="vsim-divider" data-ref="divider" role="slider" tabindex="0" aria-label="${s.divider}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="horizontal" hidden><span class="vsim-divider-line"></span><span class="vsim-divider-knob" aria-hidden="true"></span></div>
+      ${viewerOnly ? '' : `<button type="button" class="vsim-whole" data-ref="whole" dir="${root.dir}" hidden><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${s.wholeScene}</span></button>`}
       <button type="button" class="vsim-expand" data-ref="expand" aria-pressed="false" aria-label="${s.enlarge}" title="${s.enlarge}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path data-ref="expandIcon" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <p class="vsim-note" data-ref="note" role="status" hidden></p>
       <p class="vsim-rotate" dir="${root.dir}">${s.rotateHint}</p>
@@ -100,43 +101,55 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
         </div>
       </div>
       <div class="vsim-adv" id="vsim${n}-adv" data-ref="adv" ${more ? '' : 'hidden'}>
-        <fieldset class="vsim-field vsim-field-otherlens">
-          <legend class="vsim-legend-title">${s.otherLenses}</legend>
-          <div class="vsim-seg vsim-seg-3">${radios('lensA', OTHER_LENSES, lensLabel, state.lens)}</div>
-        </fieldset>
-        <fieldset class="vsim-field vsim-field-scenario">
-          <legend class="vsim-legend-title">${s.scenario}</legend>
-          <div class="vsim-seg vsim-seg-scn">${radios('scenario', SCENARIO_IDS, scnLabel, scenario)}</div>
-          <p class="vsim-custom" data-ref="custom" hidden>${s.customView}</p>
-        </fieldset>
-        <div class="vsim-field vsim-field-compare">
-          <label class="vsim-switch"><input type="checkbox" data-ref="compare" ${state.compare ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.compare}</span></label>
-          <fieldset class="vsim-field" data-ref="lensBField" ${state.compare ? '' : 'hidden'}>
-            <legend class="vsim-legend-title">${s.compareWith}</legend>
-            <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS, lensLabel, state.lensB)}</div>
+        <section class="vsim-group" aria-labelledby="vsim${n}-g-compare">
+          <h3 class="vsim-group-title" id="vsim${n}-g-compare">${s.groupCompare}</h3>
+          <fieldset class="vsim-field vsim-field-otherlens">
+            <legend class="vsim-legend-title">${s.otherLenses}</legend>
+            <div class="vsim-seg vsim-seg-3">${radios('lensA', OTHER_LENSES, lensLabel, state.lens)}</div>
           </fieldset>
-        </div>
-        <div class="vsim-field-sub vsim-range-field">
-          <p class="vsim-legend-title">${s.exactDistance}</p>
-          <div class="vsim-range-row">
-            <input type="range" class="vsim-range" data-ref="range" min="0" max="1000" step="1" value="${distanceToSlider(state.distanceM)}" aria-label="${s.distance}">
-            <output class="vsim-range-out" data-ref="rangeOut" aria-hidden="true"></output>
+          <div class="vsim-field vsim-field-compare">
+            <label class="vsim-switch"><input type="checkbox" data-ref="compare" ${state.compare ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.compare}</span></label>
+            <fieldset class="vsim-field" data-ref="lensBField" ${state.compare ? '' : 'hidden'}>
+              <legend class="vsim-legend-title">${s.compareWith}</legend>
+              <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS, lensLabel, state.lensB)}</div>
+            </fieldset>
           </div>
-        </div>
-        <p class="vsim-fine">${s.eye}</p>
-        <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.astig}</legend>
-          <div class="vsim-seg vsim-seg-3">${radios('cyl', [0, 1, 2], (v) => (v ? `${fmt(L, v, 1)} ${s.D}` : s.none), Math.abs(state.refraction.cylD))}</div></fieldset>
-        <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.axis}</legend>
-          <div class="vsim-seg vsim-seg-2">${radios('axis', [180, 90], (v) => `${fmt(L, v)}°`, state.refraction.axisDeg)}</div></fieldset>
-        <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.sphere}</legend>
-          <div class="vsim-seg vsim-seg-3">${radios('sphere', [-1, 0, 1], (v) => (v ? `<bdi dir="ltr">${v > 0 ? '+' : '−'}${fmt(L, Math.abs(v), 2)}</bdi> ${s.D}` : s.none), state.refraction.sphereD)}</div></fieldset>
-        <div class="vsim-modelbox" data-ref="model"></div>
+        </section>
+        <section class="vsim-group" aria-labelledby="vsim${n}-g-where">
+          <h3 class="vsim-group-title" id="vsim${n}-g-where">${s.groupWhere}</h3>
+          <fieldset class="vsim-field vsim-field-scenario">
+            <legend class="vsim-legend-title">${s.scenario}</legend>
+            <div class="vsim-seg vsim-seg-scn">${radios('scenario', SCENARIO_IDS, scnLabel, scenario)}</div>
+            <p class="vsim-custom" data-ref="custom" hidden>${s.customView}</p>
+          </fieldset>
+          <div class="vsim-field-sub vsim-range-field">
+            <p class="vsim-legend-title">${s.exactDistance}</p>
+            <div class="vsim-range-row">
+              <input type="range" class="vsim-range" data-ref="range" min="0" max="1000" step="1" value="${distanceToSlider(state.distanceM)}" aria-label="${s.distance}">
+              <output class="vsim-range-out" data-ref="rangeOut" aria-hidden="true"></output>
+            </div>
+          </div>
+        </section>
+        <details class="vsim-group vsim-group-fold" data-ref="eyeBox">
+          <summary class="vsim-group-title">${s.eye}<span class="vsim-group-now" data-ref="eyeNow" hidden></span></summary>
+          <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.astig}</legend>
+            <div class="vsim-seg vsim-seg-3">${radios('cyl', [0, 1, 2], (v) => (v ? `${fmt(L, v, 1)} ${s.D}` : s.none), Math.abs(state.refraction.cylD))}</div></fieldset>
+          <fieldset class="vsim-field-sub" data-ref="axisField"><legend class="vsim-legend-title">${s.axis}</legend>
+            <div class="vsim-seg vsim-seg-2">${radios('axis', [180, 90], (v) => `${fmt(L, v)}°`, state.refraction.axisDeg)}</div></fieldset>
+          <fieldset class="vsim-field-sub"><legend class="vsim-legend-title">${s.sphere}</legend>
+            <div class="vsim-seg vsim-seg-3">${radios('sphere', [-1, 0, 1], (v) => (v ? `<bdi dir="ltr">${v > 0 ? '+' : '−'}${fmt(L, Math.abs(v), 2)}</bdi> ${s.D}` : s.none), state.refraction.sphereD)}</div></fieldset>
+        </details>
+        <details class="vsim-group vsim-group-fold" data-ref="modelBox">
+          <summary class="vsim-group-title">${s.model}</summary>
+          <div class="vsim-modelbox" data-ref="model"></div>
+        </details>
       </div>
     </div>
   </div>
   <section class="vsim-explain" aria-labelledby="vsim${n}-seeing">
     <h3 id="vsim${n}-seeing">${s.seeing}</h3>
     <p class="vsim-seeing" data-ref="seeing"></p>
+    <p class="vsim-fine vsim-close-note" data-ref="closeNote" hidden></p>
     <div class="vsim-lensinfo" data-ref="lensInfo"></div>
     <p class="vsim-exam">${s.exam}</p>
   </section>
@@ -164,6 +177,8 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (noteKey) showNote(noteKey);
     if (loading) showLoading(true);
     if (targetBox) setTarget(targetBox);
+    if (ref.whole) ref.whole.hidden = !closeUp;
+    root.dataset.closeUp = closeUp ? 'true' : 'false';
     applyExpanded();
     applyMore();
   }
@@ -250,6 +265,9 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (ref.expand && e.target.closest('.vsim-expand')) setExpanded(!expanded);
     else if (ref.more && e.target.closest('.vsim-more')) setMore(!more);
     else if (ref.reset && e.target.closest('.vsim-reset')) handlers.reset();
+    else if (ref.whole && e.target.closest('.vsim-whole')) handlers.closeUp(false);
+    // tapping the distance that is already chosen (no change event) still brings the closer view
+    else if (e.target.dataset && e.target.dataset.group === 'preset' && e.target.value === lastPreset) handlers.distance(DISTANCES[e.target.value], 'preset');
     else if (e.target.closest('[data-vsim-reload]')) handlers.retry();
   });
   // divider: pointer + keyboard
@@ -295,6 +313,12 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (state.compare && state.lensB !== state.lens) parts.push(words(state.lensB));
     return parts.filter(Boolean).join(' ');
   };
+  // one short line for the picture: how the chosen lens is described at the distance being looked at (same wording as
+  // the comparison table; qualitative, pending physician review). Empty for a comparison and for the cataract view.
+  const levelText = (state, view) => {
+    if (state.compare || !LAB_LENSES.includes(state.lens)) return '';
+    return `${STRINGS[L].lenses[state.lens].short}: ${LAB[L].lenses[state.lens].levels[view.subject]}`;
+  };
 
   function update(state, view, viewB) {
     const s = STRINGS[L];
@@ -313,7 +337,13 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.canvasHost.setAttribute('role', 'img');
     ref.canvasHost.setAttribute('aria-label', `${s.viewerLabel(s.lenses[state.lens].name, state.compare ? s.lenses[state.lensB].name : null)}. ${distText} · ${obj}. ${s.lights[state.lighting]}.`);
     if (viewerOnly) return;
-    ref.caption.textContent = `${distText} · ${obj} · ${s.lights[state.lighting]}`;
+    const level = levelText(state, view);
+    ref.caption.innerHTML = `<span class="vsim-caption-main">${distText} · ${obj} · ${s.lights[state.lighting]}</span>${level ? `<span class="vsim-caption-sub">${level}</span>` : ''}`;
+    // in a closer view of one lens the caption already names the lens: the tag would only cover the object
+    ref.tagA.hidden = closeUp && !state.compare && !!level;
+    placeWhole();
+    ref.closeNote.hidden = !closeUp;
+    ref.closeNote.textContent = closeUp ? s.closeNote(obj) : '';
     ref.moreNow.hidden = PRIMARY_LENSES.includes(state.lens);
     ref.moreNow.textContent = ref.moreNow.hidden ? '' : s.lenses[state.lens].short;
 
@@ -324,6 +354,12 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     set('cyl', Math.abs(state.refraction.cylD)); set('axis', state.refraction.axisDeg); set('sphere', state.refraction.sphereD);
     const preset = ['near', 'intermediate', 'distance'].find((k) => Math.abs(DISTANCES[k] - state.distanceM) < 0.005) || '';
     set('preset', preset);
+    lastPreset = preset;
+    const rx = state.refraction, eyeSet = rx.cylD !== 0 || rx.sphereD !== 0;
+    ref.axisField.hidden = rx.cylD === 0; // the axis only matters once there is astigmatism
+    ref.eyeNow.hidden = !eyeSet;
+    ref.eyeNow.textContent = eyeSet ? s.changed : '';
+    if (eyeSet && !ref.eyeBox.dataset.auto) { ref.eyeBox.open = true; ref.eyeBox.dataset.auto = '1'; }
     ref.compare.checked = state.compare;
     ref.lensBField.hidden = !state.compare;
     const sv = distanceToSlider(state.distanceM);
@@ -355,7 +391,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <div><dt>${s.sharpness}</dt><dd>${fmt(L, v.layers[v.subject].sharpness, 2)}</dd></div>
       <div><dt>${s.halo}</dt><dd>${fmt(L, v.halo.haloIndex, 2)}</dd></div>
       <div><dt>${s.contrast}</dt><dd>${fmt(L, v.contrast.contrastIndex, 2)}</dd></div></dl>`;
-    ref.model.innerHTML = `<p class="vsim-legend-title">${s.model}</p>${dl(view, viewB ? 'A' : '')}${viewB ? dl(viewB, 'B') : ''}<p class="vsim-fine">${s.sharpnessNote}</p>`;
+    ref.model.innerHTML = `${dl(view, viewB ? 'A' : '')}${viewB ? dl(viewB, 'B') : ''}<p class="vsim-fine">${s.sharpnessNote}</p>`;
     const lensesForChart = [...new Set([state.lens, ...(state.compare ? [state.lensB] : []), 'monofocal', 'edof', 'trifocal'])].filter((l) => l !== 'toric');
     const howKey = `${L}|${lensesForChart.join()}|${view.pupilMm}|${state.lens}|${state.lensB}`;
     if (ref.how.dataset.key !== howKey) {
@@ -385,6 +421,48 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.target.hidden = !box;
     if (!box) return;
     Object.assign(ref.target.style, { left: `${box.left}%`, top: `${box.top}%`, width: `${box.width}%`, height: `${box.height}%` });
+    placeWhole();
+  }
+  // "Whole scene" takes the corner where it covers the least of the object being looked at: top right, else top
+  // left under the lens tag, else bottom right above the enlarge button. It never sits on the caption or a tag.
+  function placeWhole() {
+    if (!ref.whole || ref.whole.hidden || !targetBox || !ref.viewport) return;
+    const vw = ref.viewport.clientWidth, vh = ref.viewport.clientHeight;
+    const bw = ref.whole.offsetWidth, bh = ref.whole.offsetHeight;
+    if (!vw || !vh || !bw) return;
+    const t = { l: targetBox.left / 100 * vw, t: targetBox.top / 100 * vh };
+    t.r = t.l + targetBox.width / 100 * vw; t.b = t.t + targetBox.height / 100 * vh;
+    const tagB = ref.tagB && !ref.tagB.hidden;
+    // the low spot clears the enlarge button and a caption of any height (two or three lines on narrow phones)
+    const low = Math.max(62, (ref.caption ? ref.caption.offsetHeight : 0) + 18);
+    const leftTop = ref.tagA && !ref.tagA.hidden ? 46 : 10;
+    const spots = {
+      '': { l: vw - 10 - bw, t: tagB ? 46 : 10 },
+      'is-left': { l: 10, t: leftTop },
+      'is-low': { l: vw - 10 - bw, t: vh - low - bh },
+    };
+    let best = '', bestArea = Infinity;
+    for (const [cls, p] of Object.entries(spots)) {
+      const area = Math.max(0, Math.min(t.r, p.l + bw) - Math.max(t.l, p.l)) * Math.max(0, Math.min(t.b, p.t + bh) - Math.max(t.t, p.t));
+      if (area < bestArea - 0.5) { best = cls; bestArea = area; }
+    }
+    ref.whole.classList.toggle('is-left', best === 'is-left');
+    ref.whole.classList.toggle('is-low', best === 'is-low');
+    ref.whole.style.bottom = best === 'is-low' ? `${low}px` : '';
+    ref.whole.style.top = best === 'is-left' ? `${leftTop}px` : '';
+  }
+  // Closer view on/off: the "Whole scene" button is only there while the picture is close to one object.
+  function setCloseUp(on) {
+    closeUp = !!on;
+    root.dataset.closeUp = closeUp ? 'true' : 'false';
+    if (ref.whole) ref.whole.hidden = !closeUp;
+    placeWhole();
+    if (ref.canvasHost && closeUp !== (ref.canvasHost.dataset.close === '1')) {
+      ref.canvasHost.dataset.close = closeUp ? '1' : '0';
+      ref.canvasHost.classList.remove('is-reframed');
+      void ref.canvasHost.offsetWidth; // restart the short settle animation
+      ref.canvasHost.classList.add('is-reframed');
+    }
   }
   function showLoading(on) {
     loading = on;
@@ -411,6 +489,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     showFallback,
     showLoading,
     setTarget,
+    setCloseUp,
     measureBench,
     setExpanded,
     setMore,
@@ -421,7 +500,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     setLang(l, state) {
       const active = document.activeElement;
       const key = active && root.contains(active) ? (active.id || active.dataset.ref) : null;
-      const open = ['clarityBox', 'limits', 'qbox', 'howBox'].filter((k) => ref[k] && ref[k].open);
+      const open = ['clarityBox', 'limits', 'qbox', 'howBox', 'eyeBox', 'modelBox'].filter((k) => ref[k] && ref[k].open);
       L = l; build(state);
       for (const k of open) if (ref[k]) ref[k].open = true;
       if (key) { const el = root.querySelector(`#${CSS.escape(key)}`) || ref[key]; if (el) el.focus({ preventScroll: true }); }

@@ -416,6 +416,51 @@
   .vsim .vsim-seg { padding: 3px; }
 }
 
+/* ---------- closer view (final stabilization) ----------
+   Near / Intermediate / Far bring the camera to that object; "Whole scene" goes back. Framing only: see
+   OPTICAL_MODEL_FINDINGS.md. The caption carries one plain line about the chosen lens at that distance. */
+.vsim-whole {
+  position: absolute; top: 10px; right: 10px; z-index: 3; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 4px 14px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(9, 18, 26, 0.78); color: #fff; font: inherit; font-size: 0.8125rem; font-weight: 600; line-height: 1.2;
+  cursor: pointer; backdrop-filter: blur(6px);
+}
+.vsim-whole[hidden] { display: none; }
+.vsim-whole:focus-visible { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim-tag-b:not([hidden]) ~ .vsim-whole { top: 46px; }
+.vsim-whole.is-low, .vsim-tag-b:not([hidden]) ~ .vsim-whole.is-low { top: auto; bottom: 62px; }
+.vsim-whole.is-left, .vsim-tag-b:not([hidden]) ~ .vsim-whole.is-left { top: 46px; right: auto; left: 10px; }
+@media (orientation: landscape) and (max-height: 520px) { .vsim-caption-sub { -webkit-line-clamp: 1; line-clamp: 1; } }
+.vsim--expanded .vsim-whole, .vsim--fallback .vsim-whole { display: none; }
+.vsim-caption {
+  display: grid; gap: 1px; border-radius: 12px; white-space: normal; padding: 5px 10px;
+}
+.vsim-caption-main { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vsim-caption-sub { font-weight: 400; font-size: 0.78rem; opacity: 0.94; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+@keyframes vsim-reframe { from { opacity: 0.35; } to { opacity: 1; } }
+.vsim-canvas-host.is-reframed { animation: vsim-reframe 0.22s ease-out; }
+.vsim[data-reduced-motion="true"] .vsim-canvas-host.is-reframed { animation: none; }
+@media (prefers-reduced-motion: reduce) { .vsim-canvas-host.is-reframed { animation: none; } .vsim-target { transition: none; } }
+
+/* More settings: three plain groups instead of one long list; the rarely needed ones stay folded */
+.vsim-adv { gap: 0; padding-block: 4px 12px; }
+.vsim-group { display: grid; gap: 10px; padding-block: 12px; min-width: 0; }
+.vsim-group + .vsim-group { border-block-start: 1px solid var(--vsim-border); }
+.vsim-group-title { margin: 0; font: inherit; font-size: 0.95rem; font-weight: 700; color: var(--vsim-text); }
+.vsim-group-fold { padding-block: 0; }
+.vsim-group-fold[open] { padding-block-end: 12px; }
+.vsim-group-fold > summary { gap: 8px; min-height: 48px; }
+.vsim-group-fold > summary::after {
+  content: ""; margin-inline-start: auto; width: 8px; height: 8px; border: solid currentColor; border-width: 0 2px 2px 0;
+  transform: rotate(45deg); transition: transform 0.15s ease; flex: none;
+}
+.vsim-group-fold[open] > summary::after { transform: rotate(-135deg); }
+.vsim-group-fold > summary::-webkit-details-marker { display: none; }
+.vsim-group-fold > summary { list-style: none; }
+.vsim-group-now { padding: 0 8px; border-radius: 999px; background: var(--vsim-accent-soft); color: var(--vsim-accent); font-size: 0.78rem; font-weight: 600; }
+.vsim-group .vsim-modelbox { margin-top: 0; }
+.vsim-close-note[hidden] { display: none; }
+
 /* Clinical review panel (review mode only; vision-sim-preview.html?review=1). Shared .srv controls take the
    simulator's own tokens, so light and dark themes both work. */
 .vsim.vsim-review {

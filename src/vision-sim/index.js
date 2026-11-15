@@ -64,6 +64,10 @@ class VisionSimulator {
     this.sourceVersion = 0;
     this.quality = 0;
     this.perf = { last: 0, samples: [] };
+    // Closer view: which part of the full picture the viewer shows. Presentation only — never part of the optics
+    // state, the saved choice, the review harness or the model values.
+    this.closeUp = false;
+    this.framing = { zoom: 1, x: 0, y: 0 };
     counters.mounts++; counters.live++;
     this.frame = this.frame.bind(this);
     const self = this;
@@ -130,6 +134,7 @@ class VisionSimulator {
         refraction: (r) => this.setRefraction(r, true),
         split: (x) => this.setSplit(x),
         scenario: (id) => this.setScenario(id, true),
+        closeUp: (on) => this.setCloseUp(on, true),
         expand: (on) => this.onExpand(on),
         more: () => this.emit('change', { what: 'more', state: this.getState() }),
         reset: () => this.reset(true),
@@ -364,7 +369,7 @@ class VisionSimulator {
     if (!this.pipe || !this.scenes || this.status === 'error') return false;
     this.dirty = false;
     const v = this.views();
-    const stats = this.pipe.render({ views: v, scenes: this.scenes, camera: this.camera, split: this.state.split, taps: QUALITY[this.quality].taps, sourceVersion: this.sourceVersion });
+    const stats = this.pipe.render({ views: v, scenes: this.scenes, camera: this.camera, split: this.state.split, taps: QUALITY[this.quality].taps, sourceVersion: this.sourceVersion, frame: this.framing });
     counters.renderTargets += this.pipe.renderTargets - (this.lastRT || 0);
     this.lastRT = this.pipe.renderTargets;
     this.frames++;
@@ -386,6 +391,7 @@ class VisionSimulator {
     if (!this.scenes || Math.abs((this.sceneK ?? -1) - k) > 0.02) this.rebuildScenes();
     else if (changed || force) this.sourceVersion++;
     this.dirty = true;
+    this.applyFraming();
     this.placeTarget();
   }
   rebuildScenes() {
@@ -398,6 +404,7 @@ class VisionSimulator {
     if (!this.camera) this.camera = this.scenesMod.createCamera(aspect);
     this.sourceVersion++;
     this.dirty = true;
+    this.applyFraming();
     this.placeTarget();
   }
 
@@ -405,8 +412,10 @@ class VisionSimulator {
   refreshUI() {
     if (!this.ui) return;
     const v = this.views();
+    this.ui.setCloseUp(this.closeUp);
     this.ui.update(this.state, v.A, v.B);
     this.lastView = v;
+    this.applyFraming();
     this.placeTarget();
   }
   /** Frame around the object the chosen distance looks at (full mode), in percent of the viewer. */
@@ -415,7 +424,46 @@ class VisionSimulator {
     const box = this.targetBox();
     this.ui.setTarget(box);
   }
-  targetBox() {
+  /**
+   * Closer view: point the camera at the object the chosen distance looks at, so that it fills most of the viewer.
+   * Only the framing changes. The same three layers are drawn with the same blur angles (the pipeline scales the
+   * pixel sizes with the zoom), so the closer view is the matching part of the whole scene, shown larger.
+   */
+  applyFraming() {
+    if (!this.camera) return;
+    let next = { zoom: 1, x: 0, y: 0 };
+    if (this.closeUp && this.mode === 'full' && !this.reviewMode && this.scenes && this.lastView) {
+      if (this.camera.view) { this.camera.clearViewOffset(); }
+      const box = this.targetBox(0); // in the whole picture, percent
+      if (box) {
+        const w = box.width / 100, h = box.height / 100;
+        const zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.74 / h));
+        const span = 1 / zoom;
+        const x = Math.min(1 - span, Math.max(0, (box.left / 100 + w / 2) - span / 2));
+        const y = Math.min(1 - span, Math.max(0, (box.top / 100 + h / 2) - span / 2));
+        if (zoom > 1.02) next = { zoom: Math.round(zoom * 1000) / 1000, x: Math.round(x * 1e4) / 1e4, y: Math.round(y * 1e4) / 1e4 };
+      }
+    }
+    const cur = this.framing;
+    const same = cur.zoom === next.zoom && cur.x === next.x && cur.y === next.y;
+    if (next.zoom > 1) this.camera.setViewOffset(1, 1 / this.camera.aspect, next.x, next.y / this.camera.aspect, 1 / next.zoom, 1 / next.zoom / this.camera.aspect);
+    else if (this.camera.view) this.camera.clearViewOffset();
+    if (same) return;
+    this.framing = next;
+    if (this.ui) this.ui.root.dataset.zoom = String(next.zoom);
+    this.sourceVersion++;
+    this.dirty = true;
+
+  }
+  /** Closer view on or off (the Near / Intermediate / Far buttons turn it on; "Whole scene" and Reset turn it off). */
+  setCloseUp(on, fromUI = false) {
+    if (this.destroyed || this.mode !== 'full') return;
+    const next = !!on;
+    if (next === this.closeUp) return;
+    this.closeUp = next;
+    this.changed('closeUp', fromUI);
+  }
+  targetBox(pad = 1.5) {
     if (!this.scenes || !this.camera || !this.lastView) return null;
     const { near, intermediate, distance } = this.scenes.scenes;
     const band = this.lastView.A.subject;
@@ -432,7 +480,6 @@ class VisionSimulator {
       v.set(sx * size.width / 2, sy * size.height / 2, 0).applyMatrix4(mesh.matrixWorld).project(this.camera);
       xs.push((v.x + 1) * 50); ys.push((1 - v.y) * 50);
     }
-    const pad = 1.5;
     const left = Math.max(1, Math.min(...xs) - pad), right = Math.min(99, Math.max(...xs) + pad);
     const top = Math.max(1, Math.min(...ys) - pad), bottom = Math.min(99, Math.max(...ys) + pad);
     return { left, top, width: Math.max(4, right - left), height: Math.max(4, bottom - top) };
@@ -450,7 +497,8 @@ class VisionSimulator {
       if (!this.ui) return;
       const s = STRINGS[this.lang], st = this.state, v = this.lastView.A;
       const band = `${s.presets[v.subject]} · ${s.objects[v.subject]}`;
-      this.ui.announce(s.announce(s.lenses[st.lens].name, formatDistance(this.lang, st.distanceM), band, s.lights[st.lighting], st.compare ? s.lenses[st.lensB].name : null));
+      const view = this.closeUp ? `${s.closeAnnounce(s.objects[v.subject])}. ` : '';
+      this.ui.announce(view + s.announce(s.lenses[st.lens].name, formatDistance(this.lang, st.distanceM), band, s.lights[st.lighting], st.compare ? s.lenses[st.lensB].name : null));
     };
     if (debounce) this.announceTimer = this.timeout(go, 450); else go();
   }
@@ -471,6 +519,7 @@ class VisionSimulator {
     if (this.destroyed) return;
     const d = clamp(Number(m), DISTANCES.sliderMin, DISTANCES.sliderMax, this.state.distanceM);
     if (Math.abs(d - this.state.distanceM) < 1e-9 && src !== 'preset') return;
+    if (src === 'preset') this.closeUp = true; // choosing a distance looks at that object
     this.state.distanceM = d;
     this.changed('distance', src === 'slider' ? 'debounce' : true);
   }
@@ -490,6 +539,7 @@ class VisionSimulator {
     const rebuild = sc.lighting !== this.state.lighting;
     this.state.distanceM = sc.distanceM;
     this.state.lighting = sc.lighting;
+    if (fromUI) this.closeUp = true;
     if (rebuild) this.rebuildScenes();
     this.changed('scenario', true);
   }
@@ -497,6 +547,7 @@ class VisionSimulator {
   reset(fromUI = false) {
     if (this.destroyed) return;
     const rebuild = this.state.lighting !== 'day';
+    this.closeUp = false;
     Object.assign(this.state, { lens: 'monofocal', lensB: 'trifocal', compare: false, distanceM: DISTANCES.distance, lighting: 'day', refraction: normalizeRefraction(), split: 0.5 });
     if (rebuild) this.rebuildScenes();
     this.changed('reset', fromUI);
@@ -588,6 +639,8 @@ class VisionSimulator {
       scenario: scenarioFor(this.state.distanceM, this.state.lighting),
       ui: this.mode,
       expanded: !!(this.ui && this.ui.expanded),
+      closeUp: this.closeUp,
+      frame: { ...this.framing },
       pupilMm: v.A.pupilMm,
       refraction: { ...this.state.refraction },
       lang: this.lang,

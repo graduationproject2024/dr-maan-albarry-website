@@ -148,6 +148,10 @@ export function createPipeline({ canvas, debug = false }) {
   const depthRT = () => new THREE.WebGLRenderTarget(W, H, { ...rtOpts(true), depthBuffer: true });
   const keys = { A: {}, B: {} };
   let srcVersion = 0, srcRendered = -1;
+  // Closer view (framing): the camera shows a sub-rectangle of the full picture, `zoom` times larger. Every angular
+  // size is converted to pixels with the magnified focal length, so the result is the same picture seen closer:
+  // the optics model, the blur angles and the light sizes do not change (see OPTICAL_MODEL_FINDINGS.md).
+  let zoom = 1, frameX = 0, frameY = 0;
   const blank = new THREE.DataTexture(new Uint8Array(4), 1, 1); blank.needsUpdate = true;
 
   function allocate(w, h) {
@@ -192,7 +196,7 @@ export function createPipeline({ canvas, debug = false }) {
 
   /** Accumulate all model terms of one layer for one lens into acc[slot][layer]. */
   function blurLayer(slot, L, layer, taps, lightsPx) {
-    const f = focalPx(H, VIEWING.vFovDeg);
+    const f = focalPx(H, VIEWING.vFovDeg) * zoom;
     const target = acc[slot][L];
     renderer.setRenderTarget(target);
     renderer.setClearColor(0x000000, 0); renderer.clear(true, false, false);
@@ -261,10 +265,14 @@ export function createPipeline({ canvas, debug = false }) {
   /**
    * Render a frame.
    * views: { A: view, B: view|null } where view = optics computeView() output (+ straylight on layers).
-   * scenes: buildScenes() result; camera: shared camera; opts: { split, taps, sourceVersion }.
+   * scenes: buildScenes() result; camera: shared camera; opts: { split, taps, sourceVersion, frame }.
+   * frame: { zoom, x, y } — the part of the full picture the camera shows (x, y = top-left corner as a fraction of
+   * the full picture; zoom 1 = the whole picture). The camera's view offset must already match it.
    */
-  function render({ views, scenes, camera, split = 0.5, taps = 12, sourceVersion = 0 }) {
+  function render({ views, scenes, camera, split = 0.5, taps = 12, sourceVersion = 0, frame = null }) {
     const stats = { passes: 0, reblurred: 0 };
+    const nz = frame && frame.zoom > 1 ? frame.zoom : 1, nx = nz > 1 ? frame.x : 0, ny = nz > 1 ? frame.y : 0;
+    if (nz !== zoom || nx !== frameX || ny !== frameY) { zoom = nz; frameX = nx; frameY = ny; srcRendered = -1; }
     if (sourceVersion !== srcRendered) {
       for (const L of LAYERS) {
         renderer.setRenderTarget(src[L]);
@@ -279,14 +287,19 @@ export function createPipeline({ canvas, debug = false }) {
     const lightsPx = scenes.lights.map((l) => {
       v3.copy(l.position).project(camera);
       return { x: (v3.x * 0.5 + 0.5) * W, y: (v3.y * 0.5 + 0.5) * H, color: l.color, intensity: l.intensity, coreDeg: l.coreDeg, visible: v3.z < 1 };
-    }).filter((l) => l.visible && l.x > -50 && l.x < W + 50 && l.y > -50 && l.y < H + 50);
+    }).filter((l) => {
+      // A light is kept when it is inside the FULL picture (plus the usual 50 px margin there), so a closer view shows
+      // the same lights, halos and glare as the matching part of the whole scene. v3.y points up; frameY counts from the top.
+      const fx = l.x / zoom + frameX * W, fy = l.y / zoom + (1 - frameY - 1 / zoom) * H;
+      return l.visible && fx > -50 && fx < W + 50 && fy > -50 && fy < H + 50;
+    });
     for (const slot of SLOTS) {
       const v = views[slot];
       if (!v) { if (slot === 'B') freeAcc('B'); continue; }
       ensureAcc(slot);
       for (const L of LAYERS) {
         const layer = { ...v.layers[L], straylight: v.halo.straylight };
-        const key = JSON.stringify([layer.terms.map((t) => [t.weight, t.blurAxisArcmin.toFixed(3), t.blurPerpArcmin.toFixed(3), t.axisDeg]), layer.loss, layer.straylight, taps, L === 'distance' ? lightsPx.length : 0]);
+        const key = JSON.stringify([layer.terms.map((t) => [t.weight, t.blurAxisArcmin.toFixed(3), t.blurPerpArcmin.toFixed(3), t.axisDeg]), layer.loss, layer.straylight, taps, L === 'distance' ? lightsPx.length : 0, zoom]);
         if (keys[slot][L] === key) continue;
         stats.passes += blurLayer(slot, L, layer, taps, L === 'distance' ? lightsPx : null);
         stats.reblurred++;

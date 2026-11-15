@@ -26,6 +26,10 @@ const pick = (group, text) => group.getByText(text, { exact: true }).click();
 // Since the workbench rebuild the essential controls are always shown; everything else sits in More settings.
 const openMore = (page) => page.locator('.vsim-more').click();
 const otherLenses = (page) => lensGroup(page, 'Other lens types');
+// A distance preset brings a closer view of that object (lens-lab-distance.spec.js); this goes back to the whole scene.
+const wholeScene = (page) => page.locator('.vsim-whole').click();
+// Eye settings and the model values are folded groups inside More settings.
+const openFold = (page, ref) => page.locator(`details[data-ref="${ref}"]:not([open]) > summary`).click();
 
 let errors;
 test.beforeEach(({ page }) => { errors = watchConsole(page); });
@@ -83,6 +87,7 @@ test.describe('vision simulator — desktop', () => {
     await open(page);
     // near preset, monofocal: the phone (40 cm) is blurred
     await page.getByRole('group', { name: 'Viewing distance' }).getByText('Near', { exact: true }).click();
+    await wholeScene(page); // a preset brings a closer view; the fixed sample regions below are whole-scene coordinates
     let s = await S(page);
     expect(s.distanceM).toBeCloseTo(0.4, 6);
     expect(s.subject).toBe('near');
@@ -99,6 +104,7 @@ test.describe('vision simulator — desktop', () => {
     expect(s.optics.A.layers.near.sharpness).toBeGreaterThan(0.2);
     // distance preset: the road sign; cataract scatter makes it less sharp than monofocal
     await page.getByRole('group', { name: 'Viewing distance' }).getByText('Far', { exact: true }).click();
+    await wholeScene(page);
     await pick(lensGroup(page), 'Monofocal');
     const monoSign = await sample(page, SIGN);
     await openMore(page);
@@ -262,8 +268,13 @@ test.describe('vision simulator — desktop', () => {
     await expect(page.locator('.vsim-limits li')).toHaveCount(5);
     await page.locator('.vsim-questions > summary').click();
     await expect(page.locator('.vsim-questions li').first()).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Corneal astigmatism' }), 'eye settings are folded until asked for').toBeHidden();
+    await openFold(page, 'eyeBox');
     await expect(page.getByRole('group', { name: 'Corneal astigmatism' })).toBeVisible();
     await expect(page.locator('.vsim-range')).toBeVisible();
+    await expect(page.locator('.vsim-model')).toBeHidden();
+    await openFold(page, 'modelBox');
+    await expect(page.locator('.vsim-model')).toBeVisible();
     await expect(page.locator('.vsim-model')).toContainText('Assumed pupil');
   });
 
@@ -385,7 +396,9 @@ for (const lang of ['ar', 'en']) {
       const r = await page.evaluate(() => {
         const box = (e) => { const b = e.getBoundingClientRect(); return { x: b.left, y: b.top, r: b.right, b: b.bottom }; };
         const overlap = (a, b) => a.x < b.r - 0.5 && b.x < a.r - 0.5 && a.y < b.b - 0.5 && b.y < a.b - 0.5;
-        const vis = (sel) => [...document.querySelectorAll(sel)].filter((e) => e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden');
+        // checkVisibility: the content of a folded <details> is laid out but not shown
+        const vis = (sel) => [...document.querySelectorAll(sel)].filter((e) => e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && e.checkVisibility({ contentVisibilityAuto: true }));
+        document.querySelectorAll('.vsim-adv details').forEach((d) => { d.open = true; }); // measure every control, folded groups too
         const controls = vis('.vsim .vsim-seg-btn, .vsim .vsim-switch, .vsim .vsim-range, .vsim .vsim-range-out, .vsim summary').map(box);
         const clashes = [];
         for (let i = 0; i < controls.length; i++) for (let j = i + 1; j < controls.length; j++) if (overlap(controls[i], controls[j])) clashes.push([i, j]);

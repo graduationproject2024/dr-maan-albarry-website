@@ -248,10 +248,11 @@ test.describe('Simple and Advanced', () => {
     const a = await zone(page);
     await more(page).tap();
     await expect(page.locator(`${H} .vsim`)).toHaveAttribute('data-mode', 'advanced');
-    for (const name of ['Everyday situation', 'Other lens types', 'Corneal astigmatism', 'Astigmatism axis', 'Leftover short- or long-sightedness']) await expect(page.getByRole('group', { name, exact: true })).toBeVisible();
+    for (const name of ['Everyday situation', 'Other lens types']) await expect(page.getByRole('group', { name, exact: true })).toBeVisible();
     await expect(page.locator(`${H} .vsim-switch`)).toBeVisible();
     await expect(page.locator(`${H} .vsim-range`)).toBeVisible();
-    await expect(page.locator(`${H} .vsim-model`).first()).toContainText('Assumed pupil');
+    await expect(page.getByRole('group', { name: 'Corneal astigmatism', exact: true }), 'eye settings are folded').toBeHidden();
+    await expect(page.locator(`${H} .vsim-model`).first(), 'model numbers are folded').toBeHidden();
     const b = await zone(page);
     expect(Math.abs(b.y - a.y), 'opening does not move the page').toBeLessThanOrEqual(1);
     await lbl(page, 'preset', 'near').tap(); // a control right under the stuck picture must not make the page jump either
@@ -259,6 +260,17 @@ test.describe('Simple and Advanced', () => {
     expect(Math.abs((await zone(page)).y - a.y), 'tapping with More settings open').toBeLessThanOrEqual(1);
     expect(Math.abs(b.viewport.h - a.viewport.h), 'opening does not resize the picture').toBeLessThanOrEqual(1);
     expect(b.sticky).toBe(true);
+    // the rarely needed groups are folded: eye settings and the model numbers open on request
+    await expect(page.getByRole('group', { name: 'Corneal astigmatism', exact: true })).toBeHidden();
+    await expect(page.locator(`${H} .vsim-model`).first()).toBeHidden();
+    await page.locator(`${H} details[data-ref="eyeBox"] > summary`).tap();
+    for (const name of ['Corneal astigmatism', 'Leftover short- or long-sightedness']) await expect(page.getByRole('group', { name, exact: true })).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Astigmatism axis', exact: true }), 'the axis only shows once there is astigmatism').toBeHidden();
+    await page.locator(`${H} details[data-ref="modelBox"] > summary`).tap();
+    await expect(page.locator(`${H} .vsim-model`).first()).toContainText('Assumed pupil');
+    await page.locator(`${H} details[data-ref="modelBox"] > summary`).tap();
+    await page.locator(`${H} details[data-ref="eyeBox"] > summary`).tap();
+    await more(page).scrollIntoViewIfNeeded();
     await more(page).tap();
     await expect(page.locator(`${H} .vsim-adv`)).toBeHidden();
     await expect(more(page)).toBeFocused();
@@ -312,6 +324,7 @@ test.describe('Simple and Advanced', () => {
     await open(page, 'en', '?lens=edof&dist=near&light=night');
     await more(page).tap();
     await page.locator(`${H} .vsim-switch`).tap();
+    await page.locator(`${H} details[data-ref="eyeBox"] > summary`).tap();
     await lbl(page, 'cyl', '2').tap();
     await expect(radio(page, 'cyl', '2')).toBeChecked();
     await reset(page).tap();
@@ -338,7 +351,10 @@ test.describe('Simple and Advanced', () => {
     await expect(page.locator(`${H} canvas`)).toHaveCount(1);
     expect(new URL(page.url()).search).toBe('?lens=trifocal&dist=intermediate&light=dim');
     expect(Math.abs((await zone(page)).y - y0)).toBeLessThanOrEqual(1);
-    // the same state rendered fresh is the same picture
+    // the same state rendered fresh is the same picture. A fresh load opens on the whole scene (the closer view is a
+    // passing look, not a saved setting), so the comparison is made on the whole scene.
+    await page.locator(`${H} .vsim-whole`).tap();
+    expect(Math.abs((await zone(page)).y - y0)).toBeLessThanOrEqual(1);
     const after = await picture(page);
     await page.reload();
     await page.waitForFunction((host) => document.querySelector(`${host} canvas`) && !document.querySelector(`${host} .vsim-loading:not([hidden])`), H);
