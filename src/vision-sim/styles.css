@@ -431,6 +431,27 @@
 .vsim-whole.is-low, .vsim-tag-b:not([hidden]) ~ .vsim-whole.is-low { top: auto; bottom: 62px; }
 .vsim-whole.is-left, .vsim-tag-b:not([hidden]) ~ .vsim-whole.is-left { top: 46px; right: auto; left: 10px; }
 @media (orientation: landscape) and (max-height: 520px) { .vsim-caption-sub { -webkit-line-clamp: 1; line-clamp: 1; } }
+/* Very short picture (under 170 px: small phones held sideways, enlarged text): the caption keeps its first line only
+   and the lens tag gives way, so the overlays never cover the picture. The lens line is still in "What are you seeing?". */
+.vsim[data-viewer="short"] .vsim-caption-sub, .vsim[data-viewer="short"] .vsim-bench .vsim-tag-a { display: none; }
+.vsim[data-viewer="short"] .vsim-caption { bottom: 6px; left: 6px; padding-block: 3px; }
+.vsim[data-viewer="short"] .vsim-expand { bottom: 6px; right: 6px; }
+/* icon only on a short picture (the name stays for screen readers) */
+.vsim[data-viewer="short"] .vsim-whole { width: 44px; padding: 0; justify-content: center; }
+.vsim[data-viewer="short"] .vsim-whole > span { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* Controlled fallback: back to one column when the space between the bars is too short for two (ui.js measureBench) */
+.vsim-bench[data-stack] { display: block; }
+.vsim-bench[data-stack] .vsim-bench-view, .vsim-bench[data-stack] .vsim-bench-side { display: contents; }
+.vsim-bench[data-stack] .vsim-bench-controls { padding-block: 6px; }
+/* Controlled fallback: the picture column no longer sticks when it cannot fit between the bars by itself */
+.vsim:not(.vsim--expanded):not(.vsim--fallback) .vsim-bench[data-flow] .vsim-bench-view { position: static; }
+/* narrow phones held sideways: the two columns share the width evenly and the option labels step down one size,
+   so words are not broken in the middle */
+@media (orientation: landscape) and (max-height: 520px) and (min-width: 560px) and (max-width: 719.98px) {
+  .vsim-bench { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .vsim-bench .vsim-seg-main, .vsim-bench .vsim-action { font-size: 0.82rem; }
+  .vsim-bench .vsim-seg-btn { padding-inline: 2px; }
+}
 .vsim--expanded .vsim-whole, .vsim--fallback .vsim-whole { display: none; }
 .vsim-caption {
   display: grid; gap: 1px; border-radius: 12px; white-space: normal; padding: 5px 10px;

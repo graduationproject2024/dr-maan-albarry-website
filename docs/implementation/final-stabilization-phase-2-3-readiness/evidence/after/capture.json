@@ -1,0 +1,127 @@
+{
+  "phase": "after",
+  "pages": [
+    {
+      "name": "home-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-en",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-en",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "cataract-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "cataract-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "lens-lab-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "lens-lab-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    }
+  ],
+  "lensLab": [
+    {
+      "size": "390x844",
+      "preset": "distance",
+      "viewerHash": 326553224,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · DayMonofocal: Usually clear (when set for distance)"
+    },
+    {
+      "size": "390x844",
+      "preset": "intermediate",
+      "viewerHash": 4277600820,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · DayMonofocal: Glasses usually needed"
+    },
+    {
+      "size": "390x844",
+      "preset": "near",
+      "viewerHash": 2888586534,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · DayMonofocal: Reading glasses usually needed"
+    },
+    {
+      "size": "320x640",
+      "preset": "distance",
+      "viewerHash": 2485555957,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · DayMonofocal: Usually clear (when set for distance)"
+    },
+    {
+      "size": "320x640",
+      "preset": "intermediate",
+      "viewerHash": 975501326,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · DayMonofocal: Glasses usually needed"
+    },
+    {
+      "size": "320x640",
+      "preset": "near",
+      "viewerHash": 4164547973,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · DayMonofocal: Reading glasses usually needed"
+    },
+    {
+      "size": "844x390",
+      "preset": "distance",
+      "viewerHash": 1692835037,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · DayMonofocal: Usually clear (when set for distance)"
+    },
+    {
+      "size": "844x390",
+      "preset": "intermediate",
+      "viewerHash": 1323749345,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · DayMonofocal: Glasses usually needed"
+    },
+    {
+      "size": "844x390",
+      "preset": "near",
+      "viewerHash": 3688763768,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · DayMonofocal: Reading glasses usually needed"
+    }
+  ]
+}

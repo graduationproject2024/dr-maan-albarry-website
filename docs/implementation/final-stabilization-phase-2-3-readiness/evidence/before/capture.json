@@ -1,0 +1,127 @@
+{
+  "phase": "before",
+  "pages": [
+    {
+      "name": "home-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-en",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "home-en",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "cataract-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "cataract-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "lens-lab-ar",
+      "tag": "phone",
+      "errors": [],
+      "overflowX": 0
+    },
+    {
+      "name": "lens-lab-ar",
+      "tag": "desktop",
+      "errors": [],
+      "overflowX": 0
+    }
+  ],
+  "lensLab": [
+    {
+      "size": "390x844",
+      "preset": "distance",
+      "viewerHash": 1567934576,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · Day"
+    },
+    {
+      "size": "390x844",
+      "preset": "intermediate",
+      "viewerHash": 3014420442,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · Day"
+    },
+    {
+      "size": "390x844",
+      "preset": "near",
+      "viewerHash": 837490060,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · Day"
+    },
+    {
+      "size": "320x640",
+      "preset": "distance",
+      "viewerHash": 4229576297,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · Day"
+    },
+    {
+      "size": "320x640",
+      "preset": "intermediate",
+      "viewerHash": 3280395384,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · Day"
+    },
+    {
+      "size": "320x640",
+      "preset": "near",
+      "viewerHash": 1964025961,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · Day"
+    },
+    {
+      "size": "844x390",
+      "preset": "distance",
+      "viewerHash": 3995510821,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "6 m+ · road sign · Day"
+    },
+    {
+      "size": "844x390",
+      "preset": "intermediate",
+      "viewerHash": 3949388340,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "66 cm · laptop · Day"
+    },
+    {
+      "size": "844x390",
+      "preset": "near",
+      "viewerHash": 2759623323,
+      "scrollMoved": 0,
+      "canvases": 1,
+      "caption": "40 cm · phone · Day"
+    }
+  ]
+}

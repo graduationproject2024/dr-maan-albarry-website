@@ -204,6 +204,17 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   function measureBench() {
     if (!ref.bench || fallbackShown) return;
     const height = (el) => (el ? el.getBoundingClientRect().height : 0);
+    // Controlled fallback 1 — one column. A phone held sideways shows the picture beside the controls, but when the
+    // space between the bars is under ~9.5 lines of the reader's text size (a 320 px-high screen, or enlarged text),
+    // the narrow columns wrap every label into a tall block. Then the workbench goes back to one column, as on a
+    // phone held upright. The rule uses only the screen and the text size, never the layout it changes, so it cannot flip.
+    {
+      const cs0 = getComputedStyle(ref.bench);
+      const room0 = window.innerHeight - (parseFloat(cs0.getPropertyValue('--vsim-chrome-top')) || 0) - (parseFloat(cs0.getPropertyValue('--vsim-chrome-bottom')) || 0);
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const sideways = typeof matchMedia === 'function' && matchMedia('(orientation: landscape) and (max-height: 520px)').matches;
+      if (sideways && room0 / rem < 9.5) ref.bench.dataset.stack = ''; else delete ref.bench.dataset.stack;
+    }
     const setVar = (name, v) => { const px = `${Math.ceil(v)}px`; if (ref.bench.style.getPropertyValue(name) !== px) ref.bench.style.setProperty(name, px); };
     const stage = height(ref.stage), presets = height(ref.presets), side = height(ref.benchControls);
     setVar('--vsim-strip-h', height(ref.disclaimer));
@@ -217,6 +228,13 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     // only the stacked layout sticks the picture alone; the two-column layout keeps its whole left column in place
     const stacked = getComputedStyle(ref.stage.parentElement).display === 'contents';
     if (stacked && (more || !fits)) ref.bench.dataset.sticky = ''; else delete ref.bench.dataset.sticky;
+    // Controlled fallback 2 — no sticking. In two columns, when the picture column alone is taller than the space
+    // between the bars, it stops sticking and the whole workbench scrolls as ordinary content, so the distance row
+    // can never be trapped under the booking bar.
+    if (!stacked && stage + presets > room + 0.5) ref.bench.dataset.flow = ''; else delete ref.bench.dataset.flow;
+    // a picture this short has no room for the second caption line or the lens tag
+    const vh = ref.viewport ? ref.viewport.clientHeight : 0;
+    root.dataset.viewer = vh && vh < 170 ? 'short' : 'normal';
   }
 
   // ---------- expanded (large) view ----------
@@ -495,6 +513,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     setMore,
     get expanded() { return expanded; },
     get more() { return more; },
+    get closeUp() { return closeUp; },
     attachCanvas(c) { canvas = c; if (ref.canvasHost) ref.canvasHost.appendChild(c); },
     detachCanvas() { if (canvas) canvas.remove(); canvas = null; },
     setLang(l, state) {

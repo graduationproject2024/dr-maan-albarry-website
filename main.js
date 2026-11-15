@@ -1879,21 +1879,27 @@ window.addEventListener('popstate', e => {
   }
   go(next, { push: false, scrollTo: y });
   // restore the reading position once the page has rendered
-  requestAnimationFrame(() => { window.scrollTo(0, y); if (y > 0) holdScrollTarget(() => y); });
+  requestAnimationFrame(() => { window.scrollTo(0, y); if (y > 0) holdScrollTarget(() => y, 'auto', y); });
 });
 
 // A section can move after the visitor has asked for it: a simulator further up the page replaces its reserved height
 // when its module arrives, which on a busy device is long after the jump has started. So a jump keeps its target until
 // the visitor takes over (any scroll, touch, click or key) or the page has had time to finish loading.
 let releaseScrollHold = null;
-function holdScrollTarget(targetTop, behavior = 'auto') {
+let restoringY = null; // the reading position being restored, while its hold is active
+function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
   if (releaseScrollHold) releaseScrollHold();
+  restoringY = restoreY;
   const main = document.getElementById('main');
   if (!main || !('ResizeObserver' in window)) return;
   let last = targetTop();
   const ro = new ResizeObserver(() => {
     const top = targetTop();
-    if (Math.abs(top - last) < 2) return;
+    // Nothing to do when the target has not moved AND the page is already there. The second half matters for a fixed
+    // target (a restored reading position): the page can be too short to reach it until a module further up has
+    // mounted, so the first scroll is clamped to the bottom and must be repeated once the page has grown (BUG-FS-01).
+    const limit = document.documentElement.scrollHeight - window.innerHeight;
+    if (Math.abs(top - last) < 2 && Math.abs(window.scrollY - Math.min(top, limit)) < 2) return;
     last = top;
     window.__headerHoldUntil = performance.now() + 900; // this is not the reader scrolling (headerScrollShadow)
     window.scrollTo({ top, behavior });
@@ -1905,6 +1911,7 @@ function holdScrollTarget(targetTop, behavior = 'auto') {
     inputs.forEach(t => window.removeEventListener(t, stop, true));
     clearTimeout(timer);
     releaseScrollHold = null;
+    restoringY = null;
   };
   inputs.forEach(t => window.addEventListener(t, stop, { capture: true, passive: true }));
   const timer = setTimeout(stop, 20000);
@@ -1926,6 +1933,9 @@ function sectionTop(id) {
 // It is written when scrolling stops and when the page is left: the browser's own restoration is off (scrollRestoration
 // is 'manual') because re-rendering #app would defeat it.
 function saveReadingPosition() {
+  // While a position is being restored the page may still be too short to reach it; the clamped position must not
+  // replace the one being restored (BUG-FS-01).
+  if (releaseScrollHold && restoringY !== null && document.documentElement.scrollHeight - window.innerHeight < restoringY - 2) return;
   history.replaceState({ ...(history.state || {}), y: Math.round(window.scrollY) }, '');
 }
 let readingPositionTimer = 0;
@@ -1937,7 +1947,7 @@ function restoreReadingPosition() {
   const y = history.state && history.state.y;
   if ((type !== 'reload' && type !== 'back_forward') || !(y > 0)) return false;
   window.scrollTo(0, y);
-  holdScrollTarget(() => y);
+  holdScrollTarget(() => y, 'auto', y);
   return true;
 }
 

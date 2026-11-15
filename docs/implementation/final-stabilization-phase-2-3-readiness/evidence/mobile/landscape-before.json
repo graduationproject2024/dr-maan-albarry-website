@@ -1,0 +1,962 @@
+[
+ {
+  "size": "568x320",
+  "note": "iPhone SE sideways",
+  "text": "100%",
+  "zonePx": 186,
+  "viewerPx": 96,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 57
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "568x320",
+  "note": "iPhone SE sideways",
+  "text": "125%",
+  "zonePx": 186,
+  "viewerPx": 96,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": false,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 90
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "568x320",
+  "note": "iPhone SE sideways",
+  "text": "150%",
+  "zonePx": 186,
+  "viewerPx": 96,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": false,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": false,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 96
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 89
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "640x360",
+  "note": "small Android sideways",
+  "text": "100%",
+  "zonePx": 226,
+  "viewerPx": 137,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "640x360",
+  "note": "small Android sideways",
+  "text": "125%",
+  "zonePx": 226,
+  "viewerPx": 108,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 66
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "640x360",
+  "note": "small Android sideways",
+  "text": "150%",
+  "zonePx": 226,
+  "viewerPx": 108,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": false,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 77
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x331",
+  "note": "iPhone 8 sideways, Safari bars showing",
+  "text": "100%",
+  "zonePx": 197,
+  "viewerPx": 108,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x331",
+  "note": "iPhone 8 sideways, Safari bars showing",
+  "text": "125%",
+  "zonePx": 197,
+  "viewerPx": 99,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 99
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 66
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 99
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 99
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x331",
+  "note": "iPhone 8 sideways, Safari bars showing",
+  "text": "150%",
+  "zonePx": 197,
+  "viewerPx": 99,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 99
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 74
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 99
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 98
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x375",
+  "note": "iPhone 8 sideways",
+  "text": "100%",
+  "zonePx": 241,
+  "viewerPx": 152,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 152
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 152
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 152
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 152
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x375",
+  "note": "iPhone 8 sideways",
+  "text": "125%",
+  "zonePx": 241,
+  "viewerPx": 114,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 114
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 114
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 114
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 114
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "667x375",
+  "note": "iPhone 8 sideways",
+  "text": "150%",
+  "zonePx": 241,
+  "viewerPx": 113,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 113
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 74
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 113
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 113
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "740x360",
+  "note": "Android sideways",
+  "text": "100%",
+  "zonePx": 226,
+  "viewerPx": 137,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 137
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "740x360",
+  "note": "Android sideways",
+  "text": "125%",
+  "zonePx": 226,
+  "viewerPx": 121,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 121
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 121
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 121
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 121
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "740x360",
+  "note": "Android sideways",
+  "text": "150%",
+  "zonePx": 226,
+  "viewerPx": 108,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 75
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 108
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x340",
+  "note": "iPhone 14 sideways, Safari bars showing",
+  "text": "100%",
+  "zonePx": 206,
+  "viewerPx": 133,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 133
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 133
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 133
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 133
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x340",
+  "note": "iPhone 14 sideways, Safari bars showing",
+  "text": "125%",
+  "zonePx": 206,
+  "viewerPx": 102,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x340",
+  "note": "iPhone 14 sideways, Safari bars showing",
+  "text": "150%",
+  "zonePx": 206,
+  "viewerPx": 102,
+  "fitsNow": {
+   "viewer": true,
+   "presets": false,
+   "lens": true,
+   "light": true,
+   "actions": false
+  },
+  "allFit": false,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 48
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 102
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x390",
+  "note": "iPhone 14 sideways",
+  "text": "100%",
+  "zonePx": 256,
+  "viewerPx": 183,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 183
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 183
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 183
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 183
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x390",
+  "note": "iPhone 14 sideways",
+  "text": "125%",
+  "zonePx": 256,
+  "viewerPx": 151,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 151
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 151
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 151
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 151
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "844x390",
+  "note": "iPhone 14 sideways",
+  "text": "150%",
+  "zonePx": 256,
+  "viewerPx": 135,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 135
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 135
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 135
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 135
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "932x430",
+  "note": "iPhone 14 Pro Max sideways",
+  "text": "100%",
+  "zonePx": 296,
+  "viewerPx": 223,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 223
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 223
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 223
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 223
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "932x430",
+  "note": "iPhone 14 Pro Max sideways",
+  "text": "125%",
+  "zonePx": 296,
+  "viewerPx": 191,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 191
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 191
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 191
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 191
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ },
+ {
+  "size": "932x430",
+  "note": "iPhone 14 Pro Max sideways",
+  "text": "150%",
+  "zonePx": 296,
+  "viewerPx": 175,
+  "fitsNow": {
+   "viewer": true,
+   "presets": true,
+   "lens": true,
+   "light": true,
+   "actions": true
+  },
+  "allFit": true,
+  "reach": {
+   "presets": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 175
+   },
+   "lens": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 175
+   },
+   "light": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 175
+   },
+   "actions": {
+    "inZone": true,
+    "tapReaches": true,
+    "pictureVisiblePx": 175
+   }
+  },
+  "sticky": false,
+  "sw": 0,
+  "canvases": 1
+ }
+]

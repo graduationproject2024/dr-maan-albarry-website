@@ -412,10 +412,10 @@ class VisionSimulator {
   refreshUI() {
     if (!this.ui) return;
     const v = this.views();
-    this.ui.setCloseUp(this.closeUp);
-    this.ui.update(this.state, v.A, v.B);
     this.lastView = v;
     this.applyFraming();
+    this.ui.setCloseUp(this.closeUp && this.framing.zoom > 1);
+    this.ui.update(this.state, v.A, v.B);
     this.placeTarget();
   }
   /** Frame around the object the chosen distance looks at (full mode), in percent of the viewer. */
@@ -437,11 +437,12 @@ class VisionSimulator {
       const box = this.targetBox(0); // in the whole picture, percent
       if (box) {
         const w = box.width / 100, h = box.height / 100;
-        const zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.74 / h));
+        const zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.9 / h));
         const span = 1 / zoom;
         const x = Math.min(1 - span, Math.max(0, (box.left / 100 + w / 2) - span / 2));
         const y = Math.min(1 - span, Math.max(0, (box.top / 100 + h / 2) - span / 2));
-        if (zoom > 1.02) next = { zoom: Math.round(zoom * 1000) / 1000, x: Math.round(x * 1e4) / 1e4, y: Math.round(y * 1e4) / 1e4 };
+        if (zoom > 1.12) next = { // below this the view would hardly change: stay on the whole scene
+          zoom: Math.round(zoom * 1000) / 1000, x: Math.round(x * 1e4) / 1e4, y: Math.round(y * 1e4) / 1e4 };
       }
     }
     const cur = this.framing;
@@ -450,7 +451,12 @@ class VisionSimulator {
     else if (this.camera.view) this.camera.clearViewOffset();
     if (same) return;
     this.framing = next;
-    if (this.ui) this.ui.root.dataset.zoom = String(next.zoom);
+    if (this.ui) {
+      this.ui.root.dataset.zoom = String(next.zoom);
+      // "Whole scene" and the closer-view note only exist while the picture really is closer
+      const shown = this.closeUp && next.zoom > 1;
+      if (shown !== this.ui.closeUp) { this.ui.setCloseUp(shown); if (this.lastView) this.ui.update(this.state, this.lastView.A, this.lastView.B); }
+    }
     this.sourceVersion++;
     this.dirty = true;
 

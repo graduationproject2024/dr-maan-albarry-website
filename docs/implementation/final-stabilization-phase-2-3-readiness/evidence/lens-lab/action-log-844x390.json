@@ -1,0 +1,268 @@
+{
+ "viewport": "844x390",
+ "browser": "Chromium (Playwright emulation, touch)",
+ "lang": "en",
+ "steps": [
+  {
+   "step": 1,
+   "action": "open Lens Lab",
+   "touch": null,
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1,
+   "closeUp": false,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 2,
+   "action": "select Monofocal",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-lensA-monofocal\"]",
+    "x": 565,
+    "y": 104,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-lensA-monofocal\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Monof"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1,
+   "closeUp": false,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 3,
+   "action": "view the current scene",
+   "touch": null,
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1,
+   "closeUp": false,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 4,
+   "action": "select Near",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-preset-near\"]",
+    "x": 91,
+    "y": 294,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-preset-near\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Near</spa"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Day",
+   "lensLine": "Monofocal: Reading glasses usually needed",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 5,
+   "action": "understand what changed (Near)",
+   "touch": null,
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Day",
+   "lensLine": "Monofocal: Reading glasses usually needed",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 6,
+   "action": "select Intermediate",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-preset-intermediate\"]",
+    "x": 253,
+    "y": 294,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-preset-intermediate\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">I"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 2.1,
+   "closeUp": true,
+   "caption": "66 cm · laptop · Day",
+   "lensLine": "Monofocal: Glasses usually needed",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 7,
+   "action": "understand what changed (Intermediate)",
+   "touch": null,
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 2.1,
+   "closeUp": true,
+   "caption": "66 cm · laptop · Day",
+   "lensLine": "Monofocal: Glasses usually needed",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 8,
+   "action": "select Far",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-preset-distance\"]",
+    "x": 416,
+    "y": 294,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-preset-distance\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Far</"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 2.2,
+   "closeUp": true,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 9,
+   "action": "understand what changed (Far)",
+   "touch": null,
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 2.2,
+   "closeUp": true,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 10,
+   "action": "select EDOF",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-lensA-edof\"]",
+    "x": 672,
+    "y": 104,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-lensA-edof\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Extended r"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 2.2,
+   "closeUp": true,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "EDOF: Usually clear",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 11,
+   "action": "compare the displayed effect (Near with EDOF)",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-preset-near\"]",
+    "x": 91,
+    "y": 294,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-preset-near\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Near</spa"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Day",
+   "lensLine": "EDOF: Glasses often needed for small print",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 12,
+   "action": "select Trifocal",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-lensA-trifocal\"]",
+    "x": 780,
+    "y": 104,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-lensA-trifocal\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Trifoc"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Day",
+   "lensLine": "Trifocal: Often possible without glasses",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 13,
+   "action": "switch to night",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-lighting-night\"]",
+    "x": 780,
+    "y": 168,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-lighting-night\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Night<"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Night",
+   "lensLine": "Trifocal: Often possible without glasses",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 13.5,
+   "action": "switch back to day",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-lighting-day\"]",
+    "x": 565,
+    "y": 168,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-lighting-day\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Day</spa"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1.646,
+   "closeUp": true,
+   "caption": "40 cm · phone · Day",
+   "lensLine": "Trifocal: Often possible without glasses",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 14,
+   "action": "Reset",
+   "touch": {
+    "selector": "#simulator-host .vsim-reset",
+    "x": 756,
+    "y": 220,
+    "inView": true,
+    "receivedBy": "<button type=\"button\" class=\"vsim-action vsim-reset\" data-ref=\"reset\">Reset</button>"
+   },
+   "scrollY": 716,
+   "moved": 0,
+   "zoom": 1,
+   "closeUp": false,
+   "caption": "6 m+ · road sign · Day",
+   "lensLine": "Monofocal: Usually clear (when set for distance)",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
+   "step": 15,
+   "action": "return to the website (home)",
+   "url": "http://localhost:4671/en/",
+   "canvases": 0
+  }
+ ]
+}

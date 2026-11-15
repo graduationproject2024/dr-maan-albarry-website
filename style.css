@@ -1050,8 +1050,8 @@ html.dialog-open { overflow: hidden; }
 .feature-slot:not([data-reserve]):empty { display: none; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--r-3); background: linear-gradient(90deg, var(--paper-2), var(--paper), var(--paper-2)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
 .feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
-.feature-light-journey .feature-slot[data-reserve] { min-height: 640px; }
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 900px; } }
+.feature-light-journey .feature-slot[data-reserve] { min-height: 1200px; } /* measured 1,195–1,290 px mounted (final stabilization) */
+@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 1250px; } }
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--alert-line); background: var(--alert-bg); color: var(--alert-ink); }

@@ -364,3 +364,72 @@ test.describe('closer view on a phone, Arabic', () => {
     expect(Math.abs(v.y - y0)).toBeLessThanOrEqual(1);
   });
 });
+
+// ---------- very short landscape screens (section 8.2) ----------
+const textScale = (page, pct) => page.addInitScript((t) => {
+  const apply = () => { if (!document.documentElement) return false; document.documentElement.style.fontSize = `${t}%`; return true; };
+  if (!apply()) new MutationObserver((_, o) => { if (apply()) o.disconnect(); }).observe(document, { childList: true });
+}, pct);
+/** Brings every essential option (each distance, lens, lighting button, More settings, Reset) between the bars,
+ *  scrolling only if needed, and hit-tests its centre. At 150 % text on a 320 px-high screen a whole group can be
+ *  taller than the space between the bars, so the unit that must fit is the single button, not the group. */
+const reachAll = (page) => page.evaluate(async (host) => {
+  const r = (e) => e.getBoundingClientRect();
+  const header = () => r(document.getElementById('site-header')).bottom;
+  const barEl = document.querySelector('.booking-bar');
+  const bar = () => (barEl && getComputedStyle(barEl).display !== 'none' ? r(barEl).top : innerHeight);
+  const out = [];
+  const targets = [...document.querySelectorAll(`${host} .vsim-field-presets label, ${host} .vsim-bench-controls label, ${host} .vsim-bench-actions button`)];
+  for (const t of targets) {
+    if (r(t).bottom > bar() + 1) { scrollBy(0, r(t).bottom - bar() + 4); await new Promise((res) => setTimeout(res, 200)); }
+    if (r(t).top < header() - 1) { scrollBy(0, r(t).top - header() - 4); await new Promise((res) => setTimeout(res, 200)); }
+    const tb = r(t);
+    const hit = document.elementFromPoint(tb.left + tb.width / 2, tb.top + tb.height / 2);
+    out.push({ name: t.textContent.trim().slice(0, 24), between: tb.top >= header() - 1 && tb.bottom <= bar() + 1, hit: !!hit && (t === hit || t.contains(hit)), receivedBy: hit ? (hit.className || hit.tagName).toString().slice(0, 40) : null });
+  }
+  return out;
+}, H);
+
+for (const [w, h, name] of [[568, 320, 'iPhone SE sideways'], [667, 331, 'iPhone 8 sideways with browser bars'], [844, 340, 'iPhone 14 sideways with browser bars']]) {
+  test.describe(`short landscape ${w}×${h} (${name})`, () => {
+    test.use(phone(w, h));
+
+    test('normal text: picture and controls fit together, no word is broken, overlays leave the picture visible', async ({ page }) => {
+      await openPublic(page, 'en');
+      const m = await page.evaluate((host) => {
+        const q = (s) => document.querySelector(`${host} ${s}`);
+        const r = (e) => e.getBoundingClientRect();
+        const header = r(document.getElementById('site-header')).bottom, bar = r(document.querySelector('.booking-bar')).top;
+        const parts = ['.vsim-viewport', '.vsim-field-presets', '.vsim-field-lens', '.vsim-field-light', '.vsim-bench-actions'].map(q);
+        // a label broken inside a word is taller than its words need: compare with the same text set not to break words
+        const broken = [...document.querySelectorAll(`${host} .vsim-bench .vsim-seg-main`)].filter((e) => e.getClientRects().length).filter((e) => {
+          const lines = Math.round(r(e).height / parseFloat(getComputedStyle(e).lineHeight));
+          return lines > e.textContent.trim().split(/\s+/).length;
+        }).map((e) => e.textContent);
+        const v = r(q('.vsim-viewport')), cap = r(q('.vsim-caption'));
+        return { fit: parts.every((e) => r(e).top >= header - 1 && r(e).bottom <= bar + 1), broken, viewerH: v.height, captionShare: (cap.width * cap.height) / (v.width * v.height), sw: document.documentElement.scrollWidth - innerWidth };
+      }, H);
+      expect(m.fit, 'picture, distance, lens, lighting and actions between the bars').toBe(true);
+      expect(m.broken, 'no option label is broken inside a word').toEqual([]);
+      expect(m.captionShare, 'the caption covers a small part of the picture').toBeLessThan(0.2);
+      expect(m.sw).toBeLessThanOrEqual(0);
+      const small = await page.evaluate((host) => [...document.querySelectorAll(`${host} .vsim-bench .vsim-seg-btn, ${host} .vsim-action, ${host} .vsim-expand`)].filter((e) => e.getClientRects().length).map((e) => e.getBoundingClientRect()).filter((b) => b.width < 44 || b.height < 44).length, H);
+      expect(small, '44 px touch targets').toBe(0);
+    });
+
+    for (const pct of [125, 150]) {
+      test(`${pct}% text: every essential control can be brought between the bars and tapped`, async ({ page }) => {
+        await textScale(page, pct);
+        await openPublic(page, 'en');
+        const reach = await reachAll(page);
+        expect(reach.length, 'three distances, three lenses, three lighting levels, More settings, Reset').toBe(11);
+        for (const v of reach) {
+          expect(v.between, `"${v.name}" can be brought between the header and the booking bar`).toBe(true);
+          expect(v.hit, `"${v.name}": the touch reaches the control, not ${v.receivedBy}`).toBe(true);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+        await expect(page.locator(`${H} canvas`)).toHaveCount(1);
+      });
+    }
+  });
+}

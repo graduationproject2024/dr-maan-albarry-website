@@ -111,7 +111,10 @@ test.describe('acceptance at 390x844', () => {
         const p = await picture(page);
         expect(samePicture(p, before), 'distance changes the picture').toBe(false);
         const frameNear = await frameBox(page);
-        expect(Math.abs(frameNear.y - frameFar.y), 'the frame moves to the phone').toBeGreaterThan(40);
+        // the frame is now on another object. Since the closer view centres the object, the frame may move less than
+        // before, so its change in place and size is measured together.
+        const frameChange = Math.abs(frameNear.x - frameFar.x) + Math.abs(frameNear.y - frameFar.y) + Math.abs(frameNear.width - frameFar.width) + Math.abs(frameNear.height - frameFar.height);
+        expect(frameChange, 'the frame moves to the phone').toBeGreaterThan(40);
         before = p;
         const z = await zone(page); expectInZone(z, 'distance'); ys.push(z.y);
       });

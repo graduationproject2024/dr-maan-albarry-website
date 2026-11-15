@@ -157,6 +157,41 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
   });
 });
 
+// BUG-FS-01: on a desktop the Lens Lab reference is ~5,000 px taller than the height reserved for it. A visitor who
+// read past it, left and came Back was put ~5,000 px above where they had been: the first scroll was clamped to the
+// bottom of the still-short page and was never repeated once the module had mounted.
+test.describe('Back below a module that mounts late', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  for (const delay of [0, 1500]) {
+    test(`lens-lab page, closing section → home → Back returns to the closing section (module held ${delay} ms)`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.goto('/en/lens-lab/');
+      await expect(page.locator('html')).not.toHaveClass(/first-load/);
+      // read down the page until both modules have mounted and the page has its full height
+      await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => document.querySelector('#simulator-host canvas'), null, { timeout: 45_000 });
+      await page.locator('#lens-lab-host').scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => document.querySelector('.feature-lens-lab.is-mounted'), null, { timeout: 45_000 });
+      const y = await readTo(page, '.closing');
+      const fullHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+      const closingTop = await page.locator('.closing').evaluate((el) => Math.round(el.getBoundingClientRect().top));
+      expect(y, 'the closing section is far below the reserved heights').toBeGreaterThan(5000);
+      if (delay) await page.route(/lens-lab-[^/]*\.js$/, async (route) => { await new Promise((r) => setTimeout(r, delay)); route.continue(); });
+      await page.locator('footer a[href="en/"], footer a[href$="/en/"]').first().click();
+      await expect(page).toHaveURL(/\/en\/$/);
+      await page.goBack();
+      await expect(page).toHaveURL(/\/en\/lens-lab\/$/);
+      await page.waitForFunction((h) => document.documentElement.scrollHeight > h - 200, fullHeight, { timeout: 45_000 });
+      await near(page, y);
+      await expect.poll(() => page.locator('.closing').evaluate((el) => Math.round(el.getBoundingClientRect().top)), { message: 'the closing section is where the visitor left it' }).toBeGreaterThan(closingTop - 40);
+      expect(await page.locator('.closing').evaluate((el) => Math.round(el.getBoundingClientRect().top))).toBeLessThan(closingTop + 40);
+      // and the restored position is the one that stays on the history entry
+      await page.waitForTimeout(400);
+      expect(Math.abs((await page.evaluate(() => history.state.y)) - y)).toBeLessThan(40);
+    });
+  }
+});
+
 test.describe('Bookmarks and deep links', () => {
   for (const [url, id] of [['/en/education/#red-flags', 'red-flags'], ['/procedures/cataract-surgery/#p-faq', 'p-faq'], ['/en/lens-lab/#simulator', 'simulator-host'], ['/en/clinic/#visit', 'visit']]) {
     test(`${url} lands on its section and stays there`, async ({ page }) => {
