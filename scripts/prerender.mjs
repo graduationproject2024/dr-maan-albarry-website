@@ -30,6 +30,18 @@ const indexPath = path.join(dist, 'index.html');
 const template = fs.readFileSync(indexPath, 'utf8');
 if (!template.includes('<div id="app"></div>')) throw new Error('dist/index.html: empty #app root not found');
 
+// The main stylesheet is written into every prerendered page. Measured on a throttled phone profile (Fast 3G, 4x CPU)
+// the first paint waited about a second for the stylesheet, which shared the connection with the fonts, the portrait
+// and the script; inside the HTML it arrives with the first response (PERFORMANCE_RESULTS.md). The 17 KB (compressed)
+// cost is paid once per visit: later pages are rendered by the app without another HTML request.
+// url() references are relative to assets/ in the file and to the site root (<base>) in the page, so they are rewritten.
+const cssLink = template.match(/<link rel="stylesheet"[^>]*href="\.\/(assets\/index-[^"]+\.css)"[^>]*>/);
+if (!cssLink) throw new Error('dist/index.html: main stylesheet link not found');
+const cssText = fs.readFileSync(path.join(dist, cssLink[1]), 'utf8').replace(/url\((['"]?)\.\.\//g, 'url($1./');
+if (/url\((['"]?)(?!\.\/|data:|#|https?:)/.test(cssText)) throw new Error('main stylesheet: a url() that would not resolve from the site root');
+if (cssText.includes('</style')) throw new Error('main stylesheet: cannot be inlined safely');
+const inlineCss = (doc) => doc.replace(cssLink[0], () => `<style data-inlined="${cssLink[1]}">${cssText}</style>`);
+
 const PORT = Number(process.env.PRERENDER_PORT || 4176);
 const server = await preview({ preview: { port: PORT, strictPort: true }, logLevel: 'silent' });
 const browser = await chromium.launch();
@@ -115,6 +127,7 @@ function documentFor(page, appHtml) {
     if (slug || sectionPage(key).ogType !== 'profile') doc = doc.replace(/<meta property="og:type" content="profile">/, '<meta property="og:type" content="article">');
     doc = doc.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, () => `<script type="application/ld+json">\n${ld}\n</script>`);
   }
+  doc = inlineCss(doc);
   for (const must of [`<html lang="${lang}"`, `<link rel="canonical" href="${url}">`, `<base href="${base}">`]) {
     if (!doc.includes(must)) throw new Error(`${page.path || '/'}: missing ${must}`);
   }

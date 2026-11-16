@@ -1,0 +1,809 @@
+{
+ "label": "current-after",
+ "base": "http://127.0.0.1:4174/",
+ "measuredAt": "2026-11-16T14:42:14.293Z",
+ "profile": "Chromium, phone 390x844 DPR 2, Fast 3G (1.44 Mbps down, 562 ms latency) + CPU 4x, cold cache",
+ "runs": 5,
+ "pages": [
+  {
+   "page": "home AR",
+   "url": "",
+   "lcpElement": [
+    "img.",
+    "img.",
+    "img.",
+    "img.",
+    "img."
+   ],
+   "summary": {
+    "ttfb": {
+     "median": 10,
+     "min": 8,
+     "max": 46
+    },
+    "htmlDone": {
+     "median": 784,
+     "min": 767,
+     "max": 809
+    },
+    "fcp": {
+     "median": 2136,
+     "min": 1980,
+     "max": 2760
+    },
+    "lcp": {
+     "median": 2460,
+     "min": 2008,
+     "max": 3120
+    },
+    "cls": {
+     "median": 0.0029,
+     "min": 0.0029,
+     "max": 0.0029
+    },
+    "tbt": {
+     "median": 315,
+     "min": 302,
+     "max": 392
+    },
+    "cssDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "jsDone": {
+     "median": 2209,
+     "min": 2189,
+     "max": 2235
+    },
+    "fontDone": {
+     "median": 5055,
+     "min": 4182,
+     "max": 5758
+    },
+    "heroImgDone": {
+     "median": 1571,
+     "min": 1542,
+     "max": 1595
+    },
+    "transferKB": {
+     "median": 660,
+     "min": 660,
+     "max": 660
+    },
+    "requests": {
+     "median": 17,
+     "min": 17,
+     "max": 17
+    },
+    "htmlKB": {
+     "median": 36.1,
+     "min": 36.1,
+     "max": 36.1
+    }
+   },
+   "raw": [
+    {
+     "ttfb": 46,
+     "htmlDone": 809,
+     "htmlKB": 36.1,
+     "fcp": 2436,
+     "lcp": 2612,
+     "lcpEl": "img.",
+     "cls": 0.0029,
+     "tbt": 392,
+     "cssDone": null,
+     "jsDone": 2235,
+     "fontDone": 5119,
+     "heroImgDone": 1595,
+     "transferKB": 660,
+     "requests": 17
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 784,
+     "htmlKB": 36.1,
+     "fcp": 2136,
+     "lcp": 2460,
+     "lcpEl": "img.",
+     "cls": 0.0029,
+     "tbt": 315,
+     "cssDone": null,
+     "jsDone": 2202,
+     "fontDone": 5055,
+     "heroImgDone": 1562,
+     "transferKB": 660,
+     "requests": 17
+    },
+    {
+     "ttfb": 12,
+     "htmlDone": 767,
+     "htmlKB": 36.1,
+     "fcp": 2760,
+     "lcp": 3120,
+     "lcpEl": "img.",
+     "cls": 0.0029,
+     "tbt": 337,
+     "cssDone": null,
+     "jsDone": 2189,
+     "fontDone": 5758,
+     "heroImgDone": 1542,
+     "transferKB": 660,
+     "requests": 17
+    },
+    {
+     "ttfb": 8,
+     "htmlDone": 768,
+     "htmlKB": 36.1,
+     "fcp": 2048,
+     "lcp": 2272,
+     "lcpEl": "img.",
+     "cls": 0.0029,
+     "tbt": 314,
+     "cssDone": null,
+     "jsDone": 2225,
+     "fontDone": 4567,
+     "heroImgDone": 1571,
+     "transferKB": 660,
+     "requests": 17
+    },
+    {
+     "ttfb": 9,
+     "htmlDone": 797,
+     "htmlKB": 36.1,
+     "fcp": 1980,
+     "lcp": 2008,
+     "lcpEl": "img.",
+     "cls": 0.0029,
+     "tbt": 302,
+     "cssDone": null,
+     "jsDone": 2209,
+     "fontDone": 4182,
+     "heroImgDone": 1573,
+     "transferKB": 660,
+     "requests": 17
+    }
+   ]
+  },
+  {
+   "page": "home EN",
+   "url": "en/",
+   "lcpElement": [
+    "img.",
+    "img.",
+    "img.",
+    "img.",
+    "img."
+   ],
+   "summary": {
+    "ttfb": {
+     "median": 10,
+     "min": 8,
+     "max": 12
+    },
+    "htmlDone": {
+     "median": 759,
+     "min": 753,
+     "max": 789
+    },
+    "fcp": {
+     "median": 1792,
+     "min": 1648,
+     "max": 1932
+    },
+    "lcp": {
+     "median": 1932,
+     "min": 1664,
+     "max": 2180
+    },
+    "cls": {
+     "median": 0,
+     "min": 0,
+     "max": 0
+    },
+    "tbt": {
+     "median": 229,
+     "min": 124,
+     "max": 286
+    },
+    "cssDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "jsDone": {
+     "median": 1987,
+     "min": 1962,
+     "max": 1988
+    },
+    "fontDone": {
+     "median": 4122,
+     "min": 3390,
+     "max": 4260
+    },
+    "heroImgDone": {
+     "median": 1545,
+     "min": 1521,
+     "max": 1550
+    },
+    "transferKB": {
+     "median": 559,
+     "min": 559,
+     "max": 559
+    },
+    "requests": {
+     "median": 15,
+     "min": 15,
+     "max": 15
+    },
+    "htmlKB": {
+     "median": 34.8,
+     "min": 34.8,
+     "max": 34.8
+    }
+   },
+   "raw": [
+    {
+     "ttfb": 10,
+     "htmlDone": 755,
+     "htmlKB": 34.8,
+     "fcp": 1792,
+     "lcp": 1932,
+     "lcpEl": "img.",
+     "cls": 0,
+     "tbt": 229,
+     "cssDone": null,
+     "jsDone": 1988,
+     "fontDone": 4122,
+     "heroImgDone": 1550,
+     "transferKB": 559,
+     "requests": 15
+    },
+    {
+     "ttfb": 8,
+     "htmlDone": 789,
+     "htmlKB": 34.8,
+     "fcp": 1648,
+     "lcp": 1664,
+     "lcpEl": "img.",
+     "cls": 0,
+     "tbt": 124,
+     "cssDone": null,
+     "jsDone": 1988,
+     "fontDone": 3390,
+     "heroImgDone": 1537,
+     "transferKB": 559,
+     "requests": 15
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 753,
+     "htmlKB": 34.8,
+     "fcp": 1872,
+     "lcp": 2036,
+     "lcpEl": "img.",
+     "cls": 0,
+     "tbt": 286,
+     "cssDone": null,
+     "jsDone": 1968,
+     "fontDone": 4177,
+     "heroImgDone": 1545,
+     "transferKB": 559,
+     "requests": 15
+    },
+    {
+     "ttfb": 12,
+     "htmlDone": 779,
+     "htmlKB": 34.8,
+     "fcp": 1932,
+     "lcp": 2180,
+     "lcpEl": "img.",
+     "cls": 0,
+     "tbt": 265,
+     "cssDone": null,
+     "jsDone": 1987,
+     "fontDone": 4260,
+     "heroImgDone": 1546,
+     "transferKB": 559,
+     "requests": 15
+    },
+    {
+     "ttfb": 8,
+     "htmlDone": 759,
+     "htmlKB": 34.8,
+     "fcp": 1700,
+     "lcp": 1868,
+     "lcpEl": "img.",
+     "cls": 0,
+     "tbt": 175,
+     "cssDone": null,
+     "jsDone": 1962,
+     "fontDone": 3838,
+     "heroImgDone": 1521,
+     "transferKB": 559,
+     "requests": 15
+    }
+   ]
+  },
+  {
+   "page": "cataract AR",
+   "url": "procedures/cataract-surgery/",
+   "lcpElement": [
+    "p.proc-lede",
+    "p.proc-lede",
+    "p.proc-lede",
+    "p.proc-lede",
+    "p.proc-lede"
+   ],
+   "summary": {
+    "ttfb": {
+     "median": 10,
+     "min": 9,
+     "max": 11
+    },
+    "htmlDone": {
+     "median": 773,
+     "min": 759,
+     "max": 783
+    },
+    "fcp": {
+     "median": 2000,
+     "min": 1956,
+     "max": 2248
+    },
+    "lcp": {
+     "median": 2000,
+     "min": 1956,
+     "max": 2248
+    },
+    "cls": {
+     "median": 0.002,
+     "min": 0.002,
+     "max": 0.0022
+    },
+    "tbt": {
+     "median": 308,
+     "min": 205,
+     "max": 369
+    },
+    "cssDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "jsDone": {
+     "median": 2454,
+     "min": 2429,
+     "max": 2471
+    },
+    "fontDone": {
+     "median": 3487,
+     "min": 3445,
+     "max": 3725
+    },
+    "heroImgDone": {
+     "median": 2483,
+     "min": 2476,
+     "max": 2501
+    },
+    "transferKB": {
+     "median": 434,
+     "min": 434,
+     "max": 434
+    },
+    "requests": {
+     "median": 11,
+     "min": 11,
+     "max": 11
+    },
+    "htmlKB": {
+     "median": 35.2,
+     "min": 35.2,
+     "max": 35.2
+    }
+   },
+   "raw": [
+    {
+     "ttfb": 11,
+     "htmlDone": 759,
+     "htmlKB": 35.2,
+     "fcp": 2232,
+     "lcp": 2232,
+     "lcpEl": "p.proc-lede",
+     "cls": 0.0022,
+     "tbt": 369,
+     "cssDone": null,
+     "jsDone": 2454,
+     "fontDone": 3689,
+     "heroImgDone": 2483,
+     "transferKB": 434,
+     "requests": 11
+    },
+    {
+     "ttfb": 9,
+     "htmlDone": 773,
+     "htmlKB": 35.2,
+     "fcp": 2248,
+     "lcp": 2248,
+     "lcpEl": "p.proc-lede",
+     "cls": 0.0022,
+     "tbt": 342,
+     "cssDone": null,
+     "jsDone": 2455,
+     "fontDone": 3725,
+     "heroImgDone": 2486,
+     "transferKB": 434,
+     "requests": 11
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 766,
+     "htmlKB": 35.2,
+     "fcp": 1988,
+     "lcp": 1988,
+     "lcpEl": "p.proc-lede",
+     "cls": 0.002,
+     "tbt": 226,
+     "cssDone": null,
+     "jsDone": 2440,
+     "fontDone": 3487,
+     "heroImgDone": 2477,
+     "transferKB": 434,
+     "requests": 11
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 783,
+     "htmlKB": 35.2,
+     "fcp": 2000,
+     "lcp": 2000,
+     "lcpEl": "p.proc-lede",
+     "cls": 0.002,
+     "tbt": 308,
+     "cssDone": null,
+     "jsDone": 2471,
+     "fontDone": 3456,
+     "heroImgDone": 2501,
+     "transferKB": 434,
+     "requests": 11
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 775,
+     "htmlKB": 35.2,
+     "fcp": 1956,
+     "lcp": 1956,
+     "lcpEl": "p.proc-lede",
+     "cls": 0.002,
+     "tbt": 205,
+     "cssDone": null,
+     "jsDone": 2429,
+     "fontDone": 3445,
+     "heroImgDone": 2476,
+     "transferKB": 434,
+     "requests": 11
+    }
+   ]
+  },
+  {
+   "page": "lens-lab EN",
+   "url": "en/lens-lab/",
+   "lcpElement": [
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede"
+   ],
+   "summary": {
+    "ttfb": {
+     "median": 10,
+     "min": 9,
+     "max": 11
+    },
+    "htmlDone": {
+     "median": 719,
+     "min": 713,
+     "max": 744
+    },
+    "fcp": {
+     "median": 1596,
+     "min": 1496,
+     "max": 1676
+    },
+    "lcp": {
+     "median": 1596,
+     "min": 1496,
+     "max": 1676
+    },
+    "cls": {
+     "median": 0,
+     "min": 0,
+     "max": 0.034
+    },
+    "tbt": {
+     "median": 1004,
+     "min": 931,
+     "max": 1168
+    },
+    "cssDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "jsDone": {
+     "median": 1891,
+     "min": 1889,
+     "max": 1905
+    },
+    "fontDone": {
+     "median": 2711,
+     "min": 2546,
+     "max": 2947
+    },
+    "heroImgDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "transferKB": {
+     "median": 414,
+     "min": 414,
+     "max": 414
+    },
+    "requests": {
+     "median": 13,
+     "min": 13,
+     "max": 13
+    },
+    "htmlKB": {
+     "median": 25.4,
+     "min": 25.4,
+     "max": 25.4
+    }
+   },
+   "raw": [
+    {
+     "ttfb": 10,
+     "htmlDone": 713,
+     "htmlKB": 25.4,
+     "fcp": 1596,
+     "lcp": 1596,
+     "lcpEl": "p.page-lede",
+     "cls": 0,
+     "tbt": 1168,
+     "cssDone": null,
+     "jsDone": 1892,
+     "fontDone": 2666,
+     "heroImgDone": null,
+     "transferKB": 414,
+     "requests": 13
+    },
+    {
+     "ttfb": 9,
+     "htmlDone": 723,
+     "htmlKB": 25.4,
+     "fcp": 1612,
+     "lcp": 1612,
+     "lcpEl": "p.page-lede",
+     "cls": 0,
+     "tbt": 998,
+     "cssDone": null,
+     "jsDone": 1889,
+     "fontDone": 2803,
+     "heroImgDone": null,
+     "transferKB": 414,
+     "requests": 13
+    },
+    {
+     "ttfb": 9,
+     "htmlDone": 717,
+     "htmlKB": 25.4,
+     "fcp": 1496,
+     "lcp": 1496,
+     "lcpEl": "p.page-lede",
+     "cls": 0.034,
+     "tbt": 1004,
+     "cssDone": null,
+     "jsDone": 1905,
+     "fontDone": 2546,
+     "heroImgDone": null,
+     "transferKB": 414,
+     "requests": 13
+    },
+    {
+     "ttfb": 11,
+     "htmlDone": 744,
+     "htmlKB": 25.4,
+     "fcp": 1676,
+     "lcp": 1676,
+     "lcpEl": "p.page-lede",
+     "cls": 0,
+     "tbt": 931,
+     "cssDone": null,
+     "jsDone": 1891,
+     "fontDone": 2947,
+     "heroImgDone": null,
+     "transferKB": 414,
+     "requests": 13
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 719,
+     "htmlKB": 25.4,
+     "fcp": 1580,
+     "lcp": 1580,
+     "lcpEl": "p.page-lede",
+     "cls": 0,
+     "tbt": 1027,
+     "cssDone": null,
+     "jsDone": 1890,
+     "fontDone": 2711,
+     "heroImgDone": null,
+     "transferKB": 414,
+     "requests": 13
+    }
+   ]
+  },
+  {
+   "page": "procedures AR",
+   "url": "procedures/",
+   "lcpElement": [
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede",
+    "p.page-lede"
+   ],
+   "summary": {
+    "ttfb": {
+     "median": 10,
+     "min": 9,
+     "max": 47
+    },
+    "htmlDone": {
+     "median": 739,
+     "min": 729,
+     "max": 747
+    },
+    "fcp": {
+     "median": 2056,
+     "min": 1932,
+     "max": 2068
+    },
+    "lcp": {
+     "median": 2056,
+     "min": 1932,
+     "max": 2068
+    },
+    "cls": {
+     "median": 0.0024,
+     "min": 0.0024,
+     "max": 0.0024
+    },
+    "tbt": {
+     "median": 73,
+     "min": 55,
+     "max": 145
+    },
+    "cssDone": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "jsDone": {
+     "median": 2101,
+     "min": 2093,
+     "max": 2131
+    },
+    "fontDone": {
+     "median": 4445,
+     "min": 4343,
+     "max": 4834
+    },
+    "heroImgDone": {
+     "median": 4045,
+     "min": 3893,
+     "max": 4140
+    },
+    "transferKB": {
+     "median": 637,
+     "min": 637,
+     "max": 637
+    },
+    "requests": {
+     "median": 16,
+     "min": 16,
+     "max": 16
+    },
+    "htmlKB": {
+     "median": 29.6,
+     "min": 29.6,
+     "max": 29.6
+    }
+   },
+   "raw": [
+    {
+     "ttfb": 10,
+     "htmlDone": 729,
+     "htmlKB": 29.6,
+     "fcp": 2056,
+     "lcp": 2056,
+     "lcpEl": "p.page-lede",
+     "cls": 0.0024,
+     "tbt": 81,
+     "cssDone": null,
+     "jsDone": 2097,
+     "fontDone": 4818,
+     "heroImgDone": 4116,
+     "transferKB": 637,
+     "requests": 16
+    },
+    {
+     "ttfb": 11,
+     "htmlDone": 739,
+     "htmlKB": 29.6,
+     "fcp": 2064,
+     "lcp": 2064,
+     "lcpEl": "p.page-lede",
+     "cls": 0.0024,
+     "tbt": 73,
+     "cssDone": null,
+     "jsDone": 2131,
+     "fontDone": 4343,
+     "heroImgDone": 3893,
+     "transferKB": 637,
+     "requests": 16
+    },
+    {
+     "ttfb": 9,
+     "htmlDone": 747,
+     "htmlKB": 29.6,
+     "fcp": 1992,
+     "lcp": 1992,
+     "lcpEl": "p.page-lede",
+     "cls": 0.0024,
+     "tbt": 145,
+     "cssDone": null,
+     "jsDone": 2112,
+     "fontDone": 4445,
+     "heroImgDone": 4045,
+     "transferKB": 637,
+     "requests": 16
+    },
+    {
+     "ttfb": 10,
+     "htmlDone": 742,
+     "htmlKB": 29.6,
+     "fcp": 1932,
+     "lcp": 1932,
+     "lcpEl": "p.page-lede",
+     "cls": 0.0024,
+     "tbt": 55,
+     "cssDone": null,
+     "jsDone": 2101,
+     "fontDone": 4344,
+     "heroImgDone": 3975,
+     "transferKB": 637,
+     "requests": 16
+    },
+    {
+     "ttfb": 47,
+     "htmlDone": 739,
+     "htmlKB": 29.6,
+     "fcp": 2068,
+     "lcp": 2068,
+     "lcpEl": "p.page-lede",
+     "cls": 0.0024,
+     "tbt": 70,
+     "cssDone": null,
+     "jsDone": 2093,
+     "fontDone": 4834,
+     "heroImgDone": 4140,
+     "transferKB": 637,
+     "requests": 16
+    }
+   ]
+  }
+ ]
+}
