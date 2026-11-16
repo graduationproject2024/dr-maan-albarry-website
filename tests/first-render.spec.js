@@ -50,6 +50,9 @@ test.describe('first load keeps the prerendered page', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await booted(page, 'ar');
+    // positions are real only once the first-load containment is lifted (it is lifted after the first frame; a
+    // measurement taken before that saw every later section at the top and counted none: one failure in five runs)
+    await expect(page.locator('html')).not.toHaveClass(/first-load/);
     const r = await page.evaluate(() => ({
       waiting: [...document.querySelectorAll('.fade-in:not(.visible)')].filter((e) => e.getBoundingClientRect().top >= innerHeight).length,
       hiddenOnScreen: [...document.querySelectorAll('.fade-in:not(.visible)')].filter((e) => e.getBoundingClientRect().top < innerHeight - 40).length,

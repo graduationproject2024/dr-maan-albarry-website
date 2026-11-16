@@ -1437,3 +1437,7 @@ html.dialog-open { overflow: hidden; }
 html.first-load main > section:not(:first-child),
 html.first-load .proc-page > :not(:first-child),
 html.first-load .site-footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+
+/* Not-found page (an address that is not a page of this site): the page intro pattern, with the ways back under it */
+.not-found .not-found-links { margin-top: var(--s-5); }
+.not-found .not-found-book { margin-top: var(--s-5); }

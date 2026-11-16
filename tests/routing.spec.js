@@ -140,3 +140,85 @@ test.describe('Served from a subpath (GitHub Pages)', () => {
     await page.unrouteAll({ behavior: 'wait' });
   });
 });
+
+// Final stabilization, section 8.3: an address that is not a page of this site used to show a silent copy of the home
+// page under an SPA fallback, and GitHub's generic error page on GitHub Pages. It now shows the site's own not-found
+// page (in the reader's language, noindex, no canonical), and the build ships a 404.html for static hosts.
+// Two kinds of host are covered. A static host (GitHub Pages, the live site) answers an unknown address with
+// 404.html and status 404: every unknown address works. A host with an SPA fallback answers with index.html and
+// status 200: deep unknown addresses work; a single unknown folder such as /x/ cannot be told apart from the site
+// living under /x/ (the same build must run under any sub-path), so that one case needs the host to serve 404.html.
+const lostPage = async (page) => {
+  const fs = await import('node:fs');
+  const body = fs.readFileSync('dist/404.html', 'utf8');
+  await page.route(/\/(no-such-page|old)\//, r => (r.request().resourceType() === 'document' ? r.fulfill({ status: 404, contentType: 'text/html; charset=utf-8', body }) : r.continue()));
+};
+test.describe('Unknown addresses', () => {
+  for (const [url, lang, title, host] of [['/no-such-page/', 'ar', 'هذه الصفحة غير موجودة', 'static'], ['/en/no-such-page/', 'en', 'This page does not exist', 'static'], ['/en/procedures/not-a-procedure/', 'en', 'This page does not exist', 'spa'], ['/a/b/c/d', 'ar', 'هذه الصفحة غير موجودة', 'spa']]) {
+    test(`${url} shows the not-found page, not the home page (${host === 'static' ? 'static host: 404.html' : 'SPA fallback'})`, async ({ page }) => {
+      const errors = [];
+      page.on('pageerror', e => errors.push(String(e)));
+      if (host === 'static') await lostPage(page);
+      const res = await page.goto(url);
+      if (host === 'static') expect(res.status()).toBe(404);
+      await expect(page.locator('main[data-page="not-found"] h1')).toHaveText(title);
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+      expect(await page.locator('link[rel="canonical"][href]').count(), 'no canonical address').toBe(0);
+      expect(await page.locator('link[rel="alternate"][hreflang][href]').count(), 'no hreflang').toBe(0);
+      expect(await page.title()).toMatch(lang === 'en' ? /Page not found/ : /الصفحة غير موجودة/);
+      await expect(page.locator('#hero-primary-cta')).toHaveCount(0); // not the home page
+      await expect(page.locator('#site-header')).toBeVisible();
+      await expect(page.locator('main a[data-cta="book"]')).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  }
+
+  test('the links lead back into the site, Back returns, and the page head is restored', async ({ page }) => {
+    await lostPage(page);
+    await page.goto('/en/no-such-page/');
+    await page.locator('.not-found-links a').first().click();
+    await expect(page).toHaveURL(/\/en\/$/);
+    await expect(page.locator('main h1')).toHaveText(DOCTOR.identity.name.en);
+    await expect(page.locator('meta[name="robots"][data-not-found]')).toHaveCount(0);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/en\/$/);
+    await page.goBack();
+    await expect(page.locator('main[data-page="not-found"] h1')).toBeVisible();
+    await page.locator('.not-found-links a').nth(1).click();
+    await expect(page).toHaveURL(/\/en\/procedures\/$/);
+  });
+
+  test('the language switch changes the not-found page in place', async ({ page }) => {
+    await lostPage(page);
+    await page.goto('/no-such-page/');
+    await expect(page.locator('main h1')).toHaveText('هذه الصفحة غير موجودة');
+    await page.locator('[onclick="toggleLang()"]').first().click();
+    await expect(page.locator('main h1')).toHaveText('This page does not exist');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+    expect(new URL(page.url()).pathname).toBe('/no-such-page/');
+  });
+
+  test('the build ships 404.html for static hosts: site-root base, noindex, readable without JavaScript', async () => {
+    const fs = await import('node:fs');
+    const html = fs.readFileSync('dist/404.html', 'utf8');
+    expect(html).toMatch(/<base href="\/[^"]*">/);
+    expect(html).toContain('<meta name="robots" content="noindex">');
+    expect(html).not.toMatch(/rel="canonical"|hreflang=|application\/ld\+json|<meta name="site-route"/);
+    expect(html).toContain('هذه الصفحة غير موجودة');
+    expect(html).toContain('This page does not exist');
+    expect(html).toMatch(/<script type="module"[^>]*src="\.\/assets\/index-/);
+    expect(fs.readFileSync('dist/sitemap.xml', 'utf8')).not.toContain('404');
+  });
+
+  test('404.html served at a deep address boots the app from the site root', async ({ page }) => {
+    const fs = await import('node:fs');
+    const body = fs.readFileSync('dist/404.html', 'utf8');
+    const failed = [];
+    page.on('response', r => { if (r.status() >= 400 && /\/assets\//.test(r.url())) failed.push(r.url()); });
+    await page.route('**/en/old/removed/page', r => r.fulfill({ status: 404, contentType: 'text/html; charset=utf-8', body }));
+    await page.goto('/en/old/removed/page');
+    await expect(page.locator('main[data-page="not-found"] h1')).toHaveText('This page does not exist');
+    await expect(page.locator('#site-header')).toBeVisible();
+    expect(failed, 'scripts and styles load from the site root').toEqual([]);
+  });
+});

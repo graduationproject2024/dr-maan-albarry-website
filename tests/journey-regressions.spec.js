@@ -91,7 +91,8 @@ test.describe('journey regressions — phone', () => {
     page.on('response', (r) => { if (r.status() === 200 && /localhost:\d+\/assets\/index-[^/]+\.js$/.test(r.url())) ok.push(r.url()); });
     await page.goto('/procedures/not-a-procedure/');
     // body classes are set only by the running app (the prerendered markup has none)
-    await page.waitForFunction(() => document.body.classList.contains('is-home'));
+    // (since the final stabilization an unknown address shows the not-found page, not a silent copy of the home page)
+    await page.waitForFunction(() => document.body.classList.contains('is-not-found'));
     expect(ok.length).toBeGreaterThan(0); // the app bundle was loaded from the site root
     // (Chromium's preload scanner may still speculatively request ./assets/* relative to the static <base>
     //  before the inline script corrects it; those speculative 404s are harmless.)

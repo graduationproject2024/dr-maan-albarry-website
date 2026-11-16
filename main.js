@@ -42,7 +42,10 @@ let currentLang = route.lang;
 (() => {
   let saved = null;
   try { saved = localStorage.getItem('lang'); } catch (e) { /* storage unavailable */ }
-  if (route.page === 'home' && route.lang === 'ar' && relOf(location.href) === '' && saved === 'en') {
+  // An address that is not a page of this site (route.known === false) shows the not-found page. It has no URL of
+  // its own to carry the language, so a saved English choice applies there too.
+  if (route.known === false && route.lang === 'ar' && saved === 'en') { route = { ...route, lang: 'en' }; currentLang = 'en'; }
+  if (route.page === 'home' && route.known !== false && route.lang === 'ar' && relOf(location.href) === '' && saved === 'en') {
     route = { ...route, lang: 'en' };
     currentLang = 'en';
     history.replaceState(history.state, '', new URL(pathFor('en') + location.hash, SITE_ROOT));
@@ -1732,6 +1735,24 @@ function renderBookingBar() {
 
 // --- HEAD METADATA (client-side navigation keeps it in step with the prerendered pages) ---
 function updateHead(full) {
+  // The not-found page must never be indexed or share the home page's canonical address.
+  let robots = document.querySelector('meta[name="robots"]'); // 404.html ships one; elsewhere it is added here
+  if (robots && robots.content !== 'noindex') robots = null; // only the not-found marker is managed here
+  if (route.known === false) {
+    document.title = tr('الصفحة غير موجودة | د. معن البري', 'Page not found | Dr. Maan Al Barry');
+    if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.appendChild(robots); }
+    robots.setAttribute('data-not-found', '');
+    robots.content = 'noindex';
+    document.querySelectorAll('link[rel="canonical"], link[rel="alternate"][hreflang]').forEach(n => n.setAttribute('data-parked-href', n.getAttribute('href') || '') || n.removeAttribute('href'));
+    return;
+  }
+  if (robots) {
+    robots.remove();
+    full = true; // the addresses parked above are written again below
+    // 404.html has no canonical or hreflang links at all: a real page needs them back
+    const need = [['link[rel="canonical"]', { rel: 'canonical' }], ...['ar', 'en', 'x-default'].map(h => [`link[rel="alternate"][hreflang="${h}"]`, { rel: 'alternate', hreflang: h }])];
+    for (const [sel, attrs] of need) if (!document.querySelector(sel)) { const l = document.createElement('link'); Object.entries(attrs).forEach(([k, v]) => l.setAttribute(k, v)); document.head.appendChild(l); }
+  }
   const meta = pageMeta(currentLang, route.slug, route.page);
   document.title = meta.title;
   if (!full) return;
@@ -1825,12 +1846,13 @@ window.cycleTheme = window.toggleTheme;
 window.toggleLang = function () {
   const lang = currentLang === 'ar' ? 'en' : 'ar';
   try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable: session-only */ }
+  if (route.known === false) { route = { ...route, lang }; currentLang = lang; renderApp(true); return; } // the not-found page has no address of its own: switch it in place
   go({ lang, slug: route.slug, page: route.page }, { scrollTo: 0 }); // questionnaire answers are language-independent and stay in memory
 };
 
 // --- CLIENT-SIDE NAVIGATION ---
 // Commit a route: push history, re-render, then scroll (to a section, a saved position or the top).
-const samePage = (a, b) => a.lang === b.lang && a.slug === b.slug && a.page === b.page;
+const samePage = (a, b) => a.lang === b.lang && a.slug === b.slug && a.page === b.page && (a.known === false) === (b.known === false);
 function go(next, { push = true, hash = '', scrollTo = null } = {}) {
   const commit = () => {
     const changed = !samePage(next, route);
@@ -1840,7 +1862,7 @@ function go(next, { push = true, hash = '', scrollTo = null } = {}) {
         history.replaceState({ ...(history.state || {}), y: window.scrollY }, '');
         history.pushState({ y: 0 }, '', new URL(pathFor(next.lang, next.slug, next.page) + hash, SITE_ROOT));
       }
-      route = { lang: next.lang, slug: next.slug, page: next.page, known: true };
+      route = { lang: next.lang, slug: next.slug, page: next.page, known: next.known !== false };
       currentLang = next.lang;
       renderApp(true);
     } else if (push && hash) {
@@ -2174,7 +2196,21 @@ const PAGE_CONTENT = {
   clinic: renderClinicPage
 };
 /** The current page's renderer. A published section without one stops the prerender (a page error fails the build). */
+/** An address that is not a page of this site: say so, in the reader's language, and offer the ways back. */
+function renderNotFound() {
+  const to = (key) => pathFor(currentLang, null, key);
+  const links = [['home', tr('الصفحة الرئيسية', 'Home page')], ['procedures', tr('العمليات والعلاجات', 'Procedures and treatments')], ['about', tr('عن د. معن', 'About Dr. Maan')], ['clinic', tr('العيادة والحجز', 'Clinic and booking')]];
+  return editorialIntro({
+    cls: 'not-found',
+    kicker: tr('خطأ ٤٠٤', 'Error 404'),
+    title: tr('هذه الصفحة غير موجودة', 'This page does not exist'),
+    lede: tr('ربما تغيّر العنوان أو كُتب بطريقة غير صحيحة. يمكنك المتابعة من أحد هذه الروابط.', 'The address may have changed or been mistyped. You can carry on from one of these links.'),
+    after: `<nav class="page-hero-links not-found-links" aria-label="${tr('روابط مفيدة', 'Useful links')}">${links.map(([key, name]) => `<a href="${to(key) || './'}" data-nav class="text-link">${name}</a>`).join('')}</nav>
+          <p class="not-found-book"><a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعداً', 'Book an appointment')}</span></a></p>`,
+  });
+}
 function pageContent() {
+  if (route.known === false) return renderNotFound();
   const section = publishedSections().find(s => s.id === route.page);
   const render = PAGE_CONTENT[section.content];
   if (!render) throw new Error(`section "${section.id}" names the renderer "${section.content}", which main.js does not define`);
@@ -2189,7 +2225,7 @@ let adoptedFirstLoad = false;
 function canAdoptPrerender() {
   const main = document.querySelector('#app > main[data-page]');
   const site = document.querySelector('meta[name="site-route"]');
-  return Boolean(main && site)
+  return Boolean(main && site) && route.known !== false
     && site.getAttribute('content') === pathFor(currentLang, route.slug, route.page) // not a fallback page served at another URL
     && document.documentElement.lang === currentLang // not the saved-English redirect from the Arabic root
     && main.dataset.page === (route.slug ? 'procedure' : route.page)
@@ -2219,7 +2255,7 @@ function renderApp(navigated = false) {
   document.documentElement.lang = currentLang;
   document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
   const key = route.slug ? 'procedure' : route.page;
-  document.body.className = `${currentLang === 'en' ? 'lang-en' : 'lang-ar'} ${route.slug ? 'is-procedure' : `is-${route.page === 'home' ? 'home' : 'section'}`}`;
+  document.body.className = `${currentLang === 'en' ? 'lang-en' : 'lang-ar'} ${route.known === false ? 'is-section is-not-found' : route.slug ? 'is-procedure' : `is-${route.page === 'home' ? 'home' : 'section'}`}`;
   updateHead(navigated);
 
   const app = document.getElementById('app');
@@ -2234,7 +2270,7 @@ function renderApp(navigated = false) {
   else app.innerHTML = `
     <a class="skip-link" href="${hereHref('main')}">${tr('تخطَّ إلى المحتوى', 'Skip to content')}</a>
     ${renderHeader()}
-    <main id="main" tabindex="-1" data-page="${key}">
+    <main id="main" tabindex="-1" data-page="${route.known === false ? 'not-found' : key}">
       ${proc ? renderProcedurePage(proc) : pageContent()}
     </main>
     ${renderFooter()}

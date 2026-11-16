@@ -129,6 +129,27 @@ try {
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'index.html'), doc);
   }
+  // 404.html — what a static host (GitHub Pages) serves, with status 404, for an address that is not a page.
+  // It is the app shell with <base> fixed to the site root (the address can be at any depth), marked noindex, with
+  // no canonical or hreflang, and a plain bilingual message for readers without JavaScript. With JavaScript the app
+  // renders its own not-found page in the reader's language (main.js renderNotFound).
+  const root = new URL(SITE_URL.replace(/\/+$/, '') + '/').pathname;
+  const lost = template
+    .replace('<meta charset="UTF-8">', `<meta charset="UTF-8">
+  <base href="${root}">
+  <meta name="robots" content="noindex">`)
+    .replace(/<title>[^<]*<\/title>/, '<title>الصفحة غير موجودة | Page not found — د. معن البري</title>')
+    .replace(/\s*<link rel="canonical"[^>]*>/, '')
+    .replace(/\s*<link rel="alternate" hreflang="[^"]*"[^>]*>/g, '')
+    .replace(/\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/, '')
+    .replace('<div id="app"></div>', `<div id="app"><main id="main" data-page="not-found" style="max-width:40rem;margin:0 auto;padding:4rem 1.25rem;font-family:system-ui,sans-serif;line-height:1.8">
+      <h1>هذه الصفحة غير موجودة</h1>
+      <p>ربما تغيّر العنوان أو كُتب بطريقة غير صحيحة. <a href="./">الصفحة الرئيسية</a> · <a href="procedures/">العمليات والعلاجات</a> · <a href="clinic/">العيادة والحجز</a></p>
+      <div lang="en" dir="ltr"><h2>This page does not exist</h2>
+      <p>The address may have changed or been mistyped. <a href="en/">Home page</a> · <a href="en/procedures/">Procedures and treatments</a> · <a href="en/clinic/">Clinic and booking</a></p></div>
+    </main></div>`);
+  if (!lost.includes(`<base href="${root}">`) || !lost.includes('data-page="not-found"') || /rel="canonical"/.test(lost)) throw new Error('404.html: could not be derived from the app shell');
+  fs.writeFileSync(path.join(dist, '404.html'), lost);
   console.log(`prerender: ${out.length} pages → ${out.map(([p]) => '/' + p.path).join(' ')}`);
 } finally {
   await browser.close();
