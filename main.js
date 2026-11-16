@@ -269,9 +269,27 @@ function atlasIllus(a, { bg = 'alpha', sizes = '100vw', priority = false, eager 
   const p = procedureBySlug(a.procedure);
   return `<div class="illus atlas-illus is-${kind} ${cls}" style="aspect-ratio:${a.w} / ${a.h}">
       <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" onerror="var d=this.closest('.illus');d.classList.add('is-plate');this.parentNode.remove()"></picture>
-      ${pins ? pinLayer(atlasLabels(a), { progressive: a.level === 'L2' }) : ''}
+      ${pins ? pinLayer(spreadPins(atlasLabels(a), a.w / a.h), { progressive: a.level === 'L2' }) : ''}
       ${anatomyPlate(a.procedure, p ? L(p.alt) : label)}
     </div>`;
+}
+/** Two structures that lie close together gave two numbered pins that overlapped (4 figures in the audit: the pins
+ *  are 20 to 28 px wide, the anchors were 16 to 23 px apart). The pins of such a pair are moved apart along the line
+ *  between them, each by at most about 1.3 % of the picture's width, until their centres are 7 % of the width apart.
+ *  Drawing only: the anchor coordinates in the manifest (what the physician reviews) are not changed. */
+function spreadPins(labels, aspect, minDist = 0.07) {
+  const pts = labels.map(l => ({ ...l }));
+  for (let pass = 0; pass < 4; pass++) {
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      const dx = pts[j].x - pts[i].x, dy = (pts[j].y - pts[i].y) / aspect; // both in units of the picture's width
+      const d = Math.hypot(dx, dy);
+      if (d >= minDist) continue;
+      const push = Math.min(0.013, (minDist - d) / 2), ux = d ? dx / d : 1, uy = d ? dy / d : 0;
+      pts[i].x -= ux * push; pts[i].y -= uy * push * aspect;
+      pts[j].x += ux * push; pts[j].y += uy * push * aspect;
+    }
+  }
+  return pts.map(l => ({ ...l, x: Math.min(0.97, Math.max(0.03, l.x)), y: Math.min(0.97, Math.max(0.03, l.y)) }));
 }
 /** Numbered pins at the projected anchors (decorative duplicates of the key, which carries the text).
  *  progressive: pins that are not essential stay hidden until the figure's "Show all labels" is open. */

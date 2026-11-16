@@ -517,7 +517,7 @@ main:focus, main h1:focus { outline: none; }
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--paper) 70%, transparent), 0 2px 6px rgba(0, 0, 0, .18);
 }
 @media (max-width: 639px) { .pin { width: 20px; height: 20px; margin: -10px 0 0 -10px; font-size: .6875rem; box-shadow: 0 0 0 2px color-mix(in srgb, var(--paper) 70%, transparent), 0 1px 3px rgba(0, 0, 0, .18); } }
-.pin-key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--fs-caption); line-height: 1.6; color: var(--ink-2); }
+.pin-key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--fs-small); line-height: 1.6; color: var(--ink-2); } /* 15 px: the names of the structures are what an older reader needs most (was 13 px) */
 .pin-key li { display: inline-flex; align-items: baseline; gap: 6px; }
 .pk-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--rule-strong); font-style: italic; font-size: .75rem; color: var(--accent); line-height: 1; transform: translateY(2px); }
 .fig-cap .pin-key { flex-basis: 100%; }

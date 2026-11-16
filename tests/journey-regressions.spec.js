@@ -195,6 +195,6 @@ test.describe('journey regressions — no JavaScript', () => {
     await page.goto('/lens-lab/'); // the simulator and the Lens Lab live here since Phase 1
     expect((await page.locator('#simulator-host').boundingBox()).height).toBeLessThan(100);
     expect((await page.locator('#lens-lab-host').boundingBox())?.height || 0).toBeLessThan(100);
-    for (const f of ['dist/index.html', 'dist/en/index.html', 'dist/lens-lab/index.html', 'dist/en/lens-lab/index.html', 'dist/how-vision-works/index.html']) expect(fs.readFileSync(f, 'utf8')).not.toMatch(/data-reserve/);
+    for (const f of ['dist/index.html', 'dist/en/index.html', 'dist/lens-lab/index.html', 'dist/en/lens-lab/index.html', 'dist/how-vision-works/index.html']) expect(fs.readFileSync(f, 'utf8').replace(/<style[\s\S]*?<\/style>/g, ''), `${f}: no element carries data-reserve (the inlined stylesheet names the attribute in its selectors)`).not.toMatch(/data-reserve/);;
   });
 });
