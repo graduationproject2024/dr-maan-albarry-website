@@ -1,0 +1,47 @@
+# The whole test suite (every simulator, every journey, stress and review tests). It takes much longer than the gate,
+# so it runs before a release (started by hand) and once a week, not on every push. Publishes nothing.
+name: Full regression
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1'   # Mondays 03:00 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full:
+    name: Full suite (Chromium and WebKit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Build and run every test
+        run: npm run test:full
+      # Before a release a flaky test is a finding: the job fails so that it is looked at, not retried away.
+      - name: Test summary (flaky tests fail this run)
+        if: always()
+        run: node scripts/ci-summary.mjs --title="Full regression" --strict-flaky
+      - name: Keep the report, traces and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-regression-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+          if-no-files-found: ignore

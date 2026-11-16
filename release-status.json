@@ -1,0 +1,6 @@
+{
+  "_readme": "Human release states. Edited by a person only. CI reads it (scripts/release-check.mjs) and never writes it. Medical review can only be set to complete with the reviewer's name and the date, after every clinical item in the content files carries that review.",
+  "visualQa": { "status": "pending", "by": null, "date": null, "note": "Automated screenshots exist; no person has signed off the final-stabilization build." },
+  "medicalReview": { "status": "pending", "reviewer": null, "date": null },
+  "deployment": { "authorizedCommit": null, "date": null, "note": "Last authorized deployment: c7cdbed on 2026-11-14 (owner: 'Yes, deploy'). Nothing later is authorized." }
+}

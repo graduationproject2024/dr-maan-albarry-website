@@ -82,9 +82,19 @@ test.describe('first load keeps the prerendered page', () => {
   });
 
   test('simulator slots reserve their height again after adoption', async ({ page }) => {
+    // The simulator sits right under the page intro, so on a fast machine it can finish mounting (and give its
+    // reserved height back) before the check runs. Its code is held here so the check always sees the adopted state.
+    let release;
+    const held = new Promise((r) => { release = r; });
+    await page.route(/assets\/vision-sim-[^/]+\.js$/, async (route) => { await held; await route.continue(); });
     await page.goto('/lens-lab/');
     await booted(page, 'ar');
     await expect(page.locator('#simulator-host')).toHaveAttribute('data-reserve', '');
+    release();
+    // and once it has mounted it sizes itself
+    await page.locator('#simulator-host').scrollIntoViewIfNeeded();
+    await expect(page.locator('#simulator-host canvas')).toHaveCount(1, { timeout: 45_000 });
+    await expect(page.locator('#simulator-host')).not.toHaveAttribute('data-reserve', '');
   });
 
   test('a procedure page answers taps before its content chunk arrives', async ({ page }) => {

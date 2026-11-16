@@ -10,7 +10,11 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "test": "playwright test",
-    "test:evidence": "npm run build && node tests/measure.mjs docs/implementation/phase-0-phase-1/final-closure/evidence"
+    "test:evidence": "npm run build && node tests/measure.mjs docs/implementation/phase-0-phase-1/final-closure/evidence",
+    "typecheck": "tsc --noEmit",
+    "release:check": "node scripts/release-check.mjs",
+    "test:gate": "playwright test tests/content-registry.spec.js tests/section-registry.spec.js tests/phase0-content.spec.js tests/seo.spec.js tests/routing.spec.js tests/first-render.spec.js tests/hero-portrait.spec.js tests/phase1-pages.spec.js tests/phase1-mobile.spec.js tests/plates-clarity.spec.js tests/closure.spec.js tests/vision-optics.spec.js tests/cataract-constraints.spec.js tests/journeys/axe.spec.js tests/journeys/security.spec.js",
+    "test:full": "playwright test"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

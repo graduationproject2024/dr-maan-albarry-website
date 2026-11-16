@@ -1,25 +1,37 @@
 name: Deploy to GitHub Pages
 
+# A push to main is published only after the quality gate (verify.yml) has passed on that exact commit.
+# The gate decides engineering readiness only. Whether a commit should reach main at all is the owner's decision
+# (deployment authorization), and the medical review state is reported, never granted, by the pipeline.
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
+# Least privilege: nothing may write by default; only the deploy job below may publish to Pages.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: 'pages'
   cancel-in-progress: true
 
 jobs:
+  verify:
+    uses: ./.github/workflows/verify.yml
+
   deploy:
+    name: Build and publish
+    needs: verify               # a failed gate stops the deployment
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # The build prerenders / and /en/ in headless Chromium (scripts/prerender.mjs).
+      # The build prerenders every page in headless Chromium (scripts/prerender.mjs).
       - name: Install Chromium for prerendering
         run: npx playwright install --with-deps chromium
 
@@ -43,6 +55,16 @@ jobs:
         run: npm run build
         env:
           SITE_URL: https://graduationproject2024.github.io/dr-maan-albarry-website
+
+      # The doctor's private review tools are test-only pages; they must never be in a published build.
+      - name: Check the published files
+        run: |
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/sitemap.xml
+          if ls dist/*-preview.html >/dev/null 2>&1; then echo "review harness pages found in the production build"; exit 1; fi
+          echo "### Published build" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit \`${GITHUB_SHA::7}\` · $(find dist -name index.html | wc -l) pages · 404.html present · no review harness pages" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -1,0 +1,66 @@
+# Quality gate: the checks a commit must pass before it can be published.
+# Called by ci.yml (every branch push and pull request) and by deploy.yml (before the Pages deployment).
+# Read-only: this workflow cannot publish, write to the repository or reach any secret.
+name: Verify
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Type check, build, gate tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies (locked versions)
+        run: npm ci
+
+      # Production dependencies only (three.js): a known high or critical advisory stops the release.
+      - name: Security audit of shipped dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Type check
+        run: npm run typecheck
+
+      # Release state: fails only if an approval is claimed without a reviewer and a date. It never grants approval.
+      - name: Release state and clinical review queue
+        run: npm run release:check
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Builds the site (type check, bundle, prerender of every page, 404.html) and runs the gate suite against it:
+      # doctor-content integrity, section registry, routes and sitemap, SEO and hreflang, navigation and booking links,
+      # Arabic and English, phone layouts, first render, accessibility (axe), security headers and links, and the
+      # unit tests of the optics model and the surgical constraints.
+      - name: Build and run the gate tests
+        run: npm run test:gate
+
+      - name: Test summary
+        if: always()
+        run: node scripts/ci-summary.mjs --title="Gate suite"
+
+      - name: Keep the report, traces and screenshots of failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-report-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
