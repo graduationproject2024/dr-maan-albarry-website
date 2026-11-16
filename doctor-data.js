@@ -44,6 +44,24 @@ export const SITE = {
   image: 'https://drmaanalbarry.com/images/doctor-portrait.jpg'
 };
 
+/**
+ * The portrait on the home page. ONE place to change when a new photograph arrives: run
+ * `python scripts/build-portrait.py <photo>` and paste the object it prints here (DOCTOR_PORTRAIT_STATUS.md).
+ * `src` is the default file; `variants` are wider copies of the same crop for sharp screens (may be empty).
+ * Current source: the 295×225 studio photograph, cropped and enlarged to 374×450 — soft on large screens.
+ * It must always be an authentic photograph of Dr. Maan; never a generated or retouched face.
+ */
+export const PORTRAIT = Object.freeze({
+  src: 'images/dr-maan-portrait-hero.webp',
+  width: 374,
+  height: 450,
+  type: 'image/webp',
+  variants: Object.freeze([]), // e.g. [{ src: 'images/dr-maan-portrait-hero-800.webp', width: 800 }, { src: '…-1200.webp', width: 1200 }]
+  sizes: '(max-width: 639px) 62vw, (max-width: 1023px) 40vw, 420px',
+});
+/** srcset for PORTRAIT, or '' when there is only one file. */
+export const portraitSrcset = (p = PORTRAIT) => (p.variants.length ? [`${p.src} ${p.width}w`, ...p.variants.map(v => `${v.src} ${v.width}w`)].join(', ') : '');
+
 export const DOCTOR = {
   identity: {
     name: { ar: 'د. معن بن عبدالله البري', en: 'Dr. Maan bin Abdullah Al Barry' },

@@ -7,7 +7,7 @@
 // page copy and patient education from src/site/content.js.
 // ============================================================
 
-import { DOCTOR, FAQ, PROCEDURES, PROCEDURE_GROUPS, procedureBySlug, whatsappUrl, publishableTestimonials, yearsOfExperience, buildJsonLd, buildProcedureJsonLd, buildSectionJsonLd } from './doctor-data.js';
+import { DOCTOR, FAQ, PROCEDURES, PROCEDURE_GROUPS, procedureBySlug, whatsappUrl, publishableTestimonials, yearsOfExperience, buildJsonLd, buildProcedureJsonLd, buildSectionJsonLd, PORTRAIT, portraitSrcset } from './doctor-data.js';
 import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } from './site-routes.js';
 import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
 import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES } from './src/site/content.js';
@@ -452,7 +452,7 @@ function renderHero() {
     <div class="container hero-grid">
       <figure class="hero-portrait">
         <div class="portrait-frame">
-          <img src="images/dr-maan-portrait-hero.webp" width="374" height="450" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
+          <img src="${PORTRAIT.src}"${portraitSrcset() ? ` srcset="${portraitSrcset()}" sizes="${PORTRAIT.sizes}"` : ''} width="${PORTRAIT.width}" height="${PORTRAIT.height}" alt="${tr('صورة د. معن بن عبدالله البري', 'Portrait of Dr. Maan bin Abdullah Al Barry')}" loading="eager" fetchpriority="high" decoding="async">
         </div>
         <figcaption class="portrait-caption"><span class="portrait-name">${L(D.identity.shortName)}</span><span class="portrait-role hero-role-text">${short(chief)}</span></figcaption>
       </figure>

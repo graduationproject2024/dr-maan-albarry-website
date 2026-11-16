@@ -22,7 +22,7 @@ import path from 'node:path';
 import { PAGE_URLS, SITE_URL, pageUrl } from '../vite.config.js';
 import { pageMeta, breadcrumbFor, sectionPage } from '../site-routes.js';
 import { FEATURE_HOST_SELECTOR } from '../section-registry.js';
-import { buildProcedureJsonLd, buildSectionJsonLd, PROCEDURES } from '../doctor-data.js';
+import { buildProcedureJsonLd, buildSectionJsonLd, PROCEDURES, PORTRAIT, portraitSrcset } from '../doctor-data.js';
 import { CONTENT } from '../src/procedures/content.js';
 
 const dist = path.resolve('dist');
@@ -97,7 +97,7 @@ function documentFor(page, appHtml) {
     .replace(/<link rel="alternate" hreflang="x-default" href="[^"]*">/, `<link rel="alternate" hreflang="x-default" href="${pageUrl('ar', slug, key)}">`)
     .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${url}">`);
   // Home: the doctor's portrait is the largest element of the first screen (the LCP element), so it is fetched ahead of the fonts.
-  if (!slug && key === 'home') doc = doc.replace('<!-- @font-preload -->', () => `<link rel="preload" as="image" href="./images/dr-maan-portrait-hero.webp" type="image/webp" fetchpriority="high">
+  if (!slug && key === 'home') doc = doc.replace('<!-- @font-preload -->', () => `<link rel="preload" as="image" href="./${PORTRAIT.src}"${portraitSrcset() ? ` imagesrcset="${portraitSrcset().replace(/(^|, )/g, '$1./')}" imagesizes="${PORTRAIT.sizes}"` : ''} type="${PORTRAIT.type}" fetchpriority="high">
   <!-- @font-preload -->`);
   if (lang === 'en') {
     doc = doc.replace(/<meta property="og:locale" content="ar_SA">\s*<meta property="og:locale:alternate" content="en_US">/,

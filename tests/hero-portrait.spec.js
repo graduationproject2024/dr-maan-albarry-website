@@ -65,3 +65,29 @@ test('the portrait is never stretched and stays within twice its source figure',
   expect(Math.abs(r.w / r.h - r.nw / r.nh)).toBeLessThan(0.02); // no distortion
   expect(r.w / (r.nw / 2)).toBeLessThanOrEqual(2.1); // source figure is 187 px wide; the file is a 2x resample of it
 });
+
+// The portrait is one setting (doctor-data.js PORTRAIT): a new photograph replaces it without touching the layout.
+test.describe('portrait setting', () => {
+  test('the page, the preload and the setting name the same file and size', async ({ page }) => {
+    const { PORTRAIT, portraitSrcset } = await import('../doctor-data.js');
+    const fs = await import('node:fs');
+    expect(fs.existsSync(`public/${PORTRAIT.src}`), 'the portrait file exists').toBe(true);
+    for (const v of PORTRAIT.variants) expect(fs.existsSync(`public/${v.src}`), `${v.src} exists`).toBe(true);
+    await page.goto('/en/');
+    const img = page.locator('.hero-portrait img');
+    await expect(img).toHaveAttribute('src', PORTRAIT.src);
+    await expect(img).toHaveAttribute('width', String(PORTRAIT.width));
+    await expect(img).toHaveAttribute('height', String(PORTRAIT.height));
+    const natural = await img.evaluate((e) => [e.naturalWidth, e.naturalHeight]);
+    expect(natural, 'the declared size is the real size (no layout shift)').toEqual([PORTRAIT.width, PORTRAIT.height]);
+    const html = fs.readFileSync('dist/en/index.html', 'utf8');
+    expect(html).toContain(`<link rel="preload" as="image" href="./${PORTRAIT.src}"`);
+    if (portraitSrcset()) await expect(img).toHaveAttribute('srcset', portraitSrcset()); else expect(await img.getAttribute('srcset')).toBeNull();
+  });
+
+  test('srcset is built only when wider copies exist', async () => {
+    const { portraitSrcset } = await import('../doctor-data.js');
+    expect(portraitSrcset({ src: 'a.webp', width: 480, variants: [] })).toBe('');
+    expect(portraitSrcset({ src: 'a.webp', width: 480, variants: [{ src: 'b.webp', width: 800 }, { src: 'c.webp', width: 1200 }] })).toBe('a.webp 480w, b.webp 800w, c.webp 1200w');
+  });
+});
