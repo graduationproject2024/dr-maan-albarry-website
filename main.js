@@ -1303,6 +1303,35 @@ function closeCataract3D(refocus = true) {
   if (btn && refocus !== false) btn.focus({ preventScroll: true });
 }
 
+// Startup profile (CATARACT_STARTUP_PERFORMANCE.md): on a slow connection about 40 % of the wait after the tap is the
+// download of the 3D code (~175 KB compressed). So the download starts a little before the tap — never on the home
+// page, never on a data-saver or 2G connection, and never the scene itself (no WebGL context, no geometry):
+//  - when the visitor reaches for the button (pointer over it, finger down, keyboard focus), on any page;
+//  - when the 3D section comes within about one screen of the viewport, in idle time, on pages other than home.
+let c3dWarmed = false;
+let c3dWarmIO = null;
+function c3dWarm() {
+  if (c3dWarmed) return;
+  const conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+  c3dWarmed = true;
+  import('./src/cataract-sim/index.js').catch(() => { c3dWarmed = false; }); // a failure here is silent; the tap reports it
+}
+function c3dWatchWarm() {
+  if (c3dWarmIO) { c3dWarmIO.disconnect(); c3dWarmIO = null; }
+  const btn = document.getElementById('cataract-3d-start');
+  if (!btn || c3dWarmed) return;
+  for (const type of ['pointerenter', 'touchstart', 'focus']) btn.addEventListener(type, c3dWarm, { once: true, passive: true });
+  if (route.page === 'home' && !route.slug) return;
+  if (!('IntersectionObserver' in window)) return;
+  c3dWarmIO = new IntersectionObserver((entries) => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    c3dWarmIO.disconnect(); c3dWarmIO = null;
+    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(c3dWarm, { timeout: 2500 });
+  }, { rootMargin: '100% 0px' });
+  c3dWarmIO.observe(btn);
+}
+
 window.startCataract3D = async function () {
   if (c3d.state === 'loading' || c3d.state === 'active') return;
   c3d.state = 'loading';
@@ -2287,6 +2316,7 @@ function renderApp(navigated = false) {
   // 3D: survives re-renders on pages that host it; torn down when the visitor leaves them.
   if ((c3d.state === 'active' || c3d.state === 'loading') && !document.getElementById('cataract-3d-stage')) closeCataract3D(false);
   c3dSync();
+  c3dWatchWarm();
   if (c3d.controller && typeof c3d.controller.setLang === 'function') {
     try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
   }

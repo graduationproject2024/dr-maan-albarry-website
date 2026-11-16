@@ -1,0 +1,696 @@
+{
+ "measuredAt": "2026-11-16T14:07:37.019Z",
+ "environment": "Chromium (Playwright) on Windows, ANGLE/D3D11 on the local GPU, phone emulated (390x844, DPR 2); vite preview on localhost",
+ "conditions": [
+  {
+   "condition": "unthrottled",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 60,
+     "min": 48,
+     "max": 135
+    },
+    "download": {
+     "median": 34,
+     "min": 28,
+     "max": 71
+    },
+    "init": {
+     "median": 859,
+     "min": 654,
+     "max": 6716
+    },
+    "createRenderer": {
+     "median": 81,
+     "min": 78,
+     "max": 799
+    },
+    "materials": {
+     "median": 60,
+     "min": 54,
+     "max": 178
+    },
+    "geometry": {
+     "median": 251,
+     "min": 193,
+     "max": 696
+    },
+    "shaders": {
+     "median": 378,
+     "min": 293,
+     "max": 4979
+    },
+    "ready": {
+     "median": 891,
+     "min": 688,
+     "max": 6787
+    },
+    "longTaskTotal": {
+     "median": 632,
+     "min": 521,
+     "max": 5222
+    },
+    "longestTask": {
+     "median": 288,
+     "min": 210,
+     "max": 3639
+    },
+    "heapMB": {
+     "median": 21,
+     "min": 17,
+     "max": 23
+    }
+   },
+   "files": [
+    {
+     "file": "cataract-sim.js",
+     "start": 2,
+     "end": 34,
+     "transferKB": 45.4,
+     "decodedKB": 136.3
+    },
+    {
+     "file": "three.module.js",
+     "start": 2,
+     "end": 71,
+     "transferKB": 128.6,
+     "decodedKB": 509.6
+    },
+    {
+     "file": "core.js",
+     "start": 3,
+     "end": 16,
+     "transferKB": 2.3,
+     "decodedKB": 3.9
+    },
+    {
+     "file": "core.css",
+     "start": 3,
+     "end": 19,
+     "transferKB": 1.6,
+     "decodedKB": 4.5
+    },
+    {
+     "file": "cataract-sim.css",
+     "start": 4,
+     "end": 20,
+     "transferKB": 4,
+     "decodedKB": 15.1
+    }
+   ],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 135,
+     "filesDone": 71,
+     "step5": 135,
+     "step25": 934,
+     "step55": 1112,
+     "step75": 1808,
+     "step100": 6787,
+     "ready": 6787,
+     "longTasks": [
+      58,
+      717,
+      158,
+      650,
+      3639
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 71,
+     "init": 6716,
+     "createRenderer": 799,
+     "materials": 178,
+     "geometry": 696,
+     "shaders": 4979,
+     "longTaskTotal": 5222,
+     "longestTask": 3639
+    },
+    {
+     "loadingShown": 68,
+     "filesDone": 37,
+     "step5": 68,
+     "step25": 177,
+     "step55": 243,
+     "step75": 494,
+     "step100": 903,
+     "ready": 903,
+     "longTasks": [
+      88,
+      64,
+      245,
+      288
+     ],
+     "heapMB": 21,
+     "canvases": 1,
+     "download": 37,
+     "init": 866,
+     "createRenderer": 109,
+     "materials": 66,
+     "geometry": 251,
+     "shaders": 409,
+     "longTaskTotal": 685,
+     "longestTask": 288
+    },
+    {
+     "loadingShown": 60,
+     "filesDone": 34,
+     "step5": 60,
+     "step25": 138,
+     "step55": 197,
+     "step75": 395,
+     "step100": 688,
+     "ready": 688,
+     "longTasks": [
+      63,
+      56,
+      192,
+      210
+     ],
+     "heapMB": 17,
+     "canvases": 1,
+     "download": 34,
+     "init": 654,
+     "createRenderer": 78,
+     "materials": 59,
+     "geometry": 198,
+     "shaders": 293,
+     "longTaskTotal": 521,
+     "longestTask": 210
+    },
+    {
+     "loadingShown": 48,
+     "filesDone": 28,
+     "step5": 48,
+     "step25": 126,
+     "step55": 186,
+     "step75": 379,
+     "step100": 727,
+     "ready": 727,
+     "longTasks": [
+      63,
+      55,
+      188,
+      219
+     ],
+     "heapMB": 17,
+     "canvases": 1,
+     "download": 28,
+     "init": 699,
+     "createRenderer": 78,
+     "materials": 60,
+     "geometry": 193,
+     "shaders": 348,
+     "longTaskTotal": 525,
+     "longestTask": 219
+    },
+    {
+     "loadingShown": 55,
+     "filesDone": 32,
+     "step5": 55,
+     "step25": 136,
+     "step55": 190,
+     "step75": 513,
+     "step100": 891,
+     "ready": 891,
+     "longTasks": [
+      67,
+      318,
+      247
+     ],
+     "heapMB": 23,
+     "canvases": 1,
+     "download": 32,
+     "init": 859,
+     "createRenderer": 81,
+     "materials": 54,
+     "geometry": 323,
+     "shaders": 378,
+     "longTaskTotal": 632,
+     "longestTask": 318
+    }
+   ]
+  },
+  {
+   "condition": "Fast 3G + CPU 4x",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 1735,
+     "min": 1694,
+     "max": 1780
+    },
+    "download": {
+     "median": 1593,
+     "min": 1587,
+     "max": 1604
+    },
+    "init": {
+     "median": 2538,
+     "min": 2232,
+     "max": 2799
+    },
+    "createRenderer": {
+     "median": 427,
+     "min": 374,
+     "max": 500
+    },
+    "materials": {
+     "median": 349,
+     "min": 302,
+     "max": 503
+    },
+    "geometry": {
+     "median": 992,
+     "min": 916,
+     "max": 1380
+    },
+    "shaders": {
+     "median": 516,
+     "min": 408,
+     "max": 548
+    },
+    "ready": {
+     "median": 4142,
+     "min": 3819,
+     "max": 4397
+    },
+    "longTaskTotal": {
+     "median": 2439,
+     "min": 2197,
+     "max": 2787
+    },
+    "longestTask": {
+     "median": 952,
+     "min": 868,
+     "max": 1345
+    },
+    "heapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 28
+    }
+   },
+   "files": [
+    {
+     "file": "cataract-sim.js",
+     "start": 8,
+     "end": 1138,
+     "transferKB": 45.4,
+     "decodedKB": 136.3
+    },
+    {
+     "file": "three.module.js",
+     "start": 10,
+     "end": 1598,
+     "transferKB": 128.6,
+     "decodedKB": 509.6
+    },
+    {
+     "file": "core.js",
+     "start": 11,
+     "end": 652,
+     "transferKB": 2.3,
+     "decodedKB": 3.9
+    },
+    {
+     "file": "core.css",
+     "start": 12,
+     "end": 635,
+     "transferKB": 1.6,
+     "decodedKB": 4.5
+    },
+    {
+     "file": "cataract-sim.css",
+     "start": 15,
+     "end": 684,
+     "transferKB": 4,
+     "decodedKB": 15.1
+    }
+   ],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 1735,
+     "filesDone": 1598,
+     "step5": 1735,
+     "step25": 2145,
+     "step55": 2494,
+     "step75": 3874,
+     "step100": 4397,
+     "ready": 4397,
+     "longTasks": [
+      116,
+      104,
+      303,
+      339,
+      1345,
+      514,
+      66
+     ],
+     "heapMB": 28,
+     "canvases": 1,
+     "download": 1598,
+     "init": 2799,
+     "createRenderer": 410,
+     "materials": 349,
+     "geometry": 1380,
+     "shaders": 523,
+     "longTaskTotal": 2787,
+     "longestTask": 1345
+    },
+    {
+     "loadingShown": 1694,
+     "filesDone": 1591,
+     "step5": 1694,
+     "step25": 2192,
+     "step55": 2519,
+     "step75": 3511,
+     "step100": 4059,
+     "ready": 4059,
+     "longTasks": [
+      88,
+      122,
+      372,
+      310,
+      952,
+      532
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 1591,
+     "init": 2468,
+     "createRenderer": 498,
+     "materials": 327,
+     "geometry": 992,
+     "shaders": 548,
+     "longTaskTotal": 2376,
+     "longestTask": 952
+    },
+    {
+     "loadingShown": 1733,
+     "filesDone": 1593,
+     "step5": 1733,
+     "step25": 2233,
+     "step55": 2610,
+     "step75": 3742,
+     "step100": 4150,
+     "ready": 4150,
+     "longTasks": [
+      125,
+      74,
+      424,
+      352,
+      1088,
+      376
+     ],
+     "heapMB": 26,
+     "canvases": 1,
+     "download": 1593,
+     "init": 2557,
+     "createRenderer": 500,
+     "materials": 377,
+     "geometry": 1132,
+     "shaders": 408,
+     "longTaskTotal": 2439,
+     "longestTask": 1088
+    },
+    {
+     "loadingShown": 1745,
+     "filesDone": 1587,
+     "step5": 1745,
+     "step25": 2119,
+     "step55": 2421,
+     "step75": 3398,
+     "step100": 3819,
+     "ready": 3819,
+     "longTasks": [
+      146,
+      109,
+      263,
+      283,
+      945,
+      400,
+      51
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 1587,
+     "init": 2232,
+     "createRenderer": 374,
+     "materials": 302,
+     "geometry": 977,
+     "shaders": 421,
+     "longTaskTotal": 2197,
+     "longestTask": 945
+    },
+    {
+     "loadingShown": 1780,
+     "filesDone": 1604,
+     "step5": 1780,
+     "step25": 2207,
+     "step55": 2710,
+     "step75": 3626,
+     "step100": 4142,
+     "ready": 4142,
+     "longTasks": [
+      166,
+      94,
+      330,
+      473,
+      868,
+      483,
+      55
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 1604,
+     "init": 2538,
+     "createRenderer": 427,
+     "materials": 503,
+     "geometry": 916,
+     "shaders": 516,
+     "longTaskTotal": 2469,
+     "longestTask": 868
+    }
+   ]
+  },
+  {
+   "condition": "Fast 3G + CPU 4x, 3D files already in the HTTP cache (second visit)",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 55,
+     "min": 41,
+     "max": 69
+    },
+    "download": {
+     "median": 0,
+     "min": 0,
+     "max": 0
+    },
+    "init": {
+     "median": 1961,
+     "min": 1578,
+     "max": 2087
+    },
+    "createRenderer": {
+     "median": 232,
+     "min": 147,
+     "max": 295
+    },
+    "materials": {
+     "median": 367,
+     "min": 209,
+     "max": 398
+    },
+    "geometry": {
+     "median": 779,
+     "min": 674,
+     "max": 808
+    },
+    "shaders": {
+     "median": 517,
+     "min": 353,
+     "max": 548
+    },
+    "ready": {
+     "median": 1961,
+     "min": 1578,
+     "max": 2087
+    },
+    "longTaskTotal": {
+     "median": 1794,
+     "min": 1469,
+     "max": 1840
+    },
+    "longestTask": {
+     "median": 738,
+     "min": 647,
+     "max": 768
+    },
+    "heapMB": {
+     "median": 21,
+     "min": 21,
+     "max": 32
+    }
+   },
+   "files": [],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 48,
+     "filesDone": 0,
+     "step5": 48,
+     "step25": 278,
+     "step55": 551,
+     "step75": 1225,
+     "step100": 1578,
+     "ready": 1578,
+     "longTasks": [
+      182,
+      255,
+      647,
+      338,
+      50
+     ],
+     "heapMB": 32,
+     "canvases": 1,
+     "download": 0,
+     "init": 1578,
+     "createRenderer": 230,
+     "materials": 273,
+     "geometry": 674,
+     "shaders": 353,
+     "longTaskTotal": 1472,
+     "longestTask": 647
+    },
+    {
+     "loadingShown": 55,
+     "filesDone": 0,
+     "step5": 55,
+     "step25": 202,
+     "step55": 411,
+     "step75": 1118,
+     "step100": 1638,
+     "ready": 1638,
+     "longTasks": [
+      108,
+      197,
+      673,
+      491
+     ],
+     "heapMB": 21,
+     "canvases": 1,
+     "download": 0,
+     "init": 1638,
+     "createRenderer": 147,
+     "materials": 209,
+     "geometry": 707,
+     "shaders": 520,
+     "longTaskTotal": 1469,
+     "longestTask": 673
+    },
+    {
+     "loadingShown": 41,
+     "filesDone": 0,
+     "step5": 41,
+     "step25": 273,
+     "step55": 666,
+     "step75": 1467,
+     "step100": 2015,
+     "ready": 2015,
+     "longTasks": [
+      168,
+      374,
+      756,
+      526
+     ],
+     "heapMB": 21,
+     "canvases": 1,
+     "download": 0,
+     "init": 2015,
+     "createRenderer": 232,
+     "materials": 393,
+     "geometry": 801,
+     "shaders": 548,
+     "longTaskTotal": 1824,
+     "longestTask": 756
+    },
+    {
+     "loadingShown": 65,
+     "filesDone": 0,
+     "step5": 65,
+     "step25": 313,
+     "step55": 680,
+     "step75": 1459,
+     "step100": 1961,
+     "ready": 1961,
+     "longTasks": [
+      184,
+      341,
+      738,
+      473,
+      58
+     ],
+     "heapMB": 25,
+     "canvases": 1,
+     "download": 0,
+     "init": 1961,
+     "createRenderer": 248,
+     "materials": 367,
+     "geometry": 779,
+     "shaders": 502,
+     "longTaskTotal": 1794,
+     "longestTask": 738
+    },
+    {
+     "loadingShown": 69,
+     "filesDone": 0,
+     "step5": 69,
+     "step25": 364,
+     "step55": 762,
+     "step75": 1570,
+     "step100": 2087,
+     "ready": 2087,
+     "longTasks": [
+      218,
+      361,
+      768,
+      493
+     ],
+     "heapMB": 21,
+     "canvases": 1,
+     "download": 0,
+     "init": 2087,
+     "createRenderer": 295,
+     "materials": 398,
+     "geometry": 808,
+     "shaders": 517,
+     "longTaskTotal": 1840,
+     "longestTask": 768
+    }
+   ]
+  }
+ ]
+}
