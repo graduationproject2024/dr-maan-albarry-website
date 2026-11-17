@@ -3,7 +3,7 @@
 import './styles.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { createScene, hasWebGL, maxDpr } from './scene.js';
+import { createScene, hasWebGL, maxDpr, precompileScene } from './scene.js';
 import { createMaterials } from './materials.js';
 import { buildEye } from './eye-model.js';
 import { STAGES, STRUCTURES, paramsAt } from './stages.js';
@@ -170,10 +170,17 @@ class Simulator {
       this.applyTimeline(0);
       this.jumpCamera(STAGES[0].camera);
       const { renderer, scene, camera } = this.three;
-      if (renderer.compileAsync) await renderer.compileAsync(scene, camera); else renderer.compile(scene, camera);
+      await precompileScene(renderer, scene, camera, { alive: () => !this.destroyed }); // what the first frame draws, built in parallel (scene.js)
       if (this.destroyed) return;
       ui.setLoadingProgress(100);
       renderer.render(scene, camera);
+      // the parts later stages show (instruments, IOL, fragments), built in the background so no stage stalls on them
+      const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
+      idle(() => {
+        if (this.destroyed || !this.three) return;
+        if (this.eye && this.eye.prepareDeferred) this.eye.prepareDeferred();
+        precompileScene(this.three.renderer, this.three.scene, this.three.camera, { hidden: true, alive: () => !this.destroyed && !!this.three }).catch(() => {});
+      }, { timeout: 3000 });
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[cataract-sim] 3D initialisation failed, using fallback', err);

@@ -358,9 +358,18 @@ export function buildEye(m) {
   for (const obj of Object.values(instruments)) { obj.visible = false; root.add(obj); }
 
   // --- light rays ---
-  const rays = buildRays();
-  root.add(rays.focusMesh, rays.scatterGroup);
-  const rayMats = { focus: rays.focusMesh.material, scatter: rays.scatterGroup.children.map((c) => c.material) };
+  // Not drawn when the viewer opens (they first appear half-way through stage 1), and tracing and tubing them was the
+  // largest single part of building the eye (~240 ms on the 4x-throttled phone profile). So they are built after the
+  // viewer is ready (prepareDeferred, in idle time) or, at the latest, by the first frame that shows them. Same
+  // geometry, same materials: only when it is built changes (Phase 2, CATARACT_PERFORMANCE.md).
+  let rays = null, rayMats = null;
+  function ensureRays() {
+    if (rays) return;
+    rays = buildRays();
+    rays.focusMesh.visible = false; rays.scatterGroup.visible = false;
+    root.add(rays.focusMesh, rays.scatterGroup);
+    rayMats = { focus: rays.focusMesh.material, scatter: rays.scatterGroup.children.map((c) => c.material) };
+  }
 
   // --- review-mode anatomical layers ---
   const layers = { cornea: true, iris: true, lens: true, iol: true, instruments: true, rays: true };
@@ -473,13 +482,16 @@ export function buildEye(m) {
     }
 
     // rays
-    rayMats.focus.uniforms.uOpacity.value = 0.85 * P.focusRays;
-    rays.focusMesh.visible = P.focusRays > 0.001 && layers.rays;
-    rayMats.scatter.forEach((mt) => { mt.uniforms.uOpacity.value = 0.8 * P.scatterRays; });
-    rays.scatterGroup.visible = P.scatterRays > 0.001 && layers.rays;
-    const tt = reduced ? 0 : time;
-    rayMats.focus.uniforms.uTime.value = tt;
-    rayMats.scatter.forEach((mt) => { mt.uniforms.uTime.value = tt; });
+    if (P.focusRays > 0.001 || P.scatterRays > 0.001) ensureRays();
+    if (rays) {
+      rayMats.focus.uniforms.uOpacity.value = 0.85 * P.focusRays;
+      rays.focusMesh.visible = P.focusRays > 0.001 && layers.rays;
+      rayMats.scatter.forEach((mt) => { mt.uniforms.uOpacity.value = 0.8 * P.scatterRays; });
+      rays.scatterGroup.visible = P.scatterRays > 0.001 && layers.rays;
+      const tt = reduced ? 0 : time;
+      rayMats.focus.uniforms.uTime.value = tt;
+      rayMats.scatter.forEach((mt) => { mt.uniforms.uTime.value = tt; });
+    }
 
     // highlights (eased, gentle pulse)
     const targets = new Set(P.highlight);
@@ -497,7 +509,7 @@ export function buildEye(m) {
   }
 
   function isAnimating() {
-    return Object.values(hl).some((v) => v > 0.01) || rays.focusMesh.visible || rays.scatterGroup.visible;
+    return Object.values(hl).some((v) => v > 0.01) || !!(rays && (rays.focusMesh.visible || rays.scatterGroup.visible));
   }
 
   // label anchors in world space
@@ -521,6 +533,8 @@ export function buildEye(m) {
     apply,
     anchors,
     isAnimating,
+    /** Build what the opening frame does not draw (the light rays). Safe to call more than once. */
+    prepareDeferred: ensureRays,
     setLayers(next) { Object.assign(layers, next); },
     get layers() { return { ...layers }; },
     setUserCutaway(v) { userCut = v; },
