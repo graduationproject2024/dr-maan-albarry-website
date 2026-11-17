@@ -452,6 +452,22 @@ test.describe('short landscape 732×256 (360 × 800 Android phone sideways in Ch
       }
     });
   }
+  test('brought into view by the browser itself (as keyboard focus does), no distance is left under the picture', async ({ page }) => {
+    // BUG-P2-10: the picture stuck at the top covered the distance row here, leaving 24 of its 44 px. The radio is what
+    // the browser scrolls into view (with its scroll margins). Known limit at this size (LANDSCAPE_TEST_RESULTS.md):
+    // with 122 px between the bars, keyboard focus may leave the row partly behind the booking bar; a finger reaches it
+    // (see the reach test above) and a tap does not move the page (below).
+    await openPublic(page, 'en');
+    expect(await page.locator(`${H} .vsim-bench`).getAttribute('data-sticky'), 'the picture does not stick at 122 px').toBeNull();
+    for (const d of ['near', 'intermediate', 'distance']) {
+      const underPicture = await page.locator(`${H} input[data-group="preset"][value="${d}"] + label`).evaluate((e, host) => {
+        e.previousElementSibling.scrollIntoView({ block: 'nearest' });
+        const b = e.getBoundingClientRect(), h = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+        return !!h && !!h.closest(`${host} .vsim-stage`);
+      }, H);
+      expect(underPicture, `${d}`).toBe(false);
+    }
+  });
   test('a tap on each distance does not move the page', async ({ page }) => {
     await openPublic(page, 'en');
     for (const d of ['near', 'intermediate', 'distance', 'near']) {

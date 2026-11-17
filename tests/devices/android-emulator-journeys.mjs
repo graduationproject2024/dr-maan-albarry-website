@@ -22,11 +22,14 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let shotN = 0;
 const shot = (name) => { const f = path.join(OUT, `${String(++shotN).padStart(2, '0')}-${name}.png`); fs.writeFileSync(f, execFileSync(ADB, ['-s', serial, 'exec-out', 'screencap', '-p'], { maxBuffer: 64 << 20 })); return path.basename(f); };
 function webviewTop() {
-  adb('shell', 'uiautomator', 'dump', '/sdcard/ui.xml');
-  const xml = adb('shell', 'cat', '/sdcard/ui.xml');
-  const b = wvBounds(xml);
-  if (!b) throw new Error('no WebView on screen');
-  return b;
+  // uiautomator occasionally returns a dump without the WebView while Chrome redraws: retry a few times
+  for (let i = 0; i < 4; i++) {
+    adb('shell', 'uiautomator', 'dump', '/sdcard/ui.xml');
+    const b = wvBounds(adb('shell', 'cat', '/sdcard/ui.xml'));
+    if (b) return b;
+    execFileSync('powershell', ['-NoProfile', '-Command', 'Start-Sleep -Milliseconds 700']);
+  }
+  throw new Error('no WebView on screen');
 }
 
 let browser = await chromium.connectOverCDP('http://127.0.0.1:9222');

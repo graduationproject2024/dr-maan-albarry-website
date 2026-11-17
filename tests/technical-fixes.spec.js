@@ -157,9 +157,12 @@ test.describe('Keyboard focus is never hidden behind the booking bar (phone widt
         const page = await ctx.newPage();
         await page.goto(url);
         await page.waitForLoadState('networkidle');
+        // a simulator that mounts while the reader tabs changes the layout under the focus: start once it is in place
+        if (await page.locator('#simulator-host').count()) await page.waitForFunction(() => document.querySelectorAll('#simulator-host canvas').length === 1, null, { timeout: 30_000 });
         const hidden = [];
         for (let i = 0; i < 120; i++) {
           await page.keyboard.press('Tab');
+          await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
           const r = await page.evaluate(() => {
             const e = document.activeElement;
             if (!e || e === document.body) return null;

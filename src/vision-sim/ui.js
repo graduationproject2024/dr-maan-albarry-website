@@ -227,7 +227,11 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     const fits = stage + presets + side <= room + 0.5;
     // only the stacked layout sticks the picture alone; the two-column layout keeps its whole left column in place
     const stacked = getComputedStyle(ref.stage.parentElement).display === 'contents';
-    if (stacked && (more || !fits)) ref.bench.dataset.sticky = ''; else delete ref.bench.dataset.sticky;
+    // ...and only when the stuck picture still leaves room for the distance row below it. On a 360 x 800 Android phone
+    // held sideways in Chrome only 122 px remain between the bars: a stuck 98 px picture left 24 px, so the distance row
+    // slid under the picture and could not be tapped (BUG-P2-10, Android Emulator). There the workbench scrolls as
+    // ordinary content instead.
+    if (stacked && (more || !fits) && stage + presets <= room + 0.5) ref.bench.dataset.sticky = ''; else delete ref.bench.dataset.sticky;
     // Controlled fallback 2 — no sticking. In two columns, when the picture column alone is taller than the space
     // between the bars, it stops sticking and the whole workbench scrolls as ordinary content, so the distance row
     // can never be trapped under the booking bar.
