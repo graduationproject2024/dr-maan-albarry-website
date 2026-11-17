@@ -4,7 +4,7 @@
 
 `deploy.yml` on push to `main`: install, build, publish. No test ran. Permissions `pages: write` and `id-token: write` applied to the whole workflow.
 
-## Now (branch `feat/final-stabilization`, not yet run on GitHub)
+## Now (branch `feat/final-stabilization`; first GitHub run passed 2026-11-17)
 
 | Workflow | When | What | Publishes |
 |---|---|---|---|
@@ -42,6 +42,12 @@ The simulators' WebGL tests are in the full suite, not the gate: GitHub's Linux 
 
 Job summary: commit, passed, failed, flaky, skipped with reasons (`scripts/ci-summary.mjs`). HTML report, traces and failure screenshots as artifacts. In CI a failed test is retried **once** and then reported as flaky in the summary; the pre-release run fails on any flaky test.
 
-## Not verified
+## First run on GitHub
 
-The workflows have not run on GitHub: nothing was pushed (pushing needs the owner's go-ahead). YAML was validated with `js-yaml`; `npm audit` reports 0 vulnerabilities locally. The first run on GitHub may show Linux-only differences (fonts, software WebGL) that need adjustment (backlog P0-CI).
+The owner authorized pushing the branch on 2026-11-17. `ci.yml` run **44075670255** on `ubuntu-latest`: **success**. Every step passed: locked install, `npm audit` (shipped dependencies), type check, `release:check`, Chromium install, build and **379 of 379 gate tests** (4.8 min), summary, artifacts.
+
+Warnings shown by GitHub (no action needed yet):
+- `actions/checkout@v4`, `setup-node@v4`, `upload-artifact@v4` target Node.js 20, which GitHub now runs on Node.js 24. Move to their next major versions when released.
+- The `ubuntu-latest` label moves to Ubuntu 26 from 2026-10-19 onward; the next runs may use it.
+
+Not yet run on GitHub: `deploy.yml` (runs only on `main`, after an owner-authorized merge) and `full-regression.yml` (manual or Mondays; the WebGL tests there use software rendering on Linux and may need timeout tuning).

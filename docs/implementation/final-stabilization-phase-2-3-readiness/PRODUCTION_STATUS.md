@@ -29,7 +29,7 @@ Everything on the local branch `feat/final-stabilization`:
 | Portrait as one replaceable setting | (portrait commit) |
 | Anatomy pins no longer overlap; 15 px label key | `d3ab9b6` |
 
-None of this is pushed. Deployment is **not authorized**: the owner has not given an instruction for this branch.
+The branch was pushed on 2026-11-17 on the owner's instruction ("Yes, push branch"); its CI run passed. It is not merged into `main`, so it is not live. Deployment is **not authorized**: the owner has not given an instruction to deploy this branch.
 
 ## Stale statements corrected
 

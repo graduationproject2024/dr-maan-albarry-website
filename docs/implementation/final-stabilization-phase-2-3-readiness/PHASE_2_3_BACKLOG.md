@@ -21,7 +21,7 @@ Small, separately testable tasks. Complexity: S (≤1 day), M (2–4 days), L (�
 - **Acceptance:** every checklist row recorded with device, OS and browser versions; defects filed.
 - **Complexity:** S per device. **Risks:** iOS-only sticky/viewport behaviour. **Done:** both reports in the repo.
 
-### P0-CI Prove the CI gate on GitHub
+### P0-CI Prove the CI gate on GitHub — DONE 2026-11-17 (run 44075670255, 379/379)
 - **Objective:** one push of the branch so `ci.yml` runs on GitHub runners; fix anything Linux-specific (fonts, GPU fallback).
 - **Baseline:** workflows written and validated locally; the gate suite passes on Windows (`CI_CD_QUALITY_GATES.md`).
 - **Dependencies:** owner authorization to push. **Complexity:** S. **Done:** green run linked in the docs.

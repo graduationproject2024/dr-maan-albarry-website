@@ -1,6 +1,6 @@
 # Final report — final refinement, production hardening and Phase 2/3 readiness
 
-Branch `feat/final-stabilization` (local; not pushed, not merged, not deployed). Live site still `c7cdbed`.
+Branch `feat/final-stabilization` (pushed 2026-11-17 on the owner's instruction; not merged, not deployed). Live site still `c7cdbed`.
 
 ## 1. Current product status
 
@@ -49,7 +49,7 @@ See `REGRESSION_RESULTS.md`. Devices emulated: 320×640, 360×800, 375×812, 390
 
 ## 7. CI/CD
 
-Added: gate before deployment (`verify.yml` → `deploy.yml`), branch and PR CI, weekly/manual full regression, release-state check, job summaries and failure artifacts, least-privilege permissions. Not yet run on GitHub (`CI_CD_QUALITY_GATES.md`).
+Added: gate before deployment (`verify.yml` → `deploy.yml`), branch and PR CI, weekly/manual full regression, release-state check, job summaries and failure artifacts, least-privilege permissions. First GitHub run (`ci.yml` 44075670255): success, 379/379 gate tests (`CI_CD_QUALITY_GATES.md`).
 
 ## 8. Next Phase 2 readiness (provisional)
 
@@ -67,7 +67,7 @@ Updated #25; created #26–#30; commented #22, #4, #20; nothing completed; no cl
 
 | Question | Verdict | Evidence |
 |---|---|---|
-| Current milestone engineering ready | **YES** (on the branch) | Full suite and gate results; no reproducible P0/P1; CI not yet proven on GitHub |
+| Current milestone engineering ready | **YES** (on the branch) | Full suite 757/0; gate 379/379 on GitHub; no reproducible P0/P1 |
 | Current milestone UX ready | **YES** (emulation) | 15-step flow at 7 sizes; short landscape; atlas audit. Real-phone check still pending |
 | Clinical review complete | **NO** | 31/31 items pending |
 | Phase 2 ready to start | **CONDITIONAL** | Needs owner scope; review first recommended |
