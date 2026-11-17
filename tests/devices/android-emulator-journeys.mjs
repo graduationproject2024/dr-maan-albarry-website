@@ -29,9 +29,11 @@ function webviewTop() {
   return b;
 }
 
-const browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
+let browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
 const ctx = browser.contexts()[0];
-let page = ctx.pages().find((p) => p.url().startsWith(BASE)) || ctx.pages()[0];
+// the tab on screen (an intent may have opened a new one; a background tab is throttled and cannot be hit-tested)
+const visiblePage = async (pages) => { for (const p of pages) { try { if (await p.evaluate(() => document.visibilityState) === 'visible') return p; } catch (e) { /* closed */ } } return pages[0]; };
+let page = await visiblePage(ctx.pages());
 const errors = [];
 const hook = (p) => { p.on('pageerror', (e) => errors.push(String(e).slice(0, 200))); p.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); }); };
 hook(page);
@@ -39,10 +41,14 @@ hook(page);
 /** OS-level tap (adb input) on the centre of an element, mapped from CSS px to screen px. */
 async function osTap(selector) {
   const loc = page.locator(selector).first();
-  // centre it: an element scrolled to the very top sits under the sticky header, and a real finger would not tap there
-  await loc.evaluate((e) => { const b = e.getBoundingClientRect(); if (b.top < 80 || b.bottom > innerHeight - 80) e.scrollIntoView({ block: 'center' }); });
-  await sleep(500);
-  const r = await loc.evaluate((e) => { const b = e.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2, dpr: devicePixelRatio, scrollY: Math.round(scrollY) }; });
+  // Bring it on screen the way the browser does (scrollIntoView 'nearest' honours the site's scroll-padding and the
+  // scroll margins that keep controls clear of the header, the booking bar and a stuck picture). Only if it is not
+  // already free to tap: a finger is not moved for a control that is in plain view.
+  const free = (e) => { const b = e.getBoundingClientRect(); const h = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2); return !!h && (h === e || e.contains(h) || (e.control && h === e.control)); };
+  await loc.evaluate((e, f) => { const isFree = new Function('e', `return (${f})(e)`); if (!isFree(e)) e.scrollIntoView({ block: 'nearest' }); }, free.toString());
+  await sleep(600);
+  const r = await loc.evaluate((e, f) => { const isFree = new Function('e', `return (${f})(e)`); const b = e.getBoundingClientRect(); const h = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2); return { x: b.left + b.width / 2, y: b.top + b.height / 2, dpr: devicePixelRatio, scrollY: Math.round(scrollY), free: isFree(e), coveredBy: h ? (h.id || h.className || h.tagName).toString().slice(0, 40) : null }; }, free.toString());
+  if (!r.free) throw new Error(`"${selector}" is covered by ${r.coveredBy} after the browser brought it into view`);
   const { left, top } = webviewTop();
   const sx = Math.round(left + r.x * r.dpr), sy = Math.round(top + r.y * r.dpr);
   adb('shell', 'input', 'tap', String(sx), String(sy));
@@ -184,11 +190,24 @@ await step('A', 'Explore 3D, then drag to rotate', 'Explore mode on; drag rotate
   const hash1 = screenHash();
   return { actual: `explore=${pressed}; page ${y0}→${y1}; screen ${hash0}→${hash1}`, ok: pressed === 'true' && Math.abs(y1 - y0) <= 2 && hash0 !== hash1 };
 });
-await step('A', 'Home, then back to Chrome', 'Viewer still active with one canvas after backgrounding', async () => {
+await step('A', 'Home, then back to Chrome', 'Viewer still active after backgrounding; or, if Android discarded the tab (low memory), the page reloads at the same address and the viewer starts again', async () => {
   adb('shell', 'input', 'keyevent', 'KEYCODE_HOME'); await sleep(3000);
   adb('shell', 'monkey', '-p', 'com.android.chrome', '-c', 'android.intent.category.LAUNCHER', '1'); await sleep(3000);
-  const s = await c3d(); const lost = await page.evaluate(() => { const c = document.querySelector('#cataract-3d-stage canvas'); const g = c && (c.getContext('webgl2') || c.getContext('webgl')); return g ? g.isContextLost() : null; });
-  return { actual: `state=${s.state} canvases=${s.canvases} contextLost=${lost}`, ok: s.state === 'active' && s.canvases === 1 && lost === false };
+  try {
+    const s = await c3d(); const lost = await page.evaluate(() => { const c = document.querySelector('#cataract-3d-stage canvas'); const g = c && (c.getContext('webgl2') || c.getContext('webgl')); return g ? g.isContextLost() : null; });
+    return { actual: `kept in memory: state=${s.state} canvases=${s.canvases} contextLost=${lost}`, ok: s.state === 'active' && s.canvases === 1 && lost === false };
+  } catch (e) {
+    // the renderer was discarded while in the background: reattach to the tab Chrome restored
+    await sleep(3000);
+    browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
+    page = await visiblePage(browser.contexts()[0].pages()); hook(page);
+    await page.waitForLoadState('load');
+    const d = await doc();
+    await osTap('#cataract-3d-start');
+    await page.waitForFunction(() => document.getElementById('cataract-3d')?.dataset.state === 'active', null, { timeout: 90000 });
+    const s = await c3d();
+    return { actual: `tab discarded by Android while in the background; reloaded at ${d.url}; viewer started again: state=${s.state} canvases=${s.canvases}`, ok: /surgical-education/.test(d.url) && s.state === 'active' && s.canvases === 1 };
+  }
 });
 await step('A', 'Rotate to landscape with the viewer open', 'Still one canvas; no sideways scroll', async () => {
   adb('shell', 'settings', 'put', 'system', 'accelerometer_rotation', '0'); adb('shell', 'settings', 'put', 'system', 'user_rotation', '0'); await sleep(800);

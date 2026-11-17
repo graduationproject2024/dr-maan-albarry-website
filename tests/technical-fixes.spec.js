@@ -146,3 +146,36 @@ test.describe('Web app manifest', () => {
     });
   }
 });
+// BUG-P2-09 (found while driving the Android Emulator with the browser's own scroll-into-view): on phone widths, keyboard
+// focus landed on links and buttons fully hidden behind the fixed booking bar (6-12 per page at 390 x 844). WCAG 2.2,
+// 2.4.11 Focus Not Obscured. Every focus stop must be fully visible between the header and the booking bar.
+test.describe('Keyboard focus is never hidden behind the booking bar (phone widths)', () => {
+  for (const [w, h] of [[390, 844], [360, 652]]) {
+    for (const url of ['/en/', '/procedures/cataract-surgery/', '/en/surgical-education/', '/en/lens-lab/']) {
+      test(`${w}×${h} ${url}`, async ({ browser }) => {
+        const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+        const page = await ctx.newPage();
+        await page.goto(url);
+        await page.waitForLoadState('networkidle');
+        const hidden = [];
+        for (let i = 0; i < 120; i++) {
+          await page.keyboard.press('Tab');
+          const r = await page.evaluate(() => {
+            const e = document.activeElement;
+            if (!e || e === document.body) return null;
+            const b = e.getBoundingClientRect();
+            const bar = document.querySelector('.booking-bar'), hdr = document.getElementById('site-header');
+            if (!b.width || !b.height || e.closest('.skip-link') || (bar && bar.contains(e)) || (hdr && hdr.contains(e))) return { skip: true };
+            const barTop = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().top : innerHeight;
+            const hb = hdr ? hdr.getBoundingClientRect().bottom : 0;
+            return { name: (e.getAttribute('aria-label') || e.textContent || e.tagName).trim().slice(0, 40), ok: b.top >= hb - 1 && b.bottom <= barTop + 1 };
+          });
+          if (!r) break;
+          if (!r.skip && !r.ok) hidden.push(r.name);
+        }
+        expect(hidden, 'focused elements not fully visible between the header and the booking bar').toEqual([]);
+        await ctx.close();
+      });
+    }
+  }
+});

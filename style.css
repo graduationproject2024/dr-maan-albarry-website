@@ -1227,6 +1227,12 @@ html.dialog-open { overflow: hidden; }
 @media (max-width: 1023px) {
   .booking-bar { display: block; }
   body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+  /* Keyboard focus and in-page jumps must not land under the fixed booking bar (WCAG 2.2, 2.4.11 Focus Not Obscured).
+     BUG-P2-09: tabbing on a phone-width page left 6-12 focused links per page fully hidden behind the bar. The height is
+     measured (main.js, it grows with larger text); 70 px is the fallback. */
+  /* A margin on the focusable elements, not page-wide scroll-padding: the vision simulator's controls keep their own,
+     more specific margins (src/vision-sim/styles.css), which are tuned so a tap never moves the page. */
+  :is(a, button, input, select, textarea, summary, [tabindex]) { scroll-margin-block-end: calc(var(--booking-bar-h, 70px) + 12px); }
 }
 
 /* ------------------------------------------------------------

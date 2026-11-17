@@ -1165,6 +1165,16 @@ function vsimRemember({ what, state }) {
   keep.light = words.light;
   try { localStorage.setItem(VSIM_STORE, JSON.stringify(keep)); } catch (e) { /* storage unavailable: session-only */ }
 }
+// The page keeps keyboard focus and jumps clear of the fixed booking bar (style.css, scroll-padding-bottom): it needs the
+// bar's real height, which grows with enlarged text (BUG-P2-09).
+let bookingBarRO = null;
+function watchBookingBar() {
+  const bar = document.querySelector('.booking-bar');
+  if (bookingBarRO) { bookingBarRO.disconnect(); bookingBarRO = null; }
+  if (!bar || !('ResizeObserver' in window)) return;
+  bookingBarRO = new ResizeObserver(() => document.documentElement.style.setProperty('--booking-bar-h', `${Math.ceil(bar.getBoundingClientRect().height)}px`));
+  bookingBarRO.observe(bar);
+}
 // The workbench is sized against the bars that are really on screen (they change with enlarged text and rotation).
 function vsimWatchChrome() {
   if (vsim.chromeRO) { vsim.chromeRO.disconnect(); vsim.chromeRO = null; }
@@ -2351,6 +2361,7 @@ function renderApp(navigated = false) {
     try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
   }
 
+  watchBookingBar();
   mountVisionSim();
   lensLab.sync();
   lightJourney.sync();
