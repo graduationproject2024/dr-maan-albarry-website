@@ -115,10 +115,16 @@ test.describe('Served from a subpath (GitHub Pages)', () => {
     const origin = new URL(baseURL).origin;
     const sub = '/dr-maan-albarry-website';
     // emulate Pages: every request under the subpath is answered by the same file at the root
+    // A request the browser itself abandons while this handler is still fetching (a speculative preload replaced
+    // once <base> is pinned, or a request from a page that has just been navigated away) can no longer be answered:
+    // Playwright then throws "Route is already handled". On a loaded machine that window is long enough to hit (seen
+    // 1 in 150 runs at 8 workers). Such requests are recorded and checked below instead of failing the handler.
+    const abandoned = [];
     await page.route(`${origin}${sub}/**`, async route => {
       const url = route.request().url().replace(`${origin}${sub}/`, `${origin}/`);
-      const res = await route.fetch({ url });
-      await route.fulfill({ response: res });
+      let res;
+      try { res = await route.fetch({ url }); await route.fulfill({ response: res }); }
+      catch (e) { if (!/already handled|Target page, context or browser has been closed|Request context disposed/i.test(String(e))) throw e; abandoned.push({ url: route.request().url(), type: route.request().resourceType() }); }
     });
     const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
@@ -138,6 +144,9 @@ test.describe('Served from a subpath (GitHub Pages)', () => {
     expect(errors).toEqual([]);
     // Late lazy-image requests may still be in the handler above: let them finish, so none is cut off when the context closes.
     await page.unrouteAll({ behavior: 'wait' });
+    // nothing the page needed was lost: an abandoned request is never the page itself
+    expect(abandoned.filter(r => r.type === 'document'), `abandoned: ${JSON.stringify(abandoned)}`).toEqual([]);
+    if (abandoned.length) test.info().annotations.push({ type: 'abandoned requests', description: JSON.stringify(abandoned) });
   });
 });
 

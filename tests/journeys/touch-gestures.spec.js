@@ -15,6 +15,18 @@ async function viewHash(page) {
   let h = 0; for (let i = 0; i < buf.length; i += 7) h = (h * 31 + buf[i]) >>> 0;
   return `${buf.length}:${h}`;
 }
+/** The view at rest: two identical pictures 300 ms apart (a camera fly-to takes 0.9 s, longer on a loaded machine).
+ *  Returns the resting hash. Fails the step if the view never settles within 10 s. */
+async function settledViewHash(page) {
+  let prev = await viewHash(page);
+  for (let i = 0; i < 30; i++) {
+    await page.waitForTimeout(300);
+    const cur = await viewHash(page);
+    if (cur === prev) return cur;
+    prev = cur;
+  }
+  throw new Error('the 3D view did not come to rest within 10 s');
+}
 async function pinch(page, cx, cy, from, to, cdp) {
   const s = cdp || await page.context().newCDPSession(page);
   const pts = (d) => [{ x: cx - d, y: cy, id: 1 }, { x: cx + d, y: cy, id: 2 }];
@@ -83,11 +95,13 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
   }, { critical: false });
 
   await j.step('Explore mode: start a drag on the "Labels" tool button and slide across the canvas', 'Starting on a control does not rotate the camera', async () => {
-    await page.locator('#cataract-3d-stage [data-ref="resetView"]').tap(); await page.waitForTimeout(1500);
+    // The "before" picture is taken once the reset fly-back has finished, not after a fixed wait: under load the fly-back
+    // outlasted 1.5 s and the step compared a moving camera with itself (1 failure in 3 runs at 8 workers).
+    await page.locator('#cataract-3d-stage [data-ref="resetView"]').tap();
     const tool = await rect(page.locator('#cataract-3d-stage [data-ref="labels"]'));
-    const h0 = await viewHash(page);
+    const h0 = await settledViewHash(page);
     cdp = await swipe(page, { x: tool.x + tool.w / 2, y: tool.y + tool.h / 2, dx: -140, dy: 40, steps: 10, cdp });
-    await page.waitForTimeout(1200); const h1 = await viewHash(page);
+    const h1 = await settledViewHash(page);
     return { actual: `view ${h0 === h1 ? 'unchanged' : 'CHANGED'}`, ok: h0 === h1 };
   }, { critical: false });
 
