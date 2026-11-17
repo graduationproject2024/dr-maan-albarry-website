@@ -13,7 +13,7 @@ Checked on the branch `feat/final-stabilization` on 2026-11-17. "Ready" here nev
 | No unresolved serious rendering bugs | Met | Full suite; atlas audit clean |
 | Existing simulators functional | Met | Full suite 757 passed |
 | Relevant regression tests passing | Met | `REGRESSION_RESULTS.md` |
-| Release pipeline validated | Met for CI; deploy path not yet exercised | `ci.yml` run 44075670255 green on GitHub (379/379); `deploy.yml` runs only after a merge to `main` |
+| Release pipeline validated | Met | `ci.yml` run 44075670255 and `deploy.yml` run 44077997526 green on GitHub (gate 379/379 before publishing) |
 
 ## Architecture
 

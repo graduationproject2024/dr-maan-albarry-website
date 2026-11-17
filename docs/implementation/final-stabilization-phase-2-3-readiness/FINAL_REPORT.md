@@ -1,6 +1,6 @@
 # Final report — final refinement, production hardening and Phase 2/3 readiness
 
-Branch `feat/final-stabilization` (pushed 2026-11-17 on the owner's instruction; not merged, not deployed). Live site still `c7cdbed`.
+Branch `feat/final-stabilization` (pushed and **deployed** 2026-11-17 on the owner's instructions; live commit `9e1773f`, run 44077997526, gate 379/379 before publishing).
 
 ## 1. Current product status
 
@@ -9,7 +9,7 @@ Branch `feat/final-stabilization` (pushed 2026-11-17 on the owner's instruction;
 | Engineering | Ready on the branch: no known reproducible P0/P1; one P3 open (FS-10, test under heavy load) | `REMAINING_DEFECTS.md` |
 | UX | Approved design kept; Lens Lab distance and settings improved; short screens handled | `LENS_LAB_FINAL_REFINEMENT.md` |
 | Performance | Throttled LCP ≤2.5 s on the five measured pages (lab) | `PERFORMANCE_RESULTS.md` |
-| Deployment | Live = `c7cdbed`. This branch is **not authorized** for deployment | `PRODUCTION_STATUS.md` |
+| Deployment | Live = `9e1773f` since 2026-11-17, owner's instruction "Yes, deploy"; live check clean | `PRODUCTION_STATUS.md` |
 | Medical review | **Not done.** 31 of 31 tracked clinical items pending | `CLINICAL_APPROVAL_QUEUE.md` |
 
 ## 2. Actual fixes
@@ -72,4 +72,4 @@ Updated #25; created #26–#30; commented #22, #4, #20; nothing completed; no cl
 | Clinical review complete | **NO** | 31/31 items pending |
 | Phase 2 ready to start | **CONDITIONAL** | Needs owner scope; review first recommended |
 | Phase 3 ready to start | **CONDITIONAL** | Needs owner scope, content, hosting decision for server features |
-| Deployment authorized | **NO** | No owner instruction for this branch |
+| Deployment authorized | **YES** (and done) | Owner: "Yes, deploy", 2026-11-17; run 44077997526 |

@@ -50,4 +50,6 @@ Warnings shown by GitHub (no action needed yet):
 - `actions/checkout@v4`, `setup-node@v4`, `upload-artifact@v4` target Node.js 20, which GitHub now runs on Node.js 24. Move to their next major versions when released.
 - The `ubuntu-latest` label moves to Ubuntu 26 from 2026-10-19 onward; the next runs may use it.
 
-Not yet run on GitHub: `deploy.yml` (runs only on `main`, after an owner-authorized merge) and `full-regression.yml` (manual or Mondays; the WebGL tests there use software rendering on Linux and may need timeout tuning).
+**Deploy path proven** on 2026-11-17 (owner: "Yes, deploy"): `deploy.yml` run 44077997526 ran `verify` (379/379) and then published; the published-files check passed (`index.html`, `404.html`, `sitemap.xml`, no review pages).
+
+Not yet run on GitHub: `full-regression.yml` (manual or Mondays; the WebGL tests there use software rendering on Linux and may need timeout tuning).
