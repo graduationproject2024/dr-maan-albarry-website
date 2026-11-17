@@ -434,6 +434,38 @@ for (const [w, h, name] of [[568, 320, 'iPhone SE sideways'], [667, 331, 'iPhone
   });
 }
 
+// 360 x 800 Android phones held sideways in Chrome have 256 px of height (Phase 2, Android Emulator): with the 65 px header
+// and the 69 px booking bar only 122 px remain, so the picture and every control cannot fit together (a limit of the
+// approved layout, recorded in LANDSCAPE_TEST_RESULTS.md). What must hold: every control can be reached and tapped, and
+// the first tap on a distance does not move the page (BUG-P2-08: it moved 11 px).
+test.describe('short landscape 732×256 (360 × 800 Android phone sideways in Chrome)', () => {
+  test.use(phone(732, 256));
+  for (const pct of [100, 125, 150]) {
+    test(`${pct}% text: every essential control can be brought between the bars and tapped`, async ({ page }) => {
+      if (pct !== 100) await textScale(page, pct);
+      await openPublic(page, 'en');
+      const reach = await reachAll(page);
+      expect(reach.length).toBe(11);
+      for (const v of reach) {
+        expect(v.between, `"${v.name}" can be brought between the header and the booking bar`).toBe(true);
+        expect(v.hit, `"${v.name}": the touch reaches the control, not ${v.receivedBy}`).toBe(true);
+      }
+    });
+  }
+  test('a tap on each distance does not move the page', async ({ page }) => {
+    await openPublic(page, 'en');
+    for (const d of ['near', 'intermediate', 'distance', 'near']) {
+      const l = page.locator(`${H} input[data-group="preset"][value="${d}"] + label`);
+      await l.evaluate((e) => e.scrollIntoView({ block: 'center' }));
+      await page.waitForTimeout(300);
+      const y0 = await page.evaluate(() => scrollY);
+      await l.tap();
+      await page.waitForTimeout(500);
+      expect(Math.abs((await page.evaluate(() => scrollY)) - y0), `tap on ${d}`).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
 // BUG-P2-07, found on the Android Emulator (Chrome 113, 863 × 304 landscape): in the closer view the icon-only "Whole scene"
 // button was placed over the enlarge button (both in the lower right corner of a short picture), so two targets
 // overlapped. Its corner is now chosen against the measured enlarge button, caption and picture edges.

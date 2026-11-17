@@ -338,6 +338,10 @@
    top correction is larger there. A tap on the first control row must not nudge the page and push the last row under the bar. */
 @media (orientation: landscape) and (max-height: 520px) {
   .vsim-bench-side :is(input, button), .vsim-field-presets input { scroll-margin-block-start: -36px; }
+  /* The distance row sits directly under the picture, so the stuck-picture margin above does not apply to it. Without
+     this, on a 360 × 800 Android phone held sideways in Chrome (256 px high) the first tap on a distance focused its
+     radio 11 px above the safe band and Chrome nudged the page (BUG-P2-08, Android Emulator). */
+  .vsim-bench[data-sticky] .vsim-field-presets input { scroll-margin-block-start: -36px; }
 }
 .vsim-seg { position: relative; }
 
