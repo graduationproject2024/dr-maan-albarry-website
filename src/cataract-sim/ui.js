@@ -272,7 +272,18 @@ export function createUI(host, ctx) {
     ref.playPause.dataset.mode = mode;
     ref.playLabel.textContent = t(mode);
     ref.playPause.setAttribute('aria-label', t(mode));
+    fitPlayLabel();
   }
+  // On a narrow phone "إيقاف مؤقت" or "إعادة التشغيل" may not fit beside the other transport buttons (BUG-P2-03, real
+  // Pixel 8: the label wrapped onto two lines). The label is shown whenever it fits and the button becomes an icon button
+  // only when it does not; the accessible name (aria-label above) is the same either way.
+  function fitPlayLabel() {
+    const b = ref.playPause;
+    b.classList.remove('is-icon');
+    if (ref.playLabel.scrollWidth > ref.playLabel.clientWidth + 1) b.classList.add('is-icon');
+  }
+  const playFit = 'ResizeObserver' in window ? new ResizeObserver(() => fitPlayLabel()) : null;
+  if (playFit) playFit.observe(ref.playPause.parentElement);
 
   function renderAnatomyInfo() {
     chipBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.structure === S.focusId)));
@@ -337,7 +348,7 @@ export function createUI(host, ctx) {
       setTimeout(() => { if (root.isConnected) ref.live.textContent = text; }, 30);
     },
     stageLabel,
-    destroy() { root.remove(); }
+    destroy() { if (playFit) playFit.disconnect(); root.remove(); }
   };
   applyText();
   return ui;

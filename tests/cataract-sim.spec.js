@@ -451,3 +451,47 @@ for (const [w, h, mobile] of [[1440, 900, false], [390, 844, true]]) {
     });
   });
 }
+
+// BUG-P2-02 / P2-03, found on real phones (iPhone 15 Safari, Pixel 8 Chrome, BrowserStack): on a 393 px screen stage 7 was
+// cut off behind a sideways scroll with no visible scrollbar, and the Arabic "Pause" label wrapped onto two lines on a
+// 412 px screen. Measured on the real page (its own gutters), Chromium mobile emulation.
+test.describe('cataract simulator — stage buttons and Play label on real phone widths', () => {
+  for (const [w, h, lang, rows] of [[393, 695, 'en', 1], [412, 808, 'ar', 1], [390, 664, 'ar', 1], [375, 640, 'en', 2], [360, 740, 'ar', 2], [320, 568, 'ar', 2]]) {
+    test(`${w}×${h} ${lang}: all seven stages visible in ${rows} row(s), no target under 44 px, label never wraps`, async ({ browser }) => {
+      const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+      const page = await ctx.newPage();
+      await page.goto(lang === 'en' ? '/en/surgical-education/' : '/surgical-education/');
+      await page.locator('#cataract-3d-start').click();
+      await expect(page.locator('#cataract-3d')).toHaveAttribute('data-state', 'active', { timeout: 30_000 });
+      const check = () => page.evaluate(() => {
+        const seg = document.querySelector('#cataract-3d-stage .csim-segments');
+        const segs = [...seg.querySelectorAll('.csim-seg')].map((b) => b.getBoundingClientRect());
+        const box = seg.getBoundingClientRect();
+        const pb = document.querySelector('#cataract-3d-stage .csim-btn--play');
+        const small = [...document.querySelectorAll('#cataract-3d-stage .csim-playbar button, #cataract-3d-stage .csim-playbar input')]
+          .filter((e) => e.offsetParent).map((e) => e.getBoundingClientRect()).filter((r) => r.width < 43.5 || r.height < 43.5).length;
+        return {
+          count: segs.length,
+          inside: segs.every((r) => r.left >= box.left - 0.5 && r.right <= box.right + 0.5),
+          rows: new Set(segs.map((r) => Math.round(r.top))).size,
+          small,
+          playH: Math.round(pb.getBoundingClientRect().height),
+          name: pb.getAttribute('aria-label')
+        };
+      });
+      let r = await check();
+      expect(r.count).toBe(7);
+      expect(r.inside, 'every stage button lies inside the row (none hidden behind a scroll)').toBe(true);
+      expect(r.rows).toBe(rows);
+      expect(r.small).toBe(0);
+      expect(r.playH, 'Play label on one line').toBeLessThanOrEqual(46);
+      // the longest labels: "Pause" while playing
+      await page.locator('#cataract-3d-stage [data-ref="start"]').click();
+      await expect(page.locator('#cataract-3d-stage .csim-btn--play')).toHaveAttribute('data-mode', 'pause');
+      r = await check();
+      expect(r.playH, 'Pause label on one line').toBeLessThanOrEqual(46);
+      expect(r.name).toBe(lang === 'en' ? 'Pause' : 'إيقاف مؤقت');
+      await ctx.close();
+    });
+  }
+});
