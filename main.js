@@ -2001,15 +2001,27 @@ function sectionTop(id) {
 // The reading position is kept on the history entry (never in storage), so Back, Forward and a reload can return to it.
 // It is written when scrolling stops and when the page is left: the browser's own restoration is off (scrollRestoration
 // is 'manual') because re-rendering #app would defeat it.
-function saveReadingPosition() {
+// Never written during pagehide: on Back, Safari (WebKit) has already moved to the destination history entry when the
+// page being left receives pagehide, so a write there overwrote the DESTINATION's position and Back to a page left by a
+// full navigation landed at the top on iPhone (BUG-P2-01, found on a real iPhone 15 / iOS 26.6). The position is taken
+// from the last scroll event, saved 200 ms after scrolling stops and immediately when the visitor starts an action
+// (pointer or key) that may leave the page.
+let lastScrollY = Math.round(window.scrollY);
+function saveReadingPosition(y = lastScrollY) {
   // While a position is being restored the page may still be too short to reach it; the clamped position must not
   // replace the one being restored (BUG-FS-01).
   if (releaseScrollHold && restoringY !== null && document.documentElement.scrollHeight - window.innerHeight < restoringY - 2) return;
-  history.replaceState({ ...(history.state || {}), y: Math.round(window.scrollY) }, '');
+  if (history.state && history.state.y === y) return; // already saved
+  history.replaceState({ ...(history.state || {}), y }, '');
 }
 let readingPositionTimer = 0;
-window.addEventListener('scroll', () => { clearTimeout(readingPositionTimer); readingPositionTimer = setTimeout(saveReadingPosition, 200); }, { passive: true });
-window.addEventListener('pagehide', saveReadingPosition);
+window.addEventListener('scroll', () => {
+  lastScrollY = Math.round(window.scrollY);
+  clearTimeout(readingPositionTimer);
+  readingPositionTimer = setTimeout(saveReadingPosition, 200);
+}, { passive: true });
+const flushReadingPosition = () => { clearTimeout(readingPositionTimer); saveReadingPosition(); };
+['pointerdown', 'keydown'].forEach(t => window.addEventListener(t, flushReadingPosition, { capture: true, passive: true }));
 /** After a reload or a return from another site: go back to where the visitor was. False when there is nothing to restore. */
 function restoreReadingPosition() {
   const type = performance.getEntriesByType('navigation')[0]?.type;

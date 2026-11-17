@@ -147,6 +147,30 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
     await near(page, y); // the place the visitor had read to, not the #p-risks anchor
   });
 
+  // BUG-P2-01, found on a real iPhone 15 (iOS 26.6, Safari): Back to a page left by a FULL navigation (typed address,
+  // external link, another tab's history) landed at the top. WebKit has already moved to the destination entry when the
+  // page being left receives pagehide, so the old pagehide save overwrote the destination's position. Runs in both
+  // engines; the WebKit run is Playwright's WebKit on Windows, not Safari on iOS.
+  for (const engine of ['chromium', 'webkit']) {
+    test(`${engine}: a full navigation away and Back returns to the reading position`, async ({ playwright }) => {
+      const browser = await playwright[engine].launch(engine === 'chromium' ? {} : { args: [] });
+      const ctx = await browser.newContext({ viewport: { width: 390, height: 700 }, baseURL: test.info().project.use.baseURL });
+      const page = await ctx.newPage();
+      try {
+        await page.goto('/en/about/');
+        const y = await readTo(page, '#record');
+        expect(y).toBeGreaterThan(300);
+        await page.goto('/en/clinic/'); // a document load, not the site's own link handling
+        await expect(page.locator('main h1')).toBeVisible();
+        await page.mouse.wheel(0, 400); // the page being left has its own, different position
+        await page.waitForFunction(() => history.state && history.state.y > 0);
+        await page.goBack({ waitUntil: 'load' });
+        await expect(page).toHaveURL(/\/en\/about\/$/);
+        await near(page, y);
+      } finally { await browser.close(); }
+    });
+  }
+
   test('a fresh visit starts at the top, even if the entry remembers a position', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/en/about/');
