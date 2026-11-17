@@ -123,3 +123,26 @@ test.describe('A jump keeps its target when a module arrives late', () => {
     expect(await inPlace(page, 'lab')).toBe(false);
   });
 });
+
+// BUG-P2-05, found in Chrome 113 on the Android Emulator (console error on every page): the build moves the manifest to
+// assets/manifest-<hash>.webmanifest, so its relative icon "./favicon.svg" pointed at assets/favicon.svg, which does not
+// exist (404). Every icon of the manifest the pages actually link must load as an image.
+test.describe('Web app manifest', () => {
+  for (const url of ['/', '/en/lens-lab/', '/procedures/cataract-surgery/']) {
+    test(`${url}: every manifest icon loads`, async ({ page, request }) => {
+      await page.goto(url);
+      const href = await page.locator('link[rel="manifest"]').getAttribute('href');
+      const manifestUrl = new URL(href, await page.evaluate(() => document.baseURI)).href;
+      const res = await request.get(manifestUrl);
+      expect(res.status()).toBe(200);
+      const manifest = await res.json();
+      expect(manifest.icons.length).toBeGreaterThan(0);
+      for (const icon of manifest.icons) {
+        const iconUrl = new URL(icon.src, manifestUrl).href;
+        const r = await request.get(iconUrl);
+        expect(r.status(), iconUrl).toBe(200);
+        expect(r.headers()['content-type'] || '', iconUrl).toMatch(/^image\//);
+      }
+    });
+  }
+});
