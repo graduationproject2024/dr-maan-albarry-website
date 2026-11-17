@@ -433,3 +433,29 @@ for (const [w, h, name] of [[568, 320, 'iPhone SE sideways'], [667, 331, 'iPhone
     }
   });
 }
+
+// BUG-P2-07, found on the Android Emulator (Chrome 113, 863 × 304 landscape): in the closer view the icon-only "Whole scene"
+// button was placed over the enlarge button (both in the lower right corner of a short picture), so two targets
+// overlapped. Its corner is now chosen against the measured enlarge button, caption and picture edges.
+test.describe('Closer view: "Whole scene" never overlaps another control', () => {
+  for (const [w, h] of [[863, 304], [568, 320], [844, 340], [667, 331], [390, 844], [320, 568]]) {
+    test(`${w}×${h}: no overlap with the enlarge button or the caption, inside the picture, at every distance`, async ({ browser }) => {
+      const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+      const page = await ctx.newPage();
+      await page.goto('/en/lens-lab/#simulator');
+      await page.waitForFunction(() => document.querySelectorAll('#simulator-host canvas').length === 1, null, { timeout: 30_000 });
+      for (const d of ['near', 'intermediate', 'distance']) {
+        await page.locator(`#simulator-host input[data-group="preset"][value="${d}"] + label`).click();
+        await expect(page.locator('#simulator-host .vsim-whole')).toBeVisible();
+        await expect.poll(() => page.evaluate(() => {
+          const box = (s) => { const e = document.querySelector(`#simulator-host ${s}`); if (!e || e.hidden || !e.offsetParent) return null; const b = e.getBoundingClientRect(); return b.width ? b : null; };
+          const a = box('.vsim-whole'), x = box('[data-ref="expand"]'), c = box('[data-ref="caption"]'), v = box('[data-ref="viewport"]');
+          const ov = (p, q) => (p && q ? Math.max(0, Math.min(p.right, q.right) - Math.max(p.left, q.left)) * Math.max(0, Math.min(p.bottom, q.bottom) - Math.max(p.top, q.top)) : 0);
+          const inside = a.left >= v.left - 1 && a.right <= v.right + 1 && a.top >= v.top - 1 && a.bottom <= v.bottom + 1;
+          return `expand ${Math.round(ov(a, x))} caption ${Math.round(ov(a, c))} inside ${inside}`;
+        }), { message: `${d}` }).toBe('expand 0 caption 0 inside true');
+      }
+      await ctx.close();
+    });
+  }
+});
