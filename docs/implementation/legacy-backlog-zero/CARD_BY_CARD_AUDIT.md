@@ -25,7 +25,7 @@ Note: 20 cards carry a comment dated 2026-11-21 15:06 UTC "Closed by the owner �
 | 17 | Phase 0+1 completion verification | DONE — VERIFIED | deployed (PR #1, 402bc49); gate passes | close |
 | 18 | Premium original redesign | BLOCKED — EXTERNAL | engineering live; only checklist item left is "Owner visual acceptance" | comment, keep open |
 | 19 | Clinical & visual reconstruction | BLOCKED — EXTERNAL | engineering live; clinical review, owner acceptance, physical-device + screen-reader test open | comment, keep open |
-| 20 | Bug register — patient-journey QA | see `TRELLO_CLOSURE_EVIDENCE.md` | BUG-11: custom 404 live since 2026-11-17 (`routing.spec.js`); BUG-18: axe repeat run | tick verified items; close only if both verified |
+| 20 | Bug register — patient-journey QA | DONE — VERIFIED | BUG-11: custom 404 live since 2026-11-17 (`routing.spec.js` 20/20); BUG-18: 40/40 repeated intravitreal axe scans + 3 clean full runs | both items ticked, close |
 | 21 | Premium reconstruction tracker | BLOCKED — EXTERNAL | engineering live; one item left = clinical approvals (#22, #13) | comment, keep open |
 | 22 | Pending physician review | BLOCKED — EXTERNAL | 8 items pending; owner's general approval recorded, not item approvals | comment, keep open |
 | 23 | Bug register — premium journeys | DONE — VERIFIED | `premium-regressions.spec.js` passes; live | close |
