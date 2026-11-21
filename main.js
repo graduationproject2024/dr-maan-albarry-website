@@ -2169,6 +2169,8 @@ window.openPlateZoom = btn => {
     // Escape: shrink back into the figure's button first (same path as the opening), then close
     dlg.addEventListener('cancel', e => { if (window.__siteMotion) { e.preventDefault(); closePlateZoom(dlg); } });
     dlg.addEventListener('close', () => {
+      dlg._closing = false; // however it closed (animated, native second Escape, Back), the next close works again
+      if (dlg.open) return; // a late close event after the dialog was already reopened: keep the new content
       document.documentElement.classList.remove('dialog-open');
       dlg.innerHTML = '';
       if (dlg._from && dlg._from.isConnected) dlg._from.focus();
@@ -2178,6 +2180,7 @@ window.openPlateZoom = btn => {
     document.body.appendChild(dlg);
   }
   dlg._from = btn;
+  dlg._closing = false;
   const n = fig.querySelector('.fig-n');
   const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
   dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="closePlateZoom(this.closest('dialog'))">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
@@ -2194,15 +2197,15 @@ window.openPlateZoom = btn => {
   dlg.showModal();
   scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
   declusterPins();
-  window.__siteMotion?.dialogIn(dlg, btn); // grows out of the button that opened it (optional motion layer)
+  window.__siteMotion?.dialogIn(dlg, btn); // short cross-fade (optional motion layer)
 };
-/** Close the figure dialog; with the motion layer it first shrinks back into the button that opened it. */
+/** Close the figure dialog; with the motion layer it first fades out. */
 window.closePlateZoom = function (dlg) {
   if (!dlg || !dlg.open || dlg._closing) return;
   const m = window.__siteMotion;
   if (!m) { dlg.close(); return; }
   dlg._closing = true;
-  m.dialogOut(dlg, dlg._from, () => { dlg._closing = false; if (dlg.open) dlg.close(); });
+  m.dialogOut(dlg, dlg._from, (finished) => { dlg._closing = false; if (finished !== false && dlg.open) dlg.close(); });
 };
 
 function observeIntersection() {
@@ -2337,15 +2340,21 @@ function finishFirstLoad() {
   bootMotion();
 }
 // Optional motion layer (src/motion: GSAP reveals and dialog/menu transitions; Lenis smooth wheel on desktop). Loaded
-// in idle time after the first page is on screen, never on a data-saver connection; the site is complete without it.
+// only after the page has fully loaded (images and fonts first: on a slow phone network it must not compete with them)
+// and then in idle time; never on a data-saver or 2G connection. The site is complete without it.
+// Desktop pointers only: on a throttled phone its parse time added 50-200 ms of blocking time for effects that are
+// only fades there (A/B in docs/implementation/legacy-backlog-zero/PERFORMANCE_COMPARISON.md), so phones keep the
+// CSS reveal, native scrolling and instant dialogs exactly as before.
 let motionBooted = false;
 function bootMotion() {
   if (motionBooted) return;
   motionBooted = true;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const conn = navigator.connection;
   if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
   const start = () => import('./src/motion/index.js').then(m => m.initMotion()).catch(() => { /* optional: the site works without it */ });
-  (window.requestIdleCallback || ((f) => setTimeout(f, 600)))(start, { timeout: 3000 });
+  const idle = () => (window.requestIdleCallback || ((f) => setTimeout(f, 600)))(start, { timeout: 4000 });
+  if (document.readyState === 'complete') idle(); else window.addEventListener('load', idle, { once: true });
 }
 function renderApp(navigated = false) {
   const adopt = firstRender && !navigated && canAdoptPrerender(); // before the lang attribute below is rewritten

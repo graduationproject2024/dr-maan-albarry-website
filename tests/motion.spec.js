@@ -1,4 +1,4 @@
-// Motion layer (src/motion: GSAP 3.15.1 + ScrollTrigger, Lenis 1.3.27 on desktop pointers only). Legacy-zero milestone.
+// Motion layer (src/motion: GSAP 3.15.1 core, Lenis 1.3.27 on desktop pointers only). Legacy-zero milestone.
 // It is optional polish: these tests check that it loads late, stays out of the way of touch, reduced motion, the
 // simulators and the site's own scrolling, and that nothing it animates can stay hidden.
 import { test, expect } from '@playwright/test';
@@ -12,9 +12,10 @@ test.describe('Motion layer — desktop', () => {
   test('loads after the first paint; Lenis is on; one ticker drives it', async ({ page }) => {
     const firstJs = [];
     page.on('request', (r) => { if (/motion-|lenis-/.test(r.url())) firstJs.push(r.url()); });
-    await page.goto('/en/');
-    // not preloaded by the page: nothing in the HTML points at the motion code
-    expect(await page.evaluate(() => [...document.querySelectorAll('link[rel="modulepreload"], script[src]')].some((l) => /motion-|lenis-/.test(l.href || l.src)))).toBe(false);
+    const res = await page.goto('/en/');
+    // not preloaded by the page: nothing in the served HTML points at the motion code (Vite adds its own preload links at
+    // run time, when the idle-time import runs, so the live DOM is not the right place to look)
+    expect(/(motion|lenis)-[\w-]+\.js/.test(await res.text())).toBe(false);
     await motionReady(page);
     const t = await page.evaluate(() => {
       const nav = performance.getEntriesByType('navigation')[0];
@@ -48,7 +49,7 @@ test.describe('Motion layer — desktop', () => {
     await expect.poll(async () => page.evaluate(() => { const h = document.getElementById('site-header').getBoundingClientRect().bottom; const t = document.getElementById('simulator').getBoundingClientRect().top; return Math.abs(t - h); }), { timeout: 8000 }).toBeLessThan(24);
   });
 
-  test('the figure dialog grows from its button, freezes the page behind it, and closes with Escape', async ({ page }) => {
+  test('the figure dialog fades in at full size, freezes the page behind it, and closes with Escape', async ({ page }) => {
     await page.goto('/en/procedures/cataract-surgery/');
     await motionReady(page);
     const btn = page.locator('.plate-zoom').first();
@@ -57,6 +58,8 @@ test.describe('Motion layer — desktop', () => {
     await btn.click();
     const dlg = page.locator('#plate-dialog');
     await expect(dlg).toBeVisible();
+    const cb = await dlg.locator('.pd-close').boundingBox(); // no scaling: the close button is full size from the first frame
+    expect(Math.round(Math.min(cb.width, cb.height))).toBeGreaterThanOrEqual(44); // sub-pixel translate: 43.999998
     await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById('plate-dialog')).opacity)).toBe('1');
     expect(await page.evaluate(() => document.documentElement.classList.contains('lenis-stopped'))).toBe(true);
     await page.mouse.wheel(0, 500); // over the dialog: the page behind must not move
@@ -68,11 +71,36 @@ test.describe('Motion layer — desktop', () => {
     expect(await page.evaluate(() => document.documentElement.classList.contains('lenis-stopped'))).toBe(false);
   });
 
+  test('reopening the dialog while it is still closing leaves it fully closable (review P1)', async ({ page }) => {
+    await page.goto('/en/procedures/cataract-surgery/');
+    await motionReady(page);
+    const btn = page.locator('.plate-zoom').first();
+    await btn.scrollIntoViewIfNeeded();
+    const dlg = page.locator('#plate-dialog');
+    // open, start the animated close, and reopen inside the 160 ms close
+    await btn.click(); await expect(dlg).toBeVisible();
+    // animated close starts; a second Escape closes natively (separate task, as for a real user); reopen at once
+    await page.evaluate(() => { const d = document.getElementById('plate-dialog'); window.closePlateZoom(d); d.close(); });
+    await page.evaluate(() => document.querySelector('.plate-zoom').click());
+    await expect(dlg).toHaveJSProperty('open', true);
+    await page.waitForTimeout(400);
+    await dlg.locator('.pd-close').click();
+    await expect(dlg).toBeHidden();
+  });
+
+  test('printing shows items that have not been revealed yet', async ({ page }) => {
+    await page.goto('/en/');
+    await motionReady(page);
+    await expect.poll(() => page.evaluate(() => document.querySelectorAll('.is-staggered').length)).toBeGreaterThan(0);
+    await page.emulateMedia({ media: 'print' });
+    const faded = await page.evaluate(() => [...document.querySelectorAll('.is-staggered > *')].filter((el) => !el.hidden && getComputedStyle(el).opacity !== '1').length);
+    expect(faded).toBe(0);
+  });
+
   test('grouped cards enter in turn and all end fully visible', async ({ page }) => {
     await page.goto('/en/');
     await motionReady(page);
-    const groups = await page.evaluate(() => document.querySelectorAll('.is-staggered').length);
-    expect(groups).toBeGreaterThan(0);
+    await expect.poll(() => page.evaluate(() => document.querySelectorAll('.is-staggered').length)).toBeGreaterThan(0);
     // scroll through the page so every group enters
     for (let i = 0; i < 30; i++) { await page.mouse.wheel(0, 700); await page.waitForTimeout(80); }
     await page.waitForTimeout(1200);
@@ -80,9 +108,10 @@ test.describe('Motion layer — desktop', () => {
     expect(hidden).toBe(0);
   });
 
-  test('changing page removes the previous page\'s scroll triggers (no build-up)', async ({ page }) => {
+  test('changing page removes the previous page\'s pending reveals (no build-up)', async ({ page }) => {
     await page.goto('/en/');
     await motionReady(page);
+    await page.waitForTimeout(400);
     const t1 = (await state(page)).triggers;
     for (const href of ['en/about/', 'en/', 'en/procedures/', 'en/']) {
       await page.evaluate((h) => document.querySelector(`a[data-nav][href$="${h}"]`)?.click(), href);
@@ -116,10 +145,14 @@ test.describe('Motion layer — desktop', () => {
 test.describe('Motion layer — phone (touch)', () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 
-  test('no Lenis on touch: native scrolling; the menu still opens and its links are all visible', async ({ page }) => {
+  test('phones never load the motion layer: native scrolling, CSS reveal; the menu opens with all links visible', async ({ page }) => {
+    const motionJs = [];
+    page.on('request', (r) => { if (/(motion|lenis)-[\w-]+\.js/.test(r.url())) motionJs.push(r.url()); });
     await page.goto('/');
-    await motionReady(page);
-    expect((await state(page)).lenis).toBe(false);
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(5000); // longer than the idle-time start on desktop
+    expect(motionJs).toEqual([]);
+    expect(await page.evaluate(() => !!window.__siteMotion)).toBe(false);
     expect(await page.evaluate(() => document.documentElement.classList.contains('lenis'))).toBe(false);
     await page.locator('.mobile-menu-btn').first().click();
     await page.waitForTimeout(600);

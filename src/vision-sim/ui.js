@@ -194,9 +194,10 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     more = !!on;
     applyMore();
     // the settings panel opens with a short height reveal when the site's optional motion layer is present (src/motion);
-    // closing stays immediate so the controls are never in an in-between state
-    if (more && ref.adv && typeof window !== 'undefined' && window.__siteMotion) window.__siteMotion.expand(ref.adv);
+    // closing stays immediate so the controls are never in an in-between state. The bench is measured first, at the
+    // panel's final height: the reveal starts from height 0 and must not be what the fit check sees (BUG-P2-10).
     measureBench();
+    if (more && ref.adv && typeof window !== 'undefined' && window.__siteMotion) window.__siteMotion.expand(ref.adv);
     if (handlers.more) handlers.more(more);
   }
 

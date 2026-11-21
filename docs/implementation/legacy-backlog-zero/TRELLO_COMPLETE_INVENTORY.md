@@ -3,7 +3,7 @@
 Board: https://trello.com/b/8CkEGIqW/dr-maan-website — fetched with `filter: all` (open, archived, completed), one page, no further pages.
 
 - Lists: 1 ("software").
-- Cards: 31 (#1–#31). Archived cards: 0. Checklists: 0 on every card. Attachments: none listed.
+- Cards: 31 (#1–#31). Archived cards: 0. Checklists: 7 (on #5, #10, #18, #19, #20, #21, #22) with 19 incomplete items in all. Comments: 53. Only #6 is marked complete. Full transcript: `_trello_full_read.md` (read 2026-11-21, read-only). Attachments: none listed.
 - State at the start of this milestone: 30 open, 1 complete (#6). On 2026-11-21 an earlier session marked 21 cards complete at the owner's request; the owner then reopened them by hand and asked that cards be closed only after verified work (recorded in memory and in this milestone's rules).
 
 | # | Title (short) | Complete at start | Description present |

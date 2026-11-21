@@ -1264,6 +1264,7 @@ html.lenis, html.lenis body { height: auto; }
   .site-header, .booking-bar, .site-footer, .closing, .q-actions, .skip-link, .crumbs, .edu-toc, .toc-m { display: none !important; }
   body { background: #fff; color: #000; padding: 0; }
   .fade-in { opacity: 1; transform: none; }
+  .is-staggered > * { opacity: 1 !important; transform: none !important; } /* items not yet revealed (src/motion) */
   .section { padding-block: 16px; }
 }
 
