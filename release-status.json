@@ -1,6 +1,18 @@
 {
   "_readme": "Human release states. Edited by a person only. CI reads it (scripts/release-check.mjs) and never writes it. Medical review can only be set to complete with the reviewer's name and the date, after every clinical item in the content files carries that review.",
-  "visualQa": { "status": "pending", "by": null, "date": null, "note": "Automated screenshots exist; no person has signed off the final-stabilization build." },
-  "medicalReview": { "status": "pending", "reviewer": null, "date": null },
-  "deployment": { "authorizedCommit": null, "date": null, "note": "Last authorized deployment: c7cdbed on 2026-11-14 (owner: 'Yes, deploy'). Nothing later is authorized." }
+  "visualQa": { "status": "pending", "by": null, "date": null, "note": "Automated screenshots and real-device cloud screenshots exist; no person has signed off the Phase 2 build." },
+  "medicalReview": {
+    "status": "pending",
+    "reviewer": null,
+    "date": null,
+    "ownerCommunicated": {
+      "date": "2026-11-17",
+      "source": "Owner, in the Phase 2 brief in chat (Claude Code session)",
+      "statement": "Dr. Maan has reviewed the existing medical information and data, raised no objections, and authorized the project to continue.",
+      "scope": "Existing medical information and data as of live commit 9e1773f; authorization to continue development (Phase 2). Not a deployment authorization.",
+      "perItemEvidence": "None supplied: no reviewer signature, session record or item-level decision. Item statuses stay pending until that evidence exists.",
+      "notCovered": "Phase 2 changes listed in docs/implementation/phase-2-advanced-clinical-visualization/PHASE_2_MEDICAL_CHANGELOG.md"
+    }
+  },
+  "deployment": { "authorizedCommit": "9e1773f", "date": "2026-11-17", "note": "Owner: 'Yes, deploy' (2026-11-17); deployed by GitHub Actions run 44077997526. Phase 2 (branch feat/phase-2) is NOT authorized for deployment." }
 }

@@ -1,0 +1,617 @@
+{
+ "measuredAt": "2026-11-17T16:03:15.840Z",
+ "environment": "Chromium (Playwright) on Windows, ANGLE/D3D11 on the local GPU, phone emulated (390x844, DPR 2); vite preview on localhost",
+ "conditions": [
+  {
+   "condition": "unthrottled",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 33,
+     "min": 32,
+     "max": 87
+    },
+    "download": {
+     "median": 0,
+     "min": 0,
+     "max": 0
+    },
+    "init": {
+     "median": 692,
+     "min": 654,
+     "max": 4050
+    },
+    "createRenderer": {
+     "median": 82,
+     "min": 73,
+     "max": 319
+    },
+    "materials": {
+     "median": 55,
+     "min": 55,
+     "max": 60
+    },
+    "geometry": {
+     "median": 182,
+     "min": 170,
+     "max": 458
+    },
+    "shaders": {
+     "median": 345,
+     "min": 320,
+     "max": 3131
+    },
+    "ready": {
+     "median": 692,
+     "min": 654,
+     "max": 4050
+    },
+    "longTaskTotal": {
+     "median": 541,
+     "min": 461,
+     "max": 3054
+    },
+    "longestTask": {
+     "median": 241,
+     "min": 201,
+     "max": 2165
+    },
+    "heapMB": {
+     "median": 23,
+     "min": 22,
+     "max": 28
+    }
+   },
+   "files": [],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 87,
+     "filesDone": 0,
+     "step5": 87,
+     "step25": 406,
+     "step55": 461,
+     "step75": 919,
+     "step100": 4050,
+     "ready": 4050,
+     "longTasks": [
+      77,
+      312,
+      51,
+      449,
+      2165
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 0,
+     "init": 4050,
+     "createRenderer": 319,
+     "materials": 55,
+     "geometry": 458,
+     "shaders": 3131,
+     "longTaskTotal": 3054,
+     "longestTask": 2165
+    },
+    {
+     "loadingShown": 35,
+     "filesDone": 0,
+     "step5": 35,
+     "step25": 117,
+     "step55": 177,
+     "step75": 359,
+     "step100": 679,
+     "ready": 679,
+     "longTasks": [
+      77,
+      56,
+      177,
+      201
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 0,
+     "init": 679,
+     "createRenderer": 82,
+     "materials": 60,
+     "geometry": 182,
+     "shaders": 320,
+     "longTaskTotal": 511,
+     "longestTask": 201
+    },
+    {
+     "loadingShown": 32,
+     "filesDone": 0,
+     "step5": 32,
+     "step25": 122,
+     "step55": 177,
+     "step75": 347,
+     "step100": 692,
+     "ready": 692,
+     "longTasks": [
+      85,
+      51,
+      164,
+      241
+     ],
+     "heapMB": 28,
+     "canvases": 1,
+     "download": 0,
+     "init": 692,
+     "createRenderer": 90,
+     "materials": 55,
+     "geometry": 170,
+     "shaders": 345,
+     "longTaskTotal": 541,
+     "longestTask": 241
+    },
+    {
+     "loadingShown": 33,
+     "filesDone": 0,
+     "step5": 33,
+     "step25": 106,
+     "step55": 161,
+     "step75": 332,
+     "step100": 654,
+     "ready": 654,
+     "longTasks": [
+      70,
+      165,
+      226
+     ],
+     "heapMB": 28,
+     "canvases": 1,
+     "download": 0,
+     "init": 654,
+     "createRenderer": 73,
+     "materials": 55,
+     "geometry": 171,
+     "shaders": 322,
+     "longTaskTotal": 461,
+     "longestTask": 226
+    },
+    {
+     "loadingShown": 33,
+     "filesDone": 0,
+     "step5": 33,
+     "step25": 110,
+     "step55": 167,
+     "step75": 366,
+     "step100": 715,
+     "ready": 715,
+     "longTasks": [
+      73,
+      53,
+      195,
+      242
+     ],
+     "heapMB": 23,
+     "canvases": 1,
+     "download": 0,
+     "init": 715,
+     "createRenderer": 77,
+     "materials": 57,
+     "geometry": 199,
+     "shaders": 349,
+     "longTaskTotal": 563,
+     "longestTask": 242
+    }
+   ]
+  },
+  {
+   "condition": "Fast 3G + CPU 4x",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 193,
+     "min": 141,
+     "max": 204
+    },
+    "download": {
+     "median": 0,
+     "min": 0,
+     "max": 0
+    },
+    "init": {
+     "median": 2364,
+     "min": 2130,
+     "max": 2491
+    },
+    "createRenderer": {
+     "median": 385,
+     "min": 326,
+     "max": 413
+    },
+    "materials": {
+     "median": 352,
+     "min": 260,
+     "max": 412
+    },
+    "geometry": {
+     "median": 959,
+     "min": 934,
+     "max": 1071
+    },
+    "shaders": {
+     "median": 448,
+     "min": 444,
+     "max": 462
+    },
+    "ready": {
+     "median": 2364,
+     "min": 2130,
+     "max": 2491
+    },
+    "longTaskTotal": {
+     "median": 2206,
+     "min": 1997,
+     "max": 2353
+    },
+    "longestTask": {
+     "median": 920,
+     "min": 894,
+     "max": 1039
+    },
+    "heapMB": {
+     "median": 23,
+     "min": 21,
+     "max": 25
+    }
+   },
+   "files": [],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 193,
+     "filesDone": 0,
+     "step5": 193,
+     "step25": 540,
+     "step55": 952,
+     "step75": 1963,
+     "step100": 2407,
+     "ready": 2407,
+     "longTasks": [
+      166,
+      318,
+      387,
+      955,
+      435,
+      50
+     ],
+     "heapMB": 23,
+     "canvases": 1,
+     "download": 0,
+     "init": 2407,
+     "createRenderer": 347,
+     "materials": 412,
+     "geometry": 1011,
+     "shaders": 444,
+     "longTaskTotal": 2311,
+     "longestTask": 955
+    },
+    {
+     "loadingShown": 162,
+     "filesDone": 0,
+     "step5": 162,
+     "step25": 488,
+     "step55": 748,
+     "step75": 1682,
+     "step100": 2130,
+     "ready": 2130,
+     "longTasks": [
+      132,
+      293,
+      242,
+      894,
+      436
+     ],
+     "heapMB": 21,
+     "canvases": 1,
+     "download": 0,
+     "init": 2130,
+     "createRenderer": 326,
+     "materials": 260,
+     "geometry": 934,
+     "shaders": 448,
+     "longTaskTotal": 1997,
+     "longestTask": 894
+    },
+    {
+     "loadingShown": 193,
+     "filesDone": 0,
+     "step5": 193,
+     "step25": 606,
+     "step55": 958,
+     "step75": 2029,
+     "step100": 2491,
+     "ready": 2491,
+     "longTasks": [
+      151,
+      387,
+      326,
+      1039,
+      450
+     ],
+     "heapMB": 25,
+     "canvases": 1,
+     "download": 0,
+     "init": 2491,
+     "createRenderer": 413,
+     "materials": 352,
+     "geometry": 1071,
+     "shaders": 462,
+     "longTaskTotal": 2353,
+     "longestTask": 1039
+    },
+    {
+     "loadingShown": 141,
+     "filesDone": 0,
+     "step5": 141,
+     "step25": 526,
+     "step55": 869,
+     "step75": 1828,
+     "step100": 2287,
+     "ready": 2287,
+     "longTasks": [
+      112,
+      351,
+      313,
+      920,
+      441
+     ],
+     "heapMB": 25,
+     "canvases": 1,
+     "download": 0,
+     "init": 2287,
+     "createRenderer": 385,
+     "materials": 343,
+     "geometry": 959,
+     "shaders": 459,
+     "longTaskTotal": 2137,
+     "longestTask": 920
+    },
+    {
+     "loadingShown": 204,
+     "filesDone": 0,
+     "step5": 204,
+     "step25": 604,
+     "step55": 977,
+     "step75": 1916,
+     "step100": 2364,
+     "ready": 2364,
+     "longTasks": [
+      154,
+      364,
+      349,
+      900,
+      439
+     ],
+     "heapMB": 22,
+     "canvases": 1,
+     "download": 0,
+     "init": 2364,
+     "createRenderer": 400,
+     "materials": 373,
+     "geometry": 939,
+     "shaders": 448,
+     "longTaskTotal": 2206,
+     "longestTask": 900
+    }
+   ]
+  },
+  {
+   "condition": "Fast 3G + CPU 4x, 3D files already in the HTTP cache (second visit)",
+   "runs": 5,
+   "summary": {
+    "loadingShown": {
+     "median": 71,
+     "min": 64,
+     "max": 85
+    },
+    "download": {
+     "median": 0,
+     "min": 0,
+     "max": 0
+    },
+    "init": {
+     "median": 1845,
+     "min": 1652,
+     "max": 1892
+    },
+    "createRenderer": {
+     "median": 180,
+     "min": 138,
+     "max": 201
+    },
+    "materials": {
+     "median": 303,
+     "min": 271,
+     "max": 355
+    },
+    "geometry": {
+     "median": 828,
+     "min": 764,
+     "max": 867
+    },
+    "shaders": {
+     "median": 435,
+     "min": 408,
+     "max": 450
+    },
+    "ready": {
+     "median": 1845,
+     "min": 1652,
+     "max": 1892
+    },
+    "longTaskTotal": {
+     "median": 1662,
+     "min": 1477,
+     "max": 1727
+    },
+    "longestTask": {
+     "median": 787,
+     "min": 737,
+     "max": 838
+    },
+    "heapMB": {
+     "median": 28,
+     "min": 23,
+     "max": 32
+    }
+   },
+   "files": [],
+   "canvases": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "raw": [
+    {
+     "loadingShown": 71,
+     "filesDone": 0,
+     "step5": 71,
+     "step25": 209,
+     "step55": 480,
+     "step75": 1244,
+     "step100": 1652,
+     "ready": 1652,
+     "longTasks": [
+      109,
+      255,
+      737,
+      376
+     ],
+     "heapMB": 32,
+     "canvases": 1,
+     "download": 0,
+     "init": 1652,
+     "createRenderer": 138,
+     "materials": 271,
+     "geometry": 764,
+     "shaders": 408,
+     "longTaskTotal": 1477,
+     "longestTask": 737
+    },
+    {
+     "loadingShown": 85,
+     "filesDone": 0,
+     "step5": 85,
+     "step25": 266,
+     "step55": 569,
+     "step75": 1431,
+     "step100": 1866,
+     "ready": 1866,
+     "longTasks": [
+      58,
+      149,
+      283,
+      832,
+      402
+     ],
+     "heapMB": 32,
+     "canvases": 1,
+     "download": 0,
+     "init": 1866,
+     "createRenderer": 181,
+     "materials": 303,
+     "geometry": 862,
+     "shaders": 435,
+     "longTaskTotal": 1724,
+     "longestTask": 832
+    },
+    {
+     "loadingShown": 64,
+     "filesDone": 0,
+     "step5": 64,
+     "step25": 204,
+     "step55": 481,
+     "step75": 1348,
+     "step100": 1776,
+     "ready": 1776,
+     "longTasks": [
+      119,
+      258,
+      838,
+      402
+     ],
+     "heapMB": 28,
+     "canvases": 1,
+     "download": 0,
+     "init": 1776,
+     "createRenderer": 140,
+     "materials": 277,
+     "geometry": 867,
+     "shaders": 428,
+     "longTaskTotal": 1617,
+     "longestTask": 838
+    },
+    {
+     "loadingShown": 79,
+     "filesDone": 0,
+     "step5": 79,
+     "step25": 259,
+     "step55": 614,
+     "step75": 1442,
+     "step100": 1892,
+     "ready": 1892,
+     "longTasks": [
+      53,
+      141,
+      334,
+      778,
+      421
+     ],
+     "heapMB": 23,
+     "canvases": 1,
+     "download": 0,
+     "init": 1892,
+     "createRenderer": 180,
+     "materials": 355,
+     "geometry": 828,
+     "shaders": 450,
+     "longTaskTotal": 1727,
+     "longestTask": 778
+    },
+    {
+     "loadingShown": 67,
+     "filesDone": 0,
+     "step5": 67,
+     "step25": 268,
+     "step55": 577,
+     "step75": 1397,
+     "step100": 1845,
+     "ready": 1845,
+     "longTasks": [
+      166,
+      286,
+      787,
+      423
+     ],
+     "heapMB": 28,
+     "canvases": 1,
+     "download": 0,
+     "init": 1845,
+     "createRenderer": 201,
+     "materials": 309,
+     "geometry": 820,
+     "shaders": 448,
+     "longTaskTotal": 1662,
+     "longestTask": 787
+    }
+   ]
+  }
+ ]
+}

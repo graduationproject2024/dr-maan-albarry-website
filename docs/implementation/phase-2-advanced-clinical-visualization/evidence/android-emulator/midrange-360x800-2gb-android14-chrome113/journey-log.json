@@ -1,0 +1,267 @@
+{
+  "label": "midrange-360x800-2gb-android14-chrome113",
+  "serial": "emulator-5554",
+  "startedAt": "2026-11-17T16:31:29.496Z",
+  "device": {
+    "android": "14",
+    "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:14/UE1A.230829.036.A4/12096271:user/release-keys",
+    "avd": "phase2_midrange",
+    "size": "Physical size: 720x1600",
+    "density": "Physical density: 320",
+    "chrome": "113.0.5672.136",
+    "ram": "MemTotal:        2534120 kB",
+    "gl": "WebGL2 Android Emulator OpenGL ES Translator (NVIDIA GeForce RTX 2060/PCIe/SSE2)",
+    "viewport": {
+      "url": "/en/lens-lab/",
+      "y": 0,
+      "w": 360,
+      "h": 652,
+      "dpr": 2,
+      "lang": "en",
+      "overflow": 0
+    }
+  },
+  "steps": [
+    {
+      "journey": "B",
+      "name": "Open Lens Lab",
+      "expected": "Page loads, simulator mounts with one canvas",
+      "actual": "canvases=1 caption=\"6 m+ · road sign · Day Monofocal: Usually clear (when set for distance)\" overflow=0",
+      "ok": true,
+      "ms": 2249,
+      "shot": "01-open-lens-lab.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Trifocal",
+      "expected": "lensA=trifocal checked; closer view; page does not jump",
+      "actual": "ERROR Error: no WebView on screen",
+      "ok": false,
+      "ms": 3339,
+      "shot": "02-tap-trifocal.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Near",
+      "expected": "preset=near checked; closer view; page does not jump",
+      "actual": "os tap 123,490; preset=near lensA=monofocal lighting=day lensB=trifocal scenario=book cyl=0 axis=180 sphere=0; zoom=1.646; caption=\"40 cm · phone · Day Monofocal: Reading glasses usually needed\"; page moved 0px",
+      "ok": true,
+      "ms": 4709,
+      "shot": "03-tap-near.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Intermediate",
+      "expected": "preset=intermediate checked; closer view; page does not jump",
+      "actual": "os tap 360,490; preset=intermediate lensA=monofocal lighting=day lensB=trifocal scenario=laptop cyl=0 axis=180 sphere=0; zoom=1.47; caption=\"66 cm · laptop · Day Monofocal: Glasses usually needed\"; page moved 0px",
+      "ok": true,
+      "ms": 4793,
+      "shot": "04-tap-intermediate.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Far",
+      "expected": "preset=distance checked; closer view; page does not jump",
+      "actual": "os tap 597,490; preset=distance lensA=monofocal lighting=day lensB=trifocal scenario=signs cyl=0 axis=180 sphere=0; zoom=2.2; caption=\"6 m+ · road sign · Day Monofocal: Usually clear (when set for distance)\"; page moved 0px",
+      "ok": true,
+      "ms": 4646,
+      "shot": "05-tap-far.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Night",
+      "expected": "lighting=night checked; closer view; page does not jump",
+      "actual": "os tap 580,730; preset=distance lensA=monofocal lighting=night lensB=trifocal scenario=night-driving cyl=0 axis=180 sphere=0; zoom=2.2; caption=\"6 m+ · road sign · Night Monofocal: Usually clear (when set for distance)\"; page moved 0px",
+      "ok": true,
+      "ms": 4682,
+      "shot": "06-tap-night.png"
+    },
+    {
+      "journey": "B",
+      "name": "Open More settings",
+      "expected": "Panel opens; no overflow",
+      "actual": "open=true overflow=0",
+      "ok": true,
+      "ms": 5179,
+      "shot": "07-open-more-settings.png"
+    },
+    {
+      "journey": "B",
+      "name": "Close More settings",
+      "expected": "Panel closes",
+      "actual": "open=false",
+      "ok": true,
+      "ms": 4721,
+      "shot": "08-close-more-settings.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Reset",
+      "expected": "Back to the default lens, distance and lighting",
+      "actual": "preset=distance lensA=monofocal lighting=day lensB=trifocal scenario=signs cyl=0 axis=180 sphere=0; url=/en/lens-lab/",
+      "ok": true,
+      "ms": 4526,
+      "shot": "09-tap-reset.png"
+    },
+    {
+      "journey": "B",
+      "name": "Rotate to landscape",
+      "expected": "Layout fits; one canvas; no sideways scroll",
+      "actual": "732x256 overflow=0 canvases=1",
+      "ok": true,
+      "ms": 2441,
+      "shot": "10-rotate-to-landscape.png"
+    },
+    {
+      "journey": "B",
+      "name": "Tap Near in landscape",
+      "expected": "Works sideways; page does not jump",
+      "actual": "preset=near lensA=monofocal lighting=day lensB=trifocal scenario=book cyl=0 axis=180 sphere=0; page moved -11px",
+      "ok": false,
+      "ms": 5072,
+      "shot": "11-tap-near-in-landscape.png"
+    },
+    {
+      "journey": "B",
+      "name": "Rotate back to portrait",
+      "expected": "State kept; layout fits",
+      "actual": "360x652 preset=near lensA=monofocal lighting=day lensB=trifocal scenario=book cyl=0 axis=180 sphere=0 overflow=0",
+      "ok": true,
+      "ms": 2627,
+      "shot": "12-rotate-back-to-portrait.png"
+    },
+    {
+      "journey": "A",
+      "name": "Tap Start the 3D experience",
+      "expected": "Viewer becomes active with one canvas; revealed",
+      "actual": "active after 14779 ms (tap→active, incl. adb latency); canvases=1; controls bottom 573/652",
+      "ok": true,
+      "ms": 16009,
+      "shot": "13-tap-start-the-3d-experience.png"
+    },
+    {
+      "journey": "A",
+      "name": "Tap Start the walkthrough",
+      "expected": "Playback starts (button shows Pause)",
+      "actual": "mode=pause المرحلة 1 من 7",
+      "ok": true,
+      "ms": 5262,
+      "shot": "14-tap-start-the-walkthrough.png"
+    },
+    {
+      "journey": "A",
+      "name": "Tap Pause",
+      "expected": "Playback pauses",
+      "actual": "mode=play",
+      "ok": true,
+      "ms": 13651,
+      "shot": "15-tap-pause.png"
+    },
+    {
+      "journey": "A",
+      "name": "Tap stage 5",
+      "expected": "Stage 5 of 7",
+      "actual": "المرحلة 5 من 7 scrub=515",
+      "ok": true,
+      "ms": 5554,
+      "shot": "16-tap-stage-5.png"
+    },
+    {
+      "journey": "A",
+      "name": "Drag the scrubber (OS swipe)",
+      "expected": "Scrubber value changes",
+      "actual": "scrub 515 → 634; المرحلة 5 من 7",
+      "ok": true,
+      "ms": 4519,
+      "shot": "17-drag-the-scrubber-os-swipe-.png"
+    },
+    {
+      "journey": "A",
+      "name": "One-finger swipe over the 3D picture",
+      "expected": "The page scrolls (the picture does not trap the finger)",
+      "actual": "page 678 → 752",
+      "ok": true,
+      "ms": 4150,
+      "shot": "18-one-finger-swipe-over-the-3d-picture.png"
+    },
+    {
+      "journey": "A",
+      "name": "Explore 3D, then drag to rotate",
+      "expected": "Explore mode on; drag rotates the eye, page stays",
+      "actual": "explore=true; page 752→752; screen f5a9c461cc→80e498362b",
+      "ok": true,
+      "ms": 10499,
+      "shot": "19-explore-3d-then-drag-to-rotate.png"
+    },
+    {
+      "journey": "A",
+      "name": "Home, then back to Chrome",
+      "expected": "Viewer still active with one canvas after backgrounding",
+      "actual": "state=active canvases=1 contextLost=false",
+      "ok": true,
+      "ms": 6600,
+      "shot": "20-home-then-back-to-chrome.png"
+    },
+    {
+      "journey": "A",
+      "name": "Rotate to landscape with the viewer open",
+      "expected": "Still one canvas; no sideways scroll",
+      "actual": "732x256 canvases=1 overflow=0 state=active",
+      "ok": true,
+      "ms": 4976,
+      "shot": "22-rotate-to-landscape-with-the-viewer-open.png"
+    },
+    {
+      "journey": "G",
+      "name": "Tap an in-site link further down the page",
+      "expected": "Another page (in-site navigation)",
+      "actual": "en/clinic/ → /en/clinic/ (left at y=1628)",
+      "ok": true,
+      "ms": 5450,
+      "shot": "23-tap-an-in-site-link-further-down-the-pag.png"
+    },
+    {
+      "journey": "G",
+      "name": "Android Back button",
+      "expected": "About page at the same reading position",
+      "actual": "/en/about/ y=1628 (was 1628)",
+      "ok": true,
+      "ms": 2162,
+      "shot": "24-android-back-button.png"
+    },
+    {
+      "journey": "G",
+      "name": "Full navigation away, then Android Back (BUG-P2-01 path)",
+      "expected": "Returns to the reading position",
+      "actual": "/en/about/ y=1628 (was 1628)",
+      "ok": true,
+      "ms": 5466,
+      "shot": "25-full-navigation-away-then-android-back-b.png"
+    },
+    {
+      "journey": "perf",
+      "name": "load /",
+      "expected": "measured",
+      "actual": "{\"lcp\":390,\"cls\":0,\"dcl\":564,\"load\":565}",
+      "ok": true,
+      "ms": 0,
+      "shot": null
+    },
+    {
+      "journey": "perf",
+      "name": "load /en/lens-lab/",
+      "expected": "measured",
+      "actual": "{\"lcp\":324,\"cls\":0,\"dcl\":263,\"load\":279}",
+      "ok": true,
+      "ms": 0,
+      "shot": null
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-17T16:34:08.581Z",
+  "summary": {
+    "pass": 24,
+    "fail": 2,
+    "consoleErrors": 0
+  }
+}
