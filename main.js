@@ -1413,7 +1413,7 @@ function revealViewer() {
   let dy = s.top < top ? s.top - top : s.bottom > window.innerHeight ? Math.min(s.top - top, s.bottom - window.innerHeight) : 0;
   const overhang = controls.getBoundingClientRect().bottom - dy - floor;
   if (overhang > 0) dy += overhang;
-  window.scrollBy({ top: dy, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  pageScrollTo(window.scrollY + dy, reducedMotion() ? 'auto' : 'smooth');
 }
 
 // /surgical-education/
@@ -1929,7 +1929,7 @@ function go(next, { push = true, hash = '', scrollTo = null } = {}) {
     if (target && document.getElementById(target)) {
       requestAnimationFrame(() => window.scrollToSection(target));
     } else if (changed || scrollTo !== null) {
-      window.scrollTo(0, scrollTo || 0);
+      pageScrollTo(scrollTo || 0);
       if (changed && push) document.querySelector('main h1, #main')?.focus({ preventScroll: true });
     }
   };
@@ -1958,12 +1958,18 @@ window.addEventListener('popstate', e => {
   }
   go(next, { push: false, scrollTo: y });
   // restore the reading position once the page has rendered
-  requestAnimationFrame(() => { window.scrollTo(0, y); if (y > 0) holdScrollTarget(() => y, 'auto', y); });
+  requestAnimationFrame(() => { pageScrollTo(y); if (y > 0) holdScrollTarget(() => y, 'auto', y); });
 });
 
 // A section can move after the visitor has asked for it: a simulator further up the page replaces its reserved height
 // when its module arrives, which on a busy device is long after the jump has started. So a jump keeps its target until
 // the visitor takes over (any scroll, touch, click or key) or the page has had time to finish loading.
+/** Every programmatic page scroll goes through here, so the optional desktop smooth-scroll layer (Lenis, src/motion)
+ *  and the native page never disagree about the position. Without that layer it is plain window.scrollTo. */
+function pageScrollTo(top, behavior = 'auto') {
+  const m = window.__siteMotion;
+  if (m && m.lenis) m.scrollTo(top, behavior); else window.scrollTo({ top, behavior });
+}
 let releaseScrollHold = null;
 let restoringY = null; // the reading position being restored, while its hold is active
 function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
@@ -1981,7 +1987,7 @@ function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
     if (Math.abs(top - last) < 2 && Math.abs(window.scrollY - Math.min(top, limit)) < 2) return;
     last = top;
     window.__headerHoldUntil = performance.now() + 900; // this is not the reader scrolling (headerScrollShadow)
-    window.scrollTo({ top, behavior });
+    pageScrollTo(top, behavior);
   });
   ro.observe(main);
   const inputs = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
@@ -2037,7 +2043,7 @@ function restoreReadingPosition() {
   const type = performance.getEntriesByType('navigation')[0]?.type;
   const y = history.state && history.state.y;
   if ((type !== 'reload' && type !== 'back_forward') || !(y > 0)) return false;
-  window.scrollTo(0, y);
+  pageScrollTo(y);
   holdScrollTarget(() => y, 'auto', y);
   return true;
 }
@@ -2045,7 +2051,7 @@ function restoreReadingPosition() {
 window.scrollToSection = function (id) {
   if (!document.getElementById(id)) return;
   const behavior = reducedMotion() ? 'auto' : 'smooth';
-  window.scrollTo({ top: sectionTop(id), behavior });
+  pageScrollTo(sectionTop(id), behavior);
   holdScrollTarget(() => sectionTop(id), behavior);
 };
 
@@ -2053,9 +2059,11 @@ window.scrollToSection = function (id) {
 function setMobileMenu(open) {
   const nav = document.getElementById('mobile-nav');
   if (!nav) return;
+  const was = nav.classList.contains('open');
   nav.classList.toggle('open', open);
   document.documentElement.classList.toggle('drawer-open', open);
   document.querySelectorAll('.mobile-menu-btn').forEach(b => b.setAttribute('aria-expanded', String(open)));
+  if (open && !was) window.__siteMotion?.drawerOpened(nav); // links arrive in reading order (optional motion layer)
 }
 
 window.toggleMobileMenu = function () {
@@ -2157,7 +2165,9 @@ window.openPlateZoom = btn => {
     dlg.id = 'plate-dialog';
     dlg.className = 'plate-dialog';
     dlg.setAttribute('aria-labelledby', 'plate-dialog-title');
-    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('click', e => { if (e.target === dlg) closePlateZoom(dlg); });
+    // Escape: shrink back into the figure's button first (same path as the opening), then close
+    dlg.addEventListener('cancel', e => { if (window.__siteMotion) { e.preventDefault(); closePlateZoom(dlg); } });
     dlg.addEventListener('close', () => {
       document.documentElement.classList.remove('dialog-open');
       dlg.innerHTML = '';
@@ -2170,7 +2180,7 @@ window.openPlateZoom = btn => {
   dlg._from = btn;
   const n = fig.querySelector('.fig-n');
   const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
-  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="this.closest('dialog').close()">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
+  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="closePlateZoom(this.closest('dialog'))">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
   const figure = dlg.querySelector('.pd-figure'), scroller = dlg.querySelector('.pd-scroll');
   const illus = fig.querySelector('.atlas-illus').cloneNode(true);
   illus.querySelectorAll('.pin').forEach(p => { p.style.translate = ''; });
@@ -2184,6 +2194,15 @@ window.openPlateZoom = btn => {
   dlg.showModal();
   scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
   declusterPins();
+  window.__siteMotion?.dialogIn(dlg, btn); // grows out of the button that opened it (optional motion layer)
+};
+/** Close the figure dialog; with the motion layer it first shrinks back into the button that opened it. */
+window.closePlateZoom = function (dlg) {
+  if (!dlg || !dlg.open || dlg._closing) return;
+  const m = window.__siteMotion;
+  if (!m) { dlg.close(); return; }
+  dlg._closing = true;
+  m.dialogOut(dlg, dlg._from, () => { dlg._closing = false; if (dlg.open) dlg.close(); });
 };
 
 function observeIntersection() {
@@ -2315,6 +2334,18 @@ function finishFirstLoad() {
     declusterPins();
   }
   if (!restoreReadingPosition()) applyInitialHash();
+  bootMotion();
+}
+// Optional motion layer (src/motion: GSAP reveals and dialog/menu transitions; Lenis smooth wheel on desktop). Loaded
+// in idle time after the first page is on screen, never on a data-saver connection; the site is complete without it.
+let motionBooted = false;
+function bootMotion() {
+  if (motionBooted) return;
+  motionBooted = true;
+  const conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+  const start = () => import('./src/motion/index.js').then(m => m.initMotion()).catch(() => { /* optional: the site works without it */ });
+  (window.requestIdleCallback || ((f) => setTimeout(f, 600)))(start, { timeout: 3000 });
 }
 function renderApp(navigated = false) {
   const adopt = firstRender && !navigated && canAdoptPrerender(); // before the lang attribute below is rewritten
@@ -2365,6 +2396,7 @@ function renderApp(navigated = false) {
   mountVisionSim();
   lensLab.sync();
   lightJourney.sync();
+  window.__siteMotion?.refresh(); // the previous page's reveals are undone; this page's are set up
 
   if (proc && !PROC) loadProcedureContent().then(() => { if (!adopt && route.slug === proc.slug) renderApp(navigated); }, () => {});
 }
@@ -2378,7 +2410,7 @@ function applyInitialHash() {
   let id = '';
   try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
   if (!id || !document.getElementById(id)) return;
-  window.scrollTo(0, sectionTop(id));
+  pageScrollTo(sectionTop(id));
   holdScrollTarget(() => sectionTop(id));
 }
 const boot = () => { renderApp(false); requestAnimationFrame(() => setTimeout(finishFirstLoad)); };

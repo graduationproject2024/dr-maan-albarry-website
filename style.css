@@ -1241,6 +1241,21 @@ html.dialog-open { overflow: hidden; }
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
 .fade-in.visible { opacity: 1; transform: none; }
 @media (max-width: 767px) { :root { --dur-reveal: .35s; } .fade-in { transform: translateY(10px); } }
+/* GSAP motion layer (src/motion): a group whose items are revealed one after another is itself shown at once; its
+   items carry the motion. Without the motion layer (not loaded yet, reduced motion) the rule above applies unchanged. */
+.fade-in.is-staggered { opacity: 1; transform: none; transition: none; }
+/* Lenis (desktop pointer only; lenis/dist/lenis.css, the rules this site needs) */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+/* A soft light follows the pointer across an anatomical plate on hover (React Bits "SpotlightCard" technique,
+   re-implemented here; no motion, desktop pointer only). The pins stay above it. */
+@media (hover: hover) and (pointer: fine) {
+  .plate-card .pc-fig::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .25s var(--ease-out);
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 40%), color-mix(in srgb, #fffaf0 26%, transparent), transparent 70%); }
+  .plate-card:hover .pc-fig::after { opacity: 1; }
+  :root[data-theme="dark"] .plate-card .pc-fig::after { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 40%), color-mix(in srgb, #fff3dc 10%, transparent), transparent 70%); }
+}
 
 /* ------------------------------------------------------------
    26. PRINT (questionnaire summary, guides)

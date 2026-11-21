@@ -193,6 +193,9 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   function setMore(on) {
     more = !!on;
     applyMore();
+    // the settings panel opens with a short height reveal when the site's optional motion layer is present (src/motion);
+    // closing stays immediate so the controls are never in an in-between state
+    if (more && ref.adv && typeof window !== 'undefined' && window.__siteMotion) window.__siteMotion.expand(ref.adv);
     measureBench();
     if (handlers.more) handlers.more(more);
   }
