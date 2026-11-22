@@ -17,8 +17,10 @@ async function start(page, { lang, theme, width, height }) {
   await page.addInitScript(([l, t]) => { try { localStorage.setItem('lang', l); localStorage.setItem('theme', t); } catch (e) { /* ignore */ } }, [lang, theme]);
   // since Phase 1 the full 3D walkthrough lives on /surgical-education/ (and the cataract page), not the homepage
   await page.goto(lang === 'en' ? '/en/surgical-education/' : '/surgical-education/');
-  const before = await page.evaluate(() => performance.getEntriesByType('resource').filter(r => /cataract-sim/.test(r.name)).length);
-  expect(before).toBe(0); // nothing 3D is downloaded until the visitor asks for it
+  // Nothing 3D is built until the visitor asks for it: no viewer, no canvas, no WebGL context. (The code itself may
+  // already be in the cache: on pages other than home it is pre-fetched in idle time when the section is within a screen
+  // - cataract-warmup.spec.js. Counting downloads here raced that idle callback.)
+  await expect(page.locator('#cataract-3d-stage .csim, canvas')).toHaveCount(0);
   await page.locator('#cataract-3d-start').click();
   await expect(page.locator('#cataract-3d-stage .csim canvas')).toHaveCount(1, { timeout: 20_000 });
 }
