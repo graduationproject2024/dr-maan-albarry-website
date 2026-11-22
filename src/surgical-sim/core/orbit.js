@@ -82,7 +82,8 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
       if (pinch0 > 0) { stopTween(); state.s.r = Math.max(minR, Math.min(maxR, r0 * pinch0 / Math.max(1, d))); apply(); }
       return;
     }
-    const k = 2.6 / Math.max(240, el.clientWidth);
+    // a drag across the whole viewport turns the model half a turn (on a phone, 140 px ≈ 70°)
+    const k = 1 / Math.max(280, el.clientWidth);
     // touch without explore mode: only horizontal turning; vertical movement belongs to the page scroll
     const vertical = p.type !== 'touch' || state.explore;
     rotate(-dx * k * Math.PI, vertical ? -dy * k * Math.PI : 0);

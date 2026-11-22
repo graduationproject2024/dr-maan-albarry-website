@@ -19,6 +19,9 @@ import { createShell } from '../ui/shell.js';
 import { contentHash } from '../../sim-review/core.js';
 
 export const ENGINE_VERSION = 'ssim-engine-2026.11-r1';
+/** True on devices that report 2 GB of memory or less (Chrome / Android; other browsers report nothing). */
+export const lowMemory = () => typeof navigator !== 'undefined' && Number.isFinite(navigator.deviceMemory) && navigator.deviceMemory <= 2;
+
 export const counters = { mounts: 0, destroys: 0, live: 0, renderers: 0, listeners: 0 };
 
 const pick = (v, lang) => (v && typeof v === 'object' ? (v[lang] ?? v.en) : v);
@@ -86,6 +89,9 @@ export async function mountEngine(host, def, opts = {}) {
       canvas.setAttribute('role', 'img');
       shell.canvasHost.appendChild(canvas);
       ctx = createScene({ canvas, debug: !!opts.debug, theme: S.theme });
+      // Low-memory phones (navigator.deviceMemory <= 2 GB): start at pixel ratio 1. On the 2 GB Android profile the
+      // pixel-ratio-2 drawing buffer, reallocated on rotation, made Chrome restart the tab (BUG-SIM-04).
+      if (lowMemory()) ctx.renderer.setPixelRatio(1);
       counters.renderers++;
       const clipPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 1e4);
       const mats = createMaterials(clipPlane);
@@ -93,7 +99,7 @@ export async function mountEngine(host, def, opts = {}) {
       model.mats = mats; model.clipPlane = clipPlane;
       ctx.scene.add(model.root);
       orbit = createOrbit(ctx.camera, canvas, { reducedMotion: reduced, track, onChange: () => invalidate(), minR: def.minR ?? 8, maxR: def.maxR ?? 90 });
-      quality = createAdaptiveQuality({ initialDpr: maxDpr(), onChange: (dpr) => { ctx.renderer.setPixelRatio(dpr); resize(); } });
+      quality = createAdaptiveQuality({ initialDpr: lowMemory() ? 1 : maxDpr(), onChange: (dpr) => { ctx.renderer.setPixelRatio(dpr); resize(); } });
       unobserve = observeVisibility(shell.viewport, (v) => { visible = v; if (v) invalidate(); }, {
         observer: () => {}, listen: (el, type, fn) => track(el, type, fn)
       });
@@ -306,7 +312,7 @@ export async function mountEngine(host, def, opts = {}) {
       setTheme(t) { S.theme = t === 'dark' ? 'dark' : 'light'; shell.setTheme(S.theme); if (ctx) ctx.setTheme(S.theme); invalidate(); },
       setQuality(level) {
         S.quality = ['low', 'high', 'auto'].includes(level) ? level : 'auto';
-        if (ctx) { ctx.renderer.setPixelRatio(S.quality === 'low' ? 1 : S.quality === 'high' ? maxDpr() : quality.dpr); resize(); }
+        if (ctx) { ctx.renderer.setPixelRatio(S.quality === 'low' || lowMemory() ? 1 : S.quality === 'high' ? maxDpr() : quality.dpr); resize(); }
       },
       setCameraMode: (m) => act('camera', m),
       setSection: (on) => act('section', on),

@@ -1,0 +1,171 @@
+{
+  "label": "midrange-repeat-2",
+  "serial": "emulator-5556",
+  "startedAt": "2026-11-22T19:07:00.512Z",
+  "device": {
+    "android": "14",
+    "model": "sdk_gphone64_x86_64",
+    "chrome": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Mobile Safari/537.36"
+  },
+  "steps": [
+    {
+      "slug": "lens-implants",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "01-lens-implants-open-and-tap-start.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 8.65 → 8.65",
+      "ok": true,
+      "shot": "02-lens-implants-tap-play-then-pause.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 0.00 → -1.19, scrollY 6032 → 6032",
+      "ok": true,
+      "shot": "03-lens-implants-swipe-sideways-on-the-model.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 3/6",
+      "ok": true,
+      "shot": "04-lens-implants-tap-next.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 3 (was 3), 863x308, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "05-lens-implants-rotate-to-landscape.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "06-lens-implants-full-screen-then-close.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "07-laser-vision-correction-open-and-tap-start.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 8.13 → 8.13",
+      "ok": true,
+      "shot": "08-laser-vision-correction-tap-play-then-pause.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.37 → 0.11, scrollY 6182.85693359375 → 6182.85693359375",
+      "ok": true,
+      "shot": "09-laser-vision-correction-swipe-sideways-on-the-mo.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 3/6",
+      "ok": true,
+      "shot": "10-laser-vision-correction-tap-next.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 3 (was 3), 863x308, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "11-laser-vision-correction-rotate-to-landscape.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "12-laser-vision-correction-full-screen-then-close.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "13-intravitreal-injections-open-and-tap-start.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 9.03 → 9.03",
+      "ok": true,
+      "shot": "14-intravitreal-injections-tap-play-then-pause.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 0.81 → -0.42, scrollY 5755.8095703125 → 5755.8095703125",
+      "ok": true,
+      "shot": "15-intravitreal-injections-swipe-sideways-on-the-mo.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 3/6",
+      "ok": true,
+      "shot": "16-intravitreal-injections-tap-next.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 3 (was 3), 863x308, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "17-intravitreal-injections-rotate-to-landscape.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "18-intravitreal-injections-full-screen-then-close.png"
+    },
+    {
+      "slug": "site",
+      "name": "hardware Back",
+      "expected": "goes to the previous procedure page",
+      "actual": "/en/procedures/intravitreal-injections/ → /en/procedures/laser-vision-correction/",
+      "ok": true,
+      "shot": "19-site-hardware-back.png"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-22T19:10:28.295Z",
+  "summary": {
+    "pass": 19,
+    "fail": 0,
+    "errors": 0
+  }
+}

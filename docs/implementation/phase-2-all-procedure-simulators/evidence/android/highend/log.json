@@ -1,0 +1,315 @@
+{
+  "label": "highend",
+  "serial": "emulator-5556",
+  "startedAt": "2026-11-22T18:43:33.316Z",
+  "device": {
+    "android": "14",
+    "model": "sdk_gphone64_x86_64",
+    "chrome": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Mobile Safari/537.36"
+  },
+  "steps": [
+    {
+      "slug": "lens-implants",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "01-lens-implants-open-and-tap-start.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 13.72 → 13.72",
+      "ok": true,
+      "shot": "02-lens-implants-tap-play-then-pause.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.33 → -1.94, scrollY 6032 → 6032",
+      "ok": true,
+      "shot": "03-lens-implants-swipe-sideways-on-the-model.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/6",
+      "ok": true,
+      "shot": "04-lens-implants-tap-next.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "05-lens-implants-rotate-to-landscape.png"
+    },
+    {
+      "slug": "lens-implants",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "06-lens-implants-full-screen-then-close.png"
+    },
+    {
+      "slug": "icl",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "07-icl-open-and-tap-start.png"
+    },
+    {
+      "slug": "icl",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 14.77 → 14.77",
+      "ok": true,
+      "shot": "08-icl-tap-play-then-pause.png"
+    },
+    {
+      "slug": "icl",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 0.00 → -3.22, scrollY 5175.619140625 → 5175.619140625",
+      "ok": true,
+      "shot": "09-icl-swipe-sideways-on-the-model.png"
+    },
+    {
+      "slug": "icl",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/7",
+      "ok": true,
+      "shot": "10-icl-tap-next.png"
+    },
+    {
+      "slug": "icl",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "11-icl-rotate-to-landscape.png"
+    },
+    {
+      "slug": "icl",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "12-icl-full-screen-then-close.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "13-laser-vision-correction-open-and-tap-start.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 14.92 → 14.92",
+      "ok": true,
+      "shot": "14-laser-vision-correction-tap-play-then-pause.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.37 → -1.91, scrollY 6182.85693359375 → 6182.85693359375",
+      "ok": true,
+      "shot": "15-laser-vision-correction-swipe-sideways-on-the-mo.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/6",
+      "ok": true,
+      "shot": "16-laser-vision-correction-tap-next.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "17-laser-vision-correction-rotate-to-landscape.png"
+    },
+    {
+      "slug": "laser-vision-correction",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "18-laser-vision-correction-full-screen-then-close.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "19-keratoconus-cxl-open-and-tap-start.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 14.50 → 14.50",
+      "ok": true,
+      "shot": "20-keratoconus-cxl-tap-play-then-pause.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.57 → -1.71, scrollY 5362.66650390625 → 5362.66650390625",
+      "ok": true,
+      "shot": "21-keratoconus-cxl-swipe-sideways-on-the-model.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/5",
+      "ok": true,
+      "shot": "22-keratoconus-cxl-tap-next.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "23-keratoconus-cxl-rotate-to-landscape.png"
+    },
+    {
+      "slug": "keratoconus-cxl",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "24-keratoconus-cxl-full-screen-then-close.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "25-corneal-transplant-open-and-tap-start.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 14.57 → 14.57",
+      "ok": true,
+      "shot": "26-corneal-transplant-tap-play-then-pause.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.50 → -1.78, scrollY 5860.5712890625 → 5860.5712890625",
+      "ok": true,
+      "shot": "27-corneal-transplant-swipe-sideways-on-the-model.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/6",
+      "ok": true,
+      "shot": "28-corneal-transplant-tap-next.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "29-corneal-transplant-rotate-to-landscape.png"
+    },
+    {
+      "slug": "corneal-transplant",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "30-corneal-transplant-full-screen-then-close.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "open and tap Start",
+      "expected": "viewer ready, one canvas",
+      "actual": "state=ready canvases=1 dpr=2",
+      "ok": true,
+      "shot": "31-intravitreal-injections-open-and-tap-start.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "tap Play, then Pause",
+      "expected": "time advances, then freezes",
+      "actual": "elapsed 14.82 → 14.82",
+      "ok": true,
+      "shot": "32-intravitreal-injections-tap-play-then-pause.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "swipe sideways on the model",
+      "expected": "the model turns; the page does not scroll away",
+      "actual": "theta 1.26 → -2.03, scrollY 5755.8095703125 → 5755.8095703125",
+      "ok": true,
+      "shot": "33-intravitreal-injections-swipe-sideways-on-the-mo.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "tap Next",
+      "expected": "stage 2",
+      "actual": "stage 4/6",
+      "ok": true,
+      "shot": "34-intravitreal-injections-tap-next.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "rotate to landscape",
+      "expected": "same stage, model and Play visible together, no overflow",
+      "actual": "stage 4 (was 4), 863x304, viewport 220px, overflow 0",
+      "ok": true,
+      "shot": "35-intravitreal-injections-rotate-to-landscape.png"
+    },
+    {
+      "slug": "intravitreal-injections",
+      "name": "full screen, then close",
+      "expected": "full screen fills the screen; close leaves no canvas",
+      "actual": "full=true, canvases after close=0",
+      "ok": true,
+      "shot": "36-intravitreal-injections-full-screen-then-close.png"
+    },
+    {
+      "slug": "site",
+      "name": "hardware Back",
+      "expected": "goes to the previous procedure page",
+      "actual": "/en/procedures/intravitreal-injections/ → /en/procedures/corneal-transplant/",
+      "ok": true,
+      "shot": "37-site-hardware-back.png"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-22T18:50:23.249Z",
+  "summary": {
+    "pass": 37,
+    "fail": 0,
+    "errors": 0
+  }
+}
