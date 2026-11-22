@@ -1036,7 +1036,17 @@ html.dialog-open { overflow: hidden; }
 #cataract-3d[data-state="active"] .c3d-text .lede, #cataract-3d[data-state="active"] .c3d-notes { display: none; }
 /* phones: the running viewer repeats this heading in its own panel, so the section heading steps aside (still read by screen readers) */
 @media (max-width: 1023px) { #cataract-3d[data-state="active"] .c3d-text :is(h2, .kicker) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
+/* procedure simulators (src/surgical-sim): the viewer card carries its own surface */
+.p3d-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+.p3d-stage { grid-column: 1 / -1; min-height: 0; border: 0; border-radius: 0; background: none; overflow: visible; }
+.p3d-host { min-height: 0; }
+#procedure-3d[data-state="loading"] .p3d-stage { min-height: min(60vh, 560px); }
+#procedure-3d[data-state="loading"] .p3d-stage::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: 36px; height: 36px; margin: -18px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+#procedure-3d[data-state="active"] .c3d-actions, #procedure-3d[data-state="active"] .c3d-text .lede, #procedure-3d[data-state="active"] .c3d-notes { display: none; }
+@media (max-width: 1023px) { #procedure-3d[data-state="active"] .c3d-text :is(h2, .kicker) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
 @media (min-width: 900px) {
+  .p3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
+  .p3d-grid .c3d-text { grid-column: 1 / span 8; }
   .c3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
   .c3d-text { grid-column: 1 / span 5; }
   .c3d-grid > .c3d-poster { grid-column: 7 / span 6; }

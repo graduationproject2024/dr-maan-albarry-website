@@ -1416,6 +1416,131 @@ function revealViewer() {
   pageScrollTo(window.scrollY + dy, reducedMotion() ? 'auto' : 'smooth');
 }
 
+// Procedure simulators (lazy module src/surgical-sim — one shared engine for the six procedures other than cataract,
+// which keeps its own simulator). Same contract as the cataract viewer: nothing downloads until the visitor presses
+// Start (or reaches for the button), the host node lives outside the re-rendered markup, and leaving the page destroys
+// the viewer and its WebGL context.
+const SIM_SLUGS = new Set(['lens-implants', 'icl', 'laser-vision-correction', 'keratoconus-cxl', 'corneal-transplant', 'intravitreal-injections']);
+const p3d = { host: null, controller: null, state: 'idle', slug: null }; // idle | loading | active | error
+const P3D_COPY = {
+  'lens-implants': ['العدسة المزروعة داخل العين، ثلاثية الأبعاد', 'The lens implant inside the eye, in 3D', 'شاهد أين توضع العدسة داخل محفظة العدسة الطبيعية، وكيف تختلف أنواعها في توزيع التركيز.', 'See where the implant sits inside the natural lens’s capsule, and how the types differ in sharing focus.'],
+  icl: ['عدسة ICL داخل العين، ثلاثية الأبعاد', 'The ICL inside the eye, in 3D', 'شاهد مكان العدسة بين القزحية والعدسة الطبيعية التي تبقى في مكانها.', 'See where the lens sits, between the iris and the natural lens, which stays in place.'],
+  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الليزك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare LASIK, PRK and SMILE on a model of the cornea and its layers.'],
+  'keratoconus-cxl': ['القرنية المخروطية وتثبيت القرنية، ثلاثي الأبعاد', 'Keratoconus and cross-linking, in 3D', 'شاهد كيف يختلف شكل القرنية المخروطية، وفكرة تقوية ألياف القرنية بالتثبيت.', 'See how a keratoconic cornea differs in shape, and the idea behind strengthening its fibres with cross-linking.'],
+  'corneal-transplant': ['زراعة القرنية، ثلاثية الأبعاد', 'Corneal transplant, in 3D', 'استكشف طبقات القرنية وكيف يستبدل كل نوع من الزراعة الطبقة المتضررة فقط أو القرنية كاملة السماكة.', 'Explore the corneal layers and how each type of transplant replaces only the damaged layer, or the full thickness.'],
+  'intravitreal-injections': ['حقن العين، ثلاثية الأبعاد', 'Eye injections, in 3D', 'استكشف الجسم الزجاجي والشبكية والبقعة، وفكرة وصول الدواء إلى خلف العين.', 'Explore the vitreous, the retina and the macula, and the idea of medicine reaching the back of the eye.']
+};
+
+function renderProcedure3D(p) {
+  const st = p3d.slug === p.slug ? p3d.state : 'idle';
+  const c = P3D_COPY[p.slug];
+  return `
+  <section class="section section-stage section-stage-deep" id="procedure-3d" data-state="${st}" data-procedure="${p.slug}" aria-labelledby="procedure-3d-title">
+    <div class="container p3d-grid">
+      <div class="c3d-text">
+        <p class="kicker"><span>${tr('تجربة تعليمية ثلاثية الأبعاد', 'Interactive 3D education')}</span></p>
+        <h2 id="procedure-3d-title">${tr(c[0], c[1])}</h2>
+        <p class="lede">${tr(c[2], c[3])}</p>
+        <ul class="c3d-notes">
+          <li>${icon('info', 18)}<span>${tr('نموذج تعليمي توضيحي جديد، بانتظار المراجعة الطبية من الطبيب.', 'A new illustrative model, awaiting the doctor’s medical review.')}</span></li>
+          <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل حالة.', 'Not a substitute for a consultation; every case is different.')}</span></li>
+        </ul>
+        <div class="c3d-actions">
+          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" onclick="startProcedure3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+            ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
+          </button>
+          <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
+        </div>
+      </div>
+      <div class="c3d-stage p3d-stage" id="procedure-3d-stage" ${st === 'active' || st === 'loading' ? '' : 'hidden'} aria-label="${tr('التجربة ثلاثية الأبعاد', '3D experience')}" role="region"></div>
+    </div>
+  </section>`;
+}
+
+function p3dSync() {
+  const sec = document.getElementById('procedure-3d');
+  if (!sec || sec.dataset.procedure !== p3d.slug) return;
+  sec.dataset.state = p3d.state;
+  const stage = document.getElementById('procedure-3d-stage');
+  const btn = document.getElementById('procedure-3d-start');
+  const status = sec.querySelector('.c3d-status');
+  if (p3d.state === 'active' || p3d.state === 'loading') document.getElementById('site-header')?.classList.remove('is-hidden');
+  if (stage) {
+    stage.hidden = !(p3d.state === 'active' || p3d.state === 'loading');
+    if (p3d.host && p3d.host.parentNode !== stage) stage.appendChild(p3d.host);
+  }
+  if (btn) {
+    if (p3d.state === 'loading') btn.setAttribute('aria-busy', 'true'); else btn.removeAttribute('aria-busy');
+    const label = btn.querySelector('.btn-label');
+    if (label) label.textContent = p3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
+  }
+  if (status) status.textContent = p3d.state === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : '';
+}
+
+function closeProcedure3D(refocus = true) {
+  const ctrl = p3d.controller;
+  p3d.controller = null;
+  try { if (ctrl) ctrl.destroy(); } catch (e) { /* already torn down */ }
+  if (p3d.host) p3d.host.remove();
+  p3d.host = null;
+  p3d.state = 'idle';
+  p3dSync();
+  const btn = document.getElementById('procedure-3d-start');
+  if (btn && refocus !== false) btn.focus({ preventScroll: true });
+}
+
+function p3dWarm() {
+  const conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+  import('./src/surgical-sim/index.js').catch(() => {});
+}
+function p3dWatchWarm() {
+  const btn = document.getElementById('procedure-3d-start');
+  if (!btn) return;
+  for (const type of ['pointerenter', 'touchstart', 'focus']) btn.addEventListener(type, p3dWarm, { once: true, passive: true });
+}
+
+window.startProcedure3D = async function () {
+  const sec = document.getElementById('procedure-3d');
+  const slug = sec && sec.dataset.procedure;
+  if (!slug || !SIM_SLUGS.has(slug)) return;
+  if (p3d.slug === slug && (p3d.state === 'loading' || p3d.state === 'active')) return;
+  if (p3d.controller || p3d.host) closeProcedure3D(false);
+  p3d.slug = slug;
+  p3d.state = 'loading';
+  const host = p3d.host = document.createElement('div');
+  host.className = 'c3d-host p3d-host';
+  p3dSync();
+  try {
+    const mod = await import('./src/surgical-sim/index.js');
+    if (p3d.host !== host) return;
+    const ctrl = await mod.mount(host, { procedure: slug, lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
+    if (p3d.host !== host) { ctrl && ctrl.destroy && ctrl.destroy(); return; }
+    p3d.controller = ctrl;
+    p3d.state = 'active';
+    ctrl.setLang(currentLang);
+    ctrl.setTheme(resolvedTheme());
+    ctrl.on('close', () => closeProcedure3D());
+    window.__procedureSim = ctrl;
+    const hadFocus = document.activeElement === document.getElementById('procedure-3d-start') || document.activeElement === document.body;
+    p3dSync();
+    if (hadFocus && p3d.host) { const t = p3d.host.querySelector('.ssim-play:not(:disabled), .ssim-stage'); if (t) t.focus({ preventScroll: true }); }
+    const stage = document.getElementById('procedure-3d-stage');
+    if (stage) {
+      const top = (document.getElementById('site-header')?.offsetHeight || 68) + 12;
+      const r = stage.getBoundingClientRect();
+      if (r.top < top || r.top > window.innerHeight * 0.4) pageScrollTo(window.scrollY + r.top - top, reducedMotion() ? 'auto' : 'smooth');
+    }
+  } catch (e) {
+    console.warn('procedure 3D module unavailable:', e);
+    if (p3d.host !== host) return;
+    if (p3d.host) p3d.host.remove();
+    p3d.host = null; p3d.controller = null; p3d.state = 'error';
+    p3dSync();
+  }
+};
+window.closeProcedure3D = closeProcedure3D;
+
 // /surgical-education/
 function renderSurgicalEducationPage() {
   return `
@@ -1635,6 +1760,7 @@ function renderProcedurePage(p) {
   const c = PROC && PROC.CONTENT[p.slug] ? PROC.CONTENT[p.slug][currentLang] : null;
   const g = groupOf(p.group);
   const idx = PROCEDURES.indexOf(p);
+  const sim3d = p.simulator ? 'cataract-3d' : SIM_SLUGS.has(p.slug) ? 'procedure-3d' : null;
   const sections = c ? PROC_SECTIONS.filter(([id]) => id !== 'types' || c.types) : [];
   const num = id => String(sections.findIndex(s => s[0] === id) + 1).padStart(2, '0');
   const list = (items, cls = '') => `<ul class="bullets ${cls}">${items.map(t => `<li>${t}</li>`).join('')}</ul>`;
@@ -1642,7 +1768,7 @@ function renderProcedurePage(p) {
     const s = PROC_SECTIONS.find(x => x[0] === id);
     return `<section class="proc-sec ${cls}" id="p-${id}" aria-labelledby="p-${id}-h"><span class="sec-n" aria-hidden="true">${num(id)}</span><h2 id="p-${id}-h">${tr(s[1], s[2])}</h2>${inner}</section>`;
   };
-  const tocLinks = () => `${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav data-spy="p-${id}"><span class="toc-n" aria-hidden="true">${num(id)}</span><span>${tr(ar, en)}</span></a></li>`).join('')}${p.simulator ? `<li class="toc-3d"><a href="${hereHref('cataract-3d')}" data-nav data-spy="cataract-3d"><span class="toc-n" aria-hidden="true"><bdi dir="ltr">3D</bdi></span><span>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</span></a></li>` : ''}`;
+  const tocLinks = () => `${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav data-spy="p-${id}"><span class="toc-n" aria-hidden="true">${num(id)}</span><span>${tr(ar, en)}</span></a></li>`).join('')}${sim3d ? `<li class="toc-3d"><a href="${hereHref(sim3d)}" data-nav data-spy="${sim3d}"><span class="toc-n" aria-hidden="true"><bdi dir="ltr">3D</bdi></span><span>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</span></a></li>` : ''}`;
   // Cataract recovery: the post-operative photograph restored from R5 (matrix I8; origin to be confirmed by the owner).
   const phaco = p.slug === 'cataract-surgery' ? `<figure class="proc-photo"><img src="images/surgery-phaco.jpg" width="512" height="279" loading="lazy" decoding="async" alt="${tr('قطرات العين ونظارة واقية ونشرة إرشادات على طاولة معقمة: أدوات شائعة بعد جراحة الماء الأبيض', 'Eye drops, protective glasses and an instruction leaflet on a sterile drape: common items after cataract surgery')}"><figcaption class="fig-cap"><span>${tr('أدوات شائعة بعد العملية: القطرات الموصوفة، ونظارة واقية، وتعليمات مكتوبة.', 'Common items after surgery: the prescribed drops, protective glasses and written instructions.')}</span></figcaption></figure>` : '';
   const loupe = c ? magnifier(p) : '';
@@ -1678,7 +1804,7 @@ function renderProcedurePage(p) {
               <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" data-cta="book"><span class="btn-label">${tr('احجز استشارة مع د. معن', 'Book a consultation with Dr. Maan')}</span></a>
               <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('اسأل عبر واتساب', 'Ask on WhatsApp')}</span></a>
             </div>
-            ${p.simulator ? `<p class="proc-3d-jump"><a href="${hereHref('cataract-3d')}" data-nav class="link-quiet">${icon('cube', 18)}<span>${tr('شاهد شرح العملية ثلاثي الأبعاد', 'Watch the 3D walkthrough')}</span></a></p>` : ''}
+            ${sim3d ? `<p class="proc-3d-jump"><a href="${hereHref(sim3d)}" data-nav class="link-quiet">${icon('cube', 18)}<span>${tr('شاهد شرح العملية ثلاثي الأبعاد', 'Watch the 3D walkthrough')}</span></a></p>` : ''}
           </div>
         </div>
       </div>
@@ -1700,6 +1826,7 @@ function renderProcedurePage(p) {
     </div>
 
     ${p.simulator ? renderCataract3D(true) : ''}
+    ${SIM_SLUGS.has(p.slug) ? renderProcedure3D(p) : ''}
 
     <section class="section section-band proc-related" aria-labelledby="related-title">
       <div class="container">
@@ -2399,6 +2526,14 @@ function renderApp(navigated = false) {
   c3dWatchWarm();
   if (c3d.controller && typeof c3d.controller.setLang === 'function') {
     try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
+  }
+  // procedure simulators: torn down when the page no longer hosts the same procedure
+  const p3dSec = document.getElementById('procedure-3d');
+  if ((p3d.host || p3d.controller) && (!p3dSec || p3dSec.dataset.procedure !== p3d.slug)) closeProcedure3D(false);
+  p3dSync();
+  p3dWatchWarm();
+  if (p3d.controller) {
+    try { p3d.controller.setLang(currentLang); p3d.controller.setTheme(resolvedTheme()); } catch (e) { /* module handles its own errors */ }
   }
 
   watchBookingBar();

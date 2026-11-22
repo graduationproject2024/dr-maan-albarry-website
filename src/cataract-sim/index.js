@@ -268,6 +268,13 @@ class Simulator {
     // Touch policy: one-finger page scroll keeps working; touch only drives the 3D view in "Explore 3D" mode.
     canvas.style.removeProperty('touch-action');
     this.listen(canvas, 'pointerdown', (e) => { if (e.pointerType === 'touch' && !this.touch) e.stopImmediatePropagation(); }, { capture: true });
+    // Wheel policy (Phase 2 refinement, same rule as the procedure simulators): a plain wheel over the viewer scrolls the
+    // page instead of being captured; Ctrl/⌘ + wheel (and a trackpad pinch, which arrives as Ctrl + wheel) zooms.
+    // Full screen has no page to scroll, so there the plain wheel zooms as before.
+    this.listen(canvas, 'wheel', (e) => {
+      if (e.ctrlKey || e.metaKey || this.host.querySelector('.csim--expanded')) return;
+      e.stopImmediatePropagation();
+    }, { capture: true });
     this.listen(c, 'start', () => {
       if (this.fly) { this.fly = null; if (this.state === 'transitioning') this.sm.to(this.resume); }
     });

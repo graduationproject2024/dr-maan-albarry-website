@@ -303,3 +303,12 @@
 .csim-review select { min-height: 44px; max-width: 100%; }
 .csim-review input[type="text"] { min-height: 44px; min-width: 0; }
 .csim-review-import { position: relative; }
+
+/* Full screen (Phase 2 refinement): CSS, so it works on iPhone too; the viewer fills the screen inside the safe areas. */
+.csim--expanded {
+  position: fixed; inset: 0; z-index: 1000; max-width: none; margin: 0; border-radius: 0; overflow: auto;
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+}
+.csim--expanded .csim-viewport { aspect-ratio: auto; height: calc(100dvh - 190px); max-height: none; min-height: 240px; }
+.csim--expanded [data-ref="expand"] { background: var(--csim-primary); color: var(--csim-on-primary); }
+@media (max-width: 560px) { .csim--expanded .csim-viewport { height: calc(100dvh - 240px); } }

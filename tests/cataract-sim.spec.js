@@ -170,7 +170,10 @@ test.describe('cataract simulator — desktop', () => {
     await page.mouse.move(box.x + box.width * 0.6, box.y + box.height * 0.5, { steps: 12 });
     await page.mouse.up();
     await expect.poll(async () => Math.abs((await S(page)).camera.azimuth - a0)).toBeGreaterThan(0.15);
+    // Ctrl + wheel zooms; a plain wheel scrolls the page (Phase 2 wheel policy)
+    await page.keyboard.down('Control');
     for (let i = 0; i < 30; i++) await page.mouse.wheel(0, 400);
+    await page.keyboard.up('Control');
     await page.waitForTimeout(500);
     const s = await S(page);
     expect(s.camera.distance).toBeLessThanOrEqual(80.01);
