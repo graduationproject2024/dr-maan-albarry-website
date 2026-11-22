@@ -166,7 +166,7 @@ test('leaving the page destroys the viewer; another procedure gets a fresh one',
   await expect(page.locator('#procedure-3d')).toHaveAttribute('data-state', 'idle');
   await expect(page.locator('canvas')).toHaveCount(0);
   await page.locator('#procedure-3d-start').click();
-  await expect.poll(() => page.evaluate(() => window.__procedureSim.getState().procedure), { timeout: 20_000 }).toBe('keratoconus-cxl');
+  await expect.poll(() => page.evaluate(() => window.__procedureSim && window.__procedureSim.getState().state === 'ready' ? window.__procedureSim.getState().procedure : null), { timeout: 20_000 }).toBe('keratoconus-cxl');
 });
 
 test('reduced motion: stage changes move the camera without animation', async ({ page }) => {
@@ -267,4 +267,22 @@ test('intravitreal: posterior anatomy; the needle enters behind the limbus into 
   const spread = await probeAt(page, 'spread');
   expect(spread.medicineOpacity).toBeGreaterThan(0);
   expect((await probeAt(page, 'after')).needleVisible).toBe(false);
+});
+
+test('GPU context lost and restored: a notice while lost, then the viewer recovers and still works', async ({ page }) => {
+  const errors = errorsOf(page);
+  await open(page, 'corneal-transplant');
+  for (let k = 0; k < 2; k++) {
+    await page.evaluate(() => { const gl = document.querySelector('#procedure-3d-stage canvas').getContext('webgl2'); window.__lose = gl.getExtension('WEBGL_lose_context'); window.__lose.loseContext(); });
+    await expect(page.locator('.ssim-notice')).toBeVisible();
+    expect((await S(page)).state).toBe('error');
+    await page.evaluate(() => window.__lose.restoreContext());
+    await expect(page.locator('.ssim-notice')).toBeHidden({ timeout: 10_000 });
+    await expect.poll(async () => (await S(page)).state).not.toBe('error');
+  }
+  await page.locator('.ssim-stage').nth(4).click();
+  expect((await S(page)).stageIndex).toBe(4);
+  await page.locator('.ssim-play').click();
+  await expect.poll(async () => (await S(page)).playing).toBe(true);
+  expect(errors.filter((e) => !/CONTEXT_LOST|context lost/i.test(e))).toEqual([]);
 });
