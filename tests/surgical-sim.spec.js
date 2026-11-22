@@ -213,3 +213,58 @@ test('accessibility: the open simulator has no axe violations (en and ar)', asyn
     expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
   }
 });
+
+// ---------- procedure-specific checks: what each model must show at the end of its key stages ----------
+const probeAt = async (page, stageId, variant) => page.evaluate(([id, v]) => {
+  const c = window.__procedureSim;
+  if (v) c.setVariant(v);
+  c.setStage(id);
+  return c.getState().probe;
+}, [stageId, variant]);
+
+test('IOL: the natural lens is gone and the implant sits in the bag at the capsule equator', async ({ page }) => {
+  await open(page, 'lens-implants');
+  const start = await probeAt(page, 'natural');
+  expect(start.lensVisible).toBe(true); expect(start.iolVisible).toBe(false);
+  const p = await probeAt(page, 'position');
+  expect(p.lensVisible).toBe(false); expect(p.iolVisible).toBe(true);
+  expect(p.iolZ).toBeCloseTo(-1.5, 2); // EYE.lensEqZ: inside the capsular bag
+  expect(p.collapse).toBe(1);
+});
+
+test('ICL: the natural lens stays, the ICL sits in front of it with a clearance, the iris rests on the ICL', async ({ page }) => {
+  await open(page, 'icl');
+  const p = await probeAt(page, 'result');
+  expect(p.lensVisible).toBe(true);
+  expect(p.iclApexZ).toBeGreaterThan(p.lensApexZ);
+  expect(p.vault).toBeGreaterThan(0.2);
+  expect(p.irisAboveIcl).toBe(true);
+});
+
+test('laser: LASIK, PRK and SMILE each thin the centre; flap only in LASIK; SMILE lenticule leaves through the opening', async ({ page }) => {
+  await open(page, 'laser-vision-correction');
+  for (const v of ['lasik', 'prk', 'smile']) {
+    const end = await probeAt(page, 'result', v);
+    expect(end.variant).toBe(v);
+    expect(end.centralThickness).toBeLessThan(end.centralThicknessStart - 0.05);
+    expect(end.flapAngle).toBe(0);
+    if (v !== 'lasik') expect(end.flapVisible).toBe(false);
+  }
+  expect((await probeAt(page, 'lift', 'lasik')).flapAngle).toBeGreaterThan(1);
+  expect((await probeAt(page, 'epithelium', 'prk')).epiAmount).toBe(1);
+  expect((await probeAt(page, 'regrow', 'prk')).epiAmount).toBe(0);
+  const rm = await probeAt(page, 'remove', 'smile');
+  expect(rm.lenticuleOutside).toBe(true);
+});
+
+test('intravitreal: posterior anatomy; the needle enters behind the limbus into the vitreous; medicine appears only after it', async ({ page }) => {
+  await open(page, 'intravitreal-injections');
+  const back = await probeAt(page, 'back');
+  expect(back.maculaPresent).toBe(true); expect(back.needleVisible).toBe(false); expect(back.medicineOpacity).toBe(0);
+  const inj = await probeAt(page, 'injection');
+  expect(inj.entryBehindLimbus).toBe(true);
+  expect(inj.tipInsideGlobe).toBe(true);
+  const spread = await probeAt(page, 'spread');
+  expect(spread.medicineOpacity).toBeGreaterThan(0);
+  expect((await probeAt(page, 'after')).needleVisible).toBe(false);
+});

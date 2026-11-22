@@ -107,9 +107,9 @@ export function createMaterials(clipPlane) {
     dropRibo: new THREE.MeshPhysicalMaterial({ color: 0xf5c518, transparent: true, opacity: 0.8, roughness: 0.05, clearcoat: 1, depthWrite: false }),
     airBubble: new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.25, roughness: 0.02, clearcoat: 1, depthWrite: false, side: THREE.DoubleSide, clippingPlanes: clip }),
     // light: additive, never lit
-    laserBeam: new THREE.MeshBasicMaterial({ color: 0x7fd4ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }),
-    femtoBeam: new THREE.MeshBasicMaterial({ color: 0xff8a5c, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }),
-    uvBeam: new THREE.MeshBasicMaterial({ color: 0x8f7bff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }),
+    laserBeam: new THREE.MeshBasicMaterial({ color: 0x7fd4ff, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }),
+    femtoBeam: new THREE.MeshBasicMaterial({ color: 0xff8a5c, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }),
+    uvBeam: new THREE.MeshBasicMaterial({ color: 0x8f7bff, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }),
     rays: new THREE.LineBasicMaterial({ color: 0xffc45a, transparent: true, opacity: 0.9, depthTest: false }),
     raysAlt: new THREE.LineBasicMaterial({ color: 0x5ab0ff, transparent: true, opacity: 0.9, depthTest: false }),
     marker: new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, depthTest: false })

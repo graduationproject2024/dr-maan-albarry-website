@@ -173,7 +173,8 @@ export async function mountEngine(host, def, opts = {}) {
   function setSection(on, apply = true) {
     S.section = !!on;
     if (model) {
-      model.clipPlane.constant = S.section ? 0 : 1e4;
+      // the cut faces lie exactly on x = 0: the plane sits 3 µm beyond them, or rounding clips random pixels away
+      model.clipPlane.constant = S.section ? 0.003 : 1e4;
       model.root.traverse((o) => { if (o.name === 'caps') o.visible = S.section; });
       if (apply) applyTime();
     }
@@ -326,6 +327,8 @@ export async function mountEngine(host, def, opts = {}) {
         };
       },
       getReviewMetadata: () => reviewMetadata(def, S.variant),
+      /** Debugging and tests: the live scene objects (read-only use). */
+      get _three() { return { scene: ctx && ctx.scene, camera: ctx && ctx.camera, renderer: ctx && ctx.renderer, model, render: () => { if (ctx) ctx.renderer.render(ctx.scene, ctx.camera); } }; },
       on(type, fn) { (listeners[type] ||= []).push(fn); return () => { listeners[type] = listeners[type].filter((f) => f !== fn); }; },
       destroy() {
         if (S.destroyed) return;

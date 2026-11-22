@@ -58,7 +58,8 @@ const def = {
     ...COMMON_SIMPLIFICATIONS,
     { ar: 'إزالة العدسة المعتمة مختصرة هنا في مرحلة واحدة؛ تعرضها تجربة عملية الماء الأبيض بالتفصيل.', en: 'Removing the cloudy lens is summarised in one stage; the cataract simulator shows it in detail.' },
     { ar: 'مسارات الضوء رسم مبسط لفكرة توزيع التركيز، وليست محاكاة بصرية دقيقة.', en: 'Light paths are a simple drawing of how focus is shared, not an optical simulation.' },
-    { ar: 'العدسة الممثلة عدسة عامة قطعة واحدة؛ تصاميم العدسات الفعلية متنوعة.', en: 'The implant shown is a generic one-piece lens; real designs vary.' }
+    { ar: 'العدسة الممثلة عدسة عامة قطعة واحدة؛ تصاميم العدسات الفعلية متنوعة.', en: 'The implant shown is a generic one-piece lens; real designs vary.' },
+    { ar: 'زاوية محور عدسة التوريك في النموذج توضيحية؛ يُحدَّد المحور الفعلي لكل عين من قياساتها.', en: 'The toric lens axis shown is illustrative; the real axis is set for each eye from its measurements.' }
   ],
 
   build({ THREE, lib, mats }) {
