@@ -13,11 +13,16 @@
 
 export const REVIEW = Object.freeze({ status: 'draft', reviewer: null, reviewedOn: null });
 
-/** Display order of the five lens categories. */
-export const LENS_ORDER = Object.freeze(['monofocal', 'toric', 'edof', 'multifocal', 'trifocal']);
+/**
+ * Display order of the five lens categories as Dr. Maan presents them (owner, 2026-11-23): standard monofocal, enhanced
+ * monofocal, EDOF, trifocal, toric. Toric is last because it is a correction that can be added to the others, not a
+ * focusing design. The bifocal-type multifocal stays in the content below (and in the simulator's "other lenses") but
+ * is no longer one of the five compared categories. Taxonomy and references: IOL_TAXONOMY.md.
+ */
+export const LENS_ORDER = Object.freeze(['monofocal', 'enhanced', 'edof', 'trifocal', 'toric']);
 
 /** Lens-lab category → vision-simulator lens id (src/vision-sim/optics/params.js LENS_IDS). */
-export const SIM_LENS = Object.freeze({ monofocal: 'monofocal', toric: 'toric', edof: 'edof', multifocal: 'multifocal', trifocal: 'trifocal' });
+export const SIM_LENS = Object.freeze({ monofocal: 'monofocal', enhanced: 'enhanced', toric: 'toric', edof: 'edof', multifocal: 'multifocal', trifocal: 'trifocal' });
 
 /** Comparison rows. Level 1–3 is how FAVOURABLE the row is for the patient (3 = most favourable). */
 export const DIMENSIONS = Object.freeze(['distance', 'intermediate', 'near', 'glasses', 'halos', 'contrast']);
@@ -29,6 +34,7 @@ export const DIMENSIONS = Object.freeze(['distance', 'intermediate', 'near', 'gl
  */
 export const LEVELS = Object.freeze({
   monofocal: Object.freeze({ distance: 3, intermediate: 1, near: 1, glasses: 1, halos: 3, contrast: 3 }),
+  enhanced: Object.freeze({ distance: 3, intermediate: 2, near: 1, glasses: 1, halos: 3, contrast: 3 }),
   toric: Object.freeze({ distance: 3, intermediate: 1, near: 1, glasses: 1, halos: 3, contrast: 3 }),
   edof: Object.freeze({ distance: 3, intermediate: 3, near: 2, glasses: 2, halos: 2, contrast: 2 }),
   multifocal: Object.freeze({ distance: 3, intermediate: 2, near: 3, glasses: 2, halos: 1, contrast: 1 }),
@@ -58,7 +64,7 @@ const AR = {
   tableCaption: 'مقارنة تثقيفية مبسطة بين خمسة أنواع من العدسات المزروعة',
   rowHead: 'الجانب',
   showLens: 'اختر نوعاً لعرض تفاصيله',
-  toricNote: 'التوريك ليس تصميماً مستقلاً للتركيز: هو تصحيح للاستجماتيزم (عدم انتظام انحناء القرنية) يمكن إضافته إلى العدسة أحادية البؤرة أو ممتدة المدى أو متعددة البؤر أو ثلاثية البؤرة. القيم في عمود التوريك هنا لعدسة توريك أحادية البؤرة.',
+  toricNote: 'العدسة اللابؤرية (Toric) ليست تصميماً مستقلاً للتركيز: هي تصحيح للانحراف اللابؤري (الاستجماتيزم، أي عدم انتظام انحناء القرنية)، ومنها الأحادية والممتدة والثلاثية. القيم في عمود اللابؤرية هنا لعدسة لابؤرية أحادية في عين فيها انحراف لابؤري منتظم.',
   legend: { 3: 'ملائم غالباً', 2: 'متوسط أو يختلف', 1: 'محدود غالباً' },
   dims: {
     distance: { label: 'الرؤية البعيدة', hint: 'القيادة، اللوحات، التلفاز' },
@@ -121,8 +127,9 @@ const AR = {
   sourcesNote: 'كُتب النص بلغة مبسطة من هذه المصادر ولم يُنقل منها حرفياً. الإصدارات التي تحمل علامة «دراسة» ملخصات أبحاث وليست توصيات.',
   lenses: {
     monofocal: {
-      name: 'أحادية البؤرة', short: 'أحادية', code: 'Monofocal',
-      what: 'تركيز واضح على مسافة واحدة، غالباً البعيدة.',
+      name: 'العدسة الأحادية', short: 'أحادية', code: 'Monofocal',
+      what: 'تعطي رؤية بعيدة، ويحتاج المريض عادةً إلى نظارة طبية للرؤية المتوسطة (نحو ٦٥ سم) والقريبة (نحو ٤٠ سم) عند ضبطها للبعيد.',
+      doctor: 'الأحادية: تعطي رؤية بعيدة، ويحتاج المريض إلى نظارة طبية للرؤية المتوسطة (65 سم) والقريبة (40 سم).',
       levels: {
         distance: 'واضحة غالباً (عند ضبطها للبعيد)',
         intermediate: 'تحتاج نظارة غالباً',
@@ -135,9 +142,26 @@ const AR = {
       cons: ['تلزم النظارة غالباً للقراءة وكثيراً للحاسوب.', 'لا تصحح الاستجماتيزم إلا إذا كانت بنسخة توريك.'],
       ask: ['على أي مسافة ستُضبط العدسة؟ وهل تناسبني الرؤية الأحادية؟', 'ما النظارات التي سأحتاجها غالباً بعد العملية؟', 'هل لدي استجماتيزم يحتاج نسخة توريك؟'],
     },
+    enhanced: {
+      name: 'العدسة الأحادية المطورة', short: 'أحادية مطورة', code: 'Enhanced monofocal',
+      what: 'تعطي رؤية بعيدة مع رؤية متوسطة (نحو ٦٥ سم) أفضل من الأحادية العادية، ويحتاج المريض عادةً إلى نظارة للرؤية القريبة (نحو ٤٠ سم).',
+      doctor: 'الأحادية المطورة: تعطي رؤية بعيدة مع متوسطة، ويحتاج المريض إلى نظارة للرؤية القريبة (40 سم).',
+      levels: {
+        distance: 'واضحة غالباً (عند ضبطها للبعيد)',
+        intermediate: 'أفضل من الأحادية العادية غالباً؛ وقد تلزم نظارة لبعض الأعمال',
+        near: 'تحتاج نظارة قراءة غالباً (نحو ٤٠ سم)',
+        glasses: 'للقراءة غالباً',
+        halos: 'قريبة من الأحادية العادية (قد تحدث)',
+        contrast: 'قريب من الأحادية العادية غالباً',
+      },
+      pros: ['رؤية متوسطة أفضل من الأحادية العادية للشاشات ولوحة القيادة.', 'لا تقسم الضوء بين بؤر منفصلة، فالهالات والتباين قريبة من الأحادية.'],
+      cons: ['المكسب في المسافة المتوسطة محدود ويختلف بين التصاميم.', 'تلزم نظارة للقراءة غالباً.'],
+      ask: ['هل تكفيني الرؤية المتوسطة لهذه العدسة في عملي على الشاشات؟', 'لأي مهام سأحتاج نظارة القراءة؟'],
+    },
     toric: {
-      name: 'توريك (لتصحيح الاستجماتيزم)', short: 'توريك', code: 'Toric',
-      what: 'تصحح الاستجماتيزم الناتج عن عدم انتظام انحناء القرنية، ويمكن دمجها مع أي تصميم آخر.',
+      name: 'العدسة اللابؤرية (Toric)', short: 'لابؤرية', code: 'Toric',
+      what: 'تصحح الانحراف اللابؤري (الاستجماتيزم) الناتج عن عدم انتظام انحناء القرنية، ومنها الأحادية والممتدة والثلاثية. هنا تُعرض بنسختها الأحادية.',
+      doctor: 'اللابؤرية: تعدل الانحراف اللابؤري، ومنها الأحادي والممتد والثلاثي.',
       levels: {
         distance: 'واضحة غالباً عند تصحيح الاستجماتيزم',
         intermediate: 'تحتاج نظارة غالباً (في النسخة أحادية البؤرة)',
@@ -151,8 +175,9 @@ const AR = {
       ask: ['كم درجة الاستجماتيزم لدي، وهل هو منتظم؟', 'ماذا يحدث لو دارت العدسة بعد العملية؟', 'مع أي تصميم ستكون عدسة التوريك: أحادية أم ممتدة المدى أم متعددة البؤر؟'],
     },
     edof: {
-      name: 'ممتدة المدى (EDOF)', short: 'ممتدة المدى', code: 'EDOF',
-      what: 'نطاق رؤية ممتد من البعيد إلى المتوسط بدل بؤرة واحدة.',
+      name: 'العدسة ممتدة المدى (EDOF)', short: 'ممتدة المدى', code: 'EDOF',
+      what: 'تعطي رؤية بعيدة ومتوسطة وقريبة إلى نحو ٥٠ سم، وقد يحتاج المريض إلى نظارة للرؤية الأقرب عند نحو ٤٠ سم.',
+      doctor: 'الممتدة: تعطي رؤية بعيدة ومتوسطة وقريبة إلى نحو 50 سم، وقد يحتاج المريض إلى نظارة للرؤية الأقرب عند 40 سم.',
       levels: {
         distance: 'واضحة غالباً',
         intermediate: 'جيدة غالباً؛ صُممت لهذا المدى',
@@ -181,8 +206,9 @@ const AR = {
       ask: ['كيف قد تؤثر الهالات في قيادتي ليلاً؟', 'هل صحة عيني (الشبكية، القرنية، جفاف العين) مناسبة لعدسة تقسم الضوء؟', 'هل سأحتاج نظارة لمسافة الحاسوب؟'],
     },
     trifocal: {
-      name: 'ثلاثية البؤرة', short: 'ثلاثية', code: 'Trifocal',
-      what: 'نوع من متعددة البؤر يقسم الضوء بين ثلاث بؤر: البعيد والمتوسط والقريب.',
+      name: 'العدسة الثلاثية', short: 'ثلاثية', code: 'Trifocal',
+      what: 'تعطي رؤية بعيدة ومتوسطة وقريبة بتقسيم الضوء بين ثلاث بؤر، وقد تقلل الحاجة إلى النظارة بدرجة كبيرة، دون ضمان الاستغناء عنها تماماً.',
+      doctor: 'الثلاثية: تعطي رؤية بعيدة ومتوسطة وقريبة (بحسب نص د. معن: «لا يحتاج المريض إلى نظارة»؛ وتُعرض هنا دون ضمان).',
       levels: {
         distance: 'واضحة غالباً؛ وقد تبدو أقل حدة في الإضاءة الخافتة',
         intermediate: 'جيدة غالباً؛ فيها بؤرة لهذا المدى',
@@ -199,7 +225,7 @@ const AR = {
   scenarios: {
     'night-driving': { label: 'القيادة ليلاً', sub: 'لوحة على ٦ م، إضاءة ليلية', detail: 'النظر إلى لوحة مرورية على بعد ٦ أمتار ليلاً. البؤبؤ أوسع في الظلام، لذلك تظهر الهالات حول الأضواء ونقص التباين بوضوح أكبر.' },
     phone: { label: 'قراءة الهاتف', sub: 'نحو ٣٥ سم', detail: 'قراءة شاشة هاتف على بعد نحو ٣٥ سم، وهي المسافة المعتادة لحمل الهاتف.' },
-    laptop: { label: 'العمل على الحاسوب', sub: 'نحو ٦٦ سم', detail: 'النظر إلى شاشة حاسوب محمول على بعد نحو ٦٦ سم، وهي قريبة من مسافة لوحة القيادة في السيارة.' },
+    laptop: { label: 'العمل على الحاسوب', sub: 'نحو ٦٥ سم', detail: 'النظر إلى شاشة حاسوب محمول على بعد نحو ٦٥ سم، وهي قريبة من مسافة لوحة القيادة في السيارة.' },
     book: { label: 'قراءة كتاب', sub: 'نحو ٤٠ سم', detail: 'القراءة على بعد نحو ٤٠ سم. في الصورة يمثّل الهاتفُ الصفحةَ المطبوعة.' },
     signs: { label: 'اللوحات البعيدة', sub: '٦ م، نهاراً', detail: 'قراءة لوحة مرورية على بعد ٦ أمتار في ضوء النهار.' },
   },
@@ -217,7 +243,7 @@ const EN = {
   tableCaption: 'A simplified educational comparison of five types of lens implant',
   rowHead: 'Aspect',
   showLens: 'Choose a type to see its details',
-  toricNote: 'Toric is not a separate focusing design: it is a correction for astigmatism (an uneven curve of the cornea) that can be added to a monofocal, EDOF, multifocal or trifocal lens. The toric column here describes a monofocal toric lens.',
+  toricNote: 'A toric lens is not a separate focusing design: it corrects astigmatism (an uneven curve of the cornea) and comes in monofocal, extended-range (EDOF) and trifocal versions. The toric column here describes a monofocal toric lens in an eye with regular astigmatism.',
   legend: { 3: 'Usually favourable', 2: 'Moderate or varies', 1: 'Usually limited' },
   dims: {
     distance: { label: 'Distance vision', hint: 'driving, signs, TV' },
@@ -277,8 +303,8 @@ const EN = {
   sourcesNote: 'The text was written in plain language from these sources, not copied from them. Items marked “study” summarise research and are not recommendations.',
   lenses: {
     monofocal: {
-      name: 'Monofocal', short: 'Monofocal', code: 'Monofocal',
-      what: 'Clear focus at one distance, usually far.',
+      name: 'Standard monofocal', short: 'Monofocal', code: 'Monofocal',
+      what: 'Gives distance vision; set for distance, glasses are usually needed for intermediate (about 65 cm) and near (about 40 cm).',
       levels: {
         distance: 'Usually clear (when set for distance)',
         intermediate: 'Glasses usually needed',
@@ -291,9 +317,24 @@ const EN = {
       cons: ['Glasses are usually needed for reading and often for the computer.', 'Does not correct astigmatism unless it is a toric version.'],
       ask: ['Which distance will my lens be set for? Could monovision suit me?', 'Which glasses am I likely to need afterwards?', 'Do I have astigmatism that needs a toric version?'],
     },
+    enhanced: {
+      name: 'Enhanced monofocal', short: 'Enhanced', code: 'Enhanced monofocal',
+      what: 'Gives distance vision with better intermediate vision (about 65 cm) than a standard monofocal; glasses are usually needed for near (about 40 cm).',
+      levels: {
+        distance: 'Usually clear (when set for distance)',
+        intermediate: 'Usually better than a standard monofocal; glasses may help for some tasks',
+        near: 'Reading glasses usually needed (about 40 cm)',
+        glasses: 'Usually for reading',
+        halos: 'Close to a standard monofocal (can occur)',
+        contrast: 'Usually close to a standard monofocal',
+      },
+      pros: ['Better intermediate vision than a standard monofocal for screens and the dashboard.', 'Light is not split into separate foci, so halos and contrast stay close to a monofocal.'],
+      cons: ['The intermediate gain is modest and varies between designs.', 'Reading glasses are usually needed.'],
+      ask: ['Will the intermediate range of this lens be enough for my screen work?', 'For which tasks will I need reading glasses?'],
+    },
     toric: {
-      name: 'Toric (astigmatism correction)', short: 'Toric', code: 'Toric',
-      what: 'Corrects astigmatism caused by an uneven curve of the cornea, and can be combined with any other design.',
+      name: 'Toric IOL', short: 'Toric', code: 'Toric',
+      what: 'Corrects astigmatism caused by an uneven curve of the cornea; available in monofocal, extended-range and trifocal designs. Shown here in its monofocal version.',
       levels: {
         distance: 'Usually clear once astigmatism is corrected',
         intermediate: 'Glasses usually needed (monofocal version)',
@@ -308,7 +349,7 @@ const EN = {
     },
     edof: {
       name: 'Extended depth of focus (EDOF)', short: 'EDOF', code: 'EDOF',
-      what: 'An extended range of focus from distance to intermediate, rather than a single point.',
+      what: 'Gives distance, intermediate and near vision to about 50 cm; glasses may be needed for closer work at about 40 cm.',
       levels: {
         distance: 'Usually clear',
         intermediate: 'Usually good; designed for this range',
@@ -338,7 +379,7 @@ const EN = {
     },
     trifocal: {
       name: 'Trifocal', short: 'Trifocal', code: 'Trifocal',
-      what: 'A type of multifocal that splits light between three foci: distance, intermediate and near.',
+      what: 'Gives distance, intermediate and near vision by splitting light between three foci; it may greatly reduce the need for glasses, without guaranteeing that none will be needed.',
       levels: {
         distance: 'Usually clear; may look less crisp in dim light',
         intermediate: 'Usually good; has a focus for this range',
@@ -355,7 +396,7 @@ const EN = {
   scenarios: {
     'night-driving': { label: 'Night driving', sub: 'sign at 6 m, at night', detail: 'Looking at a road sign 6 metres away at night. The pupil is wider in the dark, so halos around lights and lower contrast show more.' },
     phone: { label: 'Reading a phone', sub: 'about 35 cm', detail: 'Reading a phone screen about 35 cm away, the distance at which most people hold a phone.' },
-    laptop: { label: 'Laptop work', sub: 'about 66 cm', detail: 'Looking at a laptop screen about 66 cm away, close to the distance of a car dashboard.' },
+    laptop: { label: 'Laptop work', sub: 'about 65 cm', detail: 'Looking at a laptop screen about 65 cm away, close to the distance of a car dashboard.' },
     book: { label: 'Reading a book', sub: 'about 40 cm', detail: 'Reading at about 40 cm. In the picture, the phone stands in for the printed page.' },
     signs: { label: 'Distance signs', sub: '6 m, daylight', detail: 'Reading a road sign 6 metres away in daylight.' },
   },
@@ -375,6 +416,8 @@ export const SOURCES = Object.freeze([
   { id: 'cochrane-2016', kind: 'study', label: 'de Silva SR et al. Multifocal versus monofocal intraocular lenses after cataract extraction. Cochrane Database Syst Rev 2016 (CD003169)', url: 'https://www.cochrane.org/CD003169/EYES_multifocal-versus-monofocal-intraocular-lenses-after-cataract-extraction', usedFor: 'Similar distance vision; better near vision and less spectacle use with multifocals; more halos and glare (low-certainty evidence).' },
   { id: 'liu-2019', kind: 'study', label: 'Liu J, Dong Y, Wang Y. Efficacy and safety of extended depth of focus IOLs in cataract surgery: a systematic review and meta-analysis. BMC Ophthalmol 2019;19:198', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6719364/', usedFor: 'EDOF: intermediate better than monofocal; near between monofocal and trifocal; contrast and halos vs monofocal and trifocal.' },
   { id: 'karam-2023', kind: 'study', label: 'Karam M et al. Extended depth of focus versus trifocal for intraocular lens implantation: an updated systematic review and meta-analysis. Am J Ophthalmol 2023;251:52–70', url: 'https://doi.org/10.1016/j.ajo.2023.01.024', usedFor: 'Trifocal better at near, EDOF better at intermediate on the defocus curve; no significant difference in halos and glare.' },
+  { id: 'auffarth-2021', kind: 'study', label: 'Auffarth GU et al. Clinical evaluation of a new monofocal IOL with enhanced intermediate function in patients with cataract. J Cataract Refract Surg 2021', url: 'https://pubmed.ncbi.nlm.nih.gov/?term=Auffarth+monofocal+enhanced+intermediate+function+2021', usedFor: 'Enhanced monofocal: better intermediate than a standard monofocal, similar distance vision and photic phenomena.' },
+  { id: 'ascrs-osd-2019', kind: 'reference', label: 'Starr CE et al. (ASCRS Cornea Clinical Committee). An algorithm for the preoperative diagnosis and treatment of ocular surface disorders. J Cataract Refract Surg 2019;45:669–684', url: 'https://pubmed.ncbi.nlm.nih.gov/?term=Starr+algorithm+preoperative+diagnosis+treatment+ocular+surface+disorders', usedFor: 'Ocular surface disease affects keratometry, IOL calculations and visual quality; diagnose and treat before measurements and premium-lens selection.' },
   { id: 'nhs-cataract', kind: 'patient', label: 'NHS — Cataract surgery', url: 'https://www.nhs.uk/conditions/cataract-surgery/', usedFor: 'Glasses may still be needed for reading or distance after surgery.' },
 ]);
 

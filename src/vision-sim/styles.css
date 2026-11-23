@@ -23,6 +23,7 @@
   --vsim-c-edof: #2d8a63;
   --vsim-c-multi: #7a4f9a;
   --vsim-c-tri: #9a6b2f;
+  --vsim-c-enh: #3f7f8f;
   --vsim-c-toric: #5b5fa8;
   --vsim-c-cat: #a3473d;
   --vsim-radius: 14px;
@@ -68,6 +69,7 @@
   --vsim-c-edof: #79d0a6;
   --vsim-c-multi: #c9a6ec;
   --vsim-c-tri: #e0b27a;
+  --vsim-c-enh: #93cdd9;
   --vsim-c-toric: #a9adf0;
   --vsim-c-cat: #ef8e82;
 }
@@ -494,3 +496,8 @@
   --srv-primary: var(--vsim-primary); --srv-on-primary: var(--vsim-on-primary); --srv-focus: var(--vsim-focus);
   --srv-warn-bg: var(--vsim-warn-bg); --srv-warn-text: var(--vsim-warn-text); --srv-warn-border: var(--vsim-warn-border);
 }
+
+/* four focusing designs + the toric switch (2026-11-23) */
+.vsim-seg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vsim-toric { margin-top: 10px; }
+.vsim-toric-note { margin-top: 6px; }

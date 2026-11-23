@@ -79,10 +79,11 @@ export const CONTENT = {
         parts: [['القرنية', 'انحناؤها غير المنتظم يسبب الاستجماتيزم'], ['محفظة العدسة', 'موضع العدسة المزروعة'], ['البقعة', 'مركز الرؤية الدقيقة في الشبكية']]
       },
       types: [
-        ['أحادية البؤرة', 'Monofocal', 'تركيز واضح على مسافة واحدة، غالباً البعيدة، مع الحاجة إلى نظارة للقراءة والمسافات القريبة.'],
-        ['ممتدة المدى', 'EDOF', 'توسّع نطاق الرؤية من البعيد إلى المتوسط (الشاشات ولوحة القيادة)، وقد تلزم نظارة للخط الدقيق.'],
-        ['متعددة أو ثلاثية البؤرة', 'Multifocal / Trifocal', 'تقسم الضوء بين عدة مسافات لتقليل الحاجة للنظارة، مع احتمال أكبر للهالات والوهج ليلاً وانخفاض في التباين.'],
-        ['التوريكية', 'Toric', 'تصحح الاستجماتيزم الناتج عن انحناء القرنية، وتتوفر بتصاميم أحادية أو متعددة البؤرة.']
+        ['العدسة الأحادية', 'Monofocal', 'تعطي رؤية بعيدة، ويحتاج المريض عادةً إلى نظارة للرؤية المتوسطة (نحو ٦٥ سم) والقريبة (نحو ٤٠ سم).'],
+        ['العدسة الأحادية المطورة', 'Enhanced monofocal', 'تعطي رؤية بعيدة مع متوسطة، ويحتاج المريض عادةً إلى نظارة للرؤية القريبة (نحو ٤٠ سم).'],
+        ['العدسة ممتدة المدى', 'EDOF', 'تعطي رؤية بعيدة ومتوسطة وقريبة إلى نحو ٥٠ سم، وقد تلزم نظارة للرؤية الأقرب عند نحو ٤٠ سم.'],
+        ['العدسة الثلاثية', 'Trifocal', 'تعطي رؤية بعيدة ومتوسطة وقريبة، وقد تقلل الحاجة إلى النظارة بدرجة كبيرة دون ضمان، مع احتمال أكبر للهالات ليلاً وانخفاض التباين.'],
+        ['العدسة اللابؤرية', 'Toric', 'تصحح الانحراف اللابؤري (الاستجماتيزم) في القرنية، ومنها الأحادية والممتدة والثلاثية.']
       ],
       purpose: 'اختيار العدسة التي توازن بين نطاق الرؤية الذي تحتاجه، واحتمال الهالات الليلية، والحاجة المتوقعة للنظارة، بحسب قياسات عينك وطبيعة يومك.',
       candidates: ['مرضى جراحة الماء الأبيض جميعاً يحتاجون عدسة، ويختلف النوع المناسب.', 'وجود استجماتيزم ملحوظ قد يجعل العدسة التوريكية خياراً.', 'أمراض الشبكية أو الجلوكوما أو جفاف العين الشديد قد تجعل العدسات متعددة البؤرة أقل ملاءمة.', 'من يقود كثيراً ليلاً أو يعمل في إضاءة خافتة يناقش احتمال الهالات بعناية.'],
@@ -104,10 +105,11 @@ export const CONTENT = {
         parts: [['Cornea', 'an uneven curve causes astigmatism'], ['Lens capsule', 'where the implant is placed'], ['Macula', 'the centre of sharp vision in the retina']]
       },
       types: [
-        ['Monofocal', 'Monofocal', 'Clear focus at one distance, usually far, with glasses for reading and close work.'],
-        ['Extended depth of focus', 'EDOF', 'Extends the range from distance to intermediate (screens, dashboard); glasses may be needed for fine print.'],
-        ['Multifocal or trifocal', 'Multifocal / Trifocal', 'Splits light between several distances to reduce the need for glasses, with a higher chance of night halos, glare and reduced contrast.'],
-        ['Toric', 'Toric', 'Corrects astigmatism caused by the shape of the cornea; available in monofocal and multifocal designs.']
+        ['Standard monofocal', 'Monofocal', 'Gives distance vision; glasses are usually needed for intermediate (about 65 cm) and near (about 40 cm).'],
+        ['Enhanced monofocal', 'Enhanced monofocal', 'Gives distance with intermediate vision; glasses are usually needed for near (about 40 cm).'],
+        ['Extended depth of focus', 'EDOF', 'Gives distance, intermediate and near vision to about 50 cm; glasses may be needed for closer work at about 40 cm.'],
+        ['Trifocal', 'Trifocal', 'Gives distance, intermediate and near vision and may greatly reduce the need for glasses, without a guarantee; night halos and reduced contrast are more likely.'],
+        ['Toric', 'Toric', 'Corrects astigmatism from the shape of the cornea; available in monofocal, EDOF and trifocal designs.']
       ],
       purpose: 'To choose a lens that balances the range of vision you need, the chance of night halos and the expected need for glasses — based on your eye measurements and your day.',
       candidates: ['Everyone having cataract surgery needs a lens; the right type differs.', 'Significant astigmatism can make a toric lens an option.', 'Retinal disease, glaucoma or severe dry eye can make multifocal designs less suitable.', 'People who drive a lot at night or work in dim light should discuss halos carefully.'],

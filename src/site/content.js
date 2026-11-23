@@ -263,10 +263,13 @@ export const RED_FLAGS = {
 
 /** Static summary of the Lens Lab (shown without JavaScript, while it loads, or until the module lands). */
 export const LENS_SUMMARY = [
-  { code: 'Monofocal', ar: ['أحادية البؤرة', 'تركيز واضح على مسافة واحدة، غالباً البعيدة، مع الحاجة عادةً إلى نظارة للقراءة.'], en: ['Monofocal', 'Clear focus at one distance, usually far, and reading glasses are usually still needed.'] },
-  { code: 'EDOF', ar: ['ممتدة المدى', 'تمدّ مجال الرؤية من البعيد إلى المتوسط، وقد تبقى الحاجة إلى نظارة للقراءة الدقيقة.'], en: ['Extended depth of focus', 'Stretches the range from distance to intermediate; fine print may still need glasses.'] },
-  { code: 'Trifocal', ar: ['ثلاثية البؤرة', 'تغطي البعيد والمتوسط والقريب، مع احتمال أكبر لظهور هالات حول الأضواء ليلاً.'], en: ['Trifocal', 'Covers far, intermediate and near, with a higher chance of halos around lights at night.'] },
-  { code: 'Toric', ar: ['التوريكية', 'تصحح الاستجماتيزم في القرنية، وتتوفر بتصاميم مختلفة من حيث مدى الرؤية.'], en: ['Toric', 'Corrects corneal astigmatism, and comes in designs with different ranges.'] }
+  // Dr. Maan's five categories (owner, 2026-11-23). `reach` = how far towards near the lens usually covers without
+  // glasses, as zones (1 = far only, 2 = to intermediate ≈65 cm, 2.5 = to ≈50 cm, 3 = to near ≈40 cm). Educational, not a prediction.
+  { code: 'Monofocal', reach: 1, ar: ['العدسة الأحادية', 'رؤية بعيدة؛ وتلزم نظارة للمتوسط (نحو ٦٥ سم) والقريب (نحو ٤٠ سم).'], en: ['Standard monofocal', 'Distance vision; glasses for intermediate (about 65 cm) and near (about 40 cm).'] },
+  { code: 'Enhanced', reach: 1.6, ar: ['الأحادية المطورة', 'رؤية بعيدة مع متوسطة؛ وتلزم نظارة للقريب (نحو ٤٠ سم).'], en: ['Enhanced monofocal', 'Distance with intermediate vision; glasses for near (about 40 cm).'] },
+  { code: 'EDOF', reach: 2.5, ar: ['ممتدة المدى', 'بعيد ومتوسط وقريب إلى نحو ٥٠ سم؛ وقد تلزم نظارة عند ٤٠ سم.'], en: ['Extended depth of focus', 'Far, intermediate and near to about 50 cm; glasses may be needed at 40 cm.'] },
+  { code: 'Trifocal', reach: 3, ar: ['الثلاثية', 'بعيد ومتوسط وقريب؛ وقد تقلل الحاجة إلى النظارة كثيراً، دون ضمان، مع احتمال هالات ليلاً.'], en: ['Trifocal', 'Far, intermediate and near; may greatly reduce the need for glasses, without a guarantee, and halos at night are more likely.'] },
+  { code: 'Toric', reach: 0, ar: ['اللابؤرية (Toric)', 'تصحح الانحراف اللابؤري، ومنها الأحادية والممتدة والثلاثية.'], en: ['Toric', 'Corrects astigmatism; available in monofocal, EDOF and trifocal designs.'] }
 ];
 
 /** Static outline of the Light Journey (cornea → retina), with the procedure that concerns each structure. */
@@ -291,4 +294,42 @@ export const SURGERY_STAGES = {
     ['Breaking up the lens', 'Ultrasound breaks up the clouded lens, which is removed.'],
     ['Placing the new lens', 'A foldable artificial lens is placed inside the same capsule.']
   ]
+};
+
+/**
+ * Ocular surface before premium IOL selection — Dr. Maan's guidance (owner, 2026-11-23), written as evaluation and
+ * optimisation, not an absolute rule. Original: «من شروط زراعة العدسات الذكية أن يكون سطح العين خاليًا من الأمراض، وعلى رأسها
+ * جفاف العين، للخروج بأفضل نتيجة.» Clinical basis: ASCRS preoperative ocular-surface algorithm (Starr et al., JCRS 2019),
+ * AAO Cataract in the Adult Eye PPP. Rendered in full on /lens-lab/#ocular-surface; summaries elsewhere link to it.
+ * Review: pending Dr. Maan (OCULAR_SURFACE_GUIDANCE.md).
+ */
+export const OCULAR_SURFACE = {
+  original: 'من شروط زراعة العدسات الذكية أن يكون سطح العين خاليًا من الأمراض، وعلى رأسها جفاف العين، للخروج بأفضل نتيجة.',
+  title: { ar: 'قبل اختيار العدسة الذكية: صحة سطح العين أولًا', en: 'Before choosing an advanced IOL: ocular surface health matters' },
+  lede: {
+    ar: 'يوصي د. معن بالتأكد من صحة سطح العين، وعلى رأسها علاج جفاف العين، قبل زراعة العدسات المتقدمة (الممتدة والثلاثية والمطورة واللابؤرية)، للوصول إلى أفضل نتيجة ممكنة.',
+    en: 'Dr. Maan advises making sure the eye surface is healthy — dry eye above all — before advanced lenses (EDOF, trifocal, enhanced and toric) are implanted, to reach the best possible result.'
+  },
+  points: [
+    { ar: ['لماذا يهم سطح العين؟', 'طبقة الدموع على سطح القرنية هي أول سطح يمر به الضوء. إذا كانت غير منتظمة بسبب الجفاف، تقل جودة الصورة مهما كانت دقة العدسة المزروعة.'],
+      en: ['Why the surface matters', 'The tear film over the cornea is the first surface light passes through. When dryness makes it irregular, image quality drops however precise the implanted lens is.'] },
+    { ar: ['الجفاف يؤثر في القياسات', 'تُحسب قوة العدسة من قياسات القرنية. جفاف العين قد يغيّر هذه القياسات، فيصبح حساب العدسة أقل دقة، خاصة في العدسات اللابؤرية والمتعددة البؤر.'],
+      en: ['Dryness affects the measurements', 'Lens power is calculated from corneal measurements. Dry eye can change them and make the calculation less accurate — especially for toric and multifocal lenses.'] },
+    { ar: ['الكشف ثم العلاج أولاً', 'يُفحص سطح العين قبل العملية، وإذا وُجد جفاف أو مرض آخر في السطح يُعالج عند الحاجة ثم تُعاد القياسات قبل اختيار العدسة النهائية.'],
+      en: ['Detect, then treat first', 'The surface is examined before surgery. If dry eye or another surface condition is found, it is treated where needed and the measurements are repeated before the final lens is chosen.'] },
+    { ar: ['ليس رفضاً دائماً', 'وجود جفاف العين لا يعني بالضرورة عدم ملاءمة العدسات المتقدمة؛ فكثير من الحالات تتحسن بالعلاج. القرار يتخذه الطبيب بعد فحص شامل.'],
+      en: ['Not a permanent "no"', 'Dry eye does not necessarily rule out an advanced lens; many cases improve with treatment. The decision is the surgeon’s, after a full examination.'] }
+  ],
+  decides: {
+    title: { ar: 'ما الذي يحدد العدسة المناسبة لك؟', en: 'What decides the right lens for you?' },
+    items: {
+      ar: ['فحص شامل للعين', 'حالة سطح العين وجفافها', 'قياسات القرنية وطول العين', 'وجود أمراض أخرى في العين (الشبكية، الجلوكوما…)', 'طبيعة عملك ونشاطاتك اليومية', 'توقعاتك من العملية', 'تقييم الجرّاح'],
+      en: ['A complete eye examination', 'The health of the eye surface, including dry eye', 'Corneal and eye-length measurements', 'Other eye conditions (retina, glaucoma…)', 'Your work and daily activities', 'Your expectations', 'Your surgeon’s assessment']
+    }
+  },
+  short: {
+    ar: 'قبل اختيار العدسة الذكية يُفحص سطح العين، ويُعالج جفاف العين عند الحاجة، لأنه يؤثر في دقة القياسات وجودة الرؤية.',
+    en: 'Before an advanced lens is chosen, the eye surface is examined and dry eye is treated where needed, because it affects measurement accuracy and visual quality.'
+  },
+  sources: ['ascrs-osd-2019', 'aao-iol']
 };
