@@ -51,7 +51,7 @@ export async function mountEngine(host, def, opts = {}) {
     variant: def.variants ? (def.variants.find((v) => v.id === opts.variant) || def.variants[0]).id : null,
     options: Object.fromEntries((def.options || []).map((o) => [o.id, o.default ?? o.choices[0].id])),
     toggles: Object.fromEntries((def.toggles || []).map((t) => [t.id, t.default !== false])),
-    section: false, labels: true, explore: false, expanded: false, playing: false, quality: 'auto',
+    section: false, labels: false, explore: false, compare: null, expanded: false, playing: false, quality: 'auto',
     index: -1, destroyed: false
   };
   let stages = def.stages(S.variant);
@@ -64,7 +64,8 @@ export async function mountEngine(host, def, opts = {}) {
 
   const view = () => ({
     lang: S.lang, theme: S.theme, state: sm.state, playing: S.playing, index: Math.max(0, S.index), stages, progress: tl.progress,
-    variant: S.variant, options: S.options, toggles: S.toggles, section: S.section, labels: S.labels, explore: S.explore, expanded: S.expanded,
+    variant: S.variant, options: S.options, toggles: S.toggles, section: S.section, labels: S.labels, explore: S.explore, expanded: S.expanded, compare: S.compare,
+    compareOn: !!def.compare && (!def.compare.variants || def.compare.variants.includes(S.variant)),
     extra: def.extra ? def.extra({ variant: S.variant, options: S.options, index: Math.max(0, S.index), stage: stages[Math.max(0, S.index)] }) : null
   });
 
@@ -209,9 +210,25 @@ export async function mountEngine(host, def, opts = {}) {
   }
 
   // ---------- playback ----------
+  /**
+   * Before / After: the first moment of the first stage vs the last moment of the last stage, both from the first
+   * stage's camera, playback paused. Any other navigation leaves the comparison.
+   */
+  function compareOn() { return !!def.compare && (!def.compare.variants || def.compare.variants.includes(S.variant)); }
+  function compare(which) {
+    if (!compareOn() || !['before', 'after'].includes(which) || sm.state === 'fallback') return;
+    S.playing = false;
+    if (['playing', 'completed'].includes(sm.state)) sm.to('paused');
+    tl.seek(which === 'before' ? 0 : 0.9999);
+    applyTime(); shell.setProgress(tl.progress);
+    if (orbit) orbit.goTo(def.cameras[def.compare.camera || stages[0].camera] || Object.values(def.cameras)[0], reduced());
+    S.compare = which;
+    shell.update(view()); schedule();
+  }
   function play() {
     if (!['ready', 'paused', 'completed', 'playing', 'fallback'].includes(sm.state) || sm.state === 'fallback') return;
     if (tl.progress >= 1) { tl.set(0); applyTime(); }
+    S.compare = null;
     S.playing = true; sm.to('playing'); shell.update(view()); schedule();
   }
   function pause() {
@@ -219,6 +236,7 @@ export async function mountEngine(host, def, opts = {}) {
     S.playing = false; sm.to('paused'); shell.update(view());
   }
   function seek(t01) {
+    S.compare = null;
     tl.seek(Math.max(0, Math.min(1, Number(t01) || 0)));
     if (sm.state === 'fallback') { S.index = tl.locate().index; shell.update(view()); return; }
     applyTime(); shell.setProgress(tl.progress);
@@ -227,6 +245,7 @@ export async function mountEngine(host, def, opts = {}) {
   function setStage(idOrIndex) {
     const i = typeof idOrIndex === 'number' ? idOrIndex : stages.findIndex((s) => s.id === idOrIndex);
     if (i < 0 || i >= stages.length) return;
+    S.compare = null;
     // a stage shows its end state when chosen directly (the explanation matches what is on screen)
     const [a, b] = tl.stageRange(i);
     tl.seek(S.playing ? a : a + (b - a) * 0.999);
@@ -240,6 +259,7 @@ export async function mountEngine(host, def, opts = {}) {
     const wasPlaying = S.playing;
     S.playing = false;
     S.variant = id;
+    S.compare = null;
     stages = def.stages(id);
     tl = createTimeline(stages.map((s) => s.duration));
     S.index = -1;
@@ -281,7 +301,8 @@ export async function mountEngine(host, def, opts = {}) {
       case 'zoomIn': return orbit && orbit.zoom(0.85);
       case 'zoomOut': return orbit && orbit.zoom(1.18);
       case 'resetView': return orbit && (orbit.goTo(def.cameras[stages[Math.max(0, S.index)].camera] || Object.values(def.cameras)[0]), schedule());
-      case 'reset': return reset();
+      case 'reset': S.compare = null; return reset();
+      case 'compare': return compare(v);
       case 'close': emit('close'); return undefined;
       default: return undefined;
     }
@@ -316,6 +337,7 @@ export async function mountEngine(host, def, opts = {}) {
       },
       setCameraMode: (m) => act('camera', m),
       setSection: (on) => act('section', on),
+      showDetails: (on) => act('labels', on !== false), compare: (which) => act('compare', which),
       setOption: (id, val) => act('option', [id, val]),
       showAnatomy: (id) => act('toggle', [id, true]),
       hideAnatomy: (id) => act('toggle', [id, false]),
@@ -325,7 +347,7 @@ export async function mountEngine(host, def, opts = {}) {
           procedure: def.slug, modelId: def.modelId, version: def.version, state: sm.state, playing: S.playing,
           variant: S.variant, stageIndex: Math.max(0, S.index), stageId: stages[Math.max(0, S.index)].id, stageCount: stages.length,
           progress: tl.progress, elapsed: tl.elapsed, options: { ...S.options }, toggles: { ...S.toggles },
-          section: S.section, labels: S.labels, explore: S.explore, expanded: S.expanded,
+          section: S.section, labels: S.labels, details: S.labels, compare: S.compare, explore: S.explore, expanded: S.expanded,
           camera: orbit ? { ...orbit.spherical, target: orbit.target, moving: orbit.moving } : null,
           dpr: ctx ? ctx.renderer.getPixelRatio() : 0,
           render: info ? { calls: info.render.calls, triangles: info.render.triangles, geometries: info.memory.geometries, textures: info.memory.textures } : null,

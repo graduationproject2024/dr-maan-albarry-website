@@ -11,15 +11,20 @@
 // Vision & Lens Lab) provides its own controls.
 import { STRINGS, LENS_INFO, fmt, formatDistance } from './i18n.js';
 import { curveChart, fallbackHTML } from './fallback.js';
-import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIO_IDS } from './optics/params.js';
+import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIO_IDS, ALL_LENS_IDS, TORIC_BASES, baseLens, isToric } from './optics/params.js';
 import { distanceToSlider, sliderToDistance, scenarioFor } from './optics/model.js';
 import { CONTENT as LAB } from '../lens-lab/content.js';
 
 let instance = 0;
 const BANDS = ['distance', 'intermediate', 'near'];
+// The simple row keeps the three most distinct designs (its phone layout is verified on real devices); the enhanced
+// monofocal sits with the other lens types in More settings, next to the Toric switch, which adds astigmatism correction
+// to the chosen design (Dr. Maan's five categories, 2026-11-23; all five are compared side by side in the Lens Lab).
 const PRIMARY_LENSES = ['monofocal', 'edof', 'trifocal'];
-const OTHER_LENSES = LENS_IDS.filter((l) => !PRIMARY_LENSES.includes(l));
-const LAB_LENSES = ['monofocal', 'toric', 'edof', 'multifocal', 'trifocal'];
+const OTHER_LENSES = LENS_IDS.filter((l) => !PRIMARY_LENSES.includes(l) && l !== 'toric');
+const LAB_LENSES = ['monofocal', 'enhanced', 'toric', 'edof', 'multifocal', 'trifocal'];
+/** Lens-lab content key for a simulator lens id (toric versions use their design's levels). */
+const labKey = (l) => (LAB_LENSES.includes(l) && l !== 'toric' ? l : LAB_LENSES.includes(baseLens(l)) ? baseLens(l) : null);
 const SCENARIO_ROW = { signs: 'distance', laptop: 'intermediate', phone: 'near', book: 'near', 'night-driving': 'halos' };
 
 export function createUI(host, { lang, theme, listen, handlers, mode = 'full' }) {
@@ -89,7 +94,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <div class="vsim-bench-controls" data-ref="benchControls">
         <fieldset class="vsim-field vsim-field-lens">
           <legend class="vsim-legend-title">${s.lens}</legend>
-          <div class="vsim-seg vsim-seg-3" data-ref="lensA">${radios('lensA', PRIMARY_LENSES, primaryLabel, state.lens)}</div>
+          <div class="vsim-seg vsim-seg-3" data-ref="lensA">${radios('lensA', PRIMARY_LENSES, primaryLabel, baseLens(state.lens))}</div>
         </fieldset>
         <fieldset class="vsim-field vsim-field-light">
           <legend class="vsim-legend-title">${s.lighting}</legend>
@@ -103,6 +108,10 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <div class="vsim-adv" id="vsim${n}-adv" data-ref="adv" ${more ? '' : 'hidden'}>
         <section class="vsim-group" aria-labelledby="vsim${n}-g-compare">
           <h3 class="vsim-group-title" id="vsim${n}-g-compare">${s.groupCompare}</h3>
+          <div class="vsim-field vsim-field-toric">
+            <label class="vsim-toric" data-ref="toricBox"><input type="checkbox" data-ref="toric" ${isToric(state.lens) ? 'checked' : ''}><span class="vsim-toric-track" aria-hidden="true"></span><span>${s.toricSwitch}</span></label>
+            <p class="vsim-fine vsim-toric-note" data-ref="toricNote" hidden>${s.toricNote}</p>
+          </div>
           <fieldset class="vsim-field vsim-field-otherlens">
             <legend class="vsim-legend-title">${s.otherLenses}</legend>
             <div class="vsim-seg vsim-seg-3">${radios('lensA', OTHER_LENSES, lensLabel, state.lens)}</div>
@@ -111,7 +120,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
             <label class="vsim-switch"><input type="checkbox" data-ref="compare" ${state.compare ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.compare}</span></label>
             <fieldset class="vsim-field" data-ref="lensBField" ${state.compare ? '' : 'hidden'}>
               <legend class="vsim-legend-title">${s.compareWith}</legend>
-              <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS, lensLabel, state.lensB)}</div>
+              <div class="vsim-seg vsim-seg-lens" data-ref="lensB">${radios('lensB', LENS_IDS.filter((l) => l !== 'toric').concat(['toric', 'edof-toric', 'trifocal-toric']), lensLabel, state.lensB)}</div>
             </fieldset>
           </div>
         </section>
@@ -284,6 +293,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     else if (t.dataset.group === 'axis') handlers.refraction({ axisDeg: Number(t.value) });
     else if (t.dataset.group === 'sphere') handlers.refraction({ sphereD: Number(t.value) });
     else if (t === ref.compare) handlers.compare(t.checked);
+    else if (t === ref.toric) handlers.toric(t.checked);
     else if (t === ref.range) handlers.distance(sliderToDistance(Number(t.value)), 'slider-commit');
   });
   listen(root, 'input', (e) => { if (e.target === ref.range) handlers.distance(sliderToDistance(Number(e.target.value)), 'slider'); });
@@ -331,9 +341,9 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (scn) parts.push(lab.scenarios[scn].detail);
     const words = (lens) => {
       if (lens === 'cataract') return s.catSeeing;
-      if (!LAB_LENSES.includes(lens)) return '';
+      if (!labKey(lens)) return '';
       const row = scn ? SCENARIO_ROW[scn] : (state.distanceM < 0.52 ? 'near' : state.distanceM < 1.6 ? 'intermediate' : 'distance');
-      return `${s.lenses[lens].short}: ${lab.dims[row].label} — ${lab.lenses[lens].levels[row]}.`;
+      return `${s.lenses[lens].short}: ${lab.dims[row].label} — ${lab.lenses[labKey(lens)].levels[row]}.`;
     };
     parts.push(words(state.lens));
     if (state.compare && state.lensB !== state.lens) parts.push(words(state.lensB));
@@ -342,8 +352,8 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   // one short line for the picture: how the chosen lens is described at the distance being looked at (same wording as
   // the comparison table; qualitative, pending physician review). Empty for a comparison and for the cataract view.
   const levelText = (state, view) => {
-    if (state.compare || !LAB_LENSES.includes(state.lens)) return '';
-    return `${STRINGS[L].lenses[state.lens].short}: ${LAB[L].lenses[state.lens].levels[view.subject]}`;
+    if (state.compare || !labKey(state.lens)) return '';
+    return `${STRINGS[L].lenses[state.lens].short}: ${LAB[L].lenses[labKey(state.lens)].levels[view.subject]}`;
   };
 
   function update(state, view, viewB) {
@@ -370,13 +380,17 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     placeWhole();
     ref.closeNote.hidden = !closeUp;
     ref.closeNote.textContent = closeUp ? s.closeNote(obj) : '';
+    // the toric switch and the other lenses live in More settings: name the active one on the button
     ref.moreNow.hidden = PRIMARY_LENSES.includes(state.lens);
     ref.moreNow.textContent = ref.moreNow.hidden ? '' : s.lenses[state.lens].short;
 
     const scn = scenarioFor(state.distanceM, state.lighting);
     set('scenario', scn || '');
     ref.custom.hidden = !!scn;
-    set('lensA', state.lens); set('lensB', state.lensB); set('lighting', state.lighting);
+    set('lensA', baseLens(state.lens)); set('lensB', state.lensB); set('lighting', state.lighting);
+    ref.toric.checked = isToric(state.lens);
+    ref.toricBox.hidden = !TORIC_BASES.includes(baseLens(state.lens));
+    ref.toricNote.hidden = !isToric(state.lens);
     set('cyl', Math.abs(state.refraction.cylD)); set('axis', state.refraction.axisDeg); set('sphere', state.refraction.sphereD);
     const preset = ['near', 'intermediate', 'distance'].find((k) => Math.abs(DISTANCES[k] - state.distanceM) < 0.005) || '';
     set('preset', preset);
@@ -407,7 +421,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.meters.innerHTML = `<ul>${BANDS.map(row).join('')}</ul><p class="vsim-fine">${s.clarityNote}</p>`;
     // questions for your doctor (from the lens-lab content: one source of truth)
     const lab = LAB[L];
-    const qs = [...new Set([state.lens, ...(state.compare ? [state.lensB] : [])].flatMap((l) => (LAB_LENSES.includes(l) ? lab.lenses[l].ask : [])).concat(lab.generalQuestions.slice(0, 2)))];
+    const qs = [...new Set([state.lens, ...(state.compare ? [state.lensB] : [])].flatMap((l) => (labKey(l) ? lab.lenses[labKey(l)].ask : [])).concat(lab.generalQuestions.slice(0, 2)))];
     ref.questions.innerHTML = qs.map((q) => `<li>${q}</li>`).join('');
     // model values (Advanced)
     const dl = (v, tag) => `<dl class="vsim-model">${tag ? `<div class="vsim-model-tag">${tag}</div>` : ''}

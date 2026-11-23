@@ -4,8 +4,8 @@ import { throughFocus } from './optics/model.js';
 import { PUPIL_BY_LIGHTING } from './optics/params.js';
 import { STRINGS, LENS_INFO, fmt } from './i18n.js';
 
-const COLORS = { monofocal: 'var(--vsim-c-mono)', edof: 'var(--vsim-c-edof)', multifocal: 'var(--vsim-c-multi)', trifocal: 'var(--vsim-c-tri)', toric: 'var(--vsim-c-toric)', cataract: 'var(--vsim-c-cat)' };
-const DASH = { monofocal: '', edof: '7 4', multifocal: '12 4 2 4', trifocal: '2 3', toric: '', cataract: '10 3 2 3' };
+const COLORS = { monofocal: 'var(--vsim-c-mono)', enhanced: 'var(--vsim-c-enh)', edof: 'var(--vsim-c-edof)', multifocal: 'var(--vsim-c-multi)', trifocal: 'var(--vsim-c-tri)', toric: 'var(--vsim-c-toric)', cataract: 'var(--vsim-c-cat)' };
+const DASH = { monofocal: '', enhanced: '4 2', edof: '7 4', multifocal: '12 4 2 4', trifocal: '2 3', toric: '', cataract: '10 3 2 3' };
 let uid = 0;
 
 /** SVG through-focus chart for the given lenses. Lines are labelled in a legend; the chart has a text title. */
@@ -27,17 +27,17 @@ export function curveChart(lang, lenses = ['monofocal', 'edof', 'trifocal'], { p
     const pts = throughFocus(lens, { pupilMm, toD: maxD, stepD: 0.05 });
     const d = pts.map((p, i) => `${i ? 'L' : 'M'}${x(p.vergenceD).toFixed(1)},${y(Math.min(1, p.sharpness)).toFixed(1)}`).join('');
     const on = !highlight || highlight.includes(lens);
-    out += `<path d="${d}" fill="none" stroke="${COLORS[lens]}" stroke-width="${on ? 3 : 1.6}" stroke-dasharray="${DASH[lens]}" opacity="${on ? 1 : 0.45}" stroke-linejoin="round"/>`;
+    out += `<path d="${d}" fill="none" stroke="${COLORS[lens] || COLORS.toric}" stroke-width="${on ? 3 : 1.6}" stroke-dasharray="${DASH[lens] ?? DASH.toric}" opacity="${on ? 1 : 0.45}" stroke-linejoin="round"/>`;
   }
   out += '</svg>';
-  const legend = `<ul class="vsim-legend">${lenses.map((l) => `<li><svg width="28" height="10" aria-hidden="true"><line x1="0" x2="28" y1="5" y2="5" stroke="${COLORS[l]}" stroke-width="3" stroke-dasharray="${DASH[l]}"/></svg>${s.lenses[l].name}</li>`).join('')}</ul>`;
+  const legend = `<ul class="vsim-legend">${lenses.map((l) => `<li><svg width="28" height="10" aria-hidden="true"><line x1="0" x2="28" y1="5" y2="5" stroke="${COLORS[l] || COLORS.toric}" stroke-width="3" stroke-dasharray="${DASH[l] ?? DASH.toric}"/></svg>${s.lenses[l].name}</li>`).join('')}</ul>`;
   return `<figure class="vsim-figure">${out}<figcaption><span class="vsim-chart-y">${s.chartY}</span>${legend}</figcaption></figure>`;
 }
 
 export function fallbackHTML(lang) {
   const s = STRINGS[lang];
   const info = LENS_INFO[lang];
-  const items = ['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'].map((k) => `
+  const items = ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'].map((k) => `
     <li><strong>${s.lenses[k].name}</strong>
       <span><b>${s.intended}:</b> ${info[k].intended}</span>
       <span><b>${s.tradeoffs}:</b> ${info[k].tradeoffs}</span></li>`).join('');

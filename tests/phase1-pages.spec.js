@@ -124,7 +124,9 @@ test.describe('Homepage height budget (owner complaint 1)', () => {
   // vision previews, the 3D poster and full credentials, so the old 8,350 px limit no longer fits. The page was first trimmed without hiding
   // anything (from 9,846 AR / 10,614 EN to 9,153 AR / 9,943 EN); the limits below are those measured heights plus about 100 px.
   // The 1440 px budget (5,750) is unchanged; English gained room by trimming the spacing, not by raising it.
-  const budgets = { 1440: { ar: 5750, en: 5750 }, 390: { ar: 9250, en: 10040 } };
+  // 2026-11-23: the owner asked for large procedure images (image + name only), one per row on phones, which adds about
+  // 850 px at 390; the summaries left the homepage. New 390 limits = measured (10,097 AR / 10,856 EN) + about 100 px.
+  const budgets = { 1440: { ar: 5750, en: 5750 }, 390: { ar: 10200, en: 10960 } };
   for (const w of [1440, 390]) {
     for (const lang of ['ar', 'en']) {
       const max = budgets[w][lang];

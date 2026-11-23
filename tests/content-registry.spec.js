@@ -8,14 +8,14 @@ import { DOCTOR, PROCEDURES } from '../doctor-data.js';
 
 const registry = JSON.parse(fs.readFileSync(path.resolve('content/internal-registry.json'), 'utf8'));
 const byId = id => registry.facts.find(f => f.id === id);
-const stat = DOCTOR.credibility.statistics.find(s => s.id === 'cases-15000');
+const stat = DOCTOR.credibility.statistics.find(s => s.id === 'surgeries-25000');
 const role = id => DOCTOR.professional.roles.find(r => r.id === id);
 const qual = id => DOCTOR.professional.qualifications.find(q => q.id === id);
 
 /** What each public registry fact must look like, in both languages, on the page. */
 const RENDERED = {
   'experience-since-1998': { ar: ['1998'], en: ['1998'] },
-  'cases-15000': { ar: [stat.value, stat.label.ar], en: [stat.value, stat.label.en] },
+  'surgeries-25000': { ar: [stat.value, stat.label.ar], en: [stat.value, stat.label.en] },
   'role-chief-of-staff': { ar: [role('magrabi-chief').shortAr], en: [role('magrabi-chief').shortEn] },
   'role-sscc-first-president': { ar: [role('sscc-president').shortAr], en: [role('sscc-president').shortEn] },
   'role-taibah-chair': { ar: ['جامعة طيبة'], en: ['Taibah'] },
@@ -23,6 +23,9 @@ const RENDERED = {
   'role-redsea-cofounder': { ar: [role('redsea').ar], en: [role('redsea').en] },
   'qual-frcs': { ar: ['FRCS'], en: ['FRCS'] },
   'qual-saudi-board': { ar: [qual('saudi-board').ar], en: [qual('saudi-board').en] },
+  'qual-ico-2002': { ar: ['ICO'], en: ['ICO'] },
+  'qual-ksu-fellowship-2004': { ar: [qual('ksu-fellowship-2004').ar], en: [qual('ksu-fellowship-2004').en] },
+  'qual-kkesh-fellowship-2005': { ar: [qual('kkesh-fellowship-2005').ar], en: [qual('kkesh-fellowship-2005').en] },
   'rank-associate-professor': { ar: [DOCTOR.professional.academicRank.ar], en: [DOCTOR.professional.academicRank.en] },
   'contact-clinic-direct': { ar: [DOCTOR.contact.clinicDirect.display], en: [DOCTOR.contact.clinicDirect.display] },
   'contact-magrabi-callcenter': { ar: [DOCTOR.contact.callCenter.display], en: [DOCTOR.contact.callCenter.display] },
@@ -36,9 +39,10 @@ test.describe('Protected doctor content registry', () => {
     const pub = registry.facts.filter(f => f.display === 'public').map(f => f.id).sort();
     expect(pub).toEqual(Object.keys(RENDERED).sort());
     expect(DOCTOR.professional.experienceSince).toBe(byId('experience-since-1998').expect);
-    expect(stat.value).toBe(byId('cases-15000').expect);
+    expect(stat.value).toBe(byId('surgeries-25000').expect);
+    expect(byId('cases-15000').display).toBe('internal'); // superseded: one count only on the site
     expect(DOCTOR.contact.clinicDirect.tel).toBe(byId('contact-clinic-direct').expect);
-    for (const f of registry.facts.filter(f => f.source === 'doctor')) expect(f.status, f.id).toBe('confirmed');
+    for (const f of registry.facts.filter(f => f.source === 'doctor' && f.status !== 'superseded')) expect(f.status, f.id).toBe('confirmed');
   });
 
   test('procedure scope: registry and doctor-data agree on the 7 procedures and their provenance', () => {
@@ -58,12 +62,10 @@ test.describe('Protected doctor content registry', () => {
     for (const p of PROCEDURES.filter(p => p.source === 'owner')) { expect(p.status).toBe('confirmed'); expect(p.confirmedOn).toBe('2026-11-01'); }
   });
 
-  test('15,000+ keeps its confirmed combined meaning in both languages', () => {
-    expect(stat.source).toBe('doctor');
-    expect(stat.label.ar).toMatch(/فحص/);
-    expect(stat.label.ar).toMatch(/جراح/);
-    expect(stat.label.en).toMatch(/examinations/i);
-    expect(stat.label.en).toMatch(/surgical procedures/i);
+  test('25,000+ is labelled as surgical operations over his career, owner-supplied', () => {
+    expect(stat.source).toBe('owner-2026-11-23');
+    expect(stat.label.ar).toMatch(/عملية جراحية/);
+    expect(stat.label.en).toMatch(/surgical operations/i);
     expect(`${stat.label.ar} ${stat.label.en}`).not.toMatch(/success|نجاح|patients|مريض|عملية ناجحة/i);
   });
 

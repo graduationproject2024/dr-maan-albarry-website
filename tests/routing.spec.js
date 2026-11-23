@@ -101,7 +101,7 @@ test.describe('Language and theme persistence', () => {
     await page.goto('/en/');
     await page.locator('[onclick="toggleTheme()"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await page.locator('#procedures a.proc-card-link').first().click();
+    await page.locator('#procedures a.pgal-link').first().click(); // homepage gallery (image + name, 2026-11-23)
     await expect(page.locator('main h1')).toHaveText(PROCEDURES[0].name.en);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.reload();

@@ -72,7 +72,7 @@ test.describe('content (pure data)', () => {
 
   test('scenarios map to real simulator scenarios and every lens to a simulator lens', () => {
     for (const k of SCENARIO_ORDER) expect(SCENARIOS[k]).toBeTruthy();
-    for (const l of LENS_ORDER) expect(['monofocal', 'edof', 'multifocal', 'trifocal', 'toric']).toContain(SIM_LENS[l]);
+    for (const l of LENS_ORDER) expect(['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric']).toContain(SIM_LENS[l]);
   });
 });
 
@@ -134,20 +134,20 @@ test.describe('compare two', () => {
     const pickA = page.getByRole('group', { name: 'First lens' });
     const pickB = page.getByRole('group', { name: 'Second lens' });
     await pickA.getByText('EDOF', { exact: true }).click();
-    await pickB.getByText('Multifocal', { exact: true }).click();
+    await pickB.getByText('Enhanced', { exact: true }).click(); // Dr. Maan's five categories (2026-11-23): enhanced monofocal replaces the bifocal
     await expect.poll(async () => (await S(page)).sim.lens).toBe('edof');
     st = await S(page);
-    expect(st).toMatchObject({ lensA: 'edof', lensB: 'multifocal' });
-    expect(st.sim).toMatchObject({ lens: 'edof', lensB: 'multifocal', compare: true });
+    expect(st).toMatchObject({ lensA: 'edof', lensB: 'enhanced' });
+    expect(st.sim).toMatchObject({ lens: 'edof', lensB: 'enhanced', compare: true });
     await expect(page.locator('.llab-side .llab-card[data-lens="edof"] .llab-card-title')).toContainText('Extended depth of focus');
-    await expect(page.locator('.llab-side .llab-card[data-lens="multifocal"] .llab-dim.is-diff[data-row="intermediate"]')).toHaveCount(1);
+    await expect(page.locator('.llab-side .llab-card[data-lens="enhanced"] .llab-dim.is-diff[data-row="intermediate"]')).toHaveCount(1);
     await expect(page.locator('.llab-side .llab-card[data-lens="edof"] .llab-dim[data-row="distance"]:not(.is-diff)')).toHaveCount(1);
     await expect(diff.locator('li[data-row="intermediate"]')).toContainText('EDOF:');
 
     // choosing the same type twice swaps instead of comparing a lens with itself
     await pickB.getByText('EDOF', { exact: true }).click();
     st = await S(page);
-    expect(st).toMatchObject({ lensA: 'multifocal', lensB: 'edof' });
+    expect(st).toMatchObject({ lensA: 'enhanced', lensB: 'edof' });
     await expect(page.locator('.llab-swap')).toHaveText(CONTENT.en.sameLens);
 
     // a toric lens turns on the illustrated astigmatism, explained in words
@@ -282,9 +282,9 @@ test.describe('keyboard', () => {
     const pickA = page.getByRole('group', { name: 'First lens' });
     await pickA.getByRole('radio', { name: 'Monofocal' }).focus();
     await page.keyboard.press('ArrowRight');
-    await expect(pickA.getByRole('radio', { name: 'Toric' })).toBeChecked();
-    expect((await S(page)).lensA).toBe('toric');
-    await expect(page.locator('.llab [aria-live="polite"]').last()).toContainText('Toric');
+    await expect(pickA.getByRole('radio', { name: 'Enhanced' })).toBeChecked(); // order since 2026-11-23: monofocal, enhanced, EDOF, trifocal, toric
+    expect((await S(page)).lensA).toBe('enhanced');
+    await expect(page.locator('.llab [aria-live="polite"]').last()).toContainText('Enhanced');
     const scn = page.getByRole('group', { name: CONTENT.en.scenarioTitle });
     await scn.getByRole('radio', { name: /Night driving/ }).focus();
     await page.keyboard.press('ArrowRight');

@@ -350,3 +350,22 @@
   .lj-ray { stroke: Highlight; }
   .lj-stop[aria-current="step"] .lj-stop-n { forced-color-adjust: none; background: Highlight; color: HighlightText; }
 }
+
+/* Playback (2026-11-23): play / pause / replay, scrubbable progress with a mark per step, speed */
+.lj-player { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.lj-playbtn { min-width: 120px; justify-content: center; }
+.lj-play-i { width: 0; height: 0; border-block: 6px solid transparent; border-inline-start: 10px solid currentColor; }
+.lj-playbtn[data-mode="pause"] .lj-play-i { width: 10px; height: 12px; border: 0; border-inline: 3px solid currentColor; }
+.lj-playbtn[data-mode="replay"] .lj-play-i { width: 12px; height: 12px; border: 2px solid currentColor; border-radius: 50%; border-inline-end-color: transparent; }
+.lj-bar { position: relative; flex: 1 1 200px; min-width: 160px; height: 44px; display: flex; align-items: center; }
+.lj-bar-track { position: absolute; inset-inline: 0; height: 4px; border-radius: 2px; background: var(--lj-line); overflow: hidden; }
+.lj-bar-fill { position: absolute; inset: 0; background: var(--lj-primary); transform: scaleX(0); transform-origin: left center; }
+[dir="rtl"] .lj-bar-fill { transform-origin: right center; }
+.lj-bar-mark { position: absolute; top: 0; width: 2px; height: 4px; background: var(--lj-surface); }
+.lj-range { position: relative; width: 100%; margin: 0; opacity: 0; height: 44px; cursor: pointer; }
+.lj-range:focus-visible { opacity: .35; }
+.lj-speed { display: inline-flex; border: 1px solid var(--lj-line-strong); border-radius: 999px; overflow: hidden; }
+.lj-speed-b { min-width: 44px; min-height: 44px; padding: 0 8px; border: 0; background: transparent; color: var(--lj-ink); font: inherit; font-size: .8125rem; cursor: pointer; }
+.lj-speed-b[aria-pressed="true"] { background: var(--lj-ink); color: var(--lj-surface); }
+.lj-speed-b:focus-visible, .lj-playbtn:focus-visible { outline: 2px solid var(--lj-primary); outline-offset: 2px; }
+.lj[data-motion="reduce"] .lj-bar-fill { transition: none; }

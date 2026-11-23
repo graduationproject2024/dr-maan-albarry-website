@@ -169,8 +169,8 @@ test.describe('L1 cards: one concept, no more than their essential labels', () =
   for (const [lang, url] of [['ar', '/'], ['en', '/en/']]) {
     test(`home page cards (${lang})`, async ({ page }) => {
       await page.goto(url);
-      await page.locator('#procedures .plate-card').first().waitFor();
-      for (const card of await page.locator('#procedures .plate-card').all()) {
+      await page.locator('#procedures .pgal-item').first().waitFor(); // image + name gallery since 2026-11-23: no pins on the homepage
+      for (const card of await page.locator('#procedures .pgal-item').all()) {
         const n = await visiblePins(card.locator('.pin'));
         expect(n.length).toBeLessThanOrEqual(2);
         const key = await card.locator('.pin-key li').count();

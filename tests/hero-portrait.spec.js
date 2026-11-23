@@ -19,8 +19,8 @@ test.describe('phones: the doctor is recognizable first', () => {
         expect(overlap(portrait, title)).toBe(false);
         expect(portrait.bottom).toBeLessThanOrEqual(title.top);
         expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-        // the anatomy plate never competes on a phone
-        await expect(page.locator('.hero-plate')).toBeHidden();
+        // the decorative anatomy plate was removed from the hero (owner, 2026-11-23)
+        await expect(page.locator('.hero-plate')).toHaveCount(0);
       });
     }
   }
@@ -35,20 +35,18 @@ test.describe('phones: the doctor is recognizable first', () => {
   }
 });
 
-test.describe('desktop: portrait outweighs the plate and overlaps nothing', () => {
+test.describe('desktop: the portrait leads the hero and overlaps nothing', () => {
   for (const [w, h] of [[1366, 768], [1440, 900], [1920, 1080]]) {
     for (const [lang, url] of [['ar', '/'], ['en', '/en/']]) {
       test(`${w}x${h} ${lang}`, async ({ page }) => {
         await page.setViewportSize({ width: w, height: h });
         await ready(page, url);
         const portrait = await box(page, '.portrait-frame');
-        const plate = await box(page, '.hero-plate-illus');
         const title = await box(page, '.hero-title');
         const cta = await box(page, '#hero-primary-cta');
         expect(portrait.width).toBeGreaterThanOrEqual(340);
-        expect(portrait.width * portrait.height).toBeGreaterThan(plate.width * plate.height * 3);
+        await expect(page.locator('.hero-plate')).toHaveCount(0); // no decorative eye beside the doctor
         expect(overlap(portrait, title)).toBe(false);
-        expect(overlap(portrait, plate)).toBe(false);
         expect(portrait.bottom).toBeLessThanOrEqual(h);
         expect(cta.bottom).toBeLessThanOrEqual(h);
       });

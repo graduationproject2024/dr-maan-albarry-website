@@ -23,6 +23,7 @@
   --vsim-c-edof: #2d8a63;
   --vsim-c-multi: #7a4f9a;
   --vsim-c-tri: #9a6b2f;
+  --vsim-c-enh: #3f7f8f;
   --vsim-c-toric: #5b5fa8;
   --vsim-c-cat: #a3473d;
   --vsim-radius: 14px;
@@ -68,6 +69,7 @@
   --vsim-c-edof: #79d0a6;
   --vsim-c-multi: #c9a6ec;
   --vsim-c-tri: #e0b27a;
+  --vsim-c-enh: #93cdd9;
   --vsim-c-toric: #a9adf0;
   --vsim-c-cat: #ef8e82;
 }
@@ -170,14 +172,13 @@
 .vsim-radio:checked + .vsim-seg-btn { background: var(--vsim-primary); color: var(--vsim-on-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18); }
 .vsim-radio:checked + .vsim-seg-btn .vsim-seg-sub { color: inherit; opacity: 0.85; }
 .vsim-radio:focus-visible + .vsim-seg-btn { outline: 3px solid var(--vsim-focus); outline-offset: 1px; }
-
-.vsim-switch { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 600; width: fit-content; max-width: 100%; }
-.vsim-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.vsim-switch-track { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--vsim-border-strong); transition: background-color 0.15s ease; }
-.vsim-switch-track::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start 0.15s ease; }
-.vsim-switch input:checked + .vsim-switch-track { background: var(--vsim-primary); }
-.vsim-switch input:checked + .vsim-switch-track::after { inset-inline-start: 21px; }
-.vsim-switch input:focus-visible + .vsim-switch-track { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim-switch, .vsim-toric { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 600; width: fit-content; max-width: 100%; }
+.vsim-switch input, .vsim-toric input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.vsim-switch-track, .vsim-toric-track { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--vsim-border-strong); transition: background-color 0.15s ease; }
+.vsim-switch-track::after, .vsim-toric-track::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start 0.15s ease; }
+.vsim-switch input:checked + .vsim-switch-track, .vsim-toric input:checked + .vsim-toric-track { background: var(--vsim-primary); }
+.vsim-switch input:checked + .vsim-switch-track::after, .vsim-toric input:checked + .vsim-toric-track::after { inset-inline-start: 21px; }
+.vsim-switch input:focus-visible + .vsim-switch-track, .vsim-toric input:focus-visible + .vsim-toric-track { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
 
 .vsim-range-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
 .vsim-range-out { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.92rem; }
@@ -494,3 +495,8 @@
   --srv-primary: var(--vsim-primary); --srv-on-primary: var(--vsim-on-primary); --srv-focus: var(--vsim-focus);
   --srv-warn-bg: var(--vsim-warn-bg); --srv-warn-text: var(--vsim-warn-text); --srv-warn-border: var(--vsim-warn-border);
 }
+
+/* four focusing designs + the toric switch (2026-11-23) */
+.vsim-seg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vsim-toric { margin-top: 10px; }
+.vsim-toric-note { margin-top: 6px; }

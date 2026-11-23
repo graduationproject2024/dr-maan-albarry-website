@@ -9,7 +9,7 @@ const C = DOCTOR.contact;
 const APPROVED_TEL = new Set([C.callCenter.tel, C.callCenterShort.tel, C.clinicDirect.tel]);
 // `prefers-*` CSS media features (prefers-color-scheme, prefers-reduced-motion) are code, not claims.
 const PREFERENCE = /\bprefer(red|s)?\b(?![-\w])|favou?r(ed|s|ite)?\b|clinically (preferred|favou?red)|المفضل|يفضل|يفضّل|الخيار المفضل|المفضل سريري/i;
-// 15,000+ is now a doctor-confirmed statistic (content/internal-registry.json); 100% stays internal-only.
+// 25,000+ (owner, 2026-11-23) replaced 15,000+ (content/internal-registry.json); 100% stays internal-only.
 const UNSUPPORTED_STATS = /100\s?%\s*(التزام|adherence)|التزام طبي وفق بروتوكولات|Adherence to Diagnostic Protocols/i;
 // Saudi Board is a confirmed qualification; a licence/SCFHS classification statement is still unsupplied.
 const LICENCE = /الهيئة السعودية للتخصصات الصحية|Saudi Commission for Health Specialties|Board[- ]Certified|الترخيص الاستشاري/i;
@@ -40,7 +40,7 @@ async function fullText(page, lang) {
   await page.locator('#simulator-host').scrollIntoViewIfNeeded();
   await page.locator('#simulator-host .vsim').waitFor({ timeout: 20_000 });
   await page.locator('#simulator-host .vsim-more').click(); // toric and cataract live in More settings since the workbench rebuild
-  for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
+  for (const lens of ['edof', 'trifocal', 'monofocal', 'enhanced', 'multifocal', 'cataract']) { // toric is a switch on any design since 2026-11-23
     await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
     await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
     chunks.push(await page.locator('#simulator-host .vsim').innerText());
@@ -157,7 +157,8 @@ test.describe('Phase 0 structured data & llms.txt', () => {
     expect(txt).not.toMatch(PREFERENCE);
     expect(txt).not.toMatch(/508533309|Chief Medical Officer|26\+ years|Adherence|100%/);
     expect(txt).toContain(C.clinicDirect.tel);
-    expect(txt).toContain('15,000+ eye examinations & surgical procedures');
+    expect(txt).toContain('25,000+ surgical operations over his career');
+    expect(txt).not.toContain('15,000+');
     expect(txt).toContain(DOCTOR.clinic.workingHours.en);
   });
 
@@ -222,11 +223,11 @@ test.describe('Phase 0 testimonial publication gate', () => {
     expect(isPublishableTestimonial({ ...ok, attribution: ' ' })).toBe(false);
     expect(isPublishableTestimonial({ ...ok, approvedText: {} })).toBe(false);
     expect(DOCTOR.credibility.testimonials.every(isPublishableTestimonial)).toBe(true);
-    // Statistics are published only when confirmed, sourced and carrying a defined meaning in both languages
-    // (15,000+ was confirmed by Dr. Maan on 2026-11-01 — see content/internal-registry.json).
+    // Statistics are published only when sourced and carrying a defined meaning in both languages. 25,000+ is the
+    // owner's figure (2026-11-23); its attribution to personally performed cases is still to be confirmed (registry).
     for (const s of DOCTOR.credibility.statistics) {
-      expect(s.status, s.id).toBe('confirmed');
-      expect(s.source, s.id).toBe('doctor');
+      expect(['confirmed', 'owner-supplied'], s.id).toContain(s.status);
+      expect(['doctor', 'owner-2026-11-23'], s.id).toContain(s.source);
       expect(s.scope, s.id).toBeTruthy();
       expect(s.label.ar && s.label.en, s.id).toBeTruthy();
     }

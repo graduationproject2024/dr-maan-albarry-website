@@ -2,7 +2,7 @@
 // Educational approximation — not patient-specific, not clinically validated. Pending review by Dr. Maan.
 // Equations and assumptions: docs/implementation/clinical-visual-reconstruction/VISION_OPTICAL_MODEL.md
 import {
-  BOUNDS, BANDS, DISTANCES, LENSES, LENS_IDS, LIGHTING_IDS, LIGHTING_GRADE, PUPIL_BY_LIGHTING, VIEWING, SCENARIOS, SCENARIO_IDS,
+  BOUNDS, BANDS, DISTANCES, LENSES, LENS_IDS, isLensId, baseLens, LIGHTING_IDS, LIGHTING_GRADE, PUPIL_BY_LIGHTING, VIEWING, SCENARIOS, SCENARIO_IDS,
 } from './params.js';
 
 const ARCMIN_PER_RAD = (180 / Math.PI) * 60; // ≈ 3437.75
@@ -15,7 +15,11 @@ export function clamp(v, lo, hi, fallback = lo) {
 
 export const clampDistance = (m) => clamp(m, BOUNDS.distanceM[0], BOUNDS.distanceM[1], DISTANCES.distance);
 export const clampPupil = (mm) => clamp(mm, BOUNDS.pupilMm[0], BOUNDS.pupilMm[1], PUPIL_BY_LIGHTING.day);
-export const lensProfile = (id) => LENSES[LENS_IDS.includes(id) ? id : 'monofocal'];
+export const lensProfile = (id) => {
+  if (LENS_IDS.includes(id)) return LENSES[id];
+  if (isLensId(id)) return { ...LENSES[baseLens(id)], id, correctsCylinder: true }; // '<design>-toric'
+  return LENSES.monofocal;
+};
 export const lightingId = (id) => (LIGHTING_IDS.includes(id) ? id : 'day');
 
 /** Object vergence demand (D) of a target at `distanceM` metres: V = 1 / d. */

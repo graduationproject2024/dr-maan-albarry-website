@@ -217,7 +217,7 @@ test.describe('every option', () => {
     await more(page).tap();
     await expect(more(page)).toHaveAttribute('aria-expanded', 'true');
     const tri = await picture(page);
-    for (const v of ['multifocal', 'toric', 'cataract']) {
+    for (const v of ['enhanced', 'multifocal', 'cataract']) { // toric is a switch on the chosen design since 2026-11-23
       await lbl(page, 'lensA', v).tap();
       await expect(radio(page, 'lensA', v)).toBeChecked();
       await expect(radio(page, 'lensA', 'trifocal')).not.toBeChecked();
@@ -252,7 +252,8 @@ test.describe('Simple and Advanced', () => {
     await more(page).tap();
     await expect(page.locator(`${H} .vsim`)).toHaveAttribute('data-mode', 'advanced');
     for (const name of ['Everyday situation', 'Other lens types']) await expect(page.getByRole('group', { name, exact: true })).toBeVisible();
-    await expect(page.locator(`${H} .vsim-switch`)).toBeVisible();
+    await expect(page.locator(`${H} .vsim-field-compare .vsim-switch`)).toBeVisible();
+    await expect(page.locator(`${H} .vsim-toric`)).toBeVisible(); // Toric switch (2026-11-23)
     await expect(page.locator(`${H} .vsim-range`)).toBeVisible();
     await expect(page.getByRole('group', { name: 'Corneal astigmatism', exact: true }), 'eye settings are folded').toBeHidden();
     await expect(page.locator(`${H} .vsim-model`).first(), 'model numbers are folded').toBeHidden();
@@ -396,7 +397,7 @@ test.describe('returning visitors', () => {
     await expect(radio(page, 'preset', 'intermediate')).toBeChecked();
     await expect(radio(page, 'lighting', 'dusk')).toBeChecked();
     expect(STRINGS.en.presetDist.near).toBe('40 cm');
-    expect(DISTANCES).toMatchObject({ near: 0.4, intermediate: 0.66, distance: 6 });
+    expect(DISTANCES).toMatchObject({ near: 0.4, intermediate: 0.65, distance: 6 });
   });
 
   test('stored junk is ignored', async ({ page }) => {
@@ -485,7 +486,8 @@ test.describe('page structure on phones', () => {
     }));
     expect(r.hero).toBeLessThan(r.sim);
     expect(r.sim).toBeLessThan(r.lab);
-    expect(r.h, 'page height at 390 px: was 13,062 in Arabic before the rebuild').toBeLessThan(6600);
+    // 2026-11-23: + the ocular-surface section Dr. Maan asked for (four points and the selection list) between the simulator and the comparison
+    expect(r.h, 'page height at 390 px: was 13,062 in Arabic before the rebuild').toBeLessThan(7300);
     expect(r.gl).toBe(1);
     expect(r.canvases).toBe(1);
     await expect(page.locator('#lens-lab-host .llab')).toHaveAttribute('data-sim', 'none');
@@ -672,6 +674,7 @@ test.describe('desktop', () => {
     expect(pos).toBe('sticky');
     await expect(page.locator(`${H} .vsim-adv`)).toBeHidden();
     // desktop keeps the embedded comparison picture in the Lens Lab
+    await page.locator('#lab').scrollIntoViewIfNeeded(); // the ocular-surface section (2026-11-23) now sits between the simulator and the comparison
     await page.locator('#lens-lab-host [data-lens-lab-sim]').scrollIntoViewIfNeeded();
     await expect(page.locator('#lens-lab-host .llab canvas')).toHaveCount(1, { timeout: 30_000 });
   });

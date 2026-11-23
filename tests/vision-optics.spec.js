@@ -249,7 +249,7 @@ test.describe('bounds, layers and determinism', () => {
     const v = O.computeView({ lens: 'trifocal', distanceM: 0.45, lighting: 'night' });
     expect(v.subject).toBe('near');
     expect(v.layers.near.distanceM).toBe(0.45);
-    expect(v.layers.intermediate.distanceM).toBe(0.66);
+    expect(v.layers.intermediate.distanceM).toBe(0.65); // Dr. Maan's 65 cm reference (2026-11-23)
     expect(v.layers.distance.distanceM).toBe(6);
     expect(v.pupilMm).toBe(O.PUPIL_BY_LIGHTING.night);
   });

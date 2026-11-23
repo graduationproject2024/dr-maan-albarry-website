@@ -64,7 +64,7 @@ test.describe('light journey: content and steps', () => {
     expect(first).toBeGreaterThan(0);
     await page.evaluate(() => window.__lj.goTo(6));
     expect(await on()).toBeGreaterThan(first);
-    await expect(page.locator('.lj-note')).toHaveText('Light rays are illustrative and not to scale.');
+    await expect(page.locator('.lj-note')).toHaveText(/^Light rays are illustrative and not to scale\./); // + the autoplay hint (2026-11-23)
     await expect(page.locator('.lj-illus text')).toHaveText('Illustrative');
     await page.evaluate(() => window.__lj.goTo(7));
     await expect(page.locator('.lj-inset')).toHaveClass(/is-on/); // photoreceptor inset on the retina step

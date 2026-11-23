@@ -92,14 +92,14 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
   test('home gallery → procedure → Back returns to the same card', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/en/');
-    const y = await readTo(page, '#procedures .plate-card:nth-child(4) a.proc-card-link'); // already on screen, so the click does not scroll
+    const y = await readTo(page, '#procedures .pgal-item:nth-child(4) a.pgal-link'); // already on screen, so the click does not scroll
     expect(y).toBeGreaterThan(600);
-    const card = page.locator('#procedures .plate-card').nth(3);
+    const card = page.locator('#procedures .pgal-item').nth(3);
     const slug = await card.getAttribute('data-slug');
     // "Where the visitor was" is the position at the moment of the click: if late content above the card (a font, an image)
     // changed the layout after `y` was read, the browser's scroll anchoring has already moved the page with it.
     await page.evaluate(() => addEventListener('click', () => { window.__yAtClick = Math.round(window.scrollY); }, { capture: true, once: true }));
-    await card.locator('a.proc-card-link').click();
+    await card.locator('a.pgal-link').click();
     await expect(page).toHaveURL(new RegExp(`/en/procedures/${slug}/$`));
     await expect(page.locator('main h1')).toHaveText(PROCEDURES.find((p) => p.slug === slug).name.en);
     const yAtClick = await page.evaluate(() => window.__yAtClick);
@@ -107,7 +107,7 @@ test.describe('Back, Forward and reload return to where the visitor was', () => 
     await page.goBack();
     await expect(page.locator('main')).toHaveAttribute('data-page', 'home');
     await near(page, yAtClick);
-    await expect(page.locator(`#procedures .plate-card[data-slug="${slug}"]`)).toBeInViewport();
+    await expect(page.locator(`#procedures .pgal-item[data-slug="${slug}"]`)).toBeInViewport();
   });
 
   test('library with a filter → procedure → Back keeps the filter and the position', async ({ page }) => {

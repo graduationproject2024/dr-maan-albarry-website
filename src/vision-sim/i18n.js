@@ -20,6 +20,8 @@ export const STRINGS = {
     changed: 'مُعدّلة',
     otherLenses: 'أنواع أخرى من العدسات',
     edofPlain: 'ممتدة المدى',
+    toricSwitch: 'لابؤرية (Toric): تصحيح الانحراف اللابؤري',
+    toricNote: 'العدسة اللابؤرية تصحح الانحراف اللابؤري (الاستجماتيزم) في القرنية، وتتوفر بالتصاميم الأحادية والممتدة والثلاثية. تفترض الصورة انحرافاً لابؤرياً متوسطاً (١٫٥ ديوبتر) لإظهار ما تصححه؛ ولا تُحسّن الرؤية في عين بلا انحراف.',
     loading: 'جارٍ تحميل الصورة التوضيحية…',
     retry: 'إعادة المحاولة',
     exam: 'يُختار نوع العدسة بعد الفحص والقياسات ومناقشة أولوياتك مع الطبيب.',
@@ -39,15 +41,16 @@ export const STRINGS = {
     sphere: 'قصر أو طول نظر متبقٍّ',
     none: 'لا يوجد',
     lenses: {
-      monofocal: { name: 'أحادية البؤرة', short: 'أحادية' },
-      edof: { name: 'ممتدة العمق (EDOF)', short: 'EDOF' },
+      monofocal: { name: 'العدسة الأحادية', short: 'أحادية' },
+      enhanced: { name: 'العدسة الأحادية المطورة', short: 'أحادية مطورة' },
+      edof: { name: 'العدسة ممتدة المدى (EDOF)', short: 'ممتدة' },
       multifocal: { name: 'متعددة البؤر (ثنائية البؤرة)', short: 'متعددة البؤر' },
-      trifocal: { name: 'ثلاثية البؤرة', short: 'ثلاثية' },
-      toric: { name: 'توريك (للاستجماتيزم)', short: 'توريك' },
+      trifocal: { name: 'العدسة الثلاثية', short: 'ثلاثية' },
+      toric: { name: 'الأحادية اللابؤرية (Toric)', short: 'أحادية لابؤرية' },
       cataract: { name: 'الساد قبل العملية', short: 'ساد' },
     },
     presets: { near: 'قريب', intermediate: 'متوسط', distance: 'بعيد' },
-    presetDist: { near: '٤٠ سم', intermediate: '٦٦ سم', distance: '٦ م+' },
+    presetDist: { near: '٤٠ سم', intermediate: '٦٥ سم', distance: '٦ م+' },
     objects: { near: 'الهاتف', intermediate: 'الحاسوب', distance: 'اللوحة المرورية' },
     lights: { day: 'نهار', dusk: 'خافتة', night: 'ليل' },
     sharpness: 'مؤشر الوضوح',
@@ -101,6 +104,8 @@ export const STRINGS = {
     changed: 'changed',
     otherLenses: 'Other lens types',
     edofPlain: 'Extended range',
+    toricSwitch: 'Toric: astigmatism correction',
+    toricNote: 'A toric lens corrects corneal astigmatism and comes in monofocal, extended-range and trifocal designs. The picture assumes moderate astigmatism (1.5 D) to show what it corrects; in an eye without astigmatism it adds nothing.',
     loading: 'Loading the picture…',
     retry: 'Try again',
     exam: 'The lens type is chosen after examination, measurements and a conversation about your priorities.',
@@ -120,15 +125,16 @@ export const STRINGS = {
     sphere: 'Leftover short- or long-sightedness',
     none: 'None',
     lenses: {
-      monofocal: { name: 'Monofocal', short: 'Monofocal' },
+      monofocal: { name: 'Standard monofocal', short: 'Monofocal' },
+      enhanced: { name: 'Enhanced monofocal', short: 'Enhanced' },
       edof: { name: 'Extended depth of focus (EDOF)', short: 'EDOF' },
       multifocal: { name: 'Multifocal (two-focus)', short: 'Multifocal' },
       trifocal: { name: 'Trifocal', short: 'Trifocal' },
-      toric: { name: 'Toric (for astigmatism)', short: 'Toric' },
+      toric: { name: 'Monofocal toric', short: 'Mono toric' },
       cataract: { name: 'Cataract (before surgery)', short: 'Cataract' },
     },
     presets: { near: 'Near', intermediate: 'Intermediate', distance: 'Far' },
-    presetDist: { near: '40 cm', intermediate: '66 cm', distance: '6 m+' },
+    presetDist: { near: '40 cm', intermediate: '65 cm', distance: '6 m+' },
     objects: { near: 'phone', intermediate: 'laptop', distance: 'road sign' },
     lights: { day: 'Day', dusk: 'Dim', night: 'Night' },
     sharpness: 'Sharpness index',
@@ -168,14 +174,16 @@ export const STRINGS = {
 export const LENS_INFO = {
   ar: {
     monofocal: { intended: 'رؤية واضحة لمسافة واحدة، غالباً البعيد.', tradeoffs: 'أقل هالات ليلية وأعلى تباين، لكن غالباً تلزم نظارة للقراءة والشاشات.' },
+    enhanced: { intended: 'رؤية بعيدة مع رؤية متوسطة أفضل من الأحادية العادية؛ وتلزم نظارة للقريب (نحو ٤٠ سم) غالباً.', tradeoffs: 'لا تقسم الضوء بين بؤر منفصلة، فالهالات والتباين قريبة من الأحادية العادية؛ والمكسب في المسافة المتوسطة محدود.' },
     edof: { intended: 'مدى ممتد من البعيد إلى المسافات المتوسطة (الشاشات ولوحة القيادة).', tradeoffs: 'قد تلزم نظارة للقراءة الدقيقة؛ تباين أقل قليلاً وهالات خفيفة لدى بعض التصاميم.' },
     multifocal: { intended: 'بؤرتان: للبعيد وللقريب، لتقليل الحاجة لنظارة القراءة.', tradeoffs: 'انقسام الضوء يقلل التباين وقد يسبب هالات ووهجاً ليلاً، والمسافة المتوسطة قد تكون أضعف.' },
     trifocal: { intended: 'ثلاث بؤر: بعيد ومتوسط وقريب، لتقليل الحاجة إلى النظارة.', tradeoffs: 'انقسام الضوء يقلل التباين وقد يسبب هالات ووهجاً ليلاً، ويحتاج تكيّفاً.' },
-    toric: { intended: 'تصحيح استجماتيزم القرنية مع البؤرة المختارة (هنا: أحادية البؤرة).', tradeoffs: 'تعتمد الفائدة على دقة محور العدسة وثباته؛ الدوران يقلل التصحيح.' },
+    toric: { intended: 'تصحيح الانحراف اللابؤري (الاستجماتيزم) في القرنية مع العدسة الأحادية.', tradeoffs: 'تعتمد الفائدة على دقة محور العدسة وثباته؛ الدوران يقلل التصحيح.' },
     cataract: { intended: 'للمقارنة فقط: عدسة طبيعية معتمة قبل الجراحة.', tradeoffs: 'تشتت الضوء يسبب ضبابية ووهجاً واصفراراً للألوان، ولا تصححه النظارات بالكامل.' },
   },
   en: {
     monofocal: { intended: 'Clear vision at one distance, usually far.', tradeoffs: 'Fewest night halos and highest contrast; glasses are usually needed for reading and screens.' },
+    enhanced: { intended: 'Distance vision with somewhat better intermediate vision than a standard monofocal; glasses are usually needed for near (about 40 cm).', tradeoffs: 'Light is not split into separate foci, so halos and contrast stay close to a standard monofocal; the intermediate gain is modest.' },
     edof: { intended: 'An extended range from distance to intermediate (screens, dashboard).', tradeoffs: 'Reading glasses may be needed for fine print; slightly lower contrast and mild halos with some designs.' },
     multifocal: { intended: 'Two foci — distance and near — to reduce reliance on reading glasses.', tradeoffs: 'Splitting light lowers contrast and can cause halos and glare at night; intermediate distance may be weaker.' },
     trifocal: { intended: 'Three foci — distance, intermediate and near — to reduce reliance on glasses.', tradeoffs: 'Splitting light lowers contrast and can cause halos and glare at night; adaptation takes time.' },
@@ -183,6 +191,16 @@ export const LENS_INFO = {
     cataract: { intended: 'For comparison only: a cloudy natural lens before surgery.', tradeoffs: 'Light scatter causes haze, glare and faded colours; glasses cannot fully correct it.' },
   },
 };
+
+// Toric versions of each focusing design ('edof-toric' …): the design's name and texts + the astigmatism correction.
+for (const lg of ['ar', 'en']) {
+  const L = STRINGS[lg].lenses, I = LENS_INFO[lg];
+  for (const b of ['enhanced', 'edof', 'trifocal']) {
+    L[`${b}-toric`] = lg === 'ar' ? { name: `${L[b].name} اللابؤرية (Toric)`, short: `${L[b].short} لابؤرية` } : { name: `${L[b].name} – toric`, short: `${L[b].short} toric` };
+    I[`${b}-toric`] = { intended: `${I[b].intended} ${lg === 'ar' ? 'مع تصحيح الانحراف اللابؤري في القرنية.' : 'Plus correction of corneal astigmatism.'}`, tradeoffs: `${I[b].tradeoffs} ${I.toric.tradeoffs}` };
+  }
+  L['monofocal-toric'] = L.toric; I['monofocal-toric'] = I.toric;
+}
 
 export function fmt(lang, n, digits = 0) {
   try {

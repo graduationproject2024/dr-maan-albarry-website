@@ -29,7 +29,7 @@ const ANAT_TEXT = {
 const RESULT_LINE = { ar: 'الخط المتقطع يبيّن الانحناء الأصلي.', en: 'The dashed line shows the original curve.' };
 
 const TYPE_TEXT = {
-  lasik: { ar: 'الليزك: تُرفع شريحة رقيقة من القرنية، ثم يُعاد تشكيل الطبقة تحتها وتُعاد الشريحة إلى مكانها. التعافي البصري سريع عادةً. تُختار الطريقة المناسبة بعد الفحص والتصوير، لا قبله.', en: 'LASIK: a thin flap is lifted, the layer beneath is reshaped and the flap is laid back. Visual recovery is usually quick. The method that suits an eye is chosen after examination and imaging, not before.' },
+  lasik: { ar: 'الفيمتوليزيك: يصنع ليزر الفيمتو ثانية شريحة رقيقة من القرنية تُرفع، ثم يُعاد تشكيل الطبقة تحتها وتُعاد الشريحة إلى مكانها. التعافي البصري سريع عادةً. تُختار الطريقة المناسبة بعد الفحص والتصوير، لا قبله.', en: 'Femto-LASIK: a femtosecond laser makes a thin flap, which is lifted; the layer beneath is reshaped and the flap is laid back. Visual recovery is usually quick. The method that suits an eye is chosen after examination and imaging, not before.' },
   prk: { ar: 'الليزر السطحي (PRK): يُعاد تشكيل سطح القرنية بعد إزالة الطبقة الخارجية دون شريحة. التعافي أبطأ وأكثر انزعاجاً في الأيام الأولى، وقد يناسب القرنيات الأرق. تُختار الطريقة المناسبة بعد الفحص والتصوير، لا قبله.', en: 'PRK (surface laser): the surface is reshaped after the outer layer is removed, with no flap. Recovery is slower and more uncomfortable at first; it may suit thinner corneas. The method that suits an eye is chosen after examination and imaging, not before.' },
   smile: { ar: 'سمايل (SMILE): يُصنع بالليزر جزء رقيق داخل القرنية ويُستخرج عبر فتحة صغيرة دون شريحة. مناسب لبعض حالات قصر النظر والاستجماتيزم. تُختار الطريقة المناسبة بعد الفحص والتصوير، لا قبله.', en: 'SMILE: a laser shapes a thin piece of tissue inside the cornea, removed through a small opening with no flap. It suits some short-sight and astigmatism prescriptions. The method that suits an eye is chosen after examination and imaging, not before.' }
 };
@@ -48,7 +48,7 @@ const STAGES = {
   lasik: () => [
     anatomy(),
     stage('flap', 7, 'closeup', { ar: 'صنع شريحة رقيقة', en: 'A thin flap is made' },
-      { ar: 'في الليزك تُصنع شريحة رقيقة في الجزء الأمامي من القرنية. الخط الملوّن يبيّن مكان انفصالها عن الطبقة التي تحتها.', en: 'In LASIK a thin flap is made in the front of the cornea. The coloured line shows where it separates from the layer beneath.' }, { section: true }),
+      { ar: 'في الفيمتوليزيك يصنع ليزر الفيمتو ثانية شريحة رقيقة في الجزء الأمامي من القرنية. الخط الملوّن يبيّن مكان انفصالها عن الطبقة التي تحتها.', en: 'In Femto-LASIK a femtosecond laser makes a thin flap in the front of the cornea. The coloured line shows where it separates from the layer beneath.' }, { section: true }),
     stage('lift', 6, 'lifted', { ar: 'رفع الشريحة', en: 'The flap is lifted' },
       { ar: 'تُرفع الشريحة وتُطوى على مفصلها، فتنكشف الطبقة التي تحتها.', en: 'The flap is lifted and folded back on its hinge, uncovering the layer beneath.' }, { section: true }),
     stage('reshape', 8, 'closeup', { ar: 'إعادة تشكيل الطبقة تحت الشريحة', en: 'The layer beneath is reshaped' },
@@ -118,16 +118,16 @@ const sectionPoint = (t, rhoAt) => {
 
 const def = {
   id: 'laser', slug: 'laser-vision-correction', modelId: 'ssim-laser', version: '2026.11-r1',
-  title: { ar: 'تصحيح الإبصار بالليزر: كيف يغيّر الليزك والليزر السطحي وسمايل شكل القرنية', en: 'Laser vision correction: how LASIK, PRK and SMILE reshape the cornea' },
+  title: { ar: 'تصحيح الإبصار بالليزر: كيف يغيّر الفيمتوليزيك والليزر السطحي وسمايل شكل القرنية', en: 'Laser vision correction: how Femto-LASIK, PRK and SMILE reshape the cornea' },
   note: NOTE,
   objectives: [
     { ar: 'التعرف على طبقات القرنية: الظهارة واللحمة (السدى) والبطانة.', en: 'Recognise the layers of the cornea: epithelium, stroma and endothelium.' },
     { ar: 'فهم أن الليزر يغيّر انحناء القرنية بإزالة طبقة رقيقة جداً من نسيجها.', en: 'Understand that the laser changes the curve of the cornea by removing a very thin layer of tissue.' },
-    { ar: 'التمييز بين الليزك والليزر السطحي وسمايل في طريقة الوصول إلى النسيج.', en: 'See how LASIK, PRK and SMILE differ in the way the tissue is reached.' }
+    { ar: 'التمييز بين الفيمتوليزيك والليزر السطحي وسمايل في طريقة الوصول إلى النسيج.', en: 'See how Femto-LASIK, PRK and SMILE differ in the way the tissue is reached.' }
   ],
   minR: 3,
   variants: [
-    { id: 'lasik', label: { ar: 'الليزك (LASIK)', en: 'LASIK' } },
+    { id: 'lasik', label: { ar: 'الفيمتوليزيك (Femto-LASIK)', en: 'Femto-LASIK' } }, // id 'lasik' kept for links and tests
     { id: 'prk', label: { ar: 'التقشير السطحي (PRK)', en: 'PRK' } },
     { id: 'smile', label: { ar: 'سمايل (SMILE)', en: 'SMILE' } }
   ],

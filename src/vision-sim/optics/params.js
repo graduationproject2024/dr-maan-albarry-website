@@ -27,7 +27,7 @@ export const BOUNDS = Object.freeze({
 /** Slider / preset distances used by the UI (metres). 6 m is the clinical "distance" test distance. */
 export const DISTANCES = Object.freeze({
   near: 0.40,
-  intermediate: 0.66,
+  intermediate: 0.65, // Dr. Maan's intermediate reference distance (65 cm, 2026-11-23); was 0.66
   distance: 6,
   sliderMin: 0.33,
   sliderMax: 6,
@@ -82,6 +82,24 @@ export const LENSES = Object.freeze({
     lossFraction: 0,
     lossSpreadDeg: 0,
     straylight: 1,             // relative to a healthy pseudophakic eye
+    correctsCylinder: false,
+    tint: null,
+  }),
+  enhanced: Object.freeze({
+    id: 'enhanced',
+    // Enhanced monofocal (Dr. Maan's "الأحادية المطورة", 2026-11-23): a monofocal whose refractive profile extends the
+    // distance peak a little towards intermediate — no light split into separate foci, so halos and contrast stay
+    // close to a standard monofocal. Shape only: the distance focus keeps most of the light and a shallow tail
+    // reaches ≈1 D (≈1 m); near (40 cm) still needs glasses. Published defocus curves place these lenses between a
+    // standard monofocal and an EDOF at intermediate (see LENS_LAB SOURCES 'auffarth-2021').
+    foci: Object.freeze([
+      { vergenceD: 0, weight: 0.74 },
+      { vergenceD: 0.5, weight: 0.16 },
+      { vergenceD: 1.0, weight: 0.10 },
+    ]),
+    lossFraction: 0,
+    lossSpreadDeg: 0,
+    straylight: 1.02,
     correctsCylinder: false,
     tint: null,
   }),
@@ -155,18 +173,32 @@ export const LENSES = Object.freeze({
   }),
 });
 
-export const LENS_IDS = Object.freeze(['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract']);
+export const LENS_IDS = Object.freeze(['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract']);
+/**
+ * Toric is a correction for astigmatism that can be added to a focusing design, not a design of its own
+ * (Dr. Maan: "منها الأحادي والممتد والثلاثي"). `<base>-toric` = that design + cylinder correction. 'toric' stays as the
+ * historical id of the monofocal toric (= 'monofocal-toric').
+ */
+export const TORIC_BASES = Object.freeze(['monofocal', 'enhanced', 'edof', 'trifocal']);
+export const TORIC_IDS = Object.freeze(TORIC_BASES.map((b) => `${b}-toric`));
+export const ALL_LENS_IDS = Object.freeze([...LENS_IDS, ...TORIC_IDS]);
+export const isLensId = (id) => ALL_LENS_IDS.includes(id);
+/** The focusing design of a lens id ('edof-toric' → 'edof', 'toric' → 'monofocal'). */
+export const baseLens = (id) => (id === 'toric' ? 'monofocal' : String(id).endsWith('-toric') ? String(id).slice(0, -6) : id);
+export const isToric = (id) => id === 'toric' || String(id).endsWith('-toric');
+/** The id of `base` with or without toric correction. */
+export const withToric = (base, on) => { const b = baseLens(base); return on ? (b === 'monofocal' ? 'toric' : TORIC_BASES.includes(b) ? `${b}-toric` : b) : b; };
 export const LIGHTING_IDS = Object.freeze(['day', 'dusk', 'night']);
 
 /**
  * Everyday situations (the simulator's primary control). Each one is only a viewing distance + a lighting
  * level for the same scene; the near object drawn is a phone, which also stands in for a book page.
  * Distances: phone ≈ 35 cm (Bababekova et al. 2011: 32–36 cm mean for smartphones), book / hard copy 40 cm,
- * laptop / dashboard 66 cm, road signs 6 m. Night driving uses the 6 m target with the night pupil.
+ * laptop / dashboard 65 cm, road signs 6 m. Night driving uses the 6 m target with the night pupil.
  */
 export const SCENARIOS = Object.freeze({
   signs: Object.freeze({ distanceM: 6, lighting: 'day' }),
-  laptop: Object.freeze({ distanceM: 0.66, lighting: 'day' }),
+  laptop: Object.freeze({ distanceM: 0.65, lighting: 'day' }),
   phone: Object.freeze({ distanceM: 0.35, lighting: 'day' }),
   book: Object.freeze({ distanceM: 0.40, lighting: 'day' }),
   'night-driving': Object.freeze({ distanceM: 6, lighting: 'night' }),

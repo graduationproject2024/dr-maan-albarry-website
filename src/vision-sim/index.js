@@ -10,7 +10,7 @@
 // docs/implementation/clinical-visual-reconstruction/VISION_SIMULATOR_REBUILD.md
 import './styles.css';
 import { computeView, clamp, normalizeRefraction, scenarioFor } from './optics/model.js';
-import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIOS, SCENARIO_IDS } from './optics/params.js';
+import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIOS, SCENARIO_IDS, isLensId, isToric, withToric, TORIC_BASES } from './optics/params.js';
 import { createUI } from './ui.js';
 import { STRINGS, formatDistance } from './i18n.js';
 
@@ -42,8 +42,8 @@ class VisionSimulator {
     const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.reduced = typeof o.reducedMotion === 'boolean' ? o.reducedMotion : !!(mq && mq.matches);
     this.state = {
-      lens: LENS_IDS.includes(o.lens) ? o.lens : 'monofocal',
-      lensB: LENS_IDS.includes(o.lensB) ? o.lensB : 'trifocal',
+      lens: isLensId(o.lens) ? o.lens : 'monofocal',
+      lensB: isLensId(o.lensB) ? o.lensB : 'trifocal',
       compare: !!o.compare,
       distanceM: clamp(o.distanceM, DISTANCES.sliderMin, DISTANCES.sliderMax, DISTANCES.distance),
       lighting: LIGHTING_IDS.includes(o.lighting) ? o.lighting : 'day',
@@ -77,6 +77,7 @@ class VisionSimulator {
       setTheme: (t) => self.setTheme(t),
       getState: () => self.getState(),
       setLens: (id, slot) => self.setLens(id, slot),
+      setToric: (on) => self.setToric(on),
       setDistance: (m) => self.setDistance(m),
       setLighting: (l) => self.setLighting(l),
       setCompare: (on, lensB) => self.setCompare(on, lensB),
@@ -126,7 +127,9 @@ class VisionSimulator {
       lang: this.lang, theme: this.theme, mode: this.mode,
       listen: (t, e, f, o) => this.listen(t, e, f, o),
       handlers: {
-        lens: (id) => this.setLens(id, 'A', true),
+        // choosing another design keeps the toric switch as it is
+        lens: (id) => this.setLens(TORIC_BASES.includes(id) ? withToric(id, isToric(this.state.lens)) : id, 'A', true), // keeps the toric switch
+        toric: (on) => this.setToric(on, true),
         lensB: (id) => this.setLens(id, 'B', true),
         compare: (on) => this.setCompare(on, undefined, true),
         distance: (m, src) => this.setDistance(m, src),
@@ -258,7 +261,7 @@ class VisionSimulator {
   /** Review presets: set every viewing parameter exactly (lens A/B, comparison, distance, lighting, refraction, split). */
   applyParams(p = {}) {
     if (this.destroyed) return false;
-    if (!LENS_IDS.includes(p.lens) || !LENS_IDS.includes(p.lensB) || !LIGHTING_IDS.includes(p.lighting)) return false;
+    if (!isLensId(p.lens) || !isLensId(p.lensB) || !LIGHTING_IDS.includes(p.lighting)) return false;
     const rebuild = p.lighting !== this.state.lighting;
     Object.assign(this.state, {
       lens: p.lens,
@@ -509,16 +512,27 @@ class VisionSimulator {
     if (debounce) this.announceTimer = this.timeout(go, 450); else go();
   }
   setLens(id, slot = 'A', fromUI = false) {
-    if (this.destroyed || !LENS_IDS.includes(id)) return;
+    if (this.destroyed || !isLensId(id)) return;
     const key = slot === 'B' ? 'lensB' : 'lens';
     if (this.state[key] === id && !fromUI) return;
     this.state[key] = id;
     this.changed(key, true);
   }
+  /**
+   * Toric correction on/off for the chosen design. A toric lens only matters with corneal astigmatism, so switching it
+   * on in an eye set to "no astigmatism" sets the demonstration value (1.5 D) — the picture then shows what it corrects.
+   */
+  setToric(on, fromUI = false) {
+    if (this.destroyed) return;
+    const id = withToric(this.state.lens, !!on);
+    if (on && this.state.refraction.cylD === 0) this.state.refraction = normalizeRefraction({ ...this.state.refraction, cylD: -1.5 });
+    this.state.lens = id;
+    this.changed('lens', fromUI || true);
+  }
   setCompare(on, lensB, fromUI = false) {
     if (this.destroyed) return;
     this.state.compare = !!on;
-    if (LENS_IDS.includes(lensB)) this.state.lensB = lensB;
+    if (isLensId(lensB)) this.state.lensB = lensB;
     this.changed('compare', fromUI || true);
   }
   setDistance(m, src) {

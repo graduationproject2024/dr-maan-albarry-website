@@ -14,6 +14,7 @@
 // (e.g. the undefined "100%" statistic) live only in content/internal-registry.json,
 // which the app never imports. Governance: docs/implementation/recovery/DOCTOR_CONTENT_RECOVERY.md
 // ============================================================
+import { QUALIFICATIONS, SURGERY_STAT, OWNER_SOURCE, EMPLOYMENT } from './clinical-profile.js';
 
 export const SOURCES = {
   magrabi: {
@@ -35,7 +36,8 @@ export const SOURCES = {
     label: 'Personally confirmed by Dr. Maan Al Barry, relayed by the site owner on 2026-11-01',
     url: null,
     accessed: '2026-11-01'
-  }
+  },
+  'owner-2026-11-23': { label: OWNER_SOURCE.label, url: null, accessed: OWNER_SOURCE.date }
 };
 
 // Public site address. NOTE: drmaanalbarry.com did not resolve on 2026-10-31 (see BLOCKERS.md, B-6).
@@ -80,7 +82,10 @@ export const DOCTOR = {
     experienceSince: 1998, // source: owner
     qualifications: [
       { id: 'frcs', ar: 'زميل كلية الجراحين الملكية – بريطانيا (FRCS)', en: 'Fellow of the Royal College of Surgeons, UK (FRCS)', short: 'FRCS (UK)', source: 'magrabi' },
-      { id: 'saudi-board', ar: 'البورد السعودي في طب وجراحة العيون', en: 'Saudi Board in Ophthalmology', short: 'Saudi Board', source: 'doctor' }
+      { id: 'saudi-board', ar: 'البورد السعودي في طب وجراحة العيون', en: 'Saudi Board in Ophthalmology', short: 'Saudi Board', source: 'doctor' },
+      // Added 2026-11-23 from the owner's brief (clinical-profile.js QUALIFICATIONS keeps the original wording).
+      ...QUALIFICATIONS.map(q => ({ id: q.id, ar: q.public.ar, en: q.public.en, short: q.id === 'ico-2002' ? 'ICO' : q.id === 'ksu-fellowship-2004' ? 'KSU' : 'KKESH',
+        years: q.years, source: q.source }))
     ],
     // Ordered as displayed. `current` drives present/past tense everywhere (UI, JSON-LD, llms.txt).
     roles: [
@@ -101,7 +106,12 @@ export const DOCTOR = {
         en: 'Former Representative of the Saudi Ophthalmological Society in Madinah' },
       { id: 'redsea', current: false, source: 'owner',
         ar: 'أحد مؤسسي مؤتمر البحر الأحمر الدولي للطب وجراحة العيون',
-        en: 'Co-Founder of the Red Sea International Ophthalmology Conference' }
+        en: 'Co-Founder of the Red Sea International Ophthalmology Conference' },
+      // 2001–2009 (owner, 2026-11-23; clinical-profile.js EMPLOYMENT). Historical, never current.
+      ...EMPLOYMENT.map(e => ({ id: e.id, current: false, source: e.source, from: e.from, to: e.to,
+        ar: `${e.role.ar} – ${e.place.ar.replace('، الرياض', '')} (${e.from}–${e.to})`,
+        en: `${e.role.en} – ${e.place.en.replace(', Riyadh', '')} (${e.from}–${e.to})`,
+        shortAr: `${e.place.ar.replace('، الرياض', '')} (${e.from}–${e.to})`, shortEn: `${e.place.en.replace(', Riyadh', '')} (${e.from}–${e.to})` }))
     ],
     memberships: [
       { ar: 'الجمعية السعودية لطب وجراحة العيون', en: 'Saudi Ophthalmological Society', source: 'magrabi' },
@@ -163,9 +173,11 @@ export const DOCTOR = {
     // "+15,000" was confirmed by Dr. Maan as a combined total of eye examinations and surgical
     // procedures (owner, 2026-11-01). "100%" has no measurable definition: internal registry only.
     statistics: [
-      { id: 'cases-15000', value: '15,000+', source: 'doctor', status: 'confirmed',
-        scope: 'career total; eye examinations and surgical procedures combined, not surgeries alone and not a patient count',
-        label: { ar: 'فحص وإجراء جراحي في طب العيون', en: 'eye examinations & surgical procedures' } }
+      // "+25,000 surgical operations" (owner, 2026-11-23) supersedes the earlier "15,000+ examinations and
+      // procedures combined" (doctor, 2026-11-01): one count only, never two contradictory ones.
+      // History: content/internal-registry.json (cases-15000) and clinical-profile.js SURGERY_STAT.
+      { id: SURGERY_STAT.id, value: SURGERY_STAT.display, count: SURGERY_STAT.value, source: SURGERY_STAT.source, status: SURGERY_STAT.status,
+        scope: SURGERY_STAT.scope, label: SURGERY_STAT.label, sub: SURGERY_STAT.sub }
     ],
     // A testimonial renders only when isPublishableTestimonial() passes. The three reviews previously shown
     // exist on the Magrabi profile page, but reuse permission is undocumented and the site's text was
@@ -220,8 +232,8 @@ export const PROCEDURES = [
     slug: 'laser-vision-correction', group: 'refractive', source: 'magrabi', status: 'published', kind: 'SurgicalProcedure',
     name: { ar: 'تصحيح الإبصار بالليزر', en: 'Laser vision correction' },
     summary: {
-      ar: 'إعادة تشكيل القرنية بالليزر (ليزك، الليزر السطحي PRK، سمايل) لتقليل الاعتماد على النظارة أو العدسات اللاصقة.',
-      en: 'Reshaping the cornea with a laser (LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.'
+      ar: 'إعادة تشكيل القرنية بالليزر (الفيمتوليزيك Femto-LASIK، الليزر السطحي PRK، سمايل SMILE) لتقليل الاعتماد على النظارة أو العدسات اللاصقة.',
+      en: 'Reshaping the cornea with a laser (Femto-LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.'
     },
     alt: { ar: 'رسم تشريحي لمقطع القرنية يوضح منطقة إعادة التشكيل بالليزر', en: 'Anatomical illustration of the cornea in section showing the area reshaped by laser' },
     related: ['icl', 'keratoconus-cxl', 'lens-implants']
@@ -368,9 +380,12 @@ export function buildJsonLd() {
         knowsAbout: PROCEDURES.map(p => p.name.en),
         hasCredential: d.professional.qualifications.map(q => ({
           '@type': 'EducationalOccupationalCredential',
-          credentialCategory: q.id === 'frcs' ? 'Fellowship' : 'Board certification',
+          credentialCategory: q.id === 'saudi-board' ? 'Board certification' : q.id === 'ico-2002' ? 'Certificate' : 'Fellowship',
           name: q.en,
-          recognizedBy: { '@type': 'Organization', name: q.id === 'frcs' ? 'Royal College of Surgeons, United Kingdom' : 'Saudi Commission for Health Specialties' }
+          recognizedBy: { '@type': 'Organization', name: {
+            frcs: 'Royal College of Surgeons, United Kingdom', 'saudi-board': 'Saudi Commission for Health Specialties',
+            'ico-2002': 'International Council of Ophthalmology', 'ksu-fellowship-2004': 'King Saud University',
+            'kkesh-fellowship-2005': 'King Khaled Eye Specialist Hospital' }[q.id] }
         })),
         openingHoursSpecification: d.clinic.workingHours.sessions.map(([opens, closes]) => ({
           '@type': 'OpeningHoursSpecification', dayOfWeek: d.clinic.workingHours.days, opens, closes

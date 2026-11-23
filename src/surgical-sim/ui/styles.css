@@ -166,3 +166,14 @@
 .ssim h3, .ssim h4 { color: var(--ssim-text); }
 .ssim-title { font-family: var(--font-display, inherit); }
 
+
+/* "Show details" (optional anatomy names, off by default) and Before / After (2026-11-23) */
+.ssim-details { position: absolute; inset-block-start: 50px; inset-inline-start: 12px; z-index: 3; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 14px 6px 10px; border-radius: 999px; border: 1px solid var(--ssim-border-strong); background: var(--ssim-overlay); color: var(--ssim-text); font: inherit; font-size: .8125rem; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.ssim-details svg { width: 18px; height: 18px; }
+.ssim-details[aria-pressed="true"] { background: var(--ssim-primary); color: var(--ssim-on-primary); border-color: transparent; }
+.ssim-details:focus-visible, .ssim-ba-btn:focus-visible { outline: 2px solid var(--ssim-focus); outline-offset: 2px; }
+.ssim-ba { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 10px; }
+.ssim-ba-k { font-size: .8125rem; color: var(--ssim-muted); margin-inline-end: 4px; }
+.ssim-ba-btn { min-height: 40px; min-width: 64px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--ssim-border-strong); background: transparent; color: var(--ssim-text); font: inherit; font-size: .875rem; cursor: pointer; }
+.ssim-ba-btn[aria-pressed="true"] { background: var(--ssim-primary); color: var(--ssim-on-primary); border-color: transparent; }
+.ssim-ba-text { flex-basis: 100%; margin: 4px 0 0; font-size: .875rem; line-height: 1.6; color: var(--ssim-text); }

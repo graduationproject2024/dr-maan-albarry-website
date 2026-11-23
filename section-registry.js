@@ -19,6 +19,7 @@
 //   seo         { title: { ar, en }, description: { ar, en }, schema, ogType, llms }
 // ============================================================
 import { DOCTOR } from './doctor-data.js';
+import { publishedPhotos } from './clinical-profile.js';
 
 export const PUBLISHED = 'published';
 export const UNPUBLISHED = 'unpublished';
@@ -205,6 +206,30 @@ export const SECTIONS = [
       schema: 'MedicalWebPage',
       ogType: 'article',
       llms: 'the light journey through the eye'
+    }
+  },
+  {
+    // Photo gallery (owner brief 2026-11-23). Published automatically once clinical-profile.js GALLERY holds at least one
+    // photograph that passes isPublishablePhoto(); until then it is absent from routes, menus, the sitemap and llms.txt,
+    // so no empty page is indexed. PHOTO_GALLERY_ARCHITECTURE.md.
+    id: 'gallery',
+    type: 'profile',
+    title: { ar: 'معرض الصور', en: 'Photo gallery' },
+    content: 'gallery',
+    route: 'gallery',
+    visibility: publishedPhotos().length ? PUBLISHED : UNPUBLISHED,
+    order: 8,
+    nav: { label: { ar: 'معرض الصور', en: 'Photo gallery' }, drawer: 8, footer: true },
+    features: [],
+    seo: {
+      title: { ar: `معرض الصور: محطات من المسيرة العلمية والمهنية | ${SHORT.ar}`, en: `Photo gallery: milestones of a scientific and professional journey | ${SHORT.en}` },
+      description: {
+        ar: `صور من المؤتمرات والمحافل العلمية، ومن داخل غرفة العمليات، ومن اللقاءات العلمية والمهنية لـ${SHORT.ar}.`,
+        en: `Photographs from conferences and scientific events, the operating room, and scientific and professional meetings of ${SHORT.en}.`
+      },
+      schema: 'CollectionPage',
+      ogType: 'article',
+      llms: 'photo gallery: conferences, operating room, professional meetings'
     }
   },
   {

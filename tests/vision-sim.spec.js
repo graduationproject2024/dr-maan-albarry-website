@@ -153,8 +153,8 @@ test.describe('vision simulator — desktop', () => {
     const g = lensGroup(page);
     await openMore(page);
     const before = await C(page);
-    const order = ['EDOF', 'Trifocal', 'Toric', 'Cataract', 'Monofocal'];
-    for (let i = 0; i < 25; i++) await (order[i % 5] === 'Toric' || order[i % 5] === 'Cataract' ? otherLenses(page) : g).getByText(order[i % 5], { exact: true }).click({ delay: 0 });
+    const order = ['EDOF', 'Trifocal', 'Enhanced', 'Cataract', 'Monofocal']; // toric is a switch, enhanced is in More settings (2026-11-23)
+    for (let i = 0; i < 25; i++) await (order[i % 5] === 'Cataract' || order[i % 5] === 'Enhanced' ? otherLenses(page) : g).getByText(order[i % 5], { exact: true }).click({ delay: 0 });
     await page.evaluate(() => { for (const l of ['edof', 'trifocal', 'toric', 'cataract', 'monofocal', 'trifocal']) window.__vsim.setLens(l); });
     const s = await S(page);
     expect(s.lens).toBe('trifocal');
@@ -245,7 +245,7 @@ test.describe('vision simulator — desktop', () => {
     expect(lens.y).toBeLessThan(view.y + view.height);
     expect(explain.y).toBeGreaterThanOrEqual(bench.y + bench.height - 1);
     expect((await S(page)).scenario).toBe('signs');
-    const expectations = { 'Laptop work': [0.66, 'day', 'laptop'], 'Reading a phone': [0.35, 'day', 'phone'], 'Reading a book': [0.4, 'day', 'book'], 'Night driving': [6, 'night', 'night-driving'], 'Distance signs': [6, 'day', 'signs'] };
+    const expectations = { 'Laptop work': [0.65, 'day', 'laptop'], 'Reading a phone': [0.35, 'day', 'phone'], 'Reading a book': [0.4, 'day', 'book'], 'Night driving': [6, 'night', 'night-driving'], 'Distance signs': [6, 'day', 'signs'] };
     for (const [label, [d, light, id]] of Object.entries(expectations)) {
       await scn.getByText(label, { exact: true }).click();
       const s = await S(page);

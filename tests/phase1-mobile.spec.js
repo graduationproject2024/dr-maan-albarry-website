@@ -102,7 +102,7 @@ for (const [w, h] of MOBILE) {
           await page.locator('#simulator-host').scrollIntoViewIfNeeded();
           await expect(page.locator('#simulator-host .vsim-viewport')).toBeVisible({ timeout: 20_000 });
           await page.locator('#simulator-host .vsim-more').click(); // toric and cataract live in More settings since the workbench rebuild
-          for (const lens of ['edof', 'trifocal', 'monofocal', 'toric', 'cataract']) {
+          for (const lens of ['edof', 'trifocal', 'monofocal', 'enhanced', 'multifocal', 'cataract']) { // toric is a switch on any design since 2026-11-23
             await page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"] + label`).click();
             await expect(page.locator(`#simulator-host input[data-group="lensA"][value="${lens}"]`)).toBeChecked();
             // one synchronous snapshot: view and tag measured in the same frame

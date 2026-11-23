@@ -5,6 +5,11 @@
 //   → { destroy, setLang, setTheme, getState, on, goTo, next, prev, setLight, setFocus }
 // Events (on(name, fn) returns an unsubscribe function): 'step', 'change', 'langchange', 'themechange', 'destroy'.
 //
+// Playback (2026-11-23): the journey plays by itself once it is on screen — each step holds for STEP_MS (÷ speed),
+// with a progress bar that can be scrubbed, Play / Pause / Replay and a speed choice. It pauses while the page is
+// hidden or the module is off screen, and never starts by itself under reduced motion (manual steps only).
+// Extra API: play(), pause(), replay(), seek(0..1), setSpeed(1 | 1.5 | 0.75). getState() adds playing, progress, speed.
+//
 // Educational illustration: the rays are illustrative, not an optical simulation. Medical review: pending.
 import './styles.css';
 import { STEPS, UI, describe } from './content.js';
@@ -16,6 +21,9 @@ export { STEPS, UI };
 export const counters = { mounts: 0, destroys: 0, live: 0, listeners: 0 };
 const instances = new WeakMap();
 let uid = 0;
+/** How long one step is shown during playback at speed 1 (ms): long enough to read the caption. */
+export const STEP_MS = 7000;
+const SPEEDS = [0.75, 1, 1.5];
 
 export function mount(host, options = {}) {
   if (!host || host.nodeType !== 1) throw new TypeError('light-journey mount(host): host must be an element');
@@ -42,6 +50,7 @@ class LightJourney {
       light: o.light === 'dim' ? 'dim' : 'bright',
       focus: o.focus === 'near' ? 'near' : 'far'
     };
+    this.play_ = { playing: false, elapsed: 0, speed: 1, raf: 0, last: 0, onScreen: false, userPaused: false, done: false, io: null };
     this.events = new Map();
     this.disposers = []; // DOM-bound listeners (rebuilt with the DOM)
     this.persistent = []; // listeners that live as long as the instance
@@ -53,14 +62,26 @@ class LightJourney {
       setTheme: (t) => this.setTheme(t),
       getState: () => this.getState(),
       on: (ev, fn) => this.on(ev, fn),
-      goTo: (i) => this.goTo(i),
-      next: () => this.goTo(this.state.step + 1),
-      prev: () => this.goTo(this.state.step - 1),
+      goTo: (i) => { this.pause(true); return this.goTo(i); },
+      next: () => { this.pause(true); return this.goTo(this.state.step + 1); },
+      prev: () => { this.pause(true); return this.goTo(this.state.step - 1); },
       setLight: (v) => this.set({ light: v === 'dim' ? 'dim' : 'bright' }),
-      setFocus: (v) => this.set({ focus: v === 'near' ? 'near' : 'far' })
+      setFocus: (v) => this.set({ focus: v === 'near' ? 'near' : 'far' }),
+      play: () => this.play(), pause: () => this.pause(true), replay: () => this.replay(),
+      seek: (x) => this.seek(x), setSpeed: (v) => this.setSpeed(v)
     };
     this.build();
     if (this.mq && this.reducedOpt === null) this.listen(this.mq, 'change', () => this.applyMotion(), true);
+    // autoplay when on screen; pause when off screen or when the tab is hidden
+    if (typeof IntersectionObserver === 'function') {
+      this.play_.io = new IntersectionObserver(([e]) => {
+        this.play_.onScreen = e.isIntersecting && e.intersectionRatio >= 0.35;
+        if (this.play_.onScreen && !this.play_.userPaused && !this.play_.done && !this.reduced) this.play(false);
+        else if (!this.play_.onScreen) this.halt();
+      }, { threshold: [0, 0.35, 0.6] });
+      this.play_.io.observe(host);
+    }
+    this.listen(document, 'visibilitychange', () => { if (document.hidden) this.halt(); else if (this.play_.onScreen && !this.play_.userPaused && !this.play_.done && !this.reduced && this.play_.wasPlaying) this.play(false); }, true);
   }
 
   get reduced() { return this.reducedOpt !== null ? this.reducedOpt : !!(this.mq && this.mq.matches); }
@@ -80,7 +101,68 @@ class LightJourney {
 
   getState() {
     const s = STEPS[this.state.step];
-    return { step: this.state.step, stepId: s.id, total: STEPS.length, light: this.state.light, focus: this.state.focus, lang: this.lang, theme: this.theme, reducedMotion: this.reduced };
+    return { step: this.state.step, stepId: s.id, total: STEPS.length, light: this.state.light, focus: this.state.focus, lang: this.lang, theme: this.theme, reducedMotion: this.reduced,
+      playing: this.play_.playing, progress: this.progress(), speed: this.play_.speed, done: this.play_.done };
+  }
+
+  // ---------- playback ----------
+  progress() { return Math.min(1, (this.state.step + Math.min(1, this.play_.elapsed / STEP_MS)) / STEPS.length); }
+  play(user = true) {
+    const P = this.play_;
+    if (this.destroyed || P.playing) return;
+    if (user) P.userPaused = false;
+    if (P.done || (this.state.step === STEPS.length - 1 && P.elapsed >= STEP_MS)) { P.done = false; P.elapsed = 0; this.goTo(0, { keepTime: true }); }
+    P.playing = true; P.wasPlaying = true; P.last = performance.now();
+    const tick = (now) => {
+      if (!P.playing) return;
+      P.elapsed += Math.min(250, now - P.last) * P.speed; P.last = now;
+      if (P.elapsed >= STEP_MS) {
+        if (this.state.step >= STEPS.length - 1) { P.elapsed = STEP_MS; P.playing = false; P.done = true; this.syncPlayback(); this.emit('change', this.getState()); return; }
+        P.elapsed = 0; this.goTo(this.state.step + 1, { keepTime: true });
+      }
+      this.syncProgress();
+      P.raf = requestAnimationFrame(tick);
+    };
+    P.raf = requestAnimationFrame(tick);
+    this.syncPlayback(); this.emit('change', this.getState());
+  }
+  /** Pause. `user` = the visitor pressed Pause (autoplay then waits for Play). */
+  pause(user = true) {
+    const P = this.play_;
+    if (user) { P.userPaused = true; P.wasPlaying = false; }
+    if (!P.playing) { this.syncPlayback(); return; }
+    P.playing = false; cancelAnimationFrame(P.raf); P.raf = 0;
+    this.syncPlayback(); this.emit('change', this.getState());
+  }
+  /** Stop for a reason that is not the visitor's (off screen, hidden tab); resumes when it is back. */
+  halt() { const was = this.play_.playing; this.pause(false); this.play_.wasPlaying = was || this.play_.wasPlaying; }
+  replay() { this.play_.done = false; this.play_.elapsed = 0; this.goTo(0, { keepTime: true }); this.play(true); }
+  seek(x) {
+    const v = Math.max(0, Math.min(1, Number(x) || 0)) * STEPS.length;
+    const step = Math.min(STEPS.length - 1, Math.floor(v));
+    this.play_.elapsed = Math.min(STEP_MS, (v - step) * STEP_MS);
+    this.play_.done = false;
+    this.goTo(step, { keepTime: true });
+    this.syncProgress(); this.syncPlayback();
+  }
+  setSpeed(v) { const n = Number(v); if (SPEEDS.includes(n)) { this.play_.speed = n; this.syncPlayback(); this.emit('change', this.getState()); } }
+  syncProgress() {
+    if (!this.root) return;
+    const p = this.progress();
+    const r = this.$('.lj-range');
+    if (r && document.activeElement !== r) r.value = String(Math.round(p * 1000));
+    const f = this.$('.lj-bar-fill'); if (f) f.style.transform = `scaleX(${p})`;
+  }
+  syncPlayback() {
+    if (!this.root) return;
+    const t = UI[this.lang], P = this.play_;
+    const b = this.$('.lj-playbtn');
+    const label = P.playing ? t.pause : P.done ? t.replay : t.play;
+    b.setAttribute('aria-label', label); b.querySelector('.lj-play-t').textContent = label;
+    b.dataset.mode = P.playing ? 'pause' : P.done ? 'replay' : 'play';
+    this.root.dataset.playing = P.playing ? 'true' : 'false';
+    this.root.querySelectorAll('.lj-speed-b').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.speed) === P.speed)));
+    this.syncProgress();
   }
 
   href(slug) {
@@ -107,7 +189,15 @@ class LightJourney {
 </header>
 <div class="lj-stage">
   <div class="lj-figure"></div>
-  <p class="lj-note"><span class="lj-note-dot" aria-hidden="true"></span>${esc(t.illustrativeNote)}</p>
+  <div class="lj-player">
+    <button type="button" class="lj-btn lj-btn--primary lj-playbtn" data-mode="play"><span class="lj-play-i" aria-hidden="true"></span><span class="lj-play-t"></span></button>
+    <div class="lj-bar">
+      <div class="lj-bar-track" aria-hidden="true"><span class="lj-bar-fill"></span>${STEPS.map((_, i) => `<span class="lj-bar-mark" style="inset-inline-start:${(i / STEPS.length) * 100}%"></span>`).join('')}</div>
+      <input class="lj-range" type="range" min="0" max="1000" step="1" value="0" aria-label="${esc(t.timeline)}">
+    </div>
+    <div class="lj-speed" role="group" aria-label="${esc(t.speed)}">${SPEEDS.map((v) => `<button type="button" class="lj-speed-b" data-speed="${v}" aria-pressed="false"><bdi dir="ltr">${v}×</bdi></button>`).join('')}</div>
+  </div>
+  <p class="lj-note"><span class="lj-note-dot" aria-hidden="true"></span>${esc(t.illustrativeNote)} ${esc(t.autoplayNote)}</p>
 </div>
 <div class="lj-deck">
   <div class="lj-panel" tabindex="-1">
@@ -143,6 +233,7 @@ class LightJourney {
     this.wire();
     this.applyMotion();
     this.update({ announce: false });
+    this.syncPlayback();
   }
 
   renderFigure() {
@@ -161,13 +252,17 @@ class LightJourney {
     this.listen(r, 'click', (e) => {
       const b = e.target.closest('button, [data-hit]');
       if (!b || !r.contains(b)) return;
-      if (b.matches('.lj-stop')) this.goTo(+b.dataset.step, { focusPanel: false });
-      else if (b.matches('.lj-prev')) this.goTo(this.state.step - 1);
-      else if (b.matches('.lj-next')) this.goTo(this.state.step + 1);
+      if (b.matches('.lj-playbtn')) { if (this.play_.playing) this.pause(true); else if (this.play_.done) this.replay(); else this.play(true); }
+      else if (b.matches('.lj-speed-b')) this.setSpeed(b.dataset.speed);
+      // taking the steps by hand hands control to the visitor: autoplay stops until Play
+      else if (b.matches('.lj-stop')) { this.pause(true); this.goTo(+b.dataset.step, { focusPanel: false }); }
+      else if (b.matches('.lj-prev')) { this.pause(true); this.goTo(this.state.step - 1); }
+      else if (b.matches('.lj-next')) { this.pause(true); this.goTo(this.state.step + 1); }
       else if (b.dataset.light) this.set({ light: b.dataset.light });
       else if (b.dataset.focus) this.set({ focus: b.dataset.focus });
-      else if (b.dataset.hit) { const i = STEPS.findIndex((s) => s.part === b.dataset.hit); if (i >= 0) this.goTo(i); }
+      else if (b.dataset.hit) { const i = STEPS.findIndex((s) => s.part === b.dataset.hit); if (i >= 0) { this.pause(true); this.goTo(i); } }
     });
+    this.listen(this.$('.lj-range'), 'input', (e) => this.seek(Number(e.target.value) / 1000));
     this.listen(r, 'keydown', (e) => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
       if (e.target.closest('summary, a, .lj-text')) return;
@@ -180,14 +275,16 @@ class LightJourney {
       else if (e.key === 'End') to = STEPS.length - 1;
       if (to === null) return;
       e.preventDefault();
+      this.pause(true);
       this.goTo(to);
       // keep keyboard focus on the matching step stop so the rail stays the reading position
       if (e.target.closest('.lj-rail')) this.$(`.lj-stop[data-step="${this.state.step}"]`)?.focus();
     });
   }
 
-  goTo(i, { focusPanel = false } = {}) {
+  goTo(i, { focusPanel = false, keepTime = false } = {}) {
     const n = Math.max(0, Math.min(STEPS.length - 1, Math.round(Number(i) || 0)));
+    if (!keepTime && !this.destroyed) { this.play_.elapsed = 0; this.play_.done = false; this.syncProgress(); this.syncPlayback(); }
     if (this.destroyed || n === this.state.step) return this.getState();
     this.state.step = n;
     this.update();
@@ -244,7 +341,7 @@ class LightJourney {
     if (announce) this.$('.lj-live').textContent = t.announce(step + 1, total, c);
   }
 
-  applyMotion() { if (this.root) this.root.dataset.motion = this.reduced ? 'reduce' : 'full'; }
+  applyMotion() { if (this.root) this.root.dataset.motion = this.reduced ? 'reduce' : 'full'; if (this.reduced && this.play_ && this.play_.playing && !this.play_.userStarted) this.pause(false); }
 
   setLang(l) {
     const lang = l === 'en' ? 'en' : 'ar';
@@ -275,6 +372,8 @@ class LightJourney {
 
   destroy() {
     if (this.destroyed) return;
+    this.pause(false);
+    if (this.play_.io) { this.play_.io.disconnect(); this.play_.io = null; }
     this.emit('destroy', this.getState());
     this.teardownDom();
     for (const d of this.persistent.splice(0)) d();

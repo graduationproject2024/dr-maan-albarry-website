@@ -25,7 +25,8 @@ export async function loadDefinition(slug) {
 
 export async function mount(host, options = {}) {
   const def = await loadDefinition(options.procedure);
-  return mountEngine(host, def, options);
+  const { COMPARE } = await import('./procedures/compare.js');
+  return mountEngine(host, COMPARE[options.procedure] && !def.compare ? { ...def, compare: COMPARE[options.procedure] } : def, options);
 }
 
 /** Review metadata for every procedure and variant (used by the review-queue export and the tests). */

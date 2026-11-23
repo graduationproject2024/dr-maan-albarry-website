@@ -10,8 +10,9 @@
 import { DOCTOR, FAQ, PROCEDURES, PROCEDURE_GROUPS, procedureBySlug, whatsappUrl, publishableTestimonials, yearsOfExperience, buildJsonLd, buildProcedureJsonLd, buildSectionJsonLd, PORTRAIT, portraitSrcset } from './doctor-data.js';
 import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } from './site-routes.js';
 import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
-import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES } from './src/site/content.js';
+import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES, OCULAR_SURFACE } from './src/site/content.js';
 import { createFeatureMount, hasFeature } from './src/feature-loaders.js';
+import { EMPLOYMENT, publicAchievements, achievementById, verifiedPublications, DEVICES, timelineItems, publishedPhotos, GALLERY_CATEGORIES } from './clinical-profile.js';
 import { createSectionPatterns } from './src/site/section-patterns.js';
 
 // Pick the current-language value from an { ar, en } pair.
@@ -129,7 +130,11 @@ const D = DOCTOR;
 const C = DOCTOR.contact;
 const role = id => D.professional.roles.find(r => r.id === id);
 const short = r => (currentLang === 'ar' ? (r.shortAr || r.ar) : (r.shortEn || r.en));
-const STAT = D.credibility.statistics.find(s => s.id === 'cases-15000');
+const STAT = D.credibility.statistics[0] || null; // the one public career statistic (doctor-data.js)
+/** A count-up statistic: the final value is in the markup (no-JS, prerender, screen readers); bindCounters() animates it once. */
+// The visible digits are drawn from data-n by CSS (::after), so the page's text content is always the final value (no-JS,
+// prerender adoption and screen readers all read "25,000+"); bindCounters() only changes data-n while it animates.
+const statValue = (st, cls = '') => `<strong class="stat-count ${cls}" data-count="${st.count}"><bdi dir="ltr" class="stat-num" aria-hidden="true" data-n="${st.value}"></bdi><span class="sr-only">${st.value}</span></strong>`;
 const groupOf = id => PROCEDURE_GROUPS.find(g => g.id === id);
 const guideBy = id => GUIDES.find(g => g.id === id);
 
@@ -145,7 +150,8 @@ function sourceTag(src) {
     magrabi: tr('منشور لدى مغربي الصحية', 'Published by Magrabi Health'),
     taibah: tr('منشور لدى جامعة طيبة', 'Published by Taibah University'),
     doctor: tr('أكده د. معن', 'Confirmed by Dr. Maan'),
-    owner: tr('من إدارة الموقع', 'Supplied by the site owner')
+    owner: tr('من إدارة الموقع', 'Supplied by the site owner'),
+    'owner-2026-11-23': tr('معلومات قدّمها د. معن عبر إدارة الموقع', 'Provided by Dr. Maan via the site owner')
   }[src];
   return label ? `<span class="src-tag">${label}</span>` : '';
 }
@@ -463,8 +469,6 @@ function renderHeader() {
 function renderHero() {
   const chief = role('magrabi-chief');
   const years = yearsOfExperience();
-  const cataract = procedureBySlug('cataract-surgery');
-  const heroArt = atlasOf('cataract-surgery', 'L2')[0]; // the wide natural-lens / implant render: the strongest single image
   return `
   <section class="hero" id="home" aria-labelledby="hero-title">
     <div class="container hero-grid">
@@ -487,10 +491,6 @@ function renderHero() {
         </div>
       </div>
 
-      <figure class="hero-plate">
-        ${heroArt ? atlasIllus(heroArt, { bg: 'alpha', pins: false, cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' }) : cardIllus(cataract, { cls: 'hero-plate-illus', sizes: '(min-width: 1320px) 200px, 112px' })}
-        <figcaption class="fig-cap"><span class="fig-n"><bdi dir="ltr">PL.01</bdi></span><span class="fig-pending">${pendingNote()}</span></figcaption>
-      </figure>
     </div>
 
     <div class="container">
@@ -501,9 +501,9 @@ function renderHero() {
           <span class="hero-fact-sub">${tr(`<bdi>${years}</bdi> عاماً من الخبرة`, `<bdi>${years}</bdi> years of experience`)}</span>
         </li>
         ${STAT ? `<li class="hero-fact">
-          <strong class="hero-fact-value"><bdi dir="ltr">${STAT.value}</bdi></strong>
+          ${statValue(STAT, 'hero-fact-value')}
           <span class="hero-fact-label">${L(STAT.label)}</span>
-          <span class="hero-fact-sub">${tr('إجمالي المسيرة: فحوص وإجراءات معاً', 'Career total: examinations and procedures combined')}</span>
+          <span class="hero-fact-sub">${L(STAT.sub)}</span>
         </li>` : ''}
         <li class="hero-fact">
           <strong class="hero-fact-value"><bdi dir="ltr">FRCS</bdi></strong>
@@ -552,17 +552,32 @@ function plateCard(p, i, { cls = 'spec-card', sizes = '(min-width: 1024px) 30vw,
           </div>
         </article>`;
 }
+// The homepage gallery: illustration + name only (Dr. Maan's request, 2026-11-23). Each item is one large link; the
+// summaries stay on the procedure pages and in doctor-data.js. Every procedure now has an interactive 3D walkthrough,
+// marked with a small badge rather than a label line.
+function galleryItem(p, i) {
+  return `
+        <li class="pgal-item" data-slug="${p.slug}">
+          <a class="pgal-link" href="${pageHref(currentLang, p.slug)}" data-nav>
+            <span class="pgal-fig">${cardIllus(p, { cls: 'pgal-illus', sizes: '(min-width: 1024px) 380px, (min-width: 560px) 46vw, 92vw' })}</span>
+            <span class="pgal-meta">
+              <span class="pgal-n" aria-hidden="true"><bdi dir="ltr">${String(i + 1).padStart(2, '0')}</bdi></span>
+              <span class="pgal-name">${L(p.name)}</span>
+              <span class="pgal-3d" title="${tr('يتضمن شرحاً تفاعلياً ثلاثي الأبعاد', 'Includes an interactive 3D walkthrough')}">${icon('cube', 14)}<span>3D</span><span class="sr-only">${tr(' — يتضمن شرحاً تفاعلياً ثلاثي الأبعاد', ' — includes an interactive 3D walkthrough')}</span></span>
+            </span>
+          </a>
+        </li>`;
+}
 function renderSpecialties() {
   return `
   <section class="chapter gallery" id="procedures" aria-labelledby="procedures-title">
     <div class="container">
       ${chapterHead('03', tr('الإجراءات والعلاجات', 'Procedures & treatments'), tr('ما الذي يعالجه د. معن؟', 'What Dr. Maan treats'), {
         id: 'procedures-title',
-        lede: tr('سبعة إجراءات، لكل منها دليل مبسّط للتشريح والخطوات والتعافي والمخاطر. معلومات توعوية عامة بانتظار مراجعة د. معن، ولا تغني عن الفحص.', 'Seven procedures, each with a plain-language guide to the anatomy, steps, recovery and risks. General education pending Dr. Maan’s review; it does not replace an examination.'),
         aside: quietLink(P('procedures'), tr('مكتبة الإجراءات الكاملة', 'The full procedure library'))
       })}
-      ${procedureGallery({ cls: 'atlas atlas-home fade-in', cards: PROCEDURES.map((p, i) => plateCard(p, i, { cls: `spec-card${i === 0 ? ' is-lead' : ''}`, pins: i === 0, sizes: i === 0 ? '(min-width: 1024px) 560px, 100vw' : '(min-width: 1024px) 300px, (min-width: 640px) 45vw, 120px' })) })}
-      <p class="atlas-note">${pendingNote()}. ${tr('الأرقام على اللوحة الأولى مواضع محسوبة من النموذج ثلاثي الأبعاد.', 'The numbers on the first plate are positions computed from the 3D model.')}</p>
+      <ol class="pgal fade-in">${PROCEDURES.map(galleryItem).join('')}</ol>
+      <p class="pgal-note">${icon('cube', 16)}<span>${tr('لكل إجراء شرح تفاعلي ثلاثي الأبعاد داخل صفحته.', 'Every procedure has an interactive 3D walkthrough on its page.')}</span> ${quietLink(P('surgical-education'), tr('استكشف العمليات تفاعلياً', 'Explore the procedures in 3D'))}</p>
     </div>
   </section>`;
 }
@@ -602,9 +617,9 @@ function renderExpertise() {
 const LENS_LAB_ART = () => {
   const zones = [tr('بعيد', 'Far'), tr('متوسط', 'Intermediate'), tr('قريب', 'Near')];
   const x0 = 116, zw = (480 - x0) / 3;
-  const bars = LENS_SUMMARY.slice(0, 3).map((l, i) => ({ code: l.code, w: zw * (i + 1) }));
+  const bars = LENS_SUMMARY.filter(l => l.reach > 0).map(l => ({ code: l.code, w: zw * l.reach }));
   return `
-  <svg class="disc-art lab-art" viewBox="0 0 480 214" role="img" aria-label="${tr('رسم: العدسة أحادية البؤرة للبعيد، وممتدة المدى من البعيد إلى المتوسط، وثلاثية البؤرة من البعيد إلى القريب', 'Diagram: a monofocal lens covers far, extended depth of focus far to intermediate, and trifocal far to near')}" focusable="false" direction="ltr" style="direction:ltr">
+  <svg class="disc-art lab-art" viewBox="0 0 480 214" role="img" aria-label="${tr('رسم: العدسة الأحادية للبعيد، والأحادية المطورة للبعيد والمتوسط، وممتدة المدى حتى نحو ٥٠ سم، والثلاثية من البعيد إلى القريب', 'Diagram: a standard monofocal covers far, an enhanced monofocal far and intermediate, EDOF to about 50 cm, and a trifocal far to near')}" focusable="false" direction="ltr" style="direction:ltr">
     <g class="da-grid">${[1, 2].map(k => `<path d="M${x0 + zw * k} 8V206"/>`).join('')}<path d="M${x0} 8V206"/></g>
     <g class="da-icons" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <g transform="translate(${x0 + zw / 2 - 80} -22)"><path d="M50 70 80 34l30 36M62 70v20h36V70"/><path d="M44 100h72"/></g>
@@ -612,7 +627,7 @@ const LENS_LAB_ART = () => {
       <g transform="translate(${x0 + zw * 2.5 - 400} -20)"><path d="M366 42h34v52h-34z"/><path d="M400 42h34v52h-34z"/></g>
     </g>
     <g class="da-labels">${zones.map((z, k) => `<text x="${(x0 + zw * k + zw / 2).toFixed(1)}" y="104" text-anchor="middle">${z}</text>`).join('')}</g>
-    <g class="da-bands">${bars.map((b, i) => `<text class="da-code" x="${x0 - 12}" y="${140 + i * 28}" text-anchor="end">${b.code}</text><rect x="${x0 + 6}" y="${131 + i * 28}" width="${(b.w - 12).toFixed(1)}" height="10" rx="5"/>`).join('')}</g>
+    <g class="da-bands">${bars.map((b, i) => `<text class="da-code" x="${x0 - 12}" y="${132 + i * 21}" text-anchor="end">${b.code}</text><rect x="${x0 + 6}" y="${124 + i * 21}" width="${(b.w - 12).toFixed(1)}" height="9" rx="4.5"/>`).join('')}</g>
   </svg>`;
 };
 // Light Journey preview: the light path through the eye, labelled (cornea → lens → retina).
@@ -847,6 +862,38 @@ function renderHome() {
 // ============================================================
 // /about/ — the physician profile
 // ============================================================
+const TL_KIND = {
+  employment: { ar: 'العمل', en: 'Clinical post' }, qualification: { ar: 'مؤهل', en: 'Qualification' },
+  innovation: { ar: 'إدخال تقنية أو إجراء', en: 'Introduction' }, clinical: { ar: 'خبرة سريرية', en: 'Clinical experience' },
+  research: { ar: 'بحث وعلاج', en: 'Research & treatment' }, devices: { ar: 'تقنية تشخيصية', en: 'Diagnostics' }
+};
+const INNOV_GROUPS = [
+  { cats: ['innovation'], title: { ar: 'إجراءات وتقنيات أدخلها وأجراها', en: 'Procedures and techniques he introduced' } },
+  { cats: ['clinical', 'research', 'experience'], title: { ar: 'خبرة سريرية وبحثية', en: 'Clinical and research experience' } }
+];
+const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function innovItem(a) {
+  const pubs = verifiedPublications().filter(pb => (a.publicationIds || []).includes(pb.id));
+  const link = a.link ? ` <a href="${pageHref(currentLang, a.link)}" data-nav class="text-link innov-more">${L(procedureBySlug(a.link).name)}</a>` : '';
+  return `<li class="innov">${a.year ? `<span class="innov-year"><bdi>${a.year}</bdi></span>` : '<span class="innov-year" aria-hidden="true">—</span>'}<div><p>${L(a.public)}${link}</p>${pubs.map(pb => `<p class="innov-pub">${icon('book', 14)}<a href="${pb.pubmed}" ${EXT} class="text-link" lang="en" dir="ltr">${esc(pb.title)} (${pb.year})</a></p>`).join('')}</div></li>`;
+}
+function deviceCard(d) {
+  const a = achievementById(d.achievementId);
+  const photo = d.image ? `<figure class="dev-photo"><img src="${d.image.src}" width="${d.image.width}" height="${d.image.height}" alt="${L(d.image.alt)}" loading="lazy" decoding="async"><figcaption>${esc(d.image.credit)}</figcaption></figure>` : '';
+  return `
+          <article class="dev-card${d.image ? ' has-photo' : ''}" id="device-${d.id}">
+            ${photo}
+            <div class="dev-body">
+              <p class="dev-maker" lang="en" dir="ltr">${esc(d.maker)}</p>
+              <h3 class="dev-name" lang="en" dir="ltr">${esc(d.name)}</h3>
+              <p class="dev-kind">${L(d.kind)}</p>
+              <p>${L(d.what)}</p>
+              <ul class="bullets">${d.uses.map(u => `<li>${L(u)}</li>`).join('')}</ul>
+              ${a ? `<p class="dev-intro">${icon('sparkle', 16)}<span>${L(a.public)}</span></p>` : ''}
+              <p class="dev-src"><a href="${d.url}" ${EXT} class="text-link">${tr('صفحة الجهاز لدى الشركة المصنّعة', 'Manufacturer’s product page')}${icon('external', 14)}</a></p>
+            </div>
+          </article>`;
+}
 function renderAboutPage() {
   const P_ = D.professional;
   const chief = role('magrabi-chief');
@@ -864,7 +911,7 @@ function renderAboutPage() {
   const facts = `
           <ul class="about-facts ledger" aria-label="${tr('حقائق مهنية', 'Professional facts')}">
             <li><strong><bdi>${P_.experienceSince}</bdi></strong><span>${tr('بداية الممارسة السريرية والجراحية', 'Start of clinical and surgical practice')}</span></li>
-            ${STAT ? `<li><strong><bdi dir="ltr">${STAT.value}</bdi></strong><span>${L(STAT.label)}</span><small>${tr('إجمالي المسيرة، فحوص وإجراءات معاً', 'Career total, examinations and procedures combined')}</small></li>` : ''}
+            ${STAT ? `<li>${statValue(STAT)}<span>${L(STAT.label)}</span><small>${L(STAT.sub)}</small></li>` : ''}
             <li><strong><bdi dir="ltr">FRCS</bdi></strong><span>${tr('زمالة كلية الجراحين الملكية – بريطانيا', 'Fellowship of the Royal College of Surgeons, UK')}</span></li>
           </ul>`;
   return `
@@ -933,21 +980,52 @@ function renderAboutPage() {
     </section>
 
     <section class="section section-band" id="record" aria-labelledby="record-title">
-      <div class="container record-grid">
-        <div>
-          ${sectionHead('04', tr('السجل المهني', 'Professional record'), tr('محطات مؤرخة وموثقة فقط', 'Dated, verified milestones only'),
-            tr('لا نذكر تاريخاً لم يُوثق. المناصب غير المؤرخة مدرجة أعلاه دون سنوات.', 'No date is shown unless it is documented. Undated roles are listed above without years.'), { id: 'record-title' })}
-          <ol class="record">
-            <li><span class="record-year"><bdi>${P_.experienceSince}</bdi></span><div><h3>${tr('بداية الممارسة السريرية والجراحية في طب العيون', 'Start of clinical and surgical practice in ophthalmology')}</h3><p>${sourceTag('owner')}</p></div></li>
-            <li><span class="record-year"><bdi>2024</bdi></span><div><h3>${tr('مشاركة في مؤتمر طب العيون السعودي 2024 – البحر الأحمر', 'Took part in Saudi Ophthalmology 2024 – The Red Sea')}</h3><p>${tr('موثقة بصورة المؤتمر المرفقة.', 'Documented by the conference photograph on this page.')} ${sourceTag('owner')}</p></div></li>
-            <li><span class="record-year">${tr('اليوم', 'Today')}</span><div><h3>${chief[currentLang]}</h3><p>${sourceTag(chief.source)}</p></div></li>
-          </ol>
+      <div class="container">
+        ${sectionHead('04', tr('المسيرة المهنية', 'Professional timeline'), tr('محطات مؤرخة', 'Dated milestones'),
+          tr('السنوات كما قدّمها د. معن أو نشرتها الجهات الرسمية. البنود غير المؤرخة لا تُنسب إليها سنة.', 'Years as provided by Dr. Maan or published by the institutions. Undated items are never given a year.'), { cls: 'section-head-split', id: 'record-title' })}
+        <ol class="tl fade-in">
+          <li class="tl-item"><span class="tl-year"><bdi>${P_.experienceSince}</bdi></span><div class="tl-body"><p class="tl-kind">${tr('البداية', 'Start')}</p><h3>${tr('بداية الممارسة السريرية والجراحية في طب العيون', 'Start of clinical and surgical practice in ophthalmology')}</h3>${sourceTag('owner')}</div></li>
+          ${timelineItems().map(t => `<li class="tl-item tl-${t.kind}"><span class="tl-year"><bdi dir="ltr">${t.from}${t.to ? `–${t.to}` : ''}</bdi></span><div class="tl-body"><p class="tl-kind">${TL_KIND[t.kind] ? L(TL_KIND[t.kind]) : ''}</p><h3>${L(t.title)}</h3>${t.text ? `<p>${L(t.text)}</p>` : ''}${sourceTag('owner-2026-11-23')}</div></li>`).join('')}
+          <li class="tl-item"><span class="tl-year"><bdi>2024</bdi></span><div class="tl-body"><p class="tl-kind">${tr('مؤتمرات', 'Conferences')}</p><h3>${tr('مشاركة في مؤتمر طب العيون السعودي 2024 – البحر الأحمر', 'Took part in Saudi Ophthalmology 2024 – The Red Sea')}</h3>${sourceTag('owner')}</div></li>
+          <li class="tl-item is-now"><span class="tl-year">${tr('اليوم', 'Today')}</span><div class="tl-body"><p class="tl-kind">${tr('حالياً', 'Current')}</p><h3>${chief[currentLang]}</h3>${sourceTag(chief.source)}</div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="innovation" aria-labelledby="innov-title">
+      <div class="container">
+        ${sectionHead('05', tr('الخبرة السريرية والإسهامات', 'Clinical experience & contributions'), tr('ما أدخله ومارسه في طب العيون', 'What he has introduced and practised'),
+          tr('بنود قدّمها د. معن عبر إدارة الموقع. حيث يوجد بحث منشور يُذكر رابطه.', 'Items provided by Dr. Maan via the site owner. Where a peer-reviewed paper exists, it is linked.'), { cls: 'section-head-split', id: 'innov-title' })}
+        <div class="innov-grid fade-in">
+          ${INNOV_GROUPS.map(g => `
+          <div class="innov-group">
+            <h3 class="ledger-title">${L(g.title)}</h3>
+            <ul class="innov-list">${publicAchievements().filter(a => g.cats.includes(a.category)).map(a => innovItem(a)).join('')}</ul>
+          </div>`).join('')}
         </div>
-        <div>
-          ${sectionHead('05', tr('الإسهام التعليمي', 'Educational contributions'), tr('التعليم جزء من الممارسة', 'Teaching is part of the practice'), '', { id: 'contrib-title' })}
+        <div class="kkesh-teach fade-in">${icon('book', 20)}<p>${L(EMPLOYMENT[0].teaching)} <span class="kkesh-when">${L(EMPLOYMENT[0].place)}, <bdi dir="ltr">${EMPLOYMENT[0].from}–${EMPLOYMENT[0].to}</bdi></span></p></div>
+      </div>
+    </section>
+
+    <section class="section section-band" id="diagnostics" aria-labelledby="diag-title">
+      <div class="container">
+        ${sectionHead('06', tr('تقنيات تشخيصية', 'Diagnostic technology'), tr('تقنيات تشخيصية متقدمة في عيادته', 'Advanced diagnostic technology in his practice'),
+          tr('أجهزة أدخلها د. معن إلى ممارسته. الأجهزة من صنع شركاتها؛ والوصف مأخوذ من صفحات الشركات المصنّعة الرسمية.', 'Devices Dr. Maan brought into his practice. The devices are made by their manufacturers; descriptions follow the makers’ official pages.'), { cls: 'section-head-split', id: 'diag-title' })}
+        <div class="dev-grid fade-in">${DEVICES.map(deviceCard).join('')}</div>
+      </div>
+    </section>
+
+    <section class="section" id="publications" aria-labelledby="pubs-title">
+      <div class="container about-pubs">
+        ${sectionHead('07', tr('أبحاث منشورة', 'Published research'), tr('مختارات من أبحاثه المحكّمة', 'Selected peer-reviewed papers'),
+          tr('أبحاث يظهر فيها اسمه مؤلفاً في PubMed، مع الرابط إلى كل بحث.', 'Papers listing him as an author in PubMed, each with its link.'), { cls: 'section-head-split', id: 'pubs-title' })}
+        <ol class="pubs fade-in">${verifiedPublications().sort((a, b) => b.year - a.year).map(pb => `<li><span class="pub-year"><bdi>${pb.year}</bdi></span><div><p class="pub-title" lang="en" dir="ltr">${esc(pb.title)}</p><p class="pub-meta" lang="en" dir="ltr">${esc(pb.journal)} · <a href="${pb.pubmed}" ${EXT} class="text-link">PubMed${icon('external', 14)}</a>${pb.doi ? ` · <a href="https://doi.org/${pb.doi}" ${EXT} class="text-link">DOI${icon('external', 14)}</a>` : ''}</p></div></li>`).join('')}</ol>
+        <div class="about-teach">
+          ${sectionHead('08', tr('الإسهام التعليمي', 'Educational contributions'), tr('التعليم جزء من الممارسة', 'Teaching is part of the practice'), '', { id: 'contrib-title' })}
           <ul class="contrib">
             <li>${icon('book', 20)}<span>${L(P_.academicRank)}: ${tr('تعليم طلاب الطب والأطباء المتدربين.', 'teaching medical students and doctors in training.')}</span></li>
             <li>${icon('book', 20)}<span>${role('taibah-chair')[currentLang]}.</span></li>
+            <li>${icon('book', 20)}<span>${L(EMPLOYMENT[0].teaching)}</span></li>
             <li>${icon('book', 20)}<span>${role('redsea')[currentLang]}.</span></li>
             <li>${icon('book', 20)}<span>${role('sos-rep')[currentLang]}.</span></li>
             <li>${icon('sparkle', 20)}<span>${tr('على هذا الموقع: ', 'On this site: ')}<a href="${P('education')}" data-nav class="text-link">${tr('مكتبة التثقيف', 'the education library')}</a>، <a href="${P('surgical-education')}" data-nav class="text-link">${tr('الجراحة ثلاثية الأبعاد', 'the 3D surgery walkthrough')}</a>، <a href="${P('lens-lab')}" data-nav class="text-link">${tr('مختبر العدسات', 'the Lens Lab')}</a>.</span></li>
@@ -1056,6 +1134,28 @@ function renderSimulator() {
     </div>
   </section>`;
 }
+/** Short ocular-surface summary with a link to the full explanation on the Lens Lab page. */
+function ocularSurfaceNote() {
+  return `<aside class="os-note" aria-label="${L(OCULAR_SURFACE.title)}">${icon('eye', 20)}<div><p class="os-note-t">${L(OCULAR_SURFACE.title)}</p><p>${L(OCULAR_SURFACE.short)}</p><a href="${P('lens-lab')}#ocular-surface" data-nav class="text-link">${tr('لماذا يهم ذلك؟', 'Why it matters')}</a></div></aside>`;
+}
+/** Full ocular-surface guidance (/lens-lab/#ocular-surface). */
+function renderOcularSurface() {
+  const o = OCULAR_SURFACE;
+  return `
+    <section class="section section-band os-sec" id="ocular-surface" aria-labelledby="os-title">
+      <div class="container">
+        ${sectionHead('', tr('قبل الجراحة', 'Before surgery'), L(o.title), L(o.lede), { cls: 'section-head-split', id: 'os-title' })}
+        <ol class="os-points fade-in">
+          ${o.points.map((pt, i) => `<li><span class="os-n" aria-hidden="true"><bdi dir="ltr">${String(i + 1).padStart(2, '0')}</bdi></span><h3>${L(pt)[0]}</h3><p>${L(pt)[1]}</p></li>`).join('')}
+        </ol>
+        <div class="os-decides fade-in">
+          <h3>${L(o.decides.title)}</h3>
+          <ul class="bullets bullets-check">${L(o.decides.items).map(t => `<li>${t}</li>`).join('')}</ul>
+          <p class="proc-note">${icon('info', 18)}<span>${tr('محتوى تثقيفي بانتظار مراجعة د. معن النهائية؛ ولا يغني عن الفحص.', 'Educational content pending Dr. Maan’s final review; it does not replace an examination.')}</span></p>
+        </div>
+      </div>
+    </section>`;
+}
 function renderLensLabPage() {
   const summary = `
           <ul class="lens-summary">
@@ -1070,6 +1170,7 @@ function renderLensLabPage() {
       aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a></nav>`
     })}
     ${renderSimulator()}
+    ${renderOcularSurface()}
     <section class="section" id="lab" aria-labelledby="lab-title">
       <div class="container">
         <h2 class="sr-only" id="lab-title">${tr('المقارنة', 'The comparison')}</h2>
@@ -1109,9 +1210,9 @@ const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, 
 // against known ones; a valid URL value beats the stored one. Changing a control only rewrites the current history
 // entry (replaceState), so Back still leaves the page. Keep in step with src/vision-sim/optics/params.js.
 const VSIM_STORE = 'lens-lab-choice';
-const VSIM_LENSES = ['monofocal', 'edof', 'multifocal', 'trifocal', 'toric', 'cataract'];
-const VSIM_SIMPLE_LENSES = ['monofocal', 'edof', 'trifocal'];
-const VSIM_DIST = { near: 0.4, intermediate: 0.66, far: 6 };
+const VSIM_LENSES = ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric', 'cataract'];
+const VSIM_SIMPLE_LENSES = ['monofocal', 'enhanced', 'edof', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric'];
+const VSIM_DIST = { near: 0.4, intermediate: 0.65, far: 6 };
 const VSIM_LIGHT = { day: 'day', dim: 'dusk', night: 'night' };
 const VSIM_DEFAULT = { lens: 'monofocal', dist: 'far', light: 'day' };
 /** Only values the simulator knows survive. */
@@ -1425,7 +1526,7 @@ const p3d = { host: null, controller: null, state: 'idle', slug: null }; // idle
 const P3D_COPY = {
   'lens-implants': ['العدسة المزروعة داخل العين، ثلاثية الأبعاد', 'The lens implant inside the eye, in 3D', 'شاهد أين توضع العدسة داخل محفظة العدسة الطبيعية، وكيف تختلف أنواعها في توزيع التركيز.', 'See where the implant sits inside the natural lens’s capsule, and how the types differ in sharing focus.'],
   icl: ['عدسة ICL داخل العين، ثلاثية الأبعاد', 'The ICL inside the eye, in 3D', 'شاهد مكان العدسة بين القزحية والعدسة الطبيعية التي تبقى في مكانها.', 'See where the lens sits, between the iris and the natural lens, which stays in place.'],
-  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الليزك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare LASIK, PRK and SMILE on a model of the cornea and its layers.'],
+  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الفيمتوليزيك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare Femto-LASIK, PRK and SMILE on a model of the cornea and its layers.'],
   'keratoconus-cxl': ['القرنية المخروطية وتثبيت القرنية، ثلاثي الأبعاد', 'Keratoconus and cross-linking, in 3D', 'شاهد كيف يختلف شكل القرنية المخروطية، وفكرة تقوية ألياف القرنية بالتثبيت.', 'See how a keratoconic cornea differs in shape, and the idea behind strengthening its fibres with cross-linking.'],
   'corneal-transplant': ['زراعة القرنية، ثلاثية الأبعاد', 'Corneal transplant, in 3D', 'استكشف طبقات القرنية وكيف يستبدل كل نوع من الزراعة الطبقة المتضررة فقط أو القرنية كاملة السماكة.', 'Explore the corneal layers and how each type of transplant replaces only the damaged layer, or the full thickness.'],
   'intravitreal-injections': ['حقن العين، ثلاثية الأبعاد', 'Eye injections, in 3D', 'استكشف الجسم الزجاجي والشبكية والبقعة، وفكرة وصول الدواء إلى خلف العين.', 'Explore the vitreous, the retina and the macula, and the idea of medicine reaching the back of the eye.']
@@ -1776,7 +1877,7 @@ function renderProcedurePage(p) {
         ${sec('anatomy', `<div class="anat${loupe ? ' has-loupe' : ''}"><div class="anat-text"><p>${c.anatomy.text}</p><dl class="anat-parts">${c.anatomy.parts.map(([t, d], i) => `<div><dt><span class="anat-n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>${t}</dt><dd>${d}</dd></div>`).join('')}</dl></div>${loupe}</div>`, 'proc-sec-wide')}
         ${sec('purpose', `<p class="proc-p-lg">${c.purpose}</p>`)}
         ${c.types ? sec('types', `<ul class="types">${c.types.map(([n, code, d]) => `<li class="type"><p class="type-code"><bdi dir="ltr">${code}</bdi></p><h3>${n}</h3><p>${d}</p></li>`).join('')}</ul>${p.slug === 'lens-implants' || p.slug === 'cataract-surgery' ? `<p class="proc-note">${icon('lens', 18)}<span>${tr('قارن العدسات مسافةً بمسافة في ', 'Compare lenses distance by distance in the ')}<a href="${P('lens-lab')}" data-nav class="text-link">${tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab')}</a></span></p>` : ''}`) : ''}
-        ${sec('candidates', `${list(c.candidates, 'bullets-check')}<p class="proc-note">${icon('info', 18)}<span>${tr('اعتبارات عامة فقط؛ يحدد الطبيب الملاءمة بعد فحص عينك.', 'General considerations only; suitability is decided by your doctor after examining your eye.')}</span></p>`)}
+        ${sec('candidates', `${list(c.candidates, 'bullets-check')}${p.slug === 'lens-implants' || p.slug === 'cataract-surgery' ? ocularSurfaceNote() : ''}<p class="proc-note">${icon('info', 18)}<span>${tr('اعتبارات عامة فقط؛ يحدد الطبيب الملاءمة بعد فحص عينك.', 'General considerations only; suitability is decided by your doctor after examining your eye.')}</span></p>`)}
         ${sec('steps', `<ol class="steps">${c.steps.map((t, i) => `<li><span class="step-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><p>${t}</p></li>`).join('')}</ol>`)}
         ${sec('benefits', `<div class="two-col"><div class="pane pane-pos"><h3>${icon('check', 18)}${tr('الفوائد المحتملة', 'Possible benefits')}</h3>${list(c.benefits)}</div><div class="pane"><h3>${icon('minus', 18)}${tr('الحدود', 'Limitations')}</h3>${list(c.limitations)}</div></div>`)}
         ${sec('risks', `${list(c.risks)}<p class="proc-note proc-note-alert">${icon('alert', 18)}<span>${tr('تواصل مع العيادة فوراً عند ألم متزايد، أو احمرار شديد، أو تراجع مفاجئ في الرؤية.', 'Contact the clinic at once for increasing pain, marked redness or a sudden drop in vision.')}</span></p>`)}
@@ -2343,6 +2444,34 @@ function observeIntersection() {
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  bindCounters();
+}
+
+// Count-up for the career statistic: runs once per element when it first enters the viewport, eases out and lands
+// exactly on the final value (never overshoots, never repeats). Reduced motion, no IntersectionObserver or a value
+// already counted: the final value stays as rendered. Screen readers always get the final value (.sr-only twin).
+const countedOnce = new Set();
+function bindCounters() {
+  const els = [...document.querySelectorAll('.stat-count[data-count]')];
+  if (!els.length || typeof IntersectionObserver !== 'function' || reducedMotion()) return;
+  const fmt = n => `${Math.round(n).toLocaleString('en-US')}+`;
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    io.unobserve(e.target);
+    const el = e.target, num = el.querySelector('.stat-num'), to = Number(el.dataset.count);
+    const key = `${route.page}:${el.className}`;
+    if (!num || !(to > 0) || countedOnce.has(key)) return;
+    countedOnce.add(key);
+    const t0 = performance.now(), dur = 1400;
+    const step = t => {
+      const k = Math.min(1, (t - t0) / dur), eased = 1 - Math.pow(1 - k, 3);
+      num.dataset.n = fmt(to * eased);
+      if (k < 1 && num.isConnected) requestAnimationFrame(step); else num.dataset.n = fmt(to);
+    };
+    num.dataset.n = fmt(0);
+    requestAnimationFrame(step);
+  }), { threshold: 0.6 });
+  els.forEach(el => io.observe(el));
 }
 
 // Fixed header: hairline once the page has scrolled; slides away while reading down (after the first screen) and
@@ -2403,6 +2532,38 @@ function bindScrollSpy() {
 // `navigated` = true after a client-side route change (head metadata is rewritten then; on the
 // first render the prerendered head is already correct for this URL).
 // Named by each section's `content` in section-registry.js.
+// /gallery/ — only routed when publishedPhotos() is not empty (section-registry.js). The grid and lightbox are a
+// small lazily imported module; the page itself lists the captions so it reads without JavaScript.
+const gal = { ctrl: null, loading: false };
+function renderGalleryPage() {
+  const photos = publishedPhotos();
+  return `
+    ${pageHero({
+      kicker: tr('معرض الصور', 'Photo gallery'),
+      title: tr('محطات من مسيرتي العلمية والمهنية', 'Milestones from my scientific and professional journey'),
+      lede: tr('صور من المؤتمرات والمحافل العلمية، ومن داخل غرفة العمليات، ومن اللقاءات العلمية والمهنية.', 'Photographs from conferences and scientific events, inside the operating room, and scientific and professional meetings.')
+    })}
+    <section class="section" aria-label="${tr('الصور', 'Photographs')}">
+      <div class="container"><div id="gallery-host" class="gallery-host">
+        <ul class="gallery-static">${photos.map(p => `<li>${L(p.caption)}</li>`).join('')}</ul>
+      </div></div>
+    </section>
+    ${renderClosing('about')}`;
+}
+async function mountGallery() {
+  const host = document.getElementById('gallery-host');
+  if (!host) { if (gal.ctrl) { gal.ctrl.destroy(); gal.ctrl = null; } return; }
+  if (gal.ctrl) { gal.ctrl.setLang(currentLang); if (!host.contains(document.querySelector('.gal'))) { gal.ctrl.destroy(); gal.ctrl = null; } else return; }
+  if (gal.loading) return;
+  gal.loading = true;
+  try {
+    const mod = await import('./src/gallery/index.js');
+    if (!host.isConnected) return;
+    host.innerHTML = '';
+    gal.ctrl = mod.mount(host, { lang: currentLang, photos: publishedPhotos(), categories: GALLERY_CATEGORIES });
+  } catch (e) { console.warn('gallery failed to load', e); } finally { gal.loading = false; }
+}
+
 const PAGE_CONTENT = {
   home: renderHome,
   about: renderAboutPage,
@@ -2411,7 +2572,8 @@ const PAGE_CONTENT = {
   'surgical-education': renderSurgicalEducationPage,
   education: renderEducationPage,
   'how-vision-works': renderLightJourneyPage,
-  clinic: renderClinicPage
+  clinic: renderClinicPage,
+  gallery: renderGalleryPage
 };
 /** The current page's renderer. A published section without one stops the prerender (a page error fails the build). */
 /** An address that is not a page of this site: say so, in the reader's language, and offer the ways back. */
@@ -2538,6 +2700,7 @@ function renderApp(navigated = false) {
 
   watchBookingBar();
   mountVisionSim();
+  mountGallery();
   lensLab.sync();
   lightJourney.sync();
   window.__siteMotion?.refresh(); // the previous page's reveals are undone; this page's are set up

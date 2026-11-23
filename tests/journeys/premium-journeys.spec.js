@@ -57,8 +57,8 @@ const clipped = (page, scope = 'body') => page.locator(scope).evaluate((root) =>
 }).slice(0, 8).map((el) => `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]}`));
 const barTop = (page) => page.evaluate(() => { const b = document.getElementById('booking-bar'); if (!b) return innerHeight; const r = b.getBoundingClientRect(); return r.height && getComputedStyle(b).display !== 'none' ? r.top : innerHeight; });
 async function openProcedureViaPlate(page, slug) {
-  const card = page.locator(`#procedures .plate-card[data-slug="${slug}"]`);
-  const link = card.locator('.proc-card-link');
+  const card = page.locator(`#procedures .pgal-item[data-slug="${slug}"]`);
+  const link = card.locator('.pgal-link');
   await revealInFreeArea(page, link); await settleScroll(page);
   const fromY = await page.evaluate(() => Math.round(scrollY));
   await link.tap();
@@ -83,10 +83,10 @@ for (const [key, slug] of [['ar-light-390', 'icl'], ['en-dark-390', 'keratoconus
         return { actual: `lang=${s.lang} dir=${s.dir} theme=${s.theme}; hero book button bottom ${Math.round(b.bottom)} of ${vh}; bottom bar on screen ${barOn}`, ok: s.lang === p.lang && s.theme === p.theme && (heroOn || barOn) };
       }, { shot: true });
       let galleryY = 0;
-      await j.step('Scroll to the procedure gallery', 'All seven plates are present, each with an image and a visible summary', async () => {
+      await j.step('Scroll to the procedure gallery', 'All seven plates are present, each with an image and its name (summaries live on the procedure pages since 2026-11-23)', async () => {
         await revealInFreeArea(page, page.locator('#procedures h2').first());
-        const plates = await page.locator('#procedures .plate-card').evaluateAll((cs) => cs.map((c) => ({ slug: c.dataset.slug, img: !!c.querySelector('img'), sum: (c.querySelector('.pc-sum')?.textContent || '').trim().length, h: Math.round(c.querySelector('.pc-sum')?.getBoundingClientRect().height || 0) })));
-        const bad = plates.filter((x) => !x.img || x.sum < 20 || x.h < 10);
+        const plates = await page.locator('#procedures .pgal-item').evaluateAll((cs) => cs.map((c) => ({ slug: c.dataset.slug, img: !!c.querySelector('img'), sum: (c.querySelector('.pgal-name')?.textContent || '').trim().length, h: Math.round(c.querySelector('.pgal-name')?.getBoundingClientRect().height || 0) })));
+        const bad = plates.filter((x) => !x.img || x.sum < 3 || x.h < 10);
         return { actual: `${plates.length} plates; without image/summary: ${bad.map((x) => x.slug).join(',') || 'none'}`, ok: plates.length === 7 && !bad.length };
       }, { shot: true });
       await j.step(`Tap the "${NAME[slug][p.lang]}" plate`, 'The procedure page opens at its title', async () => {
@@ -120,7 +120,7 @@ for (const [key, slug] of [['ar-light-390', 'icl'], ['en-dark-390', 'keratoconus
         await page.goBack(); await page.waitForURL(new RegExp(`${p.lang === 'en' ? '/en/' : ':\\d+/'}$`), { timeout: 15000 });
         await page.waitForTimeout(600); await settleScroll(page);
         const s = await docState(page);
-        return { actual: `${s.path} y=${s.scrollY} (left at ${galleryY}); plates ${await page.locator('#procedures .plate-card').count()}`, ok: Math.abs(s.scrollY - galleryY) < 200 && (await page.locator('#procedures .plate-card').count()) === 7 };
+        return { actual: `${s.path} y=${s.scrollY} (left at ${galleryY}); plates ${await page.locator('#procedures .pgal-item').count()}`, ok: Math.abs(s.scrollY - galleryY) < 200 && (await page.locator('#procedures .plate-card').count()) === 7 };
       }, { shot: true });
       await j.finish();
     });
@@ -135,10 +135,10 @@ for (const key of ['ar-light-390', 'en-dark-390', 'en-light-360', 'ar-dark-375',
     test(`B — trust and credentials (${key})`, async ({ page }, testInfo) => {
       await prepare(page, { theme: p.theme, clearStorage: true });
       const j = await startJourney(page, testInfo, metaFor(p, `premium-b-${key}`, 'B — trust & credentials', 'Home → profile → qualifications → clinic information → booking.', home(p.lang)));
-      await j.step('Open home; check the career scope line', 'The doctor name, FRCS and the 15,000+ scope line are in the hero', async () => {
+      await j.step('Open home; check the career scope line', 'The doctor name, FRCS and the 25,000+ scope line are in the hero', async () => {
         const s = await openUrl(page, home(p.lang));
         const t = await page.locator('.hero-facts').innerText();
-        return { actual: `h1="${s.h1}"; facts: ${t.replace(/\s+/g, ' ').slice(0, 120)}`, ok: /FRCS/.test(t) && /15[,،٬]?000/.test(t) };
+        return { actual: `h1="${s.h1}"; facts: ${t.replace(/\s+/g, ' ').slice(0, 120)}`, ok: /FRCS/.test(t) && /25[,،٬]?000/.test(t) };
       }, { shot: true });
       await j.step('Tap "Discover his expertise" in the hero', 'The profile page opens at the top', async () => {
         const l = page.locator('#hero-about-cta'); await revealInFreeArea(page, l); await l.tap();
@@ -423,8 +423,8 @@ for (const key of ['ar-light-390', 'en-dark-390', 'ar-dark-320']) {
       });
       await j.step('Double-tap a plate link', 'The page opens once: one history entry', async () => {
         await page.goto(path(p.lang, ''));
-        await page.locator('#procedures .plate-card').first().waitFor();
-        const link = page.locator('#procedures .plate-card[data-slug="icl"] .proc-card-link');
+        await page.locator('#procedures .pgal-item').first().waitFor();
+        const link = page.locator('#procedures .pgal-item[data-slug="icl"] .pgal-link');
         await revealInFreeArea(page, link);
         const before = await page.evaluate(() => history.length);
         await link.tap({ force: true }); await link.tap({ force: true, timeout: 800 }).catch(() => {});
@@ -462,7 +462,7 @@ for (const [net, key] of [['slow-3g', 'ar-light-390'], ['fast-3g', 'en-dark-390'
         return { actual: `y=${await page.evaluate(() => Math.round(scrollY))}; overflow ${ov}px; eager images with no height: ${missing}`, ok: ov <= 0 };
       }, { shot: true, timeout: 120000 });
       await j.step('Open a procedure plate', 'The procedure page opens with readable text, even before images arrive', async () => {
-        const link = page.locator('#procedures .plate-card[data-slug="corneal-transplant"] .proc-card-link');
+        const link = page.locator('#procedures .pgal-item[data-slug="corneal-transplant"] .pgal-link');
         await revealInFreeArea(page, link); await link.tap();
         await page.waitForURL(/corneal-transplant\/$/, { timeout: 60000 }); await page.locator('#p-anatomy').waitFor({ timeout: 90000 });
         const s = await docState(page);
@@ -584,8 +584,8 @@ for (const key of ['ar-light-390', 'en-dark-390', 'ar-dark-320', 'en-light-360',
         return { actual: `last footer text bottom ${g.lastBottom}, bar top ${g.barTop}`, ok: g.lastBottom <= g.barTop };
       }, { shot: true, critical: false });
       await j.step('Tap a gallery plate on its image', 'The whole plate is one tap target', async () => {
-        await page.goto(home(p.lang)); await page.locator('#procedures .plate-card').first().waitFor();
-        const fig = page.locator('#procedures .plate-card[data-slug="lens-implants"] .pc-fig');
+        await page.goto(home(p.lang)); await page.locator('#procedures .pgal-item').first().waitFor();
+        const fig = page.locator('#procedures .pgal-item[data-slug="lens-implants"] .pgal-fig');
         const r = await revealInFreeArea(page, fig);
         await page.touchscreen.tap(r.x + r.w / 2, r.y + r.h / 2);
         await page.waitForTimeout(600);

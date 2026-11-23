@@ -103,7 +103,7 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
   test('each closer view frames its own object, larger than in the whole scene and inside the viewer', async ({ page }) => {
     await openHarness(page);
     const whole = {};
-    for (const [name, m] of [['Near', 0.4], ['Intermediate', 0.66], ['Far', 6]]) {
+    for (const [name, m] of [['Near', 0.4], ['Intermediate', 0.65], ['Far', 6]]) {
       await page.evaluate((d) => { window.__vsim.reset(); window.__vsim.setDistance(d); }, m); // API call: no closer view
       expect((await S(page)).closeUp).toBe(false);
       whole[name] = await targetBox(page);
@@ -319,7 +319,7 @@ for (const [w, h] of SIZES) {
       const near = await step(4, 'select Near', lbl('preset', 'near'), (v) => { expect(v.closeUp).toBe(true); expect(v.caption).toBe('40 cm · phone · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.near}`); });
       expect(near.zoom, 'near: closer than the whole scene').toBeGreaterThan(whole.zoom);
       await step(5, 'understand what changed (Near)', null, (v) => expect(v.whole, 'a way back is shown').not.toBeNull());
-      await step(6, 'select Intermediate', lbl('preset', 'intermediate'), (v) => { expect(v.caption).toBe('66 cm · laptop · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.intermediate}`); });
+      await step(6, 'select Intermediate', lbl('preset', 'intermediate'), (v) => { expect(v.caption).toBe('65 cm · laptop · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.intermediate}`); });
       await step(7, 'understand what changed (Intermediate)', null, (v) => expect(v.closeUp).toBe(true));
       await step(8, 'select Far', lbl('preset', 'distance'), (v) => { expect(v.caption).toBe('6 m+ · road sign · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.distance}`); });
       await step(9, 'understand what changed (Far)', null, (v) => expect(v.closeUp).toBe(true));

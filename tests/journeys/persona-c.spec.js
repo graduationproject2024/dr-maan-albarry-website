@@ -41,7 +41,7 @@ test('Persona C — English mobile user', async ({ page }, testInfo) => {
   }, { shot: true });
 
   await j.step('Tap "Procedure details" on the cataract card', 'English cataract page', async () => {
-    const link = page.locator('#procedures .proc-card-link[href$="procedures/cataract-surgery/"]');
+    const link = page.locator('#procedures .pgal-link[href$="procedures/cataract-surgery/"]');
     await link.scrollIntoViewIfNeeded(); await link.tap();
     await page.waitForURL(/\/en\/procedures\/cataract-surgery\/$/);
     await page.locator('#p-anatomy').waitFor();
