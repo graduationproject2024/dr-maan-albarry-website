@@ -260,6 +260,9 @@ test.describe('Regression — existing features', () => {
       window.removeEventListener = function (type, fn, ...rest) { if (type === 'scroll') window.__scrollActive.delete(fn); return rem.call(this, type, fn, ...rest); };
     });
     await page.goto('/');
+    // The optional desktop motion layer (Lenis) adds its one scroll listener once, in idle time after load. On a slow
+    // CI runner that landed between the two counts and read as a leak (deploy run 45230465355, 2026-11-23); wait for it.
+    await page.waitForFunction(() => !!window.__siteMotion, null, { timeout: 15000 }).catch(() => {});
     const before = await page.evaluate(() => window.__scrollActive.size);
     await page.evaluate(() => { for (let i = 0; i < 4; i++) window.toggleLang(); });
     expect(await page.evaluate(() => window.__scrollActive.size)).toBe(before);
