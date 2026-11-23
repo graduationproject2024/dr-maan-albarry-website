@@ -14,7 +14,7 @@ export const I18N = {
     replayStage: 'Replay this stage', restart: 'Restart from the beginning',
     zoomIn: 'Zoom in', zoomOut: 'Zoom out', resetView: 'Reset view',
     labels: 'Anatomy labels', cutaway: 'Cross-section view',
-    touch: 'Explore 3D', touchDone: 'Done exploring',
+    touch: 'Explore 3D', touchDone: 'Done exploring', expand: 'Full screen', collapse: 'Exit full screen',
     touchHint: 'Tap “Explore 3D” to rotate with one finger; pinch to zoom.',
     viewport: '3D model of the eye. Drag to rotate, scroll or use the zoom buttons to zoom. Arrow keys change stage, Space plays or pauses.',
     viewTools: 'View controls', playback: 'Playback controls', timeline: 'Procedure timeline',
@@ -46,7 +46,7 @@ export const I18N = {
     replayStage: 'إعادة هذه المرحلة', restart: 'البدء من جديد',
     zoomIn: 'تكبير', zoomOut: 'تصغير', resetView: 'إعادة ضبط العرض',
     labels: 'تسميات التشريح', cutaway: 'عرض المقطع العرضي',
-    touch: 'استكشاف ثلاثي الأبعاد', touchDone: 'إنهاء الاستكشاف',
+    touch: 'استكشاف ثلاثي الأبعاد', touchDone: 'إنهاء الاستكشاف', expand: 'ملء الشاشة', collapse: 'إنهاء ملء الشاشة',
     touchHint: 'اضغط «استكشاف ثلاثي الأبعاد» للتدوير بإصبع واحد، وباعد بين إصبعين للتكبير.',
     viewport: 'نموذج ثلاثي الأبعاد للعين. اسحب للتدوير، واستخدم عجلة الفأرة أو أزرار التكبير. تُغيّر مفاتيح الأسهم المرحلة، ويُشغّل مفتاح المسافة العرض أو يوقفه.',
     viewTools: 'أدوات العرض', playback: 'أدوات التشغيل', timeline: 'المخطط الزمني للإجراء',
@@ -80,6 +80,7 @@ const ICON = {
   zoomIn: '<circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 8v6M8 11h6M15.5 15.5L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
   zoomOut: '<circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11h6M15.5 15.5L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
   reset: '<circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/>',
   labels: '<path d="M4 5h9l7 7-7 7H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8.5" cy="12" r="1.6" fill="currentColor"/>',
   cutaway: '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 8 8h-8z" fill="currentColor"/>',
   touch: '<path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-2.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4 15.5a1.6 1.6 0 0 1 2.6-1.8L9 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -126,6 +127,7 @@ export function createUI(host, ctx) {
           <button type="button" class="csim-tool" data-ref="resetView" data-i18n-label="resetView">${icon('reset')}</button>
           <button type="button" class="csim-tool" data-ref="labels" aria-pressed="false" data-i18n-label="labels">${icon('labels')}</button>
           <button type="button" class="csim-tool" data-ref="cutaway" aria-pressed="false" data-i18n-label="cutaway">${icon('cutaway')}</button>
+          <button type="button" class="csim-tool" data-ref="expand" aria-pressed="false" data-i18n-label="expand">${icon('expand')}</button>
           <button type="button" class="csim-tool csim-tool--touch" data-ref="touch" aria-pressed="false" data-i18n-label="touch" hidden>${icon('touch')}</button>
         </div>
         <div class="csim-overlay csim-overlay--loading" data-ref="loading" role="status">
@@ -211,6 +213,19 @@ export function createUI(host, ctx) {
   on(ref.labels, 'click', () => H.toggleLabels());
   on(ref.cutaway, 'click', () => H.toggleCutaway());
   on(ref.touch, 'click', () => H.toggleTouch());
+  // Full screen (CSS, so it also works on iPhone, which has no element full-screen API). On a touch screen it also
+  // turns on one-finger exploring, and turns it off again on exit if it was off before.
+  let touchBeforeExpand = null;
+  const setExpanded = (v) => {
+    root.classList.toggle('csim--expanded', v);
+    ref.expand.setAttribute('aria-pressed', String(v));
+    ref.expand.setAttribute('aria-label', t(v ? 'collapse' : 'expand'));
+    if (v && !ref.touch.hidden) { touchBeforeExpand = S.touch; if (!S.touch) H.toggleTouch(); }
+    if (!v && touchBeforeExpand === false && S.touch) H.toggleTouch();
+    if (!v) touchBeforeExpand = null;
+  };
+  on(ref.expand, 'click', () => setExpanded(!root.classList.contains('csim--expanded')));
+  on(root, 'keydown', (e) => { if (e.key === 'Escape' && root.classList.contains('csim--expanded')) { e.preventDefault(); setExpanded(false); ref.expand.focus(); } });
   on(ref.scrubber, 'input', () => H.scrub(Number(ref.scrubber.value) / 1000));
   on(ref.segments, 'click', (e) => { const b = e.target.closest('[data-seg]'); if (b) H.goTo(Number(b.dataset.seg)); });
   on(ref.anatomyList, 'click', (e) => { const b = e.target.closest('[data-structure]'); if (b) H.focusStructure(b.dataset.structure); });
@@ -272,7 +287,18 @@ export function createUI(host, ctx) {
     ref.playPause.dataset.mode = mode;
     ref.playLabel.textContent = t(mode);
     ref.playPause.setAttribute('aria-label', t(mode));
+    fitPlayLabel();
   }
+  // On a narrow phone "إيقاف مؤقت" or "إعادة التشغيل" may not fit beside the other transport buttons (BUG-P2-03, real
+  // Pixel 8: the label wrapped onto two lines). The label is shown whenever it fits and the button becomes an icon button
+  // only when it does not; the accessible name (aria-label above) is the same either way.
+  function fitPlayLabel() {
+    const b = ref.playPause;
+    b.classList.remove('is-icon');
+    if (ref.playLabel.scrollWidth > ref.playLabel.clientWidth + 1) b.classList.add('is-icon');
+  }
+  const playFit = 'ResizeObserver' in window ? new ResizeObserver(() => fitPlayLabel()) : null;
+  if (playFit) playFit.observe(ref.playPause.parentElement);
 
   function renderAnatomyInfo() {
     chipBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.structure === S.focusId)));
@@ -337,7 +363,7 @@ export function createUI(host, ctx) {
       setTimeout(() => { if (root.isConnected) ref.live.textContent = text; }, 30);
     },
     stageLabel,
-    destroy() { root.remove(); }
+    destroy() { if (playFit) playFit.disconnect(); root.remove(); }
   };
   applyText();
   return ui;

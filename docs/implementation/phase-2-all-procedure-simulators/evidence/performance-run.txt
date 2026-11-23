@@ -1,0 +1,13 @@
+﻿home 3D resources: []
+{"slug":"lens-implants","cache":"cold","startToReadyMs":2210,"transferKB":303,"maxTriangles":211326,"maxCalls":58,"fpsPlaying":56}
+{"slug":"lens-implants","cache":"warm","startToReadyMs":1291,"transferKB":4,"maxTriangles":211326,"maxCalls":58,"fpsPlaying":59}
+{"slug":"icl","cache":"cold","startToReadyMs":1954,"transferKB":336,"maxTriangles":118738,"maxCalls":37,"fpsPlaying":60}
+{"slug":"icl","cache":"warm","startToReadyMs":1290,"transferKB":4,"maxTriangles":118738,"maxCalls":37,"fpsPlaying":60}
+{"slug":"laser-vision-correction","cache":"cold","startToReadyMs":1388,"transferKB":361,"maxTriangles":173035,"maxCalls":40,"fpsPlaying":46}
+{"slug":"laser-vision-correction","cache":"warm","startToReadyMs":1265,"transferKB":4,"maxTriangles":173035,"maxCalls":40,"fpsPlaying":54}
+{"slug":"keratoconus-cxl","cache":"cold","startToReadyMs":1252,"transferKB":310,"maxTriangles":77822,"maxCalls":21,"fpsPlaying":59}
+{"slug":"keratoconus-cxl","cache":"warm","startToReadyMs":1230,"transferKB":4,"maxTriangles":77822,"maxCalls":21,"fpsPlaying":60}
+{"slug":"corneal-transplant","cache":"cold","startToReadyMs":1109,"transferKB":318,"maxTriangles":100694,"maxCalls":44,"fpsPlaying":60}
+{"slug":"corneal-transplant","cache":"warm","startToReadyMs":1191,"transferKB":4,"maxTriangles":100694,"maxCalls":44,"fpsPlaying":60}
+{"slug":"intravitreal-injections","cache":"cold","startToReadyMs":1110,"transferKB":328,"maxTriangles":181374,"maxCalls":68,"fpsPlaying":60}
+{"slug":"intravitreal-injections","cache":"warm","startToReadyMs":1021,"transferKB":4,"maxTriangles":181374,"maxCalls":68,"fpsPlaying":60}

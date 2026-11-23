@@ -110,3 +110,38 @@ test.describe('cataract simulator — geometric constraints (Node)', () => {
     expect(Math.hypot(hit[0], hit[1])).toBeLessThan(0.1);
   });
 });
+
+// Phase 2 (CATARACT_MOTION_CONSTRAINTS.md): only the phaco tip may work inside the capsular bag. A deliberately wrong
+// frame — the same instrument pushed further along its own shaft (so it still pivots about the wound) until it is
+// half a millimetre into the lens — must be reported; the real animation must not be.
+import { checkFrame, LIMITS } from '../src/cataract-sim/constraints.js';
+import { capsuleAntZ } from '../src/cataract-sim/anatomy.js';
+test.describe('cataract simulator — instruments stay out of the lens body (Node)', () => {
+  const deepest = (stageId, kind) => {
+    const i = STAGES.findIndex((s) => s.id === stageId);
+    let best = null;
+    for (let k = 0; k <= 400; k++) {
+      const P = paramsAt(i, k / 400);
+      if (!P.instrument || P.instrument.kind !== kind) continue;
+      if (!best || P.instrument.tip[2] < best.instrument.tip[2]) best = P;
+    }
+    return best;
+  };
+  for (const [stageId, kind] of [['capsulorhexis', 'forceps'], ['iol', 'injector'], ['incision', 'keratome']]) {
+    test(`${kind}: the animation never enters the lens; a frame pushed into the lens is reported`, () => {
+      const P = deepest(stageId, kind);
+      expect(P, `${kind} appears in ${stageId}`).toBeTruthy();
+      expect(checkFrame(P).filter((v) => v.type.startsWith('tip-in-lens'))).toEqual([]);
+      // the same tip, moved (at most 3 mm from the axis, same meridian) to 0.5 mm beyond the allowed depth inside the lens
+      const [x, y] = P.instrument.tip, r = Math.hypot(x, y), s = r > 3 ? 3 / r : 1;
+      const rr = Math.hypot(x * s, y * s);
+      const tip = [x * s, y * s, capsuleAntZ(rr, P.bagCollapse) - 0.5 - LIMITS.forcepsGrip];
+      const bad = { ...P, instrument: { ...P.instrument, tip } };
+      expect(checkFrame(bad).map((v) => v.type)).toContain(`tip-in-lens-${kind}`);
+    });
+  }
+  test('phaco: working inside the bag is not reported as an error', () => {
+    const P = deepest('phaco', 'phaco');
+    expect(checkFrame(P).filter((v) => v.type.startsWith('tip-in-lens'))).toEqual([]);
+  });
+});

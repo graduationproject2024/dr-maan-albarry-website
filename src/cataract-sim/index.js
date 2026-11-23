@@ -3,7 +3,7 @@
 import './styles.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { createScene, hasWebGL, maxDpr } from './scene.js';
+import { createScene, hasWebGL, maxDpr, precompileScene } from './scene.js';
 import { createMaterials } from './materials.js';
 import { buildEye } from './eye-model.js';
 import { STAGES, STRUCTURES, paramsAt } from './stages.js';
@@ -170,10 +170,17 @@ class Simulator {
       this.applyTimeline(0);
       this.jumpCamera(STAGES[0].camera);
       const { renderer, scene, camera } = this.three;
-      if (renderer.compileAsync) await renderer.compileAsync(scene, camera); else renderer.compile(scene, camera);
+      await precompileScene(renderer, scene, camera, { alive: () => !this.destroyed }); // what the first frame draws, built in parallel (scene.js)
       if (this.destroyed) return;
       ui.setLoadingProgress(100);
       renderer.render(scene, camera);
+      // the parts later stages show (instruments, IOL, fragments), built in the background so no stage stalls on them
+      const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
+      idle(() => {
+        if (this.destroyed || !this.three) return;
+        if (this.eye && this.eye.prepareDeferred) this.eye.prepareDeferred();
+        precompileScene(this.three.renderer, this.three.scene, this.three.camera, { hidden: true, alive: () => !this.destroyed && !!this.three }).catch(() => {});
+      }, { timeout: 3000 });
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[cataract-sim] 3D initialisation failed, using fallback', err);
@@ -261,6 +268,13 @@ class Simulator {
     // Touch policy: one-finger page scroll keeps working; touch only drives the 3D view in "Explore 3D" mode.
     canvas.style.removeProperty('touch-action');
     this.listen(canvas, 'pointerdown', (e) => { if (e.pointerType === 'touch' && !this.touch) e.stopImmediatePropagation(); }, { capture: true });
+    // Wheel policy (Phase 2 refinement, same rule as the procedure simulators): a plain wheel over the viewer scrolls the
+    // page instead of being captured; Ctrl/⌘ + wheel (and a trackpad pinch, which arrives as Ctrl + wheel) zooms.
+    // Full screen has no page to scroll, so there the plain wheel zooms as before.
+    this.listen(canvas, 'wheel', (e) => {
+      if (e.ctrlKey || e.metaKey || this.host.querySelector('.csim--expanded')) return;
+      e.stopImmediatePropagation();
+    }, { capture: true });
     this.listen(c, 'start', () => {
       if (this.fly) { this.fly = null; if (this.state === 'transitioning') this.sm.to(this.resume); }
     });

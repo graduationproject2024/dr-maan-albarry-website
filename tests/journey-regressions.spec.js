@@ -48,7 +48,7 @@ test.describe('journey regressions — phone', () => {
     expect(await liveGL(page)).toBe(1);
   });
 
-  test('BUG-04 the cataract page offers a visible 3D walkthrough link near the top; other pages do not', async ({ page }) => {
+  test('BUG-04 the cataract page offers a visible 3D walkthrough link near the top; pages with a procedure simulator link to their own', async ({ page }) => {
     await page.goto('/en/procedures/cataract-surgery/'); await page.locator('#p-faq').waitFor();
     const link = page.locator('.proc-3d-jump a');
     await expect(link).toBeVisible();
@@ -57,8 +57,9 @@ test.describe('journey regressions — phone', () => {
     expect(r.height).toBeGreaterThanOrEqual(44);
     await link.tap();
     await expect.poll(async () => (await page.locator('#cataract-3d').boundingBox()).y).toBeLessThan(200);
+    // Phase 2: every procedure page now has a 3D section; its link points to that page's own simulator, not the cataract one
     await page.goto('/en/procedures/icl/'); await page.locator('#p-faq').waitFor();
-    await expect(page.locator('.proc-3d-jump')).toHaveCount(0);
+    await expect(page.locator('.proc-3d-jump a')).toHaveAttribute('href', /#procedure-3d$/);
   });
 
   test('BUG-08 the Start button reports aria-busy="true" while the 3D code downloads', async ({ page }) => {

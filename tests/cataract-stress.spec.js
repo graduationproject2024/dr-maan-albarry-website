@@ -75,10 +75,12 @@ test.describe('cataract simulator — stress (desktop)', () => {
     const box = await page.locator('.csim canvas').boundingBox();
     const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
     await page.mouse.move(cx, cy);
+    await page.keyboard.down('Control'); // Ctrl + wheel zooms (Phase 2 wheel policy)
     for (let i = 0; i < 40; i++) await page.mouse.wheel(0, -600);
     await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeLessThan(12);
     expect((await S(page)).camera.distance).toBeGreaterThanOrEqual(10.99);
     for (let i = 0; i < 40; i++) await page.mouse.wheel(0, 800);
+    await page.keyboard.up('Control');
     await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeGreaterThan(70);
     expect((await S(page)).camera.distance).toBeLessThanOrEqual(80.01);
     await page.mouse.down();

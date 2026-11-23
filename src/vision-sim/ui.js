@@ -193,7 +193,11 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   function setMore(on) {
     more = !!on;
     applyMore();
+    // the settings panel opens with a short height reveal when the site's optional motion layer is present (src/motion);
+    // closing stays immediate so the controls are never in an in-between state. The bench is measured first, at the
+    // panel's final height: the reveal starts from height 0 and must not be what the fit check sees (BUG-P2-10).
     measureBench();
+    if (more && ref.adv && typeof window !== 'undefined' && window.__siteMotion) window.__siteMotion.expand(ref.adv);
     if (handlers.more) handlers.more(more);
   }
 
@@ -227,7 +231,11 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     const fits = stage + presets + side <= room + 0.5;
     // only the stacked layout sticks the picture alone; the two-column layout keeps its whole left column in place
     const stacked = getComputedStyle(ref.stage.parentElement).display === 'contents';
-    if (stacked && (more || !fits)) ref.bench.dataset.sticky = ''; else delete ref.bench.dataset.sticky;
+    // ...and only when the stuck picture still leaves room for the distance row below it. On a 360 x 800 Android phone
+    // held sideways in Chrome only 122 px remain between the bars: a stuck 98 px picture left 24 px, so the distance row
+    // slid under the picture and could not be tapped (BUG-P2-10, Android Emulator). There the workbench scrolls as
+    // ordinary content instead.
+    if (stacked && (more || !fits) && stage + presets <= room + 0.5) ref.bench.dataset.sticky = ''; else delete ref.bench.dataset.sticky;
     // Controlled fallback 2 — no sticking. In two columns, when the picture column alone is taller than the space
     // between the bars, it stops sticking and the whole workbench scrolls as ordinary content, so the distance row
     // can never be trapped under the booking bar.
@@ -451,15 +459,24 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     const t = { l: targetBox.left / 100 * vw, t: targetBox.top / 100 * vh };
     t.r = t.l + targetBox.width / 100 * vw; t.b = t.t + targetBox.height / 100 * vh;
     const tagB = ref.tagB && !ref.tagB.hidden;
-    // the low spot clears the enlarge button and a caption of any height (two or three lines on narrow phones)
-    const low = Math.max(62, (ref.caption ? ref.caption.offsetHeight : 0) + 18);
+    // The low spot clears the enlarge button and a caption of any height (two or three lines on narrow phones). The
+    // enlarge button is measured, not assumed: on a short landscape picture it sat 10 px into the low spot and the two
+    // buttons overlapped (BUG-P2-07, Android Emulator 863 × 304).
+    const vr = ref.viewport.getBoundingClientRect();
+    const ex = ref.expand && !ref.expand.hidden && ref.expand.offsetParent ? ref.expand.getBoundingClientRect() : null;
+    const clearExpand = ex ? vr.bottom - ex.top + 8 : 0;
+    const low = Math.max(62, (ref.caption ? ref.caption.offsetHeight : 0) + 18, clearExpand);
     const leftTop = ref.tagA && !ref.tagA.hidden ? 46 : 10;
+    const rightTop = tagB ? 46 : 10;
     const spots = {
-      '': { l: vw - 10 - bw, t: tagB ? 46 : 10 },
+      '': { l: vw - 10 - bw, t: rightTop },
       'is-left': { l: 10, t: leftTop },
       'is-low': { l: vw - 10 - bw, t: vh - low - bh },
     };
-    let best = '', bestArea = Infinity;
+    if (spots['is-low'].t < rightTop + bh + 4) delete spots['is-low']; // no room between the top spot and the enlarge button
+    const hitsExpand = (p) => ex && p.l + bw > ex.left - vr.left - 4 && p.l < ex.right - vr.left + 4 && p.t + bh > ex.top - vr.top - 4 && p.t < ex.bottom - vr.top + 4;
+    for (const k of Object.keys(spots)) if (hitsExpand(spots[k])) delete spots[k];
+    let best = Object.keys(spots)[0] ?? 'is-left', bestArea = Infinity;
     for (const [cls, p] of Object.entries(spots)) {
       const area = Math.max(0, Math.min(t.r, p.l + bw) - Math.max(t.l, p.l)) * Math.max(0, Math.min(t.b, p.t + bh) - Math.max(t.t, p.t));
       if (area < bestArea - 0.5) { best = cls; bestArea = area; }

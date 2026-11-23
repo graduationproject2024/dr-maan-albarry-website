@@ -1,5 +1,7 @@
 # Production status
 
+**Live commit since 2026-11-17: `9e1773f`** (see the update below; the first part of this file describes the state before it).
+
 Corrects the older reports. Verified on 2026-11-15 from GitHub Actions and the live site.
 
 | Item | Value |
@@ -29,7 +31,17 @@ Everything on the local branch `feat/final-stabilization`:
 | Portrait as one replaceable setting | (portrait commit) |
 | Anatomy pins no longer overlap; 15 px label key | `d3ab9b6` |
 
-The branch was pushed on 2026-11-17 on the owner's instruction ("Yes, push branch"); its CI run passed. It is not merged into `main`, so it is not live. Deployment is **not authorized**: the owner has not given an instruction to deploy this branch.
+## Update 2026-11-17: deployed
+
+The owner instructed "Yes, push branch", then "Yes, deploy". `main` was fast-forwarded from `c7cdbed` to `9e1773f`. GitHub Actions run **44077997526** ("Deploy to GitHub Pages") ran the new gate first — **379 of 379 tests passed** — and only then built and published. Everything in the table above is now **live**.
+
+Live check after the deploy (Playwright against the public URL, other hosts blocked so nothing left the site):
+- 18 pages × phone and desktop = 36 checks: HTTP 200, a page heading, no sideways scroll, no broken image, no script error, stylesheet inlined. 0 problems.
+- `en/no-such-page/`: status 404, "This page does not exist", `noindex`.
+- `vision-sim-preview.html`, `cataract-sim-preview.html`: 404, not-found page (the review tools are not public).
+- Lens Lab at 390×844, 320×640, 844×390: Near gives the closer view (zoom 1.65), the page does not move, one canvas; "Whole scene" returns.
+
+This docs commit is on the branch only; the site is the same.
 
 ## Stale statements corrected
 

@@ -123,3 +123,62 @@ test.describe('A jump keeps its target when a module arrives late', () => {
     expect(await inPlace(page, 'lab')).toBe(false);
   });
 });
+
+// BUG-P2-05, found in Chrome 113 on the Android Emulator (console error on every page): the build moves the manifest to
+// assets/manifest-<hash>.webmanifest, so its relative icon "./favicon.svg" pointed at assets/favicon.svg, which does not
+// exist (404). Every icon of the manifest the pages actually link must load as an image.
+test.describe('Web app manifest', () => {
+  for (const url of ['/', '/en/lens-lab/', '/procedures/cataract-surgery/']) {
+    test(`${url}: every manifest icon loads`, async ({ page, request }) => {
+      await page.goto(url);
+      const href = await page.locator('link[rel="manifest"]').getAttribute('href');
+      const manifestUrl = new URL(href, await page.evaluate(() => document.baseURI)).href;
+      const res = await request.get(manifestUrl);
+      expect(res.status()).toBe(200);
+      const manifest = await res.json();
+      expect(manifest.icons.length).toBeGreaterThan(0);
+      for (const icon of manifest.icons) {
+        const iconUrl = new URL(icon.src, manifestUrl).href;
+        const r = await request.get(iconUrl);
+        expect(r.status(), iconUrl).toBe(200);
+        expect(r.headers()['content-type'] || '', iconUrl).toMatch(/^image\//);
+      }
+    });
+  }
+});
+// BUG-P2-09 (found while driving the Android Emulator with the browser's own scroll-into-view): on phone widths, keyboard
+// focus landed on links and buttons fully hidden behind the fixed booking bar (6-12 per page at 390 x 844). WCAG 2.2,
+// 2.4.11 Focus Not Obscured. Every focus stop must be fully visible between the header and the booking bar.
+test.describe('Keyboard focus is never hidden behind the booking bar (phone widths)', () => {
+  for (const [w, h] of [[390, 844], [360, 652]]) {
+    for (const url of ['/en/', '/procedures/cataract-surgery/', '/en/surgical-education/', '/en/lens-lab/']) {
+      test(`${w}×${h} ${url}`, async ({ browser }) => {
+        const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+        const page = await ctx.newPage();
+        await page.goto(url);
+        await page.waitForLoadState('networkidle');
+        // a simulator that mounts while the reader tabs changes the layout under the focus: start once it is in place
+        if (await page.locator('#simulator-host').count()) await page.waitForFunction(() => document.querySelectorAll('#simulator-host canvas').length === 1, null, { timeout: 30_000 });
+        const hidden = [];
+        for (let i = 0; i < 120; i++) {
+          await page.keyboard.press('Tab');
+          await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+          const r = await page.evaluate(() => {
+            const e = document.activeElement;
+            if (!e || e === document.body) return null;
+            const b = e.getBoundingClientRect();
+            const bar = document.querySelector('.booking-bar'), hdr = document.getElementById('site-header');
+            if (!b.width || !b.height || e.closest('.skip-link') || (bar && bar.contains(e)) || (hdr && hdr.contains(e))) return { skip: true };
+            const barTop = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().top : innerHeight;
+            const hb = hdr ? hdr.getBoundingClientRect().bottom : 0;
+            return { name: (e.getAttribute('aria-label') || e.textContent || e.tagName).trim().slice(0, 40), ok: b.top >= hb - 1 && b.bottom <= barTop + 1 };
+          });
+          if (!r) break;
+          if (!r.skip && !r.ok) hidden.push(r.name);
+        }
+        expect(hidden, 'focused elements not fully visible between the header and the booking bar').toEqual([]);
+        await ctx.close();
+      });
+    }
+  }
+});

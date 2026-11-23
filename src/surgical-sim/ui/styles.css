@@ -1,0 +1,168 @@
+/* Procedure simulators — every rule scoped under .ssim. Same self-contained tokens as the cataract simulator
+   (src/cataract-sim/styles.css: ivory, ink, oxide bronze), so all eight experiences read as one family. */
+.ssim {
+  --ssim-bg: #f3eee7; --ssim-surface: #ece5da; --ssim-raised: #fbf8f3; --ssim-text: #1b1915; --ssim-muted: #544c42;
+  --ssim-border: #d6ccbe; --ssim-border-strong: #82776a; --ssim-primary: #1b1915; --ssim-on-primary: #f3eee7;
+  --ssim-accent: #8a4b22; --ssim-accent-soft: rgba(138, 75, 34, 0.12); --ssim-view: #e4dacb;
+  --ssim-overlay: rgba(243, 238, 231, 0.9); --ssim-focus: #8a4b22; --ssim-radius: var(--radius-xl, 1rem);
+  position: relative; box-sizing: border-box; width: 100%; max-width: 1320px; margin: 0 auto;
+  padding: clamp(14px, 2.4vw, 28px); color: var(--ssim-text); background: var(--ssim-bg);
+  border: 1px solid var(--ssim-border); border-radius: calc(var(--ssim-radius) + 6px);
+  box-shadow: 0 7px 28px rgba(27, 25, 21, 0.05);
+  font-family: var(--font-en, "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif); line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+}
+.ssim[lang="ar"] { font-family: var(--font-ar, "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif); line-height: 1.7; }
+.ssim[data-theme="dark"] {
+  --ssim-bg: #181a1e; --ssim-surface: #1f2227; --ssim-raised: #272a30; --ssim-text: #efe9e0; --ssim-muted: #ada59a;
+  --ssim-border: #353840; --ssim-border-strong: #767982; --ssim-primary: #efe9e0; --ssim-on-primary: #181a1e;
+  --ssim-accent: #d99c6c; --ssim-accent-soft: rgba(217, 156, 108, 0.14); --ssim-view: #111316;
+  --ssim-overlay: rgba(17, 19, 22, 0.88); --ssim-focus: #d99c6c;
+}
+.ssim *, .ssim *::before, .ssim *::after { box-sizing: border-box; }
+.ssim [hidden] { display: none !important; }
+.ssim button { font: inherit; color: inherit; }
+.ssim :focus-visible { outline: 3px solid var(--ssim-focus); outline-offset: 2px; }
+
+.ssim-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.ssim-eyebrow { margin: 0 0 2px; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ssim-accent); font-weight: 600; }
+.ssim[lang="ar"] .ssim-eyebrow { letter-spacing: 0; text-transform: none; font-size: 0.8rem; }
+.ssim-title { margin: 0; font-size: clamp(1.15rem, 2.1vw, 1.5rem); line-height: 1.25; font-weight: 700; }
+
+.ssim-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; min-width: 44px; padding: 0 16px;
+  border-radius: 999px; border: 1px solid var(--ssim-border-strong); background: var(--ssim-raised); cursor: pointer;
+  font-weight: 600; font-size: 0.92rem; line-height: 1; transition: background-color .2s, border-color .2s, transform .15s;
+}
+.ssim-btn:hover:not(:disabled) { border-color: var(--ssim-accent); }
+.ssim-btn:active:not(:disabled) { transform: scale(0.97); }
+.ssim-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.ssim .ssim-btn--primary { background: var(--ssim-primary); color: var(--ssim-on-primary); border-color: transparent; }
+.ssim-btn--ghost { background: transparent; }
+.ssim-btn--icon { padding: 0; width: 44px; }
+.ssim-icon { width: 20px; height: 20px; flex: none; }
+.ssim[dir="rtl"] .ssim-icon--dir { transform: scaleX(-1); }
+
+/* technique tabs (LASIK | PRK | SMILE, keratoconus | CXL, transplant types) */
+.ssim-variants { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; padding: 4px; border-radius: 999px; background: var(--ssim-surface); width: fit-content; max-width: 100%; }
+.ssim-tab { min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; cursor: pointer; font-weight: 600; }
+.ssim-tab[aria-selected="true"] { background: var(--ssim-primary); color: var(--ssim-on-primary); }
+
+.ssim-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: clamp(16px, 2vw, 28px); align-items: start; }
+.ssim-stagewrap { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+
+.ssim-viewport { position: relative; width: 100%; aspect-ratio: 16 / 10; max-height: 72vh; min-height: 300px; border-radius: var(--ssim-radius); overflow: hidden; background: var(--ssim-view); isolation: isolate; }
+.ssim-canvas-host, .ssim-canvas-host canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ssim-canvas-host canvas { touch-action: pan-y; outline: none; cursor: grab; }
+.ssim-canvas-host canvas:active { cursor: grabbing; }
+.ssim-canvas-host canvas:focus-visible { outline: 3px solid var(--ssim-focus); outline-offset: -3px; }
+.ssim--explore .ssim-canvas-host canvas, .ssim--expanded .ssim-canvas-host canvas { touch-action: none; }
+.ssim--explore .ssim-viewport { box-shadow: inset 0 0 0 3px var(--ssim-accent); }
+
+.ssim-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.ssim-label {
+  position: absolute; top: 0; left: 0; translate: -50% -130%; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  background: var(--ssim-overlay); color: var(--ssim-text); font-size: 0.76rem; font-weight: 600; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+}
+.ssim-label::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 2px; height: 5px; margin-left: -1px; background: var(--ssim-accent); }
+
+.ssim-chip {
+  position: absolute; top: 12px; inset-inline-start: 12px; max-width: calc(100% - 80px); margin: 0; padding: 6px 12px; border-radius: 999px;
+  background: var(--ssim-overlay); font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;
+}
+.ssim-viewtools { position: absolute; top: 12px; inset-inline-end: 12px; display: flex; flex-direction: column; gap: 4px; padding: 5px; border-radius: 16px; background: var(--ssim-overlay); }
+.ssim-tool { width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; cursor: pointer; color: var(--ssim-text); }
+.ssim-tool:hover { background: var(--ssim-accent-soft); }
+.ssim-tool[aria-pressed="true"] { background: var(--ssim-primary); color: var(--ssim-on-primary); }
+@media (hover: hover) and (pointer: fine) { .ssim-tool--touch { display: none; } }
+.ssim-hint { position: absolute; bottom: 10px; inset-inline-start: 12px; inset-inline-end: 70px; margin: 0; font-size: 0.75rem; color: var(--ssim-muted); pointer-events: none; text-shadow: 0 1px 0 var(--ssim-view); }
+.ssim-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; background: var(--ssim-view); color: var(--ssim-muted); font-weight: 600; }
+.ssim-spinner { width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--ssim-border); border-top-color: var(--ssim-accent); animation: ssim-spin 0.9s linear infinite; }
+@keyframes ssim-spin { to { transform: rotate(360deg); } }
+.ssim-notice { position: absolute; inset-inline: 12px; bottom: 44px; margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--ssim-overlay); font-weight: 600; }
+.ssim--fallback .ssim-viewport, .ssim--fallback .ssim-playbar, .ssim--fallback .ssim-controls { display: none; }
+.ssim--fallback .ssim-body { grid-template-columns: 1fr; }
+.ssim-fallback { margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; background: var(--ssim-accent-soft); font-weight: 600; }
+
+.ssim-playbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ssim-play { min-width: 112px; }
+.ssim-range { flex: 1 1 160px; min-width: 120px; height: 44px; accent-color: var(--ssim-accent); background: transparent; cursor: pointer; }
+.ssim-count { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ssim-muted); min-width: 3.2em; text-align: center; }
+
+.ssim-controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-start; }
+.ssim-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ssim-group:empty { display: none; }
+.ssim-seg { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--ssim-border); background: var(--ssim-raised); cursor: pointer; font-weight: 600; font-size: 0.86rem; }
+.ssim-seg[aria-pressed="true"] { background: var(--ssim-primary); color: var(--ssim-on-primary); border-color: transparent; }
+.ssim-seg:hover { border-color: var(--ssim-accent); }
+.ssim-check { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 10px; border-radius: 999px; border: 1px solid var(--ssim-border); background: var(--ssim-raised); cursor: pointer; font-weight: 600; font-size: 0.86rem; }
+.ssim-check input { width: 18px; height: 18px; accent-color: var(--ssim-accent); margin: 0; }
+.ssim-opt { display: flex; flex-direction: column; gap: 4px; }
+.ssim-opt-k { margin: 0; font-size: 0.78rem; font-weight: 600; color: var(--ssim-muted); }
+.ssim-opt-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.ssim-panel { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ssim-now { padding: 14px 16px; border-radius: var(--ssim-radius); background: var(--ssim-raised); border: 1px solid var(--ssim-border); }
+.ssim-now-n { margin: 0; font-size: 0.78rem; font-weight: 600; color: var(--ssim-accent); }
+.ssim-now-title { margin: 2px 0 6px; font-size: 1.08rem; line-height: 1.3; }
+.ssim-now-text { margin: 0; color: var(--ssim-muted); }
+.ssim-now-extra { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--ssim-border); font-size: 0.92rem; }
+.ssim-list-title { margin: 6px 0 0; font-size: 0.86rem; color: var(--ssim-muted); }
+.ssim-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: 340px; overflow: auto; }
+.ssim-stage { display: flex; gap: 10px; width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; cursor: pointer; text-align: start; align-items: flex-start; }
+.ssim-stage:hover { background: var(--ssim-accent-soft); }
+.ssim-stage[aria-current="step"] { border-color: var(--ssim-accent); background: var(--ssim-accent-soft); }
+.ssim-stage-n { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ssim-accent); padding-top: 1px; }
+.ssim-stage-body { display: flex; flex-direction: column; gap: 2px; }
+.ssim-stage-t { font-weight: 600; }
+.ssim-stage-d { display: none; font-size: 0.86rem; color: var(--ssim-muted); }
+.ssim--fallback .ssim-stage-d, .ssim-stage[aria-current="step"] .ssim-stage-d { display: block; }
+.ssim--fallback .ssim-list { max-height: none; }
+.ssim-note { margin: 0; font-size: 0.82rem; color: var(--ssim-muted); }
+.ssim-simpl { font-size: 0.85rem; color: var(--ssim-muted); }
+.ssim-simpl summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--ssim-text); }
+.ssim-simpl ul { margin: 0 0 8px; padding-inline-start: 1.2em; }
+.ssim-sources-k { margin: 4px 0; font-weight: 600; }
+.ssim-sources a { color: var(--ssim-accent); }
+
+/* full screen (CSS, so it also works on iPhone, which has no element full-screen API) */
+.ssim--expanded { position: fixed; inset: 0; z-index: 1000; max-width: none; margin: 0; border-radius: 0; overflow: auto; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+.ssim--expanded .ssim-body { grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); }
+.ssim--expanded .ssim-viewport { aspect-ratio: auto; height: calc(100dvh - 210px); max-height: none; }
+
+@media (max-width: 900px) {
+  .ssim-body { grid-template-columns: 1fr; }
+  .ssim--expanded .ssim-body { grid-template-columns: 1fr; }
+  .ssim-list { max-height: none; }
+}
+@media (max-width: 560px) {
+  .ssim { padding: 12px; border-radius: var(--ssim-radius); }
+  .ssim-viewport { aspect-ratio: 4 / 5; max-height: 62vh; min-height: 280px; }
+  .ssim-tool { width: 40px; height: 40px; }
+  .ssim-viewtools { top: 8px; inset-inline-end: 8px; padding: 3px; gap: 2px; }
+  .ssim-chip { top: 8px; inset-inline-start: 8px; max-width: calc(100% - 64px); }
+  .ssim-play { min-width: 0; flex: 1 1 auto; }
+  .ssim-range { order: 5; flex-basis: 100%; }
+  .ssim-controls { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .ssim-group { flex-wrap: nowrap; }
+  .ssim-opt-row { flex-wrap: nowrap; }
+  .ssim-seg, .ssim-check { white-space: nowrap; }
+  .ssim-hint { display: none; }
+  .ssim--expanded .ssim-viewport { height: calc(100dvh - 250px); min-height: 240px; }
+  .ssim-variants { border-radius: 16px; }
+  .ssim-tab { padding: 0 14px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .ssim-viewport { aspect-ratio: auto; height: calc(100dvh - 140px); min-height: 220px; max-height: none; }
+  .ssim-body { grid-template-columns: minmax(0, 1fr) minmax(220px, 300px); }
+  .ssim-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ssim-btn, .ssim-tool { transition: none; }
+  .ssim-spinner { animation-duration: 2.4s; }
+}
+
+/* host pages style headings for their own bands: the simulator sets its own */
+.ssim h3, .ssim h4 { color: var(--ssim-text); }
+.ssim-title { font-family: var(--font-display, inherit); }
+

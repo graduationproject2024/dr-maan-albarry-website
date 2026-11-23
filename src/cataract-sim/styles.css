@@ -212,7 +212,7 @@
   .csim-body { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 600px) {
-  .csim { padding: 10px; border-radius: 16px; }
+  .csim { padding: 7px; border-radius: 16px; }
   .csim-header { align-items: center; }
   .csim-close span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .csim-close { padding: 0; width: 44px; }
@@ -222,13 +222,29 @@
   .csim-overlay--start { padding-bottom: 68px; }
   .csim-chip { top: 10px; inset-inline-start: 10px; max-width: calc(100% - 20px); }
   .csim-transport { gap: 6px; flex-wrap: nowrap; }
-  .csim-btn--play { flex: 1; min-width: 0; }
+  .csim-btn--play { flex: 1; min-width: 0; padding: 0 12px; white-space: nowrap; }
+  .csim-btn--play [data-ref="playLabel"] { display: block; min-width: 0; overflow: hidden; }
+  .csim-btn--play.is-icon { padding: 0; }
+  .csim-btn--play.is-icon [data-ref="playLabel"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .csim-counter { display: none; }
-  .csim-segments { gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  .csim-segments { gap: 1px; overflow-x: auto; scrollbar-width: none; }
   .csim-segments li { flex: 1 0 44px !important; }
   .csim-seg { height: 44px; }
   .csim-scrubber { height: 44px; }
-  .csim-playbar { padding: 6px; }
+  .csim-playbar { padding: 5px; container-type: inline-size; }
+}
+/* Phones (BUG-P2-02/03, found on a real iPhone 15 and Pixel 8). The controls stay as compact as before: the viewer is
+   revealed so that they end above the booking bar, so every extra row lifts the 3D picture under the header.
+   - Seven 44 px stage buttons with 1 px gaps need 314 px, which the 390–430 px phones now have (stage 7 was cut off at
+     393 px). Below that (360–375 px phones) they wrap 4 + 3 instead of hiding stages behind a sideways scroll with no
+     visible scrollbar. No target goes below 44 × 44 px.
+   - The Play/Pause label never wraps; when it does not fit it is hidden visually (ui.js fitPlayLabel) and the button
+     keeps its accessible name. */
+@container (max-width: 313px) {
+  .csim-segments { display: grid; grid-template-columns: repeat(4, minmax(44px, 1fr)); gap: 4px; overflow: visible; }
+}
+@container (max-width: 299px) {
+  .csim-transport { gap: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .csim * { transition: none !important; }
@@ -287,3 +303,12 @@
 .csim-review select { min-height: 44px; max-width: 100%; }
 .csim-review input[type="text"] { min-height: 44px; min-width: 0; }
 .csim-review-import { position: relative; }
+
+/* Full screen (Phase 2 refinement): CSS, so it works on iPhone too; the viewer fills the screen inside the safe areas. */
+.csim--expanded {
+  position: fixed; inset: 0; z-index: 1000; max-width: none; margin: 0; border-radius: 0; overflow: auto;
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+}
+.csim--expanded .csim-viewport { aspect-ratio: auto; height: calc(100dvh - 190px); max-height: none; min-height: 240px; }
+.csim--expanded [data-ref="expand"] { background: var(--csim-primary); color: var(--csim-on-primary); }
+@media (max-width: 560px) { .csim--expanded .csim-viewport { height: calc(100dvh - 240px); } }

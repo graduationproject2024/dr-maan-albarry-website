@@ -1165,6 +1165,16 @@ function vsimRemember({ what, state }) {
   keep.light = words.light;
   try { localStorage.setItem(VSIM_STORE, JSON.stringify(keep)); } catch (e) { /* storage unavailable: session-only */ }
 }
+// The page keeps keyboard focus and jumps clear of the fixed booking bar (style.css, scroll-padding-bottom): it needs the
+// bar's real height, which grows with enlarged text (BUG-P2-09).
+let bookingBarRO = null;
+function watchBookingBar() {
+  const bar = document.querySelector('.booking-bar');
+  if (bookingBarRO) { bookingBarRO.disconnect(); bookingBarRO = null; }
+  if (!bar || !('ResizeObserver' in window)) return;
+  bookingBarRO = new ResizeObserver(() => document.documentElement.style.setProperty('--booking-bar-h', `${Math.ceil(bar.getBoundingClientRect().height)}px`));
+  bookingBarRO.observe(bar);
+}
 // The workbench is sized against the bars that are really on screen (they change with enlarged text and rotation).
 function vsimWatchChrome() {
   if (vsim.chromeRO) { vsim.chromeRO.disconnect(); vsim.chromeRO = null; }
@@ -1403,8 +1413,133 @@ function revealViewer() {
   let dy = s.top < top ? s.top - top : s.bottom > window.innerHeight ? Math.min(s.top - top, s.bottom - window.innerHeight) : 0;
   const overhang = controls.getBoundingClientRect().bottom - dy - floor;
   if (overhang > 0) dy += overhang;
-  window.scrollBy({ top: dy, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  pageScrollTo(window.scrollY + dy, reducedMotion() ? 'auto' : 'smooth');
 }
+
+// Procedure simulators (lazy module src/surgical-sim — one shared engine for the six procedures other than cataract,
+// which keeps its own simulator). Same contract as the cataract viewer: nothing downloads until the visitor presses
+// Start (or reaches for the button), the host node lives outside the re-rendered markup, and leaving the page destroys
+// the viewer and its WebGL context.
+const SIM_SLUGS = new Set(['lens-implants', 'icl', 'laser-vision-correction', 'keratoconus-cxl', 'corneal-transplant', 'intravitreal-injections']);
+const p3d = { host: null, controller: null, state: 'idle', slug: null }; // idle | loading | active | error
+const P3D_COPY = {
+  'lens-implants': ['العدسة المزروعة داخل العين، ثلاثية الأبعاد', 'The lens implant inside the eye, in 3D', 'شاهد أين توضع العدسة داخل محفظة العدسة الطبيعية، وكيف تختلف أنواعها في توزيع التركيز.', 'See where the implant sits inside the natural lens’s capsule, and how the types differ in sharing focus.'],
+  icl: ['عدسة ICL داخل العين، ثلاثية الأبعاد', 'The ICL inside the eye, in 3D', 'شاهد مكان العدسة بين القزحية والعدسة الطبيعية التي تبقى في مكانها.', 'See where the lens sits, between the iris and the natural lens, which stays in place.'],
+  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الليزك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare LASIK, PRK and SMILE on a model of the cornea and its layers.'],
+  'keratoconus-cxl': ['القرنية المخروطية وتثبيت القرنية، ثلاثي الأبعاد', 'Keratoconus and cross-linking, in 3D', 'شاهد كيف يختلف شكل القرنية المخروطية، وفكرة تقوية ألياف القرنية بالتثبيت.', 'See how a keratoconic cornea differs in shape, and the idea behind strengthening its fibres with cross-linking.'],
+  'corneal-transplant': ['زراعة القرنية، ثلاثية الأبعاد', 'Corneal transplant, in 3D', 'استكشف طبقات القرنية وكيف يستبدل كل نوع من الزراعة الطبقة المتضررة فقط أو القرنية كاملة السماكة.', 'Explore the corneal layers and how each type of transplant replaces only the damaged layer, or the full thickness.'],
+  'intravitreal-injections': ['حقن العين، ثلاثية الأبعاد', 'Eye injections, in 3D', 'استكشف الجسم الزجاجي والشبكية والبقعة، وفكرة وصول الدواء إلى خلف العين.', 'Explore the vitreous, the retina and the macula, and the idea of medicine reaching the back of the eye.']
+};
+
+function renderProcedure3D(p) {
+  const st = p3d.slug === p.slug ? p3d.state : 'idle';
+  const c = P3D_COPY[p.slug];
+  return `
+  <section class="section section-stage section-stage-deep" id="procedure-3d" data-state="${st}" data-procedure="${p.slug}" aria-labelledby="procedure-3d-title">
+    <div class="container p3d-grid">
+      <div class="c3d-text">
+        <p class="kicker"><span>${tr('تجربة تعليمية ثلاثية الأبعاد', 'Interactive 3D education')}</span></p>
+        <h2 id="procedure-3d-title">${tr(c[0], c[1])}</h2>
+        <p class="lede">${tr(c[2], c[3])}</p>
+        <ul class="c3d-notes">
+          <li>${icon('info', 18)}<span>${tr('نموذج تعليمي توضيحي جديد، بانتظار المراجعة الطبية من الطبيب.', 'A new illustrative model, awaiting the doctor’s medical review.')}</span></li>
+          <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل حالة.', 'Not a substitute for a consultation; every case is different.')}</span></li>
+        </ul>
+        <div class="c3d-actions">
+          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" onclick="startProcedure3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+            ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
+          </button>
+          <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
+        </div>
+      </div>
+      <div class="c3d-stage p3d-stage" id="procedure-3d-stage" ${st === 'active' || st === 'loading' ? '' : 'hidden'} aria-label="${tr('التجربة ثلاثية الأبعاد', '3D experience')}" role="region"></div>
+    </div>
+  </section>`;
+}
+
+function p3dSync() {
+  const sec = document.getElementById('procedure-3d');
+  if (!sec || sec.dataset.procedure !== p3d.slug) return;
+  sec.dataset.state = p3d.state;
+  const stage = document.getElementById('procedure-3d-stage');
+  const btn = document.getElementById('procedure-3d-start');
+  const status = sec.querySelector('.c3d-status');
+  if (p3d.state === 'active' || p3d.state === 'loading') document.getElementById('site-header')?.classList.remove('is-hidden');
+  if (stage) {
+    stage.hidden = !(p3d.state === 'active' || p3d.state === 'loading');
+    if (p3d.host && p3d.host.parentNode !== stage) stage.appendChild(p3d.host);
+  }
+  if (btn) {
+    if (p3d.state === 'loading') btn.setAttribute('aria-busy', 'true'); else btn.removeAttribute('aria-busy');
+    const label = btn.querySelector('.btn-label');
+    if (label) label.textContent = p3d.state === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience');
+  }
+  if (status) status.textContent = p3d.state === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : '';
+}
+
+function closeProcedure3D(refocus = true) {
+  const ctrl = p3d.controller;
+  p3d.controller = null;
+  try { if (ctrl) ctrl.destroy(); } catch (e) { /* already torn down */ }
+  if (p3d.host) p3d.host.remove();
+  p3d.host = null;
+  p3d.state = 'idle';
+  p3dSync();
+  const btn = document.getElementById('procedure-3d-start');
+  if (btn && refocus !== false) btn.focus({ preventScroll: true });
+}
+
+function p3dWarm() {
+  const conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+  import('./src/surgical-sim/index.js').catch(() => {});
+}
+function p3dWatchWarm() {
+  const btn = document.getElementById('procedure-3d-start');
+  if (!btn) return;
+  for (const type of ['pointerenter', 'touchstart', 'focus']) btn.addEventListener(type, p3dWarm, { once: true, passive: true });
+}
+
+window.startProcedure3D = async function () {
+  const sec = document.getElementById('procedure-3d');
+  const slug = sec && sec.dataset.procedure;
+  if (!slug || !SIM_SLUGS.has(slug)) return;
+  if (p3d.slug === slug && (p3d.state === 'loading' || p3d.state === 'active')) return;
+  if (p3d.controller || p3d.host) closeProcedure3D(false);
+  p3d.slug = slug;
+  p3d.state = 'loading';
+  const host = p3d.host = document.createElement('div');
+  host.className = 'c3d-host p3d-host';
+  p3dSync();
+  try {
+    const mod = await import('./src/surgical-sim/index.js');
+    if (p3d.host !== host) return;
+    const ctrl = await mod.mount(host, { procedure: slug, lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion() });
+    if (p3d.host !== host) { ctrl && ctrl.destroy && ctrl.destroy(); return; }
+    p3d.controller = ctrl;
+    p3d.state = 'active';
+    ctrl.setLang(currentLang);
+    ctrl.setTheme(resolvedTheme());
+    ctrl.on('close', () => closeProcedure3D());
+    window.__procedureSim = ctrl;
+    const hadFocus = document.activeElement === document.getElementById('procedure-3d-start') || document.activeElement === document.body;
+    p3dSync();
+    if (hadFocus && p3d.host) { const t = p3d.host.querySelector('.ssim-play:not(:disabled), .ssim-stage'); if (t) t.focus({ preventScroll: true }); }
+    const stage = document.getElementById('procedure-3d-stage');
+    if (stage) {
+      const top = (document.getElementById('site-header')?.offsetHeight || 68) + 12;
+      const r = stage.getBoundingClientRect();
+      if (r.top < top || r.top > window.innerHeight * 0.4) pageScrollTo(window.scrollY + r.top - top, reducedMotion() ? 'auto' : 'smooth');
+    }
+  } catch (e) {
+    console.warn('procedure 3D module unavailable:', e);
+    if (p3d.host !== host) return;
+    if (p3d.host) p3d.host.remove();
+    p3d.host = null; p3d.controller = null; p3d.state = 'error';
+    p3dSync();
+  }
+};
+window.closeProcedure3D = closeProcedure3D;
 
 // /surgical-education/
 function renderSurgicalEducationPage() {
@@ -1625,6 +1760,7 @@ function renderProcedurePage(p) {
   const c = PROC && PROC.CONTENT[p.slug] ? PROC.CONTENT[p.slug][currentLang] : null;
   const g = groupOf(p.group);
   const idx = PROCEDURES.indexOf(p);
+  const sim3d = p.simulator ? 'cataract-3d' : SIM_SLUGS.has(p.slug) ? 'procedure-3d' : null;
   const sections = c ? PROC_SECTIONS.filter(([id]) => id !== 'types' || c.types) : [];
   const num = id => String(sections.findIndex(s => s[0] === id) + 1).padStart(2, '0');
   const list = (items, cls = '') => `<ul class="bullets ${cls}">${items.map(t => `<li>${t}</li>`).join('')}</ul>`;
@@ -1632,7 +1768,7 @@ function renderProcedurePage(p) {
     const s = PROC_SECTIONS.find(x => x[0] === id);
     return `<section class="proc-sec ${cls}" id="p-${id}" aria-labelledby="p-${id}-h"><span class="sec-n" aria-hidden="true">${num(id)}</span><h2 id="p-${id}-h">${tr(s[1], s[2])}</h2>${inner}</section>`;
   };
-  const tocLinks = () => `${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav data-spy="p-${id}"><span class="toc-n" aria-hidden="true">${num(id)}</span><span>${tr(ar, en)}</span></a></li>`).join('')}${p.simulator ? `<li class="toc-3d"><a href="${hereHref('cataract-3d')}" data-nav data-spy="cataract-3d"><span class="toc-n" aria-hidden="true"><bdi dir="ltr">3D</bdi></span><span>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</span></a></li>` : ''}`;
+  const tocLinks = () => `${sections.map(([id, ar, en]) => `<li><a href="${hereHref(`p-${id}`)}" data-nav data-spy="p-${id}"><span class="toc-n" aria-hidden="true">${num(id)}</span><span>${tr(ar, en)}</span></a></li>`).join('')}${sim3d ? `<li class="toc-3d"><a href="${hereHref(sim3d)}" data-nav data-spy="${sim3d}"><span class="toc-n" aria-hidden="true"><bdi dir="ltr">3D</bdi></span><span>${tr('التجربة ثلاثية الأبعاد', '3D walkthrough')}</span></a></li>` : ''}`;
   // Cataract recovery: the post-operative photograph restored from R5 (matrix I8; origin to be confirmed by the owner).
   const phaco = p.slug === 'cataract-surgery' ? `<figure class="proc-photo"><img src="images/surgery-phaco.jpg" width="512" height="279" loading="lazy" decoding="async" alt="${tr('قطرات العين ونظارة واقية ونشرة إرشادات على طاولة معقمة: أدوات شائعة بعد جراحة الماء الأبيض', 'Eye drops, protective glasses and an instruction leaflet on a sterile drape: common items after cataract surgery')}"><figcaption class="fig-cap"><span>${tr('أدوات شائعة بعد العملية: القطرات الموصوفة، ونظارة واقية، وتعليمات مكتوبة.', 'Common items after surgery: the prescribed drops, protective glasses and written instructions.')}</span></figcaption></figure>` : '';
   const loupe = c ? magnifier(p) : '';
@@ -1668,7 +1804,7 @@ function renderProcedurePage(p) {
               <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-lg" data-cta="book"><span class="btn-label">${tr('احجز استشارة مع د. معن', 'Book a consultation with Dr. Maan')}</span></a>
               <a href="${getWhatsAppUrl()}" ${EXT} class="btn btn-whatsapp btn-lg" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('اسأل عبر واتساب', 'Ask on WhatsApp')}</span></a>
             </div>
-            ${p.simulator ? `<p class="proc-3d-jump"><a href="${hereHref('cataract-3d')}" data-nav class="link-quiet">${icon('cube', 18)}<span>${tr('شاهد شرح العملية ثلاثي الأبعاد', 'Watch the 3D walkthrough')}</span></a></p>` : ''}
+            ${sim3d ? `<p class="proc-3d-jump"><a href="${hereHref(sim3d)}" data-nav class="link-quiet">${icon('cube', 18)}<span>${tr('شاهد شرح العملية ثلاثي الأبعاد', 'Watch the 3D walkthrough')}</span></a></p>` : ''}
           </div>
         </div>
       </div>
@@ -1690,6 +1826,7 @@ function renderProcedurePage(p) {
     </div>
 
     ${p.simulator ? renderCataract3D(true) : ''}
+    ${SIM_SLUGS.has(p.slug) ? renderProcedure3D(p) : ''}
 
     <section class="section section-band proc-related" aria-labelledby="related-title">
       <div class="container">
@@ -1919,7 +2056,7 @@ function go(next, { push = true, hash = '', scrollTo = null } = {}) {
     if (target && document.getElementById(target)) {
       requestAnimationFrame(() => window.scrollToSection(target));
     } else if (changed || scrollTo !== null) {
-      window.scrollTo(0, scrollTo || 0);
+      pageScrollTo(scrollTo || 0);
       if (changed && push) document.querySelector('main h1, #main')?.focus({ preventScroll: true });
     }
   };
@@ -1948,12 +2085,18 @@ window.addEventListener('popstate', e => {
   }
   go(next, { push: false, scrollTo: y });
   // restore the reading position once the page has rendered
-  requestAnimationFrame(() => { window.scrollTo(0, y); if (y > 0) holdScrollTarget(() => y, 'auto', y); });
+  requestAnimationFrame(() => { pageScrollTo(y); if (y > 0) holdScrollTarget(() => y, 'auto', y); });
 });
 
 // A section can move after the visitor has asked for it: a simulator further up the page replaces its reserved height
 // when its module arrives, which on a busy device is long after the jump has started. So a jump keeps its target until
 // the visitor takes over (any scroll, touch, click or key) or the page has had time to finish loading.
+/** Every programmatic page scroll goes through here, so the optional desktop smooth-scroll layer (Lenis, src/motion)
+ *  and the native page never disagree about the position. Without that layer it is plain window.scrollTo. */
+function pageScrollTo(top, behavior = 'auto') {
+  const m = window.__siteMotion;
+  if (m && m.lenis) m.scrollTo(top, behavior); else window.scrollTo({ top, behavior });
+}
 let releaseScrollHold = null;
 let restoringY = null; // the reading position being restored, while its hold is active
 function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
@@ -1971,7 +2114,7 @@ function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
     if (Math.abs(top - last) < 2 && Math.abs(window.scrollY - Math.min(top, limit)) < 2) return;
     last = top;
     window.__headerHoldUntil = performance.now() + 900; // this is not the reader scrolling (headerScrollShadow)
-    window.scrollTo({ top, behavior });
+    pageScrollTo(top, behavior);
   });
   ro.observe(main);
   const inputs = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
@@ -2001,21 +2144,33 @@ function sectionTop(id) {
 // The reading position is kept on the history entry (never in storage), so Back, Forward and a reload can return to it.
 // It is written when scrolling stops and when the page is left: the browser's own restoration is off (scrollRestoration
 // is 'manual') because re-rendering #app would defeat it.
-function saveReadingPosition() {
+// Never written during pagehide: on Back, Safari (WebKit) has already moved to the destination history entry when the
+// page being left receives pagehide, so a write there overwrote the DESTINATION's position and Back to a page left by a
+// full navigation landed at the top on iPhone (BUG-P2-01, found on a real iPhone 15 / iOS 26.6). The position is taken
+// from the last scroll event, saved 200 ms after scrolling stops and immediately when the visitor starts an action
+// (pointer or key) that may leave the page.
+let lastScrollY = Math.round(window.scrollY);
+function saveReadingPosition(y = lastScrollY) {
   // While a position is being restored the page may still be too short to reach it; the clamped position must not
   // replace the one being restored (BUG-FS-01).
   if (releaseScrollHold && restoringY !== null && document.documentElement.scrollHeight - window.innerHeight < restoringY - 2) return;
-  history.replaceState({ ...(history.state || {}), y: Math.round(window.scrollY) }, '');
+  if (history.state && history.state.y === y) return; // already saved
+  history.replaceState({ ...(history.state || {}), y }, '');
 }
 let readingPositionTimer = 0;
-window.addEventListener('scroll', () => { clearTimeout(readingPositionTimer); readingPositionTimer = setTimeout(saveReadingPosition, 200); }, { passive: true });
-window.addEventListener('pagehide', saveReadingPosition);
+window.addEventListener('scroll', () => {
+  lastScrollY = Math.round(window.scrollY);
+  clearTimeout(readingPositionTimer);
+  readingPositionTimer = setTimeout(saveReadingPosition, 200);
+}, { passive: true });
+const flushReadingPosition = () => { clearTimeout(readingPositionTimer); saveReadingPosition(); };
+['pointerdown', 'keydown'].forEach(t => window.addEventListener(t, flushReadingPosition, { capture: true, passive: true }));
 /** After a reload or a return from another site: go back to where the visitor was. False when there is nothing to restore. */
 function restoreReadingPosition() {
   const type = performance.getEntriesByType('navigation')[0]?.type;
   const y = history.state && history.state.y;
   if ((type !== 'reload' && type !== 'back_forward') || !(y > 0)) return false;
-  window.scrollTo(0, y);
+  pageScrollTo(y);
   holdScrollTarget(() => y, 'auto', y);
   return true;
 }
@@ -2023,7 +2178,7 @@ function restoreReadingPosition() {
 window.scrollToSection = function (id) {
   if (!document.getElementById(id)) return;
   const behavior = reducedMotion() ? 'auto' : 'smooth';
-  window.scrollTo({ top: sectionTop(id), behavior });
+  pageScrollTo(sectionTop(id), behavior);
   holdScrollTarget(() => sectionTop(id), behavior);
 };
 
@@ -2031,9 +2186,11 @@ window.scrollToSection = function (id) {
 function setMobileMenu(open) {
   const nav = document.getElementById('mobile-nav');
   if (!nav) return;
+  const was = nav.classList.contains('open');
   nav.classList.toggle('open', open);
   document.documentElement.classList.toggle('drawer-open', open);
   document.querySelectorAll('.mobile-menu-btn').forEach(b => b.setAttribute('aria-expanded', String(open)));
+  if (open && !was) window.__siteMotion?.drawerOpened(nav); // links arrive in reading order (optional motion layer)
 }
 
 window.toggleMobileMenu = function () {
@@ -2135,8 +2292,12 @@ window.openPlateZoom = btn => {
     dlg.id = 'plate-dialog';
     dlg.className = 'plate-dialog';
     dlg.setAttribute('aria-labelledby', 'plate-dialog-title');
-    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('click', e => { if (e.target === dlg) closePlateZoom(dlg); });
+    // Escape: shrink back into the figure's button first (same path as the opening), then close
+    dlg.addEventListener('cancel', e => { if (window.__siteMotion) { e.preventDefault(); closePlateZoom(dlg); } });
     dlg.addEventListener('close', () => {
+      dlg._closing = false; // however it closed (animated, native second Escape, Back), the next close works again
+      if (dlg.open) return; // a late close event after the dialog was already reopened: keep the new content
       document.documentElement.classList.remove('dialog-open');
       dlg.innerHTML = '';
       if (dlg._from && dlg._from.isConnected) dlg._from.focus();
@@ -2146,9 +2307,10 @@ window.openPlateZoom = btn => {
     document.body.appendChild(dlg);
   }
   dlg._from = btn;
+  dlg._closing = false;
   const n = fig.querySelector('.fig-n');
   const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
-  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="this.closest('dialog').close()">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
+  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="closePlateZoom(this.closest('dialog'))">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
   const figure = dlg.querySelector('.pd-figure'), scroller = dlg.querySelector('.pd-scroll');
   const illus = fig.querySelector('.atlas-illus').cloneNode(true);
   illus.querySelectorAll('.pin').forEach(p => { p.style.translate = ''; });
@@ -2162,6 +2324,15 @@ window.openPlateZoom = btn => {
   dlg.showModal();
   scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
   declusterPins();
+  window.__siteMotion?.dialogIn(dlg, btn); // short cross-fade (optional motion layer)
+};
+/** Close the figure dialog; with the motion layer it first fades out. */
+window.closePlateZoom = function (dlg) {
+  if (!dlg || !dlg.open || dlg._closing) return;
+  const m = window.__siteMotion;
+  if (!m) { dlg.close(); return; }
+  dlg._closing = true;
+  m.dialogOut(dlg, dlg._from, (finished) => { dlg._closing = false; if (finished !== false && dlg.open) dlg.close(); });
 };
 
 function observeIntersection() {
@@ -2293,6 +2464,24 @@ function finishFirstLoad() {
     declusterPins();
   }
   if (!restoreReadingPosition()) applyInitialHash();
+  bootMotion();
+}
+// Optional motion layer (src/motion: GSAP reveals and dialog/menu transitions; Lenis smooth wheel on desktop). Loaded
+// only after the page has fully loaded (images and fonts first: on a slow phone network it must not compete with them)
+// and then in idle time; never on a data-saver or 2G connection. The site is complete without it.
+// Desktop pointers only: on a throttled phone its parse time added 50-200 ms of blocking time for effects that are
+// only fades there (A/B in docs/implementation/legacy-backlog-zero/PERFORMANCE_COMPARISON.md), so phones keep the
+// CSS reveal, native scrolling and instant dialogs exactly as before.
+let motionBooted = false;
+function bootMotion() {
+  if (motionBooted) return;
+  motionBooted = true;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+  const start = () => import('./src/motion/index.js').then(m => m.initMotion()).catch(() => { /* optional: the site works without it */ });
+  const idle = () => (window.requestIdleCallback || ((f) => setTimeout(f, 600)))(start, { timeout: 4000 });
+  if (document.readyState === 'complete') idle(); else window.addEventListener('load', idle, { once: true });
 }
 function renderApp(navigated = false) {
   const adopt = firstRender && !navigated && canAdoptPrerender(); // before the lang attribute below is rewritten
@@ -2338,10 +2527,20 @@ function renderApp(navigated = false) {
   if (c3d.controller && typeof c3d.controller.setLang === 'function') {
     try { c3d.controller.setLang(currentLang); } catch (e) { /* module handles its own errors */ }
   }
+  // procedure simulators: torn down when the page no longer hosts the same procedure
+  const p3dSec = document.getElementById('procedure-3d');
+  if ((p3d.host || p3d.controller) && (!p3dSec || p3dSec.dataset.procedure !== p3d.slug)) closeProcedure3D(false);
+  p3dSync();
+  p3dWatchWarm();
+  if (p3d.controller) {
+    try { p3d.controller.setLang(currentLang); p3d.controller.setTheme(resolvedTheme()); } catch (e) { /* module handles its own errors */ }
+  }
 
+  watchBookingBar();
   mountVisionSim();
   lensLab.sync();
   lightJourney.sync();
+  window.__siteMotion?.refresh(); // the previous page's reveals are undone; this page's are set up
 
   if (proc && !PROC) loadProcedureContent().then(() => { if (!adopt && route.slug === proc.slug) renderApp(navigated); }, () => {});
 }
@@ -2355,7 +2554,7 @@ function applyInitialHash() {
   let id = '';
   try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
   if (!id || !document.getElementById(id)) return;
-  window.scrollTo(0, sectionTop(id));
+  pageScrollTo(sectionTop(id));
   holdScrollTarget(() => sectionTop(id));
 }
 const boot = () => { renderApp(false); requestAnimationFrame(() => setTimeout(finishFirstLoad)); };

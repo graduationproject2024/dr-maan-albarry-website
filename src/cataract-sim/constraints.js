@@ -20,7 +20,8 @@ export const LIMITS = {
   maxTipSpeed: 30,          // mm per second of playback inside / at the eye (no teleporting between frames)
   maxTipSpeedOutside: 150,  // mm per second while approaching or leaving outside the eye
   capsuleClear: 0.02,       // mm, required clearance in front of the posterior capsule
-  bagSlack: 0.03            // mm tolerance for IOL/fragment containment in the bag
+  bagSlack: 0.03,           // mm tolerance for IOL/fragment containment in the bag
+  forcepsGrip: 0.15         // mm the capsulorhexis forceps may press behind the anterior capsule surface (grip on the flap)
 };
 
 const rOf = (p) => Math.hypot(p[0], p[1]);
@@ -90,6 +91,16 @@ function checkInstrument(P, at, out) {
     if (insideCornea(tip, LIMITS.tipRadius)) add('tip-cornea', 'tip inside corneal stroma');
     if (insideIris(tip, P.pupilR, P.bagCollapse, LIMITS.tipRadius * 0.5)) add('tip-iris', 'tip inside iris');
     if (behindPosteriorCapsule(tip, P.bagCollapse, LIMITS.capsuleClear + LIMITS.tipRadius)) add('tip-posterior-capsule', `tip z ${tip[2].toFixed(3)} behind posterior capsule`);
+    // Phase 2: only the phaco tip works inside the capsular bag. The keratome never reaches the lens; the capsulorhexis
+    // forceps works ON the anterior capsule (it may press into it by the flap's grip depth, never into the lens body);
+    // the injector nozzle delivers from the anterior chamber and does not enter the bag.
+    const r = rOf(tip);
+    if (r < EYE.lensEqR && ins.kind !== 'phaco') {
+      const front = capsuleAntZ(r, P.bagCollapse);
+      const depth = front - tip[2]; // > 0: tip is behind the anterior capsule surface
+      const allowed = ins.kind === 'forceps' ? LIMITS.forcepsGrip : ins.kind === 'injector' ? LIMITS.tipRadius : 0;
+      if (depth > allowed + 1e-9) add(`tip-in-lens-${ins.kind}`, `${ins.kind} tip ${depth.toFixed(3)} mm behind the anterior capsule (allowed ${allowed} mm)`);
+    }
   }
   // shaft centre-line from the tip to the fulcrum
   if (outsideAlong(tip) < -0.05) {
@@ -156,6 +167,13 @@ function checkNucleus(P, at, out) {
     const q = [x, y, z];
     if (!insideBag(q, P.bagCollapse, 0.15) && !insideAnteriorSegment(q, P)) out.push({ ...at, part: 'particle', type: 'particle-outside', detail: q.map((v) => v.toFixed(2)).join(',') });
   }
+}
+
+/** Every per-frame check on one parameter set (used by the tests to prove a check fires on a bad frame). */
+export function checkFrame(P, at = { stage: 0, id: 'frame', p: 0 }) {
+  const out = [];
+  checkInstrument(P, at, out); checkIOL(P, at, out); checkFlap(P, at, out); checkNucleus(P, at, out);
+  return out;
 }
 
 // Persistent anatomical fields must be continuous across stage boundaries (no jumps between stages).

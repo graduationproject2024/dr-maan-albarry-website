@@ -1036,7 +1036,17 @@ html.dialog-open { overflow: hidden; }
 #cataract-3d[data-state="active"] .c3d-text .lede, #cataract-3d[data-state="active"] .c3d-notes { display: none; }
 /* phones: the running viewer repeats this heading in its own panel, so the section heading steps aside (still read by screen readers) */
 @media (max-width: 1023px) { #cataract-3d[data-state="active"] .c3d-text :is(h2, .kicker) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
+/* procedure simulators (src/surgical-sim): the viewer card carries its own surface */
+.p3d-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+.p3d-stage { grid-column: 1 / -1; min-height: 0; border: 0; border-radius: 0; background: none; overflow: visible; }
+.p3d-host { min-height: 0; }
+#procedure-3d[data-state="loading"] .p3d-stage { min-height: min(60vh, 560px); }
+#procedure-3d[data-state="loading"] .p3d-stage::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: 36px; height: 36px; margin: -18px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+#procedure-3d[data-state="active"] .c3d-actions, #procedure-3d[data-state="active"] .c3d-text .lede, #procedure-3d[data-state="active"] .c3d-notes { display: none; }
+@media (max-width: 1023px) { #procedure-3d[data-state="active"] .c3d-text :is(h2, .kicker) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
 @media (min-width: 900px) {
+  .p3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
+  .p3d-grid .c3d-text { grid-column: 1 / span 8; }
   .c3d-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
   .c3d-text { grid-column: 1 / span 5; }
   .c3d-grid > .c3d-poster { grid-column: 7 / span 6; }
@@ -1227,6 +1237,12 @@ html.dialog-open { overflow: hidden; }
 @media (max-width: 1023px) {
   .booking-bar { display: block; }
   body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+  /* Keyboard focus and in-page jumps must not land under the fixed booking bar (WCAG 2.2, 2.4.11 Focus Not Obscured).
+     BUG-P2-09: tabbing on a phone-width page left 6-12 focused links per page fully hidden behind the bar. The height is
+     measured (main.js, it grows with larger text); 70 px is the fallback. */
+  /* A margin on the focusable elements, not page-wide scroll-padding: the vision simulator's controls keep their own,
+     more specific margins (src/vision-sim/styles.css), which are tuned so a tap never moves the page. */
+  :is(a, button, input, select, textarea, summary, [tabindex]) { scroll-margin-block-end: calc(var(--booking-bar-h, 70px) + 12px); }
 }
 
 /* ------------------------------------------------------------
@@ -1235,6 +1251,21 @@ html.dialog-open { overflow: hidden; }
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
 .fade-in.visible { opacity: 1; transform: none; }
 @media (max-width: 767px) { :root { --dur-reveal: .35s; } .fade-in { transform: translateY(10px); } }
+/* GSAP motion layer (src/motion): a group whose items are revealed one after another is itself shown at once; its
+   items carry the motion. Without the motion layer (not loaded yet, reduced motion) the rule above applies unchanged. */
+.fade-in.is-staggered { opacity: 1; transform: none; transition: none; }
+/* Lenis (desktop pointer only; lenis/dist/lenis.css, the rules this site needs) */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+/* A soft light follows the pointer across an anatomical plate on hover (React Bits "SpotlightCard" technique,
+   re-implemented here; no motion, desktop pointer only). The pins stay above it. */
+@media (hover: hover) and (pointer: fine) {
+  .plate-card .pc-fig::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .25s var(--ease-out);
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 40%), color-mix(in srgb, #fffaf0 26%, transparent), transparent 70%); }
+  .plate-card:hover .pc-fig::after { opacity: 1; }
+  :root[data-theme="dark"] .plate-card .pc-fig::after { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 40%), color-mix(in srgb, #fff3dc 10%, transparent), transparent 70%); }
+}
 
 /* ------------------------------------------------------------
    26. PRINT (questionnaire summary, guides)
@@ -1243,6 +1274,7 @@ html.dialog-open { overflow: hidden; }
   .site-header, .booking-bar, .site-footer, .closing, .q-actions, .skip-link, .crumbs, .edu-toc, .toc-m { display: none !important; }
   body { background: #fff; color: #000; padding: 0; }
   .fade-in { opacity: 1; transform: none; }
+  .is-staggered > * { opacity: 1 !important; transform: none !important; } /* items not yet revealed (src/motion) */
   .section { padding-block: 16px; }
 }
 
