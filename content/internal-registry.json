@@ -37,8 +37,8 @@
       "meaning": "career total; examinations and surgical procedures combined; not surgeries alone, not patients",
       "source": "doctor",
       "evidence": "Original wording commit 9da524c (Arabic: 'فحص وإجراء جراحي دقيق'; English then read 'Specialized Ophthalmic Procedures'). Meaning confirmed by owner on behalf of Dr. Maan, 2026-11-01.",
-      "status": "confirmed",
-      "display": "public",
+      "status": "superseded",
+      "display": "internal",
       "dataPath": "credibility.statistics[id=cases-15000].value",
       "expect": "15,000+",
       "history": [
@@ -56,6 +56,30 @@
           "date": "2026-11-01",
           "commit": null,
           "change": "restored with combined meaning confirmed by Dr. Maan; adjective 'دقيق' dropped as promotional"
+        },
+        {
+          "date": "2026-11-23",
+          "commit": null,
+          "change": "superseded by surgeries-25000 at the owner's request (one count only on the site); kept here for history, never rendered"
+        }
+      ]
+    },
+    {
+      "id": "surgeries-25000",
+      "ar": "+25,000 عملية جراحية خلال مسيرته",
+      "en": "25,000+ surgical operations over his career",
+      "meaning": "career total of surgical operations, as supplied by the owner; whether every case was personally performed is to be confirmed by the owner",
+      "source": "owner-2026-11-23",
+      "evidence": "Owner brief 2026-11-23 (§15): '+25,000 surgical operations'.",
+      "status": "owner-supplied",
+      "display": "public",
+      "dataPath": "credibility.statistics[id=surgeries-25000].value",
+      "expect": "25,000+",
+      "history": [
+        {
+          "date": "2026-11-23",
+          "commit": null,
+          "change": "added; replaces cases-15000 on the site"
         }
       ]
     },
@@ -451,6 +475,57 @@
           "date": "2026-11-04",
           "commit": null,
           "change": "recorded as pending (Phase 1)"
+        }
+      ]
+    },
+    {
+      "id": "qual-ico-2002",
+      "ar": "شهادات المجلس الدولي لطب العيون (ICO)",
+      "en": "International Council of Ophthalmology (ICO) examination certificates",
+      "source": "owner-2026-11-23",
+      "status": "owner-supplied",
+      "display": "public",
+      "dataPath": "professional.qualifications[id=ico-2002]",
+      "expect": "ico-2002",
+      "history": [
+        {
+          "date": "2026-11-23",
+          "commit": null,
+          "change": "added from the owner's brief; original wording in clinical-profile.js QUALIFICATIONS"
+        }
+      ]
+    },
+    {
+      "id": "qual-ksu-fellowship-2004",
+      "ar": "زمالة جامعة الملك سعود في طب وجراحة العيون",
+      "en": "King Saud University Fellowship in Ophthalmology",
+      "source": "owner-2026-11-23",
+      "status": "owner-supplied",
+      "display": "public",
+      "dataPath": "professional.qualifications[id=ksu-fellowship-2004]",
+      "expect": "ksu-fellowship-2004",
+      "history": [
+        {
+          "date": "2026-11-23",
+          "commit": null,
+          "change": "added from the owner's brief; original wording in clinical-profile.js QUALIFICATIONS"
+        }
+      ]
+    },
+    {
+      "id": "qual-kkesh-fellowship-2005",
+      "ar": "زمالة مستشفى الملك خالد التخصصي للعيون في التخصصات الدقيقة",
+      "en": "King Khaled Eye Specialist Hospital subspecialty fellowship",
+      "source": "owner-2026-11-23",
+      "status": "owner-supplied",
+      "display": "public",
+      "dataPath": "professional.qualifications[id=kkesh-fellowship-2005]",
+      "expect": "kkesh-fellowship-2005",
+      "history": [
+        {
+          "date": "2026-11-23",
+          "commit": null,
+          "change": "added from the owner's brief; original wording in clinical-profile.js QUALIFICATIONS"
         }
       ]
     }

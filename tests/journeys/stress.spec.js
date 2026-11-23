@@ -93,7 +93,7 @@ test('Stress — seeded rapid interaction', async ({ page }, testInfo) => {
 
   await j.step('Back during animation: play, then browser Back', 'Previous page renders; the viewer is torn down; no errors', async () => {
     await page.goto('/en/'); await page.locator('main h1').waitFor();
-    const l = page.locator('#procedures .proc-card-link[href$="procedures/cataract-surgery/"]'); await revealInFreeArea(page, l); await l.tap();
+    const l = page.locator('#procedures .pgal-link[href$="procedures/cataract-surgery/"]'); await revealInFreeArea(page, l); await l.tap();
     await page.waitForURL(/cataract-surgery\/$/);
     const b = page.locator('#cataract-3d-start'); await revealInFreeArea(page, b); await b.tap(); await waitCsim(page, ['ready'], 40000);
     await page.locator('#cataract-3d-stage [data-ref="start"]').tap(); await page.waitForTimeout(400);
@@ -142,10 +142,10 @@ test('Stress — seeded rapid interaction', async ({ page }, testInfo) => {
   }, { critical: false });
 
   await j.step('Rapid lens switching: 30 seeded taps across the 5 lens buttons', 'Selected lens equals the last tap; explanation card follows; one canvas', async () => {
-    const ids = ['monofocal', 'edof', 'trifocal', 'toric', 'cataract']; const seq = [];
+    const ids = ['monofocal', 'edof', 'trifocal', 'enhanced', 'cataract']; const seq = []; // toric became a switch (2026-11-23)
     const first = page.locator('#simulator-host label[for$="-lensA-monofocal"]'); await revealInFreeArea(page, first);
     await page.locator('#simulator-host .vsim-more').tap(); // toric and cataract live in More settings since the workbench rebuild
-    await revealInFreeArea(page, page.locator('#simulator-host label[for$="-lensA-toric"]'));
+    await revealInFreeArea(page, page.locator('#simulator-host label[for$="-lensA-cataract"]'));
     // the five lens types now sit in two groups (Simple row, More settings) with a sticky picture between them, so each
     // tap uses Playwright's own scrolling and hit-target check (raw coordinates could land on the stuck picture)
     for (let i = 0; i < 30; i++) { const id = pick(rnd, ids); seq.push(id); await page.locator(`#simulator-host label[for$="-lensA-${id}"]`).tap(); }

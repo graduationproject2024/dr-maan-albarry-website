@@ -172,14 +172,13 @@
 .vsim-radio:checked + .vsim-seg-btn { background: var(--vsim-primary); color: var(--vsim-on-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18); }
 .vsim-radio:checked + .vsim-seg-btn .vsim-seg-sub { color: inherit; opacity: 0.85; }
 .vsim-radio:focus-visible + .vsim-seg-btn { outline: 3px solid var(--vsim-focus); outline-offset: 1px; }
-
-.vsim-switch { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 600; width: fit-content; max-width: 100%; }
-.vsim-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.vsim-switch-track { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--vsim-border-strong); transition: background-color 0.15s ease; }
-.vsim-switch-track::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start 0.15s ease; }
-.vsim-switch input:checked + .vsim-switch-track { background: var(--vsim-primary); }
-.vsim-switch input:checked + .vsim-switch-track::after { inset-inline-start: 21px; }
-.vsim-switch input:focus-visible + .vsim-switch-track { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
+.vsim-switch, .vsim-toric { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 600; width: fit-content; max-width: 100%; }
+.vsim-switch input, .vsim-toric input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.vsim-switch-track, .vsim-toric-track { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--vsim-border-strong); transition: background-color 0.15s ease; }
+.vsim-switch-track::after, .vsim-toric-track::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start 0.15s ease; }
+.vsim-switch input:checked + .vsim-switch-track, .vsim-toric input:checked + .vsim-toric-track { background: var(--vsim-primary); }
+.vsim-switch input:checked + .vsim-switch-track::after, .vsim-toric input:checked + .vsim-toric-track::after { inset-inline-start: 21px; }
+.vsim-switch input:focus-visible + .vsim-switch-track, .vsim-toric input:focus-visible + .vsim-toric-track { outline: 3px solid var(--vsim-focus); outline-offset: 2px; }
 
 .vsim-range-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
 .vsim-range-out { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.92rem; }

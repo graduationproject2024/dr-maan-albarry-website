@@ -17,8 +17,10 @@ import { CONTENT as LAB } from '../lens-lab/content.js';
 
 let instance = 0;
 const BANDS = ['distance', 'intermediate', 'near'];
-// Dr. Maan's four focusing designs (2026-11-23); Toric is a switch that adds astigmatism correction to the chosen design.
-const PRIMARY_LENSES = ['monofocal', 'enhanced', 'edof', 'trifocal'];
+// The simple row keeps the three most distinct designs (its phone layout is verified on real devices); the enhanced
+// monofocal sits with the other lens types in More settings, next to the Toric switch, which adds astigmatism correction
+// to the chosen design (Dr. Maan's five categories, 2026-11-23; all five are compared side by side in the Lens Lab).
+const PRIMARY_LENSES = ['monofocal', 'edof', 'trifocal'];
 const OTHER_LENSES = LENS_IDS.filter((l) => !PRIMARY_LENSES.includes(l) && l !== 'toric');
 const LAB_LENSES = ['monofocal', 'enhanced', 'toric', 'edof', 'multifocal', 'trifocal'];
 /** Lens-lab content key for a simulator lens id (toric versions use their design's levels). */
@@ -92,9 +94,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <div class="vsim-bench-controls" data-ref="benchControls">
         <fieldset class="vsim-field vsim-field-lens">
           <legend class="vsim-legend-title">${s.lens}</legend>
-          <div class="vsim-seg vsim-seg-4" data-ref="lensA">${radios('lensA', PRIMARY_LENSES, primaryLabel, baseLens(state.lens))}</div>
-          <label class="vsim-switch vsim-toric" data-ref="toricBox"><input type="checkbox" data-ref="toric" ${isToric(state.lens) ? 'checked' : ''}><span class="vsim-switch-track" aria-hidden="true"></span><span>${s.toricSwitch}</span></label>
-          <p class="vsim-fine vsim-toric-note" data-ref="toricNote" hidden>${s.toricNote}</p>
+          <div class="vsim-seg vsim-seg-3" data-ref="lensA">${radios('lensA', PRIMARY_LENSES, primaryLabel, baseLens(state.lens))}</div>
         </fieldset>
         <fieldset class="vsim-field vsim-field-light">
           <legend class="vsim-legend-title">${s.lighting}</legend>
@@ -108,6 +108,10 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       <div class="vsim-adv" id="vsim${n}-adv" data-ref="adv" ${more ? '' : 'hidden'}>
         <section class="vsim-group" aria-labelledby="vsim${n}-g-compare">
           <h3 class="vsim-group-title" id="vsim${n}-g-compare">${s.groupCompare}</h3>
+          <div class="vsim-field vsim-field-toric">
+            <label class="vsim-toric" data-ref="toricBox"><input type="checkbox" data-ref="toric" ${isToric(state.lens) ? 'checked' : ''}><span class="vsim-toric-track" aria-hidden="true"></span><span>${s.toricSwitch}</span></label>
+            <p class="vsim-fine vsim-toric-note" data-ref="toricNote" hidden>${s.toricNote}</p>
+          </div>
           <fieldset class="vsim-field vsim-field-otherlens">
             <legend class="vsim-legend-title">${s.otherLenses}</legend>
             <div class="vsim-seg vsim-seg-3">${radios('lensA', OTHER_LENSES, lensLabel, state.lens)}</div>
@@ -376,13 +380,14 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     placeWhole();
     ref.closeNote.hidden = !closeUp;
     ref.closeNote.textContent = closeUp ? s.closeNote(obj) : '';
-    ref.moreNow.hidden = PRIMARY_LENSES.includes(baseLens(state.lens));
+    // the toric switch and the other lenses live in More settings: name the active one on the button
+    ref.moreNow.hidden = PRIMARY_LENSES.includes(state.lens);
     ref.moreNow.textContent = ref.moreNow.hidden ? '' : s.lenses[state.lens].short;
 
     const scn = scenarioFor(state.distanceM, state.lighting);
     set('scenario', scn || '');
     ref.custom.hidden = !!scn;
-    set('lensA', PRIMARY_LENSES.includes(baseLens(state.lens)) ? baseLens(state.lens) : state.lens); set('lensB', state.lensB); set('lighting', state.lighting);
+    set('lensA', baseLens(state.lens)); set('lensB', state.lensB); set('lighting', state.lighting);
     ref.toric.checked = isToric(state.lens);
     ref.toricBox.hidden = !TORIC_BASES.includes(baseLens(state.lens));
     ref.toricNote.hidden = !isToric(state.lens);

@@ -405,6 +405,7 @@ main:focus, main h1:focus { outline: none; }
 .hero-facts { margin-top: clamp(28px, 3vw, 40px); }
 .hero-fact { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--rule); }
 .stat-num { font-variant-numeric: tabular-nums; }
+.stat-num::after { content: attr(data-n); }
 .hero-fact-value { grid-row: span 2; font-weight: 400; font-size: 2.125rem; line-height: 1; letter-spacing: -.02em; color: var(--ink); min-width: 4.4ch; }
 .hero-fact-label { font-size: var(--fs-small); line-height: 1.55; color: var(--ink); }
 .hero-fact-sub { font-size: var(--fs-caption); line-height: 1.55; color: var(--ink-3); }

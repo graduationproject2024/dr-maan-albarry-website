@@ -55,7 +55,7 @@ test('Persona D — slow network, low-power phone', async ({ page }, testInfo) =
   }, { shot: true, timeout: 90000 });
 
   await j.step('Tap the cataract card\'s details link', 'Cataract page opens (content chunk loads over the slow link)', async () => {
-    const link = page.locator('#procedures .proc-card-link[href$="procedures/cataract-surgery/"]');
+    const link = page.locator('#procedures .pgal-link[href$="procedures/cataract-surgery/"]');
     await link.scrollIntoViewIfNeeded();
     const t0 = Date.now();
     await link.tap();

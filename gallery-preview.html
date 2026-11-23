@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Photo gallery preview (internal)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- @doctor-json-ld -->
+    <style>body { margin: 0; font-family: system-ui, sans-serif; background: #f3eee7; color: #1b1915; } main { padding: 16px; }</style>
+  </head>
+  <body>
+    <!-- Test harness only (CSIM_HARNESS builds). The fixtures are NOT gallery content and are never published:
+         they reuse an existing authorised site photograph to exercise the grid and the lightbox. -->
+    <main><div id="gal-host"></div></main>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const lang = q.get('lang') === 'en' ? 'en' : 'ar';
+      document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      const img = './images/dr-maan-redsea.jpg';
+      const fx = (id, category, n) => ({ id, category, image: img, thumbnail: img, width: 682, height: 1024,
+        alt: { ar: `صورة اختبار ${n}`, en: `Test photo ${n}` }, caption: { ar: `تعليق اختبار ${n}`, en: `Test caption ${n}` },
+        event: { ar: 'فعالية اختبار', en: 'Test event' }, date: '2024', source: 'test fixture', permission: { documented: true, reference: 'fixture', patientPrivacyReviewed: true }, exifStripped: true, published: true });
+      const photos = [fx('t1', 'conferences', 1), fx('t2', 'conferences', 2), fx('t3', 'meetings', 3), fx('t4', 'operating-room', 4)];
+      const { GALLERY_CATEGORIES, isPublishablePhoto } = await import('./clinical-profile.js');
+      const mod = await import('./src/gallery/index.js');
+      window.__gal = mod.mount(document.getElementById('gal-host'), { lang, photos: photos.filter(isPublishablePhoto), categories: GALLERY_CATEGORIES });
+      window.__galCounters = mod.counters;
+    </script>
+  </body>
+</html>

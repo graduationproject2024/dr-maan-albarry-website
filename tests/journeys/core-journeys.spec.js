@@ -68,7 +68,7 @@ test.describe('J02', () => {
       return { actual: titles.join(', '), ok: titles.length === 3 && titles.includes(NAME['keratoconus-cxl'].en) };
     }, { shot: true });
     await j.step('Tap the keratoconus card', 'Keratoconus page', async () => {
-      const l = page.locator('#procedures .proc-card-link[href$="procedures/keratoconus-cxl/"]'); await revealInFreeArea(page, l); await l.tap();
+      const l = page.locator('#procedures .pgal-link[href$="procedures/keratoconus-cxl/"]'); await revealInFreeArea(page, l); await l.tap();
       await page.waitForURL(/keratoconus-cxl\/$/); const s = await docState(page); return { actual: s.h1, ok: s.h1 === NAME['keratoconus-cxl'].en };
     });
     await j.step('Tap the related "Corneal transplant" card', 'Corneal transplant page', async () => {
@@ -291,7 +291,7 @@ test.describe('J08', () => {
       return { actual: `h1 visible after ${metrics.h1} ms; load ${metrics.load} ms; LCP ${metrics.lcp} ms; CLS ${metrics.cls}; ${metrics.kib} KiB`, ok: metrics.h1 < 15000 };
     }, { shot: true, timeout: 240000 });
     await j.step('Tap the cataract card', 'Procedure page renders (content chunk over Slow 3G)', async () => {
-      const l = page.locator('#procedures .proc-card-link[href$="procedures/cataract-surgery/"]'); await revealInFreeArea(page, l);
+      const l = page.locator('#procedures .pgal-link[href$="procedures/cataract-surgery/"]'); await revealInFreeArea(page, l);
       const t0 = Date.now(); await l.tap(); await page.locator('#p-anatomy').waitFor({ timeout: 60000 }); metrics.proc = Date.now() - t0;
       return { actual: `content after ${metrics.proc} ms`, ok: true };
     }, { timeout: 90000 });

@@ -134,7 +134,7 @@ export const CONTENT = {
         parts: [['الظهارة', 'الطبقة السطحية للقرنية'], ['اللحمة (السدى)', 'الطبقة الوسطى التي يعيد الليزر تشكيلها'], ['سماكة القرنية', 'عامل أساسي في تحديد الطريقة المناسبة']]
       },
       types: [
-        ['الليزك', 'LASIK', 'تُرفع شريحة رقيقة من القرنية، ثم يُعاد تشكيل الطبقة تحتها وتُعاد الشريحة إلى مكانها. التعافي البصري سريع عادةً.'],
+        ['الفيمتوليزيك', 'Femto-LASIK', 'يُصنع غطاء رقيق من القرنية بليزر الفيمتو ثانية ويُرفع، ثم يُعاد تشكيل الطبقة تحته بالليزر ويُعاد الغطاء إلى مكانه. الفيمتوليزيك نوع من الليزك، والتعافي البصري سريع عادةً.'],
         ['الليزر السطحي', 'PRK', 'يُعاد تشكيل سطح القرنية بعد إزالة الطبقة الخارجية دون شريحة. التعافي أبطأ وأكثر انزعاجاً في الأيام الأولى، وقد يناسب القرنيات الأرق.'],
         ['سمايل', 'SMILE', 'يُصنع بالليزر جزء رقيق داخل القرنية ويُستخرج عبر فتحة صغيرة دون شريحة. مناسب لبعض حالات قصر النظر والاستجماتيزم.']
       ],
@@ -144,9 +144,9 @@ export const CONTENT = {
       benefits: ['رؤية جيدة دون نظارة في كثير من الأنشطة لمن يناسبهم الإجراء.', 'إجراء خارجي دون مبيت.', 'خيارات متعددة تناسب أنواعاً مختلفة من القرنيات.'],
       limitations: ['لا يعالج قصر البصر الشيخوخي (الحاجة لنظارة القراءة بعد الأربعين) في معظم الحالات.', 'قد تلزم نظارة لبعض المهام أو إجراء تكميلي.', 'لا يناسب الجميع؛ القرنية الرقيقة أو غير المنتظمة قد تستبعد الليزر.'],
       risks: ['جفاف العين، وهو شائع ويتحسن غالباً مع الوقت والعلاج.', 'هالات ووهج حول الأضواء ليلاً.', 'تصحيح أقل أو أكثر من المطلوب.', 'مشكلات في الشريحة بعد الليزك، أو عتامة خفيفة بعد الليزر السطحي.', 'مضاعفات نادرة مثل العدوى أو ترقق القرنية وتحدّبها (توسّع القرنية).'],
-      recovery: ['تجنب فرك العين والسباحة والمكياج حول العين للفترة التي يحددها الطبيب.', 'التعافي بعد الليزك وسمايل أسرع عادةً منه بعد الليزر السطحي.', 'استقرار الرؤية تدريجياً خلال أسابيع، مع تذبذب بسيط في البداية.', 'قطرات مرطبة ومضادة للالتهاب حسب الوصفة.'],
+      recovery: ['تجنب فرك العين والسباحة والمكياج حول العين للفترة التي يحددها الطبيب.', 'التعافي بعد الفيمتوليزيك وسمايل أسرع عادةً منه بعد الليزر السطحي.', 'استقرار الرؤية تدريجياً خلال أسابيع، مع تذبذب بسيط في البداية.', 'قطرات مرطبة ومضادة للالتهاب حسب الوصفة.'],
       faq: [
-        { q: 'أيها أنسب لي: الليزك أم الليزر السطحي أم سمايل؟', a: 'يعتمد ذلك على سماكة قرنيتك وشكلها ودرجة النظر وطبيعة عملك ورياضتك. يُتخذ القرار بعد الفحص والتصوير، لا قبله.' },
+        { q: 'أيها أنسب لي: الفيمتوليزيك أم الليزر السطحي أم سمايل؟', a: 'يعتمد ذلك على سماكة قرنيتك وشكلها ودرجة النظر وطبيعة عملك ورياضتك. يُتخذ القرار بعد الفحص والتصوير، لا قبله.' },
         { q: 'هل نتيجة الليزر دائمة؟', a: 'التغيير في شكل القرنية دائم، لكن العين قد تتغير مع العمر، مثل الحاجة لنظارة القراءة بعد الأربعين أو ظهور الماء الأبيض لاحقاً.' },
         { q: 'ماذا لو لم يكن الليزر مناسباً لي؟', a: 'قد تكون العدسة اللاصقة الداخلية (ICL) أو استبدال العدسة خياراً آخر بحسب العمر وحالة العين.' },
         // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).
@@ -160,7 +160,7 @@ export const CONTENT = {
         parts: [['Epithelium', 'the outer surface layer of the cornea'], ['Stroma', 'the middle layer the laser reshapes'], ['Corneal thickness', 'a key factor in choosing the method']]
       },
       types: [
-        ['LASIK', 'LASIK', 'A thin flap is lifted, the layer beneath is reshaped and the flap is laid back. Visual recovery is usually quick.'],
+        ['Femtosecond laser-assisted LASIK', 'Femto-LASIK', 'A femtosecond laser creates a thin flap, which is lifted; the layer beneath is reshaped and the flap is laid back. Femto-LASIK is a type of LASIK; visual recovery is usually quick.'],
         ['Surface laser', 'PRK', 'The surface is reshaped after the outer layer is removed, with no flap. Recovery is slower and more uncomfortable at first; it may suit thinner corneas.'],
         ['SMILE', 'SMILE', 'A laser shapes a thin piece of tissue inside the cornea, removed through a small opening with no flap. It suits some short-sight and astigmatism prescriptions.']
       ],
@@ -170,9 +170,9 @@ export const CONTENT = {
       benefits: ['Good vision without glasses for many activities in suitable candidates.', 'An outpatient procedure with no hospital stay.', 'Several methods to suit different corneas.'],
       limitations: ['In most cases it does not treat presbyopia (needing reading glasses after about 40).', 'Glasses for some tasks, or an enhancement, may still be needed.', 'Not everyone is suitable; a thin or irregular cornea can rule laser out.'],
       risks: ['Dry eye, which is common and usually improves with time and treatment.', 'Halos and glare around lights at night.', 'Under- or over-correction.', 'Flap problems after LASIK, or mild haze after surface laser.', 'Rare complications such as infection or progressive thinning and bulging of the cornea (ectasia).'],
-      recovery: ['Avoid rubbing your eyes, swimming and eye make-up for as long as advised.', 'Recovery after LASIK and SMILE is usually faster than after surface laser.', 'Vision settles gradually over weeks, with some early fluctuation.', 'Lubricating and anti-inflammatory drops as prescribed.'],
+      recovery: ['Avoid rubbing your eyes, swimming and eye make-up for as long as advised.', 'Recovery after Femto-LASIK and SMILE is usually faster than after surface laser.', 'Vision settles gradually over weeks, with some early fluctuation.', 'Lubricating and anti-inflammatory drops as prescribed.'],
       faq: [
-        { q: 'Which suits me: LASIK, surface laser or SMILE?', a: 'It depends on your corneal thickness and shape, your prescription, your work and your sport. The decision is made after the examination and imaging, not before.' },
+        { q: 'Which suits me: Femto-LASIK, surface laser or SMILE?', a: 'It depends on your corneal thickness and shape, your prescription, your work and your sport. The decision is made after the examination and imaging, not before.' },
         { q: 'Is the result permanent?', a: 'The change in corneal shape is permanent, but eyes still change with age — for example needing reading glasses after 40, or a cataract later in life.' },
         { q: 'What if laser is not suitable for me?', a: 'An implantable contact lens (ICL) or lens replacement may be an alternative, depending on your age and eye health.' },
         // Moved from the homepage FAQ (premium reconstruction: the homepage keeps general questions only).

@@ -12,7 +12,7 @@ import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } 
 import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
 import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES, OCULAR_SURFACE } from './src/site/content.js';
 import { createFeatureMount, hasFeature } from './src/feature-loaders.js';
-import { EMPLOYMENT, publicAchievements, achievementById, verifiedPublications, DEVICES, timelineItems } from './clinical-profile.js';
+import { EMPLOYMENT, publicAchievements, achievementById, verifiedPublications, DEVICES, timelineItems, publishedPhotos, GALLERY_CATEGORIES } from './clinical-profile.js';
 import { createSectionPatterns } from './src/site/section-patterns.js';
 
 // Pick the current-language value from an { ar, en } pair.
@@ -132,7 +132,9 @@ const role = id => D.professional.roles.find(r => r.id === id);
 const short = r => (currentLang === 'ar' ? (r.shortAr || r.ar) : (r.shortEn || r.en));
 const STAT = D.credibility.statistics[0] || null; // the one public career statistic (doctor-data.js)
 /** A count-up statistic: the final value is in the markup (no-JS, prerender, screen readers); bindCounters() animates it once. */
-const statValue = (st, cls = '') => `<strong class="stat-count ${cls}" data-count="${st.count}"><bdi dir="ltr" class="stat-num" aria-hidden="true">${st.value}</bdi><span class="sr-only">${st.value}</span></strong>`;
+// The visible digits are drawn from data-n by CSS (::after), so the page's text content is always the final value (no-JS,
+// prerender adoption and screen readers all read "25,000+"); bindCounters() only changes data-n while it animates.
+const statValue = (st, cls = '') => `<strong class="stat-count ${cls}" data-count="${st.count}"><bdi dir="ltr" class="stat-num" aria-hidden="true" data-n="${st.value}"></bdi><span class="sr-only">${st.value}</span></strong>`;
 const groupOf = id => PROCEDURE_GROUPS.find(g => g.id === id);
 const guideBy = id => GUIDES.find(g => g.id === id);
 
@@ -1524,7 +1526,7 @@ const p3d = { host: null, controller: null, state: 'idle', slug: null }; // idle
 const P3D_COPY = {
   'lens-implants': ['العدسة المزروعة داخل العين، ثلاثية الأبعاد', 'The lens implant inside the eye, in 3D', 'شاهد أين توضع العدسة داخل محفظة العدسة الطبيعية، وكيف تختلف أنواعها في توزيع التركيز.', 'See where the implant sits inside the natural lens’s capsule, and how the types differ in sharing focus.'],
   icl: ['عدسة ICL داخل العين، ثلاثية الأبعاد', 'The ICL inside the eye, in 3D', 'شاهد مكان العدسة بين القزحية والعدسة الطبيعية التي تبقى في مكانها.', 'See where the lens sits, between the iris and the natural lens, which stays in place.'],
-  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الليزك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare LASIK, PRK and SMILE on a model of the cornea and its layers.'],
+  'laser-vision-correction': ['تصحيح النظر بالليزر، ثلاثي الأبعاد', 'Laser vision correction, in 3D', 'قارن بين الفيمتوليزيك والتقشير السطحي والسمايل على نموذج للقرنية وطبقاتها.', 'Compare Femto-LASIK, PRK and SMILE on a model of the cornea and its layers.'],
   'keratoconus-cxl': ['القرنية المخروطية وتثبيت القرنية، ثلاثي الأبعاد', 'Keratoconus and cross-linking, in 3D', 'شاهد كيف يختلف شكل القرنية المخروطية، وفكرة تقوية ألياف القرنية بالتثبيت.', 'See how a keratoconic cornea differs in shape, and the idea behind strengthening its fibres with cross-linking.'],
   'corneal-transplant': ['زراعة القرنية، ثلاثية الأبعاد', 'Corneal transplant, in 3D', 'استكشف طبقات القرنية وكيف يستبدل كل نوع من الزراعة الطبقة المتضررة فقط أو القرنية كاملة السماكة.', 'Explore the corneal layers and how each type of transplant replaces only the damaged layer, or the full thickness.'],
   'intravitreal-injections': ['حقن العين، ثلاثية الأبعاد', 'Eye injections, in 3D', 'استكشف الجسم الزجاجي والشبكية والبقعة، وفكرة وصول الدواء إلى خلف العين.', 'Explore the vitreous, the retina and the macula, and the idea of medicine reaching the back of the eye.']
@@ -2463,10 +2465,10 @@ function bindCounters() {
     const t0 = performance.now(), dur = 1400;
     const step = t => {
       const k = Math.min(1, (t - t0) / dur), eased = 1 - Math.pow(1 - k, 3);
-      num.textContent = fmt(to * eased);
-      if (k < 1 && num.isConnected) requestAnimationFrame(step); else num.textContent = fmt(to);
+      num.dataset.n = fmt(to * eased);
+      if (k < 1 && num.isConnected) requestAnimationFrame(step); else num.dataset.n = fmt(to);
     };
-    num.textContent = fmt(0);
+    num.dataset.n = fmt(0);
     requestAnimationFrame(step);
   }), { threshold: 0.6 });
   els.forEach(el => io.observe(el));
@@ -2530,6 +2532,38 @@ function bindScrollSpy() {
 // `navigated` = true after a client-side route change (head metadata is rewritten then; on the
 // first render the prerendered head is already correct for this URL).
 // Named by each section's `content` in section-registry.js.
+// /gallery/ — only routed when publishedPhotos() is not empty (section-registry.js). The grid and lightbox are a
+// small lazily imported module; the page itself lists the captions so it reads without JavaScript.
+const gal = { ctrl: null, loading: false };
+function renderGalleryPage() {
+  const photos = publishedPhotos();
+  return `
+    ${pageHero({
+      kicker: tr('معرض الصور', 'Photo gallery'),
+      title: tr('محطات من مسيرتي العلمية والمهنية', 'Milestones from my scientific and professional journey'),
+      lede: tr('صور من المؤتمرات والمحافل العلمية، ومن داخل غرفة العمليات، ومن اللقاءات العلمية والمهنية.', 'Photographs from conferences and scientific events, inside the operating room, and scientific and professional meetings.')
+    })}
+    <section class="section" aria-label="${tr('الصور', 'Photographs')}">
+      <div class="container"><div id="gallery-host" class="gallery-host">
+        <ul class="gallery-static">${photos.map(p => `<li>${L(p.caption)}</li>`).join('')}</ul>
+      </div></div>
+    </section>
+    ${renderClosing('about')}`;
+}
+async function mountGallery() {
+  const host = document.getElementById('gallery-host');
+  if (!host) { if (gal.ctrl) { gal.ctrl.destroy(); gal.ctrl = null; } return; }
+  if (gal.ctrl) { gal.ctrl.setLang(currentLang); if (!host.contains(document.querySelector('.gal'))) { gal.ctrl.destroy(); gal.ctrl = null; } else return; }
+  if (gal.loading) return;
+  gal.loading = true;
+  try {
+    const mod = await import('./src/gallery/index.js');
+    if (!host.isConnected) return;
+    host.innerHTML = '';
+    gal.ctrl = mod.mount(host, { lang: currentLang, photos: publishedPhotos(), categories: GALLERY_CATEGORIES });
+  } catch (e) { console.warn('gallery failed to load', e); } finally { gal.loading = false; }
+}
+
 const PAGE_CONTENT = {
   home: renderHome,
   about: renderAboutPage,
@@ -2538,7 +2572,8 @@ const PAGE_CONTENT = {
   'surgical-education': renderSurgicalEducationPage,
   education: renderEducationPage,
   'how-vision-works': renderLightJourneyPage,
-  clinic: renderClinicPage
+  clinic: renderClinicPage,
+  gallery: renderGalleryPage
 };
 /** The current page's renderer. A published section without one stops the prerender (a page error fails the build). */
 /** An address that is not a page of this site: say so, in the reader's language, and offer the ways back. */
@@ -2665,6 +2700,7 @@ function renderApp(navigated = false) {
 
   watchBookingBar();
   mountVisionSim();
+  mountGallery();
   lensLab.sync();
   lightJourney.sync();
   window.__siteMotion?.refresh(); // the previous page's reveals are undone; this page's are set up

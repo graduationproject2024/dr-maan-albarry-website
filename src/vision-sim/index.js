@@ -128,7 +128,7 @@ class VisionSimulator {
       listen: (t, e, f, o) => this.listen(t, e, f, o),
       handlers: {
         // choosing another design keeps the toric switch as it is
-        lens: (id) => this.setLens(TORIC_BASES.includes(id) ? withToric(id, isToric(this.state.lens)) : id, 'A', true),
+        lens: (id) => this.setLens(TORIC_BASES.includes(id) ? withToric(id, isToric(this.state.lens)) : id, 'A', true), // keeps the toric switch
         toric: (on) => this.setToric(on, true),
         lensB: (id) => this.setLens(id, 'B', true),
         compare: (on) => this.setCompare(on, undefined, true),

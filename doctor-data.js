@@ -232,8 +232,8 @@ export const PROCEDURES = [
     slug: 'laser-vision-correction', group: 'refractive', source: 'magrabi', status: 'published', kind: 'SurgicalProcedure',
     name: { ar: 'تصحيح الإبصار بالليزر', en: 'Laser vision correction' },
     summary: {
-      ar: 'إعادة تشكيل القرنية بالليزر (ليزك، الليزر السطحي PRK، سمايل) لتقليل الاعتماد على النظارة أو العدسات اللاصقة.',
-      en: 'Reshaping the cornea with a laser (LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.'
+      ar: 'إعادة تشكيل القرنية بالليزر (الفيمتوليزيك Femto-LASIK، الليزر السطحي PRK، سمايل SMILE) لتقليل الاعتماد على النظارة أو العدسات اللاصقة.',
+      en: 'Reshaping the cornea with a laser (Femto-LASIK, surface PRK, SMILE) to reduce dependence on glasses or contact lenses.'
     },
     alt: { ar: 'رسم تشريحي لمقطع القرنية يوضح منطقة إعادة التشكيل بالليزر', en: 'Anatomical illustration of the cornea in section showing the area reshaped by laser' },
     related: ['icl', 'keratoconus-cxl', 'lens-implants']

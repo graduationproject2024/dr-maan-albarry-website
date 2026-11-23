@@ -7,7 +7,7 @@ const T = {
   ar: {
     eyebrow: 'تجربة تعليمية ثلاثية الأبعاد', play: 'تشغيل', pause: 'إيقاف مؤقت', prev: 'المرحلة السابقة', next: 'المرحلة التالية',
     stage: 'المرحلة', of: 'من', timeline: 'التقدم خلال المراحل', close: 'إغلاق التجربة', stages: 'المراحل',
-    views: 'زاوية العرض', anatomy: 'إظهار الأجزاء', section: 'مقطع عرضي', labels: 'الأسماء', explore: 'تدوير بإصبع واحد',
+    views: 'زاوية العرض', anatomy: 'إظهار الأجزاء', section: 'مقطع عرضي', labels: 'إظهار التفاصيل', labelsOff: 'إخفاء التفاصيل', compare: 'قبل وبعد', before: 'قبل', after: 'بعد', explore: 'تدوير بإصبع واحد',
     expand: 'ملء الشاشة', collapse: 'إنهاء ملء الشاشة', zoomIn: 'تكبير', zoomOut: 'تصغير', resetView: 'إعادة زاوية العرض', restart: 'البدء من جديد',
     loading: 'جارٍ تجهيز النموذج ثلاثي الأبعاد…', tools: 'أدوات العرض', technique: 'التقنية',
     hint: 'اسحب لتدوير النموذج · Ctrl + عجلة الفأرة للتكبير · الأسهم من لوحة المفاتيح',
@@ -22,7 +22,7 @@ const T = {
   en: {
     eyebrow: 'Interactive 3D education', play: 'Play', pause: 'Pause', prev: 'Previous stage', next: 'Next stage',
     stage: 'Stage', of: 'of', timeline: 'Progress through the stages', close: 'Close the 3D experience', stages: 'Stages',
-    views: 'View', anatomy: 'Show structures', section: 'Cross-section', labels: 'Labels', explore: 'One-finger rotate',
+    views: 'View', anatomy: 'Show structures', section: 'Cross-section', labels: 'Show details', labelsOff: 'Hide details', compare: 'Before and after', before: 'Before', after: 'After', explore: 'One-finger rotate',
     expand: 'Full screen', collapse: 'Exit full screen', zoomIn: 'Zoom in', zoomOut: 'Zoom out', resetView: 'Reset the view', restart: 'Start again',
     loading: 'Preparing the 3D model…', tools: 'View tools', technique: 'Technique',
     hint: 'Drag to rotate · Ctrl + scroll to zoom · arrow keys work too',
@@ -81,9 +81,9 @@ export function createShell(host, { def, lang, theme, track, action }) {
           <div class="ssim-canvas-host"></div>
           <div class="ssim-labels" aria-hidden="true"></div>
           <p class="ssim-chip" aria-hidden="true"></p>
+          <button type="button" class="ssim-details" data-act="labels" aria-pressed="false">${svg('labels')}<span class="ssim-details-t"></span></button>
           <div class="ssim-viewtools" role="toolbar">
             <button type="button" class="ssim-tool" data-act="section" aria-pressed="false">${svg('section')}</button>
-            <button type="button" class="ssim-tool" data-act="labels" aria-pressed="true">${svg('labels')}</button>
             <button type="button" class="ssim-tool ssim-tool--touch" data-act="explore" aria-pressed="false">${svg('explore')}</button>
             <button type="button" class="ssim-tool" data-act="expand" aria-pressed="false">${svg('expand')}</button>
             <button type="button" class="ssim-tool" data-act="zoomIn">${svg('zoomIn')}</button>
@@ -102,6 +102,7 @@ export function createShell(host, { def, lang, theme, track, action }) {
           <span class="ssim-count" aria-hidden="true"></span>
           <button type="button" class="ssim-btn ssim-btn--icon ssim-btn--ghost" data-act="reset">${svg('restart')}</button>
         </div>
+        ${def.compare ? `<div class="ssim-ba" role="group"><span class="ssim-ba-k" data-t="compare"></span><button type="button" class="ssim-ba-btn" data-act="compare" data-value="before" aria-pressed="false" data-t="before"></button><button type="button" class="ssim-ba-btn" data-act="compare" data-value="after" aria-pressed="false" data-t="after"></button><p class="ssim-ba-text" aria-live="polite" hidden></p></div>` : ''}
         <div class="ssim-controls">
           <div class="ssim-group ssim-cams" role="group"></div>
           <div class="ssim-group ssim-toggles" role="group"></div>
@@ -136,6 +137,7 @@ export function createShell(host, { def, lang, theme, track, action }) {
     if (b && root.contains(b)) {
       const a = b.dataset.act;
       const pressed = b.getAttribute('aria-pressed');
+      if (a === 'compare') return action('compare', b.dataset.value);
       if (pressed !== null && ['section', 'labels', 'explore', 'expand'].includes(a)) return action(a, pressed !== 'true');
       return action(a);
     }
@@ -239,6 +241,17 @@ export function createShell(host, { def, lang, theme, track, action }) {
     range.setAttribute('aria-valuetext', `${n}: ${L(st.title, cur.lang)}`);
     const pressed = { section: v.section, labels: v.labels, explore: v.explore, expand: v.expanded };
     root.querySelectorAll('.ssim-tool[aria-pressed]').forEach((b) => b.setAttribute('aria-pressed', pressed[b.dataset.act] ? 'true' : 'false'));
+    // optional anatomy names: hidden by default, one clearly worded switch
+    const det = $('.ssim-details');
+    det.setAttribute('aria-pressed', v.labels ? 'true' : 'false');
+    $('.ssim-details-t').textContent = v.labels ? t.labelsOff : t.labels;
+    if (def.compare) {
+      $('.ssim-ba').hidden = !v.compareOn;
+      root.querySelectorAll('.ssim-ba-btn').forEach((b) => b.setAttribute('aria-pressed', v.compare === b.dataset.value ? 'true' : 'false'));
+      const bt = $('.ssim-ba-text');
+      bt.hidden = !v.compare;
+      bt.textContent = v.compare ? L(def.compare[v.compare], cur.lang) : '';
+    }
     const ex = $('[data-act="expand"]'); const exl = v.expanded ? t.collapse : t.expand; ex.setAttribute('aria-label', exl); ex.title = exl;
     root.querySelectorAll('[data-variant]').forEach((b) => { const on = b.dataset.variant === v.variant; b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; });
     root.querySelectorAll('[data-toggle]').forEach((c) => { c.checked = !!v.toggles[c.dataset.toggle]; });
