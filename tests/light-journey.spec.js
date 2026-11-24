@@ -73,6 +73,62 @@ test.describe('light journey: content and steps', () => {
     await expect(page.locator('.lj-signal')).toHaveClass(/is-on/);
   });
 
+  // Visual reconstruction (2026-11-24): continuous motion while playing, frozen while paused.
+  test('rays move continuously while playing and hold still while paused', async ({ page }) => {
+    await open(page, 'lang=en&step=6');
+    const snap = () => page.evaluate(() => [...document.querySelectorAll('.lj-flow.is-on, .lj-signal')].map((el) => el.getAttribute('stroke-dashoffset')).join('|'));
+    const frames = () => page.evaluate(() => new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(res, 120)))));
+    await page.evaluate(() => window.__lj.play());
+    await expect(page.locator('.lj')).toHaveAttribute('data-playing', 'true');
+    expect(await page.locator('.lj-flow.is-on').count()).toBeGreaterThan(10);
+    const a = await snap(); await frames(); const b = await snap(); await frames(); const c = await snap();
+    expect(b).not.toBe(a);
+    expect(c).not.toBe(b);
+    // the photon pulses are visible while playing (full motion)
+    await expect.poll(() => page.locator('.lj-flow.is-on:not(.lj-flow--halo)').first().evaluate((el) => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.5);
+    await page.evaluate(() => window.__lj.pause());
+    await expect(page.locator('.lj')).toHaveAttribute('data-playing', 'false');
+    const p1 = await snap(); await frames(); await page.waitForTimeout(400); const p2 = await snap();
+    expect(p2).toBe(p1);
+    // on the last step the nerve signal moves too
+    await page.evaluate(() => { window.__lj.seek(8.2 / 9); window.__lj.play(); });
+    const s1 = await page.locator('.lj-signal').getAttribute('stroke-dashoffset');
+    await frames(); await frames();
+    expect(await page.locator('.lj-signal').getAttribute('stroke-dashoffset')).not.toBe(s1);
+  });
+
+  test('each step renders and highlights its anatomy', async ({ page }) => {
+    await open(page, 'lang=en&reduced=1');
+    const anatomy = {
+      scene: ['.lj-obj.is-on', '.lj-sun.is-on', '.lj-src'],
+      tear: ['.lj-tear'],
+      cornea: ['.lj-cornea', '.lj-cornea-epi', '.lj-cornea-endo', '.lj-refract.is-on'],
+      aqueous: ['.lj-aqueous'],
+      iris: ['.lj-iris', '.lj-iris-pe', '.lj-ciliary path', '.lj-ray--blocked.is-on'],
+      lens: ['.lj-lens', '.lj-lens-nucleus', '.lj-zonules line', '.lj-refract.is-on'],
+      vitreous: ['.lj-vitreous', '.lj-vit-shade'],
+      retina: ['.lj-retina', '.lj-retina-cells', '.lj-macula', '.lj-fovea', '.lj-disc', '.lj-choroid', '.lj-focus.is-on', '.lj-inset.is-on'],
+      nerve: ['.lj-nerve', '.lj-sheath', '.lj-brain', '.lj-cortex.is-on', '.lj-signal.is-on']
+    };
+    const all = await steps(page);
+    for (let i = 0; i < all.length; i++) {
+      await page.evaluate((n) => window.__lj.goTo(n), i);
+      const part = all[i].part;
+      await expect(page.locator(`.lj-part[data-part="${part}"]`)).toHaveClass(/is-active/);
+      await expect(page.locator(`.lj-label[data-part="${part}"]`)).toHaveClass(/is-active/);
+      for (const sel of anatomy[part]) {
+        const size = await page.locator(sel).first().evaluate((el) => { const r = el.getBoundingClientRect(); return r.width + r.height; });
+        expect(size, `${part}: ${sel}`).toBeGreaterThan(0);
+      }
+      // the refraction highlight belongs to the cornea and lens steps only
+      expect(await page.locator('.lj-refract.is-on').count()).toBe(part === 'cornea' || part === 'lens' ? 1 : 0);
+    }
+    // by the vitreous step the beam (cone of light) and every ray segment reach the macula
+    await page.evaluate(() => window.__lj.goTo(6));
+    expect(await page.locator('.lj-beam.is-on').count()).toBe(5);
+    expect(await page.locator('.lj-ray.is-on:not(.lj-ray--blocked)').count()).toBe(25);
+  });
+
   test('"what goes wrong" links use the host-supplied linkFor', async ({ page }) => {
     await open(page, 'lang=en');
     const hrefs = async (i) => { await page.evaluate((n) => window.__lj.goTo(n), i); return page.locator('.lj-wrong a').evaluateAll((as) => as.map((a) => a.getAttribute('href'))); };

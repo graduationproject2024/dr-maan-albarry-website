@@ -56,6 +56,38 @@
   --lj-photo: #e9b7a4;
   --lj-cone: #c96f3e;
   --lj-rod: #8d6f9a;
+  /* atlas rendering (2026-11-24) */
+  --lj-plate: rgba(27, 25, 21, 0.10);
+  --lj-sclera-in: #d8ccb6;
+  --lj-sclera-mid: #f1e9da;
+  --lj-sclera-out: #cdbfa6;
+  --lj-sclera-edge: rgba(82, 70, 54, 0.45);
+  --lj-shade: rgba(120, 92, 70, 0.16);
+  --lj-cornea-a: rgba(198, 228, 236, 0.85);
+  --lj-cornea-b: rgba(150, 196, 210, 0.55);
+  --lj-glint: rgba(255, 255, 255, 0.95);
+  --lj-iris-a: #5a3524;
+  --lj-iris-b: #9a6a48;
+  --lj-iris-pe: #2e1a12;
+  --lj-iris-fib: rgba(240, 210, 180, 0.45);
+  --lj-lens-a: #fbf4e2;
+  --lj-lens-b: #f1e4c4;
+  --lj-lens-c: #dcc79c;
+  --lj-lens-nucleus: rgba(214, 186, 128, 0.32);
+  --lj-retina-cells: #a94f3d;
+  --lj-retina-ilm: rgba(255, 236, 226, 0.9);
+  --lj-disc: #f3dcc2;
+  --lj-vessel: #b8402e;
+  --lj-nerve-a: #f4ead8;
+  --lj-nerve-b: #e3d3b6;
+  --lj-sheath: #d8c6a6;
+  --lj-brain-a: #f3e3da;
+  --lj-brain-b: #e0c6b8;
+  --lj-cortex: #e08a52;
+  --lj-beam: rgba(233, 166, 64, 0.22);
+  --lj-flow-halo: rgba(255, 214, 120, 0.55);
+  --lj-refract: rgba(240, 170, 60, 0.75);
+  --lj-pin: #82776a;
 
   --lj-f-display: "Newsreader", "Newsreader Fallback", "Iowan Old Style", Georgia, serif;
   --lj-f-text: "IBM Plex Sans", "IBM Plex Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -134,6 +166,37 @@
   --lj-book: #e6dfd0;
   --lj-ground: #3d4a48;
   --lj-photo: #5a3a33;
+  --lj-plate: rgba(239, 233, 224, 0.08);
+  --lj-sclera-in: #2f302d;
+  --lj-sclera-mid: #4a4840;
+  --lj-sclera-out: #34332f;
+  --lj-sclera-edge: rgba(200, 190, 170, 0.35);
+  --lj-shade: rgba(0, 0, 0, 0.32);
+  --lj-cornea-a: rgba(130, 190, 208, 0.55);
+  --lj-cornea-b: rgba(100, 160, 180, 0.30);
+  --lj-glint: rgba(230, 248, 255, 0.85);
+  --lj-iris-a: #6e4430;
+  --lj-iris-b: #b07e5a;
+  --lj-iris-pe: #1a0f0a;
+  --lj-iris-fib: rgba(255, 220, 190, 0.35);
+  --lj-lens-a: #e9dfc6;
+  --lj-lens-b: #cfc2a2;
+  --lj-lens-c: #a8977a;
+  --lj-lens-nucleus: rgba(160, 130, 80, 0.38);
+  --lj-retina-cells: #f4b09c;
+  --lj-retina-ilm: rgba(255, 220, 205, 0.55);
+  --lj-disc: #8a7058;
+  --lj-vessel: #e0644c;
+  --lj-nerve-a: #4f493e;
+  --lj-nerve-b: #3e3a32;
+  --lj-sheath: #5c5446;
+  --lj-brain-a: #5a4844;
+  --lj-brain-b: #43363a;
+  --lj-cortex: #f0a060;
+  --lj-beam: rgba(242, 191, 94, 0.16);
+  --lj-flow-halo: rgba(255, 210, 120, 0.45);
+  --lj-refract: rgba(255, 196, 96, 0.8);
+  --lj-pin: #8f8a80;
 }
 .lj *, .lj *::before, .lj *::after { box-sizing: border-box; }
 .lj :focus-visible { outline: 3px solid var(--lj-focus); outline-offset: 3px; border-radius: 10px; }
@@ -164,78 +227,137 @@
 .lj-note { display: flex; align-items: center; gap: 8px; color: var(--lj-muted); font-size: 0.875rem; }
 .lj-note-dot { width: 18px; height: 3px; border-radius: 2px; background: var(--lj-ray); flex: none; }
 
-/* ---- diagram */
+/* ---- diagram: anatomical-atlas plate (2026-11-24) */
 .lj-svg text { font-family: var(--lj-f-text); font-size: 23px; font-weight: 600; fill: var(--lj-ink); paint-order: stroke; stroke: var(--lj-stage-a); stroke-width: 6px; stroke-linejoin: round; }
-.lj-part { transition: opacity 0.45s ease; }
-.lj-part:not(.is-active) { opacity: 0.5; }
+.lj-plate { fill: none; stroke: var(--lj-plate); stroke-width: 1.2; }
+.lj-cam { --lj-cam: none; transform: var(--lj-cam); transition: transform 1.8s cubic-bezier(0.45, 0, 0.2, 1); }
+/* the camera moves only while the journey plays; once the visitor takes control the whole plate holds still,
+   so nothing moves under the pointer */
+.lj:not([data-playing="true"]) .lj-cam { transform: none; }
+.lj-part { transition: opacity 0.6s ease, filter 0.6s ease; }
+.lj-part:not(.is-active) { opacity: 0.62; }
+.lj-part[data-part="scene"]:not(.is-active) { opacity: 0.78; }
 .lj-part.is-active { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--lj-primary) 35%, transparent)); }
 .lj-sky { opacity: 0.95; transition: opacity 0.5s ease; }
 .lj[data-light="dim"] .lj-sky { opacity: 0.55; }
 .lj-sky-a { stop-color: var(--lj-sky-a); }
 .lj[data-light="dim"] .lj-sky-a { stop-color: var(--lj-sky-dim); }
 .lj-sky-b { stop-color: var(--lj-stage-a); stop-opacity: 0; }
-.lj-sun circle { fill: var(--lj-sun); }
-.lj-sun line { stroke: var(--lj-sun); stroke-width: 4; stroke-linecap: round; }
-.lj-moon { fill: var(--lj-moon); }
+.lj-sunglow-a { stop-color: var(--lj-sun); stop-opacity: 0.45; }
+.lj-sunglow-b { stop-color: var(--lj-sun); stop-opacity: 0; }
+.lj-sun-disc { fill: var(--lj-sun); }
+.lj-sun line { stroke: var(--lj-sun); stroke-width: 3.5; stroke-linecap: round; }
+.lj-moon path { fill: var(--lj-moon); }
+.lj-star { fill: var(--lj-moon); opacity: 0.8; }
 .lj-sun, .lj-moon, .lj-obj { opacity: 0; transition: opacity 0.4s ease; }
 .lj-sun.is-on, .lj-moon.is-on, .lj-obj.is-on { opacity: 1; }
 .lj-ground { stroke: var(--lj-ground); stroke-width: 2; stroke-linecap: round; }
+.lj-shadow { fill: var(--lj-ink); opacity: 0.08; }
 .lj-canopy { fill: var(--lj-tree); }
+.lj-canopy-hi { fill: #fff; opacity: 0.16; }
 .lj-trunk { fill: var(--lj-trunk); }
 .lj-book { fill: var(--lj-book); stroke: var(--lj-book-line); stroke-width: 2; stroke-linejoin: round; }
 .lj-book-lines { fill: none; stroke: var(--lj-book-line); stroke-width: 1.6; stroke-linecap: round; }
-.lj-src { fill: var(--lj-ray); }
-.lj-sclera { fill: none; stroke: var(--lj-sclera); stroke-width: 15; }
-.lj-axis { stroke: var(--lj-line-strong); stroke-width: 1.2; stroke-dasharray: 2 7; opacity: 0.5; }
-.lj-choroid { fill: none; stroke: var(--lj-choroid); stroke-width: 3; opacity: 0.8; }
-.lj-retina { fill: none; stroke: var(--lj-retina); stroke-width: 7; stroke-linecap: round; }
+.lj-src { fill: var(--lj-ray); stroke: var(--lj-stage-a); stroke-width: 2; }
+.lj-axis { stroke: var(--lj-line-strong); stroke-width: 1.2; stroke-dasharray: 2 7; opacity: 0.45; }
+/* globe wall: sclera (tubular shading), choroid, retina with its photoreceptor layer */
+.lj-sclera { fill: none; stroke-width: 15; }
+.lj-sclera-in { stop-color: var(--lj-sclera-in); }
+.lj-sclera-mid { stop-color: var(--lj-sclera-mid); }
+.lj-sclera-out { stop-color: var(--lj-sclera-out); }
+.lj-sclera-edge { fill: none; stroke: var(--lj-sclera-edge); stroke-width: 1.2; }
+.lj-choroid { fill: none; stroke: var(--lj-choroid); stroke-width: 3.5; opacity: 0.85; }
+.lj-retina { fill: none; stroke: var(--lj-retina); stroke-width: 7; }
+.lj-retina-cells { fill: none; stroke: var(--lj-retina-cells); stroke-width: 3; stroke-dasharray: 1.2 2.6; opacity: 0.75; }
+.lj-retina-ilm { fill: none; stroke: var(--lj-retina-ilm); stroke-width: 1.1; }
+.lj-disc { fill: var(--lj-disc); stroke: var(--lj-nerve-line); stroke-width: 1; }
 .lj-mac-a { stop-color: var(--lj-mac-a); }
 .lj-mac-b { stop-color: var(--lj-mac-b); stop-opacity: 0; }
+.lj-fovea { fill: none; stroke: var(--lj-mac-a); stroke-width: 2; stroke-linecap: round; opacity: 0.9; }
 .lj-gel-a { stop-color: var(--lj-gel-a); }
 .lj-gel-b { stop-color: var(--lj-gel-b); }
-.lj-cornea { fill: var(--lj-cornea); stroke: var(--lj-cornea-line); stroke-width: 2; }
+.lj-shade-a { stop-color: var(--lj-shade); stop-opacity: 0; }
+.lj-shade-b { stop-color: var(--lj-shade); }
+.lj-vit-fibres { fill: none; stroke: var(--lj-cornea-line); stroke-width: 1; opacity: 0.12; }
+/* anterior segment */
+.lj-cornea { stroke: var(--lj-cornea-line); stroke-width: 1.5; }
+.lj-cornea-a { stop-color: var(--lj-cornea-a); }
+.lj-cornea-b { stop-color: var(--lj-cornea-b); }
+.lj-cornea-epi { fill: none; stroke: var(--lj-cornea-line); stroke-width: 2.4; }
+.lj-cornea-endo { fill: none; stroke: var(--lj-cornea-line); stroke-width: 1; opacity: 0.7; }
+.lj-glint { fill: none; stroke: var(--lj-glint); stroke-width: 3; stroke-linecap: round; opacity: 0.85; }
 .lj-tear { fill: none; stroke: var(--lj-tear); stroke-width: 4; stroke-linecap: round; }
 .lj-aqueous { fill: var(--lj-aqueous); }
-.lj-iris { fill: var(--lj-iris); stroke: var(--lj-iris-line); stroke-width: 1.5; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
-.lj-ciliary path { fill: var(--lj-ciliary); opacity: 0.85; }
-.lj-zonules line { stroke: var(--lj-lens-line); stroke-width: 1; opacity: 0.55; transition: all 0.6s ease; }
-.lj-lens { fill: var(--lj-lens); stroke: var(--lj-lens-line); stroke-width: 2; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
-.lj-lens-shine { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 3; stroke-linecap: round; transition: d 0.6s ease; }
-.lj-nerve { fill: var(--lj-nerve); stroke: var(--lj-nerve-line); stroke-width: 2; }
-.lj-nerve-fibres { fill: none; stroke: var(--lj-nerve-line); stroke-width: 1.2; opacity: 0.6; }
-.lj-brain { fill: var(--lj-brain); stroke: var(--lj-brain-line); stroke-width: 2; }
-.lj-gyri { fill: none; stroke: var(--lj-brain-line); stroke-width: 2; stroke-linecap: round; }
-.lj-signal { fill: none; stroke: var(--lj-signal); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 0.03 0.05; opacity: 0; transition: opacity 0.4s ease; }
+.lj-iris { stroke: var(--lj-iris-line); stroke-width: 1; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-iris-a { stop-color: var(--lj-iris-a); }
+.lj-iris-b { stop-color: var(--lj-iris-b); }
+.lj-iris-pe { fill: none; stroke: var(--lj-iris-pe); stroke-width: 3.2; stroke-linecap: round; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-iris-fib { fill: none; stroke: var(--lj-iris-fib); stroke-width: 1.4; stroke-linecap: round; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-ciliary path { fill: var(--lj-ciliary); stroke: var(--lj-iris-pe); stroke-width: 0.8; opacity: 0.9; }
+.lj-zonules line { stroke: var(--lj-lens-line); stroke-width: 0.9; opacity: 0.6; transition: all 0.6s ease; }
+.lj-lens { stroke: var(--lj-lens-line); stroke-width: 2; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-lens-a { stop-color: var(--lj-lens-a); }
+.lj-lens-b { stop-color: var(--lj-lens-b); }
+.lj-lens-c { stop-color: var(--lj-lens-c); }
+.lj-lens-nucleus { fill: var(--lj-lens-nucleus); stroke: var(--lj-lens-line); stroke-width: 0.8; stroke-dasharray: 3 4; opacity: 0.8; transition: d 0.6s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.lj-lens-shine { fill: none; stroke: rgba(255, 255, 255, 0.75); stroke-width: 3; stroke-linecap: round; transition: d 0.6s ease; }
+/* optic nerve, signal and brain */
+.lj-sheath { fill: var(--lj-sheath); opacity: 0.7; }
+.lj-nerve { stroke: var(--lj-nerve-line); stroke-width: 1.5; }
+.lj-nerve-a { stop-color: var(--lj-nerve-a); }
+.lj-nerve-b { stop-color: var(--lj-nerve-b); }
+.lj-nerve-fibres { fill: none; stroke: var(--lj-nerve-line); stroke-width: 1.1; opacity: 0.7; }
+.lj-vessel { fill: none; stroke: var(--lj-vessel); stroke-width: 2; stroke-linecap: round; opacity: 0.75; }
+.lj-brain { stroke: var(--lj-brain-line); stroke-width: 2; }
+.lj-brain-a { stop-color: var(--lj-brain-a); }
+.lj-brain-b { stop-color: var(--lj-brain-b); }
+.lj-cerebellum { fill: var(--lj-brain-b); stroke: var(--lj-brain-line); stroke-width: 1.5; }
+.lj-gyri { fill: none; stroke: var(--lj-brain-line); stroke-width: 1.8; stroke-linecap: round; }
+.lj-cortex { fill: var(--lj-cortex); opacity: 0; transition: opacity 0.8s ease 0.6s; }
+.lj-cortex.is-on { opacity: 0.75; }
+.lj-signal, .lj-pulse { fill: none; stroke: var(--lj-signal); stroke-linecap: round; stroke-dasharray: 0.035 0.105; opacity: 0; transition: opacity 0.5s ease; }
+.lj-signal { stroke-width: 4; }
+.lj-pulse { stroke-width: 2.5; }
 .lj-signal.is-on { opacity: 1; }
+.lj-pulse.is-on { opacity: 0.7; }
 
-/* illustrative rays, revealed stage by stage */
-.lj-ray { fill: none; stroke: var(--lj-ray); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.75s cubic-bezier(0.4, 0, 0.2, 1), d 0.6s ease; }
+/* light: beam (cone of light), rays revealed stage by stage, photon pulses, refraction highlights */
+.lj-beam { fill: var(--lj-beam); opacity: 0; transition: opacity 0.9s ease 0.15s, d 0.6s ease; }
+.lj-beam.is-on { opacity: 1; }
+.lj-ray { fill: none; stroke: var(--lj-ray); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1), d 0.6s ease; }
 .lj-ray.is-on { stroke-dashoffset: 0; }
-.lj-ray--blocked { stroke-width: 2; opacity: 0.45; }
-.lj-flow { fill: none; stroke: var(--lj-ray-flow); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0.035 0.09; opacity: 0; transition: opacity 0.4s ease 0.5s, d 0.6s ease; }
-.lj[data-motion="full"] .lj-flow.is-on { opacity: 0.85; animation: lj-flow 1.6s linear infinite; }
-.lj[data-motion="full"] .lj-signal.is-on { animation: lj-flow 1.2s linear infinite; }
-@keyframes lj-flow { to { stroke-dashoffset: -0.125; } }
+.lj-ray--blocked { stroke-width: 1.6; opacity: 0.5; }
+.lj-absorb { fill: var(--lj-ray); opacity: 0; transition: opacity 0.4s ease 0.7s; }
+.lj-absorb.is-on { opacity: 0.6; }
+.lj-flow { fill: none; stroke: var(--lj-ray-flow); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 9 61; opacity: 0; transition: opacity 0.5s ease 0.6s, d 0.6s ease; }
+.lj-flow--halo { stroke: var(--lj-flow-halo); stroke-width: 7; }
+.lj[data-motion="full"] .lj-flow.is-on { opacity: 0.95; }
+.lj[data-motion="full"] .lj-flow--halo.is-on { opacity: 0.5; }
+.lj-refract { fill: none; stroke: var(--lj-refract); stroke-width: 8; stroke-linecap: round; opacity: 0; transition: opacity 0.6s ease 0.4s, d 0.6s ease; }
+.lj-refract.is-on { opacity: 1; }
 .lj-focus { fill: var(--lj-ray); opacity: 0; transition: opacity 0.4s ease; }
 .lj-focus-glow { fill: var(--lj-ray); opacity: 0; transition: opacity 0.4s ease; }
 .lj-focus.is-on { opacity: 1; }
-.lj-focus-glow.is-on { opacity: 0.55; }
+.lj-focus-glow.is-on { opacity: 0.6; }
 
 /* photoreceptor inset */
 .lj-inset { opacity: 0; transition: opacity 0.45s ease; pointer-events: none; }
 .lj-inset.is-on { opacity: 1; }
 .lj-inset-bg { fill: var(--lj-surface); }
 .lj-inset-ring { fill: none; stroke: var(--lj-retina); stroke-width: 3; }
+.lj-inset-ring2 { fill: none; stroke: var(--lj-retina); stroke-width: 1; opacity: 0.4; }
 .lj-inset-lead { stroke: var(--lj-retina); stroke-width: 2; stroke-dasharray: 4 5; }
 .lj-rod { fill: var(--lj-rod); }
 .lj-cone { fill: var(--lj-cone); }
 .lj-inset-ray { fill: none; stroke: var(--lj-ray); stroke-width: 3; stroke-linecap: round; }
 
-/* labels and the "illustrative" chip */
-.lj-label { opacity: 0; transition: opacity 0.35s ease; }
+/* labels (numbered like an atlas plate), part pins and the "illustrative" chip */
+.lj-labels { pointer-events: none; }
+.lj-label { opacity: 0; transition: opacity 0.45s ease 0.2s; }
 .lj-label.is-active { opacity: 1; }
-.lj-label line { stroke: var(--lj-ink); stroke-width: 1.5; opacity: 0.55; }
+.lj-label line { stroke: var(--lj-ink); stroke-width: 1.2; opacity: 0.55; }
 .lj-label circle { fill: var(--lj-accent); stroke: var(--lj-stage-a); stroke-width: 3; }
+.lj-svg .lj-label-n { fill: var(--lj-primary); font-family: var(--lj-f-display); font-weight: 500; }
 .lj-illus rect { fill: var(--lj-surface); stroke: var(--lj-line); stroke-width: 1.5; opacity: 0.9; }
 .lj-illus circle { fill: var(--lj-ray); }
 .lj-svg .lj-illus text { font-size: 16px; font-weight: 600; fill: var(--lj-muted); stroke: none; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -334,6 +456,8 @@
    "illustrative" tag moves to the note below the drawing */
 @container (max-width: 560px) {
   .lj-illus { display: none; }
+  .lj-cam { transform: none; }
+  .lj-svg .lj-label-n { display: none; }
   .lj-svg .lj-label text { font-size: 38px; stroke-width: 8px; }
   .lj-svg .lj-label circle { r: 9px; }
   .lj { border-radius: 22px; }
@@ -343,6 +467,7 @@
 /* ---- reduced motion: no autonomous animation, no transitions; changes happen step by step */
 .lj[data-motion="reduce"] *, .lj[data-motion="reduce"] *::before, .lj[data-motion="reduce"] *::after { transition: none !important; animation: none !important; }
 .lj[data-motion="reduce"] .lj-flow { display: none; }
+.lj[data-motion="reduce"] .lj-cam { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .lj:not([data-motion="full"]) *, .lj:not([data-motion="full"]) *::before { transition: none !important; animation: none !important; }
 }

@@ -10,10 +10,16 @@
 // hidden or the module is off screen, and never starts by itself under reduced motion (manual steps only).
 // Extra API: play(), pause(), replay(), seek(0..1), setSpeed(1 | 1.5 | 0.75). getState() adds playing, progress, speed.
 //
+// Continuous motion (2026-11-24): while the journey plays, the same requestAnimationFrame loop that drives the
+// timeline also advances the photon pulses along the rays (.lj-flow stroke-dashoffset), the signal pulses along the
+// optic nerve and the focus glow. Paused, hidden, off screen or under reduced motion, the drawing holds still.
+// While playing, each step also moves a gentle camera (.lj-cam, CSS transition); paused, under reduced motion
+// and in small containers the whole plate holds still, so nothing moves under the pointer.
+//
 // Educational illustration: the rays are illustrative, not an optical simulation. Medical review: pending.
 import './styles.css';
 import { STEPS, UI, describe } from './content.js';
-import { svgMarkup } from './diagram.js';
+import { svgMarkup, cameraTransform, FLOW } from './diagram.js';
 
 export { STEPS, UI };
 
@@ -115,7 +121,9 @@ class LightJourney {
     P.playing = true; P.wasPlaying = true; P.last = performance.now();
     const tick = (now) => {
       if (!P.playing) return;
-      P.elapsed += Math.min(250, now - P.last) * P.speed; P.last = now;
+      const dt = Math.min(250, now - P.last) * P.speed;
+      P.elapsed += dt; P.last = now;
+      this.motionFrame(dt);
       if (P.elapsed >= STEP_MS) {
         if (this.state.step >= STEPS.length - 1) { P.elapsed = STEP_MS; P.playing = false; P.done = true; this.syncPlayback(); this.emit('change', this.getState()); return; }
         P.elapsed = 0; this.goTo(this.state.step + 1, { keepTime: true });
@@ -145,6 +153,25 @@ class LightJourney {
     this.goTo(step, { keepTime: true });
     this.syncProgress(); this.syncPlayback();
   }
+  /** Advance the continuous motion by dt ms of journey time (only while playing, never under reduced motion). */
+  motionFrame(dt) {
+    if (this.reduced || !this.motion) return;
+    const M = this.motion;
+    M.t += dt / 1000;
+    const period = FLOW.dash + FLOW.gap;
+    const shift = (M.t * 110) % period; // photons: 110 drawing units per second
+    for (const x of M.flows) x.el.setAttribute('stroke-dashoffset', (x.base - shift).toFixed(1));
+    const sp = (M.t * 0.45) % 1; // nerve signal: one pattern length per ~2 s
+    for (const x of M.pulses) x.el.setAttribute('stroke-dashoffset', (x.base - sp).toFixed(3));
+    if (M.glow) M.glow.setAttribute('r', (16 + 3 * Math.sin(M.t * 4)).toFixed(2));
+  }
+  cacheMotion() {
+    const fig = this.$('.lj-figure');
+    const list = (sel) => [...fig.querySelectorAll(sel)].map((el) => ({ el, base: Number(el.dataset.base) || 0 }));
+    this.motion = { t: this.motion ? this.motion.t : 0, flows: list('.lj-flow'), pulses: list('.lj-signal, .lj-pulse'), glow: fig.querySelector('.lj-focus-glow') };
+    if (this.motion.t) this.motionFrame(0);
+  }
+
   setSpeed(v) { const n = Number(v); if (SPEEDS.includes(n)) { this.play_.speed = n; this.syncPlayback(); this.emit('change', this.getState()); } }
   syncProgress() {
     if (!this.root) return;
@@ -241,10 +268,11 @@ class LightJourney {
     const fig = this.$('.lj-figure');
     const markup = svgMarkup({ id: this.id, state: this.state, lang: this.lang, illustrative: esc(t.illustrative), labelFor: (part) => esc(STEPS.find((s) => s.part === part)[this.lang].name) });
     const old = fig.firstElementChild;
-    if (!old) { fig.innerHTML = markup; return; }
+    if (!old) { fig.innerHTML = markup; this.cacheMotion(); return; }
     // morph geometry in place so pupil and lens changes can transition
     const tpl = document.createElement('div'); tpl.innerHTML = markup;
     morph(old, tpl.firstElementChild);
+    this.cacheMotion();
   }
 
   wire() {
@@ -309,6 +337,7 @@ class LightJourney {
     const r = this.root;
     r.dataset.step = s.id; r.dataset.light = this.state.light; r.dataset.focus = this.state.focus;
     // diagram
+    const cam = this.$('.lj-cam'); if (cam) cam.style.setProperty('--lj-cam', cameraTransform(step, this.lang));
     r.querySelectorAll('.lj-part, .lj-label').forEach((el) => el.classList.toggle('is-active', el.dataset.part === s.part));
     r.querySelectorAll('[data-stage]').forEach((el) => {
       const on = el.dataset.only ? +el.dataset.only === step : +el.dataset.stage <= step;
@@ -386,7 +415,7 @@ class LightJourney {
 
 // Copy geometry attributes from a freshly rendered SVG onto the live one (same structure), so CSS transitions on
 // `d` and positions can animate between states.
-const GEOM = ['d', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height', 'transform', 'text-anchor'];
+const GEOM = ['data-base', 'd', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height', 'transform', 'text-anchor'];
 function morph(a, b) {
   if (!a || !b || a.tagName !== b.tagName) return;
   for (const k of GEOM) { const v = b.getAttribute(k); if (v !== null && a.getAttribute(k) !== v) a.setAttribute(k, v); }
