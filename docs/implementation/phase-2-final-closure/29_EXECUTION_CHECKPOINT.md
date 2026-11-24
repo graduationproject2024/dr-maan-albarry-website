@@ -1,0 +1,30 @@
+# Execution checkpoint — Phase 2 final closure
+
+Updated: 2026-11-24. Branch `feat/phase-2-final-closure` (from main `4e55b40`), draft PR #6.
+
+## Done
+- Baseline: main `4e55b40` deployed by run 45242684926 (success). Last full regression 45169661762 (on PR-#3 code): 52 failed, 3 flaky, 788 passed, 24 skipped — mostly 3D timeouts on Linux SwiftShader, job near its 2 h cap (BUG-C01).
+- `full-regression.yml` → 4 shards × (ubuntu, windows). Run 45402597982 dispatched on the branch.
+- `security.yml` (CodeQL, Semgrep, Gitleaks redacted, OSV-Scanner, npm audit, ZAP baseline) — runs on PR #6.
+- AI Kitchen: 12 agents in `.claude/agents/`, routing in `CLAUDE.md`, `.claude/settings.json` (sonnet/medium). Project agents load on the next session start; in this session the same roles ran as `general-purpose` with `model: opus`.
+- Trello read: `03_TRELLO_FULL_INVENTORY.md`. Nothing closed yet.
+- graphify graph refreshed (3,950 nodes; screenshots skipped).
+
+## In progress (Opus agents, own worktrees, no shared files)
+| Workstream | Worktree / branch | Doc |
+|---|---|---|
+| Light Journey visuals | `C:\w\lj` / `wt/lj` | 07 |
+| Surgical cameras | `C:\w\cam` / `wt/cam` | 08 |
+| Lens Lab recovery + visuals | `C:\w\ll` / `wt/ll` | 06 |
+| ICL illustration | `C:\w\icl` / `wt/icl` | 09 |
+
+## Next
+1. Review each agent branch (Sonnet cross-model review), merge into `feat/phase-2-final-closure`, rerun gate + touched suites.
+2. Read sharded full-regression + security results; fix real failures/findings.
+3. Recheck BUG-05 (font CLS), FS-10, P3 items; performance re-measure.
+4. Before/After + labels-hidden check on cataract sim; doctor-content verification.
+5. Trello: evidence comments, close verified cards, fix stale text, read back.
+6. Device QA (BrowserStack needs owner OK for minutes), final acceptance audit.
+
+## External (cannot be done by engineering)
+Device photos, gallery photos, "first" claim evidence, EDOF year, dropless paper, 25,000+ attribution, association name, D-1…D-14, physician review, domain purchase, scope of cards #7/#8/#9.
