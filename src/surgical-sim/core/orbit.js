@@ -2,7 +2,30 @@
 // that the visitor can interrupt at any moment (a drag stops a running transition and continues from where it is).
 // Input: mouse drag, one-finger drag (horizontal only unless "explore" mode is on, so the page still scrolls),
 // two-finger pinch, Ctrl/⌘ + wheel, keyboard (arrows, + / −). Pure camera maths lives in sphericalOf()/positionOf().
+//
+// Framing (2026-11 camera pass): a preset may declare `fit` — the half width and half height (mm) of its subject in
+// the view plane through the target. The distance is then computed from the canvas size, the field of view and the
+// "safe" area left free by the overlaid controls (fitDistance), so the same preset frames the same subject on a
+// 1440x900 desktop, a 390x844 phone held upright and an 844x390 phone on its side. The preset position gives the
+// viewing direction only. Zoom limits are relative to that fitted distance; the elevation is kept off the poles.
 import * as THREE from 'three';
+
+/** Zoom range relative to the preset's fitted distance, and the absolute bounds (mm). */
+export const ZOOM = { min: 0.45, max: 2.6, absMin: 1.5, absMax: 140 };
+/** Elevation limit (radians from the poles): the camera never flips over the top or bottom of the eye. */
+export const PHI_MARGIN = 0.15;
+
+/**
+ * Distance (mm) at which a subject of half extents fit = [hw, hh] (or one number) fills the safe area of a view.
+ * view: { w, h, safe: { l, r, t, b } } in CSS pixels; fovDeg: vertical field of view.
+ */
+export function fitDistance(fit, fovDeg, view) {
+  const [hw, hh] = Array.isArray(fit) ? fit : [fit, fit];
+  const f = (view.h / 2) / Math.tan((fovDeg * Math.PI) / 360);
+  const sw = Math.max(60, view.w - view.safe.l - view.safe.r) / 2;
+  const sh = Math.max(60, view.h - view.safe.t - view.safe.b) / 2;
+  return Math.max((hw * f) / sw, (hh * f) / sh);
+}
 
 export function sphericalOf(pos, target) {
   const d = [pos[0] - target[0], pos[1] - target[1], pos[2] - target[2]];
@@ -16,8 +39,17 @@ export function positionOf(s, target) {
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const wrapPi = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
-export function createOrbit(camera, el, { onChange, reducedMotion = () => false, minR = 6, maxR = 80, track }) {
-  const state = { target: [0, 0, 0], s: { r: 40, theta: 0, phi: Math.PI / 2 }, tween: null, explore: false };
+export function createOrbit(camera, el, { onChange, reducedMotion = () => false, track, view = null }) {
+  const state = { target: [0, 0, 0], s: { r: 40, theta: 0, phi: Math.PI / 2 }, tween: null, explore: false, preset: null, base: 40, userMoved: false };
+  const limits = () => ({ minR: Math.max(ZOOM.absMin, state.base * ZOOM.min), maxR: Math.min(ZOOM.absMax, state.base * ZOOM.max) });
+  const clampR = (r) => { const l = limits(); return Math.max(l.minR, Math.min(l.maxR, r)); };
+  /** The spherical position a preset resolves to in the current view (deterministic: depends only on preset + view). */
+  function resolve(preset) {
+    const s = sphericalOf(preset.pos, preset.target);
+    if (preset.fit && view) { const v = view(); if (v && v.w > 0 && v.h > 0) s.r = fitDistance(preset.fit, camera.fov, v); }
+    s.phi = Math.max(PHI_MARGIN, Math.min(Math.PI - PHI_MARGIN, s.phi));
+    return s;
+  }
   const pointers = new Map();
   let pinch0 = 0, r0 = 0;
 
@@ -31,11 +63,19 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
   function stopTween() { state.tween = null; }
 
   function goTo(preset, instant = false) {
-    const to = { target: preset.target.slice(), s: sphericalOf(preset.pos, preset.target) };
+    const to = { target: preset.target.slice(), s: resolve(preset) };
+    state.preset = preset; state.base = to.s.r; state.userMoved = false;
     if (instant || reducedMotion()) { state.target = to.target; state.s = to.s; state.tween = null; apply(); return; }
     const from = { target: state.target.slice(), s: { ...state.s } };
     to.s.theta = from.s.theta + wrapPi(to.s.theta - from.s.theta);
     state.tween = { from, to, t: 0, dur: 0.85 };
+  }
+  /** After a resize: a camera still on its preset is re-fitted to the new view (a visitor's own view is kept). */
+  function refit() {
+    if (!state.preset || state.userMoved) return;
+    const r = resolve(state.preset).r;
+    state.base = r;
+    if (state.tween) state.tween.to.s.r = r; else { state.s.r = r; apply(); }
   }
   /** Advance a running transition; returns true while the camera is moving. */
   function tick(dt) {
@@ -54,14 +94,14 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
     return true;
   }
   function rotate(dTheta, dPhi) {
-    stopTween();
-    state.s.theta += dTheta;
-    state.s.phi = Math.max(0.12, Math.min(Math.PI - 0.12, state.s.phi + dPhi));
+    stopTween(); state.userMoved = true;
+    state.s.theta = wrapPi(state.s.theta + dTheta);
+    state.s.phi = Math.max(PHI_MARGIN, Math.min(Math.PI - PHI_MARGIN, state.s.phi + dPhi));
     apply();
   }
   function zoom(factor) {
-    stopTween();
-    state.s.r = Math.max(minR, Math.min(maxR, state.s.r * factor));
+    stopTween(); state.userMoved = true;
+    state.s.r = clampR(state.s.r * factor);
     apply();
   }
 
@@ -79,7 +119,7 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
     if (pointers.size === 2) {
       const [a, b] = [...pointers.values()];
       const d = Math.hypot(a.x - b.x, a.y - b.y);
-      if (pinch0 > 0) { stopTween(); state.s.r = Math.max(minR, Math.min(maxR, r0 * pinch0 / Math.max(1, d))); apply(); }
+      if (pinch0 > 0) { stopTween(); state.userMoved = true; state.s.r = clampR(r0 * pinch0 / Math.max(1, d)); apply(); }
       return;
     }
     // a drag across the whole viewport turns the model half a turn (on a phone, 140 px ≈ 70°)
@@ -108,8 +148,10 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
   ];
   apply();
   return {
-    goTo, tick, rotate, zoom, apply,
+    goTo, tick, rotate, zoom, apply, refit, resolve,
     get moving() { return !!state.tween; },
+    get limits() { return limits(); },
+    get userMoved() { return state.userMoved; },
     get spherical() { return { ...state.s }; },
     get target() { return state.target.slice(); },
     setExplore(on) { state.explore = !!on; },

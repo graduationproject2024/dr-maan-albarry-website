@@ -1,0 +1,7106 @@
+[
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 57.13639008054304,
+   "theta": 1.4091749716118835,
+   "phi": 1.4639259643866587,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    13,
+    12.6
+   ],
+   "userMoved": false,
+   "minR": 25.71137553624437,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 41.718634027063175,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 18.77338531217843,
+   "maxR": 108.46844847036425,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 27.20780480025859,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.243512160116365,
+   "maxR": 70.74029248067234,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 27.20780480025859,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.243512160116365,
+   "maxR": 70.74029248067234,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 27.20780480025859,
+   "theta": 1.1602388787530462,
+   "phi": 1.3583121880178413,
+   "target": [
+    0,
+    0,
+    -1.4
+   ],
+   "moving": false,
+   "preset": "lens",
+   "stagePreset": "lens",
+   "fit": [
+    3.8,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.243512160116365,
+   "maxR": 70.74029248067234,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 47.61365840045253,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    14,
+    10.5
+   ],
+   "userMoved": false,
+   "minR": 21.42614628020364,
+   "maxR": 123.79551184117658,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 71.72358221414994,
+   "theta": 1.4091749716118835,
+   "phi": 1.4639259643866587,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    13,
+    12.6
+   ],
+   "userMoved": false,
+   "minR": 32.27561199636747,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 50.75822741309072,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 22.841202335890827,
+   "maxR": 131.97139127403588,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 27.968373262486494,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.585767968118923,
+   "maxR": 72.71777048246489,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 27.968373262486494,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.585767968118923,
+   "maxR": 72.71777048246489,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 27.968373262486494,
+   "theta": 1.1602388787530462,
+   "phi": 1.3583121880178413,
+   "target": [
+    0,
+    0,
+    -1.4
+   ],
+   "moving": false,
+   "preset": "lens",
+   "stagePreset": "lens",
+   "fit": [
+    3.8,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.585767968118923,
+   "maxR": 72.71777048246489,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 77.24078084600762,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    14,
+    10.5
+   ],
+   "userMoved": false,
+   "minR": 34.75835138070343,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 74.22537498715448,
+   "theta": 1.4091749716118835,
+   "phi": 1.4639259643866587,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    13,
+    12.6
+   ],
+   "userMoved": false,
+   "minR": 33.40141874421952,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 54.19630554617628,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 24.38833749577933,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 35.34541666054975,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 15.905437497247389,
+   "maxR": 91.89808331742935,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 35.34541666054975,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 15.905437497247389,
+   "maxR": 91.89808331742935,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 35.34541666054975,
+   "theta": 1.1602388787530462,
+   "phi": 1.3583121880178413,
+   "target": [
+    0,
+    0,
+    -1.4
+   ],
+   "moving": false,
+   "preset": "lens",
+   "stagePreset": "lens",
+   "fit": [
+    3.8,
+    6
+   ],
+   "userMoved": false,
+   "minR": 15.905437497247389,
+   "maxR": 91.89808331742935,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 61.85447915596207,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    14,
+    10.5
+   ],
+   "userMoved": false,
+   "minR": 27.83451562018293,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 27.20780480025859,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.243512160116365,
+   "maxR": 70.74029248067234,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 41.718634027063175,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 18.77338531217843,
+   "maxR": 108.46844847036425,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.4899573262537283,
+   "phi": 1.2578950989145121,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "anterior",
+   "stagePreset": "anterior",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 18.138536533505725,
+   "theta": 1.4298026143117724,
+   "phi": 1.5070070635813406,
+   "target": [
+    0,
+    0.6,
+    0.4
+   ],
+   "moving": false,
+   "preset": "vault",
+   "stagePreset": "vault",
+   "fit": [
+    2.6,
+    4
+   ],
+   "userMoved": false,
+   "minR": 8.162341440077576,
+   "maxR": 47.160194987114885,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 61.21756080058183,
+   "theta": 0.4729066036629292,
+   "phi": 1.30788176184019,
+   "target": [
+    0,
+    0,
+    -7
+   ],
+   "moving": false,
+   "preset": "full",
+   "stagePreset": "full",
+   "fit": [
+    13.5,
+    13.5
+   ],
+   "userMoved": false,
+   "minR": 27.547902360261823,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 27.968373262486494,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 12.585767968118923,
+   "maxR": 72.71777048246489,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 50.75822741309072,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 22.841202335890827,
+   "maxR": 131.97139127403588,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.4899573262537283,
+   "phi": 1.2578950989145121,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "anterior",
+   "stagePreset": "anterior",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 18.645582174990995,
+   "theta": 1.4298026143117724,
+   "phi": 1.5070070635813406,
+   "target": [
+    0,
+    0.6,
+    0.4
+   ],
+   "moving": false,
+   "preset": "vault",
+   "stagePreset": "vault",
+   "fit": [
+    2.6,
+    4
+   ],
+   "userMoved": false,
+   "minR": 8.390511978745948,
+   "maxR": 48.47851365497659,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 74.48218153007878,
+   "theta": 0.4729066036629292,
+   "phi": 1.30788176184019,
+   "target": [
+    0,
+    0,
+    -7
+   ],
+   "moving": false,
+   "preset": "full",
+   "stagePreset": "full",
+   "fit": [
+    13.5,
+    13.5
+   ],
+   "userMoved": false,
+   "minR": 33.51698168853545,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 35.34541666054975,
+   "theta": 1.3382393849899876,
+   "phi": 1.4183442341483306,
+   "target": [
+    0,
+    0,
+    -0.5
+   ],
+   "moving": false,
+   "preset": "anteriorSection",
+   "stagePreset": "anteriorSection",
+   "fit": [
+    4.6,
+    6
+   ],
+   "userMoved": false,
+   "minR": 15.905437497247389,
+   "maxR": 91.89808331742935,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 54.19630554617628,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    9.2,
+    9.2
+   ],
+   "userMoved": false,
+   "minR": 24.38833749577933,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.4899573262537283,
+   "phi": 1.2578950989145121,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false,
+   "preset": "anterior",
+   "stagePreset": "anterior",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.4205850268888753,
+   "phi": 1.4643099021985948,
+   "target": [
+    0,
+    0,
+    0.4
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    3.4,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 23.563611107033168,
+   "theta": 1.4298026143117724,
+   "phi": 1.5070070635813406,
+   "target": [
+    0,
+    0.6,
+    0.4
+   ],
+   "moving": false,
+   "preset": "vault",
+   "stagePreset": "vault",
+   "fit": [
+    2.6,
+    4
+   ],
+   "userMoved": false,
+   "minR": 10.603624998164927,
+   "maxR": 61.26538887828624,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 79.52718748623694,
+   "theta": 0.4729066036629292,
+   "phi": 1.30788176184019,
+   "target": [
+    0,
+    0,
+    -7
+   ],
+   "moving": false,
+   "preset": "full",
+   "stagePreset": "full",
+   "fit": [
+    13.5,
+    13.5
+   ],
+   "userMoved": false,
+   "minR": 35.78723436880662,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 19.952390186856302,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 8.978575584085336,
+   "maxR": 51.87621448582639,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 19.952390186856302,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 8.978575584085336,
+   "maxR": 51.87621448582639,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 15.417756053479868,
+   "theta": 1.377825516829327,
+   "phi": 1.5144514983781703,
+   "target": [
+    0,
+    2.6,
+    3.4
+   ],
+   "moving": false,
+   "preset": "wide",
+   "stagePreset": "wide",
+   "fit": [
+    2.6,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 6.937990224065941,
+   "maxR": 40.08616573904766,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 13.603902400129295,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.121756080058183,
+   "maxR": 35.37014624033617,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 31.999752064774587,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 14.399888429148564,
+   "maxR": 83.19935536841393,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 31.999752064774587,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 14.399888429148564,
+   "maxR": 83.19935536841393,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 15.848744848742346,
+   "theta": 1.377825516829327,
+   "phi": 1.5144514983781703,
+   "target": [
+    0,
+    2.6,
+    3.4
+   ],
+   "moving": false,
+   "preset": "wide",
+   "stagePreset": "wide",
+   "fit": [
+    2.6,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 7.131935181934056,
+   "maxR": 41.2067366067301,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 13.984186631243247,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 6.292883984059461,
+   "maxR": 36.35888524123244,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 25.919972217736486,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 11.663987497981418,
+   "maxR": 67.39192776611486,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 25.919972217736486,
+   "theta": 1.4621351109543088,
+   "phi": 1.4627709869645282,
+   "target": [
+    0,
+    3.4,
+    6.2
+   ],
+   "moving": false,
+   "preset": "lifted",
+   "stagePreset": "lifted",
+   "fit": [
+    5.8,
+    4.4
+   ],
+   "userMoved": false,
+   "minR": 11.663987497981418,
+   "maxR": 67.39192776611486,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 20.02906944097819,
+   "theta": 1.377825516829327,
+   "phi": 1.5144514983781703,
+   "target": [
+    0,
+    2.6,
+    3.4
+   ],
+   "moving": false,
+   "preset": "wide",
+   "stagePreset": "wide",
+   "fit": [
+    2.6,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 9.013081248440185,
+   "maxR": 52.0755805465433,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 17.672708330274876,
+   "theta": 1.3355104134257505,
+   "phi": 1.5907754706811885,
+   "target": [
+    0,
+    2.3,
+    2.85
+   ],
+   "moving": false,
+   "preset": "closeup",
+   "stagePreset": "closeup",
+   "fit": [
+    1.6,
+    3
+   ],
+   "userMoved": false,
+   "minR": 7.9527187486236945,
+   "maxR": 45.94904165871468,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 15.417756053479868,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 6.937990224065941,
+   "maxR": 40.08616573904766,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 36.27707306701145,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    11,
+    8
+   ],
+   "userMoved": false,
+   "minR": 16.32468288015515,
+   "maxR": 94.32038997422977,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 15.417756053479868,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 6.937990224065941,
+   "maxR": 40.08616573904766,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 15.417756053479868,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 6.937990224065941,
+   "maxR": 40.08616573904766,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.49479900164241314,
+   "phi": 1.1589178276305543,
+   "target": [
+    0,
+    -0.4,
+    1.6
+   ],
+   "moving": false,
+   "preset": "oblique",
+   "stagePreset": "oblique",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 28.114731626933878,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 12.651629232120245,
+   "maxR": 73.09830223002808,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 15.848744848742346,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 7.131935181934056,
+   "maxR": 41.2067366067301,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 60.689184950434566,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    11,
+    8
+   ],
+   "userMoved": false,
+   "minR": 27.310133227695555,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 15.848744848742346,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 7.131935181934056,
+   "maxR": 41.2067366067301,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 15.848744848742346,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 7.131935181934056,
+   "maxR": 41.2067366067301,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.49479900164241314,
+   "phi": 1.1589178276305543,
+   "target": [
+    0,
+    -0.4,
+    1.6
+   ],
+   "moving": false,
+   "preset": "oblique",
+   "stagePreset": "oblique",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 28.900652371236045,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 13.00529356705622,
+   "maxR": 75.14169616521372,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 20.02906944097819,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 9.013081248440185,
+   "maxR": 52.0755805465433,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 47.127222214066336,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false,
+   "preset": "optics",
+   "stagePreset": "optics",
+   "fit": [
+    11,
+    8
+   ],
+   "userMoved": false,
+   "minR": 21.207249996329853,
+   "maxR": 122.53077775657248,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 20.02906944097819,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 9.013081248440185,
+   "maxR": 52.0755805465433,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 20.02906944097819,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2,
+    2.6
+   ],
+   "moving": false,
+   "preset": "closeSection",
+   "stagePreset": "closeSection",
+   "fit": [
+    1.8,
+    3.4
+   ],
+   "userMoved": false,
+   "minR": 9.013081248440185,
+   "maxR": 52.0755805465433,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.49479900164241314,
+   "phi": 1.1589178276305543,
+   "target": [
+    0,
+    -0.4,
+    1.6
+   ],
+   "moving": false,
+   "preset": "oblique",
+   "stagePreset": "oblique",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 36.52359721590141,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false,
+   "preset": "side",
+   "stagePreset": "side",
+   "fit": [
+    2.8,
+    6.2
+   ],
+   "userMoved": false,
+   "minR": 16.435618747155637,
+   "maxR": 94.96135276134368,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 29.928585280284448,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 13.467863376128001,
+   "maxR": 77.81432172873957,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 16.324682880155155,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.34610729606982,
+   "maxR": 42.4441754884034,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 36.41351097026074,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 16.38607993661733,
+   "maxR": 94.67512852267792,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 16.781023957491897,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 7.551460780871354,
+   "maxR": 43.630662289478934,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 38.87995832660473,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false,
+   "preset": "front",
+   "stagePreset": "front",
+   "fit": [
+    6.6,
+    6.6
+   ],
+   "userMoved": false,
+   "minR": 17.49598124697213,
+   "maxR": 101.0878916491723,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 21.207249996329853,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.9,
+    2.6
+   ],
+   "moving": false,
+   "preset": "section",
+   "stagePreset": "section",
+   "fit": [
+    1.9,
+    3.6
+   ],
+   "userMoved": false,
+   "minR": 9.543262498348435,
+   "maxR": 55.13884999045762,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 52.60175594716661,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 23.670790176224976,
+   "maxR": 136.7645654626332,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 20.859317013531587,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 9.386692656089215,
+   "maxR": 54.234224235182126,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 31.742438933635025,
+   "theta": 1.1861916119726832,
+   "phi": 1.2711194238862162,
+   "target": [
+    0,
+    0,
+    0.5
+   ],
+   "moving": false,
+   "preset": "drops",
+   "stagePreset": "drops",
+   "fit": [
+    7,
+    7
+   ],
+   "userMoved": false,
+   "minR": 14.284097520135761,
+   "maxR": 82.53034122745107,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 29.021658453609167,
+   "theta": 1.4382447944982226,
+   "phi": 1.4393941534187538,
+   "target": [
+    0,
+    -8.6,
+    -3.6
+   ],
+   "moving": false,
+   "preset": "entry",
+   "stagePreset": "entry",
+   "fit": [
+    7.2,
+    6.4
+   ],
+   "userMoved": false,
+   "minR": 13.059746304124126,
+   "maxR": 75.45631197938384,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 52.60175594716661,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 23.670790176224976,
+   "maxR": 136.7645654626332,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 20.859317013531587,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 9.386692656089215,
+   "maxR": 54.234224235182126,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94.34375,
+    "b": 30.59375
+   },
+   "view": [
+    866,
+    541
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 60.689184950434566,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 27.310133227695555,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 25.37911370654536,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 11.420601167945414,
+   "maxR": 65.98569563701794,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 38.62039042300381,
+   "theta": 1.1861916119726832,
+   "phi": 1.2711194238862162,
+   "target": [
+    0,
+    0,
+    0.5
+   ],
+   "moving": false,
+   "preset": "drops",
+   "stagePreset": "drops",
+   "fit": [
+    7,
+    7
+   ],
+   "userMoved": false,
+   "minR": 17.379175690351715,
+   "maxR": 100.41301509980991,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 39.72383014937535,
+   "theta": 1.4382447944982226,
+   "phi": 1.4393941534187538,
+   "target": [
+    0,
+    -8.6,
+    -3.6
+   ],
+   "moving": false,
+   "preset": "entry",
+   "stagePreset": "entry",
+   "fit": [
+    7.2,
+    6.4
+   ],
+   "userMoved": false,
+   "minR": 17.87572356721891,
+   "maxR": 103.28195838837593,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 60.689184950434566,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 27.310133227695555,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 25.37911370654536,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 11.420601167945414,
+   "maxR": 65.98569563701794,
+   "safe": {
+    "l": 8,
+    "r": 60,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    324,
+    405
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 68.33447221039619,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 30.750512494678283,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 27.09815277308814,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 12.194168747889664,
+   "maxR": 70.45519721002917,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 41.23631943730804,
+   "theta": 1.1861916119726832,
+   "phi": 1.2711194238862162,
+   "target": [
+    0,
+    0,
+    0.5
+   ],
+   "moving": false,
+   "preset": "drops",
+   "stagePreset": "drops",
+   "fit": [
+    7,
+    7
+   ],
+   "userMoved": false,
+   "minR": 18.55634374678862,
+   "maxR": 107.21443053700091,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 37.70177777125307,
+   "theta": 1.4382447944982226,
+   "phi": 1.4393941534187538,
+   "target": [
+    0,
+    -8.6,
+    -3.6
+   ],
+   "moving": false,
+   "preset": "entry",
+   "stagePreset": "entry",
+   "fit": [
+    7.2,
+    6.4
+   ],
+   "userMoved": false,
+   "minR": 16.965799997063883,
+   "maxR": 98.02462220525798,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 68.33447221039619,
+   "theta": 1.3574276846430886,
+   "phi": 1.3777654807084845,
+   "target": [
+    0,
+    0,
+    -10.5
+   ],
+   "moving": false,
+   "preset": "posterior",
+   "stagePreset": "posterior",
+   "fit": [
+    11,
+    11.6
+   ],
+   "userMoved": false,
+   "minR": 30.750512494678283,
+   "maxR": 140,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 27.09815277308814,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false,
+   "preset": "macula",
+   "stagePreset": "macula",
+   "fit": [
+    4.6,
+    4.6
+   ],
+   "userMoved": false,
+   "minR": 12.194168747889664,
+   "maxR": 70.45519721002917,
+   "safe": {
+    "l": 8,
+    "r": 72,
+    "t": 94,
+    "b": 8
+   },
+   "view": [
+    410,
+    250
+   ]
+  }
+ }
+]

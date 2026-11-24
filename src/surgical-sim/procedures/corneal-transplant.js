@@ -32,7 +32,6 @@ const def = {
   id: 'corneal-transplant', slug: 'corneal-transplant', modelId: 'ssim-kpl', version: '2026.11-r1',
   title: { ar: 'زراعة القرنية: أي طبقة تُستبدل', en: 'Corneal transplant: which layer is replaced' },
   note: NOTE,
-  minR: 6,
   objectives: [
     { ar: 'التعرف على طبقات القرنية: الظهارة واللحمة والبطانة.', en: 'Recognise the layers of the cornea: epithelium, stroma and endothelium.' },
     { ar: 'فهم أن الطبقة المتضررة تحدد نوع الزراعة: كاملة، أو أمامية عميقة، أو زراعة البطانة.', en: 'Understand that the damaged layer decides the type of transplant: full-thickness, deep anterior, or endothelial.' },
@@ -44,9 +43,9 @@ const def = {
     { id: 'ek', label: { ar: 'زراعة البطانة', en: 'DSAEK / DMEK' } }
   ],
   cameras: {
-    section: { pos: [10.5, -2.7, 2.9], target: [0, -2.7, 2.2], label: { ar: 'مقطع القرنية عن قرب', en: 'Cornea section close-up' } },
-    front: { pos: [0.01, 0.5, 21], target: [0, 0, 1.6], label: { ar: 'من الأمام', en: 'Front view' } },
-    oblique: { pos: [7, 7.5, 16], target: [0, 0, 2] },
+    section: { pos: [10.5, -1.9, 3.3], target: [0, -1.9, 2.6], fit: [1.9, 3.6], label: { ar: 'مقطع القرنية عن قرب', en: 'Cornea section close-up' } },
+    front: { pos: [0.01, 0.5, 21], target: [0, 0, 1.6], fit: [6.6, 6.6], label: { ar: 'من الأمام', en: 'Front view' } },
+    oblique: { pos: [7, 7.5, 16], target: [0, 0, 1.6], fit: [6.6, 6.6] },
     full: CAMERAS.full
   },
   toggles: [

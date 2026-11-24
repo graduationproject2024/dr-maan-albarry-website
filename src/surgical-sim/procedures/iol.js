@@ -27,7 +27,7 @@ const def = {
     { ar: 'فهم أن العدسة المزروعة توضع داخل المحفظة نفسها أثناء عملية الماء الأبيض.', en: 'Understand that the implant is placed inside that same capsule during cataract surgery.' },
     { ar: 'فهم أن أنواع العدسات متشابهة الشكل وتختلف في طريقة توزيع التركيز.', en: 'Understand that lens types look alike and differ in how they share focus.' }
   ],
-  cameras: { full: CAMERAS.full, front: CAMERAS.front, anterior: CAMERAS.anterior, section: CAMERAS.section, anteriorSection: CAMERAS.anteriorSection, lens: CAMERAS.lens, optics: { pos: [42, 17, -3], target: [0, 0, -8.5], label: { ar: 'مسار الضوء', en: 'Light path' } } },
+  cameras: { full: CAMERAS.full, front: CAMERAS.front, anterior: CAMERAS.anterior, section: CAMERAS.section, anteriorSection: CAMERAS.anteriorSection, lens: CAMERAS.lens, optics: { pos: [42, 17, -3], target: [0, 0, -8.5], fit: [14, 10.5], label: { ar: 'مسار الضوء', en: 'Light path' } } },
   options: [{ id: 'type', label: { ar: 'نوع العدسة', en: 'Lens type' }, choices: TYPES, default: 'monofocal' }],
   toggles: [
     { id: 'compare', label: { ar: 'إظهار العدسة الطبيعية للمقارنة', en: 'Show the natural lens to compare' }, default: false },
