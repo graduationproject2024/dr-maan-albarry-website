@@ -9,26 +9,20 @@
     {
       "id": "icl",
       "structure": "icl",
-      "x": 0.4825,
-      "y": 0.6504
-    },
-    {
-      "id": "vault",
-      "structure": "vault",
-      "x": 0.5149,
-      "y": 0.7275
+      "x": 0.3194,
+      "y": 0.3903
     },
     {
       "id": "natural-lens",
-      "structure": "natural-lens",
-      "x": 0.7419,
-      "y": 0.6282
+      "structure": "natural-lens-kept",
+      "x": 0.3751,
+      "y": 0.6665
     },
     {
       "id": "iris",
       "structure": "iris",
-      "x": 0.5336,
-      "y": 0.3112
+      "x": 0.6806,
+      "y": 0.4111
     }
   ]
 }

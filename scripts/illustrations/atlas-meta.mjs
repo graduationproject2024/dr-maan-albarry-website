@@ -2,8 +2,9 @@
 // (only from docs/implementation/clinical-visual-reconstruction/CLINICAL_SOURCES.md), known simplifications and the
 // questions for Dr. Maan. Nothing here has been reviewed by a physician; every asset is `reviewStatus: "pending"`.
 
-export const VERSION = 'atlas-2026.11-r2';
-export const VERSION_R1 = 'atlas-2026.11-r1'; // assets not re-rendered in r2 keep this
+export const VERSION = 'atlas-2026.11-r3'; // library version (the newest asset version)
+export const VERSION_R2 = 'atlas-2026.11-r2';
+export const VERSION_R1 = 'atlas-2026.11-r1'; // assets not re-rendered in r2 or r3 keep this
 
 
 // Reference keys -> citations, copied from CLINICAL_SOURCES.md (keys as used there).
@@ -59,9 +60,6 @@ export const CHANGED = {
   "lens-implants-l3-iol-in-bag": [
     "Ciliary ring recoloured from heavy maroon to a pale tint so the implant is the focal point; camera and anatomy unchanged."
   ],
-  "icl-l2-hero": [
-    "Reframed with anterior up so the section runs across the 16:9 frame (the subject filled only the centre on phones); anatomy unchanged."
-  ],
   "keratoconus-cxl-l2-hero": [
     "Profile view with anterior up through a straight half cut (the cornea previously read at an angle); yellow is now only on the cut stroma, not over the whole chamber; only the front normal curve is dashed; UV kept as a soft field."
   ],
@@ -86,6 +84,18 @@ export const CHANGED = {
 };
 
 // Labels shown by default on the plate (at most 4 on L2, 1 or 2 on L1). A proposal: pending physician review.
+// r3 (ICL rebuild, phase 2 final closure): the owner found the ICL plates confusing (too many transparent layers, an
+// ambiguous cut-away). All three ICL assets were rebuilt as one flat sagittal section. Pending physician review.
+const ICL_R3 = 'Rebuilt as one flat sagittal section square to the cut (the 3/4 wedge cut-away, the translucent 3D implant and the tinted vault slab are gone): the implant is a single teal arch behind the iris and in front of the natural lens, the natural lens is drawn whole and labelled as kept, the vault is clear fluid; geometry from the surgical-simulator ICL model (vault 0.5 mm).';
+export const CHANGED_R3 = {
+  'icl-l2-hero': [ICL_R3, 'Anterior up across the 16:9 frame; both footplates in the sulcus; labels: implant, gap, natural lens (kept), iris essential.'],
+  'icl-l1-card': [ICL_R3, 'Card: the right half of the same section, anterior up, so it reads as the same picture as the hero.'],
+  'icl-l3-vault-section': [ICL_R3, 'Close-up in the sagittal convention (anterior left) of the iris, the implant, the vault and the footplate in the sulcus.']
+};
+
+const ICL_SECTION = 'ICL geometry from the surgical-simulator model (src/surgical-sim/anatomy/geometry.js ICL, procedures/icl.js plateMid / irisOnIclZ): vault 0.5 mm between the back of the plate and the lens front, arch exponent 2, optic bulge 0.08 mm, footplates in the sulcus (half-length 5.3 mm in this eye).';
+const ICL_T2 = 'Plate drawn 0.2 mm thick, twice the 0.1 mm of the reference model, so it stays visible on a phone; the vault is not exaggerated.';
+
 export const ESSENTIAL = {
   "cataract-surgery-l2-hero": [
     "cataract-nucleus",
@@ -325,27 +335,27 @@ export const META = {
   },
   // ------------------------------------------------------------- ICL
   'icl-l2-hero': {
-    structures: ['icl', 'vault', 'natural-lens', 'iris', 'cornea', 'icl-footplate', 'anterior-chamber', 'ciliary-body'],
+    structures: ['icl', 'vault', 'natural-lens-kept', 'iris', 'cornea', 'icl-footplate', 'ciliary-sulcus', 'ciliary-body'],
     refs: [...EYE_DIMS, 'STR', 'AAO-phakic'],
-    simplifications: [...GEN, 'Generic, brand-free plate (central port omitted); vault ≈0.5 mm centrally is illustrative.', 'The vault is tinted aqua so it reads; aqueous is clear. The vitreous floor is now translucent (it was a pale slab).'],
-    alt: { en: 'Cut-away of the front of the eye: a thin implantable lens rests behind the iris and arches over the clear natural lens with a small fluid gap.', ar: 'مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية تتقوّس فوق العدسة الطبيعية الشفافة مع فراغ صغير مملوء بالسائل.' },
-    caption: { en: 'An ICL sits behind the iris and arches over the natural lens, which stays in place.', ar: 'تستقر العدسة اللاصقة الداخلية خلف القزحية وتتقوّس فوق العدسة الطبيعية التي تبقى في مكانها.' },
-    questions: ['Is a ~0.5 mm central vault the right “ideal” to depict?', 'Should the central port be drawn?']
+    simplifications: [...GEN, ICL_SECTION, ICL_T2, 'Generic, brand-free plate (central port omitted); the section runs along the plate’s long axis, so both footplates show.', 'Fluids (aqueous in front, vitreous behind the lens) are painted as calm opaque fills so the section is never a window into the eye behind it.'],
+    alt: { en: 'Cross-section of the front of the eye: a thin teal lens implant sits behind the iris and arches over the natural lens, which stays, with a small clear gap.', ar: 'مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية تتقوّس فوق العدسة الطبيعية التي تبقى، مع فراغ صغير صافٍ بينهما.' },
+    caption: { en: 'An ICL sits behind the iris and in front of your natural lens, which stays in place.', ar: 'تستقر العدسة اللاصقة الداخلية خلف القزحية وأمام عدستك الطبيعية التي تبقى في مكانها.' },
+    questions: ['Is a ~0.5 mm central vault the right “ideal” to depict?', 'Is drawing the plate twice its real thickness acceptable for legibility?', 'Should the central port be drawn?']
   },
   'icl-l1-card': {
-    structures: ['icl', 'vault', 'natural-lens', 'iris'],
+    structures: ['icl', 'natural-lens-kept', 'iris', 'cornea'],
     refs: [...EYE_DIMS, 'AAO-phakic'],
-    simplifications: [...GEN, 'Generic plate; vault tint illustrative.'],
-    alt: { en: 'Close cut-away showing a thin lens implant behind the coloured iris, arching over the eye’s own clear lens.', ar: 'مقطع مقرّب يُظهر عدسة مزروعة رقيقة خلف القزحية الملوّنة تتقوّس فوق عدسة العين الطبيعية الشفافة.' },
-    caption: { en: 'The ICL adds a lens inside the eye; the natural lens stays.', ar: 'تُضيف ICL عدسة داخل العين وتبقى العدسة الطبيعية.' },
-    questions: ['Is this close-up recognisable enough at card size?']
+    simplifications: [...GEN, ICL_SECTION, ICL_T2, 'Half of the hero section (the centre to the sulcus), anterior up.'],
+    alt: { en: 'Half cross-section of the front of the eye: a thin teal lens implant behind the brown iris, above the eye’s own lens.', ar: 'نصف مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية البنية فوق عدسة العين الطبيعية.' },
+    caption: { en: 'The ICL adds a lens behind the iris; your natural lens stays.', ar: 'تُضيف ICL عدسة خلف القزحية، وتبقى عدستك الطبيعية.' },
+    questions: ['Is this half-section recognisable enough at card size?']
   },
   'icl-l3-vault-section': {
-    structures: ['icl', 'vault', 'natural-lens', 'iris', 'icl-footplate', 'ciliary-sulcus', 'ciliary-body', 'cornea', 'anterior-chamber'],
+    structures: ['icl', 'vault', 'natural-lens-kept', 'iris', 'icl-footplate', 'ciliary-sulcus', 'ciliary-body', 'cornea', 'anterior-chamber'],
     refs: [...EYE_DIMS, 'STR', 'AAO-phakic'],
-    simplifications: [...GEN, 'True sagittal section along the plate’s long axis; plate thickness and outline generic.', 'The iris is lifted 0.72 mm over the plate (draped iris is simplified).'],
-    alt: { en: 'Cross-section showing an implantable lens arching between the iris and the natural lens, its foot resting in the groove behind the iris root.', ar: 'مقطع يُظهر عدسة مزروعة تتقوّس بين القزحية والعدسة الطبيعية، وطرفها مستقر في الثلم خلف جذر القزحية.' },
-    caption: { en: 'The gap over the natural lens (the vault) is checked after surgery.', ar: 'تُفحص المسافة فوق العدسة الطبيعية بعد الجراحة.' },
+    simplifications: [...GEN, ICL_SECTION, ICL_T2, 'The iris is raised just enough to rest on the implant (0.05 mm clearance, the surgical-simulator rule); a draped iris is simplified.', 'Footplate tip drawn in the nook between the iris root and the ciliary body (sulcus); exact position varies with lens size.'],
+    alt: { en: 'Close-up cross-section: the iris, then the thin teal implant, then a clear gap and the natural lens; the implant’s foot rests in the groove behind the iris.', ar: 'مقطع مقرّب: القزحية ثم العدسة المزروعة الرقيقة ثم فراغ صافٍ ثم العدسة الطبيعية؛ وطرف العدسة المزروعة يستقر في الثلم خلف القزحية.' },
+    caption: { en: 'The small clear gap over the natural lens (the vault) is checked after surgery.', ar: 'تُفحص المسافة الصغيرة الصافية فوق العدسة الطبيعية بعد الجراحة.' },
     questions: ['Is the footplate position in the ciliary sulcus drawn correctly?', 'Is it appropriate to name the vault for patients?']
   },
   // ------------------------------------------------------------- keratoconus / CXL

@@ -121,7 +121,7 @@ function neutral(g, W, H) {
 }
 
 const state = { masters: {}, cache: {}, W: 0, H: 0 };
-window.SHOTS = SHOTS.map((s) => ({ id: s.id, slug: s.slug, level: s.level, W: s.W, H: s.H, sizes: s.sizes, camera: s.camera }));
+window.SHOTS = SHOTS.map((s) => ({ id: s.id, slug: s.slug, level: s.level, W: s.W, H: s.H, sizes: s.sizes, camera: s.camera, ...(s.model ? { model: s.model } : {}) }));
 window.CAMERAS = CAMERAS;
 
 window.renderShot = (id) => {
