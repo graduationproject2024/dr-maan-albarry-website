@@ -1,0 +1,98 @@
+# Security scanners (manual, weekly and on pull requests). Publishes nothing. Each scanner keeps its report as an
+# artifact; secret values are always redacted. Findings are triaged in
+# docs/implementation/phase-2-final-closure/15_SECURITY_RESULTS.md.
+name: Security scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+  schedule:
+    - cron: '0 4 * * 1'   # Mondays 04:00 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    name: CodeQL (JavaScript)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+
+  semgrep:
+    name: Semgrep
+    runs-on: ubuntu-latest
+    container: semgrep/semgrep:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan (JavaScript, secrets, OWASP Top 10)
+        run: |
+          semgrep scan --metrics=off \
+            --config p/javascript --config p/secrets --config p/owasp-top-ten --config p/xss \
+            --exclude node_modules --exclude dist --exclude docs --exclude graphify-out \
+            --json -o semgrep.json || true
+          semgrep scan --metrics=off \
+            --config p/javascript --config p/secrets --config p/owasp-top-ten --config p/xss \
+            --exclude node_modules --exclude dist --exclude docs --exclude graphify-out || true
+      - uses: actions/upload-artifact@v4
+        with: { name: semgrep, path: semgrep.json, if-no-files-found: ignore }
+
+  gitleaks:
+    name: Gitleaks (full history, redacted)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Scan git history
+        run: |
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest \
+            git /repo --redact -v --exit-code 0 --report-format json --report-path /repo/gitleaks.json
+          echo "findings: $(jq length gitleaks.json)"
+          jq -r '.[] | "\(.RuleID)\t\(.File):\(.StartLine)\t\(.Commit[0:7])"' gitleaks.json || true
+      - uses: actions/upload-artifact@v4
+        with: { name: gitleaks, path: gitleaks.json, if-no-files-found: ignore }
+
+  osv:
+    name: OSV-Scanner + npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: OSV-Scanner (package-lock.json)
+        run: |
+          docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:latest \
+            scan source --lockfile /src/package-lock.json --format table || true
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - name: npm audit (all dependencies)
+        run: npm audit || true
+
+  zap:
+    name: OWASP ZAP baseline (local production build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Serve the build
+        run: |
+          npx vite preview --port 4173 --strictPort --host 0.0.0.0 &
+          for i in $(seq 1 30); do curl -sf http://localhost:4173/ >/dev/null && break; sleep 2; done
+      - name: ZAP baseline (passive)
+        run: |
+          mkdir -p zap && chmod 777 zap
+          docker run --rm --network host -v "$PWD/zap:/zap/wrk" ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t http://localhost:4173/ -r zap.html -J zap.json -I || true
+      - uses: actions/upload-artifact@v4
+        with: { name: zap, path: zap/, if-no-files-found: ignore }
