@@ -16,9 +16,17 @@ concurrency:
 
 jobs:
   full:
-    name: Full suite (Chromium and WebKit)
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
+    # Split into shards: one 2-hour job on a 4-core runner ran out of time and starved the software-rendered (SwiftShader)
+    # 3D tests of CPU, which showed up as timeouts (BUG-C01). Linux and Windows both run: Windows routes WebGL through
+    # ANGLE/Direct3D like the local suite, Linux keeps the SwiftShader path covered.
+    name: Full suite ${{ matrix.os }} ${{ matrix.shard }}/4
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        shard: [1, 2, 3, 4]
     env:
       CI: 'true'
     steps:
@@ -29,8 +37,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
-      - name: Build and run every test
-        run: npm run test:full
+      - name: Build and run every test (this shard)
+        run: npm run test:full -- --shard=${{ matrix.shard }}/4
       # Before a release a flaky test is a finding: the job fails so that it is looked at, not retried away.
       - name: Test summary (flaky tests fail this run)
         if: always()
@@ -39,7 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: full-regression-${{ github.sha }}
+          name: full-regression-${{ github.sha }}-${{ matrix.os }}-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
