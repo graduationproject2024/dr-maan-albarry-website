@@ -20,19 +20,19 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: github/codeql-action/init@d2aacf54c2fbc910db8d7ec338fdb54ea48c692d # v3.39.4
         with:
           languages: javascript-typescript
           queries: security-extended
-      - uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/analyze@d2aacf54c2fbc910db8d7ec338fdb54ea48c692d # v3.39.4
 
   semgrep:
     name: Semgrep
     runs-on: ubuntu-latest
     container: semgrep/semgrep:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Scan (JavaScript, secrets, OWASP Top 10)
         run: |
           semgrep scan --metrics=off \
@@ -42,14 +42,14 @@ jobs:
           semgrep scan --metrics=off \
             --config p/javascript --config p/secrets --config p/owasp-top-ten --config p/xss \
             --exclude node_modules --exclude dist --exclude docs --exclude graphify-out || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with: { name: semgrep, path: semgrep.json, if-no-files-found: ignore }
 
   gitleaks:
     name: Gitleaks (full history, redacted)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with: { fetch-depth: 0 }
       - name: Scan git history
         run: |
@@ -57,19 +57,19 @@ jobs:
             git /repo --redact -v --exit-code 0 --report-format json --report-path /repo/gitleaks.json
           echo "findings: $(jq length gitleaks.json)"
           jq -r '.[] | "\(.RuleID)\t\(.File):\(.StartLine)\t\(.Commit[0:7])"' gitleaks.json || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with: { name: gitleaks, path: gitleaks.json, if-no-files-found: ignore }
 
   osv:
     name: OSV-Scanner + npm audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: OSV-Scanner (package-lock.json)
         run: |
           docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:latest \
             scan source --lockfile /src/package-lock.json --format table || true
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with: { node-version: 20, cache: npm }
       - run: npm ci
       - name: npm audit (all dependencies)
@@ -79,8 +79,8 @@ jobs:
     name: OWASP ZAP baseline (local production build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with: { node-version: 20, cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps chromium
@@ -94,5 +94,5 @@ jobs:
           mkdir -p zap && chmod 777 zap
           docker run --rm --network host -v "$PWD/zap:/zap/wrk" ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py -t http://localhost:4173/ -r zap.html -J zap.json -I || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with: { name: zap, path: zap/, if-no-files-found: ignore }
