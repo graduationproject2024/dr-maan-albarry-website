@@ -16,17 +16,17 @@ concurrency:
 
 jobs:
   full:
-    # Split into shards: one 2-hour job on a 4-core runner ran out of time and starved the software-rendered (SwiftShader)
-    # 3D tests of CPU, which showed up as timeouts (BUG-C01). Linux and Windows both run: Windows routes WebGL through
-    # ANGLE/Direct3D like the local suite, Linux keeps the SwiftShader path covered.
-    name: Full suite ${{ matrix.os }} ${{ matrix.shard }}/4
-    runs-on: ${{ matrix.os }}
+    # GitHub-hosted runners (Linux and Windows alike) have no GPU, so WebGL runs on a software renderer that needs the
+    # whole CPU: with 2 workers per runner the 3D suites starved each other and timed out (BUG-C01). Six shards, one
+    # worker each: same tests, same assertions and timeouts, no CPU contention. Windows was tried (run 45402597982)
+    # and timed out the same way, so it is not used.
+    name: Full suite shard ${{ matrix.shard }}/6
+    runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6]
     env:
       CI: 'true'
     steps:
@@ -38,7 +38,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
       - name: Build and run every test (this shard)
-        run: npm run test:full -- --shard=${{ matrix.shard }}/4
+        run: npm run test:full -- --shard=${{ matrix.shard }}/6 --workers=1
       # Before a release a flaky test is a finding: the job fails so that it is looked at, not retried away.
       - name: Test summary (flaky tests fail this run)
         if: always()
@@ -47,7 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: full-regression-${{ github.sha }}-${{ matrix.os }}-${{ matrix.shard }}
+          name: full-regression-${{ github.sha }}-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
