@@ -6,7 +6,8 @@
 import { EYE, lensAntZ, lensPostZ, corneaAntZ, corneaThickness, shellPoint } from '../anatomy.js';
 import cataract from '../scenes/cataract.js';
 import laser from '../scenes/laser.js';
-import icl, { PHI_LONG } from '../scenes/icl.js';
+import { iclSection, plateTop, plateBack, plateMid, HALF_L, IRIS_LIFT, ICL_REF } from '../scenes/icl.js';
+const ICL_VAULT = ICL_REF.vault;
 import cxl, { coneSurface as F, coneThickness as TC } from '../scenes/cxl.js';
 import transplant from '../scenes/transplant.js';
 import injection from '../scenes/injection.js';
@@ -40,8 +41,17 @@ const flapPoint = (x, y) => { // a point of the lifted flap (rotated -126 deg ab
 };
 const laserHit = [-1.05, 0.9, A(Math.hypot(-1.05, 0.9)) - LX.tf - abl(Math.hypot(-1.05, 0.9))];
 
-// ICL plate section along its long axis (PHI_LONG), from instruments.phakicLens.
-const iclBase = (r) => 0.84 - (r * r) / 34;
+// ICL (atlas r3): points of the implant section (scenes/icl.js) and the clear vault under it.
+const vaultMid = (r) => (plateBack(r) + lensAntZ(r)) / 2;
+// Source / model-version record written into the manifest for the r3 ICL assets.
+const ICL_MODEL = {
+  version: 'icl-section-r3',
+  scene: 'scripts/illustrations/src/scenes/icl.js (iclSection)',
+  eye: 'scripts/illustrations/src/anatomy.js (schematic adult eye of the series)',
+  implant: 'src/surgical-sim/anatomy/geometry.js ICL (vault 0.5 mm, plate 0.1 mm, optic radius 2.9 mm) and src/surgical-sim/procedures/icl.js plateMid (arch 2, optic bulge 0.08 mm) / irisOnIclZ (iris clearance 0.05 mm), library ssim-anatomy-2026.11-r1',
+  drawnExaggeration: 'plate thickness x2 (0.2 mm drawn)',
+  geometry: { vaultMm: ICL_VAULT, plateHalfLengthMm: HALF_L, irisLiftMm: IRIS_LIFT }
+};
 
 const ENTRY_KEPT = 148; // atlas r2: entry through the kept wall, just outside the opened sector (18 to 138 degrees)
 // Intravitreal: entry meridian of the legacy hero (112 degrees) and the pars plana geometry
@@ -211,42 +221,44 @@ export const SHOTS = [
   },
 
   // =================================================================== ICL
+  // atlas r3: one flat sagittal section, square to the face; anterior up for the hero and the card (the eye as it
+  // stands, light entering from the top), anterior left for the close-up (the series' sagittal convention).
   {
-    ...L2, id: 'icl-l2-hero', slug: 'icl', camera: 'oblique',
-    build: icl, cam: { H: 6.3, up: [0, 0, 1], target: [1.59, 2.54, 0.7], shift: [0, 0] }, ppm: 1.7, // r2: the section runs across the 16:9 frame, anterior up
+    ...L2, id: 'icl-l2-hero', slug: 'icl', camera: 'sagittal', model: ICL_MODEL,
+    build: (ctx) => iclSection(ctx, { view: 'up', target: [0, 0.1], H: 8.6 }), ppm: 1,
+    fade: { cx: 0.5, cy: 0.5, rx: 0.6, ry: 0.86, inner: 0.74 },
     anchors: [
-      { id: 'icl', p: onFace(PHI_LONG, 1.6, iclBase(1.6) + 0.06) },
-      { id: 'vault', p: onFace(PHI_LONG, 1.0, (iclBase(1.0) + lensAntZ(1.0)) / 2) },
-      { id: 'natural-lens', p: onFace(PHI_LONG, 1.8, -1.0) },
-      { id: 'iris', p: onFace(PHI_LONG, 4.2, 0.78) },
-      { id: 'cornea', p: onFace(PHI_LONG, 2.4, corneaMid(2.4)) },
-      { id: 'icl-footplate', p: onFace(PHI_LONG, 5.45, iclBase(5.45) + 0.06) },
-      { id: 'anterior-chamber', p: onFace(PHI_LONG, 1.6, 2.2) }
+      { id: 'icl', p: onHalf(1.1, plateTop(1.1) + 0.02) },
+      { id: 'vault', p: onHalf(-0.7, vaultMid(0.7)) },
+      { id: 'natural-lens', structure: 'natural-lens-kept', p: onHalf(0, EYE.lensEqZ - 0.3) },
+      { id: 'iris', p: onHalf(3.9, 0.85) },
+      { id: 'cornea', p: onHalf(-2.6, corneaMid(2.6)) },
+      { id: 'icl-footplate', p: onHalf(-(HALF_L - 0.25), plateMid(HALF_L - 0.25)) },
+      { id: 'ciliary-body', p: onHalf(ciliaryTip[0] + 0.25, ciliaryTip[1] + 0.1) }
     ]
   },
   {
-    ...L1, id: 'icl-l1-card', slug: 'icl', camera: 'oblique',
-    build: icl, cam: { H: 7.6, target: [1.6, 2.3, 0.35] }, ppm: 1.3, fade: { cx: 0.46, cy: 0.5, rx: 0.62, ry: 0.56, inner: 0.62 },
+    ...L1, id: 'icl-l1-card', slug: 'icl', camera: 'sagittal', model: ICL_MODEL,
+    build: (ctx) => iclSection(ctx, { view: 'up', target: [2.7, 0.0], H: 9.0, zMin: -5.6 }), ppm: 1,
+    fade: { cx: 0.5, cy: 0.5, rx: 0.56, ry: 0.54, inner: 0.7 },
     anchors: [
-      { id: 'icl', p: onFace(PHI_LONG, 1.6, iclBase(1.6) + 0.06) },
-      { id: 'vault', p: onFace(PHI_LONG, 1.0, (iclBase(1.0) + lensAntZ(1.0)) / 2) },
-      { id: 'natural-lens', p: onFace(PHI_LONG, 1.8, -1.0) },
-      { id: 'iris', p: onFace(PHI_LONG, 4.2, 0.78) }
+      { id: 'icl', p: onHalf(1.4, plateTop(1.4) + 0.02) },
+      { id: 'natural-lens', structure: 'natural-lens-kept', p: onHalf(1.8, EYE.lensEqZ - 0.2) },
+      { id: 'iris', p: onHalf(4.0, 0.8) }
     ]
   },
   {
-    ...L3, id: 'icl-l3-vault-section', slug: 'icl', camera: 'sagittal',
-    build: (ctx) => iclSagittal(ctx),
+    ...L3, id: 'icl-l3-vault-section', slug: 'icl', camera: 'sagittal', model: ICL_MODEL,
+    build: (ctx) => iclSagittal(ctx), ppm: 1,
     anchors: [
-      { id: 'icl', p: onHalf(2.0, iclBase(2.0) + 0.08) },
-      { id: 'vault', p: onHalf(0.9, (iclBase(0.9) + lensAntZ(0.9)) / 2) },
-      { id: 'natural-lens', p: onHalf(2.0, -0.9) },
+      { id: 'icl', p: onHalf(2.1, plateTop(2.1) + 0.02) },
+      { id: 'vault', p: onHalf(1.3, vaultMid(1.3)) },
+      { id: 'natural-lens', structure: 'natural-lens-kept', p: onHalf(2.0, -1.3) },
       { id: 'iris', p: onHalf(4.0, 0.95) },
-      { id: 'icl-footplate', p: onHalf(5.5, iclBase(5.5) + 0.06) },
-      { id: 'ciliary-sulcus', p: onHalf(5.8, -0.05) },
-      { id: 'ciliary-body', p: onHalf(ciliaryTip[0] + 0.5, ciliaryTip[1] - 0.2) },
-      { id: 'cornea', p: onHalf(2.2, corneaMid(2.2)) },
-      { id: 'anterior-chamber', p: onHalf(1.6, 2.2) }
+      { id: 'icl-footplate', p: onHalf(HALF_L - 0.2, plateMid(HALF_L - 0.2)) },
+      { id: 'ciliary-body', p: onHalf(ciliaryTip[0] + 0.15, ciliaryTip[1] + 0.25) },
+      { id: 'cornea', p: onHalf(2.4, corneaMid(2.4)) },
+      { id: 'anterior-chamber', p: onHalf(1.6, 2.3) }
     ]
   },
 

@@ -41,7 +41,7 @@ test.describe('the manifest records the label levels and the review state', () =
       for (const lang of ['en', 'ar']) expect([...a.alt[lang]].length, `${a.assetId} alt.${lang}`).toBeLessThanOrEqual(160);
       expect(a.references.length, a.assetId).toBeGreaterThan(0);
       expect(a.knownSimplifications.length, a.assetId).toBeGreaterThan(0);
-      if (a.version.endsWith('r2')) {
+      if (a.version.endsWith('r2') || a.version.endsWith('r3')) {
         expect(a.changeNote, a.assetId).toBeTruthy();
         expect(a.reApprovalNeeded, a.assetId).toBe(true);
       } else {
@@ -49,9 +49,10 @@ test.describe('the manifest records the label levels and the review state', () =
         expect(a.reApprovalNeeded, a.assetId).toBe(false);
       }
     }
-    // the assets judged confusing are the re-rendered ones (13 of 27)
+    // the assets judged confusing are the re-rendered ones: 12 in r2, and the three ICL plates rebuilt in r3
+    expect(MANIFEST.assets.filter(a => a.version.endsWith('r3')).map(a => a.assetId).sort()).toEqual(['icl-l1-card', 'icl-l2-hero', 'icl-l3-vault-section']);
     expect(MANIFEST.assets.filter(a => a.version.endsWith('r2')).map(a => a.assetId).sort()).toEqual([
-      'cataract-surgery-l2-hero', 'cataract-surgery-l3-iol-in-bag', 'corneal-transplant-l1-card', 'corneal-transplant-l2-hero', 'icl-l2-hero',
+      'cataract-surgery-l2-hero', 'cataract-surgery-l3-iol-in-bag', 'corneal-transplant-l1-card', 'corneal-transplant-l2-hero',
       'intravitreal-injections-l1-card', 'intravitreal-injections-l2-hero', 'keratoconus-cxl-l1-card', 'keratoconus-cxl-l2-hero', 'keratoconus-cxl-l3-cone-section',
       'lens-implants-l1-card', 'lens-implants-l2-hero', 'lens-implants-l3-iol-in-bag'
     ].sort());

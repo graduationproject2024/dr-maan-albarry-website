@@ -1,6 +1,6 @@
 // Builds public/images/procedures/manifest.json from the render results (atlas.mjs) and the editorial metadata
 // (atlas-meta.mjs). Results from earlier runs are kept for shots not re-rendered in this run.
-import { META, REFS, VERSION, VERSION_R1, CHANGED, ESSENTIAL } from './atlas-meta.mjs';
+import { META, REFS, VERSION, VERSION_R2, VERSION_R1, CHANGED, CHANGED_R3, ESSENTIAL } from './atlas-meta.mjs';
 import { STRUCTURES } from './src/atlas/structures.js';
 import { CAMERAS } from './src/atlas/cameras.js';
 
@@ -33,14 +33,15 @@ export function buildManifest(shots, results, prev) {
       alt: m.alt,
       caption: m.caption,
       questionsForDrMaan: m.questions,
-      version: CHANGED[s.id] ? VERSION : VERSION_R1,
-      changeNote: CHANGED[s.id] || null,
-      reApprovalNeeded: Boolean(CHANGED[s.id]),
+      version: CHANGED_R3[s.id] ? VERSION : CHANGED[s.id] ? VERSION_R2 : VERSION_R1,
+      changeNote: CHANGED_R3[s.id] || CHANGED[s.id] || null,
+      reApprovalNeeded: Boolean(CHANGED_R3[s.id] || CHANGED[s.id]),
       essentialLabelsReview: 'pending physician review',
       reviewStatus: 'pending',
       reviewer: null,
       reviewedOn: null,
       approval: 'not approved',
+      ...(s.model ? { model: s.model } : {}),
       licence: 'Original procedural three.js render made for this site; no third-party models, textures or photographs.'
     };
   }).filter(Boolean);

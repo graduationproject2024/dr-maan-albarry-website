@@ -7,7 +7,7 @@
 export const CAMERAS = {
   sagittal: {
     name: 'Sagittal cut-away',
-    rule: 'Camera square to a meridional cut face (at most 20 degrees off its normal), anterior to the LEFT, long lens (fov 12-14 degrees) so the painted section reads like a textbook cross-section while the 3D tissue behind it keeps depth.'
+    rule: 'Camera square to a meridional cut face (at most 20 degrees off its normal), anterior to the LEFT (close-ups) or UP (the ICL hero and card, so the whole section spans the frame), long lens (fov 12-14 degrees) so the painted section reads like a textbook cross-section while the 3D tissue behind it keeps depth.'
   },
   frontal: {
     name: 'Frontal',

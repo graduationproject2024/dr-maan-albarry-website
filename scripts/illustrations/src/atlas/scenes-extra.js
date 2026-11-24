@@ -5,24 +5,15 @@ import * as THREE from 'three';
 import { buildGlobe, zonules, bagShell } from '../globe.js';
 import { EYE, DEG, shellPoint, corneaAntZ, corneaThickness, lensAntZ, ciliaryProfile } from '../anatomy.js';
 import { corneaSpec, corneaMesh, makeSection, paintedQuad, glowSprite, rng, lathe } from '../kit.js';
-import { phakicLens, injectionNeedle, orient, iol } from '../instruments.js';
-import { paintPlate } from '../scenes/icl.js';
+import { injectionNeedle, orient, iol } from '../instruments.js';
+import { iclSection } from '../scenes/icl.js';
 import { LAYER } from '../scenes/laser.js';
 import { sagittal, ppmFor, dirFrom } from './compose.js';
 
 // ---------------------------------------------------------------- ICL: the vault in true sagittal section
-export function iclSagittal(ctx, { focus = [3.0, 0.2], H = 6.4 } = {}) {
-  return sagittal(ctx, {
-    focus, H, tilt: 12, lift: 6,
-    globe: { lens: 'clear', pupilR: 2.3, irisLift: 0.72, irisSeed: 7, paintExtra: (k) => { paintPlate(k, 0, 0); paintPlate(k, 0, 0, true); } },
-    caps: { zMin: -6.5 },
-    extra: (scene, eye) => {
-      const lens = phakicLens(ctx.mats, { full: true });
-      lens.traverse((o) => { if (o.material) { o.material.clippingPlanes = eye.planes; o.material.clipIntersection = true; } });
-      const m = lens.children[0].material; m.color = new THREE.Color('#9FD9DC'); m.opacity = 0.6;
-      scene.add(lens);
-    }
-  });
+export function iclSagittal(ctx, { focus = [3.3, 0.05], H = 5.6 } = {}) {
+  // atlas r3: the same flat section as the ICL hero (no translucent 3D implant), anterior to the left.
+  return iclSection(ctx, { view: 'left', target: focus, H, polar: 90, zMin: -4.6, r1: 7.4, k: 1.0 });
 }
 
 // ---------------------------------------------------------------- Intravitreal injection: pars plana entry in section
