@@ -101,7 +101,7 @@ export async function canvasNonBlank(page, selector) {
 
 /** Wording that would imply a guaranteed outcome. */
 export const CERTAINTY = /\bguarantee[sd]?\b|\byou will see\b|20\/20|\b\d{1,3}\s?%\s*(success|of patients)|success rate|نضمن|يضمن|ضمان|مضمون|ستر(ى|ي) بوضوح|نسبة نجاح|نسبة النجاح/i;
-const NEGATION = /\b(no|not|cannot|can't|never)\b|(^|\s)(لا|لن|ليس|ليست)\s|^هل\s|\?|؟/i;
+const NEGATION = /\b(no|not|cannot|can't|never)\b|(^|\s)(لا|لن|ليس|ليست|دون|بدون)\s|^هل\s|\?|؟/i;
 
 /** Sentences that claim certainty. A sentence that negates or questions the claim ("cannot be guaranteed",
  *  "هل يضمن…؟") is the opposite of a promise and is not counted. Returns the offending sentences. */

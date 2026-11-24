@@ -52,7 +52,10 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
     const y0 = await page.evaluate(() => scrollY);
     cdp = await swipe(page, { x: r.x + r.w * 0.5, y: r.y + r.h * 0.7, dy: -220, steps: 10, cdp });
     const y1 = await page.evaluate(() => scrollY);
-    return { actual: `scrollY ${y0} → ${y1}`, ok: y1 > y0 + 120 };
+    // The swipe must move the page, not the camera: 120 px, or as far as the page goes (the viewer sits near the end
+    // of the cataract page, so on short pages the end can come first).
+    const end = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+    return { actual: `scrollY ${y0} → ${y1} (end ${end})`, ok: y1 > y0 + 120 || (y1 > y0 + 40 && y1 >= end - 2) };
   });
 
   await j.step('One-finger horizontal swipe on the canvas (Explore 3D off)', 'Camera does not move (view unchanged) and the page does not scroll sideways', async () => {

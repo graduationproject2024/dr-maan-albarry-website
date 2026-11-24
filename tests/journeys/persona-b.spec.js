@@ -52,7 +52,7 @@ test('Persona B — first-time visitor', async ({ page }, testInfo) => {
   });
 
   await j.step('Tap "تفاصيل الإجراء" on the lens implants card', 'The lens implants page opens at its title', async () => {
-    const link = page.locator('#procedures .pgal-item').filter({ hasText: NAME['lens-implants'].ar }).locator('.pgal-link');
+    const link = page.locator('.proc-grid .proc-card').filter({ hasText: NAME['lens-implants'].ar }).locator('.proc-card-link'); // library page
     await link.scrollIntoViewIfNeeded(); await link.tap();
     await page.waitForURL(/procedures\/lens-implants\/$/); await page.locator('#p-anatomy').waitFor();
     const s = await docState(page);

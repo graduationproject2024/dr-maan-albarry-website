@@ -1170,13 +1170,15 @@ function renderLensLabPage() {
       aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a></nav>`
     })}
     ${renderSimulator()}
-    ${renderOcularSurface()}
     <section class="section" id="lab" aria-labelledby="lab-title">
       <div class="container">
         <h2 class="sr-only" id="lab-title">${tr('المقارنة', 'The comparison')}</h2>
         ${featureBlock({ key: 'lens-lab', hostAttr: 'data-lens-lab-host', slotId: 'lens-lab-host', staticHtml: summary, name: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab') })}
       </div>
     </section>
+    ${/* After the comparison, not between it and the simulator it drives: placed in between (2026-11-23) it pushed the
+        simulator out of its lazy-mount distance, so a #lab bookmark never loaded it. */ ''}
+    ${renderOcularSurface()}
     ${renderClosing('lens-lab')}`;
 }
 
