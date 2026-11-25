@@ -80,6 +80,20 @@ export function iclIrisOverlap(pose, pupilR, marginZ, n = 64, m = 10) {
   return worst;
 }
 const RIM = 0.01; // the rim tube is a little thicker than the plate
+/** Deepest overlap (mm; > 0 means they cross) between the back of the plate in a pose and the front of the natural lens. Pure. */
+export function iclLensOverlap(pose, n = 64, m = 10) {
+  const { sx = 1, sy = 1, sz = 1, px = 0, dz = 0 } = pose;
+  let worst = -Infinity;
+  for (let i = 0; i <= n; i++) {
+    const x = -HALF_L + (2 * HALF_L * i) / n, h = plateHalfW(x);
+    for (let j = 0; j <= m; j++) {
+      const y = -h + (2 * h * j) / m, r = Math.hypot(sx * x + px, sy * y);
+      if (r >= EYE.lensEqR) continue;
+      worst = Math.max(worst, lensAntZ(r) - (sz * plateBack(x, y) + dz - RIM));
+    }
+  }
+  return worst;
+}
 
 // Unfolded in the front chamber (before it is tucked behind the iris): partly opened along its length, lifted forward.
 export const AC_POSE = { sx: 0.72, dz: 1.05 };

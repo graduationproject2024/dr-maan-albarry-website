@@ -106,7 +106,13 @@ export async function mountEngine(host, def, opts = {}) {
       unobserve = observeVisibility(shell.viewport, (v) => { visible = v; if (v) invalidate(); }, {
         observer: () => {}, listen: (el, type, fn) => track(el, type, fn)
       });
-      if ('ResizeObserver' in window) { ro = new ResizeObserver(() => resize()); ro.observe(shell.viewport); }
+      if ('ResizeObserver' in window) {
+        ro = new ResizeObserver(() => resize());
+        ro.observe(shell.viewport);
+        // the overlaid controls change size on their own too (stage chip text, language, web fonts arriving late):
+        // any change re-measures the free area the cameras frame into
+        for (const sel of ['.ssim-viewtools', '.ssim-chip', '.ssim-details', '.ssim-hint']) { const el = shell.viewport.querySelector(sel); if (el) ro.observe(el); }
+      }
       offs.push(track(canvas, 'webglcontextlost', (e) => { e.preventDefault(); sm.to('error'); shell.setNotice('lost'); }));
       offs.push(track(canvas, 'webglcontextrestored', () => { shell.setNotice(null); sm.to(S.playing ? 'playing' : 'paused'); invalidate(); }));
       resize();
@@ -132,12 +138,22 @@ export async function mountEngine(host, def, opts = {}) {
     const w = Math.max(1, shell.canvasHost.clientWidth), h = Math.max(1, shell.canvasHost.clientHeight);
     ctx.renderer.setSize(w, h, false);
     ctx.camera.aspect = w / h;
-    safe = measureSafe(w, h);
-    // shift the projection centre to the middle of the free area, so a stage's target is not under the tool rail
+    applySafe();
+  }
+  /**
+   * Re-measure the free area (after a resize, and after a stage or language change: the stage chip's text, and so its
+   * size, changes) and shift the projection centre to its middle so a stage's target is not under the controls.
+   */
+  function applySafe() {
+    if (!ctx) return;
+    const w = Math.max(1, shell.canvasHost.clientWidth), h = Math.max(1, shell.canvasHost.clientHeight);
+    const next = measureSafe(w, h);
+    const same = safe.w === next.w && safe.h === next.h && ['l', 'r', 't', 'b'].every((k) => Math.abs(safe.safe[k] - next.safe[k]) < 0.5);
+    safe = next;
     const cx = (safe.safe.l + w - safe.safe.r) / 2, cy = (safe.safe.t + h - safe.safe.b) / 2;
     ctx.camera.setViewOffset(w, h, w / 2 - cx, h / 2 - cy, w, h);
     ctx.camera.updateProjectionMatrix();
-    if (orbit) orbit.refit();
+    if (orbit && !same) orbit.refit();
     invalidate();
   }
   /** Insets (CSS px) of the canvas covered by the view tools (inline end), the stage chip and details button (top) and the hint (bottom). */
@@ -208,8 +224,9 @@ export async function mountEngine(host, def, opts = {}) {
     S.index = i;
     const st = stages[i];
     if (st.section !== undefined) setSection(!!st.section, false);
-    if (st.camera && def.cameras[st.camera]) goToCamera(st.camera, instant);
     shell.update(view());
+    applySafe();
+    if (st.camera && def.cameras[st.camera]) goToCamera(st.camera, instant);
     emit('stage', { index: i, id: st.id });
   }
   function applyTime() {
@@ -375,7 +392,7 @@ export async function mountEngine(host, def, opts = {}) {
       mount: undefined,
       play, pause, resume: play, seek, setStage, reset, setVariant,
       nextStage: () => act('next'), previousStage: () => act('prev'),
-      setLang(l) { S.lang = l === 'en' ? 'en' : 'ar'; shell.setLang(S.lang); shell.update(view()); invalidate(); },
+      setLang(l) { S.lang = l === 'en' ? 'en' : 'ar'; shell.setLang(S.lang); shell.update(view()); applySafe(); invalidate(); },
       setLanguage(l) { this.setLang(l); },
       setTheme(t) { S.theme = t === 'dark' ? 'dark' : 'light'; shell.setTheme(S.theme); if (ctx) ctx.setTheme(S.theme); invalidate(); },
       setQuality(level) {

@@ -41,13 +41,21 @@ Evidence: `evidence/cameras/before/` (192 viewport screenshots, one per procedur
   free ("safe") area, so a preset frames the same subject at every size; `pos` gives the viewing direction only.
   Zoom is limited to 0.45–2.6× the fitted distance (absolute 1.5–140 mm); elevation is kept 0.15 rad off the poles;
   the azimuth is wrapped to ±π (no unbounded spin; transitions already take the short way round, so no flips).
-  `refit()` re-fits a camera that is still on its preset after a resize / rotation / full screen (a visitor's own
-  view is kept). Transitions are unchanged (0.85 s eased, interruptible; instant with reduced motion).
+  `refit()` re-fits a camera that is still on its preset after a resize / rotation / full screen; a visitor's own
+  view keeps its distance, but the zoom limits follow the new fit. Transitions are unchanged (0.85 s eased, interruptible; instant with reduced motion).
 - **`core/engine.js`** — measures the safe area (tool rail at the inline end; chip + details as a top band or a
   start-side column, whichever costs less canvas; the hint at the bottom) and shifts the projection centre
   (`camera.setViewOffset`) to the middle of it, so the target is never under the controls (also in Arabic, where the
   rail is on the left). One `goToCamera()` path for stage cameras, visitor-chosen views, Reset view and Before/After.
-  A seek (paused) and a stage choice always end on that stage's camera (deterministic, whatever the previous view).
+  The free area is re-measured after every resize, stage change and language change (the stage chip's text, and so
+  its size, changes with both) and whenever one of the overlaid controls changes size (a ResizeObserver also watches
+  the tool rail, chip, details button and hint — e.g. web fonts arriving after the first frame), and a camera still on
+  its preset is re-fitted. While the page layout animates after a rotation, the camera re-fits at each step and ends
+  on the same camera a page opened at that size gets (tested).
+  **Camera on seek (chosen behaviour):** while paused, a seek or a stage choice always ends on that stage's camera,
+  whatever the previous view — so scrubbing the timeline while paused also resets a view the visitor had turned or
+  zoomed. While playing, a seek into the same stage keeps the visitor's view; a seek into another stage takes that
+  stage's camera (as normal playback does at each stage change).
   `getState().camera` now also reports `preset`, `stagePreset`, `fit`, `minR`, `maxR`, `userMoved`, `safe`, `view`.
   The unused per-procedure `minR` fields were removed.
 - **Presets** (`procedures/common.js` and each procedure) — every preset now has a `fit`; several targets moved onto
@@ -135,9 +143,14 @@ same fitted path, so the two images match at every viewport (test "Before / Afte
   (`TUCK_POSE` sx 0.5, sy 0.72: every point inside the 7 mm dilated pupil), sinks through the pupil while the iris
   lifts to its resting height, then opens out under the iris, sinking faster than it opens ((1 − c)² ) so the
   footplates also clear the natural lens. Final pose, vault (0.5 mm) and the iris resting height are unchanged.
+- Timing changes in stage "position" (local progress p): plate gathered p 0.05–0.30 (new); sinks p 0.30–0.55
+  (was one combined lower-and-lengthen move over 0.10–0.85); opens out p 0.55–0.90; iris lift **0.35–0.90 → 0.30–0.55**;
+  `placed` (section cut face shown, probe) **0.85 → 0.90**. Stages "insert" and "result" are unchanged.
 - `iclIrisOverlap(pose, pupil, marginZ)` samples the whole plate against the iris back and front surfaces
   (`irisBackAt`, `irisFrontAt`). Worst value over stages 3–5 at 400 samples: −0.046 mm (clear); stage 4 before the
-  fix: +0.120 mm. The probe reports `irisOverlap` for the rendered model.
+  fix: +0.120 mm. The probe reports `irisOverlap` for the rendered model. `iclLensOverlap(pose)` checks the plate's
+  back (footplates included) against the front of the natural lens: clear at every sample of stages 3–5 (worst
+  −0.039 mm, in the opening-out phase).
 - Duplicate removed: `icl.js` carried its own copy of the iris thickness formula to compute the iris front surface;
   `irisFrontAt` is now exported from `anatomy/geometry.js` next to `irisBackAt` and the copy is gone.
 - Register: BUG-SIM-14 → Fixed (this document).
@@ -150,15 +163,22 @@ Added to `tests/surgical-sim.spec.js`:
   technique and stage: camera after a seek from the start equals the camera after a seek from the end with the view
   turned and zoomed; Reset view restores it and clears `userMoved`; Start again returns to stage 1's camera.
 - `camera: zoom and orbit limits hold` — 40× zoom in stops at the relative minimum, 60× zoom out at the maximum,
-  elevation stays 0.15 rad off both poles, a long drag leaves a wrapped azimuth.
-- `camera 390x844 …` and `camera 844x390 …` — every procedure / technique / stage: the target projects to the middle
-  of the free area and the four corners of the stage's subject box project inside it.
-- `camera: Before / After use one fitted camera and keep it when switching`.
-- `ICL: the plate never intersects the iris at any of 200 time samples per stage (pure model)` and
+  elevation stays 0.15 rad off both poles under the keyboard and under eight full-height drags in both directions,
+  the camera's screen-up stays world-up (no flip) and the azimuth stays wrapped.
+- `camera <lang> <size>: every stage keeps its target and its whole subject box clear of the controls` (×5: en
+  390x844, 844x390, 1440x900; ar 390x844, 844x390 with the rail on the other side) — independent of the engine's
+  numbers: the reported free area must not overlap the real DOM boxes of the tool rail, stage chip, details button
+  and hint, must keep ≥ 40 % of each dimension, the target projects to its middle and the four corners of the subject
+  box project inside it.
+- `camera: a resize re-fits a camera still on its preset, keeps a visitor-moved view, and moves the zoom limits`.
+- `camera: seek while playing keeps the visitor's view inside the stage and takes the stage camera in a new stage`.
+- `camera <size>: Before / After show two different moments from one fitted camera` (390x844 and 1440x900; IOL,
+  ICL, transplant).
+- `ICL: the plate never intersects the iris or the natural lens at any of 200 time samples per stage (pure model)` and
   `ICL: no plate/iris intersection while playing through the insertion and tuck (rendered model, 200 samples)`.
 
 Run: `PW_PORT=4711 PRERENDER_PORT=4716 npx playwright test tests/surgical-sim.spec.js tests/procedures.spec.js --workers 2`
-→ **62 passed** (4.9 min, 2 workers, Windows GPU). The new camera + BUG-SIM-14 subset (22 tests incl. the existing camera checks) also passed on its own.
+→ **62 passed** at c43f637. After the review fixes, with `tests/clinical-profile-expansion.spec.js` added to the run: **102 passed** (3.5 min, 2 workers, Windows GPU); the camera + ICL subset (28 tests) passed in 2 further repeat runs.
 
 Evidence capture: `node scripts/camera-shots.mjs http://localhost:4701 <out-dir>` against `npm run build` +
 `npx vite preview --port 4701 --strictPort` (GPU via ANGLE on Windows).

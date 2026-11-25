@@ -72,9 +72,10 @@ export function createOrbit(camera, el, { onChange, reducedMotion = () => false,
   }
   /** After a resize: a camera still on its preset is re-fitted to the new view (a visitor's own view is kept). */
   function refit() {
-    if (!state.preset || state.userMoved) return;
+    if (!state.preset) return;
     const r = resolve(state.preset).r;
-    state.base = r;
+    state.base = r; // zoom limits follow the new fit even when the visitor has moved the view
+    if (state.userMoved) { state.s.r = clampR(state.s.r); apply(); return; }
     if (state.tween) state.tween.to.s.r = r; else { state.s.r = r; apply(); }
   }
   /** Advance a running transition; returns true while the camera is moving. */
