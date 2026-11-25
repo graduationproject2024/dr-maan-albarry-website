@@ -16,17 +16,16 @@ concurrency:
 
 jobs:
   full:
-    # GitHub-hosted runners (Linux and Windows alike) have no GPU, so WebGL runs on a software renderer that needs the
-    # whole CPU: with 2 workers per runner the 3D suites starved each other and timed out (BUG-C01). Six shards, one
-    # worker each: same tests, same assertions and timeouts, no CPU contention. Windows was tried (run 45402597982)
-    # and timed out the same way, so it is not used.
-    name: Full suite shard ${{ matrix.shard }}/6
+    # CPU layer only (tests/layers.mjs). GitHub-hosted runners have no GPU, so the WebGL suites time out on a software
+    # renderer (BUG-C01; runs 45402597982, 45434609356). Owner decision 2026-11-25: the GPU layer runs on a machine with a
+    # real GPU before every release (`npm run test:gpu`, result recorded with the release).
+    name: Full suite (CPU layer) shard ${{ matrix.shard }}/4
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4]
     env:
       CI: 'true'
     steps:
@@ -37,8 +36,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
-      - name: Build and run every test (this shard)
-        run: npm run test:full -- --shard=${{ matrix.shard }}/6 --workers=1
+      - name: Build and run the CPU-layer tests (this shard)
+        run: npm run test:cpu -- --shard=${{ matrix.shard }}/4
       # Before a release a flaky test is a finding: the job fails so that it is looked at, not retried away.
       - name: Test summary (flaky tests fail this run)
         if: always()

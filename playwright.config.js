@@ -1,4 +1,9 @@
 import { defineConfig } from '@playwright/test';
+import { GPU_PATTERNS } from './tests/layers.mjs';
+
+// TEST_LAYER=gpu runs only the WebGL suites, TEST_LAYER=cpu everything else (tests/layers.mjs); unset runs all.
+const layer = process.env.TEST_LAYER;
+const layerFilter = layer === 'gpu' ? { testMatch: GPU_PATTERNS } : layer === 'cpu' ? { testIgnore: GPU_PATTERNS } : {};
 
 // The vision simulator renders continuously with WebGL. Headless Chromium falls back to SwiftShader
 // (software GL), which saturates the main thread and makes every interaction take ~9 s. On Windows we
@@ -13,6 +18,7 @@ const ci = !!process.env.CI;
 export default defineConfig({
   testDir: './tests',
   testMatch: /.*\.spec\.js/,
+  ...layerFilter,
   timeout: 60_000,
   fullyParallel: true,
   // CI (GitHub Actions): `test.only` is an error, a failed test is retried ONCE and then reported as flaky in the run
