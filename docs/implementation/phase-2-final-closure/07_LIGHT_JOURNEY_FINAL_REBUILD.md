@@ -39,17 +39,28 @@ now drawn as an anatomical-atlas plate:
   Paused, hidden tab, off screen or reduced motion → the drawing holds still. The old infinite CSS dash animation
   was removed (so `document.getAnimations()` holds no infinite loops for this module).
 - **Smooth stage changes**: ray segments draw in, the beam and labels fade in, and a gentle camera push-in per step
-  (`.lj-cam`, scale 1.00–1.06, CSS transition 1.8 s) **while the journey plays**. When the visitor pauses or picks a
-  step, the plate eases back to the full view and holds still (so click targets never move under the pointer; the
-  first test run caught exactly that race). The camera is also off under reduced motion and in containers narrower
-  than 560 px (phones).
+  (`.lj-cam`, scale 1.00–1.03, CSS transition 1.8 s) **while the journey plays**. On pause the camera freezes exactly
+  where it is (computed transform pinned, transition off): no drift, nothing moves under the pointer. The camera is
+  off under reduced motion and on phones. The drawn content spans x ≈ 20–1180 of the 1200-unit plate, so a push-in
+  that keeps every part and label inside the frame is at most about 3 %; a test checks every step's camera against
+  the measured content box in both languages.
+- Only the elements shown on the current step are written each frame; the blurred focus glow breathes through
+  `fill-opacity`, not geometry.
+
+### Phone layout (review fix, 2026-11-25)
+Below a 560 px container the drawing switches (live, via ResizeObserver; same elements, morphed) to a tighter, taller
+crop around the eye (viewBox 790 × 530 instead of 1200 × 600, mirrored in Arabic). The scene is drawn at half size and
+closer, with a `//` break mark on the rays to show the distance is shortened; labels move to the top / bottom bands.
+Result at 390 px: drawing ≈ 235 px tall (was ≈ 175), the globe fills ≈ 60 % of the width, active label ≈ 16 px (was
+8–9 px), targets still work (tested), no horizontal overflow at 320 / 390.
 - No new dependency (no GSAP needed); everything is SVG + one rAF loop.
 
 ### Homepage promotional preview (`main.js` `LIGHT_ART`, `style.css`)
 Redrawn in the same language: globe wall, retina and macula, cornea, iris, lens, optic nerve, a cone of light bent at
 the cornea and lens to a focus on the macula, labelled Cornea / Lens / Retina. Light enters from the reading start
-(left in English, right in Arabic). Photon pulses move only under `prefers-reduced-motion: no-preference`. The same
-drawing is the hero art on `/how-vision-works/`.
+(left in English, right in Arabic). Photon pulses move only under `prefers-reduced-motion: no-preference` **and**
+while the drawing is on screen in a visible tab (`.is-live`, set by an IntersectionObserver plus `visibilitychange`
+in `main.js`). The same drawing is the hero art on `/how-vision-works/`; each place has its own gradient id.
 
 ### Accessibility and layout (kept)
 Single `role="img"` SVG with title and full text description; the `aria-live` caption region; ≥ 44 px targets; no
@@ -87,6 +98,18 @@ New tests (no existing test changed):
   choroid, focus, inset; nerve: nerve, sheath, brain, cortex, signal); the refraction highlight appears only on the
   cornea and lens steps; by the vitreous step all 5 beam segments and 25 ray segments are on.
 
+### Review fixes (2026-11-25)
+Same command after the independent review fixes: **95 passed, 0 failed** — `light-journey.spec.js` 31 (24 existing +
+7 new), `first-render.spec.js` 25, `phase1-pages.spec.js` 39. Added:
+- `no drawing writes while paused or under reduced motion` — a MutationObserver on the SVG sees attribute writes
+  while playing, and none at all while paused or when Play is pressed under reduced motion.
+- `the camera keeps every drawn part and label inside the frame on every step` (en, ar) — measures the world and
+  label boxes (far and near) and maps them through every step's camera.
+- `phone layout at 390 px` (en, ar) — compact crop, drawing > 220 px tall, active label ≥ 12 px and inside the
+  drawing, globe ≥ 45 % of the width, break mark present, a tap on the cornea opens its step, wide again at 1024 px.
+- The anatomy test now also requires each element to be displayed with an effective opacity > 0.3.
+The mobile slot reservation (`style.css`) rose 1250 → 1310 px to match the taller phone drawing (+≈ 60 px).
+
 ## Screenshots
 `docs/implementation/phase-2-final-closure/evidence/light-journey/before/` and `.../after/` — 48 each (JPEG q70):
 for 1440 and 390 px × AR / EN × light / dark: the figure on steps 3 (cornea), 6 (lens), 8 (retina), 9 (brain), the whole
@@ -94,9 +117,10 @@ module on step 3, and the homepage preview card. Captured with `node scripts/lig
 against `npm run build` + `npx vite preview --port 4681 --strictPort` (Chromium, ANGLE d3d11).
 
 ## Limitations (honest)
-- On phones (390 px) the 2:1 drawing is still small (~175 px tall); labels are enlarged but the detail is best on
-  tablet / desktop. A portrait crop for phones would need a second layout of the drawing.
+- Phones get the tighter crop, but the fine anatomy (photoreceptor stipple, zonules) is still small at 390 px; the
+  object is drawn closer than in reality there (marked with `//`).
 - Still a schematic, not a rendered 3D eye: the depth comes from gradients and layering in SVG.
-- The camera push-in is deliberately gentle (≤ 1.06) so no part or label leaves the frame at 768 px.
+- The camera push-in is barely perceptible (≤ 3 %), because the plate is already full edge to edge; a stronger
+  push-in would crop the scene or the brain.
 - Medical review of the module remains "pending Dr. Maan" as before; no medical text or claim was added or changed.
 - Screenshots were reviewed by the implementing agent only; the owner has not seen them yet.

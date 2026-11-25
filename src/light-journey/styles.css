@@ -231,9 +231,7 @@
 .lj-svg text { font-family: var(--lj-f-text); font-size: 23px; font-weight: 600; fill: var(--lj-ink); paint-order: stroke; stroke: var(--lj-stage-a); stroke-width: 6px; stroke-linejoin: round; }
 .lj-plate { fill: none; stroke: var(--lj-plate); stroke-width: 1.2; }
 .lj-cam { --lj-cam: none; transform: var(--lj-cam); transition: transform 1.8s cubic-bezier(0.45, 0, 0.2, 1); }
-/* the camera moves only while the journey plays; once the visitor takes control the whole plate holds still,
-   so nothing moves under the pointer */
-.lj:not([data-playing="true"]) .lj-cam { transform: none; }
+/* paused, index.js freezes the camera where it is (inline transition: none), so nothing drifts under the pointer */
 .lj-part { transition: opacity 0.6s ease, filter 0.6s ease; }
 .lj-part:not(.is-active) { opacity: 0.62; }
 .lj-part[data-part="scene"]:not(.is-active) { opacity: 0.78; }
@@ -259,6 +257,7 @@
 .lj-book { fill: var(--lj-book); stroke: var(--lj-book-line); stroke-width: 2; stroke-linejoin: round; }
 .lj-book-lines { fill: none; stroke: var(--lj-book-line); stroke-width: 1.6; stroke-linecap: round; }
 .lj-src { fill: var(--lj-ray); stroke: var(--lj-stage-a); stroke-width: 2; }
+.lj-break { fill: none; stroke: var(--lj-ink-2); stroke-width: 2.5; stroke-linecap: round; }
 .lj-axis { stroke: var(--lj-line-strong); stroke-width: 1.2; stroke-dasharray: 2 7; opacity: 0.45; }
 /* globe wall: sclera (tubular shading), choroid, retina with its photoreceptor layer */
 .lj-sclera { fill: none; stroke-width: 15; }

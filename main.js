@@ -634,8 +634,9 @@ const LENS_LAB_ART = () => {
 // atlas language as the module (2026-11-24): globe wall with retina and macula, cornea, iris, lens, optic nerve, a
 // cone of light bent most at the cornea and finely by the lens to a focus on the macula. Light enters from the
 // reading start (left in English, right in Arabic); photon pulses move only without a reduced-motion preference.
-const LIGHT_ART = () => {
+const LIGHT_ART = (where = 'card') => {
   const ar = currentLang === 'ar';
+  const gid = `la-mac-${where}`; // one drawing per place on a page, so the gradient id stays unique and stable
   const mx = (x) => (ar ? 360 - x : x);
   const O = [16, 78], F = [296, 108];
   const rays = [-2, -1, 0, 1, 2].map((i) => {
@@ -647,13 +648,13 @@ const LIGHT_ART = () => {
   const beam = `${pd([...rays[0], ...rays[4].slice().reverse()])}Z`;
   return `
   <svg class="disc-art light-art" viewBox="0 0 360 210" role="img" aria-label="${tr('رسم: يمر الضوء عبر القرنية والعدسة ويتجمع على الشبكية', 'Diagram: light passes through the cornea and the lens and focuses on the retina')}" focusable="false" direction="ltr" style="direction:ltr">
-    <defs><radialGradient id="la-mac"><stop offset="0" class="la-mac-a"/><stop offset="1" class="la-mac-b"/></radialGradient></defs>
+    <defs><radialGradient id="${gid}"><stop offset="0" class="la-mac-a"/><stop offset="1" class="la-mac-b"/></radialGradient></defs>
     <g${ar ? ' transform="matrix(-1 0 0 1 360 0)"' : ''}>
       <path class="la-nerve" d="M296 116C318 118 338 124 356 130L356 152C338 146 318 140 292 136Z"/>
       <circle class="la-gel" cx="226" cy="105" r="72"/>
       <path class="la-sclera" d="M162 61A78 78 0 1 1 162 149"/>
       <path class="la-retina" d="M254 38A72 72 0 0 1 297 103M296 117A72 72 0 0 1 254 172"/>
-      <ellipse class="la-mac" cx="296" cy="106" rx="7" ry="20" fill="url(#la-mac)"/>
+      <ellipse class="la-mac" cx="296" cy="106" rx="7" ry="20" fill="url(#${gid})"/>
       <path class="la-lens" d="M180 73A12 32 0 0 0 180 137A15 32 0 0 0 180 73Z"/>
       <path class="la-iris" d="M165 66V95M165 115V144"/>
       <path class="la-cornea" d="M158 64A55 55 0 0 0 158 146L163 146A50 50 0 0 1 163 64Z"/>
@@ -1212,7 +1213,7 @@ function renderLightJourneyPage() {
       kicker: tr('رحلة الضوء', 'The light journey'),
       title: tr('كيف ترى العين؟', 'How does the eye see?'),
       lede: tr('يمر الضوء بأربع محطات قبل أن يصبح صورة: القرنية، ثم القزحية والبؤبؤ، ثم العدسة، ثم الشبكية. في كل محطة قد يحدث خلل، ولكل خلل إجراء.', 'Light passes four stations before it becomes an image: the cornea, the iris and pupil, the lens, and the retina. Something can go wrong at each one, and each has its procedure.'),
-      aside: `<figure class="page-hero-art">${LIGHT_ART()}</figure>`
+      aside: `<figure class="page-hero-art">${LIGHT_ART('hero')}</figure>`
     })}
     <section class="section" id="journey" aria-labelledby="journey-title">
       <div class="container">
@@ -2466,7 +2467,23 @@ function observeIntersection() {
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   bindCounters();
+  bindLightArt();
 }
+
+// Light Journey preview (2026-11-25): its photon pulses run only while the drawing is on screen and the tab is
+// visible (.is-live); reduced motion never animates them (style.css).
+let lightArtIO = null;
+function bindLightArt() {
+  if (lightArtIO) { lightArtIO.disconnect(); lightArtIO = null; }
+  const els = document.querySelectorAll('.light-art');
+  if (!els.length || typeof IntersectionObserver !== 'function') return;
+  lightArtIO = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle('is-live', e.isIntersecting && !document.hidden)), { threshold: 0.15 });
+  els.forEach(el => lightArtIO.observe(el));
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) document.querySelectorAll('.light-art.is-live').forEach(el => el.classList.remove('is-live'));
+  else if (lightArtIO) document.querySelectorAll('.light-art').forEach(el => { lightArtIO.unobserve(el); lightArtIO.observe(el); });
+});
 
 // Count-up for the career statistic: runs once per element when it first enters the viewport, eases out and lands
 // exactly on the final value (never overshoots, never repeats). Reduced motion, no IntersectionObserver or a value

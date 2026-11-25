@@ -27,11 +27,29 @@ const DISC = { a: 11.2, b: 21.2 }; // optic disc: degrees below the posterior po
 
 /** Photon pulse pattern along the rays (user units): a dash, then a gap (see .lj-flow in styles.css). */
 export const FLOW = { dash: 9, gap: 61 };
-/** Camera per step: focal point (drawing x, y) and scale. Kept gentle so nothing leaves the frame. */
+/** Camera per step while playing: focal point (drawing x, y) and scale. The drawn content spans about x 20..1180,
+ *  so a push-in that keeps every part and label inside the frame is at most ~3 % (the focal x must stay within
+ *  about 515..685; tests/light-journey.spec.js checks every step against the measured content box). */
 export const CAMERA = [
-  [600, 300, 1.0], [640, 300, 1.05], [640, 300, 1.06], [660, 300, 1.06], [680, 300, 1.06],
-  [720, 300, 1.06], [800, 300, 1.04], [990, 300, 1.06], [600, 300, 1.0]
+  [600, 300, 1.0], [560, 300, 1.025], [560, 300, 1.03], [570, 300, 1.03], [580, 300, 1.03],
+  [600, 300, 1.03], [620, 300, 1.025], [640, 300, 1.03], [640, 300, 1.02]
 ];
+/** Phone layout (containers under 560 px): a tighter, taller crop around the eye, with the scene drawn smaller and
+ *  closer (the distance is marked as shortened on the axis), so the eye fills the width and labels stay legible. */
+export const COMPACT_VB = { x: 400, y: 30, w: 790, h: 530 };
+const OBJ_C = { far: { x: 440, y: 248 }, near: { x: 492, y: 272 } };
+const SCENE_C = { far: [388, 130, 0.5], near: [323, 138, 0.5], sky: [372.4, 27.2, 0.6] }; // translate x, y, scale
+const LABELS_C = {
+  scene: { far: [440, 232, 530, 170], near: [492, 256, 540, 170] },
+  tear: [603, 206, 600, 70],
+  cornea: [566, 262, 600, 70],
+  aqueous: [606, 372, 640, 548],
+  iris: [618, 214, 680, 70],
+  lens: [668, 244, 760, 70],
+  vitreous: [860, 226, 820, 70],
+  retina: [978, 400, 860, 548],
+  nerve: [1070, 366, 960, 548]
+};
 export function cameraTransform(step, lang) {
   const [x0, y, s] = CAMERA[step] || CAMERA[0];
   const x = lang === 'ar' ? VB.w - x0 : x0;
@@ -84,8 +102,8 @@ function irisDetail(light, focus) {
 
 // Illustrative rays: from the object, bent strongly at the cornea and gently by the lens, to a focus on the macula.
 // Each ray is split into stage segments (step indices) so the journey can be revealed step by step.
-export function rays(light, focus) {
-  const ap = PUPIL[light], L = LENS[focus], O = OBJ[focus];
+export function rays(light, focus, O = OBJ[focus]) {
+  const ap = PUPIL[light], L = LENS[focus];
   const out = [];
   for (let i = 0; i < 5; i++) {
     const hc = (i / 2 - 1) * ap * 0.86;
@@ -121,16 +139,19 @@ export const LABELS = {
   iris: [618, 214, 596, 58],
   lens: [668, 244, 720, 58],
   vitreous: [860, 226, 870, 58],
-  retina: [1002, 238, 1068, 214],
+  retina: [1002, 238, 1040, 214],
   nerve: [1070, 366, 1030, 500]
 };
 
-export function svgMarkup({ id, state, lang, labelFor, illustrative }) {
+export function svgMarkup({ id, state, lang, labelFor, illustrative, compact = false }) {
   const mirror = lang === 'ar';
+  const O = (compact ? OBJ_C : OBJ)[state.focus];
+  const tr = (k) => (compact ? `translate(${SCENE_C[k][0]} ${SCENE_C[k][1]}) scale(${SCENE_C[k][2]})` : 'translate(0 0) scale(1)');
+  const vb = compact ? { ...COMPACT_VB, x: mirror ? VB.w - COMPACT_VB.x - COMPACT_VB.w : COMPACT_VB.x } : { x: 0, y: 0, w: VB.w, h: VB.h };
   const mx = (x) => (mirror ? VB.w - x : x);
   const [irisA, irisB] = irisPaths(state.light, state.focus);
   const [detA, detB] = irisDetail(state.light, state.focus);
-  const R = rays(state.light, state.focus);
+  const R = rays(state.light, state.focus, O);
   const ap = PUPIL[state.light];
   const L = LENS[state.focus];
   const arc = (r, a0, s0, a1, s1) => { const [x0, y0] = arcPt(r, a0, s0), [x1, y1] = arcPt(r, a1, s1); return `M${f(x0)},${f(y0)} A${r},${r} 0 0 1 ${f(x1)},${f(y1)}`; };
@@ -180,7 +201,8 @@ export function svgMarkup({ id, state, lang, labelFor, illustrative }) {
     return `<path d="M624,${y(6)} C640,${y(14)} 662,${y(8)} 672,${y(0)} C666,${y(-4)} 662,${y(-9)} 656,${y(-6)} C652,${y(-11)} 646,${y(-10)} 643,${y(-6)} C639,${y(-11)} 633,${y(-10)} 630,${y(-5)} C626,${y(-8)} 623,${y(-3)} 624,${y(6)}Z"/>`;
   }).join('');
   const labelNames = Object.keys(LABELS);
-  const anchor = (part) => (part === 'scene' ? LABELS.scene[state.focus] : LABELS[part]);
+  const LT = compact ? LABELS_C : LABELS;
+  const anchor = (part) => (part === 'scene' ? LT.scene[state.focus] : LT[part]);
   const labels = labelNames.map((part, i) => {
     const P = anchor(part);
     return `<g class="lj-label" data-part="${part}"><line x1="${mx(P[0])}" y1="${P[1]}" x2="${mx(P[2])}" y2="${P[3] + 10}"/><circle cx="${mx(P[0])}" cy="${P[1]}" r="5"/>`
@@ -195,7 +217,7 @@ export function svgMarkup({ id, state, lang, labelFor, illustrative }) {
   const sigA = 'M1008,344 C1048,346 1078,352 1100,358 C1124,362 1146,354 1164,342';
   const sigB = 'M1000,374 C1046,376 1076,382 1100,384 C1128,386 1150,374 1168,358';
   const lg = (name, x1, y1, x2, y2, stops) => `<linearGradient id="${id}-${name}" gradientUnits="userSpaceOnUse" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">${stops.map(([o, c]) => `<stop offset="${o}" class="${c}"/>`).join('')}</linearGradient>`;
-  return `<svg class="lj-svg" viewBox="0 0 ${VB.w} ${VB.h}" role="img" aria-labelledby="${id}-t ${id}-d" focusable="false">
+  return `<svg class="lj-svg" viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" data-layout="${compact ? 'compact' : 'wide'}" role="img" aria-labelledby="${id}-t ${id}-d" focusable="false">
 <title id="${id}-t"></title><desc id="${id}-d"></desc>
 <defs>
 <radialGradient id="${id}-sky" cx="0.5" cy="0.42" r="0.6"><stop offset="0" class="lj-sky-a"/><stop offset="1" class="lj-sky-b"/></radialGradient>
@@ -213,18 +235,19 @@ ${lg('brain', 1110, 296, 1196, 412, [[0, 'lj-brain-a'], [1, 'lj-brain-b']])}
 <filter id="${id}-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
 <clipPath id="${id}-inset"><circle cx="1086" cy="112" r="60"/></clipPath>
 </defs>
-<rect class="lj-plate" x="12" y="12" width="${VB.w - 24}" height="${VB.h - 24}" rx="14"/>
+<rect class="lj-plate" x="${vb.x + 12}" y="${vb.y + 12}" width="${vb.w - 24}" height="${vb.h - 24}" rx="14"/>
 <g class="lj-cam">
 <g class="lj-world"${mirror ? ` transform="matrix(-1 0 0 1 ${VB.w} 0)"` : ''}>
 <g class="lj-part" data-part="scene">
-<ellipse class="lj-sky" cx="210" cy="236" rx="190" ry="196" fill="url(#${id}-sky)"/>
-<g class="lj-sun" data-light="bright"><circle cx="96" cy="88" r="62" fill="url(#${id}-sunglow)"/>${sun}<circle class="lj-sun-disc" cx="96" cy="88" r="20"/></g>
-<g class="lj-moon" data-light="dim"><path d="M108,68 A24,24 0 1 0 108,112 A18,18 0 1 1 108,68Z"/><circle class="lj-star" cx="170" cy="70" r="2.2"/><circle class="lj-star" cx="52" cy="150" r="1.8"/><circle class="lj-star" cx="204" cy="122" r="1.6"/></g>
-<line class="lj-ground" x1="24" y1="372" x2="396" y2="372"/>
-<g class="lj-obj" data-focus="far"><ellipse class="lj-shadow" cx="106" cy="373" rx="46" ry="5"/><path class="lj-trunk" d="M99,372 L101,318 C101,306 96,298 92,292 L98,292 C102,298 104,302 105,306 C107,298 112,292 118,288 L121,292 C114,298 110,306 110,318 L111,372Z"/><path class="lj-canopy" d="M104,232 C140,232 156,262 150,286 C164,300 150,330 124,326 C112,338 88,336 82,324 C56,326 46,296 62,284 C56,256 76,232 104,232Z"/><path class="lj-canopy-hi" d="M98,240 C118,236 134,248 136,262 C124,256 110,256 98,262 C84,268 74,280 70,290 C64,270 76,246 98,240Z"/><circle class="lj-src" cx="104" cy="236" r="5"/></g>
-<g class="lj-obj" data-focus="near"><ellipse class="lj-shadow" cx="338" cy="352" rx="44" ry="5"/><path class="lj-book" d="M300,300 Q338,284 338,268 Q338,284 376,300 L376,346 Q338,330 338,316 Q338,330 300,346Z"/><path class="lj-book-lines" d="M310,306 Q328,298 333,290 M310,318 Q328,310 333,302 M310,330 Q328,322 333,314 M366,306 Q348,298 343,290 M366,318 Q348,310 343,302 M366,330 Q348,322 343,314"/><circle class="lj-src" cx="338" cy="268" r="5"/></g>
+<ellipse class="lj-sky" cx="${compact ? 452 : 210}" cy="${compact ? 210 : 236}" rx="${compact ? 48 : 190}" ry="${compact ? 150 : 196}" fill="url(#${id}-sky)"/>
+<g class="lj-sun" data-light="bright" transform="${tr('sky')}"><circle cx="96" cy="88" r="62" fill="url(#${id}-sunglow)"/>${sun}<circle class="lj-sun-disc" cx="96" cy="88" r="20"/></g>
+<g class="lj-moon" data-light="dim" transform="${tr('sky')}"><path d="M108,68 A24,24 0 1 0 108,112 A18,18 0 1 1 108,68Z"/><circle class="lj-star" cx="170" cy="70" r="2.2"/><circle class="lj-star" cx="52" cy="150" r="1.8"/><circle class="lj-star" cx="204" cy="122" r="1.6"/></g>
+<line class="lj-ground" x1="${compact ? 404 : 24}" y1="${compact ? 318 : 372}" x2="${compact ? 520 : 396}" y2="${compact ? 318 : 372}"/>
+<path class="lj-break" d="${compact ? `M${O.x + 34},${CY - 14} l-8,28 M${O.x + 42},${CY - 14} l-8,28` : `M${O.x},${O.y}`}"/>
+<g class="lj-obj" data-focus="far" transform="${tr('far')}"><ellipse class="lj-shadow" cx="106" cy="373" rx="46" ry="5"/><path class="lj-trunk" d="M99,372 L101,318 C101,306 96,298 92,292 L98,292 C102,298 104,302 105,306 C107,298 112,292 118,288 L121,292 C114,298 110,306 110,318 L111,372Z"/><path class="lj-canopy" d="M104,232 C140,232 156,262 150,286 C164,300 150,330 124,326 C112,338 88,336 82,324 C56,326 46,296 62,284 C56,256 76,232 104,232Z"/><path class="lj-canopy-hi" d="M98,240 C118,236 134,248 136,262 C124,256 110,256 98,262 C84,268 74,280 70,290 C64,270 76,246 98,240Z"/><circle class="lj-src" cx="104" cy="236" r="5"/></g>
+<g class="lj-obj" data-focus="near" transform="${tr('near')}"><ellipse class="lj-shadow" cx="338" cy="352" rx="44" ry="5"/><path class="lj-book" d="M300,300 Q338,284 338,268 Q338,284 376,300 L376,346 Q338,330 338,316 Q338,330 300,346Z"/><path class="lj-book-lines" d="M310,306 Q328,298 333,290 M310,318 Q328,310 333,302 M310,330 Q328,322 333,314 M366,306 Q348,298 343,290 M366,318 Q348,310 343,302 M366,330 Q348,322 343,314"/><circle class="lj-src" cx="338" cy="268" r="5"/></g>
 </g>
-<line class="lj-axis" x1="40" y1="${CY}" x2="${CX + R_OUT + 8}" y2="${CY}"/>
+<line class="lj-axis" x1="${compact ? 404 : 40}" y1="${CY}" x2="${CX + R_OUT + 8}" y2="${CY}"/>
 <g class="lj-part" data-part="vitreous"><circle class="lj-vitreous" cx="${CX}" cy="${CY}" r="${R_RET - 3}" fill="url(#${id}-gel)"/><circle class="lj-vit-shade" cx="${CX}" cy="${CY}" r="${R_RET - 3}" fill="url(#${id}-shade)"/>
 <path class="lj-vit-fibres" d="M712,206 C790,194 866,212 934,204 M704,394 C780,406 864,390 938,398 M724,246 C800,236 880,254 958,246 M728,356 C806,366 884,348 956,356"/></g>
 <g class="lj-part" data-part="nerve">
@@ -278,9 +301,9 @@ ${blocked}${blockedEnds}${rayPaths}
 <circle class="lj-inset-ring2" cx="1086" cy="112" r="66"/>
 </g>
 <g class="lj-hits">
-<rect data-hit="scene" x="20" y="40" width="${state.focus === 'near' ? 400 : 340}" height="350" rx="20"/>
+<rect data-hit="scene" x="${compact ? 404 : 20}" y="40" width="${compact ? 140 : state.focus === 'near' ? 400 : 340}" height="${compact ? 290 : 350}" rx="20"/>
 <circle data-hit="vitreous" cx="860" cy="300" r="125"/>
-<path data-hit="nerve" d="M1010,318 L1108,290 L1200,290 L1200,420 L1010,404Z"/>
+<path data-hit="nerve" d="M1010,318 L1108,290 L1180,290 L1180,420 L1010,404Z"/>
 <path data-hit="retina" class="lj-hit-line" d="${retinaD}"/>
 <path data-hit="lens" d="${lensPath(state.focus)}"/>
 <path data-hit="aqueous" d="${aqueousD}"/>

@@ -672,7 +672,8 @@ html.dialog-open { overflow: hidden; }
 .light-art .la-labels path { stroke: color-mix(in srgb, currentColor 55%, transparent); stroke-width: 1; fill: none; }
 .light-art .la-labels text { fill: var(--ink); font-size: 14px; }
 @media (prefers-reduced-motion: no-preference) {
-  .light-art .la-flow path { opacity: .95; animation: la-flow 2.2s linear infinite; }
+  .light-art .la-flow path { opacity: .95; }
+  .light-art.is-live .la-flow path { animation: la-flow 2.2s linear infinite; }
   @keyframes la-flow { to { stroke-dashoffset: -60; } }
 }
 .disc-body { display: grid; gap: 6px; justify-items: start; }
@@ -1071,7 +1072,7 @@ html.dialog-open { overflow: hidden; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--r-3); background: linear-gradient(90deg, var(--paper-2), var(--paper), var(--paper-2)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
 .feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
 .feature-light-journey .feature-slot[data-reserve] { min-height: 1200px; } /* measured 1,195–1,290 px mounted (final stabilization) */
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 1250px; } }
+@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 1310px; } } /* +60 px: phone crop of the Light Journey drawing (2026-11-25) */
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--alert-line); background: var(--alert-bg); color: var(--alert-ink); }

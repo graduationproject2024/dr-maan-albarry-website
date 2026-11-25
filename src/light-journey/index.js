@@ -119,6 +119,7 @@ class LightJourney {
     if (user) P.userPaused = false;
     if (P.done || (this.state.step === STEPS.length - 1 && P.elapsed >= STEP_MS)) { P.done = false; P.elapsed = 0; this.goTo(0, { keepTime: true }); }
     P.playing = true; P.wasPlaying = true; P.last = performance.now();
+    this.syncCamera();
     const tick = (now) => {
       if (!P.playing) return;
       const dt = Math.min(250, now - P.last) * P.speed;
@@ -140,7 +141,21 @@ class LightJourney {
     if (user) { P.userPaused = true; P.wasPlaying = false; }
     if (!P.playing) { this.syncPlayback(); return; }
     P.playing = false; cancelAnimationFrame(P.raf); P.raf = 0;
+    this.syncCamera();
     this.syncPlayback(); this.emit('change', this.getState());
+  }
+  /** Camera: eases between steps while playing; paused, it holds exactly where it is (no drift, no transition). */
+  syncCamera() {
+    const cam = this.root && this.$('.lj-cam');
+    if (!cam) return;
+    if (this.play_.playing) {
+      cam.style.removeProperty('transition');
+      cam.style.setProperty('--lj-cam', cameraTransform(this.state.step, this.lang));
+    } else {
+      const now = getComputedStyle(cam).transform;
+      cam.style.transition = 'none';
+      cam.style.setProperty('--lj-cam', now && now !== 'none' ? now : 'none');
+    }
   }
   /** Stop for a reason that is not the visitor's (off screen, hidden tab); resumes when it is back. */
   halt() { const was = this.play_.playing; this.pause(false); this.play_.wasPlaying = was || this.play_.wasPlaying; }
@@ -160,16 +175,26 @@ class LightJourney {
     M.t += dt / 1000;
     const period = FLOW.dash + FLOW.gap;
     const shift = (M.t * 110) % period; // photons: 110 drawing units per second
-    for (const x of M.flows) x.el.setAttribute('stroke-dashoffset', (x.base - shift).toFixed(1));
+    // only the elements shown on the current step are written (refreshMotion keeps the lists current)
+    for (const x of M.flowsOn) x.el.setAttribute('stroke-dashoffset', (x.base - shift).toFixed(1));
     const sp = (M.t * 0.45) % 1; // nerve signal: one pattern length per ~2 s
-    for (const x of M.pulses) x.el.setAttribute('stroke-dashoffset', (x.base - sp).toFixed(3));
-    if (M.glow) M.glow.setAttribute('r', (16 + 3 * Math.sin(M.t * 4)).toFixed(2));
+    for (const x of M.pulsesOn) x.el.setAttribute('stroke-dashoffset', (x.base - sp).toFixed(3));
+    // the blurred focus glow breathes through fill-opacity (cheap), never through its geometry
+    if (M.glowOn) M.glow.setAttribute('fill-opacity', (0.78 + 0.22 * Math.sin(M.t * 4)).toFixed(3));
   }
   cacheMotion() {
     const fig = this.$('.lj-figure');
     const list = (sel) => [...fig.querySelectorAll(sel)].map((el) => ({ el, base: Number(el.dataset.base) || 0 }));
-    this.motion = { t: this.motion ? this.motion.t : 0, flows: list('.lj-flow'), pulses: list('.lj-signal, .lj-pulse'), glow: fig.querySelector('.lj-focus-glow') };
-    if (this.motion.t) this.motionFrame(0);
+    this.motion = { t: this.motion ? this.motion.t : 0, flows: list('.lj-flow'), pulses: list('.lj-signal, .lj-pulse'), glow: fig.querySelector('.lj-focus-glow'), flowsOn: [], pulsesOn: [], glowOn: false };
+    this.refreshMotion();
+  }
+  refreshMotion() {
+    const M = this.motion;
+    if (!M) return;
+    const on = (x) => x.el.classList.contains('is-on');
+    M.flowsOn = M.flows.filter(on); M.pulsesOn = M.pulses.filter(on);
+    M.glowOn = !!(M.glow && M.glow.classList.contains('is-on'));
+    if (M.t) this.motionFrame(0); // newly shown pulses join the stream where it is
   }
 
   setSpeed(v) { const n = Number(v); if (SPEEDS.includes(n)) { this.play_.speed = n; this.syncPlayback(); this.emit('change', this.getState()); } }
@@ -256,17 +281,34 @@ class LightJourney {
     this.root = root;
     this.$ = (sel) => root.querySelector(sel);
     this.host.appendChild(root);
+    this.compact = this.isCompact();
     this.renderFigure();
+    // phone layout (2026-11-25): a tighter, taller crop below a 560 px container, switched live on resize
+    if (typeof ResizeObserver === 'function') {
+      const ro = new ResizeObserver(() => {
+        const c = this.isCompact();
+        if (c === this.compact || !this.root) return;
+        this.compact = c; this.renderFigure(); this.update({ announce: false });
+      });
+      ro.observe(root);
+      this.disposers.push(() => ro.disconnect());
+    }
     this.wire();
     this.applyMotion();
     this.update({ announce: false });
     this.syncPlayback();
   }
 
+  /** Same breakpoint as the stylesheet's small-container rules: the .lj content box under 560 px. */
+  isCompact() {
+    const r = this.root, cs = getComputedStyle(r);
+    return r.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0) < 560;
+  }
+
   renderFigure() {
     const t = UI[this.lang];
     const fig = this.$('.lj-figure');
-    const markup = svgMarkup({ id: this.id, state: this.state, lang: this.lang, illustrative: esc(t.illustrative), labelFor: (part) => esc(STEPS.find((s) => s.part === part)[this.lang].name) });
+    const markup = svgMarkup({ id: this.id, state: this.state, lang: this.lang, illustrative: esc(t.illustrative), compact: !!this.compact, labelFor: (part) => esc(STEPS.find((s) => s.part === part)[this.lang].name) });
     const old = fig.firstElementChild;
     if (!old) { fig.innerHTML = markup; this.cacheMotion(); return; }
     // morph geometry in place so pupil and lens changes can transition
@@ -337,12 +379,13 @@ class LightJourney {
     const r = this.root;
     r.dataset.step = s.id; r.dataset.light = this.state.light; r.dataset.focus = this.state.focus;
     // diagram
-    const cam = this.$('.lj-cam'); if (cam) cam.style.setProperty('--lj-cam', cameraTransform(step, this.lang));
     r.querySelectorAll('.lj-part, .lj-label').forEach((el) => el.classList.toggle('is-active', el.dataset.part === s.part));
     r.querySelectorAll('[data-stage]').forEach((el) => {
       const on = el.dataset.only ? +el.dataset.only === step : +el.dataset.stage <= step;
       el.classList.toggle('is-on', on);
     });
+    this.refreshMotion();
+    if (this.play_.playing) this.syncCamera();
     r.querySelectorAll('.lj-obj').forEach((el) => el.classList.toggle('is-on', el.dataset.focus === this.state.focus));
     r.querySelectorAll('.lj-sun, .lj-moon').forEach((el) => el.classList.toggle('is-on', el.dataset.light === this.state.light));
     this.$(`#${this.id}-t`).textContent = t.diagram;
@@ -407,6 +450,7 @@ class LightJourney {
     this.teardownDom();
     for (const d of this.persistent.splice(0)) d();
     this.events.clear();
+    this.motion = null;
     this.destroyed = true;
     instances.delete(this.host);
     counters.destroys++; counters.live--;
@@ -415,11 +459,11 @@ class LightJourney {
 
 // Copy geometry attributes from a freshly rendered SVG onto the live one (same structure), so CSS transitions on
 // `d` and positions can animate between states.
-const GEOM = ['data-base', 'd', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height', 'transform', 'text-anchor'];
+const GEOM = ['viewBox', 'data-layout', 'data-base', 'd', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height', 'transform', 'text-anchor'];
 function morph(a, b) {
   if (!a || !b || a.tagName !== b.tagName) return;
   for (const k of GEOM) { const v = b.getAttribute(k); if (v !== null && a.getAttribute(k) !== v) a.setAttribute(k, v); }
-  if (a.tagName === 'text') a.textContent = b.textContent;
+  if (a.tagName === 'text' && !b.children.length) a.textContent = b.textContent; // keep the numbered <tspan>
   const ac = a.children, bc = b.children;
   for (let i = 0; i < Math.min(ac.length, bc.length); i++) morph(ac[i], bc[i]);
 }
