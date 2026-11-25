@@ -18,6 +18,11 @@
 //   • setLang / setTheme are forwarded; leaving the page destroys the module.
 // ============================================================
 
+import { withTimeout, recoverStaleBuild } from './chunk-recovery.js';
+
+/** A module that has not arrived after this long ends in the retry message instead of an endless loading state. */
+const LOAD_TIMEOUT_MS = 20000;
+
 const MODULES = import.meta.glob(['./lens-lab/index.js', './light-journey/index.js']);
 
 export const FEATURE_PATHS = {
@@ -76,7 +81,7 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
     st.loading = true; mark();
     const token = ++st.token;
     try {
-      const mod = await load(key);
+      const mod = await withTimeout(load(key), LOAD_TIMEOUT_MS);
       if (token !== st.token || !st.host || !st.host.isConnected) return; // visitor left the page while it loaded
       st.host.innerHTML = '';
       const ctrl = await mod.mount(st.host, options());
@@ -88,9 +93,11 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
       const s = slot();
       if (s) s.removeAttribute('data-reserve'); // the module now sizes itself
     } catch (err) {
+      if (token !== st.token) return;
       console.warn(`${key} failed to load`, err);
-      showError();
-    } finally { st.loading = false; mark(); }
+      if (await recoverStaleBuild(err)) return; // stale tab after a deploy: one reload brings the current build
+      if (token === st.token) showError();
+    } finally { if (token === st.token) st.loading = false; mark(); }
   }
 
   return {
