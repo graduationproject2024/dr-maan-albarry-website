@@ -28,3 +28,11 @@ Updated: 2026-11-24. Branch `feat/phase-2-final-closure` (from main `4e55b40`), 
 
 ## External (cannot be done by engineering)
 Device photos, gallery photos, "first" claim evidence, EDOF year, dropless paper, 25,000+ attribution, association name, D-1…D-14, physician review, domain purchase, scope of cards #7/#8/#9.
+
+## Update 2026-11-25
+- All four rebuilds reviewed (Sonnet cross-model) and merged: ICL `5d249c0`, Light Journey `82e51f3`, Lens Lab `ad66ec0`, cameras `412c1a4`.
+- Fixes found by full runs: Lens Lab section order + restore loads pending modules (`90dcb94`), focus in fade-in blocks, journey test drift (`ffed997`), CodeQL (`c65c548`, clinical-queue).
+- Full GPU suite at `90dcb94`: 914 passed, 0 failed (19).
+- Security: all scanners run, findings fixed (15).
+- Trello: 5 cards closed with evidence (21); titles corrected.
+- Next: GitHub full regression 45635244805 (Linux `lj-label` width); decide CI GPU layer (owner); performance re-measure (17); device QA (18, needs owner OK for BrowserStack); physician review package (14); final acceptance audit; owner OK to merge PR #6 / deploy.
