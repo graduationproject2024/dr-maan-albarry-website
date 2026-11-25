@@ -1,0 +1,37 @@
+# Clinical review package for Dr. Maan (2026-11-25)
+
+One list of everything that needs a physician decision. Nothing here is marked approved; no approval has been recorded.
+The owner reports Dr. Maan approved the **previously supplied information**; that approval is respected and not re-asked.
+Items below are new or changed medical representations, or long-open questions. Answer per item: **OK / change (how) / remove**.
+
+## A. New in this pass (2026-11-24/25)
+| ID | Item | Where to look | Question |
+|---|---|---|---|
+| N-01 | ICL plate rebuilt (one sagittal section, opaque fluids) | `evidence/icl/after/` (hero, card, close-up, AR/EN) | Is the ~0.5 mm vault the right "ideal" to show? Plate drawn 2× real thickness (0.2 mm) for phones — acceptable? Implant half-length 5.3 mm (simulator uses 5.6 mm sulcus) — acceptable? Footplates in the sulcus, iris resting on the implant — acceptable? |
+| N-02 | ICL labels (AR/EN): "Implanted lens (ICL), behind the iris", "Small clear gap above the natural lens (vault)", "Your natural lens, which stays" | same | Wording OK? |
+| N-03 | ICL 3D tuck: plate gathered to pass the pupil, sinks, opens out under the iris (BUG-SIM-14 fix) | `evidence/cameras/after/_sheet-icl-*.jpg` | Acceptable simplification of tucking one footplate at a time? |
+| N-04 | Femto-LASIK lift: flap hinged superiorly, folded forward | `evidence/cameras/after/_sheet-laser-*` | Hinge position and lift angle OK? |
+| N-05 | Corneal transplant section view centred between apex and graft edge (PK/DALK/EK) | `evidence/cameras/after/_sheet-corneal-transplant-*` | Framing shows the graft correctly? |
+| N-06 | Injection entry view shows the whole needle path; entry point illustrative pars plana | `evidence/cameras/after/_sheet-intravitreal-*` | Entry point OK? (same as R-09) |
+| N-07 | Light Journey drawing rebuilt (cornea ~2/3 of refraction, inverted image on the macula, nerve signal to visual cortex); on phones the object is drawn closer with a `//` break | `evidence/light-journey/after/` | Anatomy and light path OK for patient education? |
+| N-08 | Lens Lab street scene (day/dim/night, palm boulevard, laptop, phone in hand); optics model unchanged | `evidence/lens-lab/after/` | Does any scene make a lens look better or worse than the model says? |
+
+## B. Earlier open items (still pending)
+| ID | Model | Question |
+|---|---|---|
+| R-01 | `ssim-iol` | Two-stage summary of cataract removal; EDOF / multifocal ring drawings as illustration |
+| R-02 | `ssim-icl` | Insertion and positioning sequence; 0.5 mm vault (see N-01/N-03) |
+| R-03 | `ssim-laser` LASIK | Hinge position and flap reflection angle (see N-04) |
+| R-04 | `ssim-laser` PRK | Wording of the regrowth stage |
+| R-05 | `ssim-laser` SMILE | Position of the opening (superior) |
+| R-06 | `ssim-cxl` keratoconus | Exaggerated inferior cone with a note — acceptable? |
+| R-07 | `ssim-cxl` CXL | Show epithelium-off or epithelium-on? (clinic decision) |
+| R-08 | `ssim-kpl` PK / DALK / EK | Show the EK air bubble absorbing? Stitch ring with no stated count? |
+| R-09 | `ssim-ivt` | Injection site drawn; "affected area" wording |
+| C-* | Cataract 3D simulator stages, vision simulator 51 presets, anatomical plates | Review tools: `cataract-sim-preview.html?review=1`, `vision-sim-preview.html?review=1` (harness build). Card #22. |
+
+## C. Content facts awaiting confirmation (card #32)
+EDOF year 2010 (first EDOF CE mark 2014); dropless-surgery paper citation; 25,000+ = operations he performed himself?; name of the association he first presided; evidence for each "first in Madinah / KSA" claim (shown as "since 2010" until then); new dry-eye guidance text.
+
+## How to record a decision
+Reply per ID (e.g. "N-01 OK; N-04 hinge nasal"). Decisions are recorded with date and reviewer in the review tools / `release-status.json`; the site never shows "physician-approved" without that record.
