@@ -1199,8 +1199,6 @@ function renderLensLabPage() {
         ${featureBlock({ key: 'lens-lab', hostAttr: 'data-lens-lab-host', slotId: 'lens-lab-host', staticHtml: summary, name: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab') })}
       </div>
     </section>
-    ${/* After the comparison, not between it and the simulator it drives: placed in between (2026-11-23) it pushed the
-        simulator out of its lazy-mount distance, so a #lab bookmark never loaded it. */ ''}
     ${renderOcularSurface()}
     ${renderClosing('lens-lab')}`;
 }
@@ -2261,6 +2259,13 @@ function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
   inputs.forEach(t => window.addEventListener(t, stop, { capture: true, passive: true }));
   const timer = setTimeout(stop, 20000);
   releaseScrollHold = stop;
+  // A restored position below a module that has not mounted is out of reach while the page is short (a module's reserve
+  // is smaller than the module): load the modules now instead of when they near the clamped viewport, which never
+  // happens when a section sits between them and the target (BUG-FS-01; Lens Lab with the eye-surface section).
+  // One frame later, so the current render's module slots are attached on a first load too.
+  if (restoreY != null) requestAnimationFrame(() => {
+    if (restoringY === restoreY && document.documentElement.scrollHeight - window.innerHeight < restoreY - 2) { lensLab.mountNow(); lightJourney.mountNow(); }
+  });
 }
 /** Where the page must be scrolled to show a section just below the fixed header. */
 // On phones (and short landscape screens) a jump to the simulator lands on the workbench itself, not on the section title

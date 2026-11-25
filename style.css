@@ -1260,6 +1260,9 @@ html.dialog-open { overflow: hidden; }
    25. MOTION — one fade-rise reveal, once (≤0.6 s desktop, ≤0.35 s phones); no scroll-jacking, no parallax
    ------------------------------------------------------------ */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+/* Keyboard focus reveals at once: the browser scrolls a focused link into view at its offset (+16 px) position, so a
+   rising block could finish under the booking bar (WCAG 2.4.11; technical-fixes "focus never hidden", 390x844 /en/). */
+.fade-in:focus-within { opacity: 1; transform: none; transition: none; }
 .fade-in.visible { opacity: 1; transform: none; }
 @media (max-width: 767px) { :root { --dur-reveal: .35s; } .fade-in { transform: translateY(10px); } }
 /* GSAP motion layer (src/motion): a group whose items are revealed one after another is itself shown at once; its

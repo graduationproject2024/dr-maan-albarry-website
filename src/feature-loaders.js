@@ -127,6 +127,13 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
       st.io.observe(s);
       mark();
     },
+    /** Load now instead of waiting for the slot to near the viewport: a restored reading position below a slot that has
+     *  not mounted cannot be reached until the page has its real height (BUG-FS-01). No-op once loading or mounted. */
+    mountNow() {
+      if (!st.io) return;
+      st.io.disconnect(); st.io = null;
+      load_();
+    },
     setTheme(theme) { if (st.ctrl && st.ctrl.setTheme) { try { st.ctrl.setTheme(theme); } catch (e) { /* ignore */ } } },
     setLang(lang) { if (st.ctrl && st.ctrl.setLang) { try { st.ctrl.setLang(lang); } catch (e) { /* ignore */ } } },
     destroy() {
