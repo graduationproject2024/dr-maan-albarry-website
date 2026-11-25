@@ -197,7 +197,35 @@ test.describe('F6 · slow or stalled network', () => {
   });
 });
 
+test.describe('F6b · stalled chunk AND stalled HTML check', () => {
+  test.use(phone);
+  test('the stale-build check gives up on its own: the retry message still appears', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.route(VS_CHUNK, () => { /* never answered: a stalled connection */ });
+    await page.route(/\/en\/lens-lab\/(\?.*)?$/, (r) => (r.request().resourceType() === 'fetch' ? undefined : r.continue())); // the HTML check stalls too
+    await page.goto('/en/lens-lab/');
+    await page.locator(H).scrollIntoViewIfNeeded();
+    // 20 s chunk timeout + at most ~4 s for the HTML check, then the retry message (never an endless "Loading")
+    const err = page.locator(`${H} .vsim-load-error`);
+    await expect(err).toBeVisible({ timeout: 40_000 });
+    await expect(err.locator('button')).toBeVisible();
+  });
+});
+
 test.describe('lens categories change the rendered picture', () => {
+  test('near-layer defocus is intact: the phone at 40 cm is clearly blurred for a far-set monofocal', async ({ page }) => {
+    await openHarness(page, 'lang=en&d=6');
+    const PHONE = { x: 0.66, y: 0.05, w: 0.18, h: 0.38 }; // drawing-buffer fractions, origin bottom-left (whole scene)
+    const edge = {};
+    for (const lens of ['monofocal', 'trifocal']) {
+      await page.evaluate((l) => window.__vsim.setLens(l), lens);
+      edge[lens] = (await page.evaluate((r) => window.__visionSim.sample(r), PHONE)).edgeEnergy;
+    }
+    // measured 2026-11-25 (1280×720 harness, ANGLE/D3D11): monofocal 1.27, trifocal 1.84 → ratio 0.69
+    expect(edge.monofocal, JSON.stringify(edge)).toBeLessThan(edge.trifocal * 0.75);
+    expect(edge.monofocal, 'absolute bound: 2.5 D of defocus must stay visibly blurred').toBeLessThan(1.45);
+  });
+
   test('all five categories render differently; toric corrects the astigmatism the others keep', async ({ page }) => {
     await openHarness(page, 'lang=en&cyl=1.5&axis=90&d=0.65');
     const stats = {};

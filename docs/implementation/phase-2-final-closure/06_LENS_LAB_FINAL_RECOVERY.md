@@ -89,8 +89,8 @@ intermediate, far; day, dim, night; More settings open; the Lens Lab A/B compari
 
 `PW_PORT=4731 PRERENDER_PORT=4736 npx playwright test tests/lens-lab.spec.js tests/lens-lab-mobile.spec.js
 tests/lens-lab-distance.spec.js tests/vision-sim.spec.js tests/vision-optics.spec.js tests/vision-review.spec.js
-tests/first-render.spec.js tests/lens-lab-recovery.spec.js --workers 2` — **208 passed, 0 failed** (5.1 min, Windows,
-Chromium on the GPU via ANGLE/D3D11). 198 existing tests unchanged + 10 new recovery / pixel tests.
+tests/first-render.spec.js tests/lens-lab-recovery.spec.js --workers 2` — **210 passed, 0 failed** after the review fixes (7.8 min, Windows,
+Chromium on the GPU via ANGLE/D3D11). 198 existing tests unchanged + 12 new recovery / pixel tests.
 
 Two issues found and fixed during verification: (1) the near layer's lights had become its first child, which broke
 the closer-view framing (`targetBox` reads `near.children[0]`) — lights are now added after the phone; (2) the existing
@@ -99,6 +99,18 @@ test "the closer view is the same picture seen closer" measures contrast inside 
 feature that makes the measure robust (0.746). No test was edited to pass.
 
 The ocular-surface section placement is untouched by this change (main.js only changes `loadVisionSim`).
+
+## Review fixes (independent review of 3fc3655)
+
+1. **The stale-build check could wait on the stalled network itself.** `serverEntry()` now aborts its no-store HTML fetch
+   after 4 s (AbortController + timeout on the body read) and treats it as "cannot tell", so the retry message always
+   follows. New test F6b: the chunk AND the HTML check both hang → the retry message appears (≈ 24 s).
+2. **Cross-fade pop on rapid changes.** The output stage now keeps three 8-bit targets (current, previous, spare). A
+   change during a fade freezes the blended frame on screen as the new starting point, so a quick second change
+   continues smoothly; a change before any new frame was drawn lets the running fade continue (no restart).
+3. Shop-fascia lettering enlarged (22 → 30 px bold on the 512 px texture).
+4. New absolute near-defocus check: with the eye set for far, the 40 cm phone under a monofocal stays below a fixed
+   edge-energy bound (1.45; measured 1.27) and below 0.75 × the trifocal value (measured ratio 0.69).
 
 ## Gaps
 

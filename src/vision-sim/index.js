@@ -530,7 +530,8 @@ class VisionSimulator {
   /** Start a short cross-fade from the view on screen to the next one (display only; none with reduced motion). */
   fade() {
     if (this.reduced || this.reviewMode || !this.pipe || this.status !== 'ready') return;
-    if (this.pipe.holdFrame() || this.fadeStart != null) this.fadeStart = performance.now();
+    // nothing drawn since the last change: the running fade simply continues towards the newest view
+    if (this.pipe.holdFrame()) this.fadeStart = performance.now();
   }
   changed(what, announce) {
     if (['lens', 'lensB', 'compare', 'distance', 'lighting', 'scenario', 'refraction', 'reset', 'closeUp'].includes(what)) this.fade();

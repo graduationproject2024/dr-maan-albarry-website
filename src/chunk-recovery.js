@@ -9,6 +9,8 @@
 
 const ENTRY_RE = /\/assets\/index-[\w-]+\.js/;
 const GUARD_KEY = 'stale-build-reload';
+/** The HTML check must not wait on the same stalled connection that made the chunk fail: give up after this. */
+const CHECK_TIMEOUT_MS = 4000;
 
 /** True for the errors browsers / Vite raise when a script or CSS chunk cannot be fetched or evaluated. */
 export function isChunkError(err) {
@@ -34,12 +36,14 @@ function currentEntry() {
 
 /** The entry script the server now sends for this page, or null when it cannot tell (offline, no match). */
 export async function serverEntry() {
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const id = setTimeout(() => ctl && ctl.abort(), CHECK_TIMEOUT_MS);
   try {
-    const res = await fetch(location.pathname + location.search, { cache: 'no-store', credentials: 'same-origin' });
+    const res = await withTimeout(fetch(location.pathname + location.search, { cache: 'no-store', credentials: 'same-origin', signal: ctl ? ctl.signal : undefined }), CHECK_TIMEOUT_MS + 100);
     if (!res.ok) return null;
-    const m = (await res.text()).match(ENTRY_RE);
+    const m = (await withTimeout(res.text(), CHECK_TIMEOUT_MS)).match(ENTRY_RE);
     return m ? m[0] : null;
-  } catch { return null; }
+  } catch { return null; } finally { clearTimeout(id); }
 }
 
 /**

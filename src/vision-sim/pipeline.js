@@ -66,7 +66,7 @@ void main(){
   gl_FragColor = vec4(col, 1.0);
 }`;
 
-// Output stage: the composite is drawn into one of two 8-bit targets and shown through this pass, which can cross-fade
+// Output stage: the composite is drawn into one of three 8-bit targets (current, previous, spare) and shown through this pass, which can cross-fade
 // from the previous view to the new one (lens / distance / lighting changes). Display-only: never part of the optics.
 const BLEND_FS = /* glsl */`
 precision highp float;
@@ -151,16 +151,17 @@ export function createPipeline({ canvas, debug = false }) {
     uniforms: { tPrev: { value: null }, tCur: { value: null }, uMix: { value: 1 } },
     vertexShader: VS, fragmentShader: BLEND_FS, depthTest: false, depthWrite: false,
   });
-  const out = [null, null]; let outIdx = 0, outW = 0, outH = 0, outFresh = false, drawn = false;
+  const out = [null, null, null]; let cur = 0, prev = 1, outW = 0, outH = 0, outFresh = false, drawn = false, lastMix = 1;
   function ensureOut() {
     const bw = Math.max(1, renderer.domElement.width), bh = Math.max(1, renderer.domElement.height);
     if (out[0] && bw === outW && bh === outH) return;
     for (const t of out) if (t) { t.dispose(); rtCount--; }
     outW = bw; outH = bh;
-    for (let i = 0; i < 2; i++) { out[i] = new THREE.WebGLRenderTarget(bw, bh, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat, depthBuffer: false, generateMipmaps: false, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter }); rtCount++; }
+    cur = 0; prev = 1;
+    for (let i = 0; i < 3; i++) { out[i] = new THREE.WebGLRenderTarget(bw, bh, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat, depthBuffer: false, generateMipmaps: false, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter }); rtCount++; }
     outFresh = false; drawn = false;
   }
-  function freeOut() { for (let i = 0; i < 2; i++) if (out[i]) { out[i].dispose(); out[i] = null; rtCount--; } outW = outH = 0; outFresh = false; }
+  function freeOut() { for (let i = 0; i < 3; i++) if (out[i]) { out[i].dispose(); out[i] = null; rtCount--; } outW = outH = 0; outFresh = false; }
 
   // light sprites (instanced, additive) drawn into the distance accumulation target in pixel space
   const spriteTex = { disk: softDiskTexture(), gauss: falloffTexture(64, (r) => Math.exp(-4.5 * r * r)), glare: falloffTexture(128, (r) => (r >= 1 ? 0 : (1 / (1 + (r / 0.06) ** 2) - 0.0036) * (1 - r))) };
@@ -357,12 +358,12 @@ export function createPipeline({ canvas, debug = false }) {
     setGrade(views.B || views.A, u.uGradeB.value, u.uTintB.value);
     ensureOut();
     quad.material = compMat;
-    renderer.setRenderTarget(out[outIdx]);
+    renderer.setRenderTarget(out[cur]);
     renderer.render(quadScene, ortho);
     const bu = blendMat.uniforms;
-    bu.tCur.value = out[outIdx].texture;
-    bu.tPrev.value = out[outIdx ^ 1].texture;
-    bu.uMix.value = outFresh && mix < 1 ? Math.max(0, mix) : 1;
+    bu.tCur.value = out[cur].texture;
+    bu.tPrev.value = out[prev].texture;
+    bu.uMix.value = lastMix = outFresh && mix < 1 ? Math.max(0, mix) : 1;
     drawn = true;
     quad.material = blendMat;
     renderer.setRenderTarget(null);
@@ -378,7 +379,26 @@ export function createPipeline({ canvas, debug = false }) {
     get renderTargets() { return rtCount; },
     get shaderError() { return shaderError; },
     /** Keep the view now on screen as the start of a cross-fade: the next frame draws into the other target. */
-    holdFrame() { if (!out[0] || !drawn) return false; drawn = false; outIdx ^= 1; outFresh = true; return true; },
+    /**
+     * Keep the view now on screen as the start of a cross-fade; the next frame draws into a free target. During a fade
+     * the frame on screen is the blend, so that blend is frozen as the new start (a quick second change continues
+     * smoothly instead of jumping). Returns false when nothing was drawn since the last hold: the running fade goes on.
+     */
+    holdFrame() {
+      if (!out[0] || !drawn) return false;
+      drawn = false;
+      const free = 3 - cur - prev;
+      if (outFresh && lastMix < 1) {
+        const bu = blendMat.uniforms;
+        bu.tCur.value = out[cur].texture; bu.tPrev.value = out[prev].texture; bu.uMix.value = lastMix;
+        quad.material = blendMat;
+        renderer.setRenderTarget(out[free]);
+        renderer.render(quadScene, ortho);
+        const old = prev; prev = free; cur = old;
+      } else { prev = cur; cur = free; }
+      outFresh = true;
+      return true;
+    },
     setSize(cssW, cssH, dpr, scale) {
       renderer.setPixelRatio(dpr);
       renderer.setSize(cssW, cssH, false);

@@ -289,9 +289,9 @@ export function buildScenes({ lighting = 'day', lang = 'en', aspect = 1.6 }) {
   const UPPER = [0, 1, 2, 3].map((v) => ({ map: upperTex(v), emissive: P.windowLit ? emissiveTex(v) : null }));
   const shopTex = (i) => canvasTexture(512, 128, (x, w, h) => {
     x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
-    x.fillStyle = P.awning[i % P.awning.length]; x.fillRect(0, 6, w, 30); // fascia
-    x.fillStyle = '#ffffff'; x.font = `600 22px ${T.font}`; x.textBaseline = 'middle'; x.textAlign = 'center'; x.direction = T.dir;
-    x.fillText(T.shops[i % T.shops.length], w / 2, 22);
+    x.fillStyle = P.awning[i % P.awning.length]; x.fillRect(0, 4, w, 38); // fascia
+    x.fillStyle = '#ffffff'; x.font = `700 30px ${T.font}`; x.textBaseline = 'middle'; x.textAlign = 'center'; x.direction = T.dir;
+    x.fillText(T.shops[i % T.shops.length], w / 2, 24);
     const g = x.createLinearGradient(0, 44, 0, h);
     g.addColorStop(0, P.shopGlass); g.addColorStop(1, night || dusk ? P.shopGlass : '#2c3a46');
     x.fillStyle = g; x.fillRect(24, 46, w - 48, h - 52);
