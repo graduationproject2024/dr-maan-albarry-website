@@ -17,7 +17,7 @@ import { SECTIONS, sectionPages, homeSection } from './section-registry.js';
 
 export const LANGS = ['ar', 'en'];
 
-const escapeRoute = r => r.replace(/-/g, '\\-').replace(/\//g, '\\/');
+const escapeRoute = r => r.replace(/[\\^$.*+?()[\]{}|/-]/g, '\\$&'); // every regex metacharacter (CodeQL js/incomplete-sanitization)
 
 /**
  * Everything derived from a section list. The site uses the real list (below); tests pass a list with a temporary

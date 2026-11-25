@@ -8,7 +8,7 @@ const DOC = 'docs/implementation/premium-experience-reconstruction';
 const LOGS = `${DOC}/evidence/journeys/logs`;
 const logs = fs.readdirSync(LOGS).filter((f) => f.startsWith('premium-') && f !== 'premium-perf.json').map((f) => JSON.parse(fs.readFileSync(`${LOGS}/${f}`, 'utf8'))).sort((a, b) => a.id.localeCompare(b.id));
 const byId = Object.fromEntries(logs.map((l) => [l.id, l]));
-const esc = (s) => String(s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
+const esc = (s) => String(s ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const rel = (p) => (p ? `[jpg](${path.relative(DOC, p).replace(/\\/g, '/')})` : '—');
 const groups = [['A', 'Discover a procedure'], ['B', 'Trust and credentials'], ['C', 'Cataract education'], ['D', 'Vision and lens comparison'], ['E', 'Older Arabic-speaking patient'], ['F', 'Impatient user'], ['G', 'Slow network and failed simulator load'], ['T', 'Touch interactions']];
 const groupOf = (id) => (id.startsWith('premium-touch') ? 'T' : id.split('-')[1].toUpperCase());

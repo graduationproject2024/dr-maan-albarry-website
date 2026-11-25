@@ -48,7 +48,7 @@ test.afterAll(() => {
   for (const dir of [LOG_DIR, LOG_MIRROR]) {
     fs.mkdirSync(dir, { recursive: true });
     const f = `${dir}/axe.json`;
-    const prev = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : [];
+    let prev = []; try { prev = JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* first run */ }
     const merged = [...prev.filter((x) => !results.some((y) => y.page === x.page && y.theme === x.theme)), ...results];
     fs.writeFileSync(f, JSON.stringify(merged, null, 2));
   }

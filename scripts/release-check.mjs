@@ -57,8 +57,8 @@ const statusPath = path.join(root, 'release-status.json');
 const human = fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : {};
 const pending = items.filter((i) => !isApproved(i.status));
 const claim = String(human.medicalReview?.status || 'pending');
-if (/^complete|approved$/i.test(claim) && pending.length) problems.push(`release-status.json says the medical review is "${claim}" but ${pending.length} clinical items are still pending`);
-if (/^complete|approved$/i.test(claim) && !(human.medicalReview?.reviewer && human.medicalReview?.date)) problems.push('release-status.json: a complete medical review needs the reviewer and the date');
+if (/^(complete|approved)$/i.test(claim) && pending.length) problems.push(`release-status.json says the medical review is "${claim}" but ${pending.length} clinical items are still pending`);
+if (/^(complete|approved)$/i.test(claim) && !(human.medicalReview?.reviewer && human.medicalReview?.date)) problems.push('release-status.json: a complete medical review needs the reviewer and the date');
 
 const groups = [...new Set(items.map((i) => i.group))];
 const lines = [];

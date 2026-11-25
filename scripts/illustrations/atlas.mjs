@@ -114,7 +114,7 @@ server.close();
 
 if (!DRY) {
   const { buildManifest } = await import(pathToFileURL(path.join(here, 'atlas-manifest.mjs')).href);
-  const prev = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
+  let prev = null; try { prev = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch { /* no manifest yet */ }
   const manifest = buildManifest(all, results, prev);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
   console.log('wrote', path.relative(root, manifestPath), `(${manifest.assets.length} assets)`);

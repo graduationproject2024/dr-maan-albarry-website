@@ -160,7 +160,7 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
 
   await j.step('Tap a related-procedure link normally', 'Navigates (sanity check that taps still work after the cancelled touch)', async () => {
     const l = page.locator('.proc-related .proc-card-link').first(); await revealInFreeArea(page, l);
-    const href = await l.getAttribute('href'); await l.tap(); await page.waitForURL(new RegExp(href.replace(/[/.]/g, '\\$&') + '$'));
+    const href = await l.getAttribute('href'); await l.tap(); await page.waitForURL(new RegExp(href.replace(/[\\^$.*+?()[\]{}|/]/g, '\\$&') + '$'));
     return { actual: page.url().replace(/^https?:\/\/[^/]+/, ''), ok: true };
   });
 

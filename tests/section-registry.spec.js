@@ -43,7 +43,7 @@ test.describe('The registry generates the public site', () => {
 
   test('the header, drawer and footer rendered on a page are the registry\'s lists', async ({ page }) => {
     await page.goto('/en/');
-    await expect(page.locator('#site-header .nav-links a')).toHaveText(headerNav().map((s) => new RegExp(s.nav.label.en.replace(/[&]/g, '\\&'))));
+    await expect(page.locator('#site-header .nav-links a')).toHaveText(headerNav().map((s) => new RegExp(s.nav.label.en.replace(/[\\^$.*+?()[\]{}|&]/g, '\\$&'))));
     expect(await page.locator('#mobile-nav .drawer-links a').evaluateAll((a) => a.map((x) => x.dataset.section))).toEqual(ids(drawerNav()));
     expect(await page.locator('.site-footer nav.footer-col a').first().getAttribute('href')).toBeTruthy();
     const footerText = await page.locator('.site-footer nav.footer-col').first().locator('a').allInnerTexts();

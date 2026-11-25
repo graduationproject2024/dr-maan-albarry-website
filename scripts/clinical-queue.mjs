@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 const m = JSON.parse(fs.readFileSync('public/images/procedures/manifest.json', 'utf8'));
 const out = [];
-const esc = (t) => String(t ?? '').replace(/\|/g, '\|').replace(/\n/g, ' ');
+const esc = (t) => String(t ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const assets = m.assets;
 const changed = assets.filter((a) => a.reApprovalNeeded);
 out.push(`Source: \`public/images/procedures/manifest.json\` (${m.version || ''}). ${assets.length} images; ${changed.length} changed since any earlier look and marked for re-approval. Every image: review status \`${[...new Set(assets.map((a) => a.reviewStatus))].join(', ')}\`, approval \`${[...new Set(assets.map((a) => a.approval))].join(', ')}\`.`);

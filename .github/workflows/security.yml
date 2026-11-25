@@ -25,6 +25,11 @@ jobs:
         with:
           languages: javascript-typescript
           queries: security-extended
+          # docs/ holds archived design-direction generators and evidence, never built or served
+          config: |
+            paths-ignore:
+              - docs
+              - graphify-out
       - uses: github/codeql-action/analyze@d2aacf54c2fbc910db8d7ec338fdb54ea48c692d # v3.39.4
 
   semgrep:
