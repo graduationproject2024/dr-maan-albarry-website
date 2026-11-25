@@ -1,0 +1,3458 @@
+[
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 46.725260833942926,
+   "theta": 1.4304213410305633,
+   "phi": 1.4635825463305148,
+   "target": [
+    0,
+    0,
+    -7.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.890209104189395,
+   "theta": 1.1701719399255743,
+   "phi": 1.3574312056048248,
+   "target": [
+    0,
+    0,
+    -1.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 45.64263357870577,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 46.725260833942926,
+   "theta": 1.4304213410305633,
+   "phi": 1.4635825463305148,
+   "target": [
+    0,
+    0,
+    -7.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.890209104189395,
+   "theta": 1.1701719399255743,
+   "phi": 1.3574312056048248,
+   "target": [
+    0,
+    0,
+    -1.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 45.64263357870577,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "natural",
+  "camera": {
+   "r": 46.725260833942926,
+   "theta": 1.4304213410305633,
+   "phi": 1.4635825463305148,
+   "target": [
+    0,
+    0,
+    -7.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "cataract",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "removed",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.890209104189395,
+   "theta": 1.1701719399255743,
+   "phi": 1.3574312056048248,
+   "target": [
+    0,
+    0,
+    -1.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "lens-implants",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "designs",
+  "camera": {
+   "r": 45.64263357870577,
+   "theta": 1.4405848838305002,
+   "phi": 1.1891392927962534,
+   "target": [
+    0,
+    0,
+    -8.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 18.374166647769364,
+   "theta": 0.47385133649476036,
+   "phi": 1.2668024839796292,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 15.738487856207787,
+   "theta": 1.4171775367547312,
+   "phi": 1.488102053001099,
+   "target": [
+    0,
+    0.3,
+    0.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 49.16299421312742,
+   "theta": 0.4825132950224769,
+   "phi": 1.3031870877951424,
+   "target": [
+    0,
+    0,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 18.374166647769364,
+   "theta": 0.47385133649476036,
+   "phi": 1.2668024839796292,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 15.738487856207787,
+   "theta": 1.4171775367547312,
+   "phi": 1.488102053001099,
+   "target": [
+    0,
+    0.3,
+    0.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 49.16299421312742,
+   "theta": 0.4825132950224769,
+   "phi": 1.3031870877951424,
+   "target": [
+    0,
+    0,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "space",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "assessment",
+  "camera": {
+   "r": 19.77776529337933,
+   "theta": 1.333261694899284,
+   "phi": 1.418523055812319,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 34.00529517589871,
+   "theta": 0.00029411763857792295,
+   "phi": 1.553151100266817,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "insert",
+  "camera": {
+   "r": 18.374166647769364,
+   "theta": 0.47385133649476036,
+   "phi": 1.2668024839796292,
+   "target": [
+    0,
+    0,
+    -0.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "position",
+  "camera": {
+   "r": 18.880942773071475,
+   "theta": 1.3995181289476382,
+   "phi": 1.4646703135692976,
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 15.738487856207787,
+   "theta": 1.4171775367547312,
+   "phi": 1.488102053001099,
+   "target": [
+    0,
+    0.3,
+    0.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "icl",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 6,
+  "id": "after",
+  "camera": {
+   "r": 49.16299421312742,
+   "theta": 0.4825132950224769,
+   "phi": 1.3031870877951424,
+   "target": [
+    0,
+    0,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 8.911789943664514,
+   "theta": 1.366778347202348,
+   "phi": 1.4921676997581832,
+   "target": [
+    0,
+    2.4,
+    3.3
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "desktop",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 8.911789943664514,
+   "theta": 1.366778347202348,
+   "phi": 1.4921676997581832,
+   "target": [
+    0,
+    2.4,
+    3.3
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "portrait",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 1,
+  "id": "flap",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 2,
+  "id": "lift",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 3,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 4,
+  "id": "replace",
+  "camera": {
+   "r": 16.904733065032406,
+   "theta": 1.3675801109110872,
+   "phi": 1.48788432168978,
+   "target": [
+    0,
+    3.8,
+    4.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "lasik",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 1,
+  "id": "epithelium",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 2,
+  "id": "reshape",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 3,
+  "id": "bandage",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 4,
+  "id": "regrow",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "prk",
+  "stage": 5,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 0,
+  "id": "anatomy",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 1,
+  "id": "lenticule",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 8.911789943664514,
+   "theta": 1.366778347202348,
+   "phi": 1.4921676997581832,
+   "target": [
+    0,
+    2.4,
+    3.3
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "laser-vision-correction",
+  "vp": "landscape",
+  "variant": "smile",
+  "stage": 3,
+  "id": "result",
+  "camera": {
+   "r": 7.46290828028859,
+   "theta": 1.374718289239322,
+   "phi": 1.497031639427601,
+   "target": [
+    0,
+    1.6,
+    3.15
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 34.0147027033899,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 16.755596080116042,
+   "theta": 0.5134597417429523,
+   "phi": 1.146364905881983,
+   "target": [
+    0,
+    -0.4,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "desktop",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 34.0147027033899,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 16.755596080116042,
+   "theta": 0.5134597417429523,
+   "phi": 1.146364905881983,
+   "target": [
+    0,
+    -0.4,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "portrait",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 0,
+  "id": "normal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 1,
+  "id": "cone",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 2,
+  "id": "thin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 3,
+  "id": "distortion",
+  "camera": {
+   "r": 34.0147027033899,
+   "theta": 1.5707963267948966,
+   "phi": 1.5413930385908916,
+   "target": [
+    0,
+    0,
+    -2.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "keratoconus",
+  "stage": 4,
+  "id": "compare",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 0,
+  "id": "tomography",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 1,
+  "id": "numbing",
+  "camera": {
+   "r": 19.516405919123528,
+   "theta": 0.0005128204678658399,
+   "phi": 1.5297936847350653,
+   "target": [
+    0,
+    -0.3,
+    1.5
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 2,
+  "id": "riboflavin",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 3,
+  "id": "uv",
+  "camera": {
+   "r": 11.5,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -1.7,
+    2.7
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 4,
+  "id": "bandage",
+  "camera": {
+   "r": 16.755596080116042,
+   "theta": 0.5134597417429523,
+   "phi": 1.146364905881983,
+   "target": [
+    0,
+    -0.4,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "keratoconus-cxl",
+  "vp": "landscape",
+  "variant": "cxl",
+  "stage": 5,
+  "id": "goal",
+  "camera": {
+   "r": 18,
+   "theta": 1.5707963267948966,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -0.4,
+    2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "desktop",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "portrait",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "pk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 4,
+  "id": "stitches",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "dalk",
+  "stage": 5,
+  "id": "followup",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 0,
+  "id": "exam",
+  "camera": {
+   "r": 19.406444805785526,
+   "theta": 0.0005154638718723355,
+   "phi": 1.5450288387476305,
+   "target": [
+    0,
+    0,
+    1.6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 1,
+  "id": "anaesthetic",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 2,
+  "id": "remove",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 3,
+  "id": "donor",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 4,
+  "id": "bubble",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "corneal-transplant",
+  "vp": "landscape",
+  "variant": "ek",
+  "stage": 5,
+  "id": "clear",
+  "camera": {
+   "r": 10.523307464861038,
+   "theta": 1.5042281630190728,
+   "phi": 1.5707963267948966,
+   "target": [
+    0,
+    -2.7,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 23.156856436053666,
+   "theta": 1.2576415492242052,
+   "phi": 1.2637060934160016,
+   "target": [
+    0,
+    0,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 27.659356463952665,
+   "theta": 1.3521273809209546,
+   "phi": 1.5635654375610881,
+   "target": [
+    0,
+    -5.2,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "desktop",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 23.156856436053666,
+   "theta": 1.2576415492242052,
+   "phi": 1.2637060934160016,
+   "target": [
+    0,
+    0,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 27.659356463952665,
+   "theta": 1.3521273809209546,
+   "phi": 1.5635654375610881,
+   "target": [
+    0,
+    -5.2,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "portrait",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 0,
+  "id": "back",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 1,
+  "id": "exam",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 2,
+  "id": "numbing",
+  "camera": {
+   "r": 23.156856436053666,
+   "theta": 1.2576415492242052,
+   "phi": 1.2637060934160016,
+   "target": [
+    0,
+    0,
+    2.2
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 3,
+  "id": "injection",
+  "camera": {
+   "r": 27.659356463952665,
+   "theta": 1.3521273809209546,
+   "phi": 1.5635654375610881,
+   "target": [
+    0,
+    -5.2,
+    -6
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 4,
+  "id": "spread",
+  "camera": {
+   "r": 31.176914536239796,
+   "theta": 1.373400766945016,
+   "phi": 1.37713802635057,
+   "target": [
+    0,
+    0,
+    -10
+   ],
+   "moving": false
+  }
+ },
+ {
+  "slug": "intravitreal-injections",
+  "vp": "landscape",
+  "variant": null,
+  "stage": 5,
+  "id": "after",
+  "camera": {
+   "r": 13.166624472506232,
+   "theta": 0.807133870239241,
+   "phi": 1.41830681818866,
+   "target": [
+    -0.9,
+    0.2,
+    -19.2
+   ],
+   "moving": false
+  }
+ }
+]

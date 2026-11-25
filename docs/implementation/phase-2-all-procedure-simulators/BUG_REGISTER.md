@@ -21,7 +21,7 @@ Severity scale:
 | BUG-SIM-11 | P3 | screenshots | Inner-structure labels shown on the closed eye | Fixed |
 | BUG-SIM-12 | P2 | screenshots | Transplant stitch ring looked offset from the graft (oblique parallax) | Fixed |
 | BUG-SIM-13 | P2 | builder | ICL plate cut through the iris | Fixed (own plate; Node check) |
-| BUG-SIM-14 | P3 | builder | ICL plate briefly passes through the iris while being tucked behind it | Open (accepted, documented) |
+| BUG-SIM-14 | P3 | builder | ICL plate briefly passes through the iris while being tucked behind it | Fixed (phase-2-final-closure/08_SURGICAL_SIMULATOR_CAMERA_QA.md; 200-sample tests) |
 | BUG-CAT-01 | P2 | code review | Cataract viewer captured the plain mouse wheel (page scroll stopped over it) | Fixed (Ctrl/⌘ + wheel zooms) |
 | BUG-CAT-02 | P2 | Phase 2 brief | Cataract viewer had no full screen for phones | Fixed |
 | BUG-TEST-01 | P3 | full run | Two older tests assumed only cataract had 3D, or raced the cataract pre-fetch | Fixed (assertions match the intended behaviour) |

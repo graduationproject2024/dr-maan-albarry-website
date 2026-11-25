@@ -56,9 +56,9 @@ const def = {
   cameras: {
     full: CAMERAS.full,
     posterior: CAMERAS.posterior,
-    macula: { pos: [8.5, 2.2, -10.2], target: [-0.9, 0.2, -19.2], label: { ar: 'البقعة عن قرب', en: 'Macula close-up' } },
-    drops: { pos: [21, 7, 9], target: [0, 0, 2.2] },
-    entry: { pos: [27, -5, 0], target: [0, -5.2, -6] }
+    macula: { pos: [8.5, 2.2, -10.2], target: [-0.9, 0.2, -19.2], fit: [4.6, 4.6], label: { ar: 'البقعة عن قرب', en: 'Macula close-up' } },
+    drops: { pos: [21, 7, 9], target: [0, 0, 0.5], fit: [7, 7] },
+    entry: { pos: [27, -5, 0], target: [0, -8.6, -3.6], fit: [7.2, 6.4] }
   },
   toggles: [
     { id: 'vitreous', label: { ar: 'الجسم الزجاجي', en: 'Vitreous' }, parts: ['vitreous'] },

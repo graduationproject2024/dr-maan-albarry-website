@@ -113,6 +113,8 @@ export const irisBackAt = (r, pupilR, marginZ) => {
   const s = clamp01((r - pupilR) / (EYE.irisRootR - pupilR));
   return irisFront(marginZ, s) - irisThick(s);
 };
+/** Front surface height of the iris at radius r (the counterpart of irisBackAt). */
+export const irisFrontAt = (r, pupilR, marginZ) => irisFront(marginZ, clamp01((r - pupilR) / (EYE.irisRootR - pupilR)));
 /** Pupil-margin height when it rests on the crystalline lens. */
 export const irisOnLensZ = (pupilR) => lensAntZ(Math.min(pupilR, EYE.lensEqR - 0.01)) + EYE.irisGap;
 

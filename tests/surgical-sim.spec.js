@@ -286,3 +286,263 @@ test('GPU context lost and restored: a notice while lost, then the viewer recove
   await expect.poll(async () => (await S(page)).playing).toBe(true);
   expect(errors.filter((e) => !/CONTEXT_LOST|context lost/i.test(e))).toEqual([]);
 });
+
+// ---------------- Cameras (2026-11 camera pass, 08_SURGICAL_SIMULATOR_CAMERA_QA.md) ----------------
+// Every stage camera is a preset with a subject box (`fit`); the distance is fitted to the canvas and the overlaid
+// controls. These checks run with reduced motion so each camera move lands at once.
+const VARIANTS = { 'laser-vision-correction': ['lasik', 'prk', 'smile'], 'keratoconus-cxl': ['keratoconus', 'cxl'], 'corneal-transplant': ['pk', 'dalk', 'ek'] };
+const camOf = (page) => page.evaluate(() => window.__procedureSim.getState().camera);
+const settled = (page) => expect.poll(async () => (await camOf(page)).moving, { timeout: 5000 }).toBe(false);
+const near = (a, b, msg) => {
+  expect(a.r, msg).toBeCloseTo(b.r, 4); expect(a.theta, msg).toBeCloseTo(b.theta, 4); expect(a.phi, msg).toBeCloseTo(b.phi, 4);
+  a.target.forEach((v, k) => expect(v, msg).toBeCloseTo(b.target[k], 4));
+};
+
+for (const slug of SLUGS) {
+  test(`camera ${slug}: seeking lands on the same stage camera from any view; Reset view restores it`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, slug);
+    for (const v of VARIANTS[slug] || [null]) {
+      if (v) await page.evaluate((id) => window.__procedureSim.setVariant(id), v);
+      const n = (await S(page)).stageCount;
+      for (let i = 0; i < n; i++) {
+        // path 1: from the start
+        await page.evaluate(() => window.__procedureSim.seek(0));
+        await page.evaluate((k) => window.__procedureSim.setStage(k), i);
+        await settled(page);
+        const a = await camOf(page);
+        const prog = (await S(page)).progress;
+        expect(a.preset, `${v} ${i}`).toBe(a.stagePreset);
+        expect(a.fit, `${v} ${i}: every stage camera frames a subject`).toBeTruthy();
+        // path 2: from the end, after the visitor turned and zoomed the view, then a seek into the same stage
+        await page.evaluate(() => window.__procedureSim.seek(1));
+        await page.locator('.ssim-canvas-host canvas').focus();
+        await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowUp'); await page.keyboard.press('+');
+        await page.evaluate((t) => window.__procedureSim.seek(t), prog);
+        await settled(page);
+        near(await camOf(page), a, `${slug} ${v} stage ${i} after seek`);
+        // the visitor moves the view, then Reset view
+        await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('-');
+        expect((await camOf(page)).userMoved).toBe(true);
+        await page.locator('[data-act="resetView"]').click();
+        await settled(page);
+        const b = await camOf(page);
+        near(b, a, `${slug} ${v} stage ${i} reset view`);
+        expect(b.userMoved).toBe(false);
+      }
+    }
+    // Start again: the first stage's camera
+    await page.locator('[data-act="reset"]').click();
+    await settled(page);
+    expect((await camOf(page)).preset).toBe((await camOf(page)).stagePreset);
+  });
+}
+
+test('camera: zoom and orbit limits hold (no flip over the poles, no zooming into or far away from the subject)', async ({ page }) => {
+  await open(page, 'icl');
+  await page.evaluate(() => window.__procedureSim.setStage(4));
+  await settled(page);
+  const c0 = await camOf(page);
+  await page.locator('.ssim-canvas-host canvas').focus();
+  for (let k = 0; k < 40; k++) await page.keyboard.press('+');
+  const zin = await camOf(page);
+  expect(zin.r).toBeGreaterThanOrEqual(zin.minR - 1e-6);
+  expect(zin.r).toBeCloseTo(zin.minR, 4);
+  expect(zin.minR).toBeGreaterThan(c0.r * 0.4);
+  for (let k = 0; k < 60; k++) await page.locator('[data-act="zoomOut"]').click();
+  const zout = await camOf(page);
+  expect(zout.r).toBeLessThanOrEqual(zout.maxR + 1e-6);
+  expect(zout.maxR).toBeLessThan(c0.r * 3);
+  await page.locator('.ssim-canvas-host canvas').focus();
+  for (let k = 0; k < 40; k++) await page.keyboard.press('ArrowUp');
+  expect((await camOf(page)).phi).toBeGreaterThanOrEqual(0.15 - 1e-6);
+  for (let k = 0; k < 60; k++) await page.keyboard.press('ArrowDown');
+  expect((await camOf(page)).phi).toBeLessThanOrEqual(Math.PI - 0.15 + 1e-6);
+  // repeated full-height drags (mouse: vertical turning allowed) in both directions: the elevation stops at the limit,
+  // the camera's up vector never turns over (no flip) and the azimuth stays wrapped
+  const box = await page.locator('.ssim-canvas-host canvas').boundingBox();
+  const cx = box.x + box.width / 2;
+  for (const dir of [1, 1, 1, -1, -1, -1, -1, 1]) {
+    const y0 = dir > 0 ? box.y + 10 : box.y + box.height - 10, y1 = dir > 0 ? box.y + box.height - 10 : box.y + 10;
+    await page.mouse.move(cx - 150 * dir, y0); await page.mouse.down();
+    await page.mouse.move(cx + 150 * dir, y1, { steps: 10 }); await page.mouse.up();
+    const c = await camOf(page);
+    expect(c.phi).toBeGreaterThanOrEqual(0.15 - 1e-6);
+    expect(c.phi).toBeLessThanOrEqual(Math.PI - 0.15 + 1e-6);
+    expect(Math.abs(c.theta)).toBeLessThanOrEqual(Math.PI + 1e-6);
+    const upY = await page.evaluate(() => { const cam = window.__procedureSim._three.camera; cam.updateMatrixWorld(); return cam.matrixWorld.elements[5]; });
+    expect(upY, 'screen up stays world up (no flip)').toBeGreaterThan(0);
+  }
+});
+
+/**
+ * Framing check for every procedure / technique / stage at one viewport and language. Independent of the engine's own
+ * numbers: the free area it reports must not overlap the real DOM boxes of the tool rail, the stage chip, the details
+ * button or the hint; the target must project to the middle of it; the four corners of the stage's subject box must
+ * project inside it.
+ */
+async function checkFraming(page, { width, height, lang = 'en' }) {
+  for (const slug of SLUGS) {
+    await open(page, slug, { width, height, lang });
+    for (const v of VARIANTS[slug] || [null]) {
+      if (v) await page.evaluate((id) => window.__procedureSim.setVariant(id), v);
+      const n = (await S(page)).stageCount;
+      for (let i = 0; i < n; i++) {
+        const res = await page.evaluate((k) => {
+          const c = window.__procedureSim; c.setStage(k);
+          const st = c.getState().camera, { camera } = c._three;
+          camera.updateMatrixWorld();
+          const V = camera.position.constructor;
+          const right = new V().setFromMatrixColumn(camera.matrixWorld, 0), up = new V().setFromMatrixColumn(camera.matrixWorld, 1);
+          const [hw, hh] = Array.isArray(st.fit) ? st.fit : [st.fit, st.fit];
+          const [W, H] = st.view, s = st.safe;
+          const px = (p) => { const q = p.clone().project(camera); return [(q.x + 1) / 2 * W, (1 - q.y) / 2 * H]; };
+          const t = new V(...st.target);
+          const pts = [[0, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]].map(([a, b]) => px(t.clone().addScaledVector(right, a * hw).addScaledVector(up, b * hh)));
+          const box = document.querySelector('.ssim-canvas-host').getBoundingClientRect();
+          const ctrls = ['.ssim-viewtools', '.ssim-chip', '.ssim-details', '.ssim-hint'].map((sel) => {
+            const el = document.querySelector(sel); const r = el && !el.hidden ? el.getBoundingClientRect() : null;
+            return r && r.width && r.height ? { sel, l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top } : null;
+          }).filter(Boolean);
+          return { pts, s, W, H, ctrls, moving: st.moving, cw: box.width, ch: box.height };
+        }, i);
+        const tag = `${lang} ${width}x${height} ${slug} ${v} ${i}`;
+        expect(res.moving, tag).toBe(false);
+        expect(Math.abs(res.W - res.cw), `${tag} view size`).toBeLessThan(1.5);
+        expect(Math.abs(res.H - res.ch), `${tag} view size`).toBeLessThan(1.5);
+        const free = { l: res.s.l, r: res.W - res.s.r, t: res.s.t, b: res.H - res.s.b };
+        expect(free.r - free.l, `${tag} free width`).toBeGreaterThan(res.W * 0.4);
+        expect(free.b - free.t, `${tag} free height`).toBeGreaterThan(res.H * 0.4);
+        for (const c of res.ctrls) {
+          const ox = Math.min(free.r, c.r) - Math.max(free.l, c.l), oy = Math.min(free.b, c.b) - Math.max(free.t, c.t);
+          expect(ox <= 1 || oy <= 1, `${tag}: free area overlaps ${c.sel}`).toBe(true);
+        }
+        const [cx, cy] = res.pts[0];
+        expect(Math.abs(cx - (free.l + free.r) / 2), `${tag} target x`).toBeLessThan(2);
+        expect(Math.abs(cy - (free.t + free.b) / 2), `${tag} target y`).toBeLessThan(2);
+        for (const [x, y] of res.pts.slice(1)) {
+          expect(x, `${tag} subject x`).toBeGreaterThanOrEqual(free.l - 2);
+          expect(x, `${tag} subject x`).toBeLessThanOrEqual(free.r + 2);
+          expect(y, `${tag} subject y`).toBeGreaterThanOrEqual(free.t - 2);
+          expect(y, `${tag} subject y`).toBeLessThanOrEqual(free.b + 2);
+        }
+      }
+    }
+  }
+}
+for (const [w, h, lang] of [[390, 844, 'en'], [844, 390, 'en'], [1440, 900, 'en'], [390, 844, 'ar'], [844, 390, 'ar']]) {
+  test(`camera ${lang} ${w}x${h}: every stage keeps its target and its whole subject box clear of the controls`, async ({ page }) => {
+    test.setTimeout(180_000);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await checkFraming(page, { width: w, height: h, lang });
+  });
+}
+
+test('camera: a resize re-fits a camera still on its preset, keeps a visitor-moved view, and moves the zoom limits', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await open(page, 'lens-implants', { width: 1440, height: 900 });
+  await page.evaluate(() => window.__procedureSim.setStage('removed'));
+  const d = await camOf(page);
+  // reference: the camera a page opened directly at the phone size gets
+  const fresh = await page.context().newPage();
+  await fresh.emulateMedia({ reducedMotion: 'reduce' });
+  await open(fresh, 'lens-implants', { width: 390, height: 844 });
+  await fresh.evaluate(() => window.__procedureSim.setStage('removed'));
+  const f = await camOf(fresh);
+  await fresh.close();
+  await page.setViewportSize({ width: 390, height: 844 });
+  // the page layout animates to its phone form over a few frames; each step re-fits, ending on the reference camera
+  await expect.poll(async () => { const c = await camOf(page); return c.view.join('x') === f.view.join('x') && Math.abs(c.r - f.r) < 0.01; }, { timeout: 8000 }).toBe(true);
+  const p = await camOf(page);
+  expect(p.userMoved).toBe(false);
+  expect(Math.abs(p.r - d.r), 'the distance changed with the view').toBeGreaterThan(0.2);
+  // the visitor zooms; a resize keeps their distance but the limits follow the new fit
+  await page.locator('.ssim-canvas-host canvas').focus();
+  await page.keyboard.press('+');
+  const m = await camOf(page);
+  expect(m.userMoved).toBe(true);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect.poll(async () => (await camOf(page)).view.join('x'), { timeout: 8000 }).toBe(d.view.join('x'));
+  const back = await camOf(page);
+  expect(back.r).toBeCloseTo(m.r, 4);
+  expect(back.userMoved).toBe(true);
+  expect(back.maxR).toBeLessThan(m.maxR); // the desktop fit is closer, so the limits shrank with it
+  // Reset view: the desktop fit again
+  await page.locator('[data-act="resetView"]').click();
+  expect((await camOf(page)).r).toBeCloseTo(d.r, 3);
+});
+
+test('camera: seek while playing keeps the visitor\'s view inside the stage and takes the stage camera in a new stage', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await open(page, 'icl');
+  // stage range of "position" (index 4) and "result" (index 5) on the timeline
+  const [a4, a5] = await page.evaluate(() => { const c = window.__procedureSim; c.setStage(4); const x = c.getState().progress; c.setStage(5); const y = c.getState().progress; return [x, y]; });
+  await page.evaluate((t) => { const c = window.__procedureSim; c.seek(t); c.play(); }, a4 - 0.04);
+  await page.locator('.ssim-canvas-host canvas').focus();
+  await page.keyboard.press('ArrowLeft');
+  const moved = await camOf(page);
+  expect(moved.userMoved).toBe(true);
+  await page.evaluate((t) => window.__procedureSim.seek(t), a4 - 0.02); // same stage, still playing
+  const same = await camOf(page);
+  expect((await S(page)).playing).toBe(true);
+  expect(same.userMoved).toBe(true);
+  expect(same.theta).toBeCloseTo(moved.theta, 2);
+  await page.evaluate((t) => window.__procedureSim.seek(t), (a4 + a5) / 2 + 0.01); // into another stage
+  const other = await camOf(page);
+  expect(other.userMoved).toBe(false);
+  expect(other.preset).toBe(other.stagePreset);
+  await page.evaluate(() => window.__procedureSim.pause());
+});
+
+for (const [w, h] of [[390, 844], [1440, 900]]) {
+  test(`camera ${w}x${h}: Before / After show two different moments from one fitted camera`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const slug of ['lens-implants', 'icl', 'corneal-transplant']) {
+      await open(page, slug, { width: w, height: h });
+      await page.evaluate(() => window.__procedureSim.compare('before'));
+      const a = await camOf(page), sa = await S(page);
+      await page.evaluate(() => window.__procedureSim.compare('after'));
+      const b = await camOf(page), sb = await S(page);
+      expect(sa.compare).toBe('before'); expect(sb.compare).toBe('after');
+      expect(sa.stageIndex).toBe(0); expect(sb.stageIndex).toBe(sb.stageCount - 1);
+      expect(sb.progress - sa.progress, 'two different moments').toBeGreaterThan(0.9);
+      if (sa.probe) expect(JSON.stringify(sa.probe)).not.toBe(JSON.stringify(sb.probe));
+      near(b, a, `${slug} before vs after`);
+      expect(a.fit).toBeTruthy();
+    }
+  });
+}
+
+// BUG-SIM-14: the ICL plate must never cross the iris while it is unfolded and tucked behind it.
+test('ICL: the plate never intersects the iris or the natural lens at any of 200 time samples per stage (pure model)', async () => {
+  const { iclPoseAt, iclIrisOverlap, iclLensOverlap } = await import('../src/surgical-sim/procedures/icl.js');
+  for (const i of [3, 4, 5]) {
+    let worst = -Infinity, lens = -Infinity;
+    for (let k = 0; k <= 200; k++) {
+      const s = iclPoseAt(i, k / 200);
+      if (!s.on) continue;
+      worst = Math.max(worst, iclIrisOverlap(s.pose, s.pupil, s.marginZ));
+      lens = Math.max(lens, iclLensOverlap(s.pose));
+    }
+    expect(worst, `stage ${i}: plate vs iris`).toBeLessThan(0);
+    expect(lens, `stage ${i}: footplates vs natural lens`).toBeLessThan(0);
+  }
+  const end = iclPoseAt(5, 1);
+  expect(iclLensOverlap(end.pose)).toBeLessThan(0);
+  expect(end.pose).toEqual({ sx: 1, sy: 1, sz: 1, px: 0, dz: 0 }); // final resting position (and vault) unchanged
+});
+
+test('ICL: no plate/iris intersection while playing through the insertion and tuck (rendered model, 200 samples)', async ({ page }) => {
+  await open(page, 'icl');
+  const res = await page.evaluate(() => {
+    const c = window.__procedureSim, out = [];
+    c.setStage('insert'); const a = c.getState().progress;
+    c.setStage('result'); const b = c.getState().progress;
+    for (let k = 0; k <= 200; k++) { c.seek(a - 0.02 + (b - a + 0.02) * k / 200); const st = c.getState(); out.push({ id: st.stageId, o: st.probe.irisOverlap }); }
+    return out;
+  });
+  const sampled = res.filter((r) => r.o !== null);
+  expect(sampled.length).toBeGreaterThan(100);
+  expect(sampled.filter((r) => r.id === 'position').length).toBeGreaterThan(40);
+  for (const r of sampled) expect(r.o, r.id).toBeLessThan(0);
+});
