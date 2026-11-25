@@ -103,6 +103,7 @@ tests/phase1-pages.spec.js tests/first-render.spec.js tests/content-registry.spe
 ## 7. Open points for the physician (also in the manifest)
 
 - Is a ~0.5 mm central vault the right "ideal" to depict? Is the 2x plate thickness acceptable?
+- Implant half-length is drawn as 5.3 mm, chosen to fit this schematic eye (the surgical simulator uses a 5.6 mm sulcus radius). Acceptable? (raised by the independent review, 2026-11-24)
 - Footplate position in the ciliary sulcus; iris shown resting on the implant (simplified drape).
 - Patient wording of the three new / changed labels (AR + EN), especially "القبة"-free phrasing of the vault.
 - Whether a side-by-side "ICL vs cataract lens implant" figure is wanted (not drawn; the contrast is in text only).
