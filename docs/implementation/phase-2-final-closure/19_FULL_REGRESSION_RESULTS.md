@@ -35,8 +35,9 @@ Options for making layer 2 cover rendering (owner decision):
 3. Keep layer 1 as the rendering gate before each release (current practice) and run the non-GPU suites on GitHub.
 
 ## Owner decision 2026-11-25: local GPU run per release
-Suites are split in `tests/layers.mjs`: GPU layer (17 files, 334 tests: cataract, surgical, vision, Lens Lab, core and stress journeys) and CPU layer (36 files, 604 tests). `full-regression.yml` now runs the CPU layer on GitHub (4 shards); the GPU layer runs with `npm run test:gpu` on a machine with a real GPU before every release, recorded here and in the PR. Rule written into `CLAUDE.md`.
+Suites are split in `tests/layers.mjs`: GPU layer (18 files, 335 tests: cataract, surgical, vision, Lens Lab, core, stress and WebKit journeys) and CPU layer (35 files, 603 tests). `full-regression.yml` now runs the CPU layer on GitHub (4 shards); the GPU layer runs with `npm run test:gpu` on a machine with a real GPU before every release, recorded here and in the PR. Rule written into `CLAUDE.md`.
 
 | GPU layer run | Code | Result |
 |---|---|---|
 | 1 | `90dcb94` + layer split | **330 passed, 0 failed**, 4 skipped (evidence captures) — 10.4 min, RTX 2060 / ANGLE D3D11 |
+| — | `webkit.spec.js` moved to the GPU layer (CPU run 45640303933 timed out on the vision simulator); passes locally 1/1 | |

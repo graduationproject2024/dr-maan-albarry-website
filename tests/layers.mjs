@@ -24,6 +24,7 @@ export const GPU_SPECS = [
   'vision-sim.spec.js',
   'journeys/core-journeys.spec.js',
   'journeys/stress.spec.js',
+  'journeys/webkit.spec.js', // drives both simulators in WebKit (CPU-layer run 45640303933 timed out on the vision simulator)
 ];
 
 const toRe = (f) => new RegExp(`[\\\\/]tests[\\\\/]${f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\//g, '[\\\\/]')}$`);
