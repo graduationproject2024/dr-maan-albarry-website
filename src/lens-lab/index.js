@@ -13,6 +13,10 @@ import './styles.css';
 import { CONTENT, LENS_ORDER, SIM_LENS, DIMENSIONS, LEVELS, SCENARIO_ORDER, SCENARIO_ROWS, SOURCES } from './content.js';
 import { computeView } from '../vision-sim/optics/model.js';
 import { SCENARIOS } from '../vision-sim/optics/params.js';
+import { withTimeout, recoverStaleBuild } from '../chunk-recovery.js';
+
+/** The picture's code must arrive within this time, or the slot offers a retry (never an endless "Loading"). */
+const SIM_LOAD_TIMEOUT_MS = 20000;
 
 /** Debug counters (exposed on window only with { debug: true }) used by tests to prove clean teardown. */
 export const counters = { mounts: 0, destroys: 0, live: 0, listeners: 0, observers: 0, sims: 0 };
@@ -157,9 +161,10 @@ class LensLab {
   async loadSim() {
     if (this.destroyed || this.sim || this.simState === 'loading' || this.simMode === 'off' || this.compact) return;
     this.simState = 'loading';
+    this.simLoadError = false;
     this.renderSimStatus();
     try {
-      const mod = await import('../vision-sim/index.js');
+      const mod = await withTimeout(import('../vision-sim/index.js'), SIM_LOAD_TIMEOUT_MS);
       if (this.destroyed || this.compact) { this.simState = this.destroyed ? this.simState : 'none'; return; }
       const sim = await mod.mount(this.simHost, {
         ui: 'viewer', lang: this.lang, theme: this.theme, reducedMotion: this.reduced, debug: this.debug,
@@ -176,7 +181,10 @@ class LensLab {
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[lens-lab] vision simulator failed to load', err);
+      if (await recoverStaleBuild(err)) return; // a tab left over from an older deploy reloads once
+      if (this.destroyed) return;
       this.simState = 'failed';
+      this.simLoadError = true;
       this.emit('simerror', { error: String(err && err.message || err) });
     }
     this.renderSimStatus();
@@ -348,8 +356,13 @@ class LensLab {
   renderSimStatus() {
     if (!this.ref || !this.ref.simStatus) { if (this.root) this.root.dataset.sim = this.simState; return; }
     const c = this.t();
-    const msg = { idle: c.simLater, loading: c.simLoading, failed: c.simFailed, off: c.simFailed }[this.simState] || '';
+    const msg = { idle: c.simLater, loading: c.simLoading, failed: this.simLoadError ? c.simLoadFailed : c.simFailed, off: c.simFailed }[this.simState] || '';
     this.ref.simStatus.textContent = msg;
+    if (this.simState === 'failed' && this.simLoadError) { // the download failed: one tap tries again
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'llab-retry'; b.dataset.act = 'sim-retry'; b.textContent = c.simRetry;
+      this.ref.simStatus.append(' ', b);
+    }
     this.ref.simStatus.hidden = this.simState === 'ready';
     if (this.root) this.root.dataset.sim = this.simState;
   }
@@ -405,6 +418,7 @@ class LensLab {
       else if ('scn' in t.dataset) this.setScenario(t.value, true);
     });
     this.listen(this.root, 'click', (e) => {
+      if (e.target.closest('[data-act="sim-retry"]')) { this.simState = 'idle'; this.loadSim(); return; }
       const a = e.target.closest('[data-act="limits"]');
       if (!a) return;
       e.preventDefault();

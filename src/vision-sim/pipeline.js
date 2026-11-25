@@ -66,6 +66,18 @@ void main(){
   gl_FragColor = vec4(col, 1.0);
 }`;
 
+// Output stage: the composite is drawn into one of two 8-bit targets and shown through this pass, which can cross-fade
+// from the previous view to the new one (lens / distance / lighting changes). Display-only: never part of the optics.
+const BLEND_FS = /* glsl */`
+precision highp float;
+uniform sampler2D tPrev; uniform sampler2D tCur; uniform float uMix;
+varying vec2 vUv;
+void main(){
+  vec4 c = texture2D(tCur, vUv);
+  if (uMix < 1.0) { float t = uMix * uMix * (3.0 - 2.0 * uMix); c = mix(texture2D(tPrev, vUv), c, t); }
+  gl_FragColor = vec4(c.rgb, 1.0);
+}`;
+
 function softDiskTexture(size = 128) {
   const data = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
@@ -102,6 +114,15 @@ export function createPipeline({ canvas, debug = false }) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: !!debug });
   if (!renderer.capabilities.isWebGL2) { renderer.dispose(); throw new Error('webgl2-required'); }
   renderer.autoClear = false;
+  // A shader the driver rejects draws nothing. Record it (instead of three.js's console error) so the simulator can
+  // switch to the static comparison rather than show a blank or black picture (06_LENS_LAB_FINAL_RECOVERY.md, F3).
+  let shaderError = null;
+  renderer.debug.checkShaderErrors = true;
+  renderer.debug.onShaderError = (gl, program) => {
+    let log = '';
+    try { log = gl.getProgramInfoLog(program) || ''; } catch { /* context gone */ }
+    shaderError = log || 'shader compile / link failed';
+  };
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace; // the composite shader does its own sRGB transfer
   const floatOK = renderer.extensions.has('EXT_color_buffer_float') || renderer.extensions.has('EXT_color_buffer_half_float');
   const TYPE = floatOK ? THREE.HalfFloatType : THREE.UnsignedByteType;
@@ -126,6 +147,20 @@ export function createPipeline({ canvas, debug = false }) {
     },
     vertexShader: VS, fragmentShader: COMPOSITE_FS, depthTest: false, depthWrite: false,
   });
+  const blendMat = new THREE.ShaderMaterial({
+    uniforms: { tPrev: { value: null }, tCur: { value: null }, uMix: { value: 1 } },
+    vertexShader: VS, fragmentShader: BLEND_FS, depthTest: false, depthWrite: false,
+  });
+  const out = [null, null]; let outIdx = 0, outW = 0, outH = 0, outFresh = false, drawn = false;
+  function ensureOut() {
+    const bw = Math.max(1, renderer.domElement.width), bh = Math.max(1, renderer.domElement.height);
+    if (out[0] && bw === outW && bh === outH) return;
+    for (const t of out) if (t) { t.dispose(); rtCount--; }
+    outW = bw; outH = bh;
+    for (let i = 0; i < 2; i++) { out[i] = new THREE.WebGLRenderTarget(bw, bh, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat, depthBuffer: false, generateMipmaps: false, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter }); rtCount++; }
+    outFresh = false; drawn = false;
+  }
+  function freeOut() { for (let i = 0; i < 2; i++) if (out[i]) { out[i].dispose(); out[i] = null; rtCount--; } outW = outH = 0; outFresh = false; }
 
   // light sprites (instanced, additive) drawn into the distance accumulation target in pixel space
   const spriteTex = { disk: softDiskTexture(), gauss: falloffTexture(64, (r) => Math.exp(-4.5 * r * r)), glare: falloffTexture(128, (r) => (r >= 1 ? 0 : (1 / (1 + (r / 0.06) ** 2) - 0.0036) * (1 - r))) };
@@ -180,6 +215,7 @@ export function createPipeline({ canvas, debug = false }) {
     for (const L of LAYERS) if (src[L]) { src[L].dispose(); delete src[L]; }
     if (tmp) { tmp.dispose(); tmp = null; }
     for (const s of SLOTS) freeAcc(s);
+    freeOut();
     rtCount = 0;
   }
 
@@ -269,7 +305,7 @@ export function createPipeline({ canvas, debug = false }) {
    * frame: { zoom, x, y } — the part of the full picture the camera shows (x, y = top-left corner as a fraction of
    * the full picture; zoom 1 = the whole picture). The camera's view offset must already match it.
    */
-  function render({ views, scenes, camera, split = 0.5, taps = 12, sourceVersion = 0, frame = null }) {
+  function render({ views, scenes, camera, split = 0.5, taps = 12, sourceVersion = 0, frame = null, mix = 1 }) {
     const stats = { passes: 0, reblurred: 0 };
     const nz = frame && frame.zoom > 1 ? frame.zoom : 1, nx = nz > 1 ? frame.x : 0, ny = nz > 1 ? frame.y : 0;
     if (nz !== zoom || nx !== frameX || ny !== frameY) { zoom = nz; frameX = nx; frameY = ny; srcRendered = -1; }
@@ -319,10 +355,19 @@ export function createPipeline({ canvas, debug = false }) {
     };
     setGrade(views.A, u.uGradeA.value, u.uTintA.value);
     setGrade(views.B || views.A, u.uGradeB.value, u.uTintB.value);
+    ensureOut();
     quad.material = compMat;
+    renderer.setRenderTarget(out[outIdx]);
+    renderer.render(quadScene, ortho);
+    const bu = blendMat.uniforms;
+    bu.tCur.value = out[outIdx].texture;
+    bu.tPrev.value = out[outIdx ^ 1].texture;
+    bu.uMix.value = outFresh && mix < 1 ? Math.max(0, mix) : 1;
+    drawn = true;
+    quad.material = blendMat;
     renderer.setRenderTarget(null);
     renderer.render(quadScene, ortho);
-    stats.passes++;
+    stats.passes += 2;
     return stats;
   }
 
@@ -331,6 +376,9 @@ export function createPipeline({ canvas, debug = false }) {
     get size() { return { width: W, height: H }; },
     get halfFloat() { return TYPE === THREE.HalfFloatType; },
     get renderTargets() { return rtCount; },
+    get shaderError() { return shaderError; },
+    /** Keep the view now on screen as the start of a cross-fade: the next frame draws into the other target. */
+    holdFrame() { if (!out[0] || !drawn) return false; drawn = false; outIdx ^= 1; outFresh = true; return true; },
     setSize(cssW, cssH, dpr, scale) {
       renderer.setPixelRatio(dpr);
       renderer.setSize(cssW, cssH, false);
@@ -341,11 +389,11 @@ export function createPipeline({ canvas, debug = false }) {
       const w = Math.max(64, Math.round(bw * f)), h = Math.max(64, Math.round(bh * f));
       return allocate(w, h);
     },
-    invalidateSources() { srcVersion++; srcRendered = -1; },
+    invalidateSources() { srcVersion++; srcRendered = -1; outFresh = false; },
     render,
     dispose() {
       freeTargets();
-      quadGeo.dispose(); spriteGeo.dispose(); blurMat.dispose(); blurAddMat.dispose(); compMat.dispose(); blank.dispose();
+      quadGeo.dispose(); spriteGeo.dispose(); blurMat.dispose(); blurAddMat.dispose(); compMat.dispose(); blendMat.dispose(); blank.dispose();
       for (const k of Object.keys(sprites)) { sprites[k].material.dispose(); sprites[k].dispose(); }
       for (const t of Object.values(spriteTex)) t.dispose();
       renderer.dispose();

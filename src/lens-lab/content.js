@@ -91,6 +91,8 @@ const AR = {
   simLoading: 'جارٍ تحميل الصورة التوضيحية…',
   simLater: 'ستظهر الصورة التوضيحية عند الوصول إلى هذا الجزء.',
   simFailed: 'تعذّر عرض الصورة التوضيحية على هذا الجهاز. المقارنة المكتوبة أعلاه تبقى صحيحة.',
+  simLoadFailed: 'تعذّر تحميل الصورة التوضيحية على هذا الاتصال. المقارنة المكتوبة أعلاه تبقى صحيحة.',
+  simRetry: 'إعادة المحاولة',
   toricAssumption: 'لإظهار عمل عدسة التوريك، تفترض الصورة أن في القرنية استجماتيزماً متوسطاً. العدسة غير التوريكية في المقارنة لا تصححه.',
   sameLens: 'اخترت النوع نفسه مرتين؛ تم تبديل العدسة الأخرى.',
   // advanced
@@ -269,6 +271,8 @@ const EN = {
   simLoading: 'Loading the illustration…',
   simLater: 'The illustration appears when you reach this part.',
   simFailed: 'The illustration cannot be shown on this device. The written comparison above still applies.',
+  simLoadFailed: 'The illustration could not load on this connection. The written comparison above still applies.',
+  simRetry: 'Try again',
   toricAssumption: 'To show what a toric lens does, the picture assumes a moderate amount of corneal astigmatism. The non-toric lens in the comparison does not correct it.',
   sameLens: 'You chose the same type twice, so the other lens was swapped.',
   advanced: 'Advanced details: model assumptions',

@@ -12,6 +12,7 @@ import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } 
 import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
 import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES, OCULAR_SURFACE } from './src/site/content.js';
 import { createFeatureMount, hasFeature } from './src/feature-loaders.js';
+import { withTimeout, recoverStaleBuild } from './src/chunk-recovery.js';
 import { EMPLOYMENT, publicAchievements, achievementById, verifiedPublications, DEVICES, timelineItems, publishedPhotos, GALLERY_CATEGORIES } from './clinical-profile.js';
 import { createSectionPatterns } from './src/site/section-patterns.js';
 
@@ -1203,7 +1204,10 @@ function renderLightJourneyPage() {
 }
 
 // Vision simulator: one host node and controller for the page's lifetime; mounted lazily near the viewport.
-const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, chromeRO: null };
+const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, chromeRO: null, token: 0 };
+// A chunk that has not arrived after this long (stalled connection) ends in the retry message, never an endless
+// "Loading" (06_LENS_LAB_FINAL_RECOVERY.md, F6). The download keeps going in the background; a retry reuses it.
+const VSIM_LOAD_TIMEOUT_MS = 20000;
 
 // A returning visitor finds the last simple choice again (one localStorage key: lens, distance preset, lighting; never
 // anything about their eyes) and a link such as ?lens=edof&dist=near&light=night shows that view. Values are checked
@@ -1293,23 +1297,27 @@ async function loadVisionSim() {
   if (vsim.loading || vsim.ctrl) return;
   vsim.loading = true;
   const host = vsim.host;
+  const token = ++vsim.token;
   try {
-    const mod = await import('./src/vision-sim/index.js');
-    if (vsim.host !== host || !host.isConnected) return; // visitor left the page while it loaded
+    const mod = await withTimeout(import('./src/vision-sim/index.js'), VSIM_LOAD_TIMEOUT_MS);
+    if (token !== vsim.token || vsim.host !== host || !host.isConnected) return; // visitor left the page while it loaded
     host.innerHTML = ''; // drop a previous load-error message
     const ctrl = await mod.mount(host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), ...vsimOptions({ ...vsimStored(), ...vsimFromUrl() }) });
-    if (vsim.host !== host) { ctrl.destroy(); return; } // left during the mount: its WebGL context must not outlive the page
+    if (token !== vsim.token || vsim.host !== host) { ctrl.destroy(); return; } // left during the mount: its WebGL context must not outlive the page
     vsim.ctrl = ctrl;
     vsim.ctrl.on('change', vsimRemember);
     vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
     vsim.failed = false;
     document.getElementById('simulator-host')?.removeAttribute('data-reserve'); // mounted: it sizes itself now
   } catch (err) {
+    if (token !== vsim.token) return;
     console.warn('Vision simulator failed to load', err);
-    if (vsim.host === host) showVisionSimError();
+    // a tab running an older build than the server (a deploy renamed the chunks) reloads once instead (F1)
+    if (await recoverStaleBuild(err)) return;
+    if (token === vsim.token && vsim.host === host) showVisionSimError();
   } finally {
-    vsim.loading = false;
-    if (vsim.host && vsim.host !== host && !vsim.ctrl) mountVisionSim(); // came back while the old load was finishing
+    if (token === vsim.token) vsim.loading = false;
+    if (vsim.host && vsim.host !== host && !vsim.ctrl && !vsim.loading) mountVisionSim(); // came back while the old load was finishing
   }
 }
 // A failed download used to leave an empty 1,500 px reserved box with no explanation (BUG-09): say what happened,
