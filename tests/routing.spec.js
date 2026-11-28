@@ -76,14 +76,14 @@ test.describe('History and navigation', () => {
 test.describe('Language and theme persistence', () => {
   test('switching language on a procedure page opens its counterpart URL and survives reload', async ({ page }) => {
     await page.goto('/procedures/keratoconus-cxl/');
-    await page.locator('button[onclick="toggleLang()"]').first().click();
+    await page.locator('button[data-act="lang"]').first().click();
     await expect(page).toHaveURL(/\/en\/procedures\/keratoconus-cxl\/$/);
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     await expect(page.locator('main h1')).toHaveText(name('keratoconus-cxl').en);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/en\/procedures\/keratoconus-cxl\/$/);
     await page.reload();
     await expect(page.locator('main h1')).toHaveText(name('keratoconus-cxl').en);
-    await page.locator('button[onclick="toggleLang()"]').first().click();
+    await page.locator('button[data-act="lang"]').first().click();
     await expect(page).toHaveURL(/\/procedures\/keratoconus-cxl\/$/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
   });
@@ -99,7 +99,7 @@ test.describe('Language and theme persistence', () => {
     const ctx = await browser.newContext({ colorScheme: 'light' });
     const page = await ctx.newPage();
     await page.goto('/en/');
-    await page.locator('[onclick="toggleTheme()"]').first().click();
+    await page.locator('[data-act="theme"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.locator('#procedures a.pgal-link').first().click(); // homepage gallery (image + name, 2026-11-23)
     await expect(page.locator('main h1')).toHaveText(PROCEDURES[0].name.en);
@@ -138,7 +138,7 @@ test.describe('Served from a subpath (GitHub Pages)', () => {
     await page.locator('.crumbs a').first().click();
     await expect(page).toHaveURL(`${origin}${sub}/en/`);
     await expect(page.locator('h1.hero-title')).toHaveText(DOCTOR.identity.name.en);
-    await page.locator('button[onclick="toggleLang()"]').first().click();
+    await page.locator('button[data-act="lang"]').first().click();
     await expect(page).toHaveURL(`${origin}${sub}/`);
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
     expect(errors).toEqual([]);
@@ -201,7 +201,7 @@ test.describe('Unknown addresses', () => {
     await lostPage(page);
     await page.goto('/no-such-page/');
     await expect(page.locator('main h1')).toHaveText('هذه الصفحة غير موجودة');
-    await page.locator('[onclick="toggleLang()"]').first().click();
+    await page.locator('[data-act="lang"]').first().click();
     await expect(page.locator('main h1')).toHaveText('This page does not exist');
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     expect(new URL(page.url()).pathname).toBe('/no-such-page/');

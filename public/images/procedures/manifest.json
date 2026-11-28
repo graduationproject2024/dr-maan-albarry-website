@@ -1,7 +1,7 @@
 {
   "name": "Dr. Maan Albarry — anatomical atlas image library",
-  "version": "atlas-2026.11-r2",
-  "generated": "2026-11-09",
+  "version": "atlas-2026.11-r3",
+  "generated": "2026-11-24",
   "generator": "node scripts/illustrations/atlas.mjs",
   "medicalReview": "NONE. No physician has reviewed these images. Every asset is reviewStatus \"pending\" and approval \"not approved\" until Dr. Maan Albarry reviews it.",
   "labelLevels": "labelAnchors[].essential marks the labels shown by default (at most 4 on L2, 1 or 2 on L1); the rest are one tap away under \"Show all labels\". labelAnchors[].plain is the patient wording shown in the key. Both are proposals pending physician review.",
@@ -19,7 +19,7 @@
   "cameras": {
     "sagittal": {
       "name": "Sagittal cut-away",
-      "rule": "Camera square to a meridional cut face (at most 20 degrees off its normal), anterior to the LEFT, long lens (fov 12-14 degrees) so the painted section reads like a textbook cross-section while the 3D tissue behind it keeps depth."
+      "rule": "Camera square to a meridional cut face (at most 20 degrees off its normal), anterior to the LEFT (close-ups) or UP (the ICL hero and card, so the whole section spans the frame), long lens (fov 12-14 degrees) so the painted section reads like a textbook cross-section while the 3D tissue behind it keeps depth."
     },
     "frontal": {
       "name": "Frontal",
@@ -3386,25 +3386,25 @@
         "height": 1350,
         "aspect": "16:9"
       },
-      "camera": "oblique",
+      "camera": "sagittal",
       "cameraSpec": {
         "target": [
-          1.59,
-          2.54,
-          0.7
+          0,
+          0,
+          0.1
         ],
         "dir": [
-          0.8066127627927412,
-          -0.3591271399312983,
-          0.46947156278589086
+          6.122301397540666e-17,
+          -0.9998476951563913,
+          0.0174524064372836
         ],
         "up": [
           0,
           0,
           1
         ],
-        "visibleHeightMm": 6.3,
-        "fov": 18,
+        "visibleHeightMm": 8.6,
+        "fov": 12,
         "ortho": false,
         "shift": [
           0,
@@ -3418,7 +3418,7 @@
           "format": "webp",
           "width": 640,
           "height": 360,
-          "bytes": 33422,
+          "bytes": 23168,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3428,7 +3428,7 @@
           "format": "webp",
           "width": 640,
           "height": 360,
-          "bytes": 18524,
+          "bytes": 15712,
           "quality": 0.9
         },
         {
@@ -3437,7 +3437,7 @@
           "format": "webp",
           "width": 1024,
           "height": 576,
-          "bytes": 73230,
+          "bytes": 44100,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3447,7 +3447,7 @@
           "format": "webp",
           "width": 1024,
           "height": 576,
-          "bytes": 37294,
+          "bytes": 29976,
           "quality": 0.9
         },
         {
@@ -3456,7 +3456,7 @@
           "format": "webp",
           "width": 1600,
           "height": 900,
-          "bytes": 139218,
+          "bytes": 84850,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3466,7 +3466,7 @@
           "format": "webp",
           "width": 1600,
           "height": 900,
-          "bytes": 80462,
+          "bytes": 59956,
           "quality": 0.9
         },
         {
@@ -3475,7 +3475,7 @@
           "format": "webp",
           "width": 2400,
           "height": 1350,
-          "bytes": 261048,
+          "bytes": 149648,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3485,7 +3485,7 @@
           "format": "webp",
           "width": 2400,
           "height": 1350,
-          "bytes": 168588,
+          "bytes": 112752,
           "quality": 0.9
         },
         {
@@ -3494,7 +3494,7 @@
           "format": "jpeg",
           "width": 1024,
           "height": 576,
-          "bytes": 52901,
+          "bytes": 44390,
           "quality": 0.86
         },
         {
@@ -3503,7 +3503,7 @@
           "format": "jpeg",
           "width": 1600,
           "height": 900,
-          "bytes": 115507,
+          "bytes": 89584,
           "quality": 0.86
         }
       ],
@@ -3512,44 +3512,47 @@
         {
           "id": "icl",
           "structure": "icl",
-          "x": 0.3773,
-          "y": 0.468,
+          "x": 0.572,
+          "y": 0.3919,
           "en": "Implantable contact lens (ICL)",
           "ar": "العدسة اللاصقة الداخلية (ICL)",
           "plain": {
-            "en": "Implanted lens (ICL)",
-            "ar": "العدسة المزروعة (ICL)"
+            "en": "Implanted lens (ICL), behind the iris",
+            "ar": "العدسة المزروعة (ICL) خلف القزحية"
           },
           "essential": true
         },
         {
           "id": "vault",
           "structure": "vault",
-          "x": 0.3264,
-          "y": 0.5029,
+          "x": 0.4542,
+          "y": 0.4505,
           "en": "Vault (gap above the natural lens)",
           "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية",
           "plain": {
-            "en": "Gap above the natural lens (vault)",
-            "ar": "المسافة فوق العدسة الطبيعية"
+            "en": "Small clear gap above the natural lens (vault)",
+            "ar": "مسافة صغيرة صافية فوق العدسة الطبيعية"
           },
           "essential": true
         },
         {
           "id": "natural-lens",
-          "structure": "natural-lens",
-          "x": 0.399,
-          "y": 0.7154,
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية",
-          "plain": null,
+          "structure": "natural-lens-kept",
+          "x": 0.5,
+          "y": 0.6975,
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)",
+          "plain": {
+            "en": "Your natural lens, which stays",
+            "ar": "عدستك الطبيعية، وتبقى في مكانها"
+          },
           "essential": true
         },
         {
           "id": "iris",
           "structure": "iris",
-          "x": 0.6074,
-          "y": 0.5011,
+          "x": 0.7552,
+          "y": 0.4128,
           "en": "Iris",
           "ar": "القزحية",
           "plain": {
@@ -3561,8 +3564,8 @@
         {
           "id": "cornea",
           "structure": "cornea",
-          "x": 0.4442,
-          "y": 0.1226,
+          "x": 0.3297,
+          "y": 0.1474,
           "en": "Cornea",
           "ar": "القرنية",
           "plain": {
@@ -3574,8 +3577,8 @@
         {
           "id": "icl-footplate",
           "structure": "icl-footplate",
-          "x": 0.7168,
-          "y": 0.6196,
+          "x": 0.1697,
+          "y": 0.4877,
           "en": "ICL footplate",
           "ar": "طرف ارتكاز العدسة",
           "plain": {
@@ -3585,15 +3588,15 @@
           "essential": false
         },
         {
-          "id": "anterior-chamber",
-          "structure": "anterior-chamber",
-          "x": 0.3732,
-          "y": 0.2689,
-          "en": "Anterior chamber",
-          "ar": "الحجرة الأمامية",
+          "id": "ciliary-body",
+          "structure": "ciliary-body",
+          "x": 0.868,
+          "y": 0.6031,
+          "en": "Ciliary body",
+          "ar": "الجسم الهدبي",
           "plain": {
-            "en": "Space between cornea and iris (anterior chamber)",
-            "ar": "المسافة بين القرنية والقزحية (الحجرة الأمامية)"
+            "en": "Ring of tissue around the lens (ciliary body)",
+            "ar": "حلقة النسيج حول العدسة (الجسم الهدبي)"
           },
           "essential": false
         }
@@ -3610,9 +3613,9 @@
           "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية"
         },
         {
-          "id": "natural-lens",
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية"
+          "id": "natural-lens-kept",
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)"
         },
         {
           "id": "iris",
@@ -3630,9 +3633,9 @@
           "ar": "طرف ارتكاز العدسة"
         },
         {
-          "id": "anterior-chamber",
-          "en": "Anterior chamber",
-          "ar": "الحجرة الأمامية"
+          "id": "ciliary-sulcus",
+          "en": "Ciliary sulcus",
+          "ar": "الثلم الهدبي"
         },
         {
           "id": "ciliary-body",
@@ -3673,24 +3676,28 @@
       "knownSimplifications": [
         "Schematic adult eye: rotationally symmetric tissues (lathe solids), so the fovea sits on the optical axis.",
         "Tissue colours are a calm illustration palette, not true histology colours.",
-        "Generic, brand-free plate (central port omitted); vault ≈0.5 mm centrally is illustrative.",
-        "The vault is tinted aqua so it reads; aqueous is clear. The vitreous floor is now translucent (it was a pale slab)."
+        "ICL geometry from the surgical-simulator model (src/surgical-sim/anatomy/geometry.js ICL, procedures/icl.js plateMid / irisOnIclZ): vault 0.5 mm between the back of the plate and the lens front, arch exponent 2, optic bulge 0.08 mm, footplates in the sulcus (half-length 5.3 mm in this eye).",
+        "Plate drawn 0.2 mm thick, twice the 0.1 mm of the reference model, so it stays visible on a phone; the vault is not exaggerated.",
+        "Generic, brand-free plate (central port omitted); the section runs along the plate’s long axis, so both footplates show.",
+        "Fluids (aqueous in front, vitreous behind the lens) are painted as calm opaque fills so the section is never a window into the eye behind it."
       ],
       "alt": {
-        "en": "Cut-away of the front of the eye: a thin implantable lens rests behind the iris and arches over the clear natural lens with a small fluid gap.",
-        "ar": "مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية تتقوّس فوق العدسة الطبيعية الشفافة مع فراغ صغير مملوء بالسائل."
+        "en": "Cross-section of the front of the eye: a thin teal lens implant sits behind the iris and arches over the natural lens, which stays, with a small clear gap.",
+        "ar": "مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية تتقوّس فوق العدسة الطبيعية التي تبقى، مع فراغ صغير صافٍ بينهما."
       },
       "caption": {
-        "en": "An ICL sits behind the iris and arches over the natural lens, which stays in place.",
-        "ar": "تستقر العدسة اللاصقة الداخلية خلف القزحية وتتقوّس فوق العدسة الطبيعية التي تبقى في مكانها."
+        "en": "An ICL sits behind the iris and in front of your natural lens, which stays in place.",
+        "ar": "تستقر العدسة اللاصقة الداخلية خلف القزحية وأمام عدستك الطبيعية التي تبقى في مكانها."
       },
       "questionsForDrMaan": [
         "Is a ~0.5 mm central vault the right “ideal” to depict?",
+        "Is drawing the plate twice its real thickness acceptable for legibility?",
         "Should the central port be drawn?"
       ],
-      "version": "atlas-2026.11-r2",
+      "version": "atlas-2026.11-r3",
       "changeNote": [
-        "Reframed with anterior up so the section runs across the 16:9 frame (the subject filled only the centre on phones); anatomy unchanged."
+        "Rebuilt as one flat sagittal section square to the cut (the 3/4 wedge cut-away, the translucent 3D implant and the tinted vault slab are gone): the implant is a single teal arch behind the iris and in front of the natural lens, the natural lens is drawn whole and labelled as kept, the vault is clear fluid; geometry from the surgical-simulator ICL model (vault 0.5 mm).",
+        "Anterior up across the 16:9 frame; both footplates in the sulcus; labels: implant, gap, natural lens (kept), iris essential."
       ],
       "reApprovalNeeded": true,
       "essentialLabelsReview": "pending physician review",
@@ -3698,6 +3705,18 @@
       "reviewer": null,
       "reviewedOn": null,
       "approval": "not approved",
+      "model": {
+        "version": "icl-section-r3",
+        "scene": "scripts/illustrations/src/scenes/icl.js (iclSection)",
+        "eye": "scripts/illustrations/src/anatomy.js (schematic adult eye of the series)",
+        "implant": "src/surgical-sim/anatomy/geometry.js ICL (vault 0.5 mm, plate 0.1 mm, optic radius 2.9 mm) and src/surgical-sim/procedures/icl.js plateMid (arch 2, optic bulge 0.08 mm) / irisOnIclZ (iris clearance 0.05 mm), library ssim-anatomy-2026.11-r1",
+        "drawnExaggeration": "plate thickness x2 (0.2 mm drawn)",
+        "geometry": {
+          "vaultMm": 0.5,
+          "plateHalfLengthMm": 5.3,
+          "irisLiftMm": 0.816
+        }
+      },
       "licence": "Original procedural three.js render made for this site; no third-party models, textures or photographs."
     },
     {
@@ -3709,28 +3728,28 @@
         "height": 1500,
         "aspect": "4:5"
       },
-      "camera": "oblique",
+      "camera": "sagittal",
       "cameraSpec": {
         "target": [
-          1.6,
-          2.3,
-          0.35
-        ],
-        "dir": [
-          0.8066127627927412,
-          -0.3591271399312983,
-          0.46947156278589086
-        ],
-        "up": [
-          0.35,
-          1,
+          2.7,
+          0,
           0
         ],
-        "visibleHeightMm": 7.6,
-        "fov": 18,
+        "dir": [
+          6.122301397540666e-17,
+          -0.9998476951563913,
+          0.0174524064372836
+        ],
+        "up": [
+          0,
+          0,
+          1
+        ],
+        "visibleHeightMm": 9,
+        "fov": 12,
         "ortho": false,
         "shift": [
-          -0.5,
+          0,
           0
         ]
       },
@@ -3741,7 +3760,7 @@
           "format": "webp",
           "width": 480,
           "height": 600,
-          "bytes": 44494,
+          "bytes": 28646,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3751,7 +3770,7 @@
           "format": "webp",
           "width": 480,
           "height": 600,
-          "bytes": 22802,
+          "bytes": 12822,
           "quality": 0.9
         },
         {
@@ -3760,7 +3779,7 @@
           "format": "webp",
           "width": 800,
           "height": 1000,
-          "bytes": 103142,
+          "bytes": 61304,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3770,7 +3789,7 @@
           "format": "webp",
           "width": 800,
           "height": 1000,
-          "bytes": 52772,
+          "bytes": 27562,
           "quality": 0.9
         },
         {
@@ -3779,8 +3798,8 @@
           "format": "webp",
           "width": 1200,
           "height": 1500,
-          "bytes": 122210,
-          "quality": 0.78,
+          "bytes": 105052,
+          "quality": 0.9,
           "alphaStep": 4
         },
         {
@@ -3789,7 +3808,7 @@
           "format": "webp",
           "width": 1200,
           "height": 1500,
-          "bytes": 111424,
+          "bytes": 51368,
           "quality": 0.9
         },
         {
@@ -3798,7 +3817,7 @@
           "format": "jpeg",
           "width": 800,
           "height": 1000,
-          "bytes": 72901,
+          "bytes": 43416,
           "quality": 0.86
         }
       ],
@@ -3807,44 +3826,34 @@
         {
           "id": "icl",
           "structure": "icl",
-          "x": 0.4825,
-          "y": 0.6504,
+          "x": 0.3194,
+          "y": 0.3903,
           "en": "Implantable contact lens (ICL)",
           "ar": "العدسة اللاصقة الداخلية (ICL)",
           "plain": {
-            "en": "Implanted lens (ICL)",
-            "ar": "العدسة المزروعة (ICL)"
+            "en": "Implanted lens (ICL), behind the iris",
+            "ar": "العدسة المزروعة (ICL) خلف القزحية"
           },
           "essential": true
         },
         {
-          "id": "vault",
-          "structure": "vault",
-          "x": 0.5149,
-          "y": 0.7275,
-          "en": "Vault (gap above the natural lens)",
-          "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية",
-          "plain": {
-            "en": "Gap above the natural lens (vault)",
-            "ar": "المسافة فوق العدسة الطبيعية"
-          },
-          "essential": false
-        },
-        {
           "id": "natural-lens",
-          "structure": "natural-lens",
-          "x": 0.7419,
-          "y": 0.6282,
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية",
-          "plain": null,
+          "structure": "natural-lens-kept",
+          "x": 0.3751,
+          "y": 0.6665,
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)",
+          "plain": {
+            "en": "Your natural lens, which stays",
+            "ar": "عدستك الطبيعية، وتبقى في مكانها"
+          },
           "essential": true
         },
         {
           "id": "iris",
           "structure": "iris",
-          "x": 0.5336,
-          "y": 0.3112,
+          "x": 0.6806,
+          "y": 0.4111,
           "en": "Iris",
           "ar": "القزحية",
           "plain": {
@@ -3861,19 +3870,19 @@
           "ar": "العدسة اللاصقة الداخلية (ICL)"
         },
         {
-          "id": "vault",
-          "en": "Vault (gap above the natural lens)",
-          "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية"
-        },
-        {
-          "id": "natural-lens",
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية"
+          "id": "natural-lens-kept",
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)"
         },
         {
           "id": "iris",
           "en": "Iris",
           "ar": "القزحية"
+        },
+        {
+          "id": "cornea",
+          "en": "Cornea",
+          "ar": "القرنية"
         }
       ],
       "references": [
@@ -3905,27 +3914,44 @@
       "knownSimplifications": [
         "Schematic adult eye: rotationally symmetric tissues (lathe solids), so the fovea sits on the optical axis.",
         "Tissue colours are a calm illustration palette, not true histology colours.",
-        "Generic plate; vault tint illustrative."
+        "ICL geometry from the surgical-simulator model (src/surgical-sim/anatomy/geometry.js ICL, procedures/icl.js plateMid / irisOnIclZ): vault 0.5 mm between the back of the plate and the lens front, arch exponent 2, optic bulge 0.08 mm, footplates in the sulcus (half-length 5.3 mm in this eye).",
+        "Plate drawn 0.2 mm thick, twice the 0.1 mm of the reference model, so it stays visible on a phone; the vault is not exaggerated.",
+        "Half of the hero section (the centre to the sulcus), anterior up."
       ],
       "alt": {
-        "en": "Close cut-away showing a thin lens implant behind the coloured iris, arching over the eye’s own clear lens.",
-        "ar": "مقطع مقرّب يُظهر عدسة مزروعة رقيقة خلف القزحية الملوّنة تتقوّس فوق عدسة العين الطبيعية الشفافة."
+        "en": "Half cross-section of the front of the eye: a thin teal lens implant behind the brown iris, above the eye’s own lens.",
+        "ar": "نصف مقطع لمقدمة العين: عدسة مزروعة رقيقة خلف القزحية البنية فوق عدسة العين الطبيعية."
       },
       "caption": {
-        "en": "The ICL adds a lens inside the eye; the natural lens stays.",
-        "ar": "تُضيف ICL عدسة داخل العين وتبقى العدسة الطبيعية."
+        "en": "The ICL adds a lens behind the iris; your natural lens stays.",
+        "ar": "تُضيف ICL عدسة خلف القزحية، وتبقى عدستك الطبيعية."
       },
       "questionsForDrMaan": [
-        "Is this close-up recognisable enough at card size?"
+        "Is this half-section recognisable enough at card size?"
       ],
-      "version": "atlas-2026.11-r1",
-      "changeNote": null,
-      "reApprovalNeeded": false,
+      "version": "atlas-2026.11-r3",
+      "changeNote": [
+        "Rebuilt as one flat sagittal section square to the cut (the 3/4 wedge cut-away, the translucent 3D implant and the tinted vault slab are gone): the implant is a single teal arch behind the iris and in front of the natural lens, the natural lens is drawn whole and labelled as kept, the vault is clear fluid; geometry from the surgical-simulator ICL model (vault 0.5 mm).",
+        "Card: the right half of the same section, anterior up, so it reads as the same picture as the hero."
+      ],
+      "reApprovalNeeded": true,
       "essentialLabelsReview": "pending physician review",
       "reviewStatus": "pending",
       "reviewer": null,
       "reviewedOn": null,
       "approval": "not approved",
+      "model": {
+        "version": "icl-section-r3",
+        "scene": "scripts/illustrations/src/scenes/icl.js (iclSection)",
+        "eye": "scripts/illustrations/src/anatomy.js (schematic adult eye of the series)",
+        "implant": "src/surgical-sim/anatomy/geometry.js ICL (vault 0.5 mm, plate 0.1 mm, optic radius 2.9 mm) and src/surgical-sim/procedures/icl.js plateMid (arch 2, optic bulge 0.08 mm) / irisOnIclZ (iris clearance 0.05 mm), library ssim-anatomy-2026.11-r1",
+        "drawnExaggeration": "plate thickness x2 (0.2 mm drawn)",
+        "geometry": {
+          "vaultMm": 0.5,
+          "plateHalfLengthMm": 5.3,
+          "irisLiftMm": 0.816
+        }
+      },
       "licence": "Original procedural three.js render made for this site; no third-party models, textures or photographs."
     },
     {
@@ -3940,21 +3966,21 @@
       "camera": "sagittal",
       "cameraSpec": {
         "target": [
-          3,
+          3.3,
           0,
-          0.2
+          0.05
         ],
         "dir": [
-          0.10224426555364696,
-          -0.9727892058317134,
-          0.20791169081775945
+          6.123233995736766e-17,
+          -1,
+          6.123233995736766e-17
         ],
         "up": [
           1,
           0,
           0
         ],
-        "visibleHeightMm": 6.4,
+        "visibleHeightMm": 5.6,
         "fov": 12,
         "ortho": false,
         "shift": [
@@ -3969,7 +3995,7 @@
           "format": "webp",
           "width": 640,
           "height": 480,
-          "bytes": 22350,
+          "bytes": 17744,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3979,7 +4005,7 @@
           "format": "webp",
           "width": 640,
           "height": 480,
-          "bytes": 17506,
+          "bytes": 15878,
           "quality": 0.9
         },
         {
@@ -3988,7 +4014,7 @@
           "format": "webp",
           "width": 1024,
           "height": 768,
-          "bytes": 46754,
+          "bytes": 36324,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -3998,7 +4024,7 @@
           "format": "webp",
           "width": 1024,
           "height": 768,
-          "bytes": 38666,
+          "bytes": 33304,
           "quality": 0.9
         },
         {
@@ -4007,7 +4033,7 @@
           "format": "webp",
           "width": 1600,
           "height": 1200,
-          "bytes": 90010,
+          "bytes": 67786,
           "quality": 0.9,
           "alphaStep": 4
         },
@@ -4017,7 +4043,7 @@
           "format": "webp",
           "width": 1600,
           "height": 1200,
-          "bytes": 78810,
+          "bytes": 63560,
           "quality": 0.9
         },
         {
@@ -4026,7 +4052,7 @@
           "format": "jpeg",
           "width": 1024,
           "height": 768,
-          "bytes": 56234,
+          "bytes": 48532,
           "quality": 0.86
         }
       ],
@@ -4035,44 +4061,47 @@
         {
           "id": "icl",
           "structure": "icl",
-          "x": 0.4309,
-          "y": 0.6576,
+          "x": 0.3921,
+          "y": 0.7143,
           "en": "Implantable contact lens (ICL)",
           "ar": "العدسة اللاصقة الداخلية (ICL)",
           "plain": {
-            "en": "Implanted lens (ICL)",
-            "ar": "العدسة المزروعة (ICL)"
+            "en": "Implanted lens (ICL), behind the iris",
+            "ar": "العدسة المزروعة (ICL) خلف القزحية"
           },
           "essential": true
         },
         {
           "id": "vault",
           "structure": "vault",
-          "x": 0.4615,
-          "y": 0.826,
+          "x": 0.4442,
+          "y": 0.8571,
           "en": "Vault (gap above the natural lens)",
           "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية",
           "plain": {
-            "en": "Gap above the natural lens (vault)",
-            "ar": "المسافة فوق العدسة الطبيعية"
+            "en": "Small clear gap above the natural lens (vault)",
+            "ar": "مسافة صغيرة صافية فوق العدسة الطبيعية"
           },
           "essential": true
         },
         {
           "id": "natural-lens",
-          "structure": "natural-lens",
-          "x": 0.6247,
-          "y": 0.6501,
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية",
-          "plain": null,
+          "structure": "natural-lens-kept",
+          "x": 0.6808,
+          "y": 0.7321,
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)",
+          "plain": {
+            "en": "Your natural lens, which stays",
+            "ar": "عدستك الطبيعية، وتبقى في مكانها"
+          },
           "essential": true
         },
         {
           "id": "iris",
           "structure": "iris",
-          "x": 0.4133,
-          "y": 0.3458,
+          "x": 0.3795,
+          "y": 0.375,
           "en": "Iris",
           "ar": "القزحية",
           "plain": {
@@ -4084,8 +4113,8 @@
         {
           "id": "icl-footplate",
           "structure": "icl-footplate",
-          "x": 0.5219,
-          "y": 0.108,
+          "x": 0.4794,
+          "y": 0.1786,
           "en": "ICL footplate",
           "ar": "طرف ارتكاز العدسة",
           "plain": {
@@ -4095,23 +4124,10 @@
           "essential": true
         },
         {
-          "id": "ciliary-sulcus",
-          "structure": "ciliary-sulcus",
-          "x": 0.5289,
-          "y": 0.0606,
-          "en": "Ciliary sulcus",
-          "ar": "الثلم الهدبي",
-          "plain": {
-            "en": "Groove behind the iris (ciliary sulcus)",
-            "ar": "الأخدود خلف القزحية (الثلم الهدبي)"
-          },
-          "essential": false
-        },
-        {
           "id": "ciliary-body",
           "structure": "ciliary-body",
-          "x": 0.6476,
-          "y": 0.0478,
+          "x": 0.592,
+          "y": 0.102,
           "en": "Ciliary body",
           "ar": "الجسم الهدبي",
           "plain": {
@@ -4123,8 +4139,8 @@
         {
           "id": "cornea",
           "structure": "cornea",
-          "x": 0.1425,
-          "y": 0.6371,
+          "x": 0.0783,
+          "y": 0.6607,
           "en": "Cornea",
           "ar": "القرنية",
           "plain": {
@@ -4136,8 +4152,8 @@
         {
           "id": "anterior-chamber",
           "structure": "anterior-chamber",
-          "x": 0.2687,
-          "y": 0.7263,
+          "x": 0.1987,
+          "y": 0.8036,
           "en": "Anterior chamber",
           "ar": "الحجرة الأمامية",
           "plain": {
@@ -4159,9 +4175,9 @@
           "ar": "المسافة بين العدسة المزروعة والعدسة الطبيعية"
         },
         {
-          "id": "natural-lens",
-          "en": "Natural lens",
-          "ar": "العدسة الطبيعية"
+          "id": "natural-lens-kept",
+          "en": "Natural lens (kept)",
+          "ar": "العدسة الطبيعية (تبقى)"
         },
         {
           "id": "iris",
@@ -4227,29 +4243,46 @@
       "knownSimplifications": [
         "Schematic adult eye: rotationally symmetric tissues (lathe solids), so the fovea sits on the optical axis.",
         "Tissue colours are a calm illustration palette, not true histology colours.",
-        "True sagittal section along the plate’s long axis; plate thickness and outline generic.",
-        "The iris is lifted 0.72 mm over the plate (draped iris is simplified)."
+        "ICL geometry from the surgical-simulator model (src/surgical-sim/anatomy/geometry.js ICL, procedures/icl.js plateMid / irisOnIclZ): vault 0.5 mm between the back of the plate and the lens front, arch exponent 2, optic bulge 0.08 mm, footplates in the sulcus (half-length 5.3 mm in this eye).",
+        "Plate drawn 0.2 mm thick, twice the 0.1 mm of the reference model, so it stays visible on a phone; the vault is not exaggerated.",
+        "The iris is raised just enough to rest on the implant (0.05 mm clearance, the surgical-simulator rule); a draped iris is simplified.",
+        "Footplate tip drawn in the nook between the iris root and the ciliary body (sulcus); exact position varies with lens size."
       ],
       "alt": {
-        "en": "Cross-section showing an implantable lens arching between the iris and the natural lens, its foot resting in the groove behind the iris root.",
-        "ar": "مقطع يُظهر عدسة مزروعة تتقوّس بين القزحية والعدسة الطبيعية، وطرفها مستقر في الثلم خلف جذر القزحية."
+        "en": "Close-up cross-section: the iris, then the thin teal implant, then a clear gap and the natural lens; the implant’s foot rests in the groove behind the iris.",
+        "ar": "مقطع مقرّب: القزحية ثم العدسة المزروعة الرقيقة ثم فراغ صافٍ ثم العدسة الطبيعية؛ وطرف العدسة المزروعة يستقر في الثلم خلف القزحية."
       },
       "caption": {
-        "en": "The gap over the natural lens (the vault) is checked after surgery.",
-        "ar": "تُفحص المسافة فوق العدسة الطبيعية بعد الجراحة."
+        "en": "The small clear gap over the natural lens (the vault) is checked after surgery.",
+        "ar": "تُفحص المسافة الصغيرة الصافية فوق العدسة الطبيعية بعد الجراحة."
       },
       "questionsForDrMaan": [
         "Is the footplate position in the ciliary sulcus drawn correctly?",
         "Is it appropriate to name the vault for patients?"
       ],
-      "version": "atlas-2026.11-r1",
-      "changeNote": null,
-      "reApprovalNeeded": false,
+      "version": "atlas-2026.11-r3",
+      "changeNote": [
+        "Rebuilt as one flat sagittal section square to the cut (the 3/4 wedge cut-away, the translucent 3D implant and the tinted vault slab are gone): the implant is a single teal arch behind the iris and in front of the natural lens, the natural lens is drawn whole and labelled as kept, the vault is clear fluid; geometry from the surgical-simulator ICL model (vault 0.5 mm).",
+        "Close-up in the sagittal convention (anterior left) of the iris, the implant, the vault and the footplate in the sulcus."
+      ],
+      "reApprovalNeeded": true,
       "essentialLabelsReview": "pending physician review",
       "reviewStatus": "pending",
       "reviewer": null,
       "reviewedOn": null,
       "approval": "not approved",
+      "model": {
+        "version": "icl-section-r3",
+        "scene": "scripts/illustrations/src/scenes/icl.js (iclSection)",
+        "eye": "scripts/illustrations/src/anatomy.js (schematic adult eye of the series)",
+        "implant": "src/surgical-sim/anatomy/geometry.js ICL (vault 0.5 mm, plate 0.1 mm, optic radius 2.9 mm) and src/surgical-sim/procedures/icl.js plateMid (arch 2, optic bulge 0.08 mm) / irisOnIclZ (iris clearance 0.05 mm), library ssim-anatomy-2026.11-r1",
+        "drawnExaggeration": "plate thickness x2 (0.2 mm drawn)",
+        "geometry": {
+          "vaultMm": 0.5,
+          "plateHalfLengthMm": 5.3,
+          "irisLiftMm": 0.816
+        }
+      },
       "licence": "Original procedural three.js render made for this site; no third-party models, textures or photographs."
     },
     {

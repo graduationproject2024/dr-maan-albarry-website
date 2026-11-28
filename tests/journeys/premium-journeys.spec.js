@@ -120,7 +120,7 @@ for (const [key, slug] of [['ar-light-390', 'icl'], ['en-dark-390', 'keratoconus
         await page.goBack(); await page.waitForURL(new RegExp(`${p.lang === 'en' ? '/en/' : ':\\d+/'}$`), { timeout: 15000 });
         await page.waitForTimeout(600); await settleScroll(page);
         const s = await docState(page);
-        return { actual: `${s.path} y=${s.scrollY} (left at ${galleryY}); plates ${await page.locator('#procedures .pgal-item').count()}`, ok: Math.abs(s.scrollY - galleryY) < 200 && (await page.locator('#procedures .plate-card').count()) === 7 };
+        return { actual: `${s.path} y=${s.scrollY} (left at ${galleryY}); plates ${await page.locator('#procedures .pgal-item').count()}`, ok: Math.abs(s.scrollY - galleryY) < 200 && (await page.locator('#procedures .pgal-item').count()) === 7 };
       }, { shot: true });
       await j.finish();
     });

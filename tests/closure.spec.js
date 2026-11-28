@@ -156,7 +156,7 @@ test.describe('Phase 2/3 — theme default, 3D section and navigation', () => {
       const lum = await page.evaluate(() => { const [r, g, b] = getComputedStyle(document.body).backgroundColor.match(/\d+/g).map(Number); return (r + g + b) / 3; });
       expect(scheme === 'dark' ? lum < 60 : lum > 200).toBe(true);
       // an explicit choice is saved and wins over the device preference after reload
-      await page.locator('[onclick="toggleTheme()"]').first().click();
+      await page.locator('[data-act="theme"]').first().click();
       const flipped = scheme === 'dark' ? 'light' : 'dark';
       await expect(page.locator('html')).toHaveAttribute('data-theme', flipped);
       expect(await page.evaluate(() => localStorage.getItem('theme'))).toBe(flipped);

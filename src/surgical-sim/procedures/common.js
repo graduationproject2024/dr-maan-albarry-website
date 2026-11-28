@@ -12,16 +12,19 @@ export const mix = (a, b, t) => a + (b - a) * t;
 export const stage = (id, duration, camera, title, text, extra = {}) => ({ id, duration, camera, title, text, ...extra });
 
 // Camera presets (positions in mm, target on the optical axis). "label" makes a preset a visitor-selectable view.
+// `fit` = half width and half height (mm) of the subject around the target in the view plane: the orbit camera
+// computes the distance from it for the current canvas (desktop, phone upright, phone on its side), so `pos` only
+// gives the viewing direction. Re-authored in the 2026-11 camera pass (08_SURGICAL_SIMULATOR_CAMERA_QA.md).
 export const CAMERAS = {
-  full: { pos: [22, 13, 36], target: [0, 0, -6], label: { ar: 'العين كاملة', en: 'Whole eye' } },
-  anterior: { pos: [8, 5.5, 15], target: [0, 0, -0.6], label: { ar: 'مقدمة العين', en: 'Front of the eye' } },
-  section: { pos: [46, 5, -1], target: [0, 0, -7.5], label: { ar: 'مقطع جانبي', en: 'Side section' } },
-  anteriorSection: { pos: [19, 3, 4], target: [0, 0, -0.6], label: { ar: 'مقطع لمقدمة العين', en: 'Front section' } },
-  cornea: { pos: [9, 3.5, 9], target: [0, 0, 2.2], label: { ar: 'القرنية عن قرب', en: 'Cornea close-up' } },
-  corneaSection: { pos: [13, 1.5, 4.5], target: [0, 0, 2.2] },
-  lens: { pos: [17, 4, 6], target: [0, 0, -1.2] },
-  posterior: { pos: [30, 6, -4], target: [0, 0, -10], label: { ar: 'خلف العين', en: 'Back of the eye' } },
-  front: { pos: [0.01, 0.6, 34], target: [0, 0, 0], label: { ar: 'من الأمام', en: 'Front view' } }
+  full: { pos: [22, 13, 36], target: [0, 0, -7], fit: [13.5, 13.5], label: { ar: 'العين كاملة', en: 'Whole eye' } },
+  anterior: { pos: [8, 5.5, 15], target: [0, 0, 0], fit: [6.6, 6.6], label: { ar: 'مقدمة العين', en: 'Front of the eye' } },
+  section: { pos: [46, 5, -1], target: [0, 0, -8.5], fit: [13, 12.6], label: { ar: 'مقطع جانبي', en: 'Side section' } },
+  anteriorSection: { pos: [19, 3, 4], target: [0, 0, -0.5], fit: [4.6, 6.0], label: { ar: 'مقطع لمقدمة العين', en: 'Front section' } },
+  cornea: { pos: [9, 3.5, 9], target: [0, 0, 2.2], fit: [6.4, 6.4], label: { ar: 'القرنية عن قرب', en: 'Cornea close-up' } },
+  corneaSection: { pos: [13, 1.5, 4.5], target: [0, 0, 2.2], fit: [3.6, 6.2] },
+  lens: { pos: [17, 4, 6], target: [0, 0, -1.4], fit: [3.8, 6.0] },
+  posterior: { pos: [30, 6, -4], target: [0, 0, -10.5], fit: [11, 11.6], label: { ar: 'خلف العين', en: 'Back of the eye' } },
+  front: { pos: [0.01, 0.6, 34], target: [0, 0, 0], fit: [9.2, 9.2], label: { ar: 'من الأمام', en: 'Front view' } }
 };
 
 /** Anatomical label anchors (mm). */

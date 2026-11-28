@@ -68,7 +68,7 @@ test.describe('J02', () => {
       return { actual: titles.join(', '), ok: titles.length === 3 && titles.includes(NAME['keratoconus-cxl'].en) };
     }, { shot: true });
     await j.step('Tap the keratoconus card', 'Keratoconus page', async () => {
-      const l = page.locator('#procedures .pgal-link[href$="procedures/keratoconus-cxl/"]'); await revealInFreeArea(page, l); await l.tap();
+      const l = page.locator('#procedures .proc-card-link[href$="procedures/keratoconus-cxl/"]'); await revealInFreeArea(page, l); await l.tap(); // library page (.proc-card), not the home gallery
       await page.waitForURL(/keratoconus-cxl\/$/); const s = await docState(page); return { actual: s.h1, ok: s.h1 === NAME['keratoconus-cxl'].en };
     });
     await j.step('Tap the related "Corneal transplant" card', 'Corneal transplant page', async () => {

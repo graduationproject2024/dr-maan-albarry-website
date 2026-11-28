@@ -269,3 +269,5 @@
   .llab-lvl-bar i { border: 1px solid CanvasText; }
   .llab-lvl[data-level="1"] .llab-lvl-bar i:nth-child(-n+1), .llab-lvl[data-level="2"] .llab-lvl-bar i:nth-child(-n+2), .llab-lvl[data-level="3"] .llab-lvl-bar i:nth-child(-n+3) { background: CanvasText; }
 }
+.llab-retry { display: block; margin-block-start: 12px; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: var(--llab-text); font: inherit; font-weight: 600; cursor: pointer; }
+.llab-retry:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }

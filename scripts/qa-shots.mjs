@@ -43,5 +43,5 @@ for (const { p, lang, w, theme } of todo) {
 }
 await browser.close();
 const f = path.join(outDir, 'heights.json');
-const prev = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : {};
+let prev = {}; try { prev = JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* first run */ }
 fs.writeFileSync(f, JSON.stringify({ ...prev, ...heights }, null, 2));

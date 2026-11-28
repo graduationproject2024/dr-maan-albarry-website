@@ -28,7 +28,6 @@ const def = {
   id: 'keratoconus-cxl', slug: 'keratoconus-cxl', modelId: 'ssim-cxl', version: '2026.11-r1',
   title: { ar: 'القرنية المخروطية وتثبيت القرنية (CXL)', en: 'Keratoconus and corneal cross-linking (CXL)' },
   note: NOTE,
-  minR: 6,
   objectives: [
     { ar: 'التعرف على القرنية الطبيعية كقبة منتظمة الانحناء، وعلى طبقة اللحمة المصنوعة من ألياف الكولاجين.', en: 'Recognise the normal cornea as an evenly curved dome, and the stroma made of collagen fibres.' },
     { ar: 'فهم كيف تضعف القرنية المخروطية وتترقق وتبرز في جزء منها، ولماذا تتشوش الرؤية.', en: 'Understand how a keratoconic cornea weakens, thins and bulges in one area, and why vision becomes distorted.' },
@@ -39,11 +38,11 @@ const def = {
     { id: 'cxl', label: { ar: 'تثبيت القرنية (CXL)', en: 'Cross-linking (CXL)' } }
   ],
   cameras: {
-    closeSection: { pos: [11.5, -1.7, 2.7], target: [0, -1.7, 2.7], label: { ar: 'القرنية عن قرب (مقطع)', en: 'Cornea close-up (section)' } },
-    side: { pos: [18, -0.4, 2.0], target: [0, -0.4, 2.0], label: { ar: 'جانب القرنية', en: 'Side profile' } },
-    front: { pos: [0.01, 0.5, 21], target: [0, -0.3, 1.5], label: { ar: 'من الأمام', en: 'Front view' } },
-    optics: { pos: [34, 1, -2.5], target: [0, 0, -2.5], label: { ar: 'مسار الضوء', en: 'Light path' } },
-    oblique: { pos: [7.5, 6.5, 15.5], target: [0, -0.4, 2.2] },
+    closeSection: { pos: [11.5, -2.0, 2.6], target: [0, -2.0, 2.6], fit: [1.8, 3.4], label: { ar: 'القرنية عن قرب (مقطع)', en: 'Cornea close-up (section)' } },
+    side: { pos: [18, -0.4, 2.0], target: [0, -0.4, 2.0], fit: [2.8, 6.2], label: { ar: 'جانب القرنية', en: 'Side profile' } },
+    front: { pos: [0.01, 0.5, 21], target: [0, -0.3, 1.5], fit: [6.6, 6.6], label: { ar: 'من الأمام', en: 'Front view' } },
+    optics: { pos: [34, 1, -2.5], target: [0, 0, -2.5], fit: [11, 8], label: { ar: 'مسار الضوء', en: 'Light path' } },
+    oblique: { pos: [7.5, 6.5, 15.5], target: [0, -0.4, 1.6], fit: [6.6, 6.6] },
     full: CAMERAS.full
   },
   toggles: [

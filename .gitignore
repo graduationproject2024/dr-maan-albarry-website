@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 test-results/
 playwright-report/
+
+# Local tooling
+.claude/settings.local.json
+.claude/worktrees/
+graphify-out/

@@ -18,6 +18,11 @@
 //   • setLang / setTheme are forwarded; leaving the page destroys the module.
 // ============================================================
 
+import { withTimeout, recoverStaleBuild } from './chunk-recovery.js';
+
+/** A module that has not arrived after this long ends in the retry message instead of an endless loading state. */
+const LOAD_TIMEOUT_MS = 20000;
+
 const MODULES = import.meta.glob(['./lens-lab/index.js', './light-journey/index.js']);
 
 export const FEATURE_PATHS = {
@@ -76,7 +81,7 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
     st.loading = true; mark();
     const token = ++st.token;
     try {
-      const mod = await load(key);
+      const mod = await withTimeout(load(key), LOAD_TIMEOUT_MS);
       if (token !== st.token || !st.host || !st.host.isConnected) return; // visitor left the page while it loaded
       st.host.innerHTML = '';
       const ctrl = await mod.mount(st.host, options());
@@ -88,9 +93,11 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
       const s = slot();
       if (s) s.removeAttribute('data-reserve'); // the module now sizes itself
     } catch (err) {
+      if (token !== st.token) return;
       console.warn(`${key} failed to load`, err);
-      showError();
-    } finally { st.loading = false; mark(); }
+      if (await recoverStaleBuild(err)) return; // stale tab after a deploy: one reload brings the current build
+      if (token === st.token) showError();
+    } finally { if (token === st.token) st.loading = false; mark(); }
   }
 
   return {
@@ -119,6 +126,13 @@ export function createFeatureMount({ key, slotId, options, messages, load = load
       }, { rootMargin: '400px 0px' });
       st.io.observe(s);
       mark();
+    },
+    /** Load now instead of waiting for the slot to near the viewport: a restored reading position below a slot that has
+     *  not mounted cannot be reached until the page has its real height (BUG-FS-01). No-op once loading or mounted. */
+    mountNow() {
+      if (!st.io) return;
+      st.io.disconnect(); st.io = null;
+      load_();
     },
     setTheme(theme) { if (st.ctrl && st.ctrl.setTheme) { try { st.ctrl.setTheme(theme); } catch (e) { /* ignore */ } } },
     setLang(lang) { if (st.ctrl && st.ctrl.setLang) { try { st.ctrl.setLang(lang); } catch (e) { /* ignore */ } } },

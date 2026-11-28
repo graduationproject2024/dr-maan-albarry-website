@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { STRINGS } from '../src/vision-sim/i18n.js';
 import { CONTENT } from '../src/lens-lab/content.js';
+import { computeView } from '../src/vision-sim/optics/model.js';
 
 const HARNESS = 'vision-sim-preview.html';
 const H = '#simulator-host';
@@ -90,6 +91,8 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
       for (const light of ['day', 'night']) {
         await page.evaluate(([l, li]) => { window.__vsim.reset(); window.__vsim.setLens(l); window.__vsim.setLighting(li); }, [lens, light]);
         const whole = await optics();
+        // Screen (50 cm, 2026-11-26) is not in this list: it moves the near layer to 0.50 m, so its values legitimately
+        // differ from the whole scene's 40 cm default; "50 cm changes the picture but not the model" checks them against computeView.
         for (const name of ['Near', 'Intermediate', 'Far']) {
           await preset(page, name);
           const s = await S(page);
@@ -103,13 +106,13 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
   test('each closer view frames its own object, larger than in the whole scene and inside the viewer', async ({ page }) => {
     await openHarness(page);
     const whole = {};
-    for (const [name, m] of [['Near', 0.4], ['Intermediate', 0.65], ['Far', 6]]) {
+    for (const [name, m] of [['Near', 0.4], ['Screen', 0.5], ['Intermediate', 0.65], ['Far', 6]]) { // Screen added 2026-11-26
       await page.evaluate((d) => { window.__vsim.reset(); window.__vsim.setDistance(d); }, m); // API call: no closer view
       expect((await S(page)).closeUp).toBe(false);
       whole[name] = await targetBox(page);
     }
     const frames = [];
-    for (const name of ['Near', 'Intermediate', 'Far']) {
+    for (const name of ['Near', 'Screen', 'Intermediate', 'Far']) {
       await preset(page, name);
       const s = await S(page);
       const b = await targetBox(page);
@@ -121,7 +124,54 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
       expect(b.top + b.height).toBeLessThanOrEqual(1.0001);
       expect(Math.max(b.width, b.height), `${name}: the object fills most of the viewer`).toBeGreaterThan(0.5);
     }
-    expect(new Set(frames).size, 'three different views').toBe(3);
+    expect(new Set(frames).size, 'four different views').toBe(4); // 2026-11-26: Screen (50 cm) frames the phone wider than Near
+  });
+
+  // 2026-11-26: the 50 cm "Screen" button (Dr. Maan's reference distances 40 / 50 / 65 cm + far)
+  test('50 cm changes the picture but not the model: the near layer is evaluated at 0.50 m, framed as seen from there', async ({ page }) => {
+    test.setTimeout(180_000);
+    await openHarness(page);
+    // 2026-11-28 (review of 27bac2d): every lens and every lighting level
+    for (const lens of ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'edof-toric', 'cataract']) for (const light of ['day', 'dusk', 'night']) {
+      await page.evaluate(([l, li]) => { window.__vsim.reset(); window.__vsim.setLens(l); window.__vsim.setLighting(li); }, [lens, light]);
+      await preset(page, 'Near');
+      const near = await S(page);
+      const pNear = light === 'day' ? await page.evaluate(() => window.__visionSim.sample()) : null;
+      await preset(page, 'Screen');
+      const s = await S(page);
+      const pScreen = light === 'day' ? await page.evaluate(() => window.__visionSim.sample()) : null;
+      expect(s.distanceM).toBeCloseTo(0.5, 9);
+      expect(s.subject).toBe('near');
+      expect(s.closeUp).toBe(true);
+      // the model values are exactly computeView() at 0.5 m — nothing new in the model
+      const v = computeView({ lens, distanceM: 0.5, lighting: light });
+      expect(s.optics.A.layers.near.defocusD).toBeCloseTo(v.layers.near.defocusD, 9);
+      expect(s.optics.A.layers.near.blurArcmin).toBeCloseTo(v.layers.near.blurArcmin, 9);
+      expect(s.optics.A.layers.near.sharpness).toBeCloseTo(v.layers.near.sharpness, 9);
+      expect(s.optics.A.layers.distance).toEqual(near.optics.A.layers.distance);
+      expect(s.optics.A.layers.intermediate).toEqual(near.optics.A.layers.intermediate);
+      // the picture changes: framed wider (the phone looks 0.8 × as large) and blurred for 2.0 D instead of 2.5 D
+      expect(s.frame.zoom).toBeLessThan(near.frame.zoom);
+      expect(s.frame.zoom).toBeCloseTo(Math.max(1, near.frame.zoom * 0.8), 2);
+      if (pNear) expect(JSON.stringify(pScreen)).not.toBe(JSON.stringify(pNear));
+      await expect(page.locator('.vsim-caption')).toContainText('50 cm · phone');
+      // 2026-11-28: the 40 cm level wording is NOT claimed at 50 cm (a trifocal's near sharpness falls from 0.27 to 0.06);
+      // the caption says the picture shows the modelled sharpness (pending physician review, N-09)
+      const caption = await page.locator('.vsim-caption').textContent();
+      const seeing = await page.locator('.vsim-seeing').textContent();
+      for (const k of Object.keys(CONTENT.en.lenses)) {
+        expect(caption, `${lens} ${light}: no near-level wording in the caption`).not.toContain(CONTENT.en.lenses[k].levels.near);
+        expect(seeing, `${lens} ${light}: no near-level wording in the explanation`).not.toContain(CONTENT.en.lenses[k].levels.near);
+      }
+      if (lens !== 'cataract') {
+        expect(caption).toContain(STRINGS.en.neutralLevel(STRINGS.en.lenses[lens].short, '50 cm'));
+        expect(seeing).toContain(STRINGS.en.neutralLevel(STRINGS.en.lenses[lens].short, '50 cm'));
+      }
+      // what IS shown follows the model at the actual distance: the clarity bar of the subject row is computeView at 0.5 m
+      const bar = await page.locator('.vsim-meters li.is-subject .vsim-bar').first().getAttribute('aria-label');
+      expect(bar).toContain(v.layers.near.sharpness.toFixed(2));
+    }
+    expect(await page.evaluate(() => new URLSearchParams(location.search).get('dist'))).toBeNull(); // the harness writes no URL
   });
 
   test('the closer view is the same picture seen closer: blur scales with the zoom, brightness does not change', async ({ page }) => {
@@ -319,6 +369,9 @@ for (const [w, h] of SIZES) {
       const near = await step(4, 'select Near', lbl('preset', 'near'), (v) => { expect(v.closeUp).toBe(true); expect(v.caption).toBe('40 cm · phone · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.near}`); });
       expect(near.zoom, 'near: closer than the whole scene').toBeGreaterThan(whole.zoom);
       await step(5, 'understand what changed (Near)', null, (v) => expect(v.whole, 'a way back is shown').not.toBeNull());
+      // 2026-11-26: the 50 cm "Screen" button sits in the same row and needs no scrolling either
+      const screen = await step(5.5, 'select Screen (50 cm)', lbl('preset', 'screen'), (v) => { expect(v.closeUp).toBe(true); expect(v.caption).toBe('50 cm · phone · Day'); expect(v.level).toBe(STRINGS.en.neutralLevel('Monofocal', '50 cm')); }); // 2026-11-28: no 40 cm wording at 50 cm (N-09)
+      expect(screen.zoom, 'screen: framed wider than near').toBeLessThan(near.zoom);
       await step(6, 'select Intermediate', lbl('preset', 'intermediate'), (v) => { expect(v.caption).toBe('65 cm · laptop · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.intermediate}`); });
       await step(7, 'understand what changed (Intermediate)', null, (v) => expect(v.closeUp).toBe(true));
       await step(8, 'select Far', lbl('preset', 'distance'), (v) => { expect(v.caption).toBe('6 m+ · road sign · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.distance}`); });
@@ -422,7 +475,7 @@ for (const [w, h, name] of [[568, 320, 'iPhone SE sideways'], [667, 331, 'iPhone
         await textScale(page, pct);
         await openPublic(page, 'en');
         const reach = await reachAll(page);
-        expect(reach.length, 'three distances, three lenses, three lighting levels, More settings, Reset').toBe(11);
+        expect(reach.length, 'four distances (Screen 50 cm added 2026-11-26), three lenses, three lighting levels, More settings, Reset').toBe(12);
         for (const v of reach) {
           expect(v.between, `"${v.name}" can be brought between the header and the booking bar`).toBe(true);
           expect(v.hit, `"${v.name}": the touch reaches the control, not ${v.receivedBy}`).toBe(true);
@@ -445,7 +498,7 @@ test.describe('short landscape 732×256 (360 × 800 Android phone sideways in Ch
       if (pct !== 100) await textScale(page, pct);
       await openPublic(page, 'en');
       const reach = await reachAll(page);
-      expect(reach.length).toBe(11);
+      expect(reach.length).toBe(12); // four distances since 2026-11-26 (Screen 50 cm)
       for (const v of reach) {
         expect(v.between, `"${v.name}" can be brought between the header and the booking bar`).toBe(true);
         expect(v.hit, `"${v.name}": the touch reaches the control, not ${v.receivedBy}`).toBe(true);
@@ -459,7 +512,7 @@ test.describe('short landscape 732×256 (360 × 800 Android phone sideways in Ch
     // (see the reach test above) and a tap does not move the page (below).
     await openPublic(page, 'en');
     expect(await page.locator(`${H} .vsim-bench`).getAttribute('data-sticky'), 'the picture does not stick at 122 px').toBeNull();
-    for (const d of ['near', 'intermediate', 'distance']) {
+    for (const d of ['near', 'screen', 'intermediate', 'distance']) { // screen (50 cm) added 2026-11-26
       const underPicture = await page.locator(`${H} input[data-group="preset"][value="${d}"] + label`).evaluate((e, host) => {
         e.previousElementSibling.scrollIntoView({ block: 'nearest' });
         const b = e.getBoundingClientRect(), h = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
@@ -470,7 +523,7 @@ test.describe('short landscape 732×256 (360 × 800 Android phone sideways in Ch
   });
   test('a tap on each distance does not move the page', async ({ page }) => {
     await openPublic(page, 'en');
-    for (const d of ['near', 'intermediate', 'distance', 'near']) {
+    for (const d of ['near', 'screen', 'intermediate', 'distance', 'near']) { // screen (50 cm) added 2026-11-26
       const l = page.locator(`${H} input[data-group="preset"][value="${d}"] + label`);
       await l.evaluate((e) => e.scrollIntoView({ block: 'center' }));
       await page.waitForTimeout(300);
@@ -492,7 +545,7 @@ test.describe('Closer view: "Whole scene" never overlaps another control', () =>
       const page = await ctx.newPage();
       await page.goto('/en/lens-lab/#simulator');
       await page.waitForFunction(() => document.querySelectorAll('#simulator-host canvas').length === 1, null, { timeout: 30_000 });
-      for (const d of ['near', 'intermediate', 'distance']) {
+      for (const d of ['near', 'screen', 'intermediate', 'distance']) { // screen (50 cm) added 2026-11-26
         await page.locator(`#simulator-host input[data-group="preset"][value="${d}"] + label`).click();
         await expect(page.locator('#simulator-host .vsim-whole')).toBeVisible();
         await expect.poll(() => page.evaluate(() => {

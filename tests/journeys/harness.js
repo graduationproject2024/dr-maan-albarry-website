@@ -100,7 +100,7 @@ export async function prepare(page, { theme = null, lang = null, clearStorage = 
   }
   await page.context().route(/^https?:\/\/(?!localhost|127\.0\.0\.1)/, (route) => {
     const url = route.request().url();
-    if (/fonts\.(googleapis|gstatic)\.com/.test(url)) return route.continue();
+    if (/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(url)) return route.continue();
     return route.fulfill({ status: 204, body: '' });
   });
   page.on('popup', (p) => p.close().catch(() => {})); // no popup ever reaches the outside

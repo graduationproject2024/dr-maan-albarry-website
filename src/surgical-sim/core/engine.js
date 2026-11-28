@@ -52,8 +52,10 @@ export async function mountEngine(host, def, opts = {}) {
     options: Object.fromEntries((def.options || []).map((o) => [o.id, o.default ?? o.choices[0].id])),
     toggles: Object.fromEntries((def.toggles || []).map((t) => [t.id, t.default !== false])),
     section: false, labels: false, explore: false, compare: null, expanded: false, playing: false, quality: 'auto',
-    index: -1, destroyed: false
+    index: -1, destroyed: false, cam: null
   };
+  // the part of the canvas left free by the overlaid controls (CSS px); cameras frame their subject inside it
+  let safe = { w: 1, h: 1, safe: { l: 0, r: 0, t: 0, b: 0 } };
   let stages = def.stages(S.variant);
   let tl = createTimeline(stages.map((s) => s.duration));
   const sm = createStateMachine({ debug: !!opts.debug, onChange: (st) => { shell && shell.update(view()); emit('state', st); } });
@@ -99,12 +101,18 @@ export async function mountEngine(host, def, opts = {}) {
       model = def.build({ THREE, lib, geo, mats, scene: ctx.scene });
       model.mats = mats; model.clipPlane = clipPlane;
       ctx.scene.add(model.root);
-      orbit = createOrbit(ctx.camera, canvas, { reducedMotion: reduced, track, onChange: () => invalidate(), minR: def.minR ?? 8, maxR: def.maxR ?? 90 });
+      orbit = createOrbit(ctx.camera, canvas, { reducedMotion: reduced, track, onChange: () => invalidate(), view: () => safe });
       quality = createAdaptiveQuality({ initialDpr: lowMemory() ? 1 : maxDpr(), onChange: (dpr) => { ctx.renderer.setPixelRatio(dpr); resize(); } });
       unobserve = observeVisibility(shell.viewport, (v) => { visible = v; if (v) invalidate(); }, {
         observer: () => {}, listen: (el, type, fn) => track(el, type, fn)
       });
-      if ('ResizeObserver' in window) { ro = new ResizeObserver(() => resize()); ro.observe(shell.viewport); }
+      if ('ResizeObserver' in window) {
+        ro = new ResizeObserver(() => resize());
+        ro.observe(shell.viewport);
+        // the overlaid controls change size on their own too (stage chip text, language, web fonts arriving late):
+        // any change re-measures the free area the cameras frame into
+        for (const sel of ['.ssim-viewtools', '.ssim-chip', '.ssim-details', '.ssim-hint']) { const el = shell.viewport.querySelector(sel); if (el) ro.observe(el); }
+      }
       offs.push(track(canvas, 'webglcontextlost', (e) => { e.preventDefault(); sm.to('error'); shell.setNotice('lost'); }));
       offs.push(track(canvas, 'webglcontextrestored', () => { shell.setNotice(null); sm.to(S.playing ? 'playing' : 'paused'); invalidate(); }));
       resize();
@@ -130,8 +138,51 @@ export async function mountEngine(host, def, opts = {}) {
     const w = Math.max(1, shell.canvasHost.clientWidth), h = Math.max(1, shell.canvasHost.clientHeight);
     ctx.renderer.setSize(w, h, false);
     ctx.camera.aspect = w / h;
+    applySafe();
+  }
+  /**
+   * Re-measure the free area (after a resize, and after a stage or language change: the stage chip's text, and so its
+   * size, changes) and shift the projection centre to its middle so a stage's target is not under the controls.
+   */
+  function applySafe() {
+    if (!ctx) return;
+    const w = Math.max(1, shell.canvasHost.clientWidth), h = Math.max(1, shell.canvasHost.clientHeight);
+    const next = measureSafe(w, h);
+    const same = safe.w === next.w && safe.h === next.h && ['l', 'r', 't', 'b'].every((k) => Math.abs(safe.safe[k] - next.safe[k]) < 0.5);
+    safe = next;
+    const cx = (safe.safe.l + w - safe.safe.r) / 2, cy = (safe.safe.t + h - safe.safe.b) / 2;
+    ctx.camera.setViewOffset(w, h, w / 2 - cx, h / 2 - cy, w, h);
     ctx.camera.updateProjectionMatrix();
+    if (orbit && !same) orbit.refit();
     invalidate();
+  }
+  /** Insets (CSS px) of the canvas covered by the view tools (inline end), the stage chip and details button (top) and the hint (bottom). */
+  function measureSafe(w, h) {
+    const box = shell.canvasHost.getBoundingClientRect();
+    const q = (sel) => { const el = shell.viewport.querySelector(sel); if (!el || el.hidden) return null; const r = el.getBoundingClientRect(); return r.width && r.height ? r : null; };
+    const out = { l: 8, r: 8, t: 8, b: 8 };
+    const tools = q('.ssim-viewtools');
+    if (tools) {
+      if (tools.left - box.left > w / 2) out.r = Math.max(out.r, box.right - tools.left + 6);
+      else out.l = Math.max(out.l, tools.right - box.left + 6);
+    }
+    // stage chip + "Show details" sit in the top start corner: give up either a top band or a start-side column,
+    // whichever costs less canvas (a band on desktop and upright phones, a column on a phone held sideways)
+    let cb = null;
+    for (const sel of ['.ssim-chip', '.ssim-details']) {
+      const r = q(sel);
+      if (r && r.bottom - box.top < h / 2) cb = cb ? { top: Math.min(cb.top, r.top), bottom: Math.max(cb.bottom, r.bottom), left: Math.min(cb.left, r.left), right: Math.max(cb.right, r.right) } : { top: r.top, bottom: r.bottom, left: r.left, right: r.right };
+    }
+    if (cb) {
+      const band = cb.bottom - box.top + 4;
+      const startLeft = cb.left - box.left < w / 2;
+      const col = startLeft ? cb.right - box.left + 6 : box.right - cb.left + 6;
+      if (band * w <= col * h) out.t = Math.max(out.t, band);
+      else if (startLeft) out.l = Math.max(out.l, col); else out.r = Math.max(out.r, col);
+    }
+    const hint = q('.ssim-hint');
+    if (hint && hint.top - box.top > h / 2) out.b = Math.max(out.b, box.bottom - hint.top + 2);
+    return { w, h, safe: out };
   }
   function invalidate() { dirty = true; schedule(); }
   function schedule() { if (!raf && !S.destroyed && ctx) raf = requestAnimationFrame(frame); }
@@ -160,12 +211,22 @@ export async function mountEngine(host, def, opts = {}) {
   }
 
   // ---------- stages and scene state ----------
+  /** Move to a named camera preset (the stage camera, a visitor-chosen view, the Before/After view). */
+  function goToCamera(key, instant = false) {
+    const preset = def.cameras[key];
+    if (!orbit || !preset) return;
+    S.cam = key;
+    orbit.goTo(preset, instant);
+    schedule();
+  }
+  const stageCamera = (i = Math.max(0, S.index)) => (def.cameras[stages[i].camera] ? stages[i].camera : Object.keys(def.cameras)[0]);
   function enterStage(i, instant = false) {
     S.index = i;
     const st = stages[i];
     if (st.section !== undefined) setSection(!!st.section, false);
-    if (orbit && st.camera && def.cameras[st.camera]) orbit.goTo(def.cameras[st.camera], instant);
     shell.update(view());
+    applySafe();
+    if (st.camera && def.cameras[st.camera]) goToCamera(st.camera, instant);
     emit('stage', { index: i, id: st.id });
   }
   function applyTime() {
@@ -221,7 +282,7 @@ export async function mountEngine(host, def, opts = {}) {
     if (['playing', 'completed'].includes(sm.state)) sm.to('paused');
     tl.seek(which === 'before' ? 0 : 0.9999);
     applyTime(); shell.setProgress(tl.progress);
-    if (orbit) orbit.goTo(def.cameras[def.compare.camera || stages[0].camera] || Object.values(def.cameras)[0], reduced());
+    goToCamera(def.compare.camera && def.cameras[def.compare.camera] ? def.compare.camera : stageCamera(0), reduced());
     S.compare = which;
     shell.update(view()); schedule();
   }
@@ -240,6 +301,8 @@ export async function mountEngine(host, def, opts = {}) {
     tl.seek(Math.max(0, Math.min(1, Number(t01) || 0)));
     if (sm.state === 'fallback') { S.index = tl.locate().index; shell.update(view()); return; }
     applyTime(); shell.setProgress(tl.progress);
+    // a seek always ends on the camera of the stage it lands in, whatever the view was before (deterministic)
+    if (!S.playing) goToCamera(stageCamera());
     if (!S.playing && sm.state === 'completed' && tl.progress < 1) { sm.to('paused'); shell.update(view()); }
   }
   function setStage(idOrIndex) {
@@ -252,6 +315,7 @@ export async function mountEngine(host, def, opts = {}) {
     if (sm.state === 'fallback') { S.index = i; shell.update(view()); emit('stage', { index: i, id: stages[i].id }); return; }
     if (i === S.index) enterStage(i);
     applyTime(); shell.setProgress(tl.progress);
+    if (S.cam !== stageCamera(i) || (orbit && orbit.userMoved)) goToCamera(stageCamera(i));
     if (sm.state === 'completed') { sm.to('paused'); shell.update(view()); }
   }
   function setVariant(id) {
@@ -278,7 +342,7 @@ export async function mountEngine(host, def, opts = {}) {
     S.index = -1;
     setSection(false, false);
     applyTime();
-    if (orbit) orbit.goTo(def.cameras[stages[0].camera] || Object.values(def.cameras)[0], true);
+    goToCamera(stageCamera(0), true);
     shell.setProgress(0); shell.update(view());
   }
 
@@ -293,14 +357,14 @@ export async function mountEngine(host, def, opts = {}) {
       case 'variant': return setVariant(v);
       case 'option': S.options = { ...S.options, [v[0]]: v[1] }; applyTime(); return shell.update(view());
       case 'toggle': S.toggles = { ...S.toggles, [v[0]]: !!v[1] }; applyTime(); return shell.update(view());
-      case 'camera': if (orbit && def.cameras[v]) orbit.goTo(def.cameras[v]); schedule(); return undefined;
+      case 'camera': goToCamera(v); return undefined;
       case 'section': return setSection(v);
       case 'labels': S.labels = !!v; invalidate(); return shell.update(view());
       case 'explore': S.explore = !!v; if (orbit) orbit.setExplore(S.explore); return shell.update(view());
       case 'expand': S.expanded = !!v; shell.update(view()); return setTimeout(resize, 30);
       case 'zoomIn': return orbit && orbit.zoom(0.85);
       case 'zoomOut': return orbit && orbit.zoom(1.18);
-      case 'resetView': return orbit && (orbit.goTo(def.cameras[stages[Math.max(0, S.index)].camera] || Object.values(def.cameras)[0]), schedule());
+      case 'resetView': return goToCamera(stageCamera());
       case 'reset': S.compare = null; return reset();
       case 'compare': return compare(v);
       case 'close': emit('close'); return undefined;
@@ -328,7 +392,7 @@ export async function mountEngine(host, def, opts = {}) {
       mount: undefined,
       play, pause, resume: play, seek, setStage, reset, setVariant,
       nextStage: () => act('next'), previousStage: () => act('prev'),
-      setLang(l) { S.lang = l === 'en' ? 'en' : 'ar'; shell.setLang(S.lang); shell.update(view()); invalidate(); },
+      setLang(l) { S.lang = l === 'en' ? 'en' : 'ar'; shell.setLang(S.lang); shell.update(view()); applySafe(); invalidate(); },
       setLanguage(l) { this.setLang(l); },
       setTheme(t) { S.theme = t === 'dark' ? 'dark' : 'light'; shell.setTheme(S.theme); if (ctx) ctx.setTheme(S.theme); invalidate(); },
       setQuality(level) {
@@ -348,7 +412,7 @@ export async function mountEngine(host, def, opts = {}) {
           variant: S.variant, stageIndex: Math.max(0, S.index), stageId: stages[Math.max(0, S.index)].id, stageCount: stages.length,
           progress: tl.progress, elapsed: tl.elapsed, options: { ...S.options }, toggles: { ...S.toggles },
           section: S.section, labels: S.labels, details: S.labels, compare: S.compare, explore: S.explore, expanded: S.expanded,
-          camera: orbit ? { ...orbit.spherical, target: orbit.target, moving: orbit.moving } : null,
+          camera: orbit ? { ...orbit.spherical, target: orbit.target, moving: orbit.moving, preset: S.cam, stagePreset: stageCamera(), fit: S.cam && def.cameras[S.cam] ? def.cameras[S.cam].fit || null : null, userMoved: orbit.userMoved, ...orbit.limits, safe: { ...safe.safe }, view: [safe.w, safe.h] } : null,
           dpr: ctx ? ctx.renderer.getPixelRatio() : 0,
           render: info ? { calls: info.render.calls, triangles: info.render.triangles, geometries: info.memory.geometries, textures: info.memory.textures } : null,
           probe: model && model.probe ? model.probe() : null

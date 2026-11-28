@@ -655,9 +655,27 @@ html.dialog-open { overflow: hidden; }
 .lab-art .da-icons { color: var(--ink-2); }
 .lab-art .da-code { font-family: var(--f-num); font-style: italic; fill: var(--accent); font-size: 16px; }
 .lab-art .da-bands rect { fill: color-mix(in srgb, var(--accent) 70%, transparent); }
-.light-art .la-rays path { stroke: var(--accent); stroke-dasharray: 3 5; }
-.light-art .la-focus { fill: var(--accent); }
+/* Light Journey preview: atlas drawing in the module's language (2026-11-24) */
+.light-art .la-gel { fill: color-mix(in srgb, currentColor 7%, transparent); }
+.light-art .la-sclera { fill: none; stroke: color-mix(in srgb, currentColor 38%, transparent); stroke-width: 6; }
+.light-art .la-retina { fill: none; stroke: #c9715a; stroke-width: 3.5; stroke-linecap: round; }
+.light-art .la-mac-a { stop-color: var(--accent); stop-opacity: .75; }
+.light-art .la-mac-b { stop-color: var(--accent); stop-opacity: 0; }
+.light-art .la-nerve { fill: color-mix(in srgb, currentColor 14%, transparent); stroke: color-mix(in srgb, currentColor 40%, transparent); stroke-width: 1; }
+.light-art .la-lens { fill: color-mix(in srgb, #e9d6a8 55%, transparent); stroke: color-mix(in srgb, currentColor 50%, transparent); stroke-width: 1.2; }
+.light-art .la-iris { fill: none; stroke: #8a5a3c; stroke-width: 4; stroke-linecap: round; }
+.light-art .la-cornea { fill: rgba(120, 186, 206, .32); stroke: #6aa9bb; stroke-width: 1.2; }
+.light-art .la-beam { fill: color-mix(in srgb, var(--accent) 16%, transparent); }
+.light-art .la-rays path { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-linejoin: round; opacity: .9; }
+.light-art .la-flow path { fill: none; stroke: color-mix(in srgb, var(--accent) 35%, #fff6e0); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 5 55; opacity: 0; }
+.light-art .la-src, .light-art .la-focus { fill: var(--accent); }
+.light-art .la-labels path { stroke: color-mix(in srgb, currentColor 55%, transparent); stroke-width: 1; fill: none; }
 .light-art .la-labels text { fill: var(--ink); font-size: 14px; }
+@media (prefers-reduced-motion: no-preference) {
+  .light-art .la-flow path { opacity: .95; }
+  .light-art.is-live .la-flow path { animation: la-flow 2.2s linear infinite; }
+  @keyframes la-flow { to { stroke-dashoffset: -60; } }
+}
 .disc-body { display: grid; gap: 6px; justify-items: start; }
 .disc-k { font-size: var(--fs-caption); color: var(--accent); font-weight: 500; }
 .disc-body h3 { font-size: 1.25rem; }
@@ -985,10 +1003,10 @@ html.dialog-open { overflow: hidden; }
    below it — only while a mount is expected (data-reserve); no-JS / prerendered pages and a failed load keep no gap. */
 /* The simulator now sits directly under the hero, so its slot is the first thing below the fold: heights measured after the
    2026-11 workbench rebuild (320-1440 px, AR/EN); data-reserve is only present while a mount is expected. */
-.vsim-host[data-reserve] { min-height: 860px; position: relative; }
-@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1090px; } }
-@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1180px; } }
-@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { .vsim-host[data-reserve] { min-height: 590px; } }
+:is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 860px; position: relative; }
+@media (max-width: 1023px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 1090px; } }
+@media (max-width: 767px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 1180px; } }
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 590px; } }
 .vsim-host[data-reserve]::before { content: attr(data-loading-text); position: absolute; inset-inline: 0; top: 24px; text-align: center; font-size: var(--fs-small); color: var(--ink-2); }
 /* Workbench geometry (read by src/vision-sim/styles.css). main.js overwrites the two chrome values with the measured
    heights of the header and the booking bar; these are the same values for the very first layout. */
@@ -1052,9 +1070,29 @@ html.dialog-open { overflow: hidden; }
 .feature { display: grid; gap: var(--s-5); }
 .feature-slot:not([data-reserve]):empty { display: none; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--r-3); background: linear-gradient(90deg, var(--paper-2), var(--paper), var(--paper-2)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
-.feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
-.feature-light-journey .feature-slot[data-reserve] { min-height: 1200px; } /* measured 1,195–1,290 px mounted (final stabilization) */
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 1250px; } }
+/* Reserves match the mounted heights measured 2026-11-26 (EN / AR, after the Lens Lab and Light Journey rebuilds) so a
+   reader scrolled into the slot does not jump when the module arrives (acceptance audit: Lens Lab CLS 0.141 at 1440 px
+   with the old 1,200 px reserve). Lens Lab: 1024 px 7,523 / 6,615; 1280 px 6,706 / 6,092; 1440 px 6,477 / 5,948;
+   768-1023 px ~1,375-1,418; phones 1,795-2,212. Light Journey: 1024 px 1,509 / 1,558; 1280-1440 px 1,336-1,386;
+   768-1023 px 1,341-1,387; phones 1,442-1,515. */
+:is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6590px; }
+:root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6020px; }
+:is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1360px; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 7520px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6620px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1530px; }
+}
+@media (max-width: 1023px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1418px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1375px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1365px; }
+}
+@media (max-width: 767px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 2080px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1860px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1480px; }
+}
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--alert-line); background: var(--alert-bg); color: var(--alert-ink); }
@@ -1242,6 +1280,9 @@ html.dialog-open { overflow: hidden; }
    25. MOTION — one fade-rise reveal, once (≤0.6 s desktop, ≤0.35 s phones); no scroll-jacking, no parallax
    ------------------------------------------------------------ */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+/* Keyboard focus reveals at once: the browser scrolls a focused link into view at its offset (+16 px) position, so a
+   rising block could finish under the booking bar (WCAG 2.4.11; technical-fixes "focus never hidden", 390x844 /en/). */
+.fade-in:focus-within { opacity: 1; transform: none; transition: none; }
 .fade-in.visible { opacity: 1; transform: none; }
 @media (max-width: 767px) { :root { --dur-reveal: .35s; } .fade-in { transform: translateY(10px); } }
 /* GSAP motion layer (src/motion): a group whose items are revealed one after another is itself shown at once; its

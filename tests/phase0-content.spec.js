@@ -78,6 +78,10 @@ for (const lang of ['ar', 'en']) {
     });
 
     test('no unsupported claims: stats, licence, testimonials, lens preference, incision size', async ({ page }) => {
+      // A text scan of 8 pages plus six lens states of the WebGL simulator: on GitHub's GPU-less runners the software
+      // renderer makes it take 50-70 s (passed once and timed out once on b157d27). The budget covers the scan; every
+      // assertion is unchanged.
+      test.setTimeout(150_000);
       await open(page, lang);
       const text = await fullText(page, lang);
       expect(text).not.toMatch(UNSUPPORTED_STATS);

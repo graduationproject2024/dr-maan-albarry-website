@@ -78,7 +78,7 @@ test('Persona E — keyboard and reduced motion', async ({ page }, testInfo) => 
   }, { shot: true });
 
   await j.step('Keep tabbing to the cataract card\'s "Procedure details" link and press Enter', 'Cataract page opens; focus lands on the main heading area', async () => {
-    const { found, trail } = await tabUntil(page, (f) => /procedures\/cataract-surgery\/$/.test(f.href || '') && f.cls === 'proc-card-link', 80);
+    const { found, trail } = await tabUntil(page, (f) => /procedures\/cataract-surgery\/$/.test(f.href || '') && f.cls === 'pgal-link', 80); // home gallery tile since 2026-11-23
     if (!found) return { actual: `not reached in ${trail.length} tabs`, ok: false };
     const noRing = trail.filter((f) => !f.ring);
     await page.keyboard.press('Enter');

@@ -20,7 +20,7 @@ if (mode !== 'home') for (const p of PAGES) for (const lang of ['ar', 'en']) for
 }
 const todo = plan.filter(x => !filter || `${name(x.p)}-${x.lang}-${x.w}-${x.theme}`.includes(filter));
 const metricsFile = path.join(outDir, 'metrics.json');
-const metrics = fs.existsSync(metricsFile) ? JSON.parse(fs.readFileSync(metricsFile, 'utf8')) : {};
+let metrics = {}; try { metrics = JSON.parse(fs.readFileSync(metricsFile, 'utf8')); } catch { /* first run */ }
 
 const browser = await chromium.launch({ args: process.platform === 'win32' ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] : [] });
 for (const { p, lang, w, theme } of todo) {

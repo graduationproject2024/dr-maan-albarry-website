@@ -13,6 +13,7 @@ import { computeView, clamp, normalizeRefraction, scenarioFor } from './optics/m
 import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIOS, SCENARIO_IDS, isLensId, isToric, withToric, TORIC_BASES } from './optics/params.js';
 import { createUI } from './ui.js';
 import { STRINGS, formatDistance } from './i18n.js';
+import { withTimeout, recoverStaleBuild } from '../chunk-recovery.js';
 
 export * as optics from './optics/index.js';
 
@@ -20,6 +21,16 @@ export * as optics from './optics/index.js';
 export const counters = { mounts: 0, destroys: 0, live: 0, listeners: 0, observers: 0, rafLoops: 0, renderers: 0, renderTargets: 0 };
 const instances = new WeakMap();
 const QUALITY = [{ scale: 1, taps: 12 }, { scale: 0.75, taps: 10 }, { scale: 0.55, taps: 8 }];
+/**
+ * Failure states that a retry cannot fix on this device (no WebGL 2, a shader the GPU driver rejects): they keep the
+ * static comparison without a retry button. Every other failure (download, stalled download, initialisation, a lost
+ * GPU context that did not come back) offers one. See 06_LENS_LAB_FINAL_RECOVERY.md.
+ */
+const FINAL_FAILURES = ['no-webgl', 'shader-error'];
+const LOAD_TIMEOUT_MS = 20000;   // picture code that has not arrived by then: static comparison + retry
+const RESTORE_TIMEOUT_MS = 10000; // a lost WebGL context not restored by then: static comparison + retry
+/** Short cross-fade between two views (lens, distance, lighting). Off with reduced motion. */
+const FADE_MS = 220;
 
 export async function mount(host, options = {}) {
   if (!host || host.nodeType !== 1) throw new TypeError('vision-sim mount(host): host must be an element');
@@ -39,6 +50,8 @@ class VisionSimulator {
     this.debug = !!o.debug;
     this.mode = o.ui === 'viewer' ? 'viewer' : 'full';
     this.reviewMode = o.review === true;
+    this.loadTimeoutMs = Number(o.loadTimeoutMs) > 0 ? Number(o.loadTimeoutMs) : LOAD_TIMEOUT_MS;
+    this.restoreTimeoutMs = Number(o.restoreTimeoutMs) > 0 ? Number(o.restoreTimeoutMs) : RESTORE_TIMEOUT_MS;
     const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.reduced = typeof o.reducedMotion === 'boolean' ? o.reducedMotion : !!(mq && mq.matches);
     this.state = {
@@ -160,11 +173,13 @@ class VisionSimulator {
     this.ui.showLoading(true);
     let pipelineMod, scenesMod;
     try {
-      [pipelineMod, scenesMod] = await Promise.all([import('./pipeline.js'), import('./scenes.js')]);
+      [pipelineMod, scenesMod] = await withTimeout(Promise.all([import('./pipeline.js'), import('./scenes.js')]), this.loadTimeoutMs);
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[vision-sim] could not load the 3D modules', err);
-      this.enterFallback('load-error', true);
+      if (await recoverStaleBuild(err)) return; // a tab left over from an older deploy reloads once
+      if (this.destroyed) return;
+      this.enterFallback(err && err.timeout ? 'load-timeout' : 'load-error', true);
       return;
     }
     if (this.destroyed) return;
@@ -181,15 +196,27 @@ class VisionSimulator {
       this.quality = coarse || this.ui.ref.viewport.clientWidth < 520 ? 1 : 0;
       this.resize(true);
       this.renderNow();
+      // a shader the driver refuses to compile / link draws nothing: never leave a blank picture
+      if (this.pipe.shaderError) throw Object.assign(new Error('shader-error'), { shader: true });
     } catch (err) {
       if (this.destroyed) return;
       console.warn('[vision-sim] 3D initialisation failed, using the static comparison', err);
-      this.enterFallback('init-error');
+      this.enterFallback(err && err.shader ? 'shader-error' : 'init-error', !(err && err.shader));
       return;
     }
     const canvas = this.pipe.renderer.domElement;
     this.listen(canvas, 'webglcontextlost', (e) => this.onContextLost(e));
     this.listen(canvas, 'webglcontextrestored', () => this.onContextRestored());
+    if (!this.watching) this.watchViewport(); // once per mount, also after a retry
+    this.status = 'ready';
+    this.ui.showLoading(false);
+    this.startLoop();
+    if (this.debug) this.exposeDebug();
+    this.emit('ready', this.getState());
+  }
+
+  watchViewport() {
+    this.watching = true;
     if ('ResizeObserver' in window) {
       const ro = new ResizeObserver(() => { this.dirty = true; this.resizePending = true; if (this.raf === null) this.resize(); });
       ro.observe(this.ui.ref.viewport);
@@ -210,15 +237,11 @@ class VisionSimulator {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (!this.destroyed && this.pipe) { this.rebuildScenes(); this.dirty = true; } });
     }
-    this.status = 'ready';
-    this.ui.showLoading(false);
-    this.startLoop();
-    if (this.debug) this.exposeDebug();
-    this.emit('ready', this.getState());
   }
 
   async retryPipeline() {
-    if (this.destroyed || this.status !== 'fallback' || this.fallbackReason !== 'load-error') return;
+    if (this.destroyed || this.status !== 'fallback' || FINAL_FAILURES.includes(this.fallbackReason)) return;
+    this.camera = null; this.sceneK = null;
     this.fallbackReason = null;
     this.ui.showFallback(false);
     this.ui.measureBench();
@@ -279,6 +302,7 @@ class VisionSimulator {
   /** PNG of the current view (rendered now, read in the same task, so the drawing buffer is intact). */
   screenshot() {
     if (!this.pipe || this.status !== 'ready') return null;
+    this.fadeStart = null; // the finished view, never a frame of a cross-fade
     this.dirty = true;
     this.renderNow();
     try { return this.pipe.renderer.domElement.toDataURL('image/png'); } catch { return null; }
@@ -372,7 +396,17 @@ class VisionSimulator {
     if (!this.pipe || !this.scenes || this.status === 'error') return false;
     this.dirty = false;
     const v = this.views();
-    const stats = this.pipe.render({ views: v, scenes: this.scenes, camera: this.camera, split: this.state.split, taps: QUALITY[this.quality].taps, sourceVersion: this.sourceVersion, frame: this.framing });
+    let mix = 1;
+    if (this.fadeStart != null) {
+      mix = (performance.now() - this.fadeStart) / FADE_MS;
+      if (mix >= 1) { mix = 1; this.fadeStart = null; } else this.dirty = true; // keep drawing until the fade ends
+    }
+    const stats = this.pipe.render({ views: v, scenes: this.scenes, camera: this.camera, split: this.state.split, taps: QUALITY[this.quality].taps, sourceVersion: this.sourceVersion, frame: this.framing, mix });
+    if (this.pipe.shaderError && this.status === 'ready') { // a material compiled later (e.g. the night lights) failed
+      console.warn('[vision-sim] shader failed, using the static comparison', this.pipe.shaderError);
+      this.enterFallback('shader-error');
+      return false;
+    }
     counters.renderTargets += this.pipe.renderTargets - (this.lastRT || 0);
     this.lastRT = this.pipe.renderTargets;
     this.frames++;
@@ -440,7 +474,11 @@ class VisionSimulator {
       const box = this.targetBox(0); // in the whole picture, percent
       if (box) {
         const w = box.width / 100, h = box.height / 100;
-        const zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.9 / h));
+        let zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.9 / h));
+        // Framing per distance (50 cm "screen" button, 2026-11-26): the near object is drawn at its 40 cm size (the model
+        // keeps object sizes fixed), so a closer view of a farther near distance is framed proportionally wider — the
+        // object looks as large as it would from there. Framing only: blur angles scale with the zoom (pipeline.js).
+        if (this.lastView.A.subject === 'near') zoom = Math.max(1, zoom * Math.min(1, DISTANCES.near / this.state.distanceM));
         const span = 1 / zoom;
         const x = Math.min(1 - span, Math.max(0, (box.left / 100 + w / 2) - span / 2));
         const y = Math.min(1 - span, Math.max(0, (box.top / 100 + h / 2) - span / 2));
@@ -493,7 +531,14 @@ class VisionSimulator {
     const top = Math.max(1, Math.min(...ys) - pad), bottom = Math.min(99, Math.max(...ys) + pad);
     return { left, top, width: Math.max(4, right - left), height: Math.max(4, bottom - top) };
   }
+  /** Start a short cross-fade from the view on screen to the next one (display only; none with reduced motion). */
+  fade() {
+    if (this.reduced || this.reviewMode || !this.pipe || this.status !== 'ready') return;
+    // nothing drawn since the last change: the running fade simply continues towards the newest view
+    if (this.pipe.holdFrame()) this.fadeStart = performance.now();
+  }
   changed(what, announce) {
+    if (['lens', 'lensB', 'compare', 'distance', 'lighting', 'scenario', 'refraction', 'reset', 'closeUp'].includes(what)) this.fade();
     this.refreshUI();
     this.dirty = true;
     this.emit('change', { what, state: this.getState() });
@@ -617,7 +662,7 @@ class VisionSimulator {
     this.status = 'error';
     this.ui.showNote('restoring');
     this.emit('error', { type: 'context-lost' });
-    this.lossTimer = this.timeout(() => { if (this.status === 'error') this.enterFallback('context-not-restored'); }, 10000);
+    this.lossTimer = this.timeout(() => { if (this.status === 'error') this.enterFallback('context-not-restored', true); }, this.restoreTimeoutMs);
   }
   onContextRestored() {
     if (this.status !== 'error' || !this.pipe) return;
@@ -690,6 +735,7 @@ class VisionSimulator {
       // Render now and summarise the frame buffer (proves the canvas is not blank).
       sample(region) {
         if (!self.pipe) return null;
+        self.fadeStart = null; // measure the finished view, not a frame of a cross-fade
         self.dirty = true; self.renderNow();
         const gl = self.pipe.renderer.getContext();
         const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;

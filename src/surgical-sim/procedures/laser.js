@@ -35,11 +35,11 @@ const TYPE_TEXT = {
 };
 
 const CAMS = {
-  closeup: { pos: [7.3, 2.15, 4.6], target: [0, 1.6, 3.15], label: { ar: 'القرنية عن قرب (مقطع)', en: 'Cornea close-up (section)' } },
+  closeup: { pos: [7.3, 2.15, 4.6], target: [0, 2.3, 2.85], fit: [1.6, 3.0], label: { ar: 'القرنية عن قرب (مقطع)', en: 'Cornea close-up (section)' } },
   anterior: CAMERAS.anterior,
   full: CAMERAS.full,
-  lifted: { pos: [16.5, 5.2, 8.0], target: [0, 3.8, 4.6] },
-  wide: { pos: [8.7, 3.1, 5.1], target: [0, 2.4, 3.3] }
+  lifted: { pos: [16.5, 5.2, 8.0], target: [0, 3.4, 6.2], fit: [5.8, 4.4] },
+  wide: { pos: [8.7, 3.1, 5.1], target: [0, 2.6, 3.4], fit: [2.6, 3.4] }
 };
 
 const anatomy = () => stage('anatomy', 7, 'closeup', ANAT, ANAT_TEXT, { section: true });
@@ -125,7 +125,6 @@ const def = {
     { ar: 'فهم أن الليزر يغيّر انحناء القرنية بإزالة طبقة رقيقة جداً من نسيجها.', en: 'Understand that the laser changes the curve of the cornea by removing a very thin layer of tissue.' },
     { ar: 'التمييز بين الفيمتوليزيك والليزر السطحي وسمايل في طريقة الوصول إلى النسيج.', en: 'See how Femto-LASIK, PRK and SMILE differ in the way the tissue is reached.' }
   ],
-  minR: 3,
   variants: [
     { id: 'lasik', label: { ar: 'الفيمتوليزيك (Femto-LASIK)', en: 'Femto-LASIK' } }, // id 'lasik' kept for links and tests
     { id: 'prk', label: { ar: 'التقشير السطحي (PRK)', en: 'PRK' } },

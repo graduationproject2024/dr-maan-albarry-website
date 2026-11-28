@@ -51,8 +51,13 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
     const v = page.locator('#cataract-3d-stage [data-ref="viewport"]'); const r = await revealInFreeArea(page, v);
     const y0 = await page.evaluate(() => scrollY);
     cdp = await swipe(page, { x: r.x + r.w * 0.5, y: r.y + r.h * 0.7, dy: -220, steps: 10, cdp });
+    // the page scrolls on the compositor; under a loaded machine it was still moving when read (81 px, 2026-11-28 full run)
+    await page.waitForFunction(() => new Promise((res) => { const a = scrollY; requestAnimationFrame(() => requestAnimationFrame(() => res(scrollY === a))); }), null, { timeout: 3000 }).catch(() => {});
     const y1 = await page.evaluate(() => scrollY);
-    return { actual: `scrollY ${y0} → ${y1}`, ok: y1 > y0 + 120 };
+    // The swipe must move the page, not the camera: 120 px, or as far as the page goes (the viewer sits near the end
+    // of the cataract page, so on short pages the end can come first).
+    const end = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+    return { actual: `scrollY ${y0} → ${y1} (end ${end})`, ok: y1 > y0 + 120 || (y1 > y0 + 40 && y1 >= end - 2) };
   });
 
   await j.step('One-finger horizontal swipe on the canvas (Explore 3D off)', 'Camera does not move (view unchanged) and the page does not scroll sideways', async () => {
@@ -157,7 +162,7 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
 
   await j.step('Tap a related-procedure link normally', 'Navigates (sanity check that taps still work after the cancelled touch)', async () => {
     const l = page.locator('.proc-related .proc-card-link').first(); await revealInFreeArea(page, l);
-    const href = await l.getAttribute('href'); await l.tap(); await page.waitForURL(new RegExp(href.replace(/[/.]/g, '\\$&') + '$'));
+    const href = await l.getAttribute('href'); await l.tap(); await page.waitForURL(new RegExp(href.replace(/[\\^$.*+?()[\]{}|/]/g, '\\$&') + '$'));
     return { actual: page.url().replace(/^https?:\/\/[^/]+/, ''), ok: true };
   });
 

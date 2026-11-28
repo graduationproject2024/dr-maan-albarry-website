@@ -197,13 +197,13 @@ test.describe('Regression — existing features', () => {
     await open(page, { lang: 'ar', theme: 'light' });
     const broken = await page.$$eval('img', imgs => imgs.filter(i => i.complete && i.loading !== 'lazy' && i.naturalWidth === 0).map(i => i.src));
     expect(broken).toEqual([]);
-    await page.locator('button[onclick="toggleLang()"]').first().click();
+    await page.locator('button[data-act="lang"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
-    await page.locator('button[onclick="toggleLang()"]').first().click();
+    await page.locator('button[data-act="lang"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await page.locator('[onclick="toggleTheme()"]').first().click();
+    await page.locator('[data-act="theme"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await page.locator('[onclick="toggleTheme()"]').first().click();
+    await page.locator('[data-act="theme"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     expect(errors).toEqual([]);
   });
@@ -248,7 +248,7 @@ test.describe('Regression — existing features', () => {
       await page.locator('.q-nav .btn-primary').click();
     }
     await expect(page.locator('.q-result')).toBeVisible();
-    await page.locator('.q-result button[onclick="restartQ()"]').click();
+    await page.locator('.q-result button[data-act="q-restart"]').click();
     await expect(page.locator('.q-option').first()).toBeVisible();
   });
 

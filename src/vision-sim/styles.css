@@ -500,3 +500,14 @@
 .vsim-seg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .vsim-toric { margin-top: 10px; }
 .vsim-toric-note { margin-top: 6px; }
+
+/* Distance row with four presets (40 / 50 / 65 cm / far, 2026-11-26). The row measures itself: where four buttons are
+   narrow (phones, the picture column of a phone held sideways) it uses the short word where one exists ("Mid") and
+   tighter padding, so no word is broken and the row keeps its single-line height. */
+.vsim-field-presets { container-type: inline-size; }
+.vsim-pl-short { display: none; }
+@container (max-width: 31em) { /* ≈ 496 px at normal text; grows with enlarged text */
+  .vsim-seg-presets .vsim-seg-btn { padding-inline: 3px; }
+  .vsim-seg-presets .vsim-pl-short { display: inline; }
+  .vsim-seg-presets .vsim-pl-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}

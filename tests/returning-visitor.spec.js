@@ -24,9 +24,9 @@ test.describe('Saved preferences', () => {
     const ctx = await browser.newContext({ colorScheme: 'light' });
     const page = await ctx.newPage();
     await page.goto('/');
-    await page.locator('[onclick="toggleLang()"]').first().click();
+    await page.locator('[data-act="lang"]').first().click();
     await expect(page).toHaveURL(/\/en\/$/);
-    await page.locator('[onclick="toggleTheme()"]').first().click();
+    await page.locator('[data-act="theme"]').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     expect(await page.evaluate(() => [localStorage.getItem('lang'), localStorage.getItem('theme')])).toEqual(['en', 'dark']);
 
@@ -82,7 +82,7 @@ test.describe('Saved preferences', () => {
       Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('denied', 'SecurityError'); } });
     });
     await page.goto('/en/');
-    await page.locator('[onclick="toggleTheme()"]').first().click();
+    await page.locator('[data-act="theme"]').first().click();
     await expect(page.locator('#prefs-reset')).toHaveCount(0);
     expect(errors).toEqual([]);
   });

@@ -7,7 +7,7 @@
 // The plate is built here rather than with lib.buildICL: its arch is shaped so that, in this model's anatomy, the plate
 // passes under the iris all the way to the sulcus (footplates on the ciliary body behind the iris root) and the iris can
 // rest on it without the two surfaces crossing. The central height above the natural lens still follows ICL.apexZ.
-import { EYE, ICL, iclHalfWidth, lensAntZ, irisBackAt, irisOnLensZ, corneaPostZ, corneaAntZ } from '../anatomy/geometry.js';
+import { EYE, ICL, iclHalfWidth, lensAntZ, irisBackAt, irisFrontAt, irisOnLensZ, corneaPostZ, corneaAntZ } from '../anatomy/geometry.js';
 import { CAMERAS, ANCHOR, NOTE, COMMON_SIMPLIFICATIONS, standardEye, stage, span, mix } from './common.js';
 
 // ---------------- Plate shape (pure maths, checked in Node) ----------------
@@ -59,21 +59,78 @@ export function irisOnIclZ(pupilR) {
   }
   return Math.max(hi, irisOnLensZ(pupilR));
 }
-// Iris front surface (same formula as geometry.js, which keeps it private) — used for the section highlights.
-const irisThick = (s) => 0.1 + 0.3 * Math.pow(Math.sin(Math.PI * Math.min(1, s * 1.08)), 0.75) + 0.04 * s;
-export const irisFrontAt = (r, pupilR, marginZ) => {
-  const s = Math.min(1, Math.max(0, (r - pupilR) / (EYE.irisRootR - pupilR)));
-  return irisBackAt(r, pupilR, marginZ) + irisThick(s);
-};
+export { irisFrontAt };
+
+/**
+ * Deepest overlap (mm; > 0 means the two cross) between the plate in a pose { sx, sy, sz, px, dz } and the iris for a
+ * pupil radius and pupil-margin height, sampled over the whole plate (BUG-SIM-14). Pure.
+ */
+export function iclIrisOverlap(pose, pupilR, marginZ, n = 64, m = 10) {
+  const { sx = 1, sy = 1, sz = 1, px = 0, dz = 0 } = pose;
+  let worst = -Infinity;
+  for (let i = 0; i <= n; i++) {
+    const x = -HALF_L + (2 * HALF_L * i) / n, h = plateHalfW(x);
+    for (let j = 0; j <= m; j++) {
+      const y = -h + (2 * h * j) / m, r = Math.hypot(sx * x + px, sy * y);
+      if (r < pupilR || r > EYE.irisRootR) continue;
+      const lo = sz * plateBack(x, y) + dz - RIM, hi = sz * plateTop(x, y) + dz + RIM;
+      worst = Math.max(worst, Math.min(hi, irisFrontAt(r, pupilR, marginZ)) - Math.max(lo, irisBackAt(r, pupilR, marginZ)));
+    }
+  }
+  return worst;
+}
+const RIM = 0.01; // the rim tube is a little thicker than the plate
+/** Deepest overlap (mm; > 0 means they cross) between the back of the plate in a pose and the front of the natural lens. Pure. */
+export function iclLensOverlap(pose, n = 64, m = 10) {
+  const { sx = 1, sy = 1, sz = 1, px = 0, dz = 0 } = pose;
+  let worst = -Infinity;
+  for (let i = 0; i <= n; i++) {
+    const x = -HALF_L + (2 * HALF_L * i) / n, h = plateHalfW(x);
+    for (let j = 0; j <= m; j++) {
+      const y = -h + (2 * h * j) / m, r = Math.hypot(sx * x + px, sy * y);
+      if (r >= EYE.lensEqR) continue;
+      worst = Math.max(worst, lensAntZ(r) - (sz * plateBack(x, y) + dz - RIM));
+    }
+  }
+  return worst;
+}
 
 // Unfolded in the front chamber (before it is tucked behind the iris): partly opened along its length, lifted forward.
 export const AC_POSE = { sx: 0.72, dz: 1.05 };
 // Folded, just out of the cartridge: short, narrow and flattened, near the opening.
 export const FOLDED_POSE = { sx: 0.3, sy: 0.12, sz: 0.3, px: 2.8, dz: 1.1 };
 const PUPIL_WIDE = EYE.pupilDilated, PUPIL = EYE.pupilNormal;
+// Tucking the plate behind the iris (stage "position", BUG-SIM-14). The old path lowered and lengthened the plate in
+// one move, so its ends crossed the iris (up to 0.12 mm) on the way down. Now: (a) the flexible plate is gathered
+// (shorter and narrower) until every point lies inside the dilated pupil, (b) it sinks through the pupil while the
+// iris lifts to the height it will rest at, (c) it opens out to full size under the iris, sinking to its final height
+// faster than it opens so the footplates clear the natural lens. Every time sample is checked by iclIrisOverlap.
+export const TUCK_POSE = { sx: 0.5, sy: 0.72, dz: 0.65 };
+
+/** Pure state of the implant and the iris at stage i, local progress p (used by apply() and by the tests). */
+export function iclPoseAt(i, p) {
+  const wide = i < 2 ? 0 : i === 2 ? span(p, 0.35, 0.95) : i <= 4 ? 1 : i === 5 ? 1 - span(p, 0.05, 0.6) : 0;
+  const pupil = mix(PUPIL, PUPIL_WIDE, wide);
+  let sx = 1, sy = 1, sz = 1, px = 0, dz = 0, on = i >= 4, roll = -1, tuck = i < 4 ? 0 : 1;
+  if (i === 3) {
+    const F = FOLDED_POSE;
+    roll = span(p, 0.2, 0.5);
+    const u = span(p, 0.5, 0.95);
+    on = p >= 0.47;
+    sx = mix(F.sx, AC_POSE.sx, u); sy = mix(F.sy, 1, u); sz = mix(F.sz, 1, u); px = mix(F.px, 0, u); dz = mix(F.dz, AC_POSE.dz, u);
+  } else if (i === 4) {
+    const a = span(p, 0.05, 0.3), b = span(p, 0.3, 0.55), c = span(p, 0.55, 0.9), T = TUCK_POSE;
+    if (c > 0) { sx = mix(T.sx, 1, c); sy = mix(T.sy, 1, c); dz = T.dz * (1 - c) ** 2; }
+    else { sx = mix(AC_POSE.sx, T.sx, a); sy = mix(1, T.sy, a); dz = mix(AC_POSE.dz, T.dz, b); }
+    tuck = b;
+  }
+  // iris: rests on the natural lens until the implant is under it, then rests on the implant
+  const marginZ = mix(irisOnLensZ(pupil), irisOnIclZ(pupil), tuck);
+  return { pose: { sx, sy, sz, px, dz }, pupil, marginZ, on, roll, placed: i > 4 || (i === 4 && p >= 0.9) };
+}
 
 const def = {
-  id: 'icl', slug: 'icl', modelId: 'ssim-icl', version: '2026.11-r1',
+  id: 'icl', slug: 'icl', modelId: 'ssim-icl', version: '2026.11-r2' /* r2 2026-11-24: tuck path keeps the plate clear of the iris (BUG-SIM-14) — needs re-review */,
   title: { ar: 'العدسة اللاصقة الداخلية (ICL): عدسة إضافية خلف القزحية', en: 'Implantable contact lens (ICL): an added lens behind the iris' },
   note: NOTE,
   objectives: [
@@ -86,9 +143,9 @@ const def = {
     front: CAMERAS.front,
     anteriorSection: CAMERAS.anteriorSection,
     section: CAMERAS.section,
-    anterior: { pos: CAMERAS.anterior.pos, target: CAMERAS.anterior.target },
-    closeSection: { pos: [18.5, 2, 3.2], target: [0, 0, 0] },
-    vault: { pos: [15.5, 1.6, 2.6], target: [0, 0.3, 0.2] }
+    anterior: { pos: CAMERAS.anterior.pos, target: CAMERAS.anterior.target, fit: CAMERAS.anterior.fit },
+    closeSection: { pos: [18.5, 2, 3.2], target: [0, 0, 0.4], fit: [3.4, 6.2] },
+    vault: { pos: [15.5, 1.6, 2.6], target: [0, 0.6, 0.4], fit: [2.6, 4.0] }
   },
   toggles: [
     { id: 'icl', label: { ar: 'العدسة الداخلية (ICL)', en: 'Implantable lens (ICL)' }, parts: ['icl'] },
@@ -244,24 +301,12 @@ const def = {
         eye.lens.object.scale.setScalar(1);
         eye.lens.object.position.set(0, 0, 0);
 
-        // pupil: normal → drawn wider for the operation → normal again once the lens is in place
-        const wide = i < 2 ? 0 : i === 2 ? span(p, 0.35, 0.95) : i <= 4 ? 1 : i === 5 ? 1 - span(p, 0.05, 0.6) : 0;
-        const pupil = mix(PUPIL, PUPIL_WIDE, wide);
-
+        // pupil: normal → drawn wider for the operation → normal again once the lens is in place;
         // the implant: hidden → folded in the cartridge → unfolding in front of the iris → tucked behind the iris
-        let sx = 1, sy = 1, sz = 1, px = 0, dz = 0, iclOn = i >= 4, roll = -1;
-        if (i === 3) {
-          const F = FOLDED_POSE;
-          roll = span(p, 0.2, 0.5);
-          const u = span(p, 0.5, 0.95);
-          iclOn = p >= 0.47;
-          sx = mix(F.sx, AC_POSE.sx, u); sy = mix(F.sy, 1, u); sz = mix(F.sz, 1, u); px = mix(F.px, 0, u); dz = mix(F.dz, AC_POSE.dz, u);
-        } else if (i === 4) {
-          const t = span(p, 0.1, 0.85);
-          sx = mix(AC_POSE.sx, 1, t); dz = mix(AC_POSE.dz, 0, t);
-        }
-        const placed = i > 4 || (i === 4 && p >= 0.85);
-        icl.visible = iclOn;
+        const P = iclPoseAt(i, p);
+        const { pupil, marginZ, roll, placed } = P;
+        const { sx, sy, sz, px, dz } = P.pose;
+        icl.visible = P.on;
         icl.position.set(px, 0, dz);
         icl.scale.set(sx, sy, sz);
         iclCut.visible = placed && s.section;
@@ -273,10 +318,6 @@ const def = {
         slit.visible = i === 3 || (i === 4 && !s.section);
         slitMat.opacity = 0.7;
 
-        // iris: rests on the natural lens until the implant is under it, then rests on the implant
-        const onLens = irisOnLensZ(pupil);
-        const tuck = i < 4 ? 0 : i === 4 ? span(p, 0.35, 0.9) : 1;
-        const marginZ = mix(onLens, irisOnIclZ(pupil), tuck);
         eye.iris.set(pupil, marginZ);
 
         // section highlights
@@ -302,6 +343,7 @@ const def = {
           iclMidAtMargin: st.placed ? plateMid(st.pupil, 0) : null,
           iclTopAtMargin: marginTop,
           irisAboveIcl: st.placed ? st.marginZ >= marginTop : null,
+          irisOverlap: st.iclVisible ? iclIrisOverlap(st, st.pupil, st.marginZ) : null,
           lensVisible: eye.lens.object.visible && mats.lens.opacity > 0.2,
           lensOpacity: mats.lens.opacity
         };

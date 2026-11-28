@@ -18,6 +18,7 @@
 import { chromium } from '@playwright/test';
 import { preview } from 'vite';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { PAGE_URLS, SITE_URL, pageUrl } from '../vite.config.js';
 import { pageMeta, breadcrumbFor, sectionPage } from '../site-routes.js';
@@ -140,7 +141,7 @@ try {
   for (const [page, doc] of out) {
     const dir = path.join(dist, page.path);
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, 'index.html'), doc);
+    fs.writeFileSync(path.join(dir, 'index.html'), withScriptHashes(doc));
   }
   // 404.html — what a static host (GitHub Pages) serves, with status 404, for an address that is not a page.
   // It is the app shell with <base> fixed to the site root (the address can be at any depth), marked noindex, with
@@ -162,9 +163,20 @@ try {
       <p>The address may have changed or been mistyped. <a href="en/">Home page</a> · <a href="en/procedures/">Procedures and treatments</a> · <a href="en/clinic/">Clinic and booking</a></p></div>
     </main></div>`);
   if (!lost.includes(`<base href="${root}">`) || !lost.includes('data-page="not-found"') || /rel="canonical"/.test(lost)) throw new Error('404.html: could not be derived from the app shell');
-  fs.writeFileSync(path.join(dist, '404.html'), lost);
+  fs.writeFileSync(path.join(dist, '404.html'), withScriptHashes(lost));
   console.log(`prerender: ${out.length} pages → ${out.map(([p]) => '/' + p.path).join(' ')}`);
 } finally {
   await browser.close();
   await new Promise(r => server.httpServer.close(r));
+}
+
+/** Replace 'unsafe-inline' in the page's script-src with the SHA-256 of each of its own inline scripts (browsers hash the text with CRLF normalised to LF, as parsed; JSON-LD is data,
+ *  not executed, so it needs none). The pages carry no inline event handlers (main.js uses data-act), so nothing else
+ *  needs 'unsafe-inline' for scripts. Styles keep 'unsafe-inline' (style attributes in the markup). */
+function withScriptHashes(doc) {
+  const hashes = [...doc.matchAll(/<script(?![^>]*src=)(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)]
+    .map(([, body]) => `'sha256-${createHash('sha256').update(body.replace(/\r\n?/g, '\n'), 'utf8').digest('base64')}'`);
+  const out = doc.replace(/(script-src 'self') 'unsafe-inline'/, (m, a) => `${a} ${[...new Set(hashes)].join(' ')}`);
+  if (out === doc || /script-src[^;]*'unsafe-inline'/.test(out)) throw new Error('prerender: could not set the script-src hashes');
+  return out;
 }

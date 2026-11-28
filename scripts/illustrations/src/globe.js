@@ -63,7 +63,8 @@ export function buildGlobe(mats, opt = {}) {
   }
 
   const paint = (k, phi = 0) => {
-    if (o.humors !== false) paintHumors(k, o.gelAlpha);
+    if (o.humors !== false) paintHumors(k, o.gelAlpha, o.aqueousAlpha);
+    if (o.paintUnder) o.paintUnder(k, phi); // under every tissue (e.g. extra fluid)
     paintSclera(k);
     if (o.posterior) { paintChoroid(k); paintRetina(k); }
     if (o.opticNerve) paintOpticNerve(k);
@@ -104,7 +105,7 @@ export function buildGlobe(mats, opt = {}) {
 // Vitreous gel (behind the lens) and a faint aqueous tint (in front), painted under the tissues so a cut face
 // reads as a solid section instead of a window into the eye.
 export const GEL = 'rgba(228,236,238,0.93)';
-export function paintHumors(k, alpha = 0.93) {
+export function paintHumors(k, alpha = 0.93, aqueous = 0.5) {
   const R = EYE.Ri - EYE.choroidT - 0.05;
   const circle = [];
   for (let i = 0; i <= 240; i++) { const a = (i / 240) * FULL; circle.push([R * Math.sin(a), EYE.cz + R * Math.cos(a)]); }
@@ -113,7 +114,7 @@ export function paintHumors(k, alpha = 0.93) {
     const zSplit = EYE.lensEqZ - 0.15;
     const xL = k.P([0, zSplit])[0];
     k.ctx.fillStyle = GEL.replace('0.93', alpha); k.ctx.fillRect(xL, yTop, k.canvas.width - xL, k.canvas.height);
-    k.ctx.fillStyle = 'rgba(232,240,242,0.5)'; k.ctx.fillRect(0, yTop, xL, k.canvas.height);
+    k.ctx.fillStyle = `rgba(232,240,242,${aqueous})`; k.ctx.fillRect(0, yTop, xL, k.canvas.height);
     const Rn = rng(8);
     for (let i = 0; i < 40; i++) {
       const x = (Rn() * 2 - 1) * 9, z = EYE.cz + (Rn() * 2 - 1) * 9;

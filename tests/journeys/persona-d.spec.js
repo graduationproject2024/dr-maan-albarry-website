@@ -43,7 +43,7 @@ test('Persona D — slow network, low-power phone', async ({ page }, testInfo) =
 
   await j.step('Swipe down through the procedure cards (images)', 'Each card shows an image or its line-drawing fallback; no broken images; page keeps up', async () => {
     let s = null;
-    const cards = page.locator('#procedures :is(.proc-card, .spec-card)');
+    const cards = page.locator('#procedures .pgal-item'); // home gallery tiles since 2026-11-23
     for (let i = 0; i < 25; i++) {
       s = await swipe(page, { x: 160, y: 520, dy: -380, cdp: s });
       const last = await rect(cards.last());

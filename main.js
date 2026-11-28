@@ -12,6 +12,7 @@ import { parseRoute, splitPath, pathFor, pageMeta, breadcrumbFor, sectionPage } 
 import { headerNav, drawerNav, footerNav, publishedSections, sectionHasFeature, FEATURE_HOST_SELECTOR } from './section-registry.js';
 import { GUIDES, FEATURED_GUIDES, QUESTIONNAIRE, questionnaireResult, VISIT, ASSESSMENTS, AREAS, WHY_IT_MATTERS, DISCLAIMER, RED_FLAGS, LENS_SUMMARY, LIGHT_PATH, SURGERY_STAGES, OCULAR_SURFACE } from './src/site/content.js';
 import { createFeatureMount, hasFeature } from './src/feature-loaders.js';
+import { withTimeout, recoverStaleBuild } from './src/chunk-recovery.js';
 import { EMPLOYMENT, publicAchievements, achievementById, verifiedPublications, DEVICES, timelineItems, publishedPhotos, GALLERY_CATEGORIES } from './clinical-profile.js';
 import { createSectionPatterns } from './src/site/section-patterns.js';
 
@@ -233,7 +234,7 @@ function illustration(p, { eager = false, priority = false, night = false, cls =
   const swap = night ? '' : `data-light="images/procedures/${p.slug}.webp" data-light-set="${set('')}" ${dark ? `data-dark="images/procedures/${p.slug}-dark.webp" data-dark-set="${set('-dark')}"` : ''}`;
   const load = priority ? 'loading="eager" fetchpriority="high"' : eager ? 'loading="eager"' : 'loading="lazy"';
   return `<div class="illus ${cls}">
-      <img src="images/procedures/${p.slug}${v}.webp" srcset="${set(v)}" sizes="${sizes}" ${swap} width="1600" height="1000" alt="${label}" ${load} decoding="async" onerror="this.parentNode.classList.add('is-plate');this.remove()">
+      <img src="images/procedures/${p.slug}${v}.webp" srcset="${set(v)}" sizes="${sizes}" ${swap} width="1600" height="1000" alt="${label}" ${load} decoding="async" data-fallback="parent">
       ${plate}
     </div>`;
 }
@@ -274,7 +275,7 @@ function atlasIllus(a, { bg = 'alpha', sizes = '100vw', priority = false, eager 
   const label = alt !== null ? alt : L(a.alt);
   const p = procedureBySlug(a.procedure);
   return `<div class="illus atlas-illus is-${kind} ${cls}" style="aspect-ratio:${a.w} / ${a.h}">
-      <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" onerror="var d=this.closest('.illus');d.classList.add('is-plate');this.parentNode.remove()"></picture>
+      <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" data-fallback="picture"></picture>
       ${pins ? pinLayer(spreadPins(atlasLabels(a), a.w / a.h), { progressive: a.level === 'L2' }) : ''}
       ${anatomyPlate(a.procedure, p ? L(p.alt) : label)}
     </div>`;
@@ -316,7 +317,7 @@ function labelsMore(more, shown) {
   return `<details class="labels-more"><summary class="labels-toggle"><span class="lm-closed">${tr(`عرض كل التسميات (${total})`, `Show all labels (${total})`)}</span><span class="lm-open">${tr('عرض التسميات الأساسية فقط', 'Show essential labels only')}</span><span class="lm-icon" aria-hidden="true">${icon('plus', 16)}</span></summary>${pinKey(more, 'plate-key', shown + 1)}</details>`;
 }
 /** The enlarge control on a figure (opens the dialog built by openPlateZoom). */
-const zoomButton = () => `<button type="button" class="plate-zoom" aria-haspopup="dialog" aria-label="${tr('تكبير الرسم', 'Enlarge illustration')}" onclick="openPlateZoom(this)">${icon('zoom', 20)}</button>`;
+const zoomButton = () => `<button type="button" class="plate-zoom" aria-haspopup="dialog" aria-label="${tr('تكبير الرسم', 'Enlarge illustration')}" data-act="plate-zoom">${icon('zoom', 20)}</button>`;
 /** The large labelled plate on a procedure page (L2 hero, Fig. 1). */
 function plateFigure(p, i, { priority = false, sizes = '100vw', cls = '' } = {}) {
   const a = atlasOf(p.slug, 'L2')[0];
@@ -382,12 +383,12 @@ function renderThemeToggle(id) {
   const isDark = resolvedTheme() === 'dark';
   const label = isDark ? tr('الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري', 'Dark mode on. Switch to light mode')
     : tr('الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي', 'Light mode on. Switch to dark mode');
-  return `<button id="${id}" type="button" class="icon-btn theme-toggle" onclick="toggleTheme()" role="switch" aria-checked="${isDark}" aria-label="${label}" title="${label}">${icon('sun', 20)}${icon('moon', 20)}</button>`;
+  return `<button id="${id}" type="button" class="icon-btn theme-toggle" data-act="theme" role="switch" aria-checked="${isDark}" aria-label="${label}" title="${label}">${icon('sun', 20)}${icon('moon', 20)}</button>`;
 }
 
 // The language switch shows the other language's own name ("English" / "العربية"); its accessible name contains it.
 function renderLangToggle(extra = '') {
-  return `<button type="button" class="icon-btn lang-switch ${extra}" onclick="toggleLang()" aria-label="${tr('English — التحويل إلى الإنجليزية', 'العربية — التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
+  return `<button type="button" class="icon-btn lang-switch ${extra}" data-act="lang" aria-label="${tr('English — التحويل إلى الإنجليزية', 'العربية — التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
           <span lang="${tr('en', 'ar')}">${tr('English', 'العربية')}</span>
         </button>`;
 }
@@ -421,7 +422,7 @@ function renderHeader() {
         <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-sm btn-header-book" data-cta="book">
           <span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>
         </a>
-        <button type="button" class="icon-btn mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="${tr('القائمة', 'Menu')}" aria-expanded="false" aria-controls="mobile-nav"><span class="burger" aria-hidden="true"><span></span><span></span></span></button>
+        <button type="button" class="icon-btn mobile-menu-btn" data-act="menu" aria-label="${tr('القائمة', 'Menu')}" aria-expanded="false" aria-controls="mobile-nav"><span class="burger" aria-hidden="true"><span></span><span></span></span></button>
       </div>
     </div>
 
@@ -630,26 +631,48 @@ const LENS_LAB_ART = () => {
     <g class="da-bands">${bars.map((b, i) => `<text class="da-code" x="${x0 - 12}" y="${132 + i * 21}" text-anchor="end">${b.code}</text><rect x="${x0 + 6}" y="${124 + i * 21}" width="${(b.w - 12).toFixed(1)}" height="9" rx="4.5"/>`).join('')}</g>
   </svg>`;
 };
-// Light Journey preview: the light path through the eye, labelled (cornea → lens → retina).
-const LIGHT_ART = () => `
+// Light Journey preview: the light path through the eye, labelled (cornea → lens → retina), drawn in the same
+// atlas language as the module (2026-11-24): globe wall with retina and macula, cornea, iris, lens, optic nerve, a
+// cone of light bent most at the cornea and finely by the lens to a focus on the macula. Light enters from the
+// reading start (left in English, right in Arabic); photon pulses move only without a reduced-motion preference.
+const LIGHT_ART = (where = 'card') => {
+  const ar = currentLang === 'ar';
+  const gid = `la-mac-${where}`; // one drawing per place on a page, so the gradient id stays unique and stable
+  const mx = (x) => (ar ? 360 - x : x);
+  const O = [16, 78], F = [296, 108];
+  const rays = [-2, -1, 0, 1, 2].map((i) => {
+    const h = i * 5.5;
+    const c = [140.5 + Math.abs(h) * 0.02, 105 + h], l1 = [168, 105 + h * 0.72], l2 = [191, 105 + h * 0.56];
+    return [O, c, l1, l2, F];
+  });
+  const pd = (pts) => 'M' + pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L');
+  const beam = `${pd([...rays[0], ...rays[4].slice().reverse()])}Z`;
+  return `
   <svg class="disc-art light-art" viewBox="0 0 360 210" role="img" aria-label="${tr('رسم: يمر الضوء عبر القرنية والعدسة ويتجمع على الشبكية', 'Diagram: light passes through the cornea and the lens and focuses on the retina')}" focusable="false" direction="ltr" style="direction:ltr">
-    <g fill="none" stroke="currentColor" stroke-linecap="round">
-      <circle cx="170" cy="105" r="78" stroke-width="1.2" opacity=".55"/>
-      <path d="M234 61c26 22 26 66 0 88" stroke-width="1.8"/>
-      <ellipse cx="216" cy="105" rx="11" ry="27" stroke-width="1.4"/>
-      <path d="M138 35a74 74 0 0 0 0 140" stroke-width="2.4" opacity=".6"/>
-      <path d="M93 97H60M93 113H60" stroke-width="1.6" opacity=".6"/>
+    <defs><radialGradient id="${gid}"><stop offset="0" class="la-mac-a"/><stop offset="1" class="la-mac-b"/></radialGradient></defs>
+    <g${ar ? ' transform="matrix(-1 0 0 1 360 0)"' : ''}>
+      <path class="la-nerve" d="M296 116C318 118 338 124 356 130L356 152C338 146 318 140 292 136Z"/>
+      <circle class="la-gel" cx="226" cy="105" r="72"/>
+      <path class="la-sclera" d="M162 61A78 78 0 1 1 162 149"/>
+      <path class="la-retina" d="M254 38A72 72 0 0 1 297 103M296 117A72 72 0 0 1 254 172"/>
+      <ellipse class="la-mac" cx="296" cy="106" rx="7" ry="20" fill="url(#${gid})"/>
+      <path class="la-lens" d="M180 73A12 32 0 0 0 180 137A15 32 0 0 0 180 73Z"/>
+      <path class="la-iris" d="M165 66V95M165 115V144"/>
+      <path class="la-cornea" d="M158 64A55 55 0 0 0 158 146L163 146A50 50 0 0 1 163 64Z"/>
+      <path class="la-beam" d="${beam}"/>
+      <g class="la-rays">${rays.map((r) => `<path d="${pd(r)}"/>`).join('')}</g>
+      <g class="la-flow">${rays.map((r, i) => `<path style="animation-delay:-${(i * 0.37).toFixed(2)}s" d="${pd(r)}"/>`).join('')}</g>
+      <circle class="la-src" cx="${O[0]}" cy="${O[1]}" r="3.5"/>
+      <circle class="la-focus" cx="${F[0]}" cy="${F[1]}" r="4"/>
     </g>
-    <g class="la-rays" fill="none" stroke-width="1.3" stroke-linecap="round">
-      <path d="M356 75 250 87 216 97 100 105"/><path d="M356 135 250 123 216 113 100 105"/><path d="M356 105H100"/>
-    </g>
-    <circle class="la-focus" cx="100" cy="105" r="5"/>
     <g class="la-labels">
-      <text x="262" y="50">${tr('القرنية', 'Cornea')}</text>
-      <text x="216" y="160" text-anchor="middle">${tr('العدسة', 'Lens')}</text>
-      <text x="100" y="26" text-anchor="middle">${tr('الشبكية', 'Retina')}</text>
+      <path d="M${mx(150)} 66V44M${mx(184)} 140V158M${mx(290)} 42V30"/>
+      <text x="${mx(150)}" y="38" text-anchor="middle">${tr('القرنية', 'Cornea')}</text>
+      <text x="${mx(184)}" y="174" text-anchor="middle">${tr('العدسة', 'Lens')}</text>
+      <text x="${mx(290)}" y="24" text-anchor="middle">${tr('الشبكية', 'Retina')}</text>
     </g>
   </svg>`;
+};
 /** Poster of the 3D walkthrough: the dark cataract render (a real image with a text alternative), never the engine. */
 function c3dPoster({ caption = true } = {}) {
   const p = procedureBySlug('cataract-surgery');
@@ -1067,7 +1090,7 @@ function renderProceduresPage() {
         <div class="atlas-bar">
           <h2 class="atlas-title" id="library-title">${tr('جميع الإجراءات', 'All procedures')}</h2>
           <div class="proc-filter" role="group" aria-label="${tr('تصفية حسب المجموعة', 'Filter by group')}">
-            ${chips.map(([id, label, n]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" onclick="filterProcedures('${id}')"><span>${label}</span><span class="chip-n" aria-hidden="true">${n}</span></button>`).join('')}
+            ${chips.map(([id, label, n]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" data-act="filter"><span>${label}</span><span class="chip-n" aria-hidden="true">${n}</span></button>`).join('')}
           </div>
         </div>
         ${procedureGallery({ cls: 'proc-grid atlas atlas-library', attrs: `data-filter="${procFilter}"`, cards: PROCEDURES.map((p, i) => procCard(p, { featured: i === 0 })), after: `
@@ -1170,13 +1193,13 @@ function renderLensLabPage() {
       aside: `<nav class="page-hero-links" aria-label="${tr('في هذه الصفحة', 'On this page')}"><a href="${hereHref('simulator')}" data-nav class="text-link" id="sim-jump">${icon('eye', 18)}${tr('محاكي الرؤية بكل أدواته', 'The full vision simulator')}</a><a href="${hereHref('lab')}" data-nav class="text-link">${icon('lens', 18)}${tr('المقارنة', 'The comparison')}</a></nav>`
     })}
     ${renderSimulator()}
-    ${renderOcularSurface()}
     <section class="section" id="lab" aria-labelledby="lab-title">
       <div class="container">
         <h2 class="sr-only" id="lab-title">${tr('المقارنة', 'The comparison')}</h2>
         ${featureBlock({ key: 'lens-lab', hostAttr: 'data-lens-lab-host', slotId: 'lens-lab-host', staticHtml: summary, name: tr('مختبر الرؤية والعدسات', 'Vision & Lens Lab') })}
       </div>
     </section>
+    ${renderOcularSurface()}
     ${renderClosing('lens-lab')}`;
 }
 
@@ -1191,7 +1214,7 @@ function renderLightJourneyPage() {
       kicker: tr('رحلة الضوء', 'The light journey'),
       title: tr('كيف ترى العين؟', 'How does the eye see?'),
       lede: tr('يمر الضوء بأربع محطات قبل أن يصبح صورة: القرنية، ثم القزحية والبؤبؤ، ثم العدسة، ثم الشبكية. في كل محطة قد يحدث خلل، ولكل خلل إجراء.', 'Light passes four stations before it becomes an image: the cornea, the iris and pupil, the lens, and the retina. Something can go wrong at each one, and each has its procedure.'),
-      aside: `<figure class="page-hero-art">${LIGHT_ART()}</figure>`
+      aside: `<figure class="page-hero-art">${LIGHT_ART('hero')}</figure>`
     })}
     <section class="section" id="journey" aria-labelledby="journey-title">
       <div class="container">
@@ -1203,7 +1226,10 @@ function renderLightJourneyPage() {
 }
 
 // Vision simulator: one host node and controller for the page's lifetime; mounted lazily near the viewport.
-const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, chromeRO: null };
+const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, chromeRO: null, token: 0 };
+// A chunk that has not arrived after this long (stalled connection) ends in the retry message, never an endless
+// "Loading" (06_LENS_LAB_FINAL_RECOVERY.md, F6). The download keeps going in the background; a retry reuses it.
+const VSIM_LOAD_TIMEOUT_MS = 20000;
 
 // A returning visitor finds the last simple choice again (one localStorage key: lens, distance preset, lighting; never
 // anything about their eyes) and a link such as ?lens=edof&dist=near&light=night shows that view. Values are checked
@@ -1212,7 +1238,7 @@ const vsim = { host: null, ctrl: null, loading: false, io: null, failed: false, 
 const VSIM_STORE = 'lens-lab-choice';
 const VSIM_LENSES = ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric', 'cataract'];
 const VSIM_SIMPLE_LENSES = ['monofocal', 'enhanced', 'edof', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric'];
-const VSIM_DIST = { near: 0.4, intermediate: 0.65, far: 6 };
+const VSIM_DIST = { near: 0.4, screen: 0.5, intermediate: 0.65, far: 6 }; // screen = 50 cm (2026-11-26, src/vision-sim/presets.js)
 const VSIM_LIGHT = { day: 'day', dim: 'dusk', night: 'night' };
 const VSIM_DEFAULT = { lens: 'monofocal', dist: 'far', light: 'day' };
 /** Only values the simulator knows survive. */
@@ -1293,23 +1319,27 @@ async function loadVisionSim() {
   if (vsim.loading || vsim.ctrl) return;
   vsim.loading = true;
   const host = vsim.host;
+  const token = ++vsim.token;
   try {
-    const mod = await import('./src/vision-sim/index.js');
-    if (vsim.host !== host || !host.isConnected) return; // visitor left the page while it loaded
+    const mod = await withTimeout(import('./src/vision-sim/index.js'), VSIM_LOAD_TIMEOUT_MS);
+    if (token !== vsim.token || vsim.host !== host || !host.isConnected) return; // visitor left the page while it loaded
     host.innerHTML = ''; // drop a previous load-error message
     const ctrl = await mod.mount(host, { lang: currentLang, theme: resolvedTheme(), reducedMotion: reducedMotion(), ...vsimOptions({ ...vsimStored(), ...vsimFromUrl() }) });
-    if (vsim.host !== host) { ctrl.destroy(); return; } // left during the mount: its WebGL context must not outlive the page
+    if (token !== vsim.token || vsim.host !== host) { ctrl.destroy(); return; } // left during the mount: its WebGL context must not outlive the page
     vsim.ctrl = ctrl;
     vsim.ctrl.on('change', vsimRemember);
     vsim.ctrl.setLang(currentLang); vsim.ctrl.setTheme(resolvedTheme()); // in case they changed while loading
     vsim.failed = false;
     document.getElementById('simulator-host')?.removeAttribute('data-reserve'); // mounted: it sizes itself now
   } catch (err) {
+    if (token !== vsim.token) return;
     console.warn('Vision simulator failed to load', err);
-    if (vsim.host === host) showVisionSimError();
+    // a tab running an older build than the server (a deploy renamed the chunks) reloads once instead (F1)
+    if (await recoverStaleBuild(err)) return;
+    if (token === vsim.token && vsim.host === host) showVisionSimError();
   } finally {
-    vsim.loading = false;
-    if (vsim.host && vsim.host !== host && !vsim.ctrl) mountVisionSim(); // came back while the old load was finishing
+    if (token === vsim.token) vsim.loading = false;
+    if (vsim.host && vsim.host !== host && !vsim.ctrl && !vsim.loading) mountVisionSim(); // came back while the old load was finishing
   }
 }
 // A failed download used to leave an empty 1,500 px reserved box with no explanation (BUG-09): say what happened,
@@ -1383,7 +1413,7 @@ function renderCataract3D(onProcedurePage = false) {
           <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل عملية بحسب حالة العين.', 'Not a substitute for a consultation; every operation is tailored to the individual eye.')}</span></li>
         </ul>
         <div class="c3d-actions">
-          <button type="button" class="btn btn-light btn-lg" id="cataract-3d-start" onclick="startCataract3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+          <button type="button" class="btn btn-light btn-lg" id="cataract-3d-start" data-act="start-c3d" ${st === 'loading' ? 'aria-busy="true"' : ''}>
             ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
           </button>
           ${onProcedurePage ? '' : quietLink(pageHref(currentLang, 'cataract-surgery'), tr('دليل جراحة الماء الأبيض', 'Cataract surgery guide'))}
@@ -1547,7 +1577,7 @@ function renderProcedure3D(p) {
           <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل حالة.', 'Not a substitute for a consultation; every case is different.')}</span></li>
         </ul>
         <div class="c3d-actions">
-          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" onclick="startProcedure3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" data-act="start-p3d" ${st === 'loading' ? 'aria-busy="true"' : ''}>
             ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
           </button>
           <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
@@ -1690,8 +1720,8 @@ function renderQuestionnaireCard() {
           <div class="q-actions">
             <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعد الفحص', 'Book an examination')}</span></a>
             <a href="${getWhatsAppUrl(tr('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.', 'Hello, I completed the visual lifestyle questionnaire on the website and would like to ask about an appointment with Dr. Maan Al Barry.'))}" ${EXT} class="btn btn-whatsapp" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب', 'WhatsApp')}</span></a>
-            <button type="button" class="btn btn-quiet" onclick="window.print()">${tr('اطبع الملخص', 'Print the summary')}</button>
-            <button type="button" class="btn btn-quiet" onclick="restartQ()">${tr('إعادة الاستبيان', 'Restart')}</button>
+            <button type="button" class="btn btn-quiet" data-act="print">${tr('اطبع الملخص', 'Print the summary')}</button>
+            <button type="button" class="btn btn-quiet" data-act="q-restart">${tr('إعادة الاستبيان', 'Restart')}</button>
           </div>
           <p class="q-safety"><strong>${tr('تنبيه:', 'Note:')}</strong> ${tr('هذا الملخص تثقيفي فقط ولا يمثل تشخيصاً أو وصفة لنوع عدسة. القرار الطبي يتخذه الاستشاري بعد الفحص المباشر.', 'This summary is educational only and is not a diagnosis or a lens prescription. Treatment decisions follow an in-person examination.')}</p>
         </div>
@@ -1705,11 +1735,11 @@ function renderQuestionnaireCard() {
       <h3 class="q-question">${cur.question}</h3>
       <p class="q-desc">${cur.desc}</p>
       <div class="q-options" role="group" aria-label="${cur.question}">
-        ${cur.options.map((opt, i) => `<button type="button" class="q-option ${qAnswers[currentQStep] === i ? 'selected' : ''}" aria-pressed="${qAnswers[currentQStep] === i}" onclick="selectQOption(${i})"><span class="q-radio" aria-hidden="true"></span><span>${opt}</span></button>`).join('')}
+        ${cur.options.map((opt, i) => `<button type="button" class="q-option ${qAnswers[currentQStep] === i ? 'selected' : ''}" aria-pressed="${qAnswers[currentQStep] === i}" data-act="q-option" data-arg="${i}"><span class="q-radio" aria-hidden="true"></span><span>${opt}</span></button>`).join('')}
       </div>
       <div class="q-nav">
-        ${currentQStep > 0 ? `<button type="button" class="btn btn-quiet btn-sm" onclick="prevQStep()">${tr('السابق', 'Previous')}</button>` : '<span></span>'}
-        <button type="button" class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[currentQStep] === undefined ? 'disabled' : ''}>
+        ${currentQStep > 0 ? `<button type="button" class="btn btn-quiet btn-sm" data-act="q-prev">${tr('السابق', 'Previous')}</button>` : '<span></span>'}
+        <button type="button" class="btn btn-primary btn-sm" data-act="q-next" ${qAnswers[currentQStep] === undefined ? 'disabled' : ''}>
           ${currentQStep < steps.length - 1 ? tr('التالي', 'Next') : tr('عرض الملخص', 'View summary')}
         </button>
       </div>
@@ -2108,7 +2138,7 @@ function syncPrefsReset() {
   const btn = document.getElementById('prefs-reset');
   if (!hasSavedPrefs()) { if (btn) btn.remove(); return; }
   if (btn) return;
-  links.insertAdjacentHTML('beforeend', `<button type="button" class="footer-reset" id="prefs-reset" onclick="resetPreferences()">${tr('إعادة ضبط اللغة والمظهر', 'Reset language and theme')}</button>`);
+  links.insertAdjacentHTML('beforeend', `<button type="button" class="footer-reset" id="prefs-reset" data-act="reset-prefs">${tr('إعادة ضبط اللغة والمظهر', 'Reset language and theme')}</button>`);
 }
 window.resetPreferences = function () {
   const hadFocus = document.activeElement === document.getElementById('prefs-reset');
@@ -2229,6 +2259,19 @@ function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
   inputs.forEach(t => window.addEventListener(t, stop, { capture: true, passive: true }));
   const timer = setTimeout(stop, 20000);
   releaseScrollHold = stop;
+  // A restored position below a module that has not mounted is out of reach while the page is short (a module's reserve
+  // is smaller than the module): load the modules now instead of when they near the clamped viewport, which never
+  // happens when a section sits between them and the target (BUG-FS-01; Lens Lab with the eye-surface section).
+  // One frame later, so the current render's module slots are attached on a first load too.
+  // Any module above the position is loaded, not only when the page is too short: a reserve is close to, never exactly,
+  // the module's height (it differs by language and width), and the saved position was measured with the modules in.
+  if (restoreY != null) requestAnimationFrame(() => {
+    if (restoringY !== restoreY) return;
+    for (const [m, sel] of [[lensLab, '.feature-lens-lab'], [lightJourney, '.feature-light-journey']]) {
+      const el = document.querySelector(sel);
+      if (el && el.getBoundingClientRect().top + window.scrollY < restoreY + window.innerHeight) m.mountNow();
+    }
+  });
 }
 /** Where the page must be scrolled to show a section just below the fixed header. */
 // On phones (and short landscape screens) a jump to the simulator lands on the workbench itself, not on the section title
@@ -2300,6 +2343,42 @@ window.toggleMobileMenu = function () {
 };
 
 window.closeMobileMenu = function () { setMobileMenu(false); };
+
+// Buttons name their action in data-act (no inline onclick: the page CSP allows only the site's own hashed inline
+// scripts, so 'unsafe-inline' is gone from script-src). One listener, registered once, survives re-renders.
+const ACTIONS = {
+  'plate-zoom': (el) => window.openPlateZoom(el),
+  'plate-close': (el) => window.closePlateZoom(el.closest('dialog')),
+  theme: () => window.toggleTheme(),
+  lang: () => window.toggleLang(),
+  menu: () => window.toggleMobileMenu(),
+  filter: (el) => window.filterProcedures(el.dataset.filter),
+  'start-c3d': () => window.startCataract3D(),
+  'start-p3d': () => window.startProcedure3D(),
+  print: () => window.print(),
+  'q-restart': () => window.restartQ(),
+  'q-option': (el) => window.selectQOption(Number(el.dataset.arg)),
+  'q-prev': () => window.prevQStep(),
+  'q-next': () => window.nextQStep(),
+  'reset-prefs': () => window.resetPreferences(),
+  faq: (el) => window.toggleFaq(Number(el.dataset.arg), el.dataset.arg2 || 'faq')
+};
+document.addEventListener('click', (e) => {
+  const el = e.target.closest && e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const act = ACTIONS[el.dataset.act];
+  if (act) act(el, e);
+});
+// A missing illustration falls back to its drawn plate (was an inline onerror). 'error' does not bubble: capture it.
+function plateFallback(img) {
+  if (img.dataset.fallback === 'picture') { const d = img.closest('.illus'); if (d) d.classList.add('is-plate'); img.parentNode && img.parentNode.remove(); }
+  else { img.parentNode && img.parentNode.classList.add('is-plate'); img.remove(); }
+}
+document.addEventListener('error', (e) => { const t = e.target; if (t && t.tagName === 'IMG' && t.dataset.fallback) plateFallback(t); }, true);
+/** Images that failed before this script ran (prerendered page on a slow link) never fire the listener above. */
+function sweepFailedImages() {
+  document.querySelectorAll('img[data-fallback]').forEach((img) => { if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) plateFallback(img); });
+}
 
 // Escape closes the drawer and returns focus to its button (registered once; survives re-renders).
 document.addEventListener('keydown', e => {
@@ -2411,7 +2490,7 @@ window.openPlateZoom = btn => {
   dlg._closing = false;
   const n = fig.querySelector('.fig-n');
   const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
-  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="closePlateZoom(this.closest('dialog'))">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
+  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" data-act="plate-close">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
   const figure = dlg.querySelector('.pd-figure'), scroller = dlg.querySelector('.pd-scroll');
   const illus = fig.querySelector('.atlas-illus').cloneNode(true);
   illus.querySelectorAll('.pin').forEach(p => { p.style.translate = ''; });
@@ -2445,7 +2524,23 @@ function observeIntersection() {
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   bindCounters();
+  bindLightArt();
 }
+
+// Light Journey preview (2026-11-25): its photon pulses run only while the drawing is on screen and the tab is
+// visible (.is-live); reduced motion never animates them (style.css).
+let lightArtIO = null;
+function bindLightArt() {
+  if (lightArtIO) { lightArtIO.disconnect(); lightArtIO = null; }
+  const els = document.querySelectorAll('.light-art');
+  if (!els.length || typeof IntersectionObserver !== 'function') return;
+  lightArtIO = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle('is-live', e.isIntersecting && !document.hidden)), { threshold: 0.15 });
+  els.forEach(el => lightArtIO.observe(el));
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) document.querySelectorAll('.light-art.is-live').forEach(el => el.classList.remove('is-live'));
+  else if (lightArtIO) document.querySelectorAll('.light-art').forEach(el => { lightArtIO.unobserve(el); lightArtIO.observe(el); });
+});
 
 // Count-up for the career statistic: runs once per element when it first enters the viewport, eases out and lands
 // exactly on the final value (never overshoots, never repeats). Reduced motion, no IntersectionObserver or a value
@@ -2620,6 +2715,7 @@ function adoptPrerender() {
  *  here on, then do the work that has to read the layout. */
 function finishFirstLoad() {
   document.documentElement.classList.remove('first-load');
+  sweepFailedImages();
   if (adoptedFirstLoad) {
     const belowFold = [...document.querySelectorAll('.fade-in.visible')].filter(el => el.getBoundingClientRect().top >= window.innerHeight);
     belowFold.forEach(el => el.classList.remove('visible')); // they fade in on scroll, as on a client render
