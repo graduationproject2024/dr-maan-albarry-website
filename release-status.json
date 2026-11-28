@@ -46,9 +46,15 @@
         "date": "2026-11-23",
         "authorization": "Owner in chat: 'merge it' after CI passed (PR #5, test fix)",
         "run": "45242684926"
+      },
+      {
+        "pr": 6,
+        "date": "2026-11-28",
+        "authorization": "Owner in chat: 'Merge and publish' (PR #6, Phase 0–2 final closure)",
+        "gpuRun": "Full local suite on GPU, 2026-11-28, combined branch: 950 passed, 1 failed (touch-gestures scroll read while moving; fixed, 3/3 under load), 24 skipped. Product code unchanged since that run (later commits: that test fix and docs)."
       }
     ],
-    "pending": "PR #6 (feat/phase-2-final-closure) is NOT authorized for merge or deployment.",
+    "pending": "None. PR #6 authorized by the owner on 2026-11-28.",
     "note": "Merging to main publishes after the gate passes. Each entry quotes the owner's own instruction in the Claude Code chat; no other authorization is recorded."
   }
 }
