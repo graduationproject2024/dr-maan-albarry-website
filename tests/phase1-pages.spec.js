@@ -132,13 +132,17 @@ test.describe('Homepage height budget (owner complaint 1)', () => {
       const max = budgets[w][lang];
       test(`home is at most ${max}px tall at ${w}px (${lang})`, async ({ page }) => {
         await page.setViewportSize({ width: w, height: 900 });
-        // Measured with the site's fonts in place. Fonts use font-display: optional (2026-11-28), so on a slow first load
-        // (GitHub runner) a page can keep its fallback fonts; the second load has them cached, as for a returning visitor.
+        // Measured with the site's fonts applied. The site uses font-display: optional (2026-11-28), so on a slow runner a
+        // page can keep its fallback fonts (Linux fallbacks made it 82 px taller). For this measurement only, the page is
+        // served with font-display: swap so the web fonts are always applied once loaded.
+        await page.route((u) => !/\.[a-z0-9]+$/i.test(new URL(u).pathname), async (route) => {
+          const r = await route.fetch();
+          route.fulfill({ response: r, body: (await r.text()).replace(/font-display:\s*optional/g, 'font-display: swap') });
+        });
         await page.goto(lang === 'en' ? '/en/' : '/');
-        await page.evaluate(() => document.fonts.ready);
-        await page.reload();
         await page.locator('main h1').waitFor();
         await page.evaluate(() => document.fonts.ready);
+        await page.waitForFunction(() => [...document.fonts].some((f) => /Plex Sans Arabic|Newsreader/.test(f.family) && f.status === 'loaded'));
         const h = await page.evaluate(() => document.documentElement.scrollHeight);
         expect(h).toBeLessThanOrEqual(max);
         if (w > 800) expect(h).toBeLessThan(10700 * 0.55);
