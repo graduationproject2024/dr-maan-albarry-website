@@ -7,6 +7,7 @@
 //      npm run test:cpu
 // `npm run test:full` (no TEST_LAYER) still runs every file, as before.
 export const GPU_SPECS = [
+  'cataract-camera.spec.js',
   'cataract-integration.spec.js',
   'cataract-refinement.spec.js',
   'cataract-review.spec.js',

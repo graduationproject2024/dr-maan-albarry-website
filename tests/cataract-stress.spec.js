@@ -71,18 +71,39 @@ test.describe('cataract simulator — stress (desktop)', () => {
   });
 
   test('camera limits hold under extreme wheel and drag input', async ({ page }) => {
+    test.setTimeout(90_000);
     await open(page);
+    // Zoom limits are relative to the stage camera's fitted distance (`base`, cataract camera pass 2026-11):
+    // minR = max(11, 0.2 × base), maxR = min(160, max(80, 1.45 × base)) — checked at several canvas sizes, then pushed
+    // to both ends with Ctrl + wheel (Phase 2 wheel policy).
+    const ctrlWheel = async (dy, n) => {
+      const b = await page.locator('.csim canvas').boundingBox();
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+      await page.keyboard.down('Control');
+      for (let i = 0; i < n; i++) await page.mouse.wheel(0, dy);
+      await page.keyboard.up('Control');
+    };
+    for (const [w, h] of [[1440, 900], [390, 844], [1024, 700], [1280, 800]]) {
+      await page.setViewportSize({ width: w, height: h });
+      await expect.poll(() => page.evaluate(() => window.__csim.getState().camera.view[0] === document.querySelector('.csim-viewport').clientWidth), { timeout: 4000 }).toBe(true);
+      await page.locator('[data-ref="resetView"]').click();
+      await expect.poll(async () => (await S(page)).camera.moving).toBe(false);
+      const c0 = (await S(page)).camera;
+      expect(c0.distance, `${w}x${h}: on the fitted distance`).toBeCloseTo(c0.base, 2);
+      expect(c0.minR, `${w}x${h}: minR`).toBeCloseTo(Math.max(11, 0.2 * c0.base), 6);
+      expect(c0.maxR, `${w}x${h}: maxR`).toBeCloseTo(Math.min(160, Math.max(80, 1.45 * c0.base)), 6);
+      expect(c0.minR / c0.base).toBeLessThanOrEqual(0.5);
+      expect(c0.maxR / c0.base).toBeGreaterThanOrEqual(1.45 - 1e-9);
+      await ctrlWheel(-600, 40);
+      await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeLessThan(c0.minR + 0.3);
+      expect((await S(page)).camera.distance, `${w}x${h}: never below minR`).toBeGreaterThanOrEqual(c0.minR - 0.01);
+      await ctrlWheel(800, 40);
+      await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeGreaterThan(c0.maxR - 0.5);
+      expect((await S(page)).camera.distance, `${w}x${h}: never above maxR`).toBeLessThanOrEqual(c0.maxR + 0.01);
+    }
     const box = await page.locator('.csim canvas').boundingBox();
     const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
     await page.mouse.move(cx, cy);
-    await page.keyboard.down('Control'); // Ctrl + wheel zooms (Phase 2 wheel policy)
-    for (let i = 0; i < 40; i++) await page.mouse.wheel(0, -600);
-    await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeLessThan(12);
-    expect((await S(page)).camera.distance).toBeGreaterThanOrEqual(10.99);
-    for (let i = 0; i < 40; i++) await page.mouse.wheel(0, 800);
-    await page.keyboard.up('Control');
-    await expect.poll(async () => (await S(page)).camera.distance, { timeout: 4000 }).toBeGreaterThan(70);
-    expect((await S(page)).camera.distance).toBeLessThanOrEqual(80.01);
     await page.mouse.down();
     await page.mouse.move(cx + 2000, cy + 2000, { steps: 20 });
     await page.mouse.up();

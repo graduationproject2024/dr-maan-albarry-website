@@ -33,7 +33,11 @@ export const I18N = {
     disclaimer: 'Illustrative patient education only — not a substitute for a consultation with your eye doctor. Simplified animation; content pending physician review.',
     announcePlaying: 'Playing', announcePaused: 'Paused', announceCompleted: 'Walkthrough complete. Press Replay to watch again.',
     announceRestored: '3D view restored.',
-    rayNote: 'Illustrative light path — simplified model eye, not a vision test'
+    rayNote: 'Illustrative light path — simplified model eye, not a vision test',
+    // Before / After (owner brief §13). Describes the change in the eye only; no promised result. Pending Dr. Maan's review.
+    compare: 'Before and after', before: 'Before', after: 'After',
+    compareBefore: 'Before: the natural lens has become clouded (a cataract), so light is scattered on its way to the retina.',
+    compareAfter: 'After: the clouded lens has been replaced by a clear artificial lens in the same capsule. How well you see afterwards depends on the health of your eye, and glasses may still be needed for some distances.'
   },
   ar: {
     eyebrow: 'تثقيف صحي · ثلاثي الأبعاد',
@@ -65,7 +69,10 @@ export const I18N = {
     disclaimer: 'محتوى توضيحي للتثقيف الصحي فقط، ولا يُغني عن استشارة طبيب العيون. الرسوم مبسّطة، والمحتوى قيد المراجعة الطبية.',
     announcePlaying: 'جارٍ التشغيل', announcePaused: 'متوقف مؤقتًا', announceCompleted: 'اكتملت الجولة. اضغط «إعادة التشغيل» للمشاهدة مرة أخرى.',
     announceRestored: 'تمت استعادة العرض ثلاثي الأبعاد.',
-    rayNote: 'مسار ضوئي توضيحي — نموذج مبسّط للعين، وليس اختبارًا للنظر'
+    rayNote: 'مسار ضوئي توضيحي — نموذج مبسّط للعين، وليس اختبارًا للنظر',
+    compare: 'قبل وبعد', before: 'قبل', after: 'بعد',
+    compareBefore: 'قبل: أصبحت العدسة الطبيعية معتمة (الماء الأبيض)، فيتشتّت الضوء في طريقه إلى الشبكية.',
+    compareAfter: 'بعد: استُبدلت العدسة المعتمة بعدسة صناعية شفافة داخل المحفظة نفسها. تعتمد جودة الرؤية بعد العملية على صحة العين، وقد تبقى الحاجة إلى النظارة لبعض المسافات.'
   }
 };
 
@@ -93,7 +100,7 @@ let uid = 0;
 
 export function createUI(host, ctx) {
   const id = `csim${++uid}`;
-  const S = { lang: ctx.lang, stage: 0, playing: false, state: 'loading', labels: false, cutaway: false, touch: false, focusId: null };
+  const S = { lang: ctx.lang, stage: 0, playing: false, state: 'loading', labels: false, cutaway: false, touch: false, focusId: null, compare: null };
   const t = (k) => I18N[S.lang][k];
   const root = document.createElement('div');
   root.className = 'csim';
@@ -154,6 +161,12 @@ export function createUI(host, ctx) {
           <input type="range" class="csim-scrubber" data-ref="scrubber" min="0" max="1000" step="1" value="0" data-i18n-label="scrubber">
         </div>
       </div>
+      <div class="csim-ba" role="group" data-ref="ba" data-i18n-label="compare">
+        <span class="csim-ba-k" data-i18n="compare" aria-hidden="true"></span>
+        <button type="button" class="csim-ba-btn" data-ref="baBefore" data-value="before" aria-pressed="false" data-i18n="before"></button>
+        <button type="button" class="csim-ba-btn" data-ref="baAfter" data-value="after" aria-pressed="false" data-i18n="after"></button>
+        <p class="csim-ba-text" data-ref="baText" hidden></p>
+      </div>
     </section>
     <aside class="csim-panel" aria-labelledby="${id}-stage-title">
       <p class="csim-kicker" data-ref="stageNum"></p>
@@ -213,6 +226,8 @@ export function createUI(host, ctx) {
   on(ref.labels, 'click', () => H.toggleLabels());
   on(ref.cutaway, 'click', () => H.toggleCutaway());
   on(ref.touch, 'click', () => H.toggleTouch());
+  on(ref.baBefore, 'click', () => H.compare('before'));
+  on(ref.baAfter, 'click', () => H.compare('after'));
   // Full screen (CSS, so it also works on iPhone, which has no element full-screen API). On a touch screen it also
   // turns on one-finger exploring, and turns it off again on exit if it was off before.
   let touchBeforeExpand = null;
@@ -257,6 +272,7 @@ export function createUI(host, ctx) {
     renderStage();
     renderPlay();
     renderAnatomyInfo();
+    renderCompare();
     if (!ref.note.hidden && ref.note.dataset.key) ref.note.textContent = t(ref.note.dataset.key);
   }
 
@@ -299,6 +315,14 @@ export function createUI(host, ctx) {
   }
   const playFit = 'ResizeObserver' in window ? new ResizeObserver(() => fitPlayLabel()) : null;
   if (playFit) playFit.observe(ref.playPause.parentElement);
+
+  function renderCompare() {
+    ref.baBefore.setAttribute('aria-pressed', String(S.compare === 'before'));
+    ref.baAfter.setAttribute('aria-pressed', String(S.compare === 'after'));
+    ref.baText.hidden = !S.compare;
+    ref.baText.textContent = S.compare ? t(S.compare === 'before' ? 'compareBefore' : 'compareAfter') : '';
+    root.classList.toggle('csim--compare', !!S.compare);
+  }
 
   function renderAnatomyInfo() {
     chipBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.structure === S.focusId)));
@@ -348,6 +372,7 @@ export function createUI(host, ctx) {
       root.classList.toggle('csim--touch-active', v);
     },
     setFocus(id) { S.focusId = id; renderAnatomyInfo(); },
+    setCompare(which) { S.compare = which || null; renderCompare(); },
     updateHotspots(list) {
       for (const h of list) {
         const b = hotspots[h.id];

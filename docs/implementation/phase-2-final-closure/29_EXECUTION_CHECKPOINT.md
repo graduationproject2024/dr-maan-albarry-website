@@ -36,3 +36,16 @@ Device photos, gallery photos, "first" claim evidence, EDOF year, dropless paper
 - Security: all scanners run, findings fixed (15).
 - Trello: 5 cards closed with evidence (21); titles corrected.
 - Next: GitHub full regression 45635244805 (Linux `lj-label` width); decide CI GPU layer (owner); performance re-measure (17); device QA (18, needs owner OK for BrowserStack); physician review package (14); final acceptance audit; owner OK to merge PR #6 / deploy.
+
+## Update 2026-11-28 — gate B "every simulator": cataract cameras + Before / After
+- Branch `wt/cat` (worktree `C:\w\cat`, from `7322bde`; not yet merged).
+- The cataract simulator now uses the fitted-camera approach (08, "Cataract simulator"): free-area framing, RTL-aware,
+  deterministic camera on seek, relative zoom limits, re-fit on resize.
+- Fixed in the same pass:
+  - view tools cut off on 844x390;
+  - tool row 2 px past the edge on 390;
+  - stale frame after a paused seek;
+  - camera could enter the globe in stage 7.
+- Before / After added (10). Wording pending physician review (14: N-10, N-11).
+- Tests: the required cataract + clinical set plus the new `cataract-camera.spec.js` → 126 passed (e31fad6). After the independent-review fixes: 132 passed, 0 failed, 4 skipped.
+- Evidence: `evidence/cataract/before/`, `evidence/cataract/after/`.

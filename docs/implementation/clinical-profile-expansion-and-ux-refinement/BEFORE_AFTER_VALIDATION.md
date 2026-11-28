@@ -15,5 +15,5 @@
 | Transplant | recovery takes months; anti-rejection drops |
 | Injections | works gradually, often as a series; **not an instant cure** |
 
-- **Cataract simulator:** it is a separate engine and has no Before/After. The lens-implants simulator covers the clouded-lens-to-implant comparison.
+- **Cataract simulator:** added 2026-11-28 (its own engine, same rule): end of stage 1 vs end of stage 7, stage 1's camera. See `phase-2-final-closure/10_BEFORE_AFTER_VERIFICATION.md`.
 - **Status:** pending Dr. Maan's review.
