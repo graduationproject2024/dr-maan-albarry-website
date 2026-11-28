@@ -51,6 +51,8 @@ test('Touch and gesture checks', async ({ page }, testInfo) => {
     const v = page.locator('#cataract-3d-stage [data-ref="viewport"]'); const r = await revealInFreeArea(page, v);
     const y0 = await page.evaluate(() => scrollY);
     cdp = await swipe(page, { x: r.x + r.w * 0.5, y: r.y + r.h * 0.7, dy: -220, steps: 10, cdp });
+    // the page scrolls on the compositor; under a loaded machine it was still moving when read (81 px, 2026-11-28 full run)
+    await page.waitForFunction(() => new Promise((res) => { const a = scrollY; requestAnimationFrame(() => requestAnimationFrame(() => res(scrollY === a))); }), null, { timeout: 3000 }).catch(() => {});
     const y1 = await page.evaluate(() => scrollY);
     // The swipe must move the page, not the camera: 120 px, or as far as the page goes (the viewer sits near the end
     // of the cataract page, so on short pages the end can come first).

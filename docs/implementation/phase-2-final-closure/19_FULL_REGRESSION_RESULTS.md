@@ -41,3 +41,7 @@ Suites are split in `tests/layers.mjs`: GPU layer (18 files, 335 tests: cataract
 |---|---|---|
 | 1 | `90dcb94` + layer split | **330 passed, 0 failed**, 4 skipped (evidence captures) — 10.4 min, RTX 2060 / ANGLE D3D11 |
 | — | `webkit.spec.js` moved to the GPU layer (CPU run 45640303933 timed out on the vision simulator); passes locally 1/1 | |
+
+## Full local run on the combined branch (2026-11-28)
+Code: `b0e9980` + Lens Lab merge (all of: four rebuilds, 50 cm preset, cataract cameras + Before/After, load-shift fixes, CSP without 'unsafe-inline').
+**950 passed, 1 failed, 24 skipped** (22.8 min, GPU). The failure: touch-gestures step 2 read the scroll position while the page was still moving under load (81 px of a 220 px swipe, far from the page end); passes 3/3 alone and 3/3 with 3 parallel workers after the step waits for the scroll to settle (assertion unchanged).
