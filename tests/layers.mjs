@@ -18,11 +18,17 @@ export const GPU_SPECS = [
   'lens-lab-distance.spec.js',
   'lens-lab-mobile.spec.js',
   'lens-lab-recovery.spec.js',
+  'module-reserve.spec.js', // mounts the Lens Lab module (WebGL comparison)
   'surgical-sim.spec.js',
   'surgical-sim-webkit.spec.js',
   'vision-review.spec.js',
   'vision-sim.spec.js',
   'journeys/core-journeys.spec.js',
+  'journeys/persona-c.spec.js', // persona C, D, F, premium C/F and touch gestures open the cataract 3D viewer
+  'journeys/persona-d.spec.js', // (CPU-layer run 45640303933 shard 2: 12 of 13 failures were 3D step timeouts)
+  'journeys/persona-f.spec.js',
+  'journeys/premium-journeys.spec.js',
+  'journeys/touch-gestures.spec.js',
   'journeys/stress.spec.js',
   'journeys/webkit.spec.js', // drives both simulators in WebKit (CPU-layer run 45640303933 timed out on the vision simulator)
 ];

@@ -1003,10 +1003,10 @@ html.dialog-open { overflow: hidden; }
    below it — only while a mount is expected (data-reserve); no-JS / prerendered pages and a failed load keep no gap. */
 /* The simulator now sits directly under the hero, so its slot is the first thing below the fold: heights measured after the
    2026-11 workbench rebuild (320-1440 px, AR/EN); data-reserve is only present while a mount is expected. */
-.vsim-host[data-reserve] { min-height: 860px; position: relative; }
-@media (max-width: 1023px) { .vsim-host[data-reserve] { min-height: 1090px; } }
-@media (max-width: 767px) { .vsim-host[data-reserve] { min-height: 1180px; } }
-@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { .vsim-host[data-reserve] { min-height: 590px; } }
+:is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 860px; position: relative; }
+@media (max-width: 1023px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 1090px; } }
+@media (max-width: 767px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 1180px; } }
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) { :is(.vsim-host[data-reserve], html.first-load .vsim-host:empty) { min-height: 590px; } }
 .vsim-host[data-reserve]::before { content: attr(data-loading-text); position: absolute; inset-inline: 0; top: 24px; text-align: center; font-size: var(--fs-small); color: var(--ink-2); }
 /* Workbench geometry (read by src/vision-sim/styles.css). main.js overwrites the two chrome values with the measured
    heights of the header and the booking bar; these are the same values for the very first layout. */
@@ -1070,9 +1070,29 @@ html.dialog-open { overflow: hidden; }
 .feature { display: grid; gap: var(--s-5); }
 .feature-slot:not([data-reserve]):empty { display: none; }
 .feature-slot[data-reserve] { display: block; border-radius: var(--r-3); background: linear-gradient(90deg, var(--paper-2), var(--paper), var(--paper-2)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
-.feature-lens-lab .feature-slot[data-reserve] { min-height: 1200px; }
-.feature-light-journey .feature-slot[data-reserve] { min-height: 1200px; } /* measured 1,195–1,290 px mounted (final stabilization) */
-@media (max-width: 767px) { .feature-lens-lab .feature-slot[data-reserve] { min-height: 1900px; } .feature-light-journey .feature-slot[data-reserve] { min-height: 1310px; } } /* +60 px: phone crop of the Light Journey drawing (2026-11-25) */
+/* Reserves match the mounted heights measured 2026-11-26 (EN / AR, after the Lens Lab and Light Journey rebuilds) so a
+   reader scrolled into the slot does not jump when the module arrives (acceptance audit: Lens Lab CLS 0.141 at 1440 px
+   with the old 1,200 px reserve). Lens Lab: 1024 px 7,523 / 6,615; 1280 px 6,706 / 6,092; 1440 px 6,477 / 5,948;
+   768-1023 px ~1,375-1,418; phones 1,795-2,212. Light Journey: 1024 px 1,509 / 1,558; 1280-1440 px 1,336-1,386;
+   768-1023 px 1,341-1,387; phones 1,442-1,515. */
+:is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6590px; }
+:root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6020px; }
+:is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1360px; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 7520px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 6620px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1530px; }
+}
+@media (max-width: 1023px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1418px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1375px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1365px; }
+}
+@media (max-width: 767px) {
+  :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 2080px; }
+  :root[lang="ar"] :is(.feature-lens-lab .feature-slot[data-reserve], html.first-load .feature-lens-lab .feature-slot:empty) { min-height: 1860px; }
+  :is(.feature-light-journey .feature-slot[data-reserve], html.first-load .feature-light-journey .feature-slot:empty) { min-height: 1480px; }
+}
 @keyframes shimmer { to { background-position: -200% 0; } }
 .feature-slot[data-reserve] ~ .feature-static, .feature.is-mounted .feature-static { display: none; }
 .feature-status { display: grid; gap: var(--s-3); justify-items: start; padding: var(--s-5); border-radius: var(--r-2); border: 1px solid var(--alert-line); background: var(--alert-bg); color: var(--alert-ink); }

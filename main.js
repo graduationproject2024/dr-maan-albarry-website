@@ -2263,8 +2263,14 @@ function holdScrollTarget(targetTop, behavior = 'auto', restoreY = null) {
   // is smaller than the module): load the modules now instead of when they near the clamped viewport, which never
   // happens when a section sits between them and the target (BUG-FS-01; Lens Lab with the eye-surface section).
   // One frame later, so the current render's module slots are attached on a first load too.
+  // Any module above the position is loaded, not only when the page is too short: a reserve is close to, never exactly,
+  // the module's height (it differs by language and width), and the saved position was measured with the modules in.
   if (restoreY != null) requestAnimationFrame(() => {
-    if (restoringY === restoreY && document.documentElement.scrollHeight - window.innerHeight < restoreY - 2) { lensLab.mountNow(); lightJourney.mountNow(); }
+    if (restoringY !== restoreY) return;
+    for (const [m, sel] of [[lensLab, '.feature-lens-lab'], [lightJourney, '.feature-light-journey']]) {
+      const el = document.querySelector(sel);
+      if (el && el.getBoundingClientRect().top + window.scrollY < restoreY + window.innerHeight) m.mountNow();
+    }
   });
 }
 /** Where the page must be scrolled to show a section just below the fixed header. */

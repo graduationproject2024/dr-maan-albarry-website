@@ -30,9 +30,11 @@ export const FLOW = { dash: 9, gap: 61 };
 /** Camera per step while playing: focal point (drawing x, y) and scale. The drawn content spans about x 20..1180,
  *  so a push-in that keeps every part and label inside the frame is at most ~3 % (the focal x must stay within
  *  about 515..685; tests/light-journey.spec.js checks every step against the measured content box). */
+// Scale capped at 1.01: the label column reaches x ≈ 1187 with Linux/Android fonts (≈ 1180 on Windows), so a larger
+// push-in crossed the 1200 frame edge there (full regression 45640303933, step 2 → 1202.4).
 export const CAMERA = [
-  [600, 300, 1.0], [560, 300, 1.025], [560, 300, 1.03], [570, 300, 1.03], [580, 300, 1.03],
-  [600, 300, 1.03], [620, 300, 1.025], [640, 300, 1.03], [640, 300, 1.02]
+  [600, 300, 1.0], [560, 300, 1.01], [560, 300, 1.01], [570, 300, 1.01], [580, 300, 1.01],
+  [600, 300, 1.01], [620, 300, 1.01], [640, 300, 1.01], [640, 300, 1.01]
 ];
 /** Phone layout (containers under 560 px): a tighter, taller crop around the eye, with the scene drawn smaller and
  *  closer (the distance is marked as shortened on the axis), so the eye fills the width and labels stay legible. */
