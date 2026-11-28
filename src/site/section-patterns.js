@@ -67,7 +67,7 @@ export function createSectionPatterns({ icon, tr }) {
         ${items.map((f, idx) => `
         <div class="faq-item" id="${prefix}-${idx}">
           <h3 class="faq-heading">
-            <button type="button" class="faq-question" onclick="toggleFaq(${idx},'${prefix}')" aria-expanded="false" aria-controls="${prefix}-answer-${idx}"><span>${f.q}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
+            <button type="button" class="faq-question" data-act="faq" data-arg="${idx}" data-arg2="${prefix}" aria-expanded="false" aria-controls="${prefix}-answer-${idx}"><span>${f.q}</span><span class="faq-icon" aria-hidden="true">${icon('plus', 20)}</span></button>
           </h3>
           <div class="faq-answer" id="${prefix}-answer-${idx}" role="region"><p>${f.a}</p></div>
         </div>`).join('')}

@@ -234,7 +234,7 @@ function illustration(p, { eager = false, priority = false, night = false, cls =
   const swap = night ? '' : `data-light="images/procedures/${p.slug}.webp" data-light-set="${set('')}" ${dark ? `data-dark="images/procedures/${p.slug}-dark.webp" data-dark-set="${set('-dark')}"` : ''}`;
   const load = priority ? 'loading="eager" fetchpriority="high"' : eager ? 'loading="eager"' : 'loading="lazy"';
   return `<div class="illus ${cls}">
-      <img src="images/procedures/${p.slug}${v}.webp" srcset="${set(v)}" sizes="${sizes}" ${swap} width="1600" height="1000" alt="${label}" ${load} decoding="async" onerror="this.parentNode.classList.add('is-plate');this.remove()">
+      <img src="images/procedures/${p.slug}${v}.webp" srcset="${set(v)}" sizes="${sizes}" ${swap} width="1600" height="1000" alt="${label}" ${load} decoding="async" data-fallback="parent">
       ${plate}
     </div>`;
 }
@@ -275,7 +275,7 @@ function atlasIllus(a, { bg = 'alpha', sizes = '100vw', priority = false, eager 
   const label = alt !== null ? alt : L(a.alt);
   const p = procedureBySlug(a.procedure);
   return `<div class="illus atlas-illus is-${kind} ${cls}" style="aspect-ratio:${a.w} / ${a.h}">
-      <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" onerror="var d=this.closest('.illus');d.classList.add('is-plate');this.parentNode.remove()"></picture>
+      <picture><source type="image/webp" srcset="${ws.map(w => `${url(kind, w)} ${w}w`).join(', ')}" sizes="${sizes}"><img src="${jpg}" width="${a.w}" height="${a.h}" alt="${label}" ${load} decoding="async" data-fallback="picture"></picture>
       ${pins ? pinLayer(spreadPins(atlasLabels(a), a.w / a.h), { progressive: a.level === 'L2' }) : ''}
       ${anatomyPlate(a.procedure, p ? L(p.alt) : label)}
     </div>`;
@@ -317,7 +317,7 @@ function labelsMore(more, shown) {
   return `<details class="labels-more"><summary class="labels-toggle"><span class="lm-closed">${tr(`عرض كل التسميات (${total})`, `Show all labels (${total})`)}</span><span class="lm-open">${tr('عرض التسميات الأساسية فقط', 'Show essential labels only')}</span><span class="lm-icon" aria-hidden="true">${icon('plus', 16)}</span></summary>${pinKey(more, 'plate-key', shown + 1)}</details>`;
 }
 /** The enlarge control on a figure (opens the dialog built by openPlateZoom). */
-const zoomButton = () => `<button type="button" class="plate-zoom" aria-haspopup="dialog" aria-label="${tr('تكبير الرسم', 'Enlarge illustration')}" onclick="openPlateZoom(this)">${icon('zoom', 20)}</button>`;
+const zoomButton = () => `<button type="button" class="plate-zoom" aria-haspopup="dialog" aria-label="${tr('تكبير الرسم', 'Enlarge illustration')}" data-act="plate-zoom">${icon('zoom', 20)}</button>`;
 /** The large labelled plate on a procedure page (L2 hero, Fig. 1). */
 function plateFigure(p, i, { priority = false, sizes = '100vw', cls = '' } = {}) {
   const a = atlasOf(p.slug, 'L2')[0];
@@ -383,12 +383,12 @@ function renderThemeToggle(id) {
   const isDark = resolvedTheme() === 'dark';
   const label = isDark ? tr('الوضع الليلي مفعّل، انقر للتحويل للوضع النهاري', 'Dark mode on. Switch to light mode')
     : tr('الوضع النهاري مفعّل، انقر للتحويل للوضع الليلي', 'Light mode on. Switch to dark mode');
-  return `<button id="${id}" type="button" class="icon-btn theme-toggle" onclick="toggleTheme()" role="switch" aria-checked="${isDark}" aria-label="${label}" title="${label}">${icon('sun', 20)}${icon('moon', 20)}</button>`;
+  return `<button id="${id}" type="button" class="icon-btn theme-toggle" data-act="theme" role="switch" aria-checked="${isDark}" aria-label="${label}" title="${label}">${icon('sun', 20)}${icon('moon', 20)}</button>`;
 }
 
 // The language switch shows the other language's own name ("English" / "العربية"); its accessible name contains it.
 function renderLangToggle(extra = '') {
-  return `<button type="button" class="icon-btn lang-switch ${extra}" onclick="toggleLang()" aria-label="${tr('English — التحويل إلى الإنجليزية', 'العربية — التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
+  return `<button type="button" class="icon-btn lang-switch ${extra}" data-act="lang" aria-label="${tr('English — التحويل إلى الإنجليزية', 'العربية — التحويل إلى العربية')}" title="${tr('Switch to English', 'التحويل إلى العربية')}">
           <span lang="${tr('en', 'ar')}">${tr('English', 'العربية')}</span>
         </button>`;
 }
@@ -422,7 +422,7 @@ function renderHeader() {
         <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary btn-sm btn-header-book" data-cta="book">
           <span class="btn-label">${tr('احجز موعداً', 'Book appointment')}</span>
         </a>
-        <button type="button" class="icon-btn mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="${tr('القائمة', 'Menu')}" aria-expanded="false" aria-controls="mobile-nav"><span class="burger" aria-hidden="true"><span></span><span></span></span></button>
+        <button type="button" class="icon-btn mobile-menu-btn" data-act="menu" aria-label="${tr('القائمة', 'Menu')}" aria-expanded="false" aria-controls="mobile-nav"><span class="burger" aria-hidden="true"><span></span><span></span></span></button>
       </div>
     </div>
 
@@ -1090,7 +1090,7 @@ function renderProceduresPage() {
         <div class="atlas-bar">
           <h2 class="atlas-title" id="library-title">${tr('جميع الإجراءات', 'All procedures')}</h2>
           <div class="proc-filter" role="group" aria-label="${tr('تصفية حسب المجموعة', 'Filter by group')}">
-            ${chips.map(([id, label, n]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" onclick="filterProcedures('${id}')"><span>${label}</span><span class="chip-n" aria-hidden="true">${n}</span></button>`).join('')}
+            ${chips.map(([id, label, n]) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${procFilter === id}" data-act="filter"><span>${label}</span><span class="chip-n" aria-hidden="true">${n}</span></button>`).join('')}
           </div>
         </div>
         ${procedureGallery({ cls: 'proc-grid atlas atlas-library', attrs: `data-filter="${procFilter}"`, cards: PROCEDURES.map((p, i) => procCard(p, { featured: i === 0 })), after: `
@@ -1413,7 +1413,7 @@ function renderCataract3D(onProcedurePage = false) {
           <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل عملية بحسب حالة العين.', 'Not a substitute for a consultation; every operation is tailored to the individual eye.')}</span></li>
         </ul>
         <div class="c3d-actions">
-          <button type="button" class="btn btn-light btn-lg" id="cataract-3d-start" onclick="startCataract3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+          <button type="button" class="btn btn-light btn-lg" id="cataract-3d-start" data-act="start-c3d" ${st === 'loading' ? 'aria-busy="true"' : ''}>
             ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
           </button>
           ${onProcedurePage ? '' : quietLink(pageHref(currentLang, 'cataract-surgery'), tr('دليل جراحة الماء الأبيض', 'Cataract surgery guide'))}
@@ -1577,7 +1577,7 @@ function renderProcedure3D(p) {
           <li>${icon('alert', 18)}<span>${tr('لا يغني عن الاستشارة والفحص؛ تختلف تفاصيل كل حالة.', 'Not a substitute for a consultation; every case is different.')}</span></li>
         </ul>
         <div class="c3d-actions">
-          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" onclick="startProcedure3D()" ${st === 'loading' ? 'aria-busy="true"' : ''}>
+          <button type="button" class="btn btn-light btn-lg" id="procedure-3d-start" data-act="start-p3d" ${st === 'loading' ? 'aria-busy="true"' : ''}>
             ${icon('play', 20)}<span class="btn-label">${st === 'loading' ? tr('جارٍ التحميل…', 'Loading…') : tr('ابدأ التجربة ثلاثية الأبعاد', 'Start the 3D experience')}</span>
           </button>
           <p class="c3d-status" role="status">${st === 'error' ? tr('تعذر تحميل التجربة ثلاثية الأبعاد على هذا الجهاز. يمكنك المحاولة مرة أخرى.', 'The 3D experience could not load on this device. You can try again.') : ''}</p>
@@ -1720,8 +1720,8 @@ function renderQuestionnaireCard() {
           <div class="q-actions">
             <a href="${C.bookingUrl}" ${EXT} class="btn btn-primary" data-cta="book"><span class="btn-label">${tr('احجز موعد الفحص', 'Book an examination')}</span></a>
             <a href="${getWhatsAppUrl(tr('مرحباً، أجريت استبيان نمط الحياة البصري على الموقع وأرغب بالاستفسار عن حجز موعد مع د. معن البري.', 'Hello, I completed the visual lifestyle questionnaire on the website and would like to ask about an appointment with Dr. Maan Al Barry.'))}" ${EXT} class="btn btn-whatsapp" data-cta="whatsapp">${glyph('whatsapp')}<span>${tr('واتساب', 'WhatsApp')}</span></a>
-            <button type="button" class="btn btn-quiet" onclick="window.print()">${tr('اطبع الملخص', 'Print the summary')}</button>
-            <button type="button" class="btn btn-quiet" onclick="restartQ()">${tr('إعادة الاستبيان', 'Restart')}</button>
+            <button type="button" class="btn btn-quiet" data-act="print">${tr('اطبع الملخص', 'Print the summary')}</button>
+            <button type="button" class="btn btn-quiet" data-act="q-restart">${tr('إعادة الاستبيان', 'Restart')}</button>
           </div>
           <p class="q-safety"><strong>${tr('تنبيه:', 'Note:')}</strong> ${tr('هذا الملخص تثقيفي فقط ولا يمثل تشخيصاً أو وصفة لنوع عدسة. القرار الطبي يتخذه الاستشاري بعد الفحص المباشر.', 'This summary is educational only and is not a diagnosis or a lens prescription. Treatment decisions follow an in-person examination.')}</p>
         </div>
@@ -1735,11 +1735,11 @@ function renderQuestionnaireCard() {
       <h3 class="q-question">${cur.question}</h3>
       <p class="q-desc">${cur.desc}</p>
       <div class="q-options" role="group" aria-label="${cur.question}">
-        ${cur.options.map((opt, i) => `<button type="button" class="q-option ${qAnswers[currentQStep] === i ? 'selected' : ''}" aria-pressed="${qAnswers[currentQStep] === i}" onclick="selectQOption(${i})"><span class="q-radio" aria-hidden="true"></span><span>${opt}</span></button>`).join('')}
+        ${cur.options.map((opt, i) => `<button type="button" class="q-option ${qAnswers[currentQStep] === i ? 'selected' : ''}" aria-pressed="${qAnswers[currentQStep] === i}" data-act="q-option" data-arg="${i}"><span class="q-radio" aria-hidden="true"></span><span>${opt}</span></button>`).join('')}
       </div>
       <div class="q-nav">
-        ${currentQStep > 0 ? `<button type="button" class="btn btn-quiet btn-sm" onclick="prevQStep()">${tr('السابق', 'Previous')}</button>` : '<span></span>'}
-        <button type="button" class="btn btn-primary btn-sm" onclick="nextQStep()" ${qAnswers[currentQStep] === undefined ? 'disabled' : ''}>
+        ${currentQStep > 0 ? `<button type="button" class="btn btn-quiet btn-sm" data-act="q-prev">${tr('السابق', 'Previous')}</button>` : '<span></span>'}
+        <button type="button" class="btn btn-primary btn-sm" data-act="q-next" ${qAnswers[currentQStep] === undefined ? 'disabled' : ''}>
           ${currentQStep < steps.length - 1 ? tr('التالي', 'Next') : tr('عرض الملخص', 'View summary')}
         </button>
       </div>
@@ -2138,7 +2138,7 @@ function syncPrefsReset() {
   const btn = document.getElementById('prefs-reset');
   if (!hasSavedPrefs()) { if (btn) btn.remove(); return; }
   if (btn) return;
-  links.insertAdjacentHTML('beforeend', `<button type="button" class="footer-reset" id="prefs-reset" onclick="resetPreferences()">${tr('إعادة ضبط اللغة والمظهر', 'Reset language and theme')}</button>`);
+  links.insertAdjacentHTML('beforeend', `<button type="button" class="footer-reset" id="prefs-reset" data-act="reset-prefs">${tr('إعادة ضبط اللغة والمظهر', 'Reset language and theme')}</button>`);
 }
 window.resetPreferences = function () {
   const hadFocus = document.activeElement === document.getElementById('prefs-reset');
@@ -2344,6 +2344,42 @@ window.toggleMobileMenu = function () {
 
 window.closeMobileMenu = function () { setMobileMenu(false); };
 
+// Buttons name their action in data-act (no inline onclick: the page CSP allows only the site's own hashed inline
+// scripts, so 'unsafe-inline' is gone from script-src). One listener, registered once, survives re-renders.
+const ACTIONS = {
+  'plate-zoom': (el) => window.openPlateZoom(el),
+  'plate-close': (el) => window.closePlateZoom(el.closest('dialog')),
+  theme: () => window.toggleTheme(),
+  lang: () => window.toggleLang(),
+  menu: () => window.toggleMobileMenu(),
+  filter: (el) => window.filterProcedures(el.dataset.filter),
+  'start-c3d': () => window.startCataract3D(),
+  'start-p3d': () => window.startProcedure3D(),
+  print: () => window.print(),
+  'q-restart': () => window.restartQ(),
+  'q-option': (el) => window.selectQOption(Number(el.dataset.arg)),
+  'q-prev': () => window.prevQStep(),
+  'q-next': () => window.nextQStep(),
+  'reset-prefs': () => window.resetPreferences(),
+  faq: (el) => window.toggleFaq(Number(el.dataset.arg), el.dataset.arg2 || 'faq')
+};
+document.addEventListener('click', (e) => {
+  const el = e.target.closest && e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const act = ACTIONS[el.dataset.act];
+  if (act) act(el, e);
+});
+// A missing illustration falls back to its drawn plate (was an inline onerror). 'error' does not bubble: capture it.
+function plateFallback(img) {
+  if (img.dataset.fallback === 'picture') { const d = img.closest('.illus'); if (d) d.classList.add('is-plate'); img.parentNode && img.parentNode.remove(); }
+  else { img.parentNode && img.parentNode.classList.add('is-plate'); img.remove(); }
+}
+document.addEventListener('error', (e) => { const t = e.target; if (t && t.tagName === 'IMG' && t.dataset.fallback) plateFallback(t); }, true);
+/** Images that failed before this script ran (prerendered page on a slow link) never fire the listener above. */
+function sweepFailedImages() {
+  document.querySelectorAll('img[data-fallback]').forEach((img) => { if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) plateFallback(img); });
+}
+
 // Escape closes the drawer and returns focus to its button (registered once; survives re-renders).
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
@@ -2454,7 +2490,7 @@ window.openPlateZoom = btn => {
   dlg._closing = false;
   const n = fig.querySelector('.fig-n');
   const open = fig.querySelector('.labels-more') && fig.querySelector('.labels-more').open;
-  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" onclick="closePlateZoom(this.closest('dialog'))">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
+  dlg.innerHTML = `<div class="pd-head"><p class="pd-title" id="plate-dialog-title">${n ? n.innerHTML : ''}</p><button type="button" class="pd-close" aria-label="${tr('إغلاق الرسم المكبّر', 'Close the enlarged illustration')}" data-act="plate-close">${icon('close', 22)}</button></div><figure class="plate pd-figure"><div class="pd-scroll" dir="ltr"></div></figure>`;
   const figure = dlg.querySelector('.pd-figure'), scroller = dlg.querySelector('.pd-scroll');
   const illus = fig.querySelector('.atlas-illus').cloneNode(true);
   illus.querySelectorAll('.pin').forEach(p => { p.style.translate = ''; });
@@ -2679,6 +2715,7 @@ function adoptPrerender() {
  *  here on, then do the work that has to read the layout. */
 function finishFirstLoad() {
   document.documentElement.classList.remove('first-load');
+  sweepFailedImages();
   if (adoptedFirstLoad) {
     const belowFold = [...document.querySelectorAll('.fade-in.visible')].filter(el => el.getBoundingClientRect().top >= window.innerHeight);
     belowFold.forEach(el => el.classList.remove('visible')); // they fade in on scroll, as on a client render
