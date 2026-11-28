@@ -50,8 +50,10 @@ Wording sources:
   - Both views use stage 1's fitted camera. The covered area is identical: both are light-ray stages, and the caption is reserved in both.
   - Reset view inside the comparison returns to this camera.
   - A seek leaves the comparison and lands on that stage's own camera.
-- **Announcements:** the caption is read once through the simulator's polite live region; the language switch keeps
-  the comparison and translates the caption.
+- **Announcements:** the caption is read once through the simulator's polite live region. The stage change behind it
+  ("Stage 7 of 7 …") is not announced on top (review fix). The language switch keeps the comparison and translates the
+  caption.
+- **Leaving:** choosing an anatomy structure (chip or hotspot) also leaves the comparison (review fix).
 
 Wording (draft, pending review):
 
@@ -78,6 +80,7 @@ scroll.
 |---|---|---|
 | Cataract | `cataract-camera.spec.js` › `cataract Before / After <1440x900 / 390x844> › <en / ar>: toggles two moments from one identical camera, with the wording, and leaves cleanly` (×4) | Checks, in both languages and at desktop and phone sizes:<br>• the group is named, the caption is hidden at first, and both buttons are ≥ 44 × 44 px;<br>• Before is stage 1, paused, with cataract 1, no IOL, scattered rays and no highlight;<br>• After (via keyboard Enter) is stage 7, with the IOL settled, focused rays and no highlight;<br>• the After camera and free area are identical to Before's, and equal stage 1's own camera;<br>• `aria-pressed` and the caption are correct in EN and AR;<br>• Reset view inside the comparison restores its camera;<br>• the language switch keeps the comparison and translates it;<br>• Play leaves it, and a seek leaves it and lands on the stage camera;<br>• one render loop. |
 | Cataract | `cataract-camera.spec.js` › `Before / After is hidden when the 3D view is unavailable` | fallback hides it; the API is a no-op |
+| Cataract | `cataract-camera.spec.js` › `Before / After under reduced motion: instant, identical camera, one announcement; a structure leaves it` | with prefers-reduced-motion: no flight, the After camera equals Before's, one "After:" announcement and no stage announcement, and choosing a structure leaves the comparison |
 | 2–4, 6, 7 | `clinical-profile-expansion.spec.js` › `procedure simulators › <slug>: Before / After with responsible wording` (×5) | After = last stage, Before = first stage, caption visible, no "cure"/"guarantee" promise |
 | 5 | `clinical-profile-expansion.spec.js` › `keratoconus: Before / After only on the cross-linking tab, without an instant-shape promise` | hidden on the keratoconus tab; CXL "after" carries the instant-shape safeguard |
 | 2, 3, 6 | `surgical-sim.spec.js` › `camera <390x844 / 1440x900>: Before / After show two different moments from one fitted camera` | identical fitted camera for both moments, two different model states |
@@ -85,12 +88,12 @@ scroll.
 Run (this pass, Windows GPU via ANGLE, 2 workers):
 
 `PW_PORT=4811 PRERENDER_PORT=4816 npx playwright test tests/cataract-sim.spec.js tests/cataract-stress.spec.js tests/cataract-review.spec.js tests/cataract-warmup.spec.js tests/cataract-refinement.spec.js tests/cataract-integration.spec.js tests/cataract-constraints.spec.js tests/clinical-profile-expansion.spec.js tests/cataract-camera.spec.js --workers 2`
-→ **126 passed, 0 failed, 4 skipped** (the opt-in evidence / performance captures), 5.7 min. Of these, `cataract-camera.spec.js` contributes 14 tests, and `cataract-constraints.spec.js` reports 0 violations. An earlier run of the same set had one failure: the stress test's 80 mm desktop zoom ceiling was exceeded at 1280x800 with a 1.55 relative factor. The factor was set to 1.45 and the suite was rerun green.
+→ after the independent-review fixes: **132 passed, 0 failed, 4 skipped** (the opt-in evidence / performance captures), 4.8 min. Of these, `cataract-camera.spec.js` contributes 20 tests (first commit: 126 passed with 14), and `cataract-constraints.spec.js` reports 0 violations. An earlier run of the same set had one failure: the stress test's 80 mm desktop zoom ceiling was exceeded at 1280x800 with a 1.55 relative factor. The factor was set to 1.45 and the suite was rerun green.
 
 Gap: in `surgical-sim.spec.js` the camera-identity check covers IOL, ICL and transplant. Laser, CXL and injections use the
 same engine path (`compare()` → `goToCamera`), but they are covered only by the wording / state tests above.
 
-## Physician review (added to `14_CLINICAL_REVIEW_PACKAGE.md`, N-09)
+## Physician review (added to `14_CLINICAL_REVIEW_PACKAGE.md`, N-10; camera framing N-11)
 
 - The cataract Before / After wording in both languages.
 - "After" shows the illustrative focused light path through the IOL to the retina, next to the scattered path in

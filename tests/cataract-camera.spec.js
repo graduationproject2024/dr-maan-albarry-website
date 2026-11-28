@@ -119,7 +119,7 @@ test.describe('cataract camera — desktop 1440x900', () => {
           const s = window.__csim.getState().camera;
           return { inGlobe: Math.hypot(c.position.x - g.c[0], c.position.y - g.c[1], c.position.z - g.c[2]) - g.r, upY: e[5], polar: s.polar, az: s.azimuth, d: s.distance, min: s.minR };
         }, [GLOBE]);
-        expect(r.inGlobe, `stage ${i}: camera outside the globe`).toBeGreaterThan(0.2);
+        expect(r.inGlobe, `stage ${i}: camera ≥ 1 mm outside the globe`).toBeGreaterThanOrEqual(1);
         expect(r.upY, 'screen-up stays world-up').toBeGreaterThan(0.3);
         expect(r.polar).toBeGreaterThanOrEqual(0.3999);
         expect(r.polar).toBeLessThanOrEqual(Math.PI - 0.3999);
@@ -301,3 +301,139 @@ test('Before / After is hidden when the 3D view is unavailable', async ({ page }
   await page.evaluate(() => window.__csim.compare('after'));
   expect((await S(page)).compare).toBeNull();
 });
+
+test.describe('cataract camera — desktop 1440x900 (input and redraw)', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('panning the target towards the globe centre never lets the camera within 1 mm of the globe', async ({ page }) => {
+    await open(page, 'lang=en&reduced=1');
+    for (const i of [0, 6, 3]) {
+      await page.evaluate((k) => window.__csim.goToStage(k), i);
+      for (let k = 0; k < 30; k++) await page.locator('[data-ref="zoomIn"]').click();
+      const box = await page.locator('.csim canvas').boundingBox();
+      const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+      // right-button drag pans (OrbitControls); then orbit hard to the side at the closest distance
+      for (const [dx, dy] of [[600, 0], [0, 500], [-1200, -900]]) {
+        await page.mouse.move(cx, cy); await page.mouse.down({ button: 'right' });
+        await page.mouse.move(cx + dx, cy + dy, { steps: 12 }); await page.mouse.up({ button: 'right' });
+        await page.mouse.move(cx, cy); await page.mouse.down();
+        await page.mouse.move(cx + 2500, cy - dy, { steps: 12 }); await page.mouse.up();
+        await page.waitForTimeout(300);
+        const gap = await page.evaluate(([g]) => { const c = window.__cataractSim.camera.position; return Math.hypot(c.x - g.c[0], c.y - g.c[1], c.z - g.c[2]) - g.r; }, [GLOBE]);
+        expect(gap, `stage ${i + 1} after pan ${dx},${dy}`).toBeGreaterThanOrEqual(1);
+      }
+    }
+  });
+
+  test('a plain click on the canvas does not count as a moved view; a drag does', async ({ page }) => {
+    await open(page, 'lang=en&reduced=1');
+    await page.evaluate(() => window.__csim.goToStage(2));
+    const box = await page.locator('.csim canvas').boundingBox();
+    await page.mouse.click(box.x + box.width * 0.4, box.y + box.height * 0.5);
+    await page.waitForTimeout(300);
+    expect((await cam(page)).userMoved).toBe(false);
+    // a re-fit after the click still re-fits (the view is not the visitor's)
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await expect.poll(async () => (await cam(page)).view[0]).toBeLessThan(860);
+    const c = await cam(page);
+    expect(c.userMoved).toBe(false);
+    expect(c.distance).toBeCloseTo(c.base, 3);
+    await moveView(page);
+    expect((await cam(page)).userMoved).toBe(true);
+  });
+
+  // Regression (camera pass 2026-11): a paused seek inside the same stage, and a review frame step, changed the scene
+  // state without asking for a new frame, so the canvas kept showing the previous moment (IOL / injector missing).
+  test('a paused seek and a review frame step each draw a new frame', async ({ page }) => {
+    await open(page, 'lang=en&reduced=1&review=1');
+    await page.evaluate((t) => window.__csim.seek(t), at(5, 0.1));
+    const idle = async () => {
+      let prev = -1;
+      await expect.poll(async () => { const f = await page.evaluate(() => window.__cataractSim.frames); const same = f === prev; prev = f; return same; }, { timeout: 10_000, intervals: [400] }).toBe(true);
+      return prev;
+    };
+    const f0 = await idle();
+    await page.evaluate((t) => window.__csim.seek(t), at(5, 0.55));
+    await expect.poll(() => page.evaluate(() => window.__cataractSim.frames)).toBeGreaterThan(f0);
+    const shown = await page.evaluate(() => ({ iol: !!window.__cataractSim.params.iol, calls: window.__cataractSim.info().calls }));
+    expect(shown.iol).toBe(true);
+    const f1 = await idle();
+    expect(await page.evaluate(() => window.__cataractSim.info().calls)).toBe(shown.calls); // the drawn frame is the new moment
+    await page.evaluate(() => window.__cataractSim.step(15));
+    await expect.poll(() => page.evaluate(() => window.__cataractSim.frames)).toBeGreaterThan(f1);
+    const f2 = await idle();
+    await page.locator('.csim-review [data-r="stepFwd"]').click();
+    await expect.poll(() => page.evaluate(() => window.__cataractSim.frames)).toBeGreaterThan(f2);
+  });
+
+  test('Before / After under reduced motion: instant, identical camera, one announcement; a structure leaves it', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, 'lang=en');
+    expect((await S(page)).reducedMotion).toBe(true);
+    const live = page.locator('.csim-sr');
+    const said = [];
+    await page.exposeFunction('__said', (t) => said.push(t));
+    await page.evaluate(() => new MutationObserver(() => { const t = document.querySelector('.csim-sr').textContent; if (t) window.__said(t); }).observe(document.querySelector('.csim-sr'), { childList: true, characterData: true, subtree: true }));
+    await page.evaluate(() => window.__csim.compare('before'));
+    let s = await S(page);
+    expect(s.camera.moving).toBe(false); // no flight with reduced motion
+    expect(s).toMatchObject({ compare: 'before', stageIndex: 0, state: 'paused' });
+    const camB = s.camera;
+    await page.locator('.csim-ba-btn[data-value="after"]').click();
+    s = await S(page);
+    expect(s.camera.moving).toBe(false);
+    expect(s).toMatchObject({ compare: 'after', stageIndex: 6, state: 'paused' });
+    sameCamera(s.camera, camB, 'reduced-motion After = Before camera');
+    await expect(live).toHaveText(/glasses may still be needed/);
+    await page.waitForTimeout(300);
+    // the stage change to 7/7 is not announced on top of the comparison caption
+    expect(said.filter((t) => /^Stage \d of 7/.test(t))).toEqual([]);
+    expect(said.filter((t) => /^After:/.test(t))).toHaveLength(1);
+    // choosing a structure leaves the comparison
+    await page.locator('[data-structure="iol"]').click();
+    s = await S(page);
+    expect(s.compare).toBeNull();
+    expect(s.camera.preset).toBe('structure:iol');
+    await expect(page.locator('.csim-ba-btn[data-value="after"]')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.csim-ba-text')).toBeHidden();
+  });
+});
+
+// The phone tool row wraps 4 + 3 below 388 px screens (a single row of seven 44 px tools does not fit the viewer).
+for (const [w, h, lang] of [[360, 740, 'ar'], [375, 812, 'en']]) {
+  test(`${w}×${h} ${lang}: the view tools wrap 4 + 3 inside the viewer, every tool reachable and ≥ 44 px`, async ({ browser }) => {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+    const page = await ctx.newPage();
+    await page.goto(lang === 'en' ? '/en/surgical-education/' : '/surgical-education/');
+    await page.locator('#cataract-3d-start').click();
+    await expect(page.locator('#cataract-3d-stage .csim[data-state="ready"]')).toHaveCount(1, { timeout: 30_000 });
+    // the viewer just under the fixed site header (the booking bar at the bottom must not cover the tools)
+    await page.evaluate(() => { const hd = document.getElementById('site-header'); const v = document.querySelector('#cataract-3d-stage .csim-viewport'); scrollBy(0, v.getBoundingClientRect().top - (hd ? hd.getBoundingClientRect().bottom : 0) - 4); });
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => {
+      const vp = document.querySelector('#cataract-3d-stage .csim-viewport').getBoundingClientRect();
+      const tools = [...document.querySelectorAll('#cataract-3d-stage .csim-viewtools .csim-tool')].filter((b) => b.offsetParent);
+      return {
+        overflowX: document.documentElement.scrollWidth - innerWidth,
+        n: tools.length,
+        rows: new Set(tools.map((b) => Math.round(b.getBoundingClientRect().top))).size,
+        tools: tools.map((b) => { const q = b.getBoundingClientRect(); const hit = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2); return { w: q.width, h: q.height, inside: q.left >= vp.left - 0.5 && q.right <= vp.right + 0.5 && q.top >= vp.top - 0.5 && q.bottom <= vp.bottom + 0.5, hit: !!hit && (hit === b || b.contains(hit)) }; })
+      };
+    });
+    expect(r.overflowX).toBeLessThanOrEqual(0);
+    expect(r.n).toBe(7); // zoom in / out, reset, labels, cross-section, full screen, Explore 3D
+    expect(r.rows).toBe(2);
+    for (const [k, t] of r.tools.entries()) {
+      expect(t.w, `tool ${k} width`).toBeGreaterThanOrEqual(44);
+      expect(t.h, `tool ${k} height`).toBeGreaterThanOrEqual(44);
+      expect(t.inside, `tool ${k} inside the viewer`).toBe(true);
+      expect(t.hit, `tool ${k} reachable (not covered)`).toBe(true);
+    }
+    // the framing leaves the wrapped tools out of the free area, and Explore 3D still works from the second row
+    const s = await page.evaluate(() => { const vp = document.querySelector('#cataract-3d-stage .csim-viewport'); const t = vp.querySelector('.csim-viewtools').getBoundingClientRect(); return { top: t.top - vp.getBoundingClientRect().top, h: vp.clientHeight }; });
+    expect(s.top).toBeGreaterThan(s.h / 2);
+    await page.locator('#cataract-3d-stage [data-ref="touch"]').tap();
+    await expect(page.locator('#cataract-3d-stage [data-ref="touch"]')).toHaveAttribute('aria-pressed', 'true');
+    await ctx.close();
+  });
+}

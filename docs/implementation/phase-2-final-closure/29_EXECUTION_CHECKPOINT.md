@@ -46,6 +46,6 @@ Device photos, gallery photos, "first" claim evidence, EDOF year, dropless paper
   - tool row 2 px past the edge on 390;
   - stale frame after a paused seek;
   - camera could enter the globe in stage 7.
-- Before / After added (10). Wording pending physician review (14: N-09, N-10).
-- Tests: the required cataract + clinical set plus the new `cataract-camera.spec.js` → 126 passed, 0 failed, 4 skipped.
+- Before / After added (10). Wording pending physician review (14: N-10, N-11).
+- Tests: the required cataract + clinical set plus the new `cataract-camera.spec.js` → 126 passed (e31fad6). After the independent-review fixes: 132 passed, 0 failed, 4 skipped.
 - Evidence: `evidence/cataract/before/`, `evidence/cataract/after/`.

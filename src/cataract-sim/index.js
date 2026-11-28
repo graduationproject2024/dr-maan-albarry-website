@@ -12,7 +12,7 @@ import { createStateMachine } from './state.js';
 import { createUI } from './ui.js';
 import { createAdaptiveQuality, observeVisibility } from './perf.js';
 import { createReviewPanel, LAYERS } from './review.js';
-import { MODEL_VERSION } from './anatomy.js';
+import { MODEL_VERSION, EYE } from './anatomy.js';
 import { fitDistance } from '../surgical-sim/core/orbit.js';
 
 export { STAGES, STRUCTURES } from './stages.js';
@@ -46,6 +46,8 @@ export const zoomLimits = (base) => ({
 // the whole stage, so the camera does not move when the caption appears part-way through.
 const RAY_STAGES = STAGES.map((_, i) => { const P = paramsAt(i, 1); return P.scatterRays > 0 || P.focusRays > 0; });
 const COMPARE_STAGE = { before: 0, after: STAGES.length - 1 };
+// Globe (sclera sphere, anatomy.js) and the clearance the camera keeps from it at any zoom, orbit or pan.
+export const GLOBE = { centre: [0, 0, EYE.scleraCenterZ], r: EYE.scleraR, clearance: 1.5 };
 
 export async function mount(host, options = {}) {
   if (!host || host.nodeType !== 1) throw new TypeError('cataract-sim mount(host): host must be an element');
@@ -311,10 +313,15 @@ class Simulator {
       e.stopImmediatePropagation();
     }, { capture: true });
     this.listen(c, 'start', () => {
-      this.userMoved = true; // a drag, pinch or Ctrl + wheel: the visitor's own view (kept on resize, left on seek)
+      this.userInput = true; // a pointer, pinch or Ctrl + wheel gesture began (it may still be a plain click)
       if (this.fly) { this.fly = null; this.setLimits(this.limits); if (this.state === 'transitioning') this.sm.to(this.resume); }
     });
-    this.listen(c, 'change', () => { this.dirty = true; });
+    this.listen(c, 'change', () => {
+      this.dirty = true;
+      // only an actual movement caused by the visitor makes the view theirs (kept on resize, left on seek); camera
+      // moves made by the simulator itself (flights, jumps, re-fits) never count
+      if (this.userInput && !this.fly && !this.programmatic) this.userMoved = true;
+    });
   }
 
   destroy() {
@@ -389,6 +396,7 @@ class Simulator {
     this.updateFly(dt);
     this.controls.target.clamp(TARGET_MIN, TARGET_MAX);
     this.controls.update();
+    this.keepOutsideGlobe();
     const needs = playing || this.fly || this.dirty || this.state === 'transitioning' || this.eye.isAnimating() || this.labels;
     if (!needs) { this.quality.reset(); return; }
     this.dirty = false;
@@ -422,7 +430,7 @@ class Simulator {
       this.focusId = null;
       this.ui.setFocus(null);
       this.ui.setStage(i);
-      this.ui.announce(`${this.ui.stageLabel(i)}: ${STAGES[i].title[this.lang]}`);
+      if (!this.compareMode) this.ui.announce(`${this.ui.stageLabel(i)}: ${STAGES[i].title[this.lang]}`); // Before / After announces once, itself
       this.emit('stagechange', { index: i, id: STAGES[i].id });
       if (this.review) this.review.refresh();
       // the covered area depends on the stage (ray caption); every caller moves to a preset right after
@@ -447,6 +455,7 @@ class Simulator {
     if (!this.three || !preset) return;
     this.cam = { key, preset };
     this.userMoved = false;
+    this.userInput = false;
     const res = this.resolve(preset);
     this.base = res.r;
     this.limits = zoomLimits(res.r);
@@ -457,6 +466,27 @@ class Simulator {
   toStageCamera(duration = 1.1) {
     if (this.compareMode) this.goCamera('compare', STAGES[COMPARE_STAGE.before].camera, duration);
     else this.goCamera(`stage:${this.stageIndex}`, STAGES[this.stageIndex].camera, duration);
+  }
+  /**
+   * The camera never comes closer than GLOBE.clearance to the outside of the globe, whatever the zoom, orbit or pan
+   * (the target may be panned towards the globe centre). It is moved back along its line of sight to the target.
+   */
+  keepOutsideGlobe() {
+    if (!this.three || !this.controls) return;
+    const cam = this.three.camera.position, T = this.controls.target;
+    const C = new THREE.Vector3(...GLOBE.centre), R = GLOBE.r + GLOBE.clearance;
+    if (cam.distanceTo(C) >= R) return;
+    const d = cam.clone().sub(T);
+    if (d.lengthSq() < 1e-9) d.set(0, 0, 1);
+    d.normalize();
+    const tc = T.clone().sub(C);
+    const b = d.dot(tc), c = tc.lengthSq() - R * R;
+    const t = -b + Math.sqrt(Math.max(0, b * b - c)); // exit of the ray T + t·d from the clearance sphere
+    cam.copy(T).addScaledVector(d, t);
+    this.programmatic = true;
+    this.controls.update();
+    this.programmatic = false;
+    this.dirty = true;
   }
   setLimits(l) { if (!this.controls) return; this.controls.minDistance = l.minR; this.controls.maxDistance = l.maxR; }
   /** Drop OrbitControls' leftover damping motion, so a preset is reached exactly (deterministic camera). */
@@ -473,7 +503,9 @@ class Simulator {
     this.setLimits(this.limits);
     camera.position.set(...preset.position);
     this.controls.target.set(...preset.target);
+    this.programmatic = true;
     this.controls.update();
+    this.programmatic = false;
     this.fly = null;
     this.dirty = true;
   }
@@ -549,6 +581,7 @@ class Simulator {
   focusStructure(id) {
     const s = STRUCTURES.find((x) => x.id === id);
     if (!s) return;
+    this.leaveCompare(); // a structure view is not the comparison view
     this.focusId = id;
     this.ui.setFocus(id);
     if (this.ready3D) this.goCamera(`structure:${id}`, s.camera, 0.9);

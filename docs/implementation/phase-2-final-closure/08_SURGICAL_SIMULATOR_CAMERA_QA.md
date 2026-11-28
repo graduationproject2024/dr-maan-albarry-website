@@ -255,16 +255,30 @@ Capture: `node scripts/cataract-camera-shots.mjs http://localhost:4801 <out-dir>
     the previous view was: turned, zoomed, a focused structure (the focus is cleared) or Before / After. Playback
     controls do not move the camera.
   - **Damping:** OrbitControls' leftover damping is dropped before a preset is reached, so the preset is reached exactly.
-- **Zoom limits:** `max(11, 0.2 × fit)` to `min(160, max(80, 1.45 × fit))` mm. On desktop this is exactly the former 11–80
-  mm range. On phones the far limit grows with the fit, so the fit itself is always reachable. While flying, the limits
-  cover both ends of the flight. Orbit limits are unchanged: polar 0.4 to π − 0.4 and azimuth ±1.5, so there are no
-  flips.
-- **Stage 1 and 7 targets** moved to z −5 (4 mm in front of the globe centre), so at the 11 mm minimum the camera
-  stays outside the globe at any allowed orbit (tested: > 0.2 mm clearance).
+- **Zoom limits:** `max(11, 0.2 × fit)` to `min(160, max(80, 1.45 × fit))` mm, where `fit` is the fitted distance of the
+  current preset.
+  - **Near limit:** 11 mm except where 0.2 × fit is larger (fits above 55 mm).
+  - **Far limit:** 80 mm, or more where 1.45 × fit exceeds 80 (fits above ≈ 55 mm).
+  - **Measured fits:** in the harness at 1280–1440 px desktop widths, the whole-eye stages fit at ≈ 49–54 mm, so the range
+    there stays 11–80 mm. On phones (fits up to ≈ 80 mm) and in short or narrow windows the far limit is larger, so the
+    fit itself is always reachable and there is room to zoom out.
+  - **Flights:** while flying, the limits cover both ends of the flight.
+  - **Orbit:** limits unchanged (polar 0.4 to π − 0.4, azimuth ±1.5), so there are no flips.
+- **Stage 1 and 7 targets** moved to z −5 (4 mm in front of the globe centre), so that the whole globe fits.
+- **Globe clearance (review fix):** after every controls update, `keepOutsideGlobe()` moves the camera back along its
+  line of sight to stay at least 1.5 mm outside the globe (sclera radius 11.5 mm), whatever the zoom, orbit or pan.
+  Panning can move the target towards the globe centre. This is tested at ≥ 1 mm after extreme orbits at the minimum
+  distance and after pans.
+- **Moved view (review fix):** a view counts as the visitor's (`userMoved`: kept on resize, left on seek) only when
+  OrbitControls reports an actual camera change during a visitor gesture. A plain click on the canvas no longer counts,
+  and moves made by the simulator itself (flights, jumps, re-fits, the globe clearance) never count. The zoom buttons
+  count.
 - **Close-up fits** (stages 2–6, structures) equal `[0.314, 0.257] × the former distance`, so the 1440x900 framing is
   the same as before and phones keep the former visible width, now centred in the free area.
 - **`styles.css`:** tool row padding 2 px and gap 1 px on phones (318 px, inside a 332 px viewer). Below 388 px screens
-  the row wraps 4 + 3, and the ray caption moves above it. On short screens (viewer under ≈ 380 px, e.g. 844x390) the
+  the row wraps 4 + 3, and the ray caption moves above it. On short screens wider than the phone layout (`(min-width: 601px) and (max-height: 540px)`): this is intended for
+  phones held sideways (844x390) and also for short desktop or laptop windows (e.g. 1280x500, split screen), where the 74vh
+  viewer is under 400 px. There the
   tools form two columns of four.
 - **Stale frame:** `seek()` and `stepFrames()` now mark the frame dirty.
 - **`getState().camera`** also reports `preset`, `stagePreset`, `fit`, `base`, `userMoved`, `moving`, `fov`, `minR`,
@@ -297,7 +311,6 @@ These still work as before:
 - WebGL context loss and restore;
 - review mode (stage, speed, frame step, camera views, layers);
 - labels hidden by default;
-- the 11–80 mm desktop zoom range;
 - one render loop and no leaks.
 
 ### Tests (`tests/cataract-camera.spec.js`, GPU layer)
@@ -306,7 +319,7 @@ These still work as before:
   stage choice equals the camera after a seek from a turned and zoomed view, after Reset view, and after a seek from
   another stage. Restart returns to stage 1's camera, and a seek after a structure focus returns to the stage camera.
 - `zoom and orbit limits …` (stages 1, 4, 7): the zoom stops at the reported minimum and maximum. Minimum ≥ 11 mm and
-  maximum ≥ max(80, 1.4 × fit). At the minimum distance, under four extreme drags, the camera stays outside the globe,
+  maximum ≥ max(80, 1.4 × fit). At the minimum distance, under four extreme drags, the camera stays ≥ 1 mm outside the globe,
   screen-up stays world-up, polar stays within 0.4 to π − 0.4 and |azimuth| ≤ 1.5. Reset view restores the stage camera.
 - `a resize re-fits …`: a camera on its preset is re-fitted for 390 px and returns exactly to the desktop camera. A
   visitor-moved view keeps its distance while the fit and limits move.
@@ -316,6 +329,22 @@ These still work as before:
   - every control lies inside the viewer;
   - the target projects to the middle of the free area;
   - the four corners of the stage's subject box project inside it.
+- Added after the independent review:
+  - `panning the target towards the globe centre …` (stages 1, 4, 7): after pans and side orbits at the minimum distance,
+    the camera stays ≥ 1 mm outside the globe.
+  - `a plain click on the canvas does not count as a moved view; a drag does` (a resize after the click still re-fits).
+  - `a paused seek and a review frame step each draw a new frame`: the stale-frame regression. The frame counter must
+    advance after a paused seek, `step()` and the review panel's "Next frame". Mutation-checked: with the fix removed
+    the test fails.
+  - `<360x740 ar / 375x812 en>: the view tools wrap 4 + 3 inside the viewer …` (real page): checks that
+    - there is no horizontal overflow;
+    - seven tools are shown in two rows, each ≥ 44 × 44 px, inside the viewer and not covered (`elementFromPoint`);
+    - the rail is in the lower half (outside the free area);
+    - Explore 3D works.
+  - `cataract-stress.spec.js` › `camera limits hold under extreme wheel and drag input` no longer checks a literal 80 mm.
+    At 1440x900, 390x844, 1024x700 and 1280x800 it checks `minR = max(11, 0.2 × base)` and
+    `maxR = min(160, max(80, 1.45 × base))`, then drives Ctrl + wheel to both ends and asserts the distance stops at the
+    reported limits.
 - Before / After tests: see `10_BEFORE_AFTER_VERIFICATION.md`.
 
 ### Gaps and notes
