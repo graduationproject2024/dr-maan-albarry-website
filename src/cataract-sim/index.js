@@ -13,6 +13,7 @@ import { createUI } from './ui.js';
 import { createAdaptiveQuality, observeVisibility } from './perf.js';
 import { createReviewPanel, LAYERS } from './review.js';
 import { MODEL_VERSION } from './anatomy.js';
+import { fitDistance } from '../surgical-sim/core/orbit.js';
 
 export { STAGES, STRUCTURES } from './stages.js';
 export { MODEL_VERSION } from './anatomy.js';
@@ -23,8 +24,28 @@ const instances = new WeakMap();
 
 const tick = () => new Promise((r) => setTimeout(r, 0));
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const ORBIT = { minDistance: 11, maxDistance: 80, minPolar: 0.4, maxPolar: Math.PI - 0.4, minAz: -1.5, maxAz: 1.5 };
+const ORBIT = { minPolar: 0.4, maxPolar: Math.PI - 0.4, minAz: -1.5, maxAz: 1.5 };
 const TARGET_MIN = new THREE.Vector3(-6, -6, -10), TARGET_MAX = new THREE.Vector3(6, 6, 5);
+// Camera framing (2026-11 camera pass, same approach as src/surgical-sim/core/orbit.js + engine.js): every preset
+// declares `fit` = the half width and half height (mm) of its subject in the view plane through the target. The
+// distance is fitted to the canvas size, the (fixed, vertical) field of view and the part of the canvas left free by
+// the overlaid controls; the projection centre is shifted to the middle of that free area. The preset position gives
+// the viewing direction only.
+export const FOV = 32;
+/**
+ * Zoom range around the fitted distance `base` of the current preset: 0.2–1.45 × base, but never narrower than the
+ * former fixed range 11–80 mm (so desktop behaviour is unchanged) and never wider than 160 mm. The 11 mm floor also
+ * keeps the camera outside the globe: every target lies at least 4 mm in front of the globe centre.
+ */
+export const ZOOM = { min: 0.2, max: 1.45, absMin: 11, floorMax: 80, absMax: 160 };
+export const zoomLimits = (base) => ({
+  minR: Math.max(ZOOM.absMin, base * ZOOM.min),
+  maxR: Math.min(ZOOM.absMax, Math.max(ZOOM.floorMax, base * ZOOM.max))
+});
+// Stages that draw light rays: their caption ("illustrative light path") is reserved as part of the covered area for
+// the whole stage, so the camera does not move when the caption appears part-way through.
+const RAY_STAGES = STAGES.map((_, i) => { const P = paramsAt(i, 1); return P.scatterRays > 0 || P.focusRays > 0; });
+const COMPARE_STAGE = { before: 0, after: STAGES.length - 1 };
 
 export async function mount(host, options = {}) {
   if (!host || host.nodeType !== 1) throw new TypeError('cataract-sim mount(host): host must be an element');
@@ -64,6 +85,12 @@ class Simulator {
     this.touch = false;
     this.scrubUntil = 0;
     this.params = null;
+    this.cam = null;        // { key, preset }: the camera preset the view is on (or flying to)
+    this.base = 40;         // fitted distance of that preset in the current view
+    this.limits = zoomLimits(40);
+    this.userMoved = false; // the visitor turned or zoomed the view since the last preset
+    this.safe = { w: 1, h: 1, safe: { l: 0, r: 0, t: 0, b: 0 } };
+    this.compareMode = null; // 'before' | 'after' | null
     this.timeline = createTimeline(STAGES.map((s) => s.duration));
     this.stageIndex = 0;
     this.stageP = 0;
@@ -84,6 +111,7 @@ class Simulator {
       prev: () => self.goToStage(self.stageIndex - 1),
       seek: (t) => { self.scrubUntil = 0; self.seek(t); },
       resetView: () => self.resetView(),
+      compare: (which) => self.compare(which),
       on: (ev, cb) => self.on(ev, cb)
     };
   }
@@ -137,6 +165,7 @@ class Simulator {
         scrub: (t) => { this.scrubUntil = performance.now() + 300; this.seek(t); },
         goTo: (i) => this.goToStage(i),
         focusStructure: (id) => this.focusStructure(id),
+        compare: (which) => this.compare(which),
         keydown: (e) => this.onKey(e)
       }
     }));
@@ -168,7 +197,7 @@ class Simulator {
       this.quality = createAdaptiveQuality({ initialDpr: maxDpr(), onChange: () => { this.resize(); } });
       this.resize();
       this.applyTimeline(0);
-      this.jumpCamera(STAGES[0].camera);
+      this.goCamera('stage:0', STAGES[0].camera, 0);
       const { renderer, scene, camera } = this.three;
       await precompileScene(renderer, scene, camera, { alive: () => !this.destroyed }); // what the first frame draws, built in parallel (scene.js)
       if (this.destroyed) return;
@@ -191,8 +220,11 @@ class Simulator {
     this.listen(canvas, 'webglcontextlost', (e) => this.onContextLost(e));
     this.listen(canvas, 'webglcontextrestored', () => this.onContextRestored());
     if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(() => this.resize());
+      // the viewport: resize the canvas; the overlaid controls (web fonts arriving late, the touch button appearing,
+      // a stage title changing the chip): re-measure the free area only
+      const ro = new ResizeObserver((entries) => { if (entries.some((e) => e.target === ui.ref.viewport)) this.resize(); else this.applySafe(); });
       ro.observe(ui.ref.viewport);
+      for (const el of [ui.ref.viewtools, ui.root.querySelector('.csim-chip')]) if (el) ro.observe(el);
       counters.observers++;
       this.disposers.push(() => { ro.disconnect(); counters.observers--; });
     }
@@ -203,6 +235,7 @@ class Simulator {
     if (this.reviewMode) this.setupReview();
     this.sm.to('ready');
     ui.showStart(true);
+    this.applySafe(); // the chip and the view tools are shown from 'ready' on: frame the first stage around them
     this.startLoop();
     if (this.autoplay && !this.reduced) this.play();
     if (this.debug) this.exposeDebug();
@@ -237,12 +270,14 @@ class Simulator {
     if (this.state !== 'paused') this.sm.to('paused');
     this.ui.showStart(false);
     this.applyTimeline(0);
+    this.dirty = true;
   }
   cameraPreset(name) {
     if (!this.ready3D) return;
     const sph = (target, az, polar, dist) => ({ target, position: [target[0] + dist * Math.sin(polar) * Math.sin(az), target[1] + dist * Math.cos(polar), target[2] + dist * Math.sin(polar) * Math.cos(az)] });
-    const P = { surgeon: sph([0, 0, 0], 0, Math.PI / 2, 30), side: sph([0, 0, -1.5], 1.45, Math.PI / 2, 34) }[name];
-    this.flyTo(P || STAGES[this.stageIndex].camera, 0.6);
+    const P = { surgeon: { ...sph([0, 0, 0], 0, Math.PI / 2, 30), fit: [9.4, 7.7] }, side: { ...sph([0, 0, -1.5], 1.45, Math.PI / 2, 34), fit: [10.7, 8.7] } }[name];
+    if (P) this.goCamera(`review:${name}`, P, 0.6);
+    else this.toStageCamera(0.6);
   }
   setLayer(id, on) {
     if (!this.eye || !LAYERS.includes(id)) return;
@@ -262,7 +297,7 @@ class Simulator {
     const c = (this.controls = new OrbitControls(camera, canvas));
     Object.assign(c, {
       enableDamping: true, dampingFactor: 0.09, rotateSpeed: 0.55, zoomSpeed: 0.7, panSpeed: 0.6,
-      screenSpacePanning: true, minDistance: ORBIT.minDistance, maxDistance: ORBIT.maxDistance,
+      screenSpacePanning: true, minDistance: this.limits.minR, maxDistance: this.limits.maxR,
       minPolarAngle: ORBIT.minPolar, maxPolarAngle: ORBIT.maxPolar, minAzimuthAngle: ORBIT.minAz, maxAzimuthAngle: ORBIT.maxAz
     });
     // Touch policy: one-finger page scroll keeps working; touch only drives the 3D view in "Explore 3D" mode.
@@ -276,7 +311,8 @@ class Simulator {
       e.stopImmediatePropagation();
     }, { capture: true });
     this.listen(c, 'start', () => {
-      if (this.fly) { this.fly = null; if (this.state === 'transitioning') this.sm.to(this.resume); }
+      this.userMoved = true; // a drag, pinch or Ctrl + wheel: the visitor's own view (kept on resize, left on seek)
+      if (this.fly) { this.fly = null; this.setLimits(this.limits); if (this.state === 'transitioning') this.sm.to(this.resume); }
     });
     this.listen(c, 'change', () => { this.dirty = true; });
   }
@@ -368,6 +404,7 @@ class Simulator {
     if (index !== this.stageIndex) this.setStageIndex(index, true);
     this.stageP = p;
     this.params = paramsAt(index, p);
+    if (this.compareMode) this.params.highlight = []; // Before / After: the two lenses without a highlight glow
     if (this.eye) this.eye.apply(this.params, { time: this.time, dt, reduced: this.reduced, focusId: this.focusId });
     const cut = this.eye ? (this.eye.userCutaway === null ? this.params.cutaway : this.eye.userCutaway) : false;
     this.ui.setCutaway(cut);
@@ -388,14 +425,52 @@ class Simulator {
       this.ui.announce(`${this.ui.stageLabel(i)}: ${STAGES[i].title[this.lang]}`);
       this.emit('stagechange', { index: i, id: STAGES[i].id });
       if (this.review) this.review.refresh();
+      // the covered area depends on the stage (ray caption); every caller moves to a preset right after
+      this.applySafe(false);
     }
-    if (fly && this.three) this.flyTo(STAGES[i].camera);
+    if (fly && this.three) this.goCamera(`stage:${i}`, STAGES[i].camera);
     this.dirty = true;
   }
 
   // ---------- camera ----------
+  /** Preset -> { target, position, r } in the current view: the distance is fitted to the free area when it has `fit`. */
+  resolve(preset) {
+    const t = new THREE.Vector3(...preset.target);
+    const off = new THREE.Vector3(...preset.position).sub(t);
+    let r = off.length();
+    if (preset.fit && this.three && this.safe.w > 1 && this.safe.h > 1) r = fitDistance(preset.fit, this.three.camera.fov, this.safe);
+    off.setLength(r);
+    return { target: preset.target.slice(), position: t.add(off).toArray(), r };
+  }
+  /** The one path to a camera preset (stage camera, structure, review view, Before / After, reset). */
+  goCamera(key, preset, duration = 1.1) {
+    if (!this.three || !preset) return;
+    this.cam = { key, preset };
+    this.userMoved = false;
+    const res = this.resolve(preset);
+    this.base = res.r;
+    this.limits = zoomLimits(res.r);
+    this.flyTo(res, duration);
+    if (this.fly) this.fly.preset = true;
+  }
+  stageCameraKey() { return this.compareMode ? 'compare' : `stage:${this.stageIndex}`; }
+  toStageCamera(duration = 1.1) {
+    if (this.compareMode) this.goCamera('compare', STAGES[COMPARE_STAGE.before].camera, duration);
+    else this.goCamera(`stage:${this.stageIndex}`, STAGES[this.stageIndex].camera, duration);
+  }
+  setLimits(l) { if (!this.controls) return; this.controls.minDistance = l.minR; this.controls.maxDistance = l.maxR; }
+  /** Drop OrbitControls' leftover damping motion, so a preset is reached exactly (deterministic camera). */
+  settleControls() {
+    const c = this.controls;
+    if (!c) return;
+    if (c._sphericalDelta) c._sphericalDelta.set(0, 0, 0);
+    if (c._panOffset) c._panOffset.set(0, 0, 0);
+    if ('_scale' in c) c._scale = 1;
+  }
   jumpCamera(preset) {
     const { camera } = this.three;
+    this.settleControls();
+    this.setLimits(this.limits);
     camera.position.set(...preset.position);
     this.controls.target.set(...preset.target);
     this.controls.update();
@@ -406,6 +481,7 @@ class Simulator {
     if (!this.three) return;
     if (this.reduced || duration <= 0) { this.jumpCamera(preset); return; }
     const { camera } = this.three;
+    this.settleControls();
     const t0 = this.controls.target.clone();
     const s0 = new THREE.Spherical().setFromVector3(camera.position.clone().sub(t0));
     const t1 = new THREE.Vector3(...preset.target);
@@ -413,6 +489,8 @@ class Simulator {
     let dTheta = s1.theta - s0.theta;
     if (dTheta > Math.PI) dTheta -= Math.PI * 2;
     if (dTheta < -Math.PI) dTheta += Math.PI * 2;
+    // while flying, the distance limits cover both ends (OrbitControls would otherwise clamp the path)
+    this.setLimits({ minR: Math.min(this.limits.minR, s0.radius, s1.radius), maxR: Math.max(this.limits.maxR, s0.radius, s1.radius) });
     this.fly = { t: 0, dur: duration, t0, t1, s0, s1, dTheta };
     this.dirty = true;
   }
@@ -431,8 +509,23 @@ class Simulator {
     this.three.camera.position.copy(tgt).add(new THREE.Vector3().setFromSpherical(s));
     if (f.t >= 1) {
       this.fly = null;
+      this.setLimits(this.limits);
       if (this.state === 'transitioning') this.sm.to(this.resume);
     }
+  }
+  /** After a resize or a change of the covered area: a camera still on its preset is re-fitted; a visitor's own view keeps its distance (within the new limits). */
+  refit() {
+    if (!this.cam || !this.controls || !this.three) return;
+    const res = this.resolve(this.cam.preset);
+    this.base = res.r;
+    this.limits = zoomLimits(res.r);
+    if (this.userMoved) { this.setLimits(this.limits); this.controls.update(); this.dirty = true; return; }
+    if (this.fly && this.fly.preset) {
+      this.fly.s1.radius = res.r;
+      this.setLimits({ minR: Math.min(this.limits.minR, this.fly.s0.radius, res.r), maxR: Math.max(this.limits.maxR, this.fly.s0.radius, res.r) });
+      return;
+    }
+    this.jumpCamera(res);
   }
   zoom(dir) {
     if (!this.ready3D) return;
@@ -441,8 +534,9 @@ class Simulator {
     const off = camera.position.clone().sub(target);
     // consecutive clicks accumulate from the pending zoom target rather than the mid-flight distance
     const base = this.fly && this.fly.zoom ? this.fly.s1.radius : off.length();
-    const d = THREE.MathUtils.clamp(base * (dir > 0 ? 0.8 : 1.25), ORBIT.minDistance, ORBIT.maxDistance);
+    const d = THREE.MathUtils.clamp(base * (dir > 0 ? 0.8 : 1.25), this.limits.minR, this.limits.maxR);
     off.setLength(d);
+    this.userMoved = true;
     this.flyTo({ target: target.toArray(), position: target.clone().add(off).toArray() }, 0.35);
     if (this.fly) this.fly.zoom = true;
   }
@@ -450,14 +544,14 @@ class Simulator {
     if (!this.ready3D) return;
     this.focusId = null;
     this.ui.setFocus(null);
-    this.flyTo(STAGES[this.stageIndex].camera, 0.9);
+    this.toStageCamera(0.9);
   }
   focusStructure(id) {
     const s = STRUCTURES.find((x) => x.id === id);
     if (!s) return;
     this.focusId = id;
     this.ui.setFocus(id);
-    if (this.ready3D) this.flyTo(s.camera, 0.9);
+    if (this.ready3D) this.goCamera(`structure:${id}`, s.camera, 0.9);
     this.dirty = true;
   }
   updateHotspots() {
@@ -489,20 +583,64 @@ class Simulator {
     renderer.setPixelRatio(this.quality ? this.quality.dpr : maxDpr());
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // keep the horizontal field of view on narrow (portrait) screens so the eye is never cropped
-    const baseHalf = Math.tan(THREE.MathUtils.degToRad(16));
-    camera.fov = camera.aspect >= 1.15 ? 32 : THREE.MathUtils.radToDeg(2 * Math.atan((baseHalf * 1.15) / camera.aspect));
-    camera.updateProjectionMatrix();
-    this.dirty = true;
+    // one vertical field of view at every size: the fitted distance (not a wider lens) keeps the subject whole on a
+    // narrow phone, as in the procedure simulators
+    camera.fov = FOV;
+    this.applySafe();
     if (this.raf === null && this.state !== 'error' && this.state !== 'fallback' && this.state !== 'loading') {
       try { renderer.render(this.three.scene, camera); } catch { /* ignore */ }
     }
+  }
+  /**
+   * Re-measure the part of the canvas the overlaid controls leave free and shift the projection centre to its middle,
+   * so a stage's target is never under the controls (in Arabic the tools sit on the other side). refit = false when
+   * the caller moves to a preset right after.
+   */
+  applySafe(refit = true) {
+    if (!this.three || !this.ui) return;
+    const vp = this.ui.ref.viewport;
+    const w = Math.max(1, vp.clientWidth), h = Math.max(1, vp.clientHeight);
+    const next = this.measureSafe(w, h);
+    const prev = this.safe;
+    const same = prev.w === next.w && prev.h === next.h && ['l', 'r', 't', 'b'].every((k) => Math.abs(prev.safe[k] - next.safe[k]) < 0.5);
+    this.safe = next;
+    const { camera } = this.three;
+    const cx = (next.safe.l + w - next.safe.r) / 2, cy = (next.safe.t + h - next.safe.b) / 2;
+    camera.setViewOffset(w, h, w / 2 - cx, h / 2 - cy, w, h);
+    camera.updateProjectionMatrix();
+    if (!same && refit) this.refit();
+    this.dirty = true;
+  }
+  /** Insets (CSS px) covered by the view tools (inline-end column, or a bottom row on phones), the stage chip (top band) and, on stages with light rays, their caption (bottom band). */
+  measureSafe(w, h) {
+    const ref = this.ui.ref;
+    const box = ref.canvasHost.getBoundingClientRect();
+    const vis = (el) => { if (!el || el.hidden) return null; const r = el.getBoundingClientRect(); return r.width && r.height ? r : null; };
+    const out = { l: 8, r: 8, t: 8, b: 8 };
+    const tools = vis(ref.viewtools);
+    if (tools) {
+      if (tools.top - box.top > h / 2) out.b = Math.max(out.b, box.bottom - tools.top + 6);
+      else if (tools.left - box.left > w / 2) out.r = Math.max(out.r, box.right - tools.left + 6);
+      else out.l = Math.max(out.l, tools.right - box.left + 6);
+    }
+    const chip = vis(this.ui.root.querySelector('.csim-chip'));
+    if (chip) out.t = Math.max(out.t, chip.bottom - box.top + 4);
+    const note = ref.rayNote;
+    if (note && RAY_STAGES[this.stageIndex] && (tools || chip)) {
+      const was = note.hidden;
+      note.hidden = false; // measured even before it appears, so the camera does not move when it does
+      const r = note.getBoundingClientRect();
+      note.hidden = was;
+      if (r.height && r.top - box.top > h / 2) out.b = Math.max(out.b, box.bottom - r.top + 4);
+    }
+    return { w, h, safe: out };
   }
 
   // ---------- playback ----------
   isPlaying() { return this.state === 'playing' || (this.state === 'transitioning' && this.resume === 'playing'); }
   play() {
     if (this.destroyed || !this.ready3D) return;
+    this.leaveCompare();
     const s = this.state;
     if (s === 'completed') { this.restart(); return; }
     if (s === 'transitioning') { this.resume = 'playing'; this.ui.setState(s, true); return; }
@@ -518,6 +656,7 @@ class Simulator {
   restart() {
     if (this.destroyed) return;
     if (!this.ready3D) { this.goToStage(0); return; }
+    this.leaveCompare();
     this.timeline.set(0);
     this.setStageIndex(0, true);
     this.ui.showStart(false);
@@ -526,8 +665,9 @@ class Simulator {
   }
   replayStage() {
     if (!this.ready3D) return;
+    this.leaveCompare();
     this.timeline.set(this.timeline.stageStart(this.stageIndex));
-    this.flyTo(STAGES[this.stageIndex].camera, 0.8);
+    this.goCamera(`stage:${this.stageIndex}`, STAGES[this.stageIndex].camera, 0.8);
     this.ui.showStart(false);
     this.sm.to('playing');
     this.applyTimeline(0);
@@ -544,28 +684,72 @@ class Simulator {
       return;
     }
     const wasPlaying = this.isPlaying();
+    this.leaveCompare();
     this.timeline.set(this.timeline.stageStart(idx));
     this.setStageIndex(idx, false);
     this.ui.showStart(false);
     this.applyTimeline(0);
     if (this.reduced) {
-      this.jumpCamera(STAGES[idx].camera);
+      this.goCamera(`stage:${idx}`, STAGES[idx].camera, 0);
       if (this.state === 'transitioning') this.sm.to(wasPlaying ? 'playing' : 'paused');
       else if (!wasPlaying) this.sm.to('paused');
       return;
     }
     this.resume = wasPlaying ? 'playing' : 'paused';
-    this.flyTo(STAGES[idx].camera);
+    this.goCamera(`stage:${idx}`, STAGES[idx].camera);
     this.sm.to('transitioning');
   }
   seek(t01) {
     if (this.destroyed || !this.ready3D) return;
     const t = Math.max(0, Math.min(1, Number(t01) || 0));
     this.ui.showStart(false);
+    const wasCompare = !!this.compareMode;
+    this.leaveCompare();
+    const from = this.stageIndex;
     this.timeline.seek(t);
     if (this.state === 'transitioning') this.resume = 'paused';
     if (t >= 1) this.sm.to('completed'); else this.sm.to('paused');
     this.applyTimeline(0);
+    this.dirty = true; // the paused scene changed: draw it (nothing else may be animating)
+    // A seek (which always pauses) ends on the camera of the stage it lands in, whatever the view was before — a
+    // turned or zoomed view, a focused structure or the Before / After view (deterministic, as in the procedure
+    // simulators). Landing in another stage already took that stage's camera in applyTimeline.
+    if (this.stageIndex === from && (wasCompare || this.userMoved || !this.cam || this.cam.key !== `stage:${this.stageIndex}`)) {
+      if (this.focusId) { this.focusId = null; this.ui.setFocus(null); }
+      this.toStageCamera();
+    }
+  }
+  /**
+   * Before / After (owner brief §13, same rule as src/surgical-sim): "before" is the end of the first stage (the clouded
+   * natural lens), "after" the end of the last stage (the clear artificial lens in the capsular bag). Both are seen from
+   * the first stage's camera, playback paused, so the only difference on screen is the lens (and the illustrative light
+   * path through it). Play, a seek, a stage choice, Replay stage or Restart leave the comparison.
+   */
+  compare(which) {
+    if (this.destroyed || !this.ready3D || !(which in COMPARE_STAGE)) return;
+    if (this.fly) this.fly = null;
+    const i = COMPARE_STAGE[which];
+    this.compareMode = which;
+    this.timeline.set(this.timeline.stageStart(i) + STAGES[i].duration * 0.999);
+    this.ui.showStart(false);
+    if (this.eye) this.eye.setUserCutaway(null);
+    this.focusId = null;
+    this.ui.setFocus(null);
+    this.applyTimeline(0);
+    if (this.state === 'transitioning') this.resume = 'paused';
+    this.sm.to('paused');
+    this.applySafe(false);
+    this.goCamera('compare', STAGES[COMPARE_STAGE.before].camera, 0.9);
+    this.ui.setCompare(which);
+    this.ui.announce(this.ui.t(which === 'before' ? 'compareBefore' : 'compareAfter'));
+    this.emit('comparechange', { compare: which });
+    this.dirty = true;
+  }
+  leaveCompare() {
+    if (!this.compareMode) return;
+    this.compareMode = null;
+    if (this.ui) this.ui.setCompare(null);
+    this.emit('comparechange', { compare: null });
   }
   complete() {
     if (this.sm.to('completed')) {
@@ -671,7 +855,16 @@ class Simulator {
       distance: this.three.camera.position.distanceTo(this.controls.target),
       azimuth: this.controls.getAzimuthalAngle(),
       polar: this.controls.getPolarAngle(),
-      target: this.controls.target.toArray()
+      target: this.controls.target.toArray(),
+      preset: this.cam ? this.cam.key : null,
+      stagePreset: this.stageCameraKey(),
+      fit: this.cam && this.cam.preset.fit ? this.cam.preset.fit.slice() : null,
+      base: this.base,
+      userMoved: this.userMoved,
+      moving: !!this.fly,
+      fov: this.three.camera.fov,
+      minR: this.limits.minR, maxR: this.limits.maxR,
+      safe: { ...this.safe.safe }, view: [this.safe.w, this.safe.h]
     } : null;
     return {
       state: this.state,
@@ -692,6 +885,7 @@ class Simulator {
       dpr: this.three ? this.three.renderer.getPixelRatio() : null,
       fps: this.quality ? this.quality.fps : null,
       review: this.reviewMode,
+      compare: this.compareMode,
       speed: this.speed,
       layers: this.eye ? this.eye.layers : null,
       modelVersion: MODEL_VERSION,

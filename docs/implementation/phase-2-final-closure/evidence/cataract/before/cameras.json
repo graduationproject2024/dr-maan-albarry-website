@@ -1,0 +1,1112 @@
+[
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   200,
+   32
+  ],
+  "rayNote": [
+   12,
+   499,
+   362,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   309,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   306,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   280,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   213,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   208,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "desktop",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   796,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   12,
+   12,
+   256,
+   32
+  ],
+  "rayNote": [
+   12,
+   499,
+   362,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   200,
+   32
+  ],
+  "rayNote": [
+   12,
+   330,
+   232,
+   43
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   309,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   306,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   280,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   213,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   208,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "portrait",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   -2,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   10,
+   10,
+   256,
+   32
+  ],
+  "rayNote": [
+   12,
+   330,
+   232,
+   43
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   200,
+   32
+  ],
+  "rayNote": [
+   12,
+   259,
+   362,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   309,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   306,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   280,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   213,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   208,
+   32
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "en",
+  "vp": "landscape",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   657,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   12,
+   12,
+   256,
+   32
+  ],
+  "rayNote": [
+   12,
+   259,
+   362,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   668,
+   12,
+   184,
+   34
+  ],
+  "rayNote": [
+   540,
+   499,
+   312,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   638,
+   12,
+   214,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   647,
+   12,
+   205,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   607,
+   12,
+   245,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   689,
+   12,
+   163,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   679,
+   12,
+   173,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "desktop",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   864,
+   540
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   306
+  ],
+  "chip": [
+   660,
+   12,
+   192,
+   34
+  ],
+  "rayNote": [
+   540,
+   499,
+   312,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   138,
+   10,
+   184,
+   34
+  ],
+  "rayNote": [
+   88,
+   330,
+   232,
+   43
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   108,
+   10,
+   214,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   117,
+   10,
+   205,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   77,
+   10,
+   245,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   159,
+   10,
+   163,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   149,
+   10,
+   173,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "portrait",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   332,
+   437
+  ],
+  "tools": [
+   8,
+   379,
+   326,
+   50
+  ],
+  "chip": [
+   130,
+   10,
+   192,
+   34
+  ],
+  "rayNote": [
+   88,
+   330,
+   232,
+   43
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "01-stage",
+  "stage": 0,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   529,
+   12,
+   184,
+   34
+  ],
+  "rayNote": [
+   402,
+   259,
+   312,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "02-stage",
+  "stage": 1,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   499,
+   12,
+   214,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "03-stage",
+  "stage": 2,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   509,
+   12,
+   205,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "04-stage",
+  "stage": 3,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   468,
+   12,
+   245,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "05-stage",
+  "stage": 4,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   551,
+   12,
+   163,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "06-stage",
+  "stage": 5,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   540,
+   12,
+   173,
+   34
+  ],
+  "rayNote": null,
+  "compare": null,
+  "camera": null
+ },
+ {
+  "lang": "ar",
+  "vp": "landscape",
+  "name": "07-stage",
+  "stage": 6,
+  "viewport": [
+   725,
+   300
+  ],
+  "tools": [
+   12,
+   12,
+   56,
+   356
+  ],
+  "chip": [
+   521,
+   12,
+   192,
+   34
+  ],
+  "rayNote": [
+   402,
+   259,
+   312,
+   29
+  ],
+  "compare": null,
+  "camera": null
+ }
+]

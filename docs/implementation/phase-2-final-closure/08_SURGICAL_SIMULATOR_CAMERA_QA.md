@@ -3,7 +3,7 @@
 Scope: the shared procedure simulators in `src/surgical-sim/` (IOL, ICL, laser vision correction with Femto-LASIK /
 PRK / SMILE, keratoconus + CXL, corneal transplant PK / DALK / EK, intravitreal injections). The earlier pass only
 audited the cameras (`clinical-profile-expansion-and-ux-refinement/SURGICAL_SIMULATOR_CAMERA_AUDIT.md`). This pass
-re-authors them. `src/cataract-sim/` was not changed (see "Out of scope" below).
+re-authors them. `src/cataract-sim/` was re-authored in a follow-up pass with the same approach (section "Cataract simulator" at the end).
 
 Anatomy dimensions, surgical steps, stage texts and the Before/After texts are unchanged. Labels stay hidden by
 default ("Show details" is unchanged).
@@ -190,8 +190,8 @@ Evidence capture: `node scripts/camera-shots.mjs http://localhost:4701 <out-dir>
   under the header (the capture script does this); the page-level bar is outside the simulator and was not changed.
   Full screen remains the better option on a phone held sideways.
 - The laser close-up keeps the iris and lens behind the cornea as context; "Rest of the eye" hides them.
-- Out of scope, recorded only: `src/cataract-sim/` has its own camera code (fixed presets, no aspect fitting); no
-  framing defect was seen in this pass, so it was not touched.
+- `src/cataract-sim/` was out of scope for this pass; it was re-authored afterwards with the same approach (see "Cataract
+  simulator" below).
 
 ## Physician-review items (no change made)
 
@@ -203,3 +203,130 @@ Evidence capture: `node scripts/camera-shots.mjs http://localhost:4701 <out-dir>
   margin position matches what Dr. Maan wants to emphasise for PK / DALK / EK.
 - Intravitreal injection: the entry camera now shows the whole needle path; the entry point remains the illustrative
   pars-plana position already pending review.
+
+## Cataract simulator (`src/cataract-sim/`) — follow-up camera pass (2026-11-28)
+
+The dedicated cataract simulator (cataract procedure page and `/surgical-education/`, `#cataract-3d-start`) keeps its
+own renderer and OrbitControls. It now frames its stages the same way as the shared engine. Anatomy dimensions,
+surgical steps, stage texts and the constraint validator are unchanged (`cataract-constraints.spec.js`: 0 violations).
+
+Evidence: `evidence/cataract/before/` and `evidence/cataract/after/` (`<en|ar>/<desktop|portrait|landscape>/NN-stage.jpg`;
+each stage at 55 % of its playback with the instruments in view, labels off, reduced motion; the after set adds
+`ba-before.jpg` and `ba-after.jpg`; contact sheets `_sheet-<lang>-<viewport>.jpg`; overlay boxes in `cameras.json`).
+Capture: `node scripts/cataract-camera-shots.mjs http://localhost:4801 <out-dir>` against `npm run build` +
+`npx vite preview --port 4801 --strictPort` (GPU via ANGLE on Windows), on the real page `/[en/]procedures/cataract-surgery/`.
+
+### What was wrong (before)
+
+1. **Fixed distances; the lens widened on phones instead.** On a narrow canvas the field of view grew so the
+   horizontal view stayed constant. The camera itself did not change, so the whole-eye stages did not fit. In stage 1 the globe was cut at the
+   top on desktop (1440x900) and on a phone held sideways (844x390), and at the right on a phone held upright
+   (390x844). The phone fit for stage 7 (≈ 88 mm at a 32° lens) was above the fixed 80 mm zoom maximum, so it could not be
+   reached.
+2. **Target centred on the whole canvas.** The view tools (inline-end column on desktop, bottom row on phones), the
+   stage chip (top start) and the light-path caption (bottom start on the ray stages) were ignored. On phones the caption
+   covered the lower part of the eye in stages 1 and 7.
+3. **Controls outside the viewer.** 844x390: the seven-button tool column (356 px) was taller than the 300 px viewer,
+   so **Full screen and Explore 3D were cut off**. 390x844: the tool row (326 px) ran 2 px past the 332 px viewer.
+4. **Camera not deterministic on seek.** A seek inside the current stage kept whatever view the visitor had left
+   (turned, zoomed, or a focused structure).
+5. **Global zoom limits** 11–80 mm whatever the stage or screen.
+6. **Stale frame after a paused seek (found while capturing).** `seek()` and review frame stepping moved the scene state
+   but did not ask for a redraw. While nothing else was animating, the canvas kept showing the previous moment: for example
+   the IOL and injector were missing in stage 6 at 55 % on phones.
+7. **Camera could enter the globe.** The stage 7 target (z −7) was 2 mm in front of the globe centre. At the 11 mm
+   minimum zoom, turned fully to the side, the camera came to ≈ 11.3 mm from the centre, inside the 11.5 mm sclera.
+
+### What changed
+
+- **`index.js`** reuses `fitDistance()` from `src/surgical-sim/core/orbit.js`. Every preset (`stages.js`: stages and
+  anatomy structures; review views) has a `fit` (half width × half height of its subject, mm). One fixed 32° vertical
+  field of view at every size.
+  - **Free area:** `measureSafe()` reads the real boxes of the view tools (column at the inline end, or a bottom
+    row), the chip (top band) and, on stages that draw light rays (1 and 7), the caption (bottom band). On those stages
+    the caption is measured even before it appears, so the camera does not move mid-stage. `applySafe()` shifts the
+    projection centre into that area (`camera.setViewOffset`), so the free area is RTL-aware automatically.
+  - **When the free area is re-measured:** on every resize, stage change and when a control changes size (a
+    ResizeObserver watches the viewer, the tool rail and the chip). A camera still on its preset is re-fitted; a visitor's
+    own view keeps its distance, and its zoom limits follow the new fit.
+- **One camera path:** `goCamera()` handles the stage camera, anatomy structure, review view, Before / After and
+  Reset view.
+  - **Deterministic camera:** a seek (which always pauses here) ends on the camera of the stage it lands in, whatever
+    the previous view was: turned, zoomed, a focused structure (the focus is cleared) or Before / After. Playback
+    controls do not move the camera.
+  - **Damping:** OrbitControls' leftover damping is dropped before a preset is reached, so the preset is reached exactly.
+- **Zoom limits:** `max(11, 0.2 × fit)` to `min(160, max(80, 1.45 × fit))` mm. On desktop this is exactly the former 11–80
+  mm range. On phones the far limit grows with the fit, so the fit itself is always reachable. While flying, the limits
+  cover both ends of the flight. Orbit limits are unchanged: polar 0.4 to π − 0.4 and azimuth ±1.5, so there are no
+  flips.
+- **Stage 1 and 7 targets** moved to z −5 (4 mm in front of the globe centre), so at the 11 mm minimum the camera
+  stays outside the globe at any allowed orbit (tested: > 0.2 mm clearance).
+- **Close-up fits** (stages 2–6, structures) equal `[0.314, 0.257] × the former distance`, so the 1440x900 framing is
+  the same as before and phones keep the former visible width, now centred in the free area.
+- **`styles.css`:** tool row padding 2 px and gap 1 px on phones (318 px, inside a 332 px viewer). Below 388 px screens
+  the row wraps 4 + 3, and the ray caption moves above it. On short screens (viewer under ≈ 380 px, e.g. 844x390) the
+  tools form two columns of four.
+- **Stale frame:** `seek()` and `stepFrames()` now mark the frame dirty.
+- **`getState().camera`** also reports `preset`, `stagePreset`, `fit`, `base`, `userMoved`, `moving`, `fov`, `minR`,
+  `maxR`, `safe` and `view`.
+
+| # | Stage | Subject | Before problem | Change | Evidence |
+|---|---|---|---|---|---|
+| 1 | cloudy-lens (section) | whole globe, lens, scattered light | globe cut top (desktop, landscape) / right (portrait); caption over the eye on phones | target (0, 0, −3.5) → (0, 0, −5); fit 15.4 × 12.6 (front side wider for the incoming light); caption reserved | `01-stage.jpg` |
+| 2 | preparation (front) | pupil, iris, limbus | desktop OK; portrait: the iris about half the width | fit 8.8 (limbus with a ring of sclera) | `02-stage.jpg` |
+| 3 | incision | limbal tunnel, keratome | none on desktop | fit 6.9 × 5.6 (same framing), centred in the free area | `03-stage.jpg` |
+| 4 | capsulorhexis | anterior capsule, forceps | none (instrument shafts leave the frame by design, also under the rail) | fit 7.8 × 6.4 | `04-stage.jpg` |
+| 5 | phaco | nucleus in the bag, probe | none on desktop | fit 7.5 × 6.2 | `05-stage.jpg` |
+| 6 | iol | IOL unfolding in the bag | stale frame after a paused seek (IOL / injector missing) | fit 7.8 × 6.4; redraw fix | `06-stage.jpg` |
+| 7 | completion (section) | whole globe, focused light | the camera could enter the globe at minimum zoom; caption over the eye on phones; phone fit above the 80 mm maximum | target (0, 0, −7) → (0, 0, −5); fit 16.5 × 13; caption reserved | `07-stage.jpg` |
+
+Anatomy structures (cornea, iris, pupil, lens, capsule, zonules, IOL) keep their targets and directions. Their fits are
+equivalent to the former distances. Review views: surgeon fit 9.4 × 7.7 and side fit 10.7 × 8.7.
+
+Content hashes: stage content versions (`review.js stageContentHash`) include the camera preset. All seven stage hashes
+therefore change with this pass. No review decision was recorded against the old hashes.
+
+### Kept behaviour (protected by the existing tests, all passing)
+
+These still work as before:
+
+- a plain wheel scrolls the page and Ctrl / ⌘ + wheel zooms (in full screen the plain wheel zooms);
+- Explore 3D touch policy (one finger scrolls the page unless Explore 3D is on; pinch zooms in Explore 3D);
+- full screen with Escape;
+- reduced motion (jump cuts);
+- WebGL context loss and restore;
+- review mode (stage, speed, frame step, camera views, layers);
+- labels hidden by default;
+- the 11–80 mm desktop zoom range;
+- one render loop and no leaks.
+
+### Tests (`tests/cataract-camera.spec.js`, GPU layer)
+
+- `every stage: one deterministic camera …` (1440x900, with motion): for each of the 7 stages, the camera after the
+  stage choice equals the camera after a seek from a turned and zoomed view, after Reset view, and after a seek from
+  another stage. Restart returns to stage 1's camera, and a seek after a structure focus returns to the stage camera.
+- `zoom and orbit limits …` (stages 1, 4, 7): the zoom stops at the reported minimum and maximum. Minimum ≥ 11 mm and
+  maximum ≥ max(80, 1.4 × fit). At the minimum distance, under four extreme drags, the camera stays outside the globe,
+  screen-up stays world-up, polar stays within 0.4 to π − 0.4 and |azimuth| ≤ 1.5. Reset view restores the stage camera.
+- `a resize re-fits …`: a camera on its preset is re-fitted for 390 px and returns exactly to the desktop camera. A
+  visitor-moved view keeps its distance while the fit and limits move.
+- `framing <en|ar> <390x844|844x390|1440x900>` (×6) checks every stage against the real DOM boxes of the tool rail, chip and
+  light-path caption (shown):
+  - the free area does not overlap them and keeps ≥ 40 % of each dimension;
+  - every control lies inside the viewer;
+  - the target projects to the middle of the free area;
+  - the four corners of the stage's subject box project inside it.
+- Before / After tests: see `10_BEFORE_AFTER_VERIFICATION.md`.
+
+### Gaps and notes
+
+- **844x390 on the real page:** the site's fixed header and booking bar leave ≈ 256 px of a 300 px viewer visible.
+  The capture scrolls the viewer under the header, so the bar still covers its lower ≈ 45 px. This is page-level and
+  unchanged; it is the same gap as the procedure simulators above. Full screen is the better option on a phone held
+  sideways.
+- With the whole eye fitted, the stage 1 eye on desktop is ≈ 15 % smaller than before (it is now whole).
+
+### Physician-review items (cataract camera; no anatomy or step changed)
+
+- Stage 1 and stage 7 views now show the whole globe in section, centred slightly in front of the globe centre. Please
+  confirm this framing suits the "cloudy lens" and "clear path for light" explanations.

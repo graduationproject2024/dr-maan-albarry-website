@@ -15,6 +15,8 @@ Items below are new or changed medical representations, or long-open questions. 
 | N-06 | Injection entry view shows the whole needle path; entry point illustrative pars plana | `evidence/cameras/after/_sheet-intravitreal-*` | Entry point OK? (same as R-09) |
 | N-07 | Light Journey drawing rebuilt (cornea ~2/3 of refraction, inverted image on the macula, nerve signal to visual cortex); on phones the object is drawn closer with a `//` break | `evidence/light-journey/after/` | Anatomy and light path OK for patient education? |
 | N-08 | Lens Lab street scene (day/dim/night, palm boulevard, laptop, phone in hand); optics model unchanged | `evidence/lens-lab/after/` | Does any scene make a lens look better or worse than the model says? |
+| N-09 | Cataract 3D simulator: new Before / After. Before = clouded natural lens with the illustrative scattered light path; After = clear IOL in the capsular bag with the illustrative focused light path; same camera; wording AR/EN in `10_BEFORE_AFTER_VERIFICATION.md` | `evidence/cataract/after/*/*/ba-before.jpg`, `ba-after.jpg` | Wording OK? Is showing the focused light path in "After" acceptable (captioned "not a vision test"), or should "After" show the lens only? |
+| N-10 | Cataract 3D simulator camera pass: stage 1 and 7 now frame the whole globe in section (target 4 mm in front of the globe centre); close-ups unchanged on desktop, centred clear of the controls on phones; no anatomy or step changed | `evidence/cataract/before/` vs `after/` contact sheets | Framing suits the explanations? |
 
 ## B. Earlier open items (still pending)
 | ID | Model | Question |
