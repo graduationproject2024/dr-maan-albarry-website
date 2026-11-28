@@ -17,7 +17,7 @@ export function curveChart(lang, lenses = ['monofocal', 'edof', 'trifocal'], { p
   const id = `vsim-chart-${++uid}`;
   let out = `<svg class="vsim-chart" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${id}" focusable="false"><title id="${id}">${s.chartTitle}</title>`;
   for (const q of [0, 0.25, 0.5, 0.75, 1]) out += `<line x1="${L}" x2="${W - R}" y1="${y(q)}" y2="${y(q)}" class="vsim-grid"/>`;
-  const marks = [[1 / 6, s.presetDist.distance], [1, `1 ${s.m}`], [1 / 0.66, s.presetDist.intermediate], [2.5, s.presetDist.near], [3, `${fmt(lang, 33)} ${s.cm}`]];
+  const marks = [[1 / 6, s.presetDist.distance], [1, `1 ${s.m}`], [1 / 0.66, s.presetDist.intermediate], [2, s.presetDist.screen], [2.5, s.presetDist.near], [3, `${fmt(lang, 33)} ${s.cm}`]];
   for (const [v, label] of marks) {
     out += `<line x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H - B}" class="vsim-grid vsim-grid-v"/>`;
     out += `<text x="${x(v)}" y="${H - B + 18}" text-anchor="middle" class="vsim-axis">${label}</text>`;

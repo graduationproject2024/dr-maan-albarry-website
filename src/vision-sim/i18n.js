@@ -13,6 +13,8 @@ export const STRINGS = {
     more: 'إعدادات إضافية',
     reset: 'إعادة الضبط',
     wholeScene: 'المشهد كاملاً',
+    // 2026-11-28 — pending physician review (N-09): the lens wording describes ~40 cm; beyond it no level is claimed
+    neutralLevel: (lens, dist) => `${lens}: تُظهر الصورة الوضوح المحسوب لهذه العدسة على ${dist}؛ اسأل جرّاحك عمّا تتوقعه.`,
     closeNote: (obj) => `عرض أقرب: الصورة اقتربت من ${obj} فقط. نموذج العدسة ودرجة الوضوح لم يتغيّرا.`,
     closeAnnounce: (obj) => `عرض أقرب: ${obj}`,
     groupCompare: 'المقارنة بين العدسات',
@@ -99,6 +101,8 @@ export const STRINGS = {
     more: 'More settings',
     reset: 'Reset',
     wholeScene: 'Whole scene',
+    // 2026-11-28 — pending physician review (N-09): the lens wording describes ~40 cm; beyond it no level is claimed
+    neutralLevel: (lens, dist) => `${lens}: the picture shows this lens's modelled sharpness at ${dist}; ask your surgeon what to expect.`,
     closeNote: (obj) => `Closer view: the picture only moved nearer to the ${obj}. The lens model and its sharpness did not change.`,
     closeAnnounce: (obj) => `Closer view: ${obj}`,
     groupCompare: 'Compare lenses',

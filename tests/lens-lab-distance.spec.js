@@ -129,20 +129,22 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
 
   // 2026-11-26: the 50 cm "Screen" button (Dr. Maan's reference distances 40 / 50 / 65 cm + far)
   test('50 cm changes the picture but not the model: the near layer is evaluated at 0.50 m, framed as seen from there', async ({ page }) => {
+    test.setTimeout(180_000);
     await openHarness(page);
-    for (const lens of ['monofocal', 'edof', 'trifocal']) {
-      await page.evaluate((l) => { window.__vsim.reset(); window.__vsim.setLens(l); }, lens);
+    // 2026-11-28 (review of 27bac2d): every lens and every lighting level
+    for (const lens of ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'edof-toric', 'cataract']) for (const light of ['day', 'dusk', 'night']) {
+      await page.evaluate(([l, li]) => { window.__vsim.reset(); window.__vsim.setLens(l); window.__vsim.setLighting(li); }, [lens, light]);
       await preset(page, 'Near');
       const near = await S(page);
-      const pNear = await page.evaluate(() => window.__visionSim.sample());
+      const pNear = light === 'day' ? await page.evaluate(() => window.__visionSim.sample()) : null;
       await preset(page, 'Screen');
       const s = await S(page);
-      const pScreen = await page.evaluate(() => window.__visionSim.sample());
+      const pScreen = light === 'day' ? await page.evaluate(() => window.__visionSim.sample()) : null;
       expect(s.distanceM).toBeCloseTo(0.5, 9);
       expect(s.subject).toBe('near');
       expect(s.closeUp).toBe(true);
       // the model values are exactly computeView() at 0.5 m — nothing new in the model
-      const v = computeView({ lens, distanceM: 0.5, lighting: 'day' });
+      const v = computeView({ lens, distanceM: 0.5, lighting: light });
       expect(s.optics.A.layers.near.defocusD).toBeCloseTo(v.layers.near.defocusD, 9);
       expect(s.optics.A.layers.near.blurArcmin).toBeCloseTo(v.layers.near.blurArcmin, 9);
       expect(s.optics.A.layers.near.sharpness).toBeCloseTo(v.layers.near.sharpness, 9);
@@ -151,9 +153,23 @@ test.describe('distance presets: the picture moves, the optics do not', () => {
       // the picture changes: framed wider (the phone looks 0.8 × as large) and blurred for 2.0 D instead of 2.5 D
       expect(s.frame.zoom).toBeLessThan(near.frame.zoom);
       expect(s.frame.zoom).toBeCloseTo(Math.max(1, near.frame.zoom * 0.8), 2);
-      expect(JSON.stringify(pScreen)).not.toBe(JSON.stringify(pNear));
-      // captions reuse the existing near wording (pending physician review, N-09)
+      if (pNear) expect(JSON.stringify(pScreen)).not.toBe(JSON.stringify(pNear));
       await expect(page.locator('.vsim-caption')).toContainText('50 cm · phone');
+      // 2026-11-28: the 40 cm level wording is NOT claimed at 50 cm (a trifocal's near sharpness falls from 0.27 to 0.06);
+      // the caption says the picture shows the modelled sharpness (pending physician review, N-09)
+      const caption = await page.locator('.vsim-caption').textContent();
+      const seeing = await page.locator('.vsim-seeing').textContent();
+      for (const k of Object.keys(CONTENT.en.lenses)) {
+        expect(caption, `${lens} ${light}: no near-level wording in the caption`).not.toContain(CONTENT.en.lenses[k].levels.near);
+        expect(seeing, `${lens} ${light}: no near-level wording in the explanation`).not.toContain(CONTENT.en.lenses[k].levels.near);
+      }
+      if (lens !== 'cataract') {
+        expect(caption).toContain(STRINGS.en.neutralLevel(STRINGS.en.lenses[lens].short, '50 cm'));
+        expect(seeing).toContain(STRINGS.en.neutralLevel(STRINGS.en.lenses[lens].short, '50 cm'));
+      }
+      // what IS shown follows the model at the actual distance: the clarity bar of the subject row is computeView at 0.5 m
+      const bar = await page.locator('.vsim-meters li.is-subject .vsim-bar').first().getAttribute('aria-label');
+      expect(bar).toContain(v.layers.near.sharpness.toFixed(2));
     }
     expect(await page.evaluate(() => new URLSearchParams(location.search).get('dist'))).toBeNull(); // the harness writes no URL
   });
@@ -354,7 +370,7 @@ for (const [w, h] of SIZES) {
       expect(near.zoom, 'near: closer than the whole scene').toBeGreaterThan(whole.zoom);
       await step(5, 'understand what changed (Near)', null, (v) => expect(v.whole, 'a way back is shown').not.toBeNull());
       // 2026-11-26: the 50 cm "Screen" button sits in the same row and needs no scrolling either
-      const screen = await step(5.5, 'select Screen (50 cm)', lbl('preset', 'screen'), (v) => { expect(v.closeUp).toBe(true); expect(v.caption).toBe('50 cm · phone · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.near}`); });
+      const screen = await step(5.5, 'select Screen (50 cm)', lbl('preset', 'screen'), (v) => { expect(v.closeUp).toBe(true); expect(v.caption).toBe('50 cm · phone · Day'); expect(v.level).toBe(STRINGS.en.neutralLevel('Monofocal', '50 cm')); }); // 2026-11-28: no 40 cm wording at 50 cm (N-09)
       expect(screen.zoom, 'screen: framed wider than near').toBeLessThan(near.zoom);
       await step(6, 'select Intermediate', lbl('preset', 'intermediate'), (v) => { expect(v.caption).toBe('65 cm · laptop · Day'); expect(v.level).toBe(`Monofocal: ${CONTENT.en.lenses.monofocal.levels.intermediate}`); });
       await step(7, 'understand what changed (Intermediate)', null, (v) => expect(v.closeUp).toBe(true));

@@ -26,6 +26,13 @@ const OTHER_LENSES = LENS_IDS.filter((l) => !PRIMARY_LENSES.includes(l) && l !==
 const LAB_LENSES = ['monofocal', 'enhanced', 'toric', 'edof', 'multifocal', 'trifocal'];
 /** Lens-lab content key for a simulator lens id (toric versions use their design's levels). */
 const labKey = (l) => (LAB_LENSES.includes(l) && l !== 'toric' ? l : LAB_LENSES.includes(baseLens(l)) ? baseLens(l) : null);
+/**
+ * The lens-lab level wording for "near" describes reading at about 40 cm. Beyond NEAR_WORDING_MAX (e.g. the 50 cm Screen
+ * button, where a trifocal's modelled near sharpness falls from 0.27 to 0.06) no level is claimed until Dr. Maan approves
+ * wording for that distance (N-09, 2026-11-28): the caption says the picture shows the modelled sharpness instead.
+ */
+const NEAR_WORDING_MAX = 0.45;
+const noLevelClaim = (state, band) => band === 'near' && state.distanceM > NEAR_WORDING_MAX;
 const SCENARIO_ROW = { signs: 'distance', laptop: 'intermediate', phone: 'near', book: 'near', 'night-driving': 'halos' };
 
 export function createUI(host, { lang, theme, listen, handlers, mode = 'full' }) {
@@ -345,6 +352,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       if (lens === 'cataract') return s.catSeeing;
       if (!labKey(lens)) return '';
       const row = scn ? SCENARIO_ROW[scn] : (state.distanceM < 0.52 ? 'near' : state.distanceM < 1.6 ? 'intermediate' : 'distance');
+      if (!scn && noLevelClaim(state, row)) return s.neutralLevel(s.lenses[lens].short, formatDistance(L, state.distanceM));
       return `${s.lenses[lens].short}: ${lab.dims[row].label} — ${lab.lenses[labKey(lens)].levels[row]}.`;
     };
     parts.push(words(state.lens));
@@ -355,6 +363,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
   // the comparison table; qualitative, pending physician review). Empty for a comparison and for the cataract view.
   const levelText = (state, view) => {
     if (state.compare || !labKey(state.lens)) return '';
+    if (noLevelClaim(state, view.subject)) return STRINGS[L].neutralLevel(STRINGS[L].lenses[state.lens].short, formatDistance(L, state.distanceM));
     return `${STRINGS[L].lenses[state.lens].short}: ${LAB[L].lenses[labKey(state.lens)].levels[view.subject]}`;
   };
 

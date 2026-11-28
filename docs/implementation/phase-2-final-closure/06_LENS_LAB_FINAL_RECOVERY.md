@@ -150,3 +150,22 @@ returning-visitor + technical-fixes, `--workers 2`: **262 passed, 0 failed** (6.
 Found and fixed on the way: at 150 % text on a phone held sideways (844×390) the four-button row wrapped "Intermediate"
 onto two lines and squeezed the picture to 117 px (limit 120); the short-word switch is now measured in `em`, so it
 also applies when text is enlarged.
+
+### 50 cm wording withheld (review of 27bac2d, 2026-11-28)
+
+The first version reused each lens's "near" level wording at 50 cm. That wording describes ~40 cm and contradicted the
+model at 50 cm (near-layer sharpness, day: trifocal 0.27 → 0.06, multifocal 0.41 → 0.05), e.g. "Often possible without
+glasses" over a blurred phone. Now, for the near band beyond 45 cm (the Screen button and the exact-distance slider),
+the caption and the "What are you seeing?" line say only "<lens>: the picture shows this lens's modelled sharpness at
+50 cm; ask your surgeon what to expect" (AR + EN, pending physician review, N-09). The clarity bars stay: they are the
+model's own sharpness at the actual distance. The fallback chart gains a 50 cm axis mark.
+
+Tests: the 50 cm test now covers 8 lenses × day/dim/night — model values equal `computeView` at 0.5 m, no near-level
+wording in the caption or explanation, the neutral sentence present, and the subject clarity bar equal to the model's
+sharpness at 0.5 m. Review records: the new `screen50` review presets are new ids; existing preset ids and hashes
+are unchanged, so saved review records stay valid (`vision-review.spec.js` checks ids/hashes stay unique).
+
+Run (2026-11-28): the 8 Lens Lab / vision files, **211 passed, 0 failed**. WebKit (Playwright WebKit, Windows) check of the
+distance row at 320×640, 360×800, 390×844 and 844×390, Arabic and English: four 44 px buttons in one row, the "Mid"
+switch applies, no label overflows (Arabic labels fit unshortened). `tests/journeys/webkit.spec.js` does not exist on
+this branch, so it was not run.
