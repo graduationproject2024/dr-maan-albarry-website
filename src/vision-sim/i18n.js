@@ -49,8 +49,10 @@ export const STRINGS = {
       toric: { name: 'الأحادية اللابؤرية (Toric)', short: 'أحادية لابؤرية' },
       cataract: { name: 'الساد قبل العملية', short: 'ساد' },
     },
-    presets: { near: 'قريب', intermediate: 'متوسط', distance: 'بعيد' },
-    presetDist: { near: '٤٠ سم', intermediate: '٦٥ سم', distance: '٦ م+' },
+    // 'screen' (50 cm) added 2026-11-26 — label pending physician review (14_CLINICAL_REVIEW_PACKAGE.md, N-09)
+    presets: { near: 'قريب', screen: 'شاشة', intermediate: 'متوسط', distance: 'بعيد' },
+    presetShort: {},
+    presetDist: { near: '٤٠ سم', screen: '٥٠ سم', intermediate: '٦٥ سم', distance: '٦ م+' },
     objects: { near: 'الهاتف', intermediate: 'الحاسوب', distance: 'اللوحة المرورية' },
     lights: { day: 'نهار', dusk: 'خافتة', night: 'ليل' },
     sharpness: 'مؤشر الوضوح',
@@ -133,8 +135,10 @@ export const STRINGS = {
       toric: { name: 'Monofocal toric', short: 'Mono toric' },
       cataract: { name: 'Cataract (before surgery)', short: 'Cataract' },
     },
-    presets: { near: 'Near', intermediate: 'Intermediate', distance: 'Far' },
-    presetDist: { near: '40 cm', intermediate: '65 cm', distance: '6 m+' },
+    // 'screen' (50 cm) added 2026-11-26 — label pending physician review (14_CLINICAL_REVIEW_PACKAGE.md, N-09)
+    presets: { near: 'Near', screen: 'Screen', intermediate: 'Intermediate', distance: 'Far' },
+    presetShort: { intermediate: 'Mid' }, // shown only when the four-button row is narrow
+    presetDist: { near: '40 cm', screen: '50 cm', intermediate: '65 cm', distance: '6 m+' },
     objects: { near: 'phone', intermediate: 'laptop', distance: 'road sign' },
     lights: { day: 'Day', dusk: 'Dim', night: 'Night' },
     sharpness: 'Sharpness index',

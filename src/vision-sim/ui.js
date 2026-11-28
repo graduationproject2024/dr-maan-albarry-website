@@ -11,8 +11,9 @@
 // Vision & Lens Lab) provides its own controls.
 import { STRINGS, LENS_INFO, fmt, formatDistance } from './i18n.js';
 import { curveChart, fallbackHTML } from './fallback.js';
-import { DISTANCES, LENS_IDS, LIGHTING_IDS, SCENARIO_IDS, ALL_LENS_IDS, TORIC_BASES, baseLens, isToric } from './optics/params.js';
+import { LENS_IDS, LIGHTING_IDS, SCENARIO_IDS, ALL_LENS_IDS, TORIC_BASES, baseLens, isToric } from './optics/params.js';
 import { distanceToSlider, sliderToDistance, scenarioFor } from './optics/model.js';
+import { PRESET_KEYS, PRESET_DISTANCES, presetFor } from './presets.js';
 import { CONTENT as LAB } from '../lens-lab/content.js';
 
 let instance = 0;
@@ -75,7 +76,8 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (viewerOnly) {
       root.innerHTML = `${stageHTML(s)}<p class="vsim-sr" data-ref="live" aria-live="polite" aria-atomic="true"></p>`;
     } else {
-      const presetLabel = (k) => `<span class="vsim-seg-main">${s.presets[k]}</span><span class="vsim-seg-sub">${s.presetDist[k]}</span>`;
+      // a narrow distance row (four buttons) shows a shorter word where one exists; the full word stays the accessible name
+      const presetLabel = (k) => `<span class="vsim-seg-main">${s.presetShort[k] ? `<span class="vsim-pl-long">${s.presets[k]}</span><span class="vsim-pl-short" aria-hidden="true">${s.presetShort[k]}</span>` : s.presets[k]}</span><span class="vsim-seg-sub">${s.presetDist[k]}</span>`;
       const scnLabel = (k) => `<span class="vsim-seg-main">${lab.scenarios[k].label}</span><span class="vsim-seg-sub">${lab.scenarios[k].sub}</span>`;
       const lensLabel = (k) => `<span class="vsim-seg-main">${s.lenses[k].short}</span>`;
       // "Extended range" with the abbreviation directly under it: the plain words explain EDOF where it first appears
@@ -87,7 +89,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
       ${stageHTML(s)}
       <fieldset class="vsim-field vsim-field-presets" data-ref="presets">
         <legend class="vsim-legend-title">${s.distance}</legend>
-        <div class="vsim-seg vsim-seg-3">${radios('preset', ['near', 'intermediate', 'distance'], presetLabel, '')}</div>
+        <div class="vsim-seg vsim-seg-4 vsim-seg-presets">${radios('preset', PRESET_KEYS, presetLabel, '')}</div>
       </fieldset>
     </div>
     <div class="vsim-bench-side">
@@ -287,7 +289,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     if (t.dataset.group === 'lensA') handlers.lens(t.value);
     else if (t.dataset.group === 'lensB') handlers.lensB(t.value);
     else if (t.dataset.group === 'scenario') handlers.scenario(t.value);
-    else if (t.dataset.group === 'preset') handlers.distance(DISTANCES[t.value], 'preset');
+    else if (t.dataset.group === 'preset') handlers.distance(PRESET_DISTANCES[t.value], 'preset');
     else if (t.dataset.group === 'lighting') handlers.lighting(t.value);
     else if (t.dataset.group === 'cyl') handlers.refraction({ cylD: -Number(t.value) });
     else if (t.dataset.group === 'axis') handlers.refraction({ axisDeg: Number(t.value) });
@@ -303,7 +305,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     else if (ref.reset && e.target.closest('.vsim-reset')) handlers.reset();
     else if (ref.whole && e.target.closest('.vsim-whole')) handlers.closeUp(false);
     // tapping the distance that is already chosen (no change event) still brings the closer view
-    else if (e.target.dataset && e.target.dataset.group === 'preset' && e.target.value === lastPreset) handlers.distance(DISTANCES[e.target.value], 'preset');
+    else if (e.target.dataset && e.target.dataset.group === 'preset' && e.target.value === lastPreset) handlers.distance(PRESET_DISTANCES[e.target.value], 'preset');
     else if (e.target.closest('[data-vsim-reload]')) handlers.retry();
   });
   // divider: pointer + keyboard
@@ -392,7 +394,7 @@ export function createUI(host, { lang, theme, listen, handlers, mode = 'full' })
     ref.toricBox.hidden = !TORIC_BASES.includes(baseLens(state.lens));
     ref.toricNote.hidden = !isToric(state.lens);
     set('cyl', Math.abs(state.refraction.cylD)); set('axis', state.refraction.axisDeg); set('sphere', state.refraction.sphereD);
-    const preset = ['near', 'intermediate', 'distance'].find((k) => Math.abs(DISTANCES[k] - state.distanceM) < 0.005) || '';
+    const preset = presetFor(state.distanceM);
     set('preset', preset);
     lastPreset = preset;
     const rx = state.refraction, eyeSet = rx.cylD !== 0 || rx.sphereD !== 0;

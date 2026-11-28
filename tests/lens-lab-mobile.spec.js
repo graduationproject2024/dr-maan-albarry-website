@@ -185,13 +185,14 @@ test.describe('every option', () => {
     expect(samePicture(seen[1], seen[2])).toBe(false);
     expect(samePicture(seen[0], seen[2])).toBe(false);
     const dist = [];
-    for (const v of ['near', 'intermediate', 'distance']) {
+    for (const v of ['near', 'screen', 'intermediate', 'distance']) { // screen (50 cm) added 2026-11-26
       await lbl(page, 'preset', v).tap();
       await expect(radio(page, 'preset', v)).toBeChecked();
       dist.push(await picture(page));
     }
     expect(samePicture(dist[0], dist[1])).toBe(false);
     expect(samePicture(dist[1], dist[2])).toBe(false);
+    expect(samePicture(dist[2], dist[3])).toBe(false);
     const light = [];
     for (const v of ['day', 'dusk', 'night']) {
       await lbl(page, 'lighting', v).tap();
@@ -398,6 +399,15 @@ test.describe('returning visitors', () => {
     await expect(radio(page, 'lighting', 'dusk')).toBeChecked();
     expect(STRINGS.en.presetDist.near).toBe('40 cm');
     expect(DISTANCES).toMatchObject({ near: 0.4, intermediate: 0.65, distance: 6 });
+    // 2026-11-26: the 50 cm "Screen" button has its own URL word, and choosing it writes it back
+    await open(page, 'en', '?dist=screen');
+    await expect(radio(page, 'preset', 'screen')).toBeChecked();
+    await expect(page.locator('#simulator-host .vsim-caption')).toContainText('50 cm');
+    await lbl(page, 'preset', 'near').tap();
+    await expect.poll(() => new URL(page.url()).searchParams.get('dist')).toBe('near');
+    await lbl(page, 'preset', 'screen').tap();
+    await expect.poll(() => new URL(page.url()).searchParams.get('dist')).toBe('screen');
+    expect(JSON.parse(await page.evaluate((k) => localStorage.getItem(k), STORE)).dist).toBe('screen');
   });
 
   test('stored junk is ignored', async ({ page }) => {

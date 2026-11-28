@@ -112,13 +112,41 @@ The ocular-surface section placement is untouched by this change (main.js only c
 4. New absolute near-defocus check: with the eye set for far, the 40 cm phone under a monofocal stays below a fixed
    edge-energy bound (1.45; measured 1.27) and below 0.75 × the trifocal value (measured ratio 0.69).
 
+## 50 cm "Screen" preset (2026-11-26)
+
+Dr. Maan's educational reference distances are 40, 50 and 65 cm plus far. The distance row now has four buttons:
+Near 40 cm · Screen 50 cm · Intermediate 65 cm · Far 6 m+ (`src/vision-sim/presets.js`).
+
+- **No model change.** 50 cm lies inside the slider range (0.33–6 m) and the near band (≤ 0.52 m); the near layer is
+  evaluated at 0.50 m by the unchanged `computeView`. `optics/params.js` and `VISION_MODEL_VERSION` are untouched.
+- **Picture:** the closer view frames the phone as seen from 50 cm (zoom × 0.40/0.50, so it looks 0.8× as large as at
+  40 cm — framing only; blur angles scale with the zoom) and blurs it for 2.0 D instead of 2.5 D (monofocal).
+- **Captions** reuse each lens's existing near wording ("50 cm · phone · Day — Monofocal: Reading glasses usually
+  needed"). New label text ("Screen" / "شاشة", and "Mid" for "Intermediate" on narrow rows) is pending physician review
+  (14_CLINICAL_REVIEW_PACKAGE.md, N-09).
+- **Phones:** the row stays one line of four 44 px buttons. A container query switches the row to tighter padding and the
+  short word "Mid" (full word kept as the accessible name) when the row is narrower than 31em (≈ 496 px at normal text size; the threshold grows with enlarged text, so 150 % text also gets the short word) — verified at 320, 360,
+  375, 390, 430 and both landscapes (667×375, 844×390); no word is broken and nothing scrolls.
+- **URL / storage:** `?dist=screen`; choosing it writes `dist=screen` and remembers it.
+- **Review harness:** new group "The 50 cm screen distance (each lens)" (`<lens>.screen-50cm`).
+- **Tests updated (dated 2026-11-26):** lens-lab-distance (model unchanged and framing per preset include Screen; four
+  different views; the 15-step flow gains step 5.5 "select Screen"; reach / tap / overlap loops include Screen),
+  lens-lab-mobile (four distance pictures differ; URL word). New test: "50 cm changes the picture but not the model".
+
 ## Gaps
 
 - The owner's original failure was not reproduced; the fixes cover every plausible production cause found, but the
   owner's device/browser should be checked against this build (F1 is the most likely after a release).
-- There is no separate 50 cm (tablet) layer: the model has three layers (near / intermediate / far); a 50 cm view is
-  shown by moving the near layer with the exact-distance slider (More settings). Adding a fourth layer would change the
-  model contract (`computeView`) and needs Dr. Maan's review.
+- 50 cm uses the near layer (the phone); there is no separate tablet object. A fourth layer would change the model
+  contract (`computeView`) and needs Dr. Maan's review.
 - The 20 s download timeout on the public page is not exercised end-to-end at full length (the picture-code timeout
   is, with a shortened value through the public `loadTimeoutMs` option).
 - WebKit / real iOS Safari were not run in this pass (Chromium only).
+
+### 50 cm preset — test run (2026-11-28)
+
+`PW_PORT=4731 PRERENDER_PORT=4736 npx playwright test` on the 8 Lens Lab / vision files + first-render +
+returning-visitor + technical-fixes, `--workers 2`: **262 passed, 0 failed** (6.9 min, Windows, Chromium on the GPU).
+Found and fixed on the way: at 150 % text on a phone held sideways (844×390) the four-button row wrapped "Intermediate"
+onto two lines and squeezed the picture to 117 px (limit 120); the short-word switch is now measured in `em`, so it
+also applies when text is enlarged.

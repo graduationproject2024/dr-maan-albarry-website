@@ -12,6 +12,7 @@ import {
 } from './optics/params.js';
 import { computeView, haloGlare, normalizeRefraction } from './optics/model.js';
 import { STRINGS, LENS_INFO } from './i18n.js';
+import { PRESET_DISTANCES } from './presets.js';
 import { CONTENT as LAB } from '../lens-lab/content.js';
 import { contentHash } from '../sim-review/core.js';
 
@@ -48,6 +49,9 @@ function build() {
     // dusk lighting has no everyday situation of its own; distance at dusk shows the 4 mm pupil
     add(`${lens}.distance-dusk`, 'lighting', { en: `${lensName('en', lens)} — ${STRINGS.en.presets.distance}, ${STRINGS.en.lights.dusk}`, ar: `${lensName('ar', lens)} — ${STRINGS.ar.presets.distance}، ${STRINGS.ar.lights.dusk}` },
       P(lens, DISTANCES.distance, 'dusk'), ['Q3', 'Q4']);
+    // the 50 cm "screen" distance button (2026-11-26): a reference distance of its own, no everyday situation
+    add(`${lens}.screen-50cm`, 'screen50', { en: `${lensName('en', lens)} — ${STRINGS.en.presets.screen} ${STRINGS.en.presetDist.screen}`, ar: `${lensName('ar', lens)} — ${STRINGS.ar.presets.screen} ${STRINGS.ar.presetDist.screen}` },
+      P(lens, PRESET_DISTANCES.screen, 'day'), ['Q6', 'Q7']);
   }
   // 2. residual refraction / astigmatism (the "Advanced" options of the public page, plus the Lens Lab toric example)
   const rx = (id, lens, d, light, r, q) => {
@@ -83,7 +87,7 @@ function build() {
 export const PRESETS = build();
 export const PRESET_IDS = Object.freeze(PRESETS.map((p) => p.id));
 export const presetById = (id) => PRESETS.find((p) => p.id === id) || null;
-export const PRESET_GROUPS = Object.freeze(['situation', 'lighting', 'refraction', 'compare']);
+export const PRESET_GROUPS = Object.freeze(['situation', 'screen50', 'lighting', 'refraction', 'compare']);
 
 /** Does a simulator state (getState()) show exactly this preset's parameters? */
 export function stateMatches(params, st) {

@@ -53,7 +53,7 @@
    "action": "select Near",
    "touch": {
     "selector": "#simulator-host label[for$=\"-preset-near\"]",
-    "x": 63,
+    "x": 50,
     "y": 279,
     "inView": true,
     "receivedBy": "<label for=\"vsim1-preset-near\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Near</spa"
@@ -81,20 +81,39 @@
    "canvases": 1
   },
   {
+   "step": 5.5,
+   "action": "select Screen (50 cm)",
+   "touch": {
+    "selector": "#simulator-host label[for$=\"-preset-screen\"]",
+    "x": 129,
+    "y": 279,
+    "inView": true,
+    "receivedBy": "<label for=\"vsim1-preset-screen\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Screen<"
+   },
+   "scrollY": 687,
+   "moved": 0,
+   "zoom": 1.317,
+   "closeUp": true,
+   "caption": "50 cm · phone · Day",
+   "lensLine": "Monofocal: Reading glasses usually needed",
+   "viewerVisible": true,
+   "canvases": 1
+  },
+  {
    "step": 6,
    "action": "select Intermediate",
    "touch": {
     "selector": "#simulator-host label[for$=\"-preset-intermediate\"]",
-    "x": 168,
+    "x": 208,
     "y": 279,
     "inView": true,
-    "receivedBy": "<label for=\"vsim1-preset-intermediate\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">I"
+    "receivedBy": "<label for=\"vsim1-preset-intermediate\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\"><"
    },
    "scrollY": 687,
    "moved": 0,
    "zoom": 2.087,
    "closeUp": true,
-   "caption": "66 cm · laptop · Day",
+   "caption": "65 cm · laptop · Day",
    "lensLine": "Monofocal: Glasses usually needed",
    "viewerVisible": true,
    "canvases": 1
@@ -107,7 +126,7 @@
    "moved": 0,
    "zoom": 2.087,
    "closeUp": true,
-   "caption": "66 cm · laptop · Day",
+   "caption": "65 cm · laptop · Day",
    "lensLine": "Monofocal: Glasses usually needed",
    "viewerVisible": true,
    "canvases": 1
@@ -117,7 +136,7 @@
    "action": "select Far",
    "touch": {
     "selector": "#simulator-host label[for$=\"-preset-distance\"]",
-    "x": 274,
+    "x": 287,
     "y": 279,
     "inView": true,
     "receivedBy": "<label for=\"vsim1-preset-distance\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Far</"
@@ -168,7 +187,7 @@
    "action": "compare the displayed effect (Near with EDOF)",
    "touch": {
     "selector": "#simulator-host label[for$=\"-preset-near\"]",
-    "x": 63,
+    "x": 50,
     "y": 279,
     "inView": true,
     "receivedBy": "<label for=\"vsim1-preset-near\" class=\"vsim-seg-btn \"><span class=\"vsim-seg-main\">Near</spa"
@@ -261,7 +280,7 @@
   {
    "step": 15,
    "action": "return to the website (home)",
-   "url": "http://localhost:4671/en/",
+   "url": "http://localhost:4731/en/",
    "canvases": 0
   }
  ]
