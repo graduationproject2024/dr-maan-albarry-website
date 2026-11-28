@@ -101,11 +101,14 @@ export async function canvasNonBlank(page, selector) {
 
 /** Wording that would imply a guaranteed outcome. */
 export const CERTAINTY = /\bguarantee[sd]?\b|\byou will see\b|20\/20|\b\d{1,3}\s?%\s*(success|of patients)|success rate|نضمن|يضمن|ضمان|مضمون|ستر(ى|ي) بوضوح|نسبة نجاح|نسبة النجاح/i;
-const NEGATION = /\b(no|not|cannot|can't|never)\b|(^|\s)(لا|لن|ليس|ليست|دون|بدون)\s|^هل\s|\?|؟/i;
+const NEGATION = /\b(no|not|cannot|can't|never)\b|(^|\s)(لا|لن|ليس|ليست)\s|^هل\s|\?|؟/i;
 
 /** Sentences that claim certainty. A sentence that negates or questions the claim ("cannot be guaranteed",
  *  "هل يضمن…؟") is the opposite of a promise and is not counted. Returns the offending sentences. */
+// "دون ضمان" / "بدون (أي) ضمان" ("without a guarantee") disclaims; only that exact phrase is removed before the check, so
+// "نضمن … بدون نظارة" ("we guarantee … without glasses") is still caught (acceptance audit 2026-11-26).
+const WITHOUT_GUARANTEE = /(^|\s)ب?دون\s+(أي\s+)?ضمان/g;
 export function certaintyClaims(text) {
   return String(text).split(/(?<=[.!؟?])\s+|\n+/).map((x) => x.trim()).filter(Boolean)
-    .filter((sentence) => CERTAINTY.test(sentence) && !NEGATION.test(sentence));
+    .filter((sentence) => { const s = sentence.replace(WITHOUT_GUARANTEE, ' '); return CERTAINTY.test(s) && !NEGATION.test(s); });
 }

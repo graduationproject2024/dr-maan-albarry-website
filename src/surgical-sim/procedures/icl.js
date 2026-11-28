@@ -130,7 +130,7 @@ export function iclPoseAt(i, p) {
 }
 
 const def = {
-  id: 'icl', slug: 'icl', modelId: 'ssim-icl', version: '2026.11-r1',
+  id: 'icl', slug: 'icl', modelId: 'ssim-icl', version: '2026.11-r2' /* r2 2026-11-24: tuck path keeps the plate clear of the iris (BUG-SIM-14) — needs re-review */,
   title: { ar: 'العدسة اللاصقة الداخلية (ICL): عدسة إضافية خلف القزحية', en: 'Implantable contact lens (ICL): an added lens behind the iris' },
   note: NOTE,
   objectives: [

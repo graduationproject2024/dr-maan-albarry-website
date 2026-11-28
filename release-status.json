@@ -1,6 +1,11 @@
 {
   "_readme": "Human release states. Edited by a person only. CI reads it (scripts/release-check.mjs) and never writes it. Medical review can only be set to complete with the reviewer's name and the date, after every clinical item in the content files carries that review.",
-  "visualQa": { "status": "pending", "by": null, "date": null, "note": "Automated screenshots and real-device cloud screenshots exist; no person has signed off the Phase 2 build." },
+  "visualQa": {
+    "status": "pending",
+    "by": null,
+    "date": null,
+    "note": "Automated screenshots and real-device cloud screenshots exist; no person has signed off the Phase 2 build."
+  },
   "medicalReview": {
     "status": "pending",
     "reviewer": null,
@@ -14,5 +19,36 @@
       "notCovered": "Phase 2 changes listed in docs/implementation/phase-2-advanced-clinical-visualization/PHASE_2_MEDICAL_CHANGELOG.md"
     }
   },
-  "deployment": { "authorizedCommit": "9e1773f", "date": "2026-11-17", "note": "Owner: 'Yes, deploy' (2026-11-17); deployed by GitHub Actions run 44077997526. Phase 2 (branch feat/phase-2) is NOT authorized for deployment." }
+  "deployment": {
+    "liveCommit": "4e55b40",
+    "date": "2026-11-23",
+    "history": [
+      {
+        "commit": "9e1773f",
+        "date": "2026-11-17",
+        "authorization": "Owner in chat: 'Yes, deploy'",
+        "run": "44077997526"
+      },
+      {
+        "commit": "4a3e4f9",
+        "date": "2026-11-23",
+        "authorization": "Owner in chat: 'merge it' (PR #3, Phase 2 simulators); then 'Merge now'",
+        "run": "45165305866"
+      },
+      {
+        "commit": "639e450",
+        "date": "2026-11-23",
+        "authorization": "Owner in chat: 'merge it' (PR #4, clinical profile expansion)",
+        "run": "45230465355 — blocked by a failing gate test; nothing published"
+      },
+      {
+        "commit": "4e55b40",
+        "date": "2026-11-23",
+        "authorization": "Owner in chat: 'merge it' after CI passed (PR #5, test fix)",
+        "run": "45242684926"
+      }
+    ],
+    "pending": "PR #6 (feat/phase-2-final-closure) is NOT authorized for merge or deployment.",
+    "note": "Merging to main publishes after the gate passes. Each entry quotes the owner's own instruction in the Claude Code chat; no other authorization is recorded."
+  }
 }

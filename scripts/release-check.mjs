@@ -51,6 +51,15 @@ const anatomy = fs.readFileSync(path.join(root, 'src/cataract-sim/anatomy.js'), 
 const CSIM_MODEL_VERSION = (anatomy.match(/MODEL_VERSION = '([^']+)'/) || [])[1] || 'unknown';
 record('Simulators', `Vision simulator optics model ${VISION_MODEL_VERSION}`, 'pending');
 record('Simulators', `Cataract 3D anatomy and stages ${CSIM_MODEL_VERSION}`, 'pending');
+// shared procedure simulators (models + stages), the Light Journey drawing and the Lens Lab scenes: each is a medical
+// representation that needs the physician's review (docs/implementation/phase-2-final-closure/14_CLINICAL_REVIEW_PACKAGE.md)
+for (const f of fs.readdirSync(path.join(root, 'src/surgical-sim/procedures')).filter((x) => x.endsWith('.js') && x !== 'compare.js')) {
+  const src = fs.readFileSync(path.join(root, 'src/surgical-sim/procedures', f), 'utf8');
+  const m = src.match(/modelId: '([^']+)', version: '([^']+)'/);
+  if (m) record('Simulators', `${m[1]} ${m[2]} (stages, framing, Before/After wording)`, 'pending');
+}
+record('Simulators', 'Light Journey drawing and light path (src/light-journey)', 'pending');
+record('Simulators', 'Lens Lab street scenes and distance presets (src/vision-sim/scenes*.js)', 'pending');
 
 // 4. the two human states
 const statusPath = path.join(root, 'release-status.json');
