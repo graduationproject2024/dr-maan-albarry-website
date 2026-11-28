@@ -474,7 +474,11 @@ class VisionSimulator {
       const box = this.targetBox(0); // in the whole picture, percent
       if (box) {
         const w = box.width / 100, h = box.height / 100;
-        const zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.9 / h));
+        let zoom = Math.max(1, Math.min(2.2, 0.86 / w, 0.9 / h));
+        // Framing per distance (50 cm "screen" button, 2026-11-26): the near object is drawn at its 40 cm size (the model
+        // keeps object sizes fixed), so a closer view of a farther near distance is framed proportionally wider — the
+        // object looks as large as it would from there. Framing only: blur angles scale with the zoom (pipeline.js).
+        if (this.lastView.A.subject === 'near') zoom = Math.max(1, zoom * Math.min(1, DISTANCES.near / this.state.distanceM));
         const span = 1 / zoom;
         const x = Math.min(1 - span, Math.max(0, (box.left / 100 + w / 2) - span / 2));
         const y = Math.min(1 - span, Math.max(0, (box.top / 100 + h / 2) - span / 2));

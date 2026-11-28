@@ -13,6 +13,8 @@ export const STRINGS = {
     more: 'إعدادات إضافية',
     reset: 'إعادة الضبط',
     wholeScene: 'المشهد كاملاً',
+    // 2026-11-28 — pending physician review (N-09): the lens wording describes ~40 cm; beyond it no level is claimed
+    neutralLevel: (lens, dist) => `${lens}: تُظهر الصورة الوضوح المحسوب لهذه العدسة على ${dist}؛ اسأل جرّاحك عمّا تتوقعه.`,
     closeNote: (obj) => `عرض أقرب: الصورة اقتربت من ${obj} فقط. نموذج العدسة ودرجة الوضوح لم يتغيّرا.`,
     closeAnnounce: (obj) => `عرض أقرب: ${obj}`,
     groupCompare: 'المقارنة بين العدسات',
@@ -49,8 +51,10 @@ export const STRINGS = {
       toric: { name: 'الأحادية اللابؤرية (Toric)', short: 'أحادية لابؤرية' },
       cataract: { name: 'الساد قبل العملية', short: 'ساد' },
     },
-    presets: { near: 'قريب', intermediate: 'متوسط', distance: 'بعيد' },
-    presetDist: { near: '٤٠ سم', intermediate: '٦٥ سم', distance: '٦ م+' },
+    // 'screen' (50 cm) added 2026-11-26 — label pending physician review (14_CLINICAL_REVIEW_PACKAGE.md, N-09)
+    presets: { near: 'قريب', screen: 'شاشة', intermediate: 'متوسط', distance: 'بعيد' },
+    presetShort: {},
+    presetDist: { near: '٤٠ سم', screen: '٥٠ سم', intermediate: '٦٥ سم', distance: '٦ م+' },
     objects: { near: 'الهاتف', intermediate: 'الحاسوب', distance: 'اللوحة المرورية' },
     lights: { day: 'نهار', dusk: 'خافتة', night: 'ليل' },
     sharpness: 'مؤشر الوضوح',
@@ -97,6 +101,8 @@ export const STRINGS = {
     more: 'More settings',
     reset: 'Reset',
     wholeScene: 'Whole scene',
+    // 2026-11-28 — pending physician review (N-09): the lens wording describes ~40 cm; beyond it no level is claimed
+    neutralLevel: (lens, dist) => `${lens}: the picture shows this lens's modelled sharpness at ${dist}; ask your surgeon what to expect.`,
     closeNote: (obj) => `Closer view: the picture only moved nearer to the ${obj}. The lens model and its sharpness did not change.`,
     closeAnnounce: (obj) => `Closer view: ${obj}`,
     groupCompare: 'Compare lenses',
@@ -133,8 +139,10 @@ export const STRINGS = {
       toric: { name: 'Monofocal toric', short: 'Mono toric' },
       cataract: { name: 'Cataract (before surgery)', short: 'Cataract' },
     },
-    presets: { near: 'Near', intermediate: 'Intermediate', distance: 'Far' },
-    presetDist: { near: '40 cm', intermediate: '65 cm', distance: '6 m+' },
+    // 'screen' (50 cm) added 2026-11-26 — label pending physician review (14_CLINICAL_REVIEW_PACKAGE.md, N-09)
+    presets: { near: 'Near', screen: 'Screen', intermediate: 'Intermediate', distance: 'Far' },
+    presetShort: { intermediate: 'Mid' }, // shown only when the four-button row is narrow
+    presetDist: { near: '40 cm', screen: '50 cm', intermediate: '65 cm', distance: '6 m+' },
     objects: { near: 'phone', intermediate: 'laptop', distance: 'road sign' },
     lights: { day: 'Day', dusk: 'Dim', night: 'Night' },
     sharpness: 'Sharpness index',

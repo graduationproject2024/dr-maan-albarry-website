@@ -1238,7 +1238,7 @@ const VSIM_LOAD_TIMEOUT_MS = 20000;
 const VSIM_STORE = 'lens-lab-choice';
 const VSIM_LENSES = ['monofocal', 'enhanced', 'edof', 'multifocal', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric', 'cataract'];
 const VSIM_SIMPLE_LENSES = ['monofocal', 'enhanced', 'edof', 'trifocal', 'toric', 'enhanced-toric', 'edof-toric', 'trifocal-toric'];
-const VSIM_DIST = { near: 0.4, intermediate: 0.65, far: 6 };
+const VSIM_DIST = { near: 0.4, screen: 0.5, intermediate: 0.65, far: 6 }; // screen = 50 cm (2026-11-26, src/vision-sim/presets.js)
 const VSIM_LIGHT = { day: 'day', dim: 'dusk', night: 'night' };
 const VSIM_DEFAULT = { lens: 'monofocal', dist: 'far', light: 'day' };
 /** Only values the simulator knows survive. */
